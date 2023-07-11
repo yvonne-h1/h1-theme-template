@@ -1,0 +1,16 @@
+{%- comment %} Create body-class from template: page.liquid => "template-page" {%- endcomment %}
+{%- liquid
+  assign template_name = 'template-' | append: request.page_type | handleize | replace: '_', '-'
+
+  if template.suffix
+    assign template_suffix = ' ' | append: template_name | append: '-' | append: template.suffix
+  endif
+
+  if request.path contains 'apps'
+    assign path_arr = request.path | split: '/'
+    assign template_name = 'template-' | append: path_arr[2]
+  endif
+
+  echo template_name
+  echo template_suffix
+-%}

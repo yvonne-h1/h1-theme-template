@@ -1,0 +1,20 @@
+{% comment %}
+  {%- render 'global-icon',
+    icon: 'arrow',
+    icon_class: "my-class" (optional),
+  -%}
+{% endcomment %}
+
+{%- liquid
+  if icon != blank
+    assign icon = icon | downcase
+    assign class = 'icon icon--' | append: icon | append: ' ' | append: icon_class
+    comment
+      Add same attributes to all icons except hamburger, close, account, user, cart and search, since they should not be hidden from screen readers.
+    endcomment
+    assign attributes = 'xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation"'
+    render 'icons-payment', icon: icon, class: class, attributes: attributes
+    render 'icons-social', icon: icon, class: class, attributes: attributes
+    render 'icons-ui', icon: icon, class: class, attributes: attributes
+  endif
+-%}

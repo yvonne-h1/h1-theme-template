@@ -1,0 +1,16 @@
+{%- liquid
+  assign demo_collection = collections.all
+-%}
+
+{%- paginate demo_collection.products by 8 -%}
+  <div class="grid grid-cols-12 gap-x-4 gap-y-10">
+    {%- for product in demo_collection.products -%}
+      <div class="col-span-6 md:col-span-4">
+        {%- render 'product-card', product_object: product -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  {%- if paginate.pages > 1 -%}
+    {%- render 'pagination', paginate: paginate, anchor: '', class: '' -%}
+  {%- endif -%}
+{%- endpaginate -%}

@@ -1,0 +1,18 @@
+@layer base {
+  a {
+    @apply no-underline
+      text-link-color
+      states:underline
+      states:text-link-color-states;
+  }
+  hr {
+    background-color: var(--border-color-default);
+    @apply my-16
+      block
+      h-px
+      border-0;
+  }
+  table {
+    word-break: break-word;
+  }
+}

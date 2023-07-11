@@ -1,0 +1,12 @@
+<script>
+  {%- comment %} Set class to define javascript support {% endcomment -%}
+  document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+  {%- comment %} Set class to define touch support. Browsers must refresh to detect touch-support changes {% endcomment -%}
+  if (!!("ontouchstart" in document)) {
+    document.documentElement.className = document.documentElement.className.replace("no-touch", "touch");
+  }
+</script>
+<script src="{{ 'global.js' | asset_url }}" defer></script>
+<script src="{{ 'collapsible.js' | asset_url }}" defer></script>
+<script src="{{ 'toggle-element-class.js' | asset_url }}" defer></script>

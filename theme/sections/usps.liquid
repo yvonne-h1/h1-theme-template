@@ -1,0 +1,337 @@
+{%- liquid
+  case section.blocks.size
+    when 1
+      assign col_class = 'col-span-12'
+    when 2
+      assign col_class = 'col-span-6'
+    when 3
+      assign col_class = 'col-span-12 sm:col-span-4'
+    when 4
+      assign col_class = 'col-span-6 md:col-span-3'
+  endcase
+-%}
+
+{% comment %} create content {% endcomment %}
+{%- capture container_content -%}
+  {% if section.blocks.size > 0 %}
+    <div class="grid grid-cols-12 text-center gap-base">
+      {% for block in section.blocks %}
+        {% comment %}
+            Capture usp content
+        {% endcomment %}
+        {%- capture usp_content -%}
+          {% comment %} Icon {% endcomment %}
+          {% if block.settings.icon != blank %}
+            <div class="usp__icon mb-element-spacing inline-block rounded-full bg-primary-300 p-6 transition-transform group-hover:scale-110">
+              {%- render 'global-icon', icon: block.settings.icon, icon_class: 'w-8' -%}
+            </div>
+          {% endif %}
+
+          {% comment %} Heading {% endcomment %}
+          {% if block.settings.heading != blank %}
+            <p class="usp__heading text-sm font-bold md:text-lg">
+              {{ block.settings.heading }}
+            </p>
+          {% endif %}
+
+          {% comment %} Content {% endcomment %}
+          {% if block.settings.content != blank %}
+            <p class="usp__content text-xs md:text-base">
+              {{ block.settings.content }}
+            </p>
+          {% endif %}
+        {%- endcapture -%}
+
+        {%- comment -%} Output in link or not {%- endcomment -%}
+        {%- if usp_content -%}
+          {%- if block.settings.url != blank and block.settings.button == blank -%}
+            <a class="usps__usp usp {{ col_class }} group break-words text-[var(--color-scheme-text)] no-underline" href="{{ block.settings.url }}">
+              {{- usp_content -}}
+            </a>
+          {%- else -%}
+            <div class="usps__usp usp  break-words {{ col_class -}}" {{ block.shopify_attributes }}>
+              {{- usp_content -}}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {% endfor %}
+    </div>
+  {% endif %}
+{%- endcapture -%}
+
+{%- if container_content != blank -%}
+  {%- liquid
+    # Container class
+    assign container_class = 'usps' | append: ' ' | append: section.settings.container_width
+    if section.settings.color_scheme != blank
+      assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+    endif
+  -%}
+
+  {%- comment -%} Render the content {%- endcomment -%}
+  {%- render 'format-container', content: container_content, class: container_class -%}
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "USPs",
+    "tag": "section",
+    "class": "usps-section",
+    "settings": [
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "color-scheme color-scheme--accent",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      }
+    ],
+    "max_blocks": 4,
+    "blocks": [
+      {
+        "type": "usp",
+        "name": "usp",
+        "settings": [
+          {
+            "type": "select",
+            "id": "icon",
+            "label": "Icon name",
+            "options": [
+              {
+                "value": "account",
+                "label": "Account"
+              },
+              {
+                "value": "arrow",
+                "label": "Arrow"
+              },
+              {
+                "value": "box",
+                "label": "Box"
+              },
+              {
+                "value": "cart",
+                "label": "Cart"
+              },
+              {
+                "value": "caret",
+                "label": "Caret"
+              },
+              {
+                "value": "chat_bubble",
+                "label": "Chat bubble"
+              },
+              {
+                "value": "checkmark",
+                "label": "Check mark"
+              },
+              {
+                "value": "close",
+                "label": "Cross"
+              },
+              {
+                "value": "discount",
+                "label": "Discount"
+              },
+              {
+                "value": "error",
+                "label": "Error"
+              },
+              {
+                "value": "eye",
+                "label": "Eye"
+              },
+              {
+                "value": "heart",
+                "label": "Heart"
+              },
+              {
+                "value": "iron",
+                "label": "Iron"
+              },
+              {
+                "value": "leaf",
+                "label": "Leaf"
+              },
+              {
+                "value": "leather",
+                "label": "Leather"
+              },
+              {
+                "value": "lock",
+                "label": "Lock"
+              },
+              {
+                "value": "map_pin",
+                "label": "Map pin"
+              },
+              {
+                "value": "pants",
+                "label": "Pants"
+              },
+              {
+                "value": "plane",
+                "label": "Plane"
+              },
+              {
+                "value": "play",
+                "label": "Play"
+              },
+              {
+                "value": "plus",
+                "label": "Plus"
+              },
+              {
+                "value": "price_tag",
+                "label": "Price tag"
+              },
+              {
+                "value": "question_mark",
+                "label": "Question mark"
+              },
+              {
+                "value": "search",
+                "label": "Search"
+              },
+              {
+                "value": "shirt",
+                "label": "Shirt"
+              },
+              {
+                "value": "shoe",
+                "label": "Shoe"
+              },
+              {
+                "value": "silhouette",
+                "label": "Silhouette"
+              },
+              {
+                "value": "star",
+                "label": "Star"
+              },
+              {
+                "value": "success",
+                "label": "Success"
+              },
+              {
+                "value": "truck",
+                "label": "Truck"
+              },
+              {
+                "value": "washing",
+                "label": "Washing"
+              },
+              {
+                "value": "zoom",
+                "label": "Zoom"
+              }
+            ],
+            "default": "plus"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "content",
+            "label": "Body text"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Link to"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "USP's",
+        "category": "Text",
+        "settings": {},
+        "blocks": [
+          {
+            "type": "usp",
+            "settings": {
+              "icon": "truck",
+              "heading": "Free delivery",
+              "content": "If you buy two products or more."
+            }
+          },
+          {
+            "type": "usp",
+            "settings": {
+              "icon": "heart",
+              "heading": "We love products",
+              "content": "We give back that love to you."
+            }
+          },
+          {
+            "type": "usp",
+            "settings": {
+              "icon": "box",
+              "heading": "Buying a gift?",
+              "content": "We wrap it to make the best gift ever."
+            }
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html class="no-js no-touch scroll-smooth" lang="{{ request.locale.iso_code }}" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    {%- liquid
+      render 'html-head-title'
+      render 'html-head-canonical'
+      render 'html-head-prefetch'
+      render 'html-head-preconnect'
+      render 'html-head-favicon'
+      render 'html-head-description'
+      render 'html-head-tags'
+      render 'html-head-fonts'
+      render 'html-head-colors'
+      render 'html-head-css'
+      render 'html-head-js'
+      render 'html-head-google'
+      render 'html-head-gtm', container: 'head'
+    -%}
+    {{ content_for_header }}
+  </head>
+
+  <body class="group/body {% render 'html-template-class' %}">
+    {%- render 'html-head-gtm', container: 'body' -%}
+
+    <a class="skip-to-content button button--secondary sr-only self-start" href="#MainContent">
+      {% render 'format-translation',
+        namespace: 'accessibility',
+        key: 'skip_to_text',
+        fallback: 'Skip to text'
+      -%}
+    </a>
+
+    {%- sections 'header-group' %}
+
+    {%- render 'cart-notification' -%}
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {%- sections 'footer-group' -%}
+
+    <ul hidden>
+      <li id="a11y-refresh-page-message">
+        {% render 'format-translation',
+          namespace: 'accessibility',
+          key: 'refresh_page',
+          fallback: 'Refresh page'
+        -%}
+      </li>
+    </ul>
+
+    {%- liquid
+      render 'html-bottom-js'
+      render 'seo-json-ld'
+
+      if settings.klaviyo_bis_api_key != blank
+        render 'klaviyo-tracking', render_script_tags: true
+
+        if settings.klaviyo_bis
+          render 'klaviyo-back-in-stock'
+        endif
+      endif
+    -%}
+  </body>
+</html>

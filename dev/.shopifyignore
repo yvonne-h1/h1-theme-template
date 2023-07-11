@@ -1,0 +1,8 @@
+// This file is copied before pushing, so we do NOT overwrite live settings and content
+
+config/settings_data.json
+templates/*.json
+sections/*.json
+
+// Ignore all locale files except en-dev.default.json
+/(locales\/)(?!en-dev.default.json)/

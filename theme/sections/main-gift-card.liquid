@@ -1,0 +1,309 @@
+{%- comment -%} Capture header classes {%- endcomment -%}
+{%- capture header_class %}
+  grid grid-cols-1 gap-y-4 {{ section.settings.text_align }} site-center site-center-sm
+{%- endcapture -%}
+
+{%- comment -%} Capture title {%- endcomment -%}
+{% capture title %}
+  {%- render 'format-translation',
+    namespace: 'gift_cards.issued.subtext',
+    fallback: 'Your gift card'
+  -%}
+{% endcapture %}
+
+{%- comment -%} Capture Container classes {%- endcomment -%}
+{%- capture container_classes -%}
+  min-h-screen flex flex-col justify-center container--background
+  {% if section.settings.section_color_scheme != "" -%}
+    my-0
+  {%- endif -%}
+  {{- section.settings.section_color_scheme | prepend: ' ' -}}
+{%- endcapture -%}
+
+{%- comment -%} Capture content classes {%- endcomment -%}
+{%- capture content_classes -%}
+ {{- section.settings.text_align }} site-center site-center-sm grid gap-y-6 flex-col items-center justify-items-center
+{%- endcapture -%}
+
+{%- comment -%} Capture Container header {%- endcomment -%}
+{%- capture container_header -%}
+  {%- if section.settings.shop_logo -%}
+    <a href="{{ routes.root_url }}"
+      class="flex text-inherit no-underline states:no-underline {{ section.settings.text_align }}"
+      title="{{ shop.name }}"
+    >
+      {%- render 'global-logo' -%}
+    </a>
+  {%- endif -%}
+
+  <h1 class="h3 break-words">
+    {% render 'format-translation',
+      namespace: 'gift_cards.issued.subtext',
+      fallback: 'Your gift card'
+    %}
+  </h1>
+
+  <h2 class="h4 break-words">
+    {{ gift_card.initial_value | money }}
+  </h2>
+
+  {%- if gift_card.enabled == false or gift_card.expired -%}
+    <p class="badge badge--sold-out">
+      {% render 'format-translation',
+        namespace: 'gift_cards.issued.expired',
+        fallback: 'Expired'
+      %}
+    </p>
+  {%- endif -%}
+
+  {%- assign gift_card_balance = gift_card.balance | money -%}
+  {%- if gift_card.balance != gift_card.initial_value -%}
+    <p class="h4 break-words">
+      {{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}
+    </p>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- comment -%} Capture Container content {%- endcomment -%}
+{%- capture container_content -%}
+
+    {%- if section.settings.image != blank -%}
+      {%- render 'format-image',
+        image_object: section.settings.image,
+        max_width: 540,
+        sizes: '(min-width: 768px) 540px, 96vw',
+        alt: title,
+        title: title,
+        class: "object-contain"
+      -%}
+    {%- else -%}
+      <img
+        src="{{ 'gift-card/card.svg' | shopify_asset_url }}"
+        alt="Gift card"
+        height="{{ 540 | divided_by: 1.5 }}"
+        width="540"
+        loading="eager"
+      >
+    {%- endif -%}
+
+  <div class="gift-card__qr-code empty:hidden" data-gift-card-qr-code data-identifier="{{ gift_card.qr_identifier }}">
+    {%- comment -%} QR Code {%- endcomment -%}
+  </div>
+
+  <div class="w-full">
+    <div class="flex w-full flex-row items-center justify-center gap-4">
+      <input
+        type="text"
+        class="gift-card__number min-w-[220px] bg-transparent text-center"
+        value="{{ gift_card.code | format_code }}"
+        aria-label="{% render "format-translation", namespace: "gift_cards.issued.gift_card_code", fallback: "Gift card code" %}"
+        readonly
+        data-gift-card-number
+      >
+      <button class="link gift-card__copy-link" data-gift-card-copy-link>
+        {% render 'format-translation',
+          namespace: 'gift_cards.issued.copy_code',
+          fallback: 'Copy code'
+        %}
+      </button>
+    </div>
+
+    <div class="gift-card__copy-success field__message mt-4 flex flex-row items-center justify-center gap-1 empty:hidden" data-gift-card-copy-success role="status">
+      {%- comment -%} Copy succes message {%- endcomment -%}
+    </div>
+    <template>
+      {%- render 'global-icon', icon: 'success', icon_class: 'text-success' -%}
+      <p class="text-sm">
+        {%- render 'format-translation',
+          namespace: 'gift_cards.issued.copy_code_success',
+          fallback: 'Successfully copied code'
+        -%}
+      </p>
+    </template>
+
+  </div>
+  {%- if gift_card.pass_url -%}
+    <div>
+      <a href="{{ gift_card.pass_url }}" class="gift_card__apple-wallet">
+        <img
+          src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+          width="120"
+          height="40"
+          alt="{% render "format-translation", namespace: "gift_cards.issued.add_to_apple_wallet", fallback: "Add to Apple Wallet" %}"
+          loading="lazy"
+        >
+      </a>
+    </div>
+  {%- endif -%}
+  <div class="flex flex-wrap gap-4">
+    <a
+      href="{{ shop.url }}"
+      class="button {{ section.settings.button_color_scheme_1 }}"
+      target="_blank"
+      rel="noopener"
+      aria-describedby="a11y-new-window-message"
+    >
+      {% render 'format-translation',
+        namespace: 'gift_cards.issued.shop_link',
+        fallback: 'Go to shop'
+      %}
+    </a>
+    <button
+      class="button {{ section.settings.button_color_scheme_2 }}"
+      onclick="window.print();"
+    >
+      {% render 'format-translation',
+        namespace: 'gift_cards.issued.print_gift_card',
+        fallback: 'Print gift card'
+      %}
+    </button>
+  </div>
+  <div hidden>
+    <span id="a11y-new-window-message">
+      {% render 'format-translation',
+        namespace: 'accessibility.link_messages.new_window',
+        fallback: 'New window'
+      %}
+    </span>
+  </div>
+{%- endcapture -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  header_class: header_class,
+  title_tag: 'div',
+  title: container_header,
+  title_class: 'flex flex-col gap-4',
+  content: container_content,
+  class: container_classes,
+  content_class: content_classes
+-%}
+
+{% schema %}
+  {
+    "name": "Gift card",
+    "tag": "section",
+    "class": "main-gift-card",
+    "settings": [
+      {
+        "type": "select",
+        "id": "section_color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_align",
+        "label": "Header text align",
+        "default": "text-center justify-center",
+        "options": [
+          {
+            "value": "text-left justify-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center justify-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right justify-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "shop_logo",
+        "label": "Show shop logo",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "select",
+        "id": "button_color_scheme_1",
+        "default": "button--outline-white",
+        "label": "Continue shopping button type",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "button--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "button--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "button--outline",
+            "label": "Outline"
+          },
+          {
+            "value": "button--outline-white",
+            "label": "Outline white"
+          },
+          {
+            "value": "button--link",
+            "label": "Link"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "button_color_scheme_2",
+        "default": "button--outline-white",
+        "label": "Print button type",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "button--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "button--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "button--outline",
+            "label": "Outline"
+          },
+          {
+            "value": "button--outline-white",
+            "label": "Outline white"
+          },
+          {
+            "value": "button--link",
+            "label": "Link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

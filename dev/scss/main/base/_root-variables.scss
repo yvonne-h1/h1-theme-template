@@ -1,0 +1,43 @@
+@layer base {
+  :root {
+    /*
+     * Site dimensions
+     */
+    --site-center: 1440px;
+    --site-center-md: 820px;
+    --site-center-sm: 620px;
+
+    /*
+     * Spacings
+     */
+    // Site side spacing
+    --site-side-spacing: theme(spacing.4);
+    @screen md {
+      --site-side-spacing: theme(spacing.10);
+    }
+
+    // Container
+    --container-spacing: theme(spacing.8);
+    @screen md {
+      --container-spacing: theme(spacing.14);
+    }
+
+    // Element
+    --element-spacing: theme(spacing.6); // 1rem
+
+    /*
+     * Grid
+     */
+    // Col gaps
+    --grid-col-gap: theme(gap.4);
+    @screen md {
+      --grid-col-gap: theme(gap.8);
+    }
+
+    // Row gaps
+    --grid-row-gap: theme(gap.4);
+    @screen md {
+      --grid-row-gap: theme(gap.8);
+    }
+  }
+}

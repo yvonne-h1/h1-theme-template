@@ -1,0 +1,53 @@
+{%- comment -%} Use grid to position elements. Mobile order is set in theme editor, desktop is based on design. {%- endcomment -%}
+<article class="main-article">
+  {% comment %} Article header {% endcomment %}
+  {%- render 'article-header', class: 'main-article__header' -%}
+
+  {% comment %} Article content {% endcomment %}
+  {%- render 'article-content', class: 'main-article__content' -%}
+
+  {% if section.settings.show_comments %}
+    {% comment %} Article comments {% endcomment %}
+    {%- render 'article-comments', class: 'main-article__comments' -%}
+  {% endif %}
+</article>
+
+{% schema %}
+  {
+    "name": "Blog post",
+    "tag": "section",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "featured_image",
+        "name": "Featured image",
+        "limit": 1
+      },
+      {
+        "type": "title",
+        "name": "Title",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "blog_show_date",
+            "default": true,
+            "label": "Show date"
+          },
+          {
+            "type": "checkbox",
+            "id": "blog_show_author",
+            "default": false,
+            "label": "Show author"
+          },
+          {
+            "type": "checkbox",
+            "id": "blog_show_type",
+            "default": true,
+            "label": "Show type"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

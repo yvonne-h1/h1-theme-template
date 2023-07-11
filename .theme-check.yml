@@ -1,0 +1,22 @@
+# https://shopify.dev/themes/tools/theme-check/configuration
+
+# The directory where theme folders are located
+root: theme
+
+# Disable a few checks that are incompatible with some of our settings
+SpaceInsideBraces:
+  enabled: false
+
+LiquidTag:
+  enabled: true
+  min_consecutive_statements: 6
+
+NestedSnippet:
+  enabled: true
+  max_nesting_level: 6
+
+TemplateLength:
+  max_length: 750
+
+SchemaJsonFormat:
+  enabled: false

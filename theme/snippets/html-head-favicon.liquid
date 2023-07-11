@@ -1,0 +1,18 @@
+{%- comment %}
+  Use http://realfavicongenerator.net/ to generate favicons
+  Put all .png, .svg and .ico in the asset map (replace current files)
+  Change the theme color and name in assets/browserconfig.xml.liquid and assets/site.webmanifest.liquid   ("#ffffff" and "Code Shopify Theme")
+  Change the theme color below
+{%- endcomment %}
+
+{%- assign theme_color = '#fff' -%}
+
+<link rel="apple-touch-icon" sizes="180x180" href="{{ 'apple-touch-icon.png' | asset_url }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon-32x32.png' | asset_url }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ 'favicon-16x16.png' | asset_url }}">
+<link rel="manifest" href="{{ 'site.webmanifest' | asset_url }}">
+<link rel="mask-icon" href="{{ 'safari-pinned-tab.svg' | asset_url }}" color="{{ theme_color }}">
+<link rel="shortcut icon" href="{{ 'favicon.ico' | asset_url }}">
+<meta name="msapplication-TileColor" content="{{ theme_color }}">
+<meta name="msapplication-config" content="{{ 'browserconfig.xml' | asset_url }}">
+<meta name="theme-color" content="{{ theme_color }}">

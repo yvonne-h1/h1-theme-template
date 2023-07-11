@@ -1,0 +1,50 @@
+{%- comment -%}
+  Outputs the filter sotring list
+
+  Accepts:
+  - section:         {Object} main-collection.liquid section object (required)
+{%- endcomment -%}
+
+{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+
+{%- comment -%} Check if the setting is on or not. {%- endcomment -%}
+{%- if section.settings.enable_sorting -%}
+  {%- comment -%} Collect active sort options. {%- endcomment -%}
+  {%- capture sorting -%}
+    {%- for option in collection.sort_options -%}
+      <li class="list-option__option">
+        <input
+          type="radio"
+          class="list-option__input hidden"
+          id="option-{{ forloop.index }}"
+          name="sort_by"
+          value="{{ option.value | escape }}"
+          {% if option.value == sort_by %}
+            checked
+          {% endif %}
+        >
+        <label class="list-option__label" for="option-{{ forloop.index }}">
+          {{- option.name | escape -}}
+        </label>
+      </li>
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- capture label -%}
+    {%- render 'format-translation',
+      namespace: 'sections.collection_template',
+      key: 'sort_by_label',
+      fallback: 'Sort by'
+    -%}
+  {%- endcapture -%}
+
+  {%- capture summary_content -%}
+    <ul class="list-options" aria-describedby="a11y-refresh-page-message">
+      {{ sorting }}
+    </ul>
+  {%- endcapture -%}
+
+  {%- if sorting != blank -%}
+    {%- render 'format-filter-group', summary_content: summary_content, label: label -%}
+  {%- endif -%}
+{%- endif -%}

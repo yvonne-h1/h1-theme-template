@@ -1,0 +1,57 @@
+{% comment %}
+  Renders a collection card
+
+  # Standard parameters
+    collection          | Object  | Required | Collection Liquid object
+    aspect_ratio         | string  | Optional | Aspect ratio, For example: '16/9' or '4/3'
+
+  Usage:
+    {%- render 'collection-card',
+      collection: collection,
+      aspect_ratio: section.settings.image_ratio,
+    -%}
+{% endcomment %}
+
+{%- liquid
+  assign featured_image = collection.featured_image
+
+  unless image_lazy != null
+    assign image_lazy = true
+  endunless
+
+  unless image_alt
+    assign image_alt = featured_image.alt
+    if image_alt == blank
+      assign image_alt = collection.title | escape
+    endif
+  endunless
+
+  unless image_title
+    assign image_title = collection.featured_image.alt
+    if image_title == blank
+      assign image_title = collection.title | escape
+    endif
+  endunless
+
+  unless aspect_ratio
+    assign aspect_ratio = '1/1'
+  endunless
+-%}
+<a href="{{ collection.url }}" class="collection-card text-current states:text-current">
+  <div class="collection-card__image">
+    {%- render 'format-image',
+      image_object: featured_image,
+      alt: image_alt,
+      title: image_title,
+      sizes: '(min-width: 1440px) 316px, (min-width: 1280px) 21.56vw, (min-width: 768px) 27vw, 43vw',
+      max_width: 379,
+      aspect_ratio: aspect_ratio,
+      lazy: image_lazy
+    -%}
+  </div>
+  <div class="collection-card__content pt-3">
+    <p class="collection-card__title text-lg">
+      {{- collection.title | escape -}}
+    </p>
+  </div>
+</a>

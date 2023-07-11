@@ -1,0 +1,41 @@
+{
+  "editor.formatOnSave": true,
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[liquid]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.words": [
+    "@apply",
+    "@layer",
+    "apply",
+    "copyfiles",
+    "customiser",
+    "endstyle",
+    "globify",
+    "metafield",
+    "Metafield",
+    "metafields",
+    "Metafields",
+    "nodelete",
+    "shopifyignore",
+    "stcheck",
+    "tailwindcss",
+    "treeshake",
+    "webp"
+  ],
+  "npm-scripts.showStartNotification": false,
+}

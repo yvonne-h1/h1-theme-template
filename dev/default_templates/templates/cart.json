@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "cart": {
+      "type": "main-cart",
+      "blocks": {
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "icon": "Truck",
+            "text": "Free shipping on orders above €30"
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "icon": "Box",
+            "text": "Free returns within 6 weeks"
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "icon": "Lock",
+            "text": "Secured payment"
+          }
+        }
+      },
+      "block_order": ["usp_1", "usp_2", "usp_3"]
+    }
+  },
+  "order": ["cart"]
+}

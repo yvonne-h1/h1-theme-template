@@ -1,0 +1,39 @@
+@layer utilities {
+  .color-scheme {
+    background-color: var(--color-scheme-background-color);
+    color: var(--color-scheme-text);
+    --swiper-theme-color: var(--color-scheme-text);
+    --text-link-color: var(--color-scheme-text);
+    --text-link-color-states: var(--color-scheme-text);
+    &--black {
+      --color-scheme-background-color: var(--color-black);
+      --color-scheme-text: var(--color-white);
+    }
+    &--white {
+      --color-scheme-background-color: var(--color-white);
+      --color-scheme-text: var(--color-black);
+    }
+    &--primary {
+      --color-scheme-background-color: var(--color-primary);
+      --color-scheme-text: var(--color-primary-text);
+    }
+    &--secondary {
+      --color-scheme-background-color: var(--color-secondary);
+      --color-scheme-text: var(--color-secondary-text);
+    }
+    &--accent {
+      --color-scheme-background-color: var(--color-accent);
+      --color-scheme-text: var(--color-accent-text);
+    }
+    &--gray {
+      --color-scheme-background-color: theme(colors.gray.200);
+      --color-scheme-text: var(--color-black);
+    }
+  }
+  .text-color-scheme {
+    color: var(--color-scheme-text);
+  }
+  .bg-color-scheme {
+    background: var(--color-scheme-color);
+  }
+}

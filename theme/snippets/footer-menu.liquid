@@ -1,0 +1,196 @@
+{%- liquid
+  comment
+    Render linklist
+
+    Accepts:
+    - linklist:                     {Object} The list to render (required).
+    - prefix:                       {String} Prefix for the linklist (optional).
+    - collapsible:                  {Boolean} Whether the linklist is collapsible (optional).
+
+    Example:
+      render linklist,
+        linklist: block.settings.menu,
+        prefix: 'footer-menu',
+        collapsible: false
+  endcomment
+
+  unless prefix
+    assign prefix = 'menu'
+  endunless
+
+  if collapsible == null
+    assign collapsible = true
+  endif
+
+  assign data_collapsible_group = ''
+  assign data_collapsible_target = ''
+  assign data_collapsible_trigger = ''
+
+  if collapsible
+    assign data_collapsible_group = 'data-collapsible-group'
+    assign data_collapsible_target = 'data-collapsible-target'
+    assign data_collapsible_trigger = 'data-collapsible-trigger'
+  endif
+
+  assign menu = linklists[linklist]
+-%}
+
+{%- if menu.links.size > 0 -%}
+  {%- comment -%} Level 1 {%- endcomment -%}
+  <ul class="{{ prefix }}__list level-1">
+    {%- for link in menu.links -%}
+      {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+      {%- assign link_1_url = link.url -%}
+      {%- if link_1_url contains 'collections' and link_1_url contains 'filter' -%}
+        {%- assign link_1_url = link_1_url | replace: '%3F', '?' -%}
+      {%- endif -%}
+
+      {%- comment -%} if link is active {%- endcomment -%}
+      {%- liquid
+        assign level_1_active_class = ''
+        if link.current
+          assign level_1_active_class = prefix | append: '__link--active'
+        endif
+      -%}
+      {%- if link.links == blank -%}
+        {%- comment -%} Level 1 without submenu {%- endcomment -%}
+        <li
+          class="{{ prefix }}__item level-1"
+        >
+          <a
+            href="{{ link_1_url }}"
+            class="{{ prefix }}__link {{ level_1_active_class }} level-1 inline-flex py-2 font-bold text-inherit no-underline hover:text-primary focus:text-primary states:no-underline"
+            {%- if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{ link.title | escape }}
+          </a>
+        </li>
+      {%- else -%}
+        {%- comment -%} Level 1 with submenu {%- endcomment -%}
+        <li
+          class="{{ prefix }}__item level-1"
+          {{ data_collapsible_group }}
+        >
+          <a
+            href="{{ link_1_url }}"
+            class="{{ prefix }}__link {{ level_1_active_class }} level-1 inline-flex py-2 font-bold text-inherit no-underline states:text-primary states:no-underline"
+            {%- if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{- link.title | escape -}}
+          </a>
+
+          {%- if collapsible -%}
+            <button
+              type="button"
+              class="{{ prefix }}__link {{ level_1_active_class }} level-1"
+              {{ data_collapsible_trigger }}
+            >
+              {%- render 'global-icon', icon: 'collapsible', icon_class: 'w-4' -%}
+            </button>
+          {%- endif -%}
+
+          {%- comment -%} Level 2 {%- endcomment -%}
+          <ul
+            class="{{ prefix }}__list level-2 list-inside list-disc"
+            tabindex="-1"
+            {{ data_collapsible_target }}
+          >
+            {%- for childlink in link.links -%}
+              {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+              {% assign childlink_url = childlink.url %}
+              {%- if childlink_url contains 'collections' and childlink_url contains 'filter' -%}
+                {% assign childlink_url = childlink_url | replace: '%3F', '?' %}
+              {%- endif -%}
+
+              {%- comment -%} if link is active {%- endcomment -%}
+              {%- liquid
+                assign level_2_active_class = ''
+                if link.current
+                  assign level_2_active_class = prefix | append: '__link--active'
+                endif
+              -%}
+
+              {%- if childlink.links == blank -%}
+                {%- comment -%} Level 2 without submenu {%- endcomment -%}
+                <li class="{{ prefix }}__item level-2">
+                  <a
+                    href="{{ childlink_url }}"
+                    class="{{ prefix }}__link {{ level_2_active_class }} level-2 inline-flex py-2 text-inherit no-underline states:text-primary states:no-underline"
+                    {% if childlink.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{- childlink.title | escape -}}
+                  </a>
+                </li>
+              {%- else -%}
+                {%- comment -%} Level 2 with submenu {%- endcomment -%}
+                <li
+                  class="{{ prefix }}__item level-2"
+                  {{ data_collapsible_group }}
+                >
+                  <a
+                    href="{{ link.url }}"
+                    class="{{ prefix }}__link {{ level_2_active_class }} level-2 inline-flex py-2 text-inherit no-underline states:text-primary states:no-underline"
+                  >
+                    {{- childlink.title | escape -}}
+                  </a>
+
+                  {%- if collapsible -%}
+                    <button
+                      type="button"
+                      class="{{ prefix }}__link {{ level_2_active_class }} level-2"
+                      {{ data_collapsible_trigger }}
+                    >
+                      {%- render 'global-icon', icon: 'collapsible', icon_class: 'w-4' -%}
+                    </button>
+                  {%- endif -%}
+
+                  {%- comment -%} Level 3 {%- endcomment -%}
+                  <ul
+                    class="{{ prefix }}__list level-3 list-inside list-disc pl-3"
+                    {{ data_collapsible_target }}
+                  >
+                    {%- for grandchildlink in childlink.links -%}
+                      {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+                      {% assign grandchildlink_url = grandchildlink.url %}
+                      {%- if grandchildlink_url contains 'collections'
+                        and grandchildlink_url contains 'filter'
+                      -%}
+                        {% assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?' %}
+                      {%- endif -%}
+
+                      {%- comment -%} If link is active {%- endcomment -%}
+                      {%- liquid
+                        assign level_3_active_class = ''
+                        if link.current
+                          assign level_3_active_class = prefix | append: '__link--active'
+                        endif
+                      -%}
+
+                      <li class="{{ prefix }}__item level-3">
+                        <a
+                          href="{{ grandchildlink_url }}"
+                          class="{{ prefix }}__link {{ level_3_active_class }} level-3 inline-flex py-2 text-inherit no-underline hover:text-primary focus:text-primary states:no-underline"
+                          {% if grandchildlink.current %}
+                            aria-current="page"
+                          {% endif %}
+                        >
+                          {{- grandchildlink.title | escape -}}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

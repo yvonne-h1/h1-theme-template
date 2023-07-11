@@ -1,0 +1,73 @@
+{%- if cart != empty -%}
+  {%- for item in cart.items -%}
+    <div id="cart-notification-product-{{ item.id }}" class="cart-item">
+      {%- if item.image != blank -%}
+        {%-
+          render 'format-image',
+          image_object: item.image,
+          alt: item.title | escape,
+          max_width: 80,
+          aspect_ratio: "1/1",
+          class: "w-20 border border-color-default"
+        -%}
+      {%- endif -%}
+      <div class="flex grow flex-col">
+        <p class="cart-notification-product__name my-0 font-bold">
+          {{ item.product.title | escape }}
+        </p>
+        <div class="text-sm">
+          {%- if item.final_price < item.variant.compare_at_price -%}
+            <dl class="price cart-notification-product__price mt-0.5">
+              {%- comment -%} New price {%- endcomment -%}
+              <dt class="sr-only">
+                {%- render 'format-translation',
+                  namespace: 'products.product.price',
+                  key: 'sale_price',
+                  fallback: 'Sale price'
+                -%}
+              </dt>
+              <dd class="price price--sale inline-block text-inherit">
+                {{ item.final_price | money }}
+              </dd>
+              {%- comment -%} Old price {%- endcomment -%}
+              <dt class="sr-only">
+                {%- render 'format-translation',
+                  namespace: 'products.product.price',
+                  key: 'regular_price',
+                  fallback: 'Regular price'
+                -%}
+              </dt>
+              <dd class="inline-block">
+                <s class="price price--compare ml-2">
+                  {{ item.variant.compare_at_price | money }}
+                </s>
+              </dd>
+            </dl>
+          {%- else -%}
+            <span class="price">
+              {{ item.original_price | money }}
+            </span>
+          {%- endif -%}
+        </div>
+
+        <div class="mt-auto">
+          {%- unless item.product.has_only_default_variant -%}
+            {%- for option in item.options_with_values -%}
+              <dl class="cart-notification-product__option mb-0 text-xs {% if forloop.first %} mt-3{% endif %}">
+                <dt class="m-0 inline-block">{{ option.name }}:</dt>
+                <dd class="m-0 inline-block">
+                  {{ option.value }}
+                </dd>
+              </dl>
+            {%- endfor -%}
+          {%- endunless -%}
+          {%- if item.selling_plan_allocation != null -%}
+            <p class="cart-notification-product__option mb-0 text-xs">
+              {{- item.selling_plan_allocation.selling_plan.name -}}
+            </p>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  {%- endfor -%}
+{%- endif -%}

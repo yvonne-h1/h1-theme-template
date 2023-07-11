@@ -1,0 +1,79 @@
+{%- comment -%}
+  Output price filter
+
+  Accepts:
+    - filter: {Object} filter object returned from collection.filters. (required)
+    - filter_index: forloop.index from the collection.filters loop. (required)
+{%- endcomment -%}
+
+{%- liquid
+  assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND' | split: ','
+  assign uses_comma_decimals = false
+  if currencies_using_comma_decimals contains cart.currency.iso_code
+    assign uses_comma_decimals = true
+  endif
+-%}
+
+{%- capture summary_content -%}
+  {%- assign max_price_amount = filter.range_max | money | strip_html | escape -%}
+  <p class="filter-options__info">
+    {%- render 'format-translation',
+      namespace: "sections.collection_template",
+      key: "max_price",
+      price: max_price_amount,
+      fallback: "The highest price"
+    -%}
+  </p>
+  <price-range class="filter-options__price">
+    <label class="field__label -order-1 my-1" for="filter-{{ filter.label | handleize }}-{{ filter_index }}-min">
+      {%- render 'format-translation', namespace: "sections.collection_template.from", fallback: "From" -%}
+    </label>
+    <div class="field flex items-center">
+      <span class="field__currency w-5">{{ cart.currency.symbol }}</span>
+      <input class="field__input w-auto flex-auto"
+        name="{{ filter.min_value.param_name }}"
+        id="filter-{{ filter.label | handleize }}-{{ filter_index }}-min"
+        {% if filter.min_value.value %}
+          {%- if uses_comma_decimals -%}
+            value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+          {%- else -%}
+            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+          {% endif %}
+        {% endif %}
+        type="number"
+        pattern="[0-9]*"
+        inputmode="numeric"
+        placeholder="0"
+        min="0"
+        max="{{ filter.range_max | divided_by: 100 | ceil }}" />
+    </div>
+    <label class="field__label -order-1 my-1" for="filter-{{ filter.label | handleize }}-{{ index }}-max">
+      {%- render 'format-translation', namespace: "sections.collection_template.to", fallback: "To" -%}
+    </label>
+    <div class="field flex items-center">
+      <span class="field__currency w-5">{{ cart.currency.symbol }}</span>
+      <input class="field__input w-auto flex-auto"
+        name="{{ filter.max_value.param_name }}"
+        id="filter-{{ filter.label | handleize }}-{{ forloop.index }}-max"
+        {% if filter.max_value.value %}
+          {%- if uses_comma_decimals -%}
+            value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+          {%- else -%}
+            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+          {% endif %}
+        {% endif %}
+        type="number"
+        pattern="[0-9]*"
+        inputmode="numeric"
+        placeholder="{{ filter.range_max | divided_by: 100 | ceil }}"
+        min="0"
+        max="{{ filter.range_max | divided_by: 100 | ceil }}" />
+    </div>
+  </price-range>
+{%- endcapture -%}
+
+{%- render 'format-filter-group',
+  summary_content: summary_content,
+  label: filter.label,
+  filter_index: filter_index
+-%}

@@ -1,0 +1,89 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "badges": {
+          "type": "badges",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "quantity_label": true
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_label": true,
+            "picker_type": "button"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false
+          }
+        },
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "heading": "Free shipping on orders above €30",
+            "icon": "dryer"
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "heading": "Free returns within 6 weeks",
+            "icon": "return"
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "heading": "Secured payment",
+            "icon": "star"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "badges",
+        "title",
+        "price",
+        "quantity_selector",
+        "variant_picker",
+        "buy_buttons",
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "description"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "enable_media_slider": false,
+        "enable_video_looping": false
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "Recommendations"
+      }
+    }
+  },
+  "order": ["main", "product-recommendations"]
+}

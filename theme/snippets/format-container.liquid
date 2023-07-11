@@ -1,0 +1,80 @@
+{%- comment -%}
+  # Parameters:
+    id              | Add an id to the .container element
+    class           | Add a class to the .container element
+    data            | Add data attribute(s) to the .container element
+    tag             | change the html tag of the .container element
+
+    header_class    | Add a class to the .container__header element
+    header_content  | Change the content of the .container__header element
+
+    title           | Add a title to the .container__title element
+    title_tag       | change the html tag of the .container__title element
+    title_class     | Add a class to the .container__title element
+
+    content_class   | Add a class to the .container__content element
+    content         | Change the content of the .container__content element
+
+    footer_class    | Add a class to the .container__footer element
+    footer_content  | Change the content of the .container__footer element
+
+
+    * All parameters can be a string or a capture
+
+
+  # Example usage:
+
+    {%- capture content %}
+      <p>This is some content</p>
+    {%- endcapture -%}
+
+    {%- render 'format-container',
+      title: 'The title'
+      content: content
+    -%}
+{%- endcomment -%}
+
+{%- comment %} Set id {%- endcomment %}
+{%- if id != blank -%}
+  {%- capture id %}id="{{ id }}"{%- endcapture -%}
+{%- endif -%}
+
+{%- comment %} Render Container {%- endcomment %}
+<{{ tag | default: 'div' }}
+  {{ id }}
+  class="container{{ class | prepend: ' ' }}"
+  {{ data }}
+>
+  {% comment %} Header {% endcomment %}
+  {%- if header_content != blank or title != blank -%}
+    <header
+      class="container__header{{ header_class | prepend: ' ' }}"
+    >
+      {%- if header_content != blank -%}
+        {{- header_content -}}
+      {%- elsif title != blank -%}
+        <{{ title_tag | default: 'h2' }} class="container__title {{ title_class }}">
+          {{- title -}}
+        </{{ title_tag | default: 'h2' }}>
+      {%- endif -%}
+    </header>
+  {%- endif -%}
+
+  {% comment %} Container content {% endcomment %}
+  {%- if content != blank -%}
+    <div
+      class="container__content{{ content_class | prepend: ' ' }}"
+    >
+      {{ content }}
+    </div>
+  {%- endif -%}
+
+  {%- comment %} Container footer {%- endcomment %}
+  {%- if footer_content != blank -%}
+    <footer
+      class="container__footer{{ footer_class | prepend: ' ' }}"
+    >
+      {{ footer_content }}
+    </footer>
+  {%- endif -%}
+</{{ tag | default: 'div' }}>

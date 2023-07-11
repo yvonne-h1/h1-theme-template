@@ -1,0 +1,8 @@
+/**
+ * The utilities layer
+ * The utilities layer is for small, single-purpose classes that should always take precedence over any other styles.
+ * Like flex, spacing, align, font styles, font-weights utility classes
+ */
+
+@import '~tailwindcss/utilities';
+@import 'utilities';

@@ -1,0 +1,28 @@
+{% # prettier-ignore %}
+
+<script>
+
+  window.routes = {
+    cart_url: '{{ routes.cart_url }}',
+    cart_add_url: '{{ routes.cart_add_url }}',
+    cart_change_url: '{{ routes.cart_change_url }}',
+    cart_update_url: '{{ routes.cart_update_url }}',
+    predictive_search_url: '{{ routes.predictive_search_url | default: '/search/suggest' }}'
+  };
+
+  window.cartStrings = {
+    error: `{% render "format-translation", namespace: "sections.cart.cart_error", fallback: "There was an error while updating your cart. Please try again." %}`,
+    quantityError: `{% render "format-translation", namespace: "sections.cart.cart_quantity_error_html", fallback: "You can only add [quantity] of this item to your cart." %}`
+  }
+
+  window.variantStrings = {
+    addToCart: `{% render "format-translation", namespace: "products.product.add_to_cart", fallback: "Add to cart" %}`,
+    soldOut: `{% render "format-translation", namespace: "products.product.sold_out", fallback: "Sold out" %}`,
+    unavailable: `{% render "format-translation", namespace: "products.product.unavailable", fallback: "Unavailable" %}`,
+  }
+
+</script>
+
+<script src="{{ 'variants.js' | asset_url }}" defer></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer></script>
+<script src="{{ 'quick-shop.js' | asset_url }}" defer></script>

@@ -1,0 +1,824 @@
+{%- comment -%} Import styles for this section {%- endcomment -%}
+{%- liquid
+  render 'import-styles', file_name: 'component-quantity-input.css', force: true
+
+  render 'import-styles', file_name: 'section-main-product.css'
+  render 'import-styles', file_name: 'module-fancybox.css'
+  render 'import-styles', file_name: 'component-fancybox.css'
+-%}
+
+{%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+{%- capture container_content -%}
+  <div class="grid grid-cols-12 gap-0">
+
+    {% comment %} Product media {% endcomment %}
+    <div class="product-media relative col-span-12 md:col-span-7 lg:col-span-8">
+      {%- if section.settings.enable_media_slider == true -%}
+        {%- render 'product-media-slider' -%}
+      {%- else -%}
+        {%- render 'product-media' -%}
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Sidebar {%- endcomment -%}
+    <div class="col-span-12 md:col-span-5 lg:col-span-4">
+      <product-info
+        class="product-info-col block {% if section.settings.enable_sticky_info == true %} product-info-col--sticky sticky top-0 transition-all duration-300{% endif %} px-[var(--site-side-spacing)] pt-6"
+        data-product-info
+      >
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+          {%- comment -%} App block {%- endcomment -%}
+          {%- when '@app' -%}
+            <div class="my-2 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
+              {% render block %}
+            </div>
+
+          {%- comment -%} Product badges {%- endcomment -%}
+          {%- when 'badges' -%}
+            {% capture badges %}
+              {%- render 'product-badges', product: product, class: 'inset-0 relative badges-md' -%}
+            {% endcapture %}
+            {% if badges != blank %}
+              <div class="my-2 hidden first:mt-0 last:mb-0 empty:my-0 md:block" {{ block.shopify_attributes }}>
+                {{- badges -}}
+              </div>
+            {% endif %}
+
+          {%- comment -%} Product title {%- endcomment -%}
+          {%- when 'title' -%}
+            <h1 class="product__title h5 my-2 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
+              {{ product.title | escape }}
+            </h1>
+
+          {%- comment -%} Text block {%- endcomment -%}
+          {%- when 'text' -%}
+            {%- if block.settings.text != blank -%}
+              <p class="product__text my-2 first:mt-0 last:mb-0 {{ block.settings.text_style }}" {{ block.shopify_attributes }}>
+                {{- block.settings.text -}}
+              </p>
+            {%- endif -%}
+
+          {%- comment -%} Product price {%- endcomment -%}
+          {%- when 'price' -%}
+            <div class="product__price my-2 text-base leading-7 first:mt-0 last:mb-0 no-js:hidden" id="price-{{ section.id }}" {{ block.shopify_attributes }}>
+              {%- render 'format-price',
+                product: product,
+                use_variant: true,
+                show_badges: false,
+                text_size: 'large'
+              -%}
+            </div>
+            {%- comment -%} Form that is used to set and read the selected variant id. {%- endcomment -%}
+            <div class="hidden" {{ block.shopify_attributes }}>
+              {%- form 'product', product, id: 'product-form-installment', class: 'installment' -%}
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                {{ form | payment_terms }}
+              {%- endform -%}
+            </div>
+
+          {%- comment -%} Product description {%- endcomment -%}
+          {%- when 'description' -%}
+            {%- if product.description != blank -%}
+              <div class="product__description rte my-4 text-sm leading-5 first:mt-0 last:mb-0">
+                {{ product.description }}
+              </div>
+            {%- endif -%}
+
+          {%- comment -%} usp content {%- endcomment -%}
+          {%- when 'usp' -%}
+            {%- if block.settings.heading != blank -%}
+              <p class="my-2 flex w-full items-center justify-items-start gap-4 text-left text-xs leading-5 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon != blank and block.settings.icon != 'none' -%}
+                  <span class="rounded-full bg-primary-200 p-1">
+                    {%- render 'global-icon', icon: block.settings.icon, icon_class: 'w-4 shrink-0 grow-0' -%}
+                  </span>
+                {%- endif -%}
+                {{- block.settings.heading -}}
+              </p>
+            {%- endif -%}
+
+          {%- comment -%} Collapsible content {%- endcomment -%}
+          {%- when 'collapsible_tab' -%}
+
+            {%- if block.settings.content != blank or block.settings.page.content != nil -%}
+              <collapsible-element class="product__collapsible collapsible group block  border-t border-color-default last:border-b first-of-type:mt-8" data-collapsible-group {{ block.shopify_attributes }}>
+                <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-left text-sm font-bold leading-5" data-collapsible-trigger>
+                  <span class="flex w-full justify-items-start gap-2">
+                    {%- if block.settings.icon != blank -%}
+                      {%- render 'global-icon', icon: block.settings.icon, icon_class: 'w-5 shrink-0 grow-0' -%}
+                    {%- endif -%}
+                    {{ block.settings.heading | default: block.settings.page.title }}
+                  </span>
+                  {%- render 'global-icon', icon: 'plus', icon_class: 'w-4 shrink-0 no-js:hidden group-[.collapsible-is-open]:hidden' -%}
+                  {%- render 'global-icon', icon: 'minus', icon_class: 'w-4 shrink-0 hidden no-js:hidden group-[.collapsible-is-open]:block' -%}
+                </button>
+                <div class="collapsible__target w-full overflow-y-auto bg-color-default" data-collapsible-target>
+                  <div class="rte pb-4 text-sm leading-5">
+                    {{- block.settings.content -}}
+                    {{- block.settings.page.content -}}
+                  </div>
+                </div>
+              </collapsible-element>
+            {%- endif -%}
+
+          {%- comment -%} Quantity input {%- endcomment -%}
+          {%- when 'quantity_selector' -%}
+            {%- if product.available -%}
+              <div class="product-form__input product-form__quantity my-4 first:mt-0 last:mb-0 no-js:hidden" {{ block.shopify_attributes }}>
+                {%- liquid
+                  assign quantity_label_class = ''
+                  if block.settings.quantity_label == false
+                    assign quantity_label_class = 'hidden'
+                  endif
+                -%}
+                <label class="quantity__label mb-2 block text-sm font-medium {{ quantity_label_class }}" for="Quantity-{{ section.id }}">
+                  {%- render 'format-translation',
+                    namespace: "products.product.quantity",
+                    key: "label",
+                    fallback: "Quantity"
+                  -%}
+                </label>
+                <quantity-input class="quantity">
+                  <button class="quantity__button no-js:hidden" name="minus" type="button">
+                    <span class="sr-only">
+                      {%- render 'format-translation',
+                        namespace: 'products.product.quantity',
+                        key: 'decrease',
+                        fallback: 'Decrease'
+                      -%}
+                    </span>
+                    {% render 'global-icon', icon: 'minus' %}
+                  </button>
+                  <input class="quantity__input"
+                      type="number"
+                      name="quantity"
+                      id="Quantity-{{ section.id }}"
+                      value="1"
+                      pattern="[0-9]*"
+                      inputmode="numeric"
+                    >
+                  <button class="quantity__button no-js:hidden" name="plus" type="button">
+                    <span class="sr-only">
+                      {%- render 'format-translation',
+                        namespace: 'products.product.quantity',
+                        key: 'increase',
+                        fallback: 'Increase'
+                      -%}
+                    </span>
+                    {% render 'global-icon', icon: 'plus' %}
+                  </button>
+                </quantity-input>
+              </div>
+            {%- endif -%}
+
+          {%- comment -%} Variants {%- endcomment -%}
+          {%- when 'variant_picker' -%}
+            {%- if product.has_only_default_variant != true and product.available -%}
+              {%- if block.settings.picker_type == 'button' -%}
+
+                {%- comment -%} Show variants as radio buttons {%- endcomment -%}
+                <variant-radios
+                  class="product__variant-selector product__variant-selector--buttons block no-js:hidden"
+                  data-section="{{ section.id }}"
+                  data-url="{{ product.url }}"
+                  {{ block.shopify_attributes }}
+                >
+                  {%- for option in product.options_with_values -%}
+                      {%- comment -%} Check if this is a color filter {%- endcomment -%}
+                      {%- liquid
+                        assign option_size = product.options.size
+                        assign is_color = false
+                        assign color_variant_label = settings.color_filter_name | handleize
+                        assign color_label = option.name | handleize
+                        if color_variant_label == color_label
+                          assign is_color = true
+                        endif
+                      -%}
+
+                      <fieldset class="options options--{{ color_label }} js product-form__input my-3 flex items-center last:mb-0" data-option-group="{{ forloop.index | minus: 1 }}">
+                        <legend class="mb-2 text-sm font-medium {% if block.settings.picker_label == false %} sr-only{% endif %}">
+                          {{- option.name -}}
+                        </legend>
+                        {%- for value in option.values -%}
+                          {%- assign index = forloop.index -%}
+
+                          {% comment %} Check if it is available if we only have 1 option {% endcomment %}
+                          {%- liquid
+                            assign index = forloop.index
+                            assign option_available_class = ''
+
+                            if option_size == 1
+                              for loop_variant in product.variants
+                                if loop_variant.option1 == value
+                                  if loop_variant.available == false
+                                    assign option_available_class = 'option__label--disabled'
+                                  endif
+                                endif
+                              endfor
+                            endif
+                          -%}
+
+                          {%- capture label -%}
+                            <label class="option__label option__label--{{ color_label }} {{ option_available_class }}" for="{{ section.id }}-{{ option.name }}-{{ index }}" data-option-label>
+                              {{ value }}
+                            </label>
+                          {%- endcapture -%}
+
+                          <div class="option option--{{ color_label }}" data-option>
+
+                            <input
+                              class="option__input option__input--{{ color_label }} sr-only"
+                              type="radio"
+                              id="{{ section.id }}-{{ option.name }}-{{ index }}"
+                              name="{{ option.name }}"
+                              value="{{ value | escape }}"
+                              data-option-input
+                              {% if option.selected_value == value %}checked{% endif %}
+                            >
+
+                            {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
+                            {%- if is_color -%}
+                              {%- liquid
+                                assign variant_color = value | handleize
+                                assign color_mappings = settings.color_mappings | split: ','
+                                assign color_is_mapped = false
+                              -%}
+
+                              {%- comment -%} Loop through color mapping {%- endcomment -%}
+                              {%- for color in color_mappings -%}
+                                {%- liquid
+                                  assign variant_color = value | handleize
+                                  assign color_name = color | split: '|' | first | handleize
+                                  assign color_hex = color | split: '|' | last
+                                -%}
+                                {%- if color_name == variant_color -%}
+
+                                  {%- comment -%} Render with background-color {%- endcomment -%}
+                                  {%- assign color_is_mapped = true -%}
+                                  <label
+                                    class="option__label option__label--{{ color_label }}"
+                                    for="{{ section.id }}-{{ option.name }}-{{ index }}"
+                                    style="background-color: {{ color_hex }};"
+                                    data-option-label
+                                  >
+                                    <span class="sr-only">{{ value }}</span>
+                                  </label>
+                                {%- endif -%}
+                              {%- endfor -%}
+
+                              {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
+                              {%- unless color_is_mapped -%}
+                                {{ label }}
+                              {%- endunless -%}
+
+                            {%- comment -%} Else render default filter option {%- endcomment -%}
+                            {%- else -%}
+                              {{ label }}
+                            {%- endif -%}
+                          </div>
+                        {%- endfor -%}
+                      </fieldset>
+                  {%- endfor -%}
+                  <script type="application/json">
+                    {{ product.variants | json }}
+                  </script>
+                </variant-radios>
+
+              {%- else -%}
+
+                {%- render 'import-styles', file_name: 'component-form.css' -%}
+
+                {%- comment -%} Show variants in dropdowns {%- endcomment -%}
+                <variant-selects class="product__variant-selector product__variant-selector--select block no-js:hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" {{ block.shopify_attributes }}>
+                  {%- for option in product.options_with_values -%}
+                    <div class="field">
+                      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                        {{ option.name }}
+                      </label>
+                      <select id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                        class="field__select"
+                        name="options[{{ option.name | escape }}]"
+                      >
+                        {%- for value in option.values -%}
+                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                            {{ value }}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                    </div>
+                  {%- endfor -%}
+                  <script type="application/json">
+                    {{ product.variants | json }}
+                  </script>
+                </variant-selects>
+              {%- endif -%}
+            {%- endif -%}
+
+            <noscript>
+              <div class="product-form__input field{% if product.has_only_default_variant %} hidden{% endif %}">
+                <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ section.id }}">
+                  {%- render 'format-translation',
+                    namespace: "products.product",
+                    key: "product_variants",
+                    fallback: "Variants"
+                  -%}
+                </label>
+                <select name="id" id="Variants-{{ section.id }}" class="field__select">
+                  {%- for variant in product.variants -%}
+                    <option
+                      {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                      {% if variant.available == false %}disabled{% endif %}
+                      value="{{ variant.id }}"
+                    >
+                      {{ variant.title }}
+                      {%- if variant.available == false %} -
+                        {%- render 'format-translation',
+                          namespace: "products.product",
+                          key: "sold_out",
+                          fallback: "Sold out"
+                        -%}
+                      {% endif %}
+                      - {{ variant.price | money | strip_html }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </noscript>
+
+          {%- comment -%} Buy buttons {%- endcomment -%}
+          {%- when 'buy_buttons' -%}
+
+            {%- liquid
+              assign button_count = 1
+              if block.settings.show_dynamic_checkout
+                assign button_count = button_count | plus: 1
+              endif
+            -%}
+
+            <div class="my-4 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
+              <product-form class="product-form mt-4 block">
+                {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
+                  <input type="hidden" name="quantity" min="1" value="1" readonly>
+                  <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}" readonly>
+                  {% if settings.enable_pre_order and
+                    product.selected_or_first_available_variant.inventory_quantity <= 0 and
+                    product.selected_or_first_available_variant.inventory_policy == 'continue'  %}
+                    <input type="hidden" name="properties[Pre-order]" value="{% render 'format-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+                  {% endif %}
+
+                  <div class="product-form__buttons mt-4 grid grid-cols-1 items-center gap-2">
+                    <button
+                      type="submit"
+                      name="add"
+                      aria-label="Add"
+                      class="button button--lg button--primary w-full"
+                      data-track-add-to-cart
+                      {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
+                      data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"
+                      {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}
+                    >
+                      {%- render 'global-icon', icon: 'cart', icon_class: 'w-6' -%}
+                      <span data-add-to-cart-button-text>
+                        {%- if product.selected_or_first_available_variant.available -%}
+                          {%- render 'format-translation',
+                            namespace: "products.product",
+                            key: "add_to_cart",
+                            fallback: "Add to cart"
+                          -%}
+                        {%- else -%}
+                          {%- render 'format-translation',
+                            namespace: "products.product",
+                            key: "sold_out",
+                            fallback: "Sold out"
+                          -%}
+                        {%- endif -%}
+                      </span>
+                    </button>
+                    {%- if block.settings.show_dynamic_checkout -%}
+                      {{ form | payment_button }}
+                    {%- endif -%}
+                  </div>
+                {%- endform -%}
+              </product-form>
+            </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </product-info>
+    </div>
+  </div>
+{%- endcapture -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  class: 'my-0',
+  content: container_content,
+  content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--site-side-spacing)]'
+-%}
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'main-product.js' | asset_url }}" defer></script>
+
+{% schema %}
+  {
+    "name": "Product",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Media",
+        "info": "Learn more about [media types](https://help.shopify.com/manual/products/product-media)"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sticky_info",
+        "default": true,
+        "label": "Enable sticky product information on large screens"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_media_slider",
+        "default": false,
+        "label": "Enable media slider"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_video_looping",
+        "default": false,
+        "label": "Enable video looping"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "default": "Text block",
+            "label": "Text"
+          },
+          {
+            "type": "select",
+            "id": "text_style",
+            "label": "Text style",
+            "default": "text-sm",
+            "options": [
+              {
+                "value": "text-xs",
+                "label": "XS"
+              },
+              {
+                "value": "text-sm",
+                "label": "SM"
+              },
+              {
+                "value": "text-base",
+                "label": "MD"
+              },
+              {
+                "value": "text-lg",
+                "label": "LG"
+              },
+              {
+                "value": "text-xl",
+                "label": "XL"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "badges",
+        "name": "Badges",
+        "limit": 1
+      },
+      {
+        "type": "title",
+        "name": "Title",
+        "limit": 1
+      },
+      {
+        "type": "description",
+        "name": "Description",
+        "limit": 1
+      },
+      {
+        "type": "price",
+        "name": "Price",
+        "limit": 1
+      },
+      {
+        "type": "quantity_selector",
+        "name": "Quantity selector",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "quantity_label",
+            "default": true,
+            "label": "Show label"
+          }
+        ]
+      },
+      {
+        "type": "variant_picker",
+        "name": "Variant picker",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "picker_label",
+            "default": true,
+            "label": "Show label"
+          },
+          {
+            "type": "select",
+            "id": "picker_type",
+            "options": [
+              {
+                "value": "dropdown",
+                "label": "Dropdown"
+              },
+              {
+                "value": "button",
+                "label": "Button"
+              }
+            ],
+            "default": "button",
+            "label": "Button"
+          },
+          {
+            "type": "paragraph",
+            "content": "Define the colors displayed as buttons in the theme settings under 'General'."
+          }
+        ]
+      },
+      {
+        "type": "buy_buttons",
+        "name": "Buy buttons",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_dynamic_checkout",
+            "default": true,
+            "label": "Show dynamic checkout buttons",
+            "info": "Using the payment methods available on your store, customers see their preferred option, like PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+          }
+        ]
+      },
+      {
+        "type": "collapsible_tab",
+        "name": "Collapsible tab",
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Collapsible tab",
+            "info": "Include a heading that explains the content. Leave empty to use page title from page selected below.",
+            "label": "Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Tab content",
+            "default": "<p>Collapsible content</p>"
+          },
+          {
+            "type": "page",
+            "id": "page",
+            "label": "Tab content from page"
+          },
+          {
+            "type": "select",
+            "id": "icon",
+            "default": "none",
+            "label": "Icon",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              },
+              {
+                "value": "box",
+                "label": "Box"
+              },
+              {
+                "value": "chat_bubble",
+                "label": "Chat bubble"
+              },
+              {
+                "value": "checkmark",
+                "label": "Check mark"
+              },
+              {
+                "value": "dryer",
+                "label": "Dryer"
+              },
+              {
+                "value": "eye",
+                "label": "Eye"
+              },
+              {
+                "value": "heart",
+                "label": "Heart"
+              },
+              {
+                "value": "iron",
+                "label": "Iron"
+              },
+              {
+                "value": "leaf",
+                "label": "Leaf"
+              },
+              {
+                "value": "leather",
+                "label": "Leather"
+              },
+              {
+                "value": "lock",
+                "label": "Lock"
+              },
+              {
+                "value": "map_pin",
+                "label": "Map pin"
+              },
+              {
+                "value": "pants",
+                "label": "Pants"
+              },
+              {
+                "value": "plane",
+                "label": "Plane"
+              },
+              {
+                "value": "price_tag",
+                "label": "Price tag"
+              },
+              {
+                "value": "question_mark",
+                "label": "Question mark"
+              },
+              {
+                "value": "return",
+                "label": "Return"
+              },
+              {
+                "value": "ruler",
+                "label": "Ruler"
+              },
+              {
+                "value": "shirt",
+                "label": "Shirt"
+              },
+              {
+                "value": "shoe",
+                "label": "Shoe"
+              },
+              {
+                "value": "silhouette",
+                "label": "Silhouette"
+              },
+              {
+                "value": "star",
+                "label": "Star"
+              },
+              {
+                "value": "truck",
+                "label": "Truck"
+              },
+              {
+                "value": "washing",
+                "label": "Washing"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "usp",
+        "name": "USP",
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "heading",
+            "default": "Secured payment",
+            "label": "Text"
+          },
+          {
+            "type": "select",
+            "id": "icon",
+            "default": "none",
+            "label": "Icon",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              },
+              {
+                "value": "box",
+                "label": "Box"
+              },
+              {
+                "value": "chat_bubble",
+                "label": "Chat bubble"
+              },
+              {
+                "value": "checkmark",
+                "label": "Check mark"
+              },
+              {
+                "value": "dryer",
+                "label": "Dryer"
+              },
+              {
+                "value": "eye",
+                "label": "Eye"
+              },
+              {
+                "value": "heart",
+                "label": "Heart"
+              },
+              {
+                "value": "iron",
+                "label": "Iron"
+              },
+              {
+                "value": "leaf",
+                "label": "Leaf"
+              },
+              {
+                "value": "leather",
+                "label": "Leather"
+              },
+              {
+                "value": "lock",
+                "label": "Lock"
+              },
+              {
+                "value": "map_pin",
+                "label": "Map pin"
+              },
+              {
+                "value": "pants",
+                "label": "Pants"
+              },
+              {
+                "value": "plane",
+                "label": "Plane"
+              },
+              {
+                "value": "price_tag",
+                "label": "Price tag"
+              },
+              {
+                "value": "question_mark",
+                "label": "Question mark"
+              },
+              {
+                "value": "return",
+                "label": "Return"
+              },
+              {
+                "value": "ruler",
+                "label": "Ruler"
+              },
+              {
+                "value": "shirt",
+                "label": "Shirt"
+              },
+              {
+                "value": "shoe",
+                "label": "Shoe"
+              },
+              {
+                "value": "silhouette",
+                "label": "Silhouette"
+              },
+              {
+                "value": "star",
+                "label": "Star"
+              },
+              {
+                "value": "truck",
+                "label": "Truck"
+              },
+              {
+                "value": "washing",
+                "label": "Washing"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

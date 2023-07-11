@@ -1,0 +1,773 @@
+{%- liquid
+  # Check if this section should be a swiper
+  assign is_slider = false
+  if section.blocks.size > 1
+    assign is_slider = true
+  endif
+-%}
+
+{% comment %} Import styles and set indicator class {% endcomment %}
+{%- liquid
+  if is_slider
+    render 'import-styles', file_name: 'component-swiper.css'
+    render 'import-styles', file_name: 'module-swiper.css'
+    render 'import-styles', file_name: 'module-swiper-a11y.css'
+    if section.settings.swiper_navigation
+      render 'import-styles', file_name: 'module-swiper-navigation.css'
+    endif
+    if section.settings.swiper_pagination
+      render 'import-styles', file_name: 'module-swiper-pagination.css'
+    endif
+  endif
+-%}
+
+{%- capture swiper_options -%}
+  data-options='{
+    "loop": true,
+    "speed": 1000,
+    {%- if section.settings.swiper_autoplay %}
+      "autoplay": {
+        "delay": {{ section.settings.swiper_autoplay_delay | default: 7500 }}
+      },
+    {%- endif %}
+    {%- if section.settings.swiper_navigation %}
+      "navigation": {
+        "nextEl": ".swiper-button-next-{{ section.id }}",
+        "prevEl": ".swiper-button-prev-{{ section.id }}"
+      },
+    {%- endif %}
+    {%- if section.settings.swiper_pagination %}
+      "pagination": {
+        "el": ".swiper-pagination-{{ section.id }}",
+        "type": "bullets", "clickable": true
+      },
+    {%- endif %}
+    {% comment %} This one should be last since it's complaining about the trailing comma... {% endcomment %}
+    "slidesPerView": 1
+  }'
+{%- endcapture -%}
+
+{% comment %} Image assigns {% endcomment %}
+{%- liquid
+  assign max_width = null
+  if section.settings.container_width == ''
+    assign max_width = 1360
+  endif
+-%}
+
+{%- comment -%} Capture container content {%- endcomment -%}
+{%- capture container_content -%}
+  <swiper-slider>
+    <div class="swiper" data-swiper {% if is_slider %}{{ swiper_options }}{% endif %}>
+      <div class="swiper-wrapper">
+        {%- for block in section.blocks -%}
+
+          {% comment %} Create content position class {% endcomment %}
+          {%- capture content_position -%}
+            {{ block.settings.position_horizontal }} {{ block.settings.position_vertical }} {{ block.settings.text_align }}
+          {%- endcapture -%}
+
+          {% comment %} Swiper slide {% endcomment %}
+          <div class="swiper-slide relative flex h-auto {{ content_position -}} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_desktop }}" data-swiper-slide-index="{{ forloop.index }}" {{ block.shopify_attributes }}>
+
+            {% comment %} Slider image {% endcomment %}
+            {%- liquid
+              assign image_class = 'h-full w-full object-cover'
+              assign image_class_desktop = image_class | append: ' hidden md:block'
+              assign image_class_mobile = image_class | append: ' md:hidden'
+
+              # Assign mobile image
+              assign image_mobile = block.settings.image_desktop
+              if block.settings.image_mobile != blank
+                assign image_mobile = block.settings.image_mobile
+              endif
+
+              # Lazy loading
+              assign lazy = block.settings.image_lazy
+              if forloop.index >= 2
+                assign lazy = true
+              endif
+            -%}
+
+            <div class="slider__image absolute inset-0">
+              {% comment %} Desktop image {% endcomment %}
+              {%- render 'format-image',
+                image_object: block.settings.image_desktop,
+                class: image_class_desktop,
+                max_width: max_width,
+                lazy: lazy
+              -%}
+
+              {% comment %} Mobile image {% endcomment %}
+              {%- if image_mobile != blank -%}
+                {%- render 'format-image',
+                  image_object: image_mobile,
+                  class: image_class_mobile,
+                  max_width: 768,
+                  lazy: lazy
+                -%}
+              {%- endif -%}
+            </div>
+
+            {% comment %} Slider content {% endcomment %}
+            <div class="slider__content relative mx-element-spacing my-12 inline-flex max-w-[80%] flex-col gap-y-4 p-8 md:my-20 md:max-w-screen-md md:p-12 {{ block.settings.content_color_scheme -}}">
+              {% comment %} Heading {% endcomment %}
+              {%- if block.settings.heading != blank -%}
+                <{{ block.settings.heading_element }} class="{{- block.settings.heading_size }} {{ block.settings.heading_color -}}">
+                  {{- block.settings.heading | escape -}}
+                </{{ block.settings.heading_element }}>
+              {%- endif -%}
+
+              {% comment %} Text {% endcomment %}
+              {%- if block.settings.text != blank -%}
+                <p class="{{- block.settings.text_color -}}">
+                  {{- block.settings.text | escape -}}
+                </p>
+              {%- endif -%}
+
+              {% comment %} Buttons {% endcomment %}
+              {%- liquid
+                # First button
+                assign button_1 = false
+                if block.settings.button_label_1 != blank
+                  assign button_1 = true
+                endif
+
+                # Second button
+                assign button_2 = false
+                if block.settings.button_label_2 != blank
+                  assign button_2 = true
+                endif
+
+                # Button alligment
+                case block.settings.text_align
+                  when 'text-left'
+                    assign buttons_alignment = 'justify-start'
+                  when 'text-center'
+                    assign buttons_alignment = 'justify-center'
+                  when 'text-right'
+                    assign buttons_alignment = 'justify-end'
+                endcase
+              -%}
+
+              {%- if button_1 or button_2 -%}
+                <div class="slider__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
+                  {% comment %} Button 1 {% endcomment %}
+                  {%- if button_1 -%}
+                    <a
+                      href="{{ block.settings.button_url_1 | default: '#' }}"
+                      class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}"
+                    >
+                      {{- block.settings.button_label_1 | escape -}}
+                    </a>
+                  {%- endif -%}
+
+                  {% comment %} Button 2 {% endcomment %}
+                  {%- if button_2 -%}
+                    <a
+                      href="{{ block.settings.button_url_2 | default: '#' }}"
+                      class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}"
+                    >
+                      {{- block.settings.button_label_2 | escape -}}
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if is_slider -%}
+        {% comment %} Navigation {% endcomment %}
+        {%- if section.settings.swiper_navigation %}
+          <button
+            class="swiper-button-prev swiper-button-prev-{{ section.id }} "
+            aria-label="{% render "format-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
+          >
+            {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+          </button>
+          <button
+            class="swiper-button-next swiper-button-next-{{ section.id }} "
+            aria-label="{% render "format-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
+          >
+            {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-5' -%}
+          </button>
+        {%- endif %}
+
+        {% comment %} Pagination {% endcomment %}
+        {%- if section.settings.swiper_pagination %}
+          <div class="swiper-pagination swiper-pagination-{{ section.id }} flex justify-center"></div>
+        {%- endif %}
+      {%- endif -%}
+    </div>
+  </swiper-slider>
+{%- endcapture -%}
+
+{%- comment -%} Import javascript {%- endcomment -%}
+{%- if is_slider or request.design_mode -%}
+  <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{%- liquid
+  assign container_class = 'slider'
+
+  # Container width
+  assign container_class = container_class | append: ' ' | append: section.settings.container_width
+
+  # Remove y margin if section is full width
+  if section.settings.container_width == 'container--full'
+    assign container_class = container_class | append: ' my-0'
+  endif
+-%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container', content: container_content, class: container_class -%}
+
+{% schema %}
+  {
+    "name": "Slider",
+    "tag": "section",
+    "class": "slider-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Appearance settings"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          },
+          {
+            "value": "container--full",
+            "label": "Full"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "min_ratio_mobile",
+        "label": "Section minimum ratio mobile",
+        "default": "aspect-[9/16]",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "aspect-[5/2]",
+            "label": "5x2"
+          },
+          {
+            "value": "aspect-[2/1]",
+            "label": "2x1"
+          },
+          {
+            "value": "aspect-[16/9]",
+            "label": "16x9"
+          },
+          {
+            "value": "aspect-[4/3]",
+            "label": "4x3"
+          },
+          {
+            "value": "aspect-[1/1]",
+            "label": "1x1"
+          },
+          {
+            "value": "aspect-[3/4]",
+            "label": "3x4"
+          },
+          {
+            "value": "aspect-[9/16]",
+            "label": "9x16"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "min_ratio_desktop",
+        "label": "Section minimum ratio desktop",
+        "info": "Bigger then 768 pixels",
+        "default": "md:aspect-[16/9]",
+        "options": [
+          {
+            "value": "",
+            "label": "Default (same as mobile)"
+          },
+          {
+            "value": "md:aspect-[5/2]",
+            "label": "5x2"
+          },
+          {
+            "value": "md:aspect-[2/1]",
+            "label": "2x1"
+          },
+          {
+            "value": "md:aspect-[16/9]",
+            "label": "16x9"
+          },
+          {
+            "value": "md:aspect-[4/3]",
+            "label": "4x3"
+          },
+          {
+            "value": "md:aspect-[1/1]",
+            "label": "1x1"
+          },
+          {
+            "value": "md:aspect-[3/4]",
+            "label": "3x4"
+          },
+          {
+            "value": "md:aspect-[9/16]",
+            "label": "9x16"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Swiper settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_navigation",
+        "label": "Navigation",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_pagination",
+        "label": "Pagination",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_autoplay",
+        "label": "Enable autoplay",
+        "default": false
+      },
+      {
+        "type": "number",
+        "id": "swiper_autoplay_delay",
+        "label": "Autoplay delay",
+        "default": 7500,
+        "info": "Delay between transitions (in ms)"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "slide",
+        "name": "Slide",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Image settings"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_desktop",
+            "label": "Desktop image",
+            "info": "Visible 768px >. Max. size: 4472 x 4472 px (20MB)."
+          },
+          {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "Mobile image",
+            "info": "Visible < 768px. Max. size: 4472 x 4472 px (20MB)."
+          },
+          {
+            "type": "checkbox",
+            "id": "image_lazy",
+            "label": "Lazyload image",
+            "default": true,
+            "info": "For page speed, disable if the image is directly visible on mobile and desktop"
+          },
+          {
+            "type": "header",
+            "content": "Content settings"
+          },
+          {
+            "type": "select",
+            "id": "content_color_scheme",
+            "label": "Color scheme",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "color-scheme color-scheme--primary",
+                "label": "Primary",
+                "group": "Theme"
+              },
+              {
+                "value": "color-scheme color-scheme--secondary",
+                "label": "Secondary",
+                "group": "Theme"
+              },
+              {
+                "value": "color-scheme color-scheme--accent",
+                "label": "Accent",
+                "group": "Theme"
+              },
+              {
+                "value": "color-scheme color-scheme--white",
+                "label": "White",
+                "group": "Standard"
+              },
+              {
+                "value": "color-scheme color-scheme--gray",
+                "label": "Gray",
+                "group": "Standard"
+              },
+              {
+                "value": "color-scheme color-scheme--black",
+                "label": "Black",
+                "group": "Standard"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "position_horizontal",
+            "label": "Horizontal position",
+            "default": "justify-center",
+            "options": [
+              {
+                "value": "justify-start",
+                "label": "Left"
+              },
+              {
+                "value": "justify-center",
+                "label": "Center"
+              },
+              {
+                "value": "justify-end",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "position_vertical",
+            "label": "Vertical position",
+            "default": "items-center",
+            "options": [
+              {
+                "value": "items-start",
+                "label": "Top"
+              },
+              {
+                "value": "items-center",
+                "label": "Center"
+              },
+              {
+                "value": "items-end",
+                "label": "Bottom"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "text_align",
+            "label": "Text align",
+            "default": "text-center",
+            "options": [
+              {
+                "value": "text-left",
+                "label": "Left"
+              },
+              {
+                "value": "text-center",
+                "label": "Center"
+              },
+              {
+                "value": "text-right",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Header settings"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "I'm a heading"
+          },
+          {
+            "type": "select",
+            "id": "heading_element",
+            "label": "Heading element",
+            "default": "h2",
+            "info": "Change the element of the heading for SEO.",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "label": "Heading size",
+            "default": "h2",
+            "info": "Change the style of the heading to only influence the look and feel.",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "heading_color",
+            "label": "Color",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "text-black",
+                "label": "Black",
+                "group": "Standard"
+              },
+              {
+                "value": "text-white",
+                "label": "White",
+                "group": "Standard"
+              },
+              {
+                "value": "text-primary",
+                "label": "Primary",
+                "group": "Theme"
+              },
+              {
+                "value": "text-secondary",
+                "label": "Secondary",
+                "group": "Theme"
+              },
+              {
+                "value": "text-accent",
+                "label": "Accent",
+                "group": "Theme"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Text settings"
+          },
+          {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text",
+            "default": "I explain what the slide is for."
+          },
+          {
+            "type": "select",
+            "id": "text_color",
+            "label": "Color",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "text-black",
+                "label": "Black",
+                "group": "Standard"
+              },
+              {
+                "value": "text-white",
+                "label": "White",
+                "group": "Standard"
+              },
+              {
+                "value": "text-primary",
+                "label": "Primary",
+                "group": "Theme"
+              },
+              {
+                "value": "text-secondary",
+                "label": "Secondary",
+                "group": "Theme"
+              },
+              {
+                "value": "text-accent",
+                "label": "Accent",
+                "group": "Theme"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "First button",
+            "info": "Leave empty to hide the button."
+          },
+          {
+            "type": "text",
+            "id": "button_label_1",
+            "label": "Label",
+            "default": "Read more"
+          },
+          {
+            "type": "url",
+            "id": "button_url_1",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "button_type_1",
+            "label": "Type",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "button--outline-white",
+                "label": "Outline white"
+              },
+              {
+                "value": "button--link",
+                "label": "Link"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Second button",
+            "info": "Leave empty to hide the button."
+          },
+          {
+            "type": "text",
+            "id": "button_label_2",
+            "label": "Label",
+            "default": "Read more"
+          },
+          {
+            "type": "url",
+            "id": "button_url_2",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "button_type_2",
+            "label": "Type",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "button--outline-white",
+                "label": "Outline white"
+              },
+              {
+                "value": "button--link",
+                "label": "Link"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Slider",
+        "blocks": [
+          {
+            "type": "slide"
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

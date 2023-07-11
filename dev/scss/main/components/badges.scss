@@ -1,0 +1,53 @@
+@mixin small {
+  @apply px-3 py-1.5 text-xs;
+}
+@mixin medium {
+  @apply px-5 py-2.5 text-sm;
+}
+
+@layer components {
+  .badges {
+    &--sm {
+      .badge {
+        @include small;
+      }
+    }
+    &--md {
+      .badge {
+        @include medium;
+      }
+    }
+  }
+  .badge {
+    background-color: var(--product-badge-background, var(--bg-color-default));
+    color: var(--product-badge-text, var(--text-color-default));
+    @include small;
+    @apply pointer-events-none
+    inline-block
+    select-none
+    break-words
+    font-bold;
+
+    @screen md {
+      @include medium;
+    }
+
+    // Variants
+    &--new {
+      --product-badge-background: var(--color-primary);
+      --product-badge-text: var(--color-primary-text);
+    }
+    &--sold-out {
+      --product-badge-background: var(--color-danger);
+      --product-badge-text: var(--color-white);
+    }
+    &--pre-order {
+      --product-badge-background: var(--color-accent);
+      --product-badge-text: var(--color-accent-text);
+    }
+    &--sale {
+      --product-badge-background: var(--color-success);
+      --product-badge-text: var(--color-white);
+    }
+  }
+}

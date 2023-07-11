@@ -1,0 +1,100 @@
+{%- comment -%}
+  Outputs the actiive/selceted filters
+
+  Accepts:
+  - section:         {Object} main-collection.liquid section object (required)
+{%- endcomment -%}
+
+<div
+  class="filter__option filter__option--active group/filter-group collapsible-is-open hidden w-full overflow-y-auto border-b-[var(--border-color-default)] bg-color-default"
+  data-filter-active-options
+  {% if settings.enable_filter_collapsibles %}
+    data-collapsible-group
+  {% endif %}
+>
+  {%- if settings.enable_filter_collapsibles -%}
+    <button
+      type="button"
+      class="filter__option-trigger flex w-full items-center justify-between py-3 transition-all group-[.collapsible-is-open]/filter-group:pb-2"
+      data-collapsible-trigger
+    >
+      <span class="text-sm font-bold leading-5">
+        {%- render 'format-translation',
+          namespace: 'products.sections.collection_template',
+          key: 'current_filters',
+          fallback: 'Current filters'
+        -%}
+      </span>
+      {%- render 'global-icon',
+        icon: 'minus',
+        icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block'
+      -%}
+      {%- render 'global-icon',
+        icon: 'plus',
+        icon_class: 'w-3 block group-[.collapsible-is-open]/filter-group:hidden'
+      -%}
+    </button>
+  {%- else -%}
+    <div class="filter__option-trigger flex w-full items-center justify-between gap-4 pb-2 pt-4 font-bold">
+      <span class="font-bold">
+        {%- render 'format-translation',
+          namespace: 'products.sections.collection_template',
+          key: 'current_filters',
+          fallback: 'Current filters'
+        -%}
+      </span>
+    </div>
+  {%- endif -%}
+
+  <div
+    class="filter-options__submenu w-full overflow-y-auto transition-all bg-color-default"
+    {% if settings.enable_filter_collapsibles %}
+      data-collapsible-target
+    {% endif %}
+  >
+    <div class="pb-4" data-filter-active-options-list>
+      {%- for filter in collection.filters -%}
+        {%- for value in filter.active_values -%}
+          <filter-remove class="block">
+            <a
+              href="{{ value.url_to_remove }}"
+              class="js-filter-remove flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
+              data-filter-remove
+            >
+              {%- render 'global-icon', icon: 'close', icon_class: 'w-4 shrink-0' -%}
+              {{ filter.label }}: {{ value.label | escape }}
+            </a>
+          </filter-remove>
+        {%- endfor -%}
+
+        {% if filter.type == 'price_range' %}
+          {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+            <filter-remove class="block">
+              <a
+                href="{{ filter.url_to_remove }}"
+                class="js-filter-remove flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
+                data-filter-remove
+              >
+                {%- render 'global-icon', icon: 'close', icon_class: 'w-4 shrink-0' -%}
+                {{ filter.label }}:
+                {%- liquid
+                  if filter.min_value.value
+                    echo filter.min_value.value | money
+                  else
+                    echo 0 | money
+                  endif
+                  echo ' - '
+                  if filter.max_value.value
+                    echo filter.max_value.value | money
+                  else
+                    echo filter.range_max | money
+                  endif
+                -%}
+              </a>
+            </filter-remove>
+          {%- endif -%}
+        {% endif %}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>

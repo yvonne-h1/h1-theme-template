@@ -1,0 +1,219 @@
+{% comment %}
+  # Parameters:
+    article:            { Object }  | Required  | The article object
+    class:              { String }  | Optional  | Add a class to the article element
+    image_max_width:    { String }  | Optional  | The max width of the image
+    image_sizes:        { String }  | Optional  | The sizes of the image
+    image_aspect_ratio: { String }  | Optional  | The aspect ratio of the image
+    highlight:     { Boolean } | Optional  | If the most recent article has a metafield set for article.image,
+                                                  then it's treated as a 'highlight' and displayed with the image on the blog overview page.
+    show_image:         { Boolean } | Optional  |
+    show_type:          { Boolean } | Optional  |
+    show_excerpt:       { Boolean } | Optional  |
+    show_date:          { Boolean } | Optional  |
+    show_author:        { Boolean } | Optional  |
+
+  Usage:
+    {%- render 'article-card', article: article -%}
+
+  Defaults:
+{% endcomment %}
+
+{%- liquid
+  unless highlight
+    assign highlight = false
+  endunless
+
+  unless image_aspect_ratio != blank
+    assign image_aspect_ratio = '4/3'
+  endunless
+
+  unless image_lazy != null
+    assign image_lazy = true
+  endunless
+
+  unless image_sizes != blank
+    assign image_sizes = '(min-width: 1440px) 432px, (min-width: 1024px) 33vw, (min-width: 480px) 50vw, 100vw'
+  endunless
+
+  unless image_max_width != blank
+    assign image_max_width = 464
+  endunless
+
+  unless show_image != null
+    assign show_image = settings.show_article_image
+  endunless
+
+  unless show_type != null
+    assign show_type = settings.show_article_type
+  endunless
+
+  unless show_excerpt != null
+    assign show_excerpt = settings.show_article_excerpt
+  endunless
+
+  unless show_date != null
+    assign show_date = settings.show_article_date
+  endunless
+
+  unless show_author != null
+    assign show_author = settings.show_article_author
+  endunless
+
+  assign image_object = article.image
+  if highlight and article.metafields.article.image.value != blank
+    assign image_object = article.metafields.article.image.value
+  endif
+-%}
+
+{%- comment -%} Capture tags, don't show type for highlighted items {%- endcomment -%}
+{%- capture tag_types -%}
+  {%- if show_type and highlight != nil -%}
+    {%- liquid
+      capture tags_with_type_prefix
+        for tag in article.tags
+          assign tag_downcase = tag | downcase
+          if tag_downcase contains 'type:'
+            assign type_name = tag | downcase | split: ':' | last
+            echo '<li class="product-card__list-tags__item uppercase text-primary tracking-widest">'
+            echo type_name
+            echo '</li>'
+          endif
+        endfor
+      endcapture
+    -%}
+    {%- if tags_with_type_prefix != blank -%}
+      <ul class="product-card__list-tags m-0 flex flex-wrap gap-2 text-sm font-bold uppercase leading-[1.125rem]">
+        {{- tags_with_type_prefix -}}
+      </ul>
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- comment -%} Add the highlight class when the article is in highlight state. {%- endcomment -%}
+{%- liquid
+  if highlight
+    assign class = class | append: ' article-card--highlighted'
+  endif
+-%}
+
+{%- comment -%} Render cart {%- endcomment -%}
+<div class="article-card {{ class -}}">
+  {% comment %} Highlighted card {% endcomment %}
+  {%- if highlight -%}
+    {%- comment -%} The highlight article card output. {%- endcomment -%}
+
+    <a
+      href="{{ article.url }}"
+      class="article-card__link relative block bg-accent text-white focus-visible:outline-dashed focus-visible:outline-1 states:no-underline"
+    >
+      {% comment %} Image {% endcomment %}
+      {%- if show_image -%}
+        {%- render 'format-image',
+          image_object: image_object,
+          alt: article.title,
+          max_width: 1360,
+          lazy: image_lazy,
+          sizes: '(min-width: 1440px) 1360px, 100vw',
+          class: 'article-card__image absolute w-full h-full object-cover'
+        -%}
+      {%- endif -%}
+
+      {% comment %} Image overlay {% endcomment %}
+      <div class="article-card__overlay absolute inset-0 bg-black opacity-20"></div>
+
+      {% comment %} Content {% endcomment %}
+      <div class="article-card__content relative z-20 flex min-h-[28rem] w-full flex-col justify-end gap-14 px-4 py-14 md:min-h-[25rem] lg:px-28 lg:py-20">
+        <header class="article-card__header grid grid-cols-1 gap-2">
+          {%- if show_date or show_author -%}
+            <p class="article-card__meta mb-0 flex flex-wrap gap-1 text-lg leading-6">
+              {%- if show_date -%}
+                <span class="article-card__published_at">
+                  {{- article.published_at | time_tag: format: 'day_month_year' -}}
+                </span>
+              {%- endif -%}
+              {%- if show_date and show_author -%}
+                <span class="article-card__divider">|</span>
+              {%- endif -%}
+              {%- if show_author -%}
+                <span class="article-card__author">
+                  {{- article.author -}}
+                </span>
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+          {%- if article.title -%}
+            <p class="article-card__title label-xl mb-0">
+              {{- article.title | escape -}}
+            </p>
+          {%- endif -%}
+        </header>
+        <p
+          class="article-card__link flex items-center gap-2 text-sm font-bold leading-5"
+          aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title | escape }}"
+        >
+          {%- render 'format-translation',
+            namespace: 'blog.articles.read_more',
+            fallback: 'Read more'
+          -%}
+          {%- render 'global-icon', icon: 'arrow' -%}
+        </p>
+      </div>
+    </a>
+
+    {% comment %} Default card {% endcomment %}
+  {%- else -%}
+    <a
+      href="{{ article.url }}"
+      class="article-card__link relative block text-inherit focus-visible:outline-dashed focus-visible:outline-1 states:no-underline"
+    >
+      {%- if show_image -%}
+        <div class="article-card__image-wrapper mb-4">
+          {%- render 'format-image',
+            image_object: image_object,
+            lazy: image_lazy,
+            alt: article.title,
+            aspect_ratio: image_aspect_ratio,
+            max_width: image_max_width,
+            sizes: image_sizes,
+            class: 'article-card__image w-full'
+          -%}
+        </div>
+      {%- endif -%}
+      <div class="article-card__content">
+        <header class="article-card__header grid grid-cols-1 gap-4">
+          {{- tag_types -}}
+          <div class="grid grid-cols-1 gap-1">
+            {%- if article.title != blank -%}
+              <p class="article-card__title label-lg mb-0">
+                {{- article.title | escape -}}
+              </p>
+            {%- endif -%}
+            {%- if show_date or show_author -%}
+              <p class="article-card__meta mb-0 flex flex-wrap gap-1 text-sm leading-6 opacity-50">
+                {%- if show_date -%}
+                  <span class="article-card__published-at">
+                    {{- article.published_at | time_tag: format: 'day_month_year' -}}
+                  </span>
+                {%- endif -%}
+                {%- if show_date and show_author -%}
+                  <span>|</span>
+                {%- endif -%}
+                {%- if show_author -%}
+                  <span class="article-card__author">
+                    {{- article.author -}}
+                  </span>
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+            {%- if show_excerpt and article.excerpt.size > 0 -%}
+              <p class="article-card__excerpt line-clamp-3 text-sm">
+                {{- article.excerpt | strip_html | truncatewords: 30 -}}
+              </p>
+            {%- endif -%}
+          </div>
+        </header>
+      </div>
+    </a>
+  {%- endif -%}
+</div>

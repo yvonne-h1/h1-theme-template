@@ -1,0 +1,472 @@
+{%- comment -%} Set variables {%- endcomment -%}
+{%- liquid
+  # Global assigns
+  assign collection_object = section.settings.collection
+  assign all_products_count = collection_object.all_products_count
+  assign products_arr = collection_object.products
+
+  # If the number of items is higher than the given setting, use the setting
+  if all_products_count > section.settings.all_products_count
+    assign all_products_count = section.settings.all_products_count
+  endif
+
+  # Assign based on container width
+  case section.settings.container_width
+    when 'container--wide'
+      assign image_max_width = 432
+      assign image_sizes = '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+    else
+      assign image_max_width = 360
+      assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+  endcase
+
+  # Import styles
+  render 'import-styles', file_name: 'section-featured-collection-slider.css'
+  render 'import-styles', file_name: 'component-swiper.css'
+  render 'import-styles', file_name: 'module-swiper.css', force: true
+  render 'import-styles', file_name: 'module-swiper-a11y.css'
+  if section.settings.swiper_navigation
+    render 'import-styles', file_name: 'module-swiper-navigation.css'
+  endif
+
+  # Styles based on swiper_indication setting
+  case section.settings.swiper_indication
+    when 'pagination'
+      assign swiper_indication_class = ' swiper-pagination-active'
+      render 'import-styles', file_name: 'module-swiper-pagination.css'
+    when 'scrollbar'
+      assign swiper_indication_class = ' swiper-scrollbar-active'
+      render 'import-styles', file_name: 'module-swiper-scrollbar.css'
+    else
+      assign swiper_indication_class = ''
+  endcase
+-%}
+
+{%- comment -%} Capture container data for slider {%- endcomment -%}
+{%- capture swiper_options -%}
+  data-options='
+  {
+    "slidesPerView": 2,
+    "spaceBetween": 16,
+    {% case section.settings.swiper_indication %}
+      {% when 'pagination' %}
+        "pagination": {
+          "el": ".swiper-pagination-{{ section.id }}",
+          "type": "bullets",
+          "clickable": true
+        },
+      {% when 'scrollbar' %}
+        "scrollbar": {
+          "el": ".swiper-scrollbar-{{ section.id }}",
+          "draggable": true
+        },
+    {% endcase %}
+    {% if section.settings.swiper_navigation %}
+      "navigation": {
+        "nextEl": ".swiper-button-next-{{ section.id }}",
+        "prevEl": ".swiper-button-prev-{{ section.id }}"
+      },
+    {% endif %}
+    "breakpoints": {
+      "768": { "slidesPerView": 3, "spaceBetween": 32 },
+      "1024": { "slidesPerView": 4, "spaceBetween": 32 }
+    }
+  }'
+{%- endcapture -%}
+
+{%- comment -%} Capture content {%- endcomment -%}
+{%- capture container_content -%}
+  <swiper-slider>
+    <div
+      class="swiper overflow-visible {{ swiper_indication_class }}"
+      data-swiper
+      {{ swiper_options }}
+    >
+      <div class="swiper-wrapper">
+        {%- for product_object in products_arr -%}
+          {%- liquid
+            # Skip current product
+            if product_object.id == product.id
+              continue
+            endif
+
+            # Add 1 to the count if product is skipped
+            assign count = count | plus: 1
+
+            # Image lazy loading by section setting
+            assign image_lazy = section.settings.lazy
+            # if lazyloading is set to false and it's slide 5 till last, always enable lazyloading
+            if forloop > 4 and section.settings.lazy == false
+              assign image_lazy = true
+            endif
+          -%}
+
+          <div class="swiper-slide w-full sm:w-1/2 md:w-1/3 lg:w-1/4" data-swiper-slide-index="{{ forloop.index }}">
+            {%- render 'product-card',
+              product_object: product_object,
+              image_max_width: image_max_width,
+              image_sizes: image_sizes,
+              image_lazy: image_lazy
+            -%}
+          </div>
+
+          {%- if count >= all_products_count -%}
+            {% break %}
+          {%- endif -%}
+
+        {% comment %} Demo slides {% endcomment %}
+        {%- else -%}
+          {%- for i in (1..8) -%}
+            <div class="swiper-slide">
+              {%- render 'product-card-placeholder' -%}
+            </div>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.swiper_navigation -%}
+        <button
+          class="swiper-button-prev swiper-button-prev-{{ section.id }} "
+          aria-label="{% render "format-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
+        >
+          {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+        </button>
+        <button
+          class="swiper-button-next swiper-button-next-{{ section.id }} "
+          aria-label="{% render "format-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
+        >
+          {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-5' -%}
+        </button>
+      {%- endif -%}
+
+      {%- case section.settings.swiper_indication -%}
+        {%- when 'pagination' -%}
+          <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
+        {%- when 'scrollbar' -%}
+          <div class="swiper-scrollbar swiper-scrollbar-{{ section.id }}"></div>
+      {%- endcase -%}
+    </div>
+  </swiper-slider>
+{%- endcapture -%}
+
+{%- capture container_footer -%}
+  {%- if section.settings.button_text != blank -%}
+    <a
+      {% if section.settings.button_url != blank or section.settings.collection.url != blank %}
+        href="{{ section.settings.button_url | default: section.settings.collection.url }}"
+      {% else %}
+        disabled
+      {% endif %}
+      class="button {{ section.settings.button_size }} {{ section.settings.button_color_scheme }}"
+    >
+      {{- section.settings.button_text -}}
+    </a>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- liquid
+  # Container class
+  assign container_class = 'featured-collection-slider overflow-hidden' | append: ' ' | append: section.settings.container_width
+  if section.settings.color_scheme != blank
+    assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+  endif
+
+  # Container title
+  assign container_title = section.settings.heading | escape
+
+  # Title Class
+  assign title_class = section.settings.heading_size | append: ' text-center'
+-%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  class: container_class,
+  title_tag: section.settings.heading_element,
+  title_class: title_class,
+  title: container_title,
+  content: container_content,
+  footer_class: 'text-center',
+  footer_content: container_footer
+-%}
+
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+  {
+    "name": "Feat. collection slider",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Appearance settings"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "all_products_count",
+        "min": 4,
+        "max": 12,
+        "step": 2,
+        "default": 8,
+        "label": "Maximum products to show",
+        "info": "When this higher than 4 it will be shown as a slider on desktop and mobile."
+      },
+      {
+        "type": "header",
+        "content": "Content settings"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "checkbox",
+        "id": "lazy",
+        "label": "Lazyload images",
+        "default": true,
+        "info": "For page speed, disable if the image is directly visible on mobile and desktop"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Featured collection slider",
+        "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h2",
+        "info": "Change the element of the heading for SEO.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h4",
+        "info": "Change the style of the heading to only influence the look and feel.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Text",
+        "default": "View all"
+      },
+      {
+        "type": "url",
+        "id": "button_url",
+        "label": "Url",
+        "info": "Optional. Overwrite the button link. The default is the selected collection."
+      },
+      {
+        "type": "select",
+        "id": "button_color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "button--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "button--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "button--outline",
+            "label": "Outline"
+          },
+          {
+            "value": "button--outline-white",
+            "label": "Outline white"
+          },
+          {
+            "value": "button--link",
+            "label": "Link"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "button_size",
+        "default": "button--md",
+        "label": "Size",
+        "options": [
+          {
+            "value": "button--sm",
+            "label": "Small"
+          },
+          {
+            "value": "button--md",
+            "label": "Medium"
+          },
+          {
+            "value": "button--lg",
+            "label": "Large"
+          },
+          {
+            "value": "button--xl",
+            "label": "Extra large"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Slider settings"
+      },
+      {
+        "type": "select",
+        "id": "swiper_indication",
+        "label": "Slider indication",
+        "default": "pagination",
+        "options": [
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "pagination",
+            "label": "Pagination"
+          },
+          {
+            "value": "scrollbar",
+            "label": "Scrollbar"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_navigation",
+        "label": "Show Navigation",
+        "default": true
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured collection slider"
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

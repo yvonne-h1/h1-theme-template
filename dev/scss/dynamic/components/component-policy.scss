@@ -1,0 +1,11 @@
+.template-policy {
+  .shopify-policy__container {
+    @apply mx-auto my-[var(--container-spacing)] max-w-[var(--site-center-md)];
+  }
+  .rte {
+    @apply max-w-none;
+  }
+  h1 {
+    @apply mb-element-spacing text-left text-[2.25rem] md:text-[3rem];
+  }
+}

@@ -1,0 +1,40 @@
+{%- comment -%}
+  Renders a product card placeholder
+  Usage:
+  {%- render 'product-card-placeholder' -%}
+{%- endcomment -%}
+
+<div
+  class="product-card relative z-0"
+>
+  <div class="product-card__inner" tabindex="-1">
+    <div class="product-card__image relative">
+      <figure class="img img--wrapper bg mb-0 block aspect-[5/6] bg-accent-100 text-accent">
+        {{- 'collection-1' | placeholder_svg_tag -}}
+      </figure>
+    </div>
+  </div>
+  {%- liquid
+    assign product_card_information_class = 'text-center'
+    if view == 'alt'
+      assign product_card_information_class = 'pt-3 text-left'
+    endif
+  -%}
+  <div class="product-card__information {{ product_card_information_class }} block pt-2 text-sm leading-5">
+    <p class="product-card__title block text-sm font-bold leading-5">
+      {%- render 'format-translation',
+        namespace: 'onboarding.product_title',
+        fallback: 'Example product title'
+      -%}
+    </p>
+  </div>
+  {%- liquid
+    assign product_card_price_class = 'justify-center text-center'
+    if view == 'alt'
+      assign product_card_price_class = 'product-card__price--alt mt-2 text-left justify-between'
+    endif
+  -%}
+  <div class="product-card__price flex items-center text-sm leading-5 {{ product_card_price_class }}">
+    {%- render 'format-price' -%}
+  </div>
+</div>

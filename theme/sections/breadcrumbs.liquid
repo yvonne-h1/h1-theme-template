@@ -1,0 +1,285 @@
+{% comment %}
+  Define on which templates breadcrumbs will be shown.
+  Can be: index,collection,list-collections,product,blog,article,page,cart,login,register,account,addresses,order,reset_password'
+{% endcomment %}
+{%- assign template_arr = 'collection,list-collections,product,blog,article,page,cart,login,register,account,addresses,order,reset_password'
+  | split: ','
+-%}
+{%- if template_arr contains template.name -%}
+  {%- comment -%} hide on mobile {%- endcomment -%}
+  {%- liquid
+    assign hide_on_mobile_class = ''
+    if section.settings.hide_on_mobile == true
+      assign hide_on_mobile_class = ' hidden md:block'
+    endif
+  -%}
+
+  {%- comment -%}
+    BREADCRUMB ARRAY
+    Creates an array from the main navigation and appends crumbs based on the current template.
+    Duplicate entries will be filtered out.
+    Use of items linking to "#" is not allowed by google, so these will not show up as a link in the breadcrumbs.
+  {%- endcomment -%}
+  {%- liquid
+    capture breadcrumb_str
+      comment
+        Prepend the homepage link
+      endcomment
+      assign home_text = 'templates.index.navigation_title' | t
+      if section.settings.show_home_link and home_text != blank
+        echo '||' | append: home_text | append: '::' | append: routes.root_url
+      endif
+
+      comment
+        Collect all active links from linklist
+      endcomment
+      if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0
+        for link in linklists[section.settings.menu].links
+          if link.active or link.child_active
+            echo '||' | append: link.title | append: '::' | append: link.url
+
+            if link.child_active
+              for sublink in link.links
+                if sublink.active or sublink.child_active
+                  echo '||' | append: sublink.title | append: '::' | append: sublink.url
+
+                  if sublink.child_active
+                    for subsublink in sublink.links
+                      if subsublink.active
+                        echo '||' | append: subsublink.title | append: '::' | append: subsublink.url
+                        break
+                      endif
+                    endfor
+                  endif
+                  break
+                endif
+              endfor
+            endif
+            break
+          endif
+        endfor
+      endif
+
+      comment
+        Check if there are extra parent collection metafields defined
+      endcomment
+      if collection.metafields.breadcrumbs.parent_collection.value != blank
+        assign parent_collection = collection.metafields.breadcrumbs.parent_collection.value
+      endif
+
+      case template.name
+        when 'list-collections'
+          echo '||'
+          echo 'sections.breadcrumbs.collections' | t
+          echo '::' | append: routes.collections_url
+        when 'collection'
+          if parent_collection != blank
+            echo '||' | append: parent_collection.title
+            echo '::' | append: parent_collection.url
+          endif
+          echo '||' | append: collection.title
+          echo '::' | append: collection.url
+        when 'product'
+          if collection.title != blank
+            if parent_collection != blank
+              echo '||' | append: parent_collection.title
+              echo '::' | append: parent_collection.url
+            endif
+            echo '||' | append: collection.title
+            echo '::' | append: collection.url
+          endif
+          echo '||' | append: product.title
+          echo '::' | append: product.url
+        when 'blog'
+          echo '||' | append: blog.title
+          echo '::' | append: blog.url
+        when 'article'
+          if blog.title != blank
+            echo '||' | append: blog.title
+            echo '::' | append: blog.url
+          endif
+        when 'page'
+          echo '||' | append: page.title
+          echo '::' | append: page.url
+        when 'cart'
+          echo '||'
+          echo 'templates.cart.title' | t
+          echo '::' | append: routes.cart_url
+        when '404'
+          echo '||'
+          echo 'templates.404.title' | t
+        when 'search'
+          echo '||'
+          echo 'sections.main_search.title' | t
+          echo '::' | append: routes.search_url
+        when 'login'
+          echo '||'
+          echo 'customer.login_page.title' | t
+          echo '::' | append: routes.account_login_url
+        when 'reset_password'
+          echo '||'
+          echo 'customer.reset_password.title' | t
+          echo '::' | append: routes.account_login_url
+        when 'register'
+          echo '||'
+          echo 'customer.register.title' | t
+          echo '::' | append: routes.account_register_url
+        when 'activate_account'
+          echo '||'
+          echo 'customer.account.title' | t
+          echo '::' | append: routes.account_url
+        when 'account'
+          echo '||'
+          echo 'customer.account.title' | t
+          echo '::' | append: routes.account_url
+        when 'addresses'
+          echo '||'
+          echo 'customer.account.title' | t
+          echo '::' | append: routes.account_url
+          echo '||'
+          echo 'customer.account.view_addresses' | t
+          echo '::' | append: routes.account_addresses_url
+        when 'order'
+          echo '||'
+          echo 'customer.account.title' | t
+          echo '::' | append: routes.account_url
+          echo '||'
+          echo 'customer.orders.title' | t
+          echo '::' | append: routes.account_url
+      endcase
+    endcapture
+
+    assign breadcrumb_arr = breadcrumb_str | strip_newlines | remove_first: '||' | split: '||' | uniq
+  -%}
+
+  {%- comment -%}
+    RENDER BREADCRUMB
+  {%- endcomment -%}
+  {%- comment -%} Render breadcrumbs {%- endcomment -%}
+  {% if breadcrumb_arr != blank %}
+    <div class="site-center site-spacing-side my-4 md:my-6 {{ hide_on_mobile_class }}">
+      <ol class="breadcrumbs flex {{ section.settings.alignment }} list-none gap-2 text-xs font-bold leading-5 text-gray-400 md:text-sm">
+        {%- comment -%} Loop the array {%- endcomment -%}
+        {%- for path in breadcrumb_arr -%}
+          {%- liquid
+            assign path_arr = path | split: '::'
+            assign path_text = path_arr[0]
+            assign path_url = path_arr[1]
+            capture path_name_item
+              echo '<span>'
+              echo path_text
+              echo '</span>'
+            endcapture
+          -%}
+
+          {%- liquid
+            if forloop.last
+              echo '<li class="breadcrumbs__item">'
+
+              echo path_name_item
+
+              if section.settings.show_tagged_link and current_tags.size > 0
+                capture current_tags_list
+                  for tag in current_tags
+                    echo tag
+                    unless forloop.last
+                      echo ','
+                    endunless
+                  endfor
+                endcapture
+
+                echo 'general.meta.tags' | t: tags: current_tags_list
+                echo '<meta content="' | append: forloop.index | append: '" />'
+              endif
+
+              echo '</li>'
+            else
+              if path_url != blank and path_url != '#'
+                echo '<li class="breadcrumbs__item">'
+                echo '<a class="breadcrumbs__link text-gray-400 transition-colors states:no-underline states:text-color-primary" href="'
+                echo path_url | strip
+                echo '">'
+                echo path_name_item
+                echo '</a>'
+                echo '<meta content="' | append: forloop.index | append: '" />'
+                echo '</li>'
+              else
+                if section.settings.show_non_link
+                  echo '<li class="breadcrumbs__item">'
+                  echo path_name_item
+                  echo '<meta content="' | append: forloop.index | append: '" />'
+                  echo '</li>'
+                endif
+              endif
+              echo '<li class="breadcrumbs__divider before:content-empty before:block border-l border-gray-400 h-4 w-0 mt-0.5"></span>'
+            endif
+          -%}
+        {%- endfor -%}
+      </ol>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Breadcrumbs",
+    "class": "breadcrumbs-section",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "info": "The breadcrumb path will be based on this menu",
+        "label": "Menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_home_link",
+        "default": true,
+        "label": "Show 'Home'"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tagged_link",
+        "default": true,
+        "label": "Show 'Tagged:'"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_non_link",
+        "default": true,
+        "label": "Show items without an url"
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_on_mobile",
+        "default": false,
+        "label": "Hide on mobile"
+      },
+      {
+        "type": "select",
+        "id": "alignment",
+        "label": "Alignment",
+        "default": "justify-start",
+        "options": [
+          {
+            "value": "justify-start",
+            "label": "Left"
+          },
+          {
+            "value": "justify-center",
+            "label": "Center"
+          },
+          {
+            "value": "justify-end",
+            "label": "Right"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Breadcrumbs"
+      }
+    ]
+  }
+{% endschema %}

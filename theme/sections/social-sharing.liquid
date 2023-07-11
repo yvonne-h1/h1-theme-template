@@ -1,0 +1,320 @@
+{%- comment -%} Capture the content {%- endcomment -%}
+{%- capture container_content -%}
+  {% if section.settings.heading != blank or section.blocks.size > 0 %}
+    <div class='social-sharing flex flex-col items-center justify-center'>
+      {% if section.settings.heading != blank %}
+        <{{ section.settings.heading_element }} class="social-sharing__title {{ section.settings.heading_size }}">
+          {{- section.settings.heading -}}
+        </{{ section.settings.heading_element }}>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <ul class='social-sharing__list mt-4 flex space-x-4'>
+          {% for block in section.blocks  %}
+            <li class='social-sharing__item duration-300 hover:scale-110'>
+              {%- liquid
+                assign platform = block.settings.platform | downcase
+
+                case platform
+                  when 'facebook'
+                    assign share_url = 'https://www.facebook.com/sharer.php?u=' | append: shop.url | append: request.path
+                  when 'twitter'
+                    assign share_url = 'https://twitter.com/intent/tweet?url=' | append: shop.url | append: request.path
+                  when 'pinterest'
+                    assign share_url = 'https://pinterest.com/pin/create/button/?url=' | append: shop.url | append: request.path
+                endcase
+
+                assign icon_class = 'icon icon--' | append: platform
+                if section.settings.icon_size != blank
+                  assign icon_class = icon_class | append: ' ' | append: section.settings.icon_size
+                endif
+
+                assign icon = platform
+                if section.settings.icon_shape != blank
+                  assign icon = icon | append: '_' | append: section.settings.icon_shape
+                endif
+              -%}
+
+              <a href='{{ share_url }}' target='_blank' rel='noopener' class='flex flex-col items-center justify-center text-inherit'>
+                {% render 'icons-social', icon: icon, class: icon_class %}
+                <p class='sr-only'>
+                  {{ block.settings.platform | capitalize }}
+                </p>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  {% endif %}
+{%- endcapture -%}
+
+{%- comment -%} Assign container classes {%- endcomment -%}
+{% liquid
+  assign container_class = 'social-sharing__container'
+  if section.settings.container_width != blank
+    assign container_class = container_class | append: ' ' | append: section.settings.container_width
+  endif
+  if section.settings.color_scheme != blank
+    assign container_class = container_class | append: ' ' | append: 'my-0 container--background' | append: ' ' | append: section.settings.color_scheme
+  endif
+%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container', content: container_content, class: container_class -%}
+
+{% schema %}
+  {
+    "name": "Social sharing",
+    "tag": "section",
+    "class": "social-sharing-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section appearance"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "default": "container--md",
+        "label": "Container width",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--sm",
+            "label": "Small"
+          },
+          {
+            "value": "container--md",
+            "label": "Medium"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Title"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Share"
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h2",
+        "info": "Change the element of the heading for SEO.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h5",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ],
+        "info": "Change the style of the heading to only influence the look and feel."
+      },
+      {
+        "type": "header",
+        "content": "Icon style"
+      },
+      {
+        "type": "select",
+        "id": "icon_shape",
+        "label": "Icon shape",
+        "default": "round",
+        "options": [
+          {
+            "value": "",
+            "label": "Regular"
+          },
+          {
+            "value": "round",
+            "label": "Round"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "icon_size",
+        "label": "Icon size",
+        "default": "w-12",
+        "options": [
+          {
+            "value": "w-4",
+            "label": "Small"
+          },
+          {
+            "value": "w-6",
+            "label": "Medium"
+          },
+          {
+            "value": "w-8",
+            "label": "Large"
+          },
+          {
+            "value": "w-12",
+            "label": "Extra large"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "platform",
+        "name": "Platform",
+        "settings": [
+          {
+            "type": "select",
+            "id": "platform",
+            "label": "Platform",
+            "default": "facebook",
+            "options": [
+              {
+                "value": "facebook",
+                "label": "Facebook"
+              },
+              {
+                "value": "twitter",
+                "label": "Twitter"
+              },
+              {
+                "value": "pinterest",
+                "label": "Pinterest"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Social sharing",
+        "blocks": [
+          {
+            "type": "platform",
+            "settings": {
+              "platform": "facebook"
+            }
+          },
+          {
+            "type": "platform",
+            "settings": {
+              "platform": "twitter"
+            }
+          },
+          {
+            "type": "platform",
+            "settings": {
+              "platform": "pinterest"
+            }
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

@@ -1,0 +1,82 @@
+{% comment %}
+  Renders a set of links for paginated results. Must be used within paginate tags.
+
+  Usage:
+  {% paginate results by 2 %}
+    {% render 'pagination', paginate: paginate, anchor: '#yourID' %}
+  {% endpaginate %}
+
+  Accepts:
+  - paginate: {Object}
+  - anchor: {String} (optional) This can be added so that on page reload it takes you to wherever you've placed your anchor tag.
+  - class: {String} (optional) Appended to container element's class attribute
+{% endcomment %}
+
+{%- if paginate.parts.size > 0 -%}
+  {%- assign pagination_item_class = 'block p-3 text-sm leading-5' -%}
+
+  <nav
+    class="pagination {{ class | default: 'my-14 block lg:my-16' }}"
+    aria-label="{% render "format-translation", namespace: "general.pagination.label", fallback: "Label" %}"
+  >
+    <ul class="pagination__list flex flex-wrap items-center justify-center text-sm font-bold leading-5">
+      {%- if paginate.previous -%}
+        <li class="mr-3">
+          <a
+            href="{{ paginate.previous.url }}{{ anchor }}"
+            class="pagination__item pagination__item--prev group/pagination-prev relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary"
+            aria-label="{% render "format-translation", namespace: "general.pagination.previous", fallback: "Previous" %}"
+          >
+            {%- render 'global-icon',
+              icon: 'chevron-left',
+              icon_class: 'w-3 group-hover/pagination-prev:scale-125 transition-all'
+            -%}
+          </a>
+        </li>
+      {%- endif -%}
+
+      {%- for part in paginate.parts -%}
+        <li>
+          {%- if part.is_link -%}
+            <a
+              href="{{ part.url }}{{ anchor }}"
+              class="pagination__item {{ pagination_item_class }} text-inherit no-underline hover:text-primary states:no-underline"
+              aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+            >
+              {{- part.title -}}
+            </a>
+          {%- else -%}
+            {%- if part.title == paginate.current_page -%}
+              <span
+                class="pagination__item pagination__item--current {{ pagination_item_class }} text-primary"
+                aria-current="page"
+                aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+              >
+                {{- part.title -}}
+              </span>
+            {%- else -%}
+              <span class="pagination__item {{ pagination_item_class }}">
+                {{- part.title -}}
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <li class="ml-3">
+          <a
+            href="{{ paginate.next.url }}{{ anchor }}"
+            class="pagination__item pagination__item--next group/pagination-next relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary"
+            aria-label="{% render "format-translation", namespace: "general.pagination.next", fallback: "Next" %}"
+          >
+            {%- render 'global-icon',
+              icon: 'chevron-right',
+              icon_class: 'w-3 group-hover/pagination-next:scale-125 transition-all'
+            -%}
+          </a>
+        </li>
+      {%- endif -%}
+    </ul>
+  </nav>
+{%- endif -%}

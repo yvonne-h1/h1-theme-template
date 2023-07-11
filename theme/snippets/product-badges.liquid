@@ -1,0 +1,76 @@
+{%- liquid
+  if class == blank
+    assign class = 'absolute inset-x-2 top-2 md:inset-x-4 md:top-4'
+  endif
+
+  # Badge - Sold out
+  capture sold_out_badge
+    echo '<span class="badge badge--sold-out" aria-hidden="true">'
+    render 'format-translation', namespace: 'products.product', key: 'sold_out', fallback: 'Sold out'
+    echo '</span>'
+  endcapture
+
+  # Badge - Sale
+  capture sale_badge
+    echo '<span class="badge badge--sale" aria-hidden="true">'
+    render 'format-translation', namespace: 'products.product', key: 'on_sale', fallback: 'Sale'
+    echo '</span>'
+  endcapture
+
+  # Badge - Pre order
+  capture pre_order_badge
+    echo '<span class="badge badge--pre-order" aria-hidden="true">'
+    render 'format-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'
+    echo '</span>'
+  endcapture
+
+  # Get badge text from product-tag "badge:"
+  capture flex_badge
+    echo '<span class="badge badge--new" aria-hidden="true">'
+    echo 'badge_text'
+    echo '</span>'
+  endcapture
+
+  # Check if the product has a compare_at_price
+  assign product_has_compare_at_price = false
+  if product.compare_at_price > 0
+    assign product_has_compare_at_price = true
+  endif
+
+  # Check if the product can be pre-ordered
+  assign product_can_be_preordered = false
+  if settings.enable_pre_order and product.selected_or_first_available_variant.inventory_quantity <= 0 and product.selected_or_first_available_variant.inventory_policy == 'continue'
+    assign product_can_be_preordered = true
+  endif
+
+  # Collect badges
+  capture badges
+    if product.available == true
+      if product_can_be_preordered
+        echo pre_order_badge
+      elsif product_has_compare_at_price
+        echo sale_badge
+      endif
+
+      assign product_tags = product.tags | downcase
+      if product_tags contains 'badge:'
+        for tag in product.tags
+          assign tag_down = tag | downcase
+          if tag_down contains 'badge:'
+            assign badge_text = tag | remove: 'badge:' | strip
+            echo flex_badge | replace: 'badge_text', badge_text
+          endif
+        endfor
+      endif
+    else
+      echo sold_out_badge
+    endif
+  endcapture
+-%}
+
+{%- comment -%} Final html output {%- endcomment -%}
+{%- if badges != blank -%}
+  <div class="badges pointer-events-none z-10 flex flex-wrap gap-2 {{ class }}">
+    {{ badges }}
+  </div>
+{%- endif -%}

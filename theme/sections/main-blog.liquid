@@ -1,0 +1,158 @@
+{%- liquid
+  assign nav_item_class = 'blog-header__nav-item'
+  assign nav_link_class = 'blog-header__nav-link whitespace-nowrap font-bold uppercase text-black no-underline aria-[current=true]:text-primary states:text-primary'
+  assign nav_link_replace = '<a class="' | append: nav_link_class | append: '" aria-current="false"'
+  assign nav_link_replace_active = '<a class="' | append: nav_link_class | append: '" aria-current="true"'
+-%}
+
+{%- comment -%} Container header {%- endcomment -%}
+{%- capture container_header -%}
+
+  <h1 class="h2">
+    {{- blog.title | escape -}}
+  </h1>
+
+  {%- if section.settings.enable_navigation and blog.all_tags.size > 0 -%}
+    <nav class="blog-header__nav blog-nav" aria-labelledby="primary-navigation">
+      <p class="blog-nav__title hidden">
+        {%- render "format-translation", namespace: "sections.main_blog", key: "categories", fallback: "Categories" -%}
+      </p>
+
+      <ul class="blog-header__nav-list article-tags list-menu flex flex-wrap justify-center gap-x-10 text-sm">
+        {%- liquid
+          assign nav_link_active = false
+          unless current_tags.size
+            assign nav_link_active = true
+          endunless
+        -%}
+
+        {%- comment -%} General All blog link {%- endcomment -%}
+        <li class="{{- nav_item_class -}}">
+          <a class="{{- nav_link_class -}}" aria-current="{{- nav_link_active -}}" href="{{ blog.url }}" title="All">
+            {%- render 'format-translation', namespace: "blogs.general", key: "all_tags", fallback: "All" -%}
+          </a>
+        </li>
+
+        {%- comment -%} Blog tags and current (if it's the case) {%- endcomment -%}
+        {%- for tag in blog.all_tags -%}
+          {%- if tag contains 'type:' -%}
+            {%- assign article_type = tag | downcase | remove: 'type:' -%}
+            {%- if current_tags contains tag -%}
+              <li class="{{- nav_item_class -}}">
+                {{ article_type | link_to_remove_tag: tag | replace: '<a ', nav_link_replace_active }}
+              </li>
+            {%- else -%}
+              <li class="{{- nav_item_class -}}">
+                {{ article_type | link_to_tag: tag | replace: '<a ', nav_link_replace }}
+              </li>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- comment -%} Container content {%- endcomment -%}
+{%- capture container_content -%}
+  {%- paginate blog.articles by section.settings.blog_pagination -%}
+    <div class="blog-articles grid grid-cols-12 gap-x-4 gap-y-8 md:gap-y-16">
+      {%- for article in blog.articles -%}
+
+        {%- comment -%} Check if first item has an image set in the metafields, if so, display it as a highlight. {%- endcomment -%}
+        {%- liquid
+          assign highlight = false
+          assign col_classes = 'col-span-12 sm:col-span-6 lg:col-span-4'
+          if article.metafields.article.image.value != blank and forloop.first and section.settings.show_highlight_article
+            assign highlight = true
+            assign col_classes = 'col-span-12 mb-8 md:mb-0'
+          endif
+          assign lazy = true
+          if forloop.index <= 1
+            assign lazy = false
+          endif
+        -%}
+
+        {%- comment -%} Output article card {%- endcomment -%}
+        {%-
+          render 'article-card',
+            article: article,
+            class: col_classes,
+            highlight: highlight,
+            image_lazy: lazy,
+            show_image: true,
+            show_type: true,
+            show_excerpt: true,
+            show_date: true,
+            show_author: true
+        -%}
+      {%- endfor -%}
+    </div>
+
+    {%- liquid
+      # Pagination
+      if paginate.pages > 1
+        render 'pagination', paginate: paginate
+      endif
+    -%}
+
+  {%- endpaginate -%}
+{%- endcapture -%}
+
+{% comment %} Container footer {% endcomment %}
+{%- capture container_footer -%}
+  {%- if section.settings.show_back_to_top == true -%}
+    {% render 'back-to-top' %}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- comment -%} Render the blog articles {%- endcomment -%}
+{%- render 'format-container',
+  class: 'main-blog',
+  header_class: 'main-blog__header blog-header mb-8 flex items-center justify-between gap-y-8 flex-col md:flex-row',
+  header_content: container_header,
+  content: container_content,
+  footer_content: container_footer
+-%}
+
+{%- if section.settings.show_back_to_top == true -%}
+  <script src="{{ 'back-to-top.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Blog",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "number",
+        "id": "blog_pagination",
+        "label": "Articles per page",
+        "default": 10
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_article",
+        "default": true,
+        "label": "Show highlight article"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_back_to_top",
+        "default": true,
+        "label": "Show back to top button"
+      },
+      {
+        "type": "header",
+        "content": "Blog navigation",
+        "info": "The navigation is generated based on the article tags with the prefix 'type:'"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_navigation",
+        "default": true,
+        "label": "Enable blog tags navigation"
+      }
+    ]
+  }
+{% endschema %}

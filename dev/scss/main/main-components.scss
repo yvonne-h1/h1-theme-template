@@ -1,0 +1,8 @@
+/**
+ * The components layer
+ * Used for component that are used often in the store, For example .button, .field & .product-card
+ * For not regular used components css use a specific component/section stylesheet and load it only when needed.
+ */
+
+@import '~tailwindcss/components';
+@import 'components';

@@ -1,0 +1,21 @@
+{%- liquid
+  assign demo_blog = blogs.news
+-%}
+
+<div class="grid grid-cols-12 gap-x-4 gap-y-10">
+  {%- for article in demo_blog.articles limit: 3 -%}
+    <div class="col-span-12 md:col-span-6">
+      {%- render 'article-card',
+        article: article,
+        image_size: '430x323',
+        image_sizes_arr: '343x256|225x169|303x228|430x323',
+        image_breakpoints_arr: '360|768|1024|1440',
+        show_image: true,
+        show_type: true,
+        show_excerpt: true,
+        show_date: true,
+        show_author: true
+      -%}
+    </div>
+  {%- endfor -%}
+</div>

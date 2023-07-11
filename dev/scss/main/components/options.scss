@@ -1,0 +1,85 @@
+@use '../../mixins' as *;
+
+/**
+  * button style options
+  * There are also dynamic list style options
+*/
+
+@layer components {
+  .options {
+    @apply flex flex-wrap gap-1;
+  }
+
+  .option {
+    @apply relative p-1.5;
+
+    &__input {
+      @apply sr-only;
+    }
+
+    &__label {
+      @apply relative
+        flex
+        min-h-[2.25rem]
+        min-w-[36px]
+        cursor-pointer
+        items-center
+        justify-center
+        rounded-[1.125rem]
+        bg-secondary-50
+        px-2
+        py-2
+        text-center
+        text-xs
+        leading-4
+        no-underline
+        transition-colors
+        text-color-default;
+
+      &:before {
+        @apply absolute
+          -inset-[5px]
+          rounded-[24px]
+          border
+          border-solid
+          border-black
+          opacity-0
+          transition-opacity
+          content-empty;
+      }
+      @include states() {
+        @apply no-underline text-color-default before:opacity-100;
+      }
+
+      &--disabled {
+        @apply pointer-events-none
+          cursor-default
+          overflow-hidden
+          opacity-50
+          text-color-light
+          before:hidden;
+        &:after {
+          @apply absolute
+            left-1/2
+            top-1/2
+            block
+            h-[200%]
+            w-0.5
+            -translate-x-1/2
+            -translate-y-1/2
+            rotate-45
+            content-empty;
+          background-color: var(--text-color-default);
+        }
+      }
+    }
+
+    &__input:checked + .option__label,
+    .option__label--checked {
+      @apply bg-primary-100;
+      &:before {
+        @apply opacity-100;
+      }
+    }
+  }
+}

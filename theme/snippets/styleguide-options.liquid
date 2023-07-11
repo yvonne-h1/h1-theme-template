@@ -1,0 +1,104 @@
+{%- liquid
+  render 'import-styles', file_name: 'component-list-options.css', force: true
+-%}
+
+<p>For variants, filters and sorting</p>
+
+<div>
+  <h3 class="h5 mb-4 border-b pb-2">Button style</h3>
+  <div class="options">
+    <div class="option">
+      <input name="radio" class="option__input sr-only" type="radio" id="options-1" tabindex="0">
+      <label class="option__label" for="options-1" tabindex="-1">Option default</label>
+    </div>
+    <div class="option">
+      <input
+        name="radio"
+        class="option__input sr-only"
+        type="radio"
+        id="options-2"
+        tabindex="0"
+        disabled
+      >
+      <label class="option__label option__label--disabled" for="options-2" tabindex="-1"
+        >Option disabled</label
+      >
+    </div>
+    <div class="option">
+      <input name="radio" class="option__input sr-only" type="radio" id="options-3" tabindex="0">
+      <label
+        class="option__label option__label--color"
+        for="options-3"
+        tabindex="-1"
+        style="background-color: #68b7ff;"
+      >
+        <span class="sr-only">Option blue</span>
+      </label>
+    </div>
+    <div class="option">
+      <input
+        name="radio"
+        class="option__input sr-only"
+        type="radio"
+        id="options-4"
+        tabindex="0"
+        checked
+      >
+      <label class="option__label option__label--checked" for="options-4" tabindex="-1"
+        >Option checked</label
+      >
+    </div>
+  </div>
+</div>
+
+<div>
+  <h3 class="h5 mb-4 border-b pb-2">List style</h3>
+  <div class="list-options">
+    <div class="list-option">
+      <input
+        name="radio"
+        class="list-option__input sr-only"
+        type="radio"
+        id="options-list-1"
+        tabindex="0"
+      >
+      <label class="list-option__label" for="options-list-1" tabindex="-1"
+        >Option radio style</label
+      >
+    </div>
+    <div class="list-option">
+      <input
+        name="radio"
+        class="list-option__input sr-only"
+        type="radio"
+        id="options-list-2"
+        tabindex="0"
+        disabled
+      >
+      <label
+        class="list-option__label list-option__label--disabled"
+        for="options-list-2"
+        tabindex="-1"
+      >
+        Option disabled
+      </label>
+    </div>
+    <div class="list-option">
+      <input
+        name="checkbox"
+        class="list-option__input sr-only"
+        type="checkbox"
+        id="options-list-3"
+        tabindex="0"
+      >
+      <label
+        class="list-option__label list-option__label--checkmark"
+        for="options-list-3"
+        tabindex="-1"
+      >
+        Option checkbox style
+        {%- render 'global-icon', icon: 'checkmark', icon_class: 'w-3' -%}
+      </label>
+    </div>
+  </div>
+</div>

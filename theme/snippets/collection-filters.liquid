@@ -1,0 +1,127 @@
+{%- comment -%}
+  Collection filter
+  Accepts:
+  - section:         {Object} main-collection.liquid section object (required)
+{%- endcomment -%}
+
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
+
+<div
+  id="main-collection-filters"
+  data-id="{{ section.id }}"
+>
+  <collapsible-element>
+    <collection-filters-form>
+      <form
+        id="CollectionFiltersForm"
+        class="group/filter filter"
+        data-collection-filters-form
+      >
+        {%- comment -%} Shadow collection filter overlay {%- endcomment -%}
+        <toggle-element-class
+          data-options='
+            {
+              "toggleClass": "filter-is-open"
+            }
+          '
+          class="filter__backdrop backdrop group-[.filter-is-open]/body:backdrop--active z-modal-backdrop"
+        >
+        </toggle-element-class>
+
+        {%- comment -%} The collection filter drawer. {%- endcomment -%}
+        <div class="filter__drawer invisible fixed bottom-0 right-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto text-sm leading-5 opacity-0 transition-all bg-color-default group-[.filter-is-open]/body:visible group-[.filter-is-open]/body:translate-x-0 group-[.filter-is-open]/body:opacity-100">
+          {%- comment -%} The collection drawer header. {%- endcomment -%}
+          <div class="filter__header sticky top-0 z-10 border-b border-b-[var(--border-color-default)] bg-white pb-6 pl-6 pr-6 pt-6">
+            <toggle-element-class
+              class="flex justify-end"
+              data-options='
+                {
+                  "toggleClass": "filter-is-open"
+                }
+              '
+            >
+              <button
+                type="button"
+                class="filter__close button button--link -mr-3 -mt-3 border-none p-3"
+                aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}"
+              >
+                {%- render 'global-icon', icon: 'close', icon_class: 'w-6' -%}
+              </button>
+            </toggle-element-class>
+            <div class="flex items-center justify-between gap-2">
+              <h2 class="filter-options__heading text-bold m-0 text-base">
+                {%- liquid
+                  if section.settings.enable_sorting
+                    render 'format-translation', namespace: 'sections.collection_template', key: 'filter_and_sort', fallback: 'Filter and sort'
+                  else
+                    render 'format-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter'
+                  endif
+                -%}
+              </h2>
+              {%- comment -%} Filter reset link {%- endcomment -%}
+              <filter-remove class="block">
+                <a
+                  href="{{ collection.url }}?sort_by={{ sort_by }}"
+                  class="js-filter-remove button button--sm button--link pl-0 pr-0 font-body"
+                  data-filter-remove
+                  data-filter-reset
+                >
+                  {%- render 'format-translation',
+                    namespace: 'sections.collection_template',
+                    key: 'clear_all',
+                    fallback: 'Clear all'
+                  -%}
+                </a>
+              </filter-remove>
+            </div>
+          </div>
+
+          {%- comment -%} The collection drawer main. {%- endcomment -%}
+          <div class="filter__main relative z-0 px-6 pb-10 pt-6">
+            {%- liquid
+              render 'filter-options-active', section: section
+              # Find filter options.
+              for filter in collection.filters
+                assign filter_index = forloop.index
+                # Loop and output filters.
+                case filter.type
+                  when 'list'
+                    render 'filter-options-list', filter: filter, filter_index: filter_index
+                  when 'price_range'
+                    render 'filter-options-price-range', filter: filter, filter_index: filter_index
+                endcase
+              endfor
+            -%}
+
+            {%- comment -%} Filter sorting {%- endcomment -%}
+            {%- render 'filter-options-sorting', section: section -%}
+          </div>
+
+          {%- comment -%} The collection drawer footer. {%- endcomment -%}
+          <div class="filter__footer sticky bottom-0 z-10 border-t border-t-[var(--border-color-default)] px-6 py-4 bg-color-default js:hidden no-js:block">
+            <button class="button button--primary button--lg group-[.loading]/filter:button--loading flex w-full">
+              {%- render 'format-translation',
+                namespace: 'sections.collection_template',
+                key: 'apply',
+                fallback: 'Apply'
+              -%}
+            </button>
+          </div>
+
+          {%- comment -%} Collection type and filters {%- endcomment -%}
+          {%- if collection.current_vendor or collection.current_type -%}
+            <input
+              type="hidden"
+              name="q"
+              value="{{ collection.current_vendor }}{{ collection.current_type }}"
+            >
+          {%- endif -%}
+        </div>
+      </form>
+    </collection-filters-form>
+  </collapsible-element>
+</div>
+
+<script src="{{ 'collection-filters-form.js' | asset_url }}" defer></script>

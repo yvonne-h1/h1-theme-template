@@ -1,0 +1,237 @@
+{%- comment -%} Select the page {%- endcomment -%}
+{%- liquid
+  if section.settings.page != blank
+    assign page = section.settings.page
+  endif
+-%}
+
+{%- comment -%} Check if there is a page {%- endcomment -%}
+{%- if page != blank -%}
+  {%- comment -%} Assign container classes {%- endcomment -%}
+  {%- liquid
+    assign container_class = 'page-section__container'
+    if section.settings.container_width != blank
+      assign container_class = container_class | append: ' ' | append: section.settings.container_width
+    endif
+    if section.settings.color_scheme != blank
+      assign container_class = container_class | append: ' ' | append: 'my-0 container--background' | append: ' ' | append: section.settings.color_scheme
+    endif
+  -%}
+
+  {%- comment -%} Assign header classes {%- endcomment -%}
+  {%- liquid
+    assign header_class = 'page-section__header'
+    if section.settings.heading_align != blank
+      assign header_class = header_class | append: ' ' | append: section.settings.heading_align
+    endif
+  -%}
+
+  {%- comment -%} Assign container title {%- endcomment -%}
+  {% liquid
+    unless section.settings.hide_heading
+      assign container_title = page.title
+    endunless
+  %}
+
+  {%- comment -%} Render the content {%- endcomment -%}
+  {%- render 'format-container',
+    class: container_class,
+    title_tag: section.settings.heading_element,
+    title_class: section.settings.heading_size,
+    title: container_title,
+    header_class: header_class,
+    content: page.content,
+    content_class: 'page-section__content rte'
+  -%}
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Page",
+    "tag": "section",
+    "class": "main-page-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "page",
+        "id": "page",
+        "label": "Page",
+        "info": "If empty then for page templates the current page will be used"
+      },
+      {
+        "type": "header",
+        "content": "Appearance settings"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "default": "container--md",
+        "label": "Container width",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--sm",
+            "label": "Small"
+          },
+          {
+            "value": "container--md",
+            "label": "Medium"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Page heading"
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_heading",
+        "label": "Hide heading",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h1",
+        "info": "Change the element of the heading for SEO.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h2",
+        "info": "Change the style of the heading to only influence the look and feel.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_align",
+        "label": "heading alignment",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Page section",
+        "category": "Page"
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

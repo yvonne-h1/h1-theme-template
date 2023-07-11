@@ -1,0 +1,89 @@
+{%- comment -%}
+  Outputs the filter option list
+
+  Accepts:
+  - filter:         {Object} (required)
+  - filter_index:   {Number} (required)
+{%- endcomment -%}
+
+{%- liquid
+  comment
+    Check if this filter is a color filter
+  endcomment
+  assign is_color = false
+  assign color_variant_label = settings.color_filter_name | handleize
+  assign filter_label = filter.label | handleize
+  if color_variant_label == filter_label
+    assign is_color = true
+  endif
+-%}
+
+{%- capture summary_content -%}
+  <ul class="filter-options__list filter-options__list--{{ filter_label }} options options--{{ filter_label }}" data-filter-option-list>
+    {%- for value in filter.values -%}
+      {%- assign index = forloop.index -%}
+      {%- comment -%} Only render if there are items {%- endcomment -%}
+      {%- if value.count > 0 -%}
+
+        {%- capture label -%}
+          <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="option__label option__label--{{ filter_label }}{% if value.count == 0 and value.active == false %} filter-options__label--disabled{% endif %}">
+            {{ value.label | escape }}
+          </label>
+        {%- endcapture -%}
+
+        <li class="option option--{{ filter_label }} list-menu__item">
+          <input class="option__input option__input--{{ filter_label }} sr-only"
+            type="checkbox"
+            name="{{ value.param_name }}"
+            value="{{ value.value }}"
+            id="filter-{{ filter.label | handleize | escape }}-{{ index }}"
+            {% if value.active %}checked{% endif %}
+            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+          >
+
+          {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
+          {%- if is_color -%}
+            {%- liquid
+              assign variant_color = value.label | handleize
+              assign color_mappings = settings.color_mappings | split: ','
+              assign color_is_mapped = false
+            -%}
+
+            {%- comment -%} Loop through color mapping {%- endcomment -%}
+            {%- for color in color_mappings -%}
+              {%- liquid
+                assign variant_color = value.label | handleize
+                assign color_name = color | split: '|' | first | handleize
+                assign color_hex = color | split: '|' | last
+              -%}
+              {%- if color_name == variant_color -%}
+
+                {%- comment -%} Render with background-color {%- endcomment -%}
+                {%- assign color_is_mapped = true -%}
+                <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="option__label option__label--{{ filter_label }} {% if value.count == 0 and value.active == false %} option__label--disabled{% endif %}" style="background-color: {{ color_hex }};">
+                  <span class="sr-only">{{ value.label | escape }}</span>
+                </label>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
+            {%- unless color_is_mapped -%}
+              {{ label }}
+            {%- endunless -%}
+
+          {%- comment -%} Else render default filter option {%- endcomment -%}
+          {%- else -%}
+            {{ label }}
+          {%- endif -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endcapture -%}
+
+{%- render 'format-filter-group',
+  summary_content: summary_content,
+  label: filter.label,
+  filter_index: filter_index,
+  is_color: is_color
+-%}

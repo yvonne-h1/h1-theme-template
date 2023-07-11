@@ -1,0 +1,202 @@
+{%- liquid
+  comment
+    Use a slider component when more than one slides and load needed css.
+  endcomment
+  if section.blocks.size > 1 or request.design_mode
+    assign wrapper_element = 'swiper-slider'
+    render 'import-styles', file_name: 'module-swiper.css'
+    render 'import-styles', file_name: 'component-swiper.css'
+  endif
+
+  comment
+    Collect slides that are used in the swiper.
+  endcomment
+-%}
+{%- capture swiper_slides -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.text != blank -%}
+      <div
+        class="swiper-slide announcement-bar__slide text-center text-sm font-bold leading-5 {{ section.settings.color_scheme }}"
+        data-swiper-slide-index="{{ forloop.index }}"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.url != blank -%}
+          <a
+            href="{{ block.settings.url }}"
+            {% if block.settings.target_blank %}
+              target="_blank"
+              rel="noopener"
+            {% endif %}
+            class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-[0.625rem] text-inherit no-underline hover:opacity-60 active:opacity-100 states:text-inherit states:no-underline"
+          >
+            {{- block.settings.text | escape -}}
+          </a>
+        {%- else -%}
+          <p class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-[0.625rem]">
+            {{- block.settings.text | escape -}}
+          </p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if swiper_slides != blank -%}
+  {%- comment -%}
+    Options for the swiper slider.
+  {%- endcomment -%}
+  {%- capture swiper_options -%}
+    data-options='{ "speed": {{ section.settings.swiper_speed }},
+    {%- if section.settings.swiper_autoplay %}
+      "autoplay": { "delay": {{ section.settings.swiper_autoplay_speed }}
+      },
+    {%- endif %}
+    "loop": {{ section.settings.swiper_loop }}, "slidesPerView": 1, "direction": "horizontal" }'
+  {%- endcapture -%}
+
+  {%- comment -%}
+    Output all the html.
+  {%- endcomment -%}
+  <div class="announcement-bar relative h-10 overflow-hidden">
+    <{{ wrapper_element | default: 'div' }}
+      role="region"
+      aria-label="{% render "format-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}"
+    >
+      <div class="swiper" data-swiper {{ swiper_options }}>
+        <div class="swiper-wrapper">
+          {{ swiper_slides }}
+        </div>
+      </div>
+    </{{ wrapper_element | default: 'div' }}>
+  </div>
+{%- endif -%}
+
+{%- if section.blocks.size > 1 or request.design_mode -%}
+  <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Announcement bar",
+    "max_blocks": 4,
+    "limit": 1,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Swiper options"
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_loop",
+        "label": "Loop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_autoplay",
+        "label": "Autoplay",
+        "default": false
+      },
+      {
+        "type": "number",
+        "id": "swiper_autoplay_speed",
+        "label": "Autoplay speed in ms",
+        "default": 8000
+      },
+      {
+        "type": "range",
+        "id": "swiper_speed",
+        "min": 0,
+        "max": 2000,
+        "step": 50,
+        "unit": "ms",
+        "label": "Effect speed",
+        "default": 750
+      },
+      {
+        "type": "header",
+        "content": "Section options"
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ],
+        "default": "color-scheme color-scheme--primary",
+        "label": "Color scheme"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "bar",
+        "name": "Bar",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text",
+            "default": "Welcome to our store"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Url"
+          },
+          {
+            "type": "checkbox",
+            "id": "target_blank",
+            "label": "Open in new tab",
+            "default": false
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Announcement bar",
+        "blocks": [
+          {
+            "type": "bar"
+          }
+        ]
+      }
+    ],
+    "enabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

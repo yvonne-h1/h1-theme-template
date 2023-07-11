@@ -1,0 +1,20 @@
+{% comment %}
+  Renders a page card
+
+  Accepts:
+  - page: {Object} Page liquid object (required)
+
+  Usage:
+    {%- render 'page-card', page: page -%}
+
+  Defaults:
+{% endcomment %}
+
+<a
+  href="{{ page.url }}"
+  class="page-card flex h-full items-center justify-center bg-accent-100 p-4 no-underline"
+>
+  <p class="label-lg text-color-default">
+    {{ page.title }}
+  </p>
+</a>

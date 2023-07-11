@@ -1,0 +1,212 @@
+{% comment %}
+  Card drawer item
+
+  # Standard parameters
+    item          | Object  | Required | line_item
+
+  Usage:
+    {%- render 'cart-drawer-item', item: line_item -%}
+{% endcomment %}
+
+<div
+  class="cart-drawer-item relative mb-4 flex gap-4 border-b border-b-[var(--border-color-default)] pb-4 last:mb-0"
+  id="CartItem-{{ item.index | plus: 1 }}"
+>
+  {%- comment -%} Product image {%- endcomment -%}
+  <a
+    href="{{ item.product.url }}"
+    class="cart-drawer-item__media w-20 cursor-pointer"
+    title="{{ item.product.title }}"
+  >
+    {%- render 'format-image',
+      image_object: item.image,
+      alt: item.title,
+      max_width: 80,
+      aspect_ratio: '3/4'
+    -%}
+  </a>
+
+  <div class="cart-drawer-item__content flex-1">
+    {%- comment -%} Title and Price and item errors {%- endcomment -%}
+    <div class="cart-drawer-item__title pr-5">
+      {%- comment -%} Title {%- endcomment -%}
+      <a
+        href="{{ item.product.url }}"
+        class="cart-drawer-item__title break-all text-sm font-bold text-inherit"
+      >
+        {{- item.product.title | escape -}}
+      </a>
+
+      <div class="cart-item__prices text-sm font-medium">
+        {%- if item.original_price != item.final_price -%}
+          <dl class="cart-item__discounted-prices price">
+            {%- comment -%} New price {%- endcomment -%}
+            <dt class="sr-only">
+              {%- render 'format-translation',
+                namespace: 'products.product.price',
+                key: 'sale_price',
+                fallback: 'Sale price'
+              -%}
+            </dt>
+            <dd class="price price--sale text-inherit">
+              {{ item.final_price | money }}
+            </dd>
+            {%- comment -%} Old price {%- endcomment -%}
+            <dt class="sr-only">
+              {%- render 'format-translation',
+                namespace: 'products.product.price',
+                key: 'regular_price',
+                fallback: 'Regular price'
+              -%}
+            </dt>
+            <dd>
+              <s class="price price--compare ml-2">
+                {{- item.original_price | money -}}
+              </s>
+            </dd>
+          </dl>
+        {%- else -%}
+          <span class="price">
+            {{ item.original_price | money }}
+          </span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Cart errors {%- endcomment -%}
+      <p
+        class="cart-drawer-item__error text-xs leading-4 text-danger"
+        id="Line-item-error-{{ item.index | plus: 1 }}"
+      >
+        <span class="cart-drawer-item__error-text empty:hidden"></span>
+      </p>
+    </div>
+
+    <div class="mt-1.5 flex justify-between gap-x-4">
+      {%- comment -%} Variants and properties {%- endcomment -%}
+      <div class="cart-drawer-item__meta mt-1">
+        {%- if settings.show_cart_vendor -%}
+          <p class="product-option mt-0.5 text-xs">
+            {{- item.product.vendor -}}
+          </p>
+        {%- endif -%}
+
+        {%- if item.product.has_only_default_variant == false
+          or item.properties.size != 0
+          or item.selling_plan_allocation != null
+        -%}
+          <dl>
+            {%- if item.product.has_only_default_variant == false -%}
+              {%- for option in item.options_with_values -%}
+                <div class="product-option mt-0.5 flex gap-1 text-xs">
+                  <dt>{{ option.name }}:</dt>
+                  <dd>{{ option.value }}</dd>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- for property in item.properties -%}
+              {%- assign property_first_char = property.first | slice: 0 -%}
+              {%- if property.last != blank and property_first_char != '_' -%}
+                <div class="product-option mt-0.5 flex gap-1 text-xs">
+                  <dt>{{ property.first }}:</dt>
+                  <dd>
+                    {%- if property.last contains '/uploads/' -%}
+                      <a href="{{ property.last }}" target="_blank">
+                        {{ property.last | split: '/' | last }}
+                      </a>
+                    {%- else -%}
+                      {{ property.last }}
+                    {%- endif -%}
+                  </dd>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </dl>
+
+          {% if item.selling_plan_allocation != null %}
+            <p class="product-option mt-1.5 text-xs">
+              {{ item.selling_plan_allocation.selling_plan.name }}
+            </p>
+          {% endif %}
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Quantity. When only one item is in the cart, add trash icon for minus {%- endcomment -%}
+      <div class="cart-drawer-item__quantity">
+        <quantity-input class="quantity">
+          <button
+            class="quantity__button no-js:hidden"
+            name="minus"
+            type="button"
+          >
+            <span class="sr-only">
+              {%- render 'format-translation',
+                namespace: 'products.product.quantity',
+                key: 'decrease',
+                product_item: item.product.title,
+                fallback: 'Decrease'
+              -%}
+            </span>
+            <span>
+              {%- if item.quantity == 1 and settings.show_cart_remove == false -%}
+                {%- render 'global-icon', icon: 'trash', icon_class: 'w-3' -%}
+              {%- else -%}
+                {%- render 'global-icon', icon: 'minus', icon_class: 'w-3' -%}
+              {%- endif -%}
+            </span>
+          </button>
+          <input
+            class="quantity__input w-7"
+            type="number"
+            name="updates[]"
+            value="{{ item.quantity }}"
+            min="0"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            aria-label="
+              {%- render 'format-translation',
+                namespace: 'products.product.quantity',
+                key: 'input_label',
+                product_item: item.product.title,
+                fallback: 'Quantity for product'
+              -%}
+            "
+            id="Quantity-{{ item.index | plus: 1 }}"
+            data-index="{{ item.index | plus: 1 }}"
+          >
+          <button
+            class="quantity__button no-js:hidden"
+            name="plus"
+            type="button"
+          >
+            <span class="sr-only">
+              {%- render 'format-translation',
+                namespace: 'products.product.quantity',
+                key: 'increase',
+                product_item: item.product.title,
+                fallback: 'Increase'
+              -%}
+            </span>
+            {% render 'global-icon', icon: 'plus', icon_class: 'w-3' %}
+          </button>
+        </quantity-input>
+
+        {%- comment -%} Cart remove {%- endcomment -%}
+        {%- if settings.show_cart_remove -%}
+          <cart-remove-button
+            id="Remove-{{ item.index | plus: 1 }}"
+            data-index="{{ item.index | plus: 1 }}"
+          >
+            <a
+              href="{{ item.url_to_remove }}"
+              class="button button--link button--sm cart-drawer-item__cart-remove-button absolute right-0 top-0 p-0"
+              aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}"
+            >
+              {% render 'global-icon', icon: 'trash', icon_class: 'w-3' %}
+            </a>
+          </cart-remove-button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,270 @@
+{%- liquid
+  assign customer_accounts = false
+  if shop.customer_accounts_enabled or shop.customer_accounts_optional
+    assign customer_accounts = true
+  endif
+-%}
+
+{%- comment -%}
+  Renders the menu drawer
+
+  Accepts:
+  - menu_list: {Object} Menu liquid object (required)
+
+  Usage:
+    {%- render 'menu-drawer', menu_list: linklists[section.settings.menu] -%}
+{%- endcomment -%}
+{%- if menu_list != blank -%}
+  <div
+    class="menu-drawer lg:hidden"
+    tabindex="-1"
+    data-menu-drawer
+  >
+    <collapsible-element
+      class="menu-drawer__inner invisible fixed bottom-0 left-0 top-0 z-offcanvas flex h-full w-full -translate-x-full flex-col overflow-x-hidden bg-white opacity-0 transition-all duration-300 text-color-default group-[.menu-drawer-is-open]/body:visible group-[.menu-drawer-is-open]/body:translate-x-0 group-[.menu-drawer-is-open]/body:opacity-100 xs:max-w-sm"
+      data-options='
+        {
+          "closeSiblings": true,
+          "toggleClass": "collapsible-is-open"
+        }
+      '
+    >
+      <div class="menu-drawer__header px-4 py-3">
+        <toggle-mobile-navigation
+          aria-expanded="false"
+          aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
+          class="inline-flex h-full"
+          data-options='
+            {
+              "closeSiblings": true,
+              "toggleClass": "menu-drawer-is-open"
+            }
+          '
+        >
+          <button
+            type="button"
+            class="menu-drawer__toggle-button relative cursor-pointer p-3 states:text-primary"
+          >
+            {%- render 'global-icon', icon: 'close', icon_class: 'w-6' -%}
+          </button>
+        </toggle-mobile-navigation>
+      </div>
+
+      <nav class="menu-drawer__content relative flex-1">
+        {%- comment -%} Level 1 {%- endcomment -%}
+        <ul class="menu-drawer__list level-1 py-8">
+          {%- for level_1 in menu_list.links -%}
+            {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+            {% assign link_1_url = level_1.url %}
+            {%- if link_1_url contains 'collections' and link_1_url contains 'filter' -%}
+              {% assign link_1_url = link_1_url | replace: '%3F', '?' %}
+            {%- endif -%}
+
+            {%- comment -%} if link is active {%- endcomment -%}
+            {%- liquid
+              if level_1.child_active or level_1.current
+                assign level_1_active_class = 'menu-drawer__link--active text-primary'
+              endif
+            -%}
+
+            {%- if level_1.links == blank -%}
+              <li class="menu-drawer__item level-1">
+                <a
+                  href="{{ link_1_url }}"
+                  class="menu-drawer__link level-1 {{ level_1_active_class }} relative flex w-full items-center justify-between gap-2 break-words py-3 pl-12 pr-14 font-bold text-inherit states:text-primary states:no-underline"
+                  {% if level_1.current %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{ level_1.title | escape }}
+                </a>
+              </li>
+            {%- else -%}
+              {%- comment -%} Level 1 with submenu {%- endcomment -%}
+              <li class="menu-drawer__item level-1 group/submenu-1" data-collapsible-group>
+                <button
+                  class="menu-drawer__link level-1 {{ level_1_active_class }} relative flex w-full items-center justify-between gap-2 break-words py-3 pl-12 pr-14 font-bold text-inherit states:text-primary states:no-underline"
+                  data-collapsible-trigger
+                >
+                  <span>
+                    {{- level_1.title | escape -}}
+                  </span>
+                  {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-4' -%}
+                </button>
+                <div
+                  id="link-{{ level_1.title | handleize }}"
+                  class="menu-drawer__submenu level-1 group/submenu-2 invisible absolute bottom-0 left-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 bg-color-default group-[.collapsible-is-open]/submenu-1:visible group-[.collapsible-is-open]/submenu-1:translate-x-0"
+                  tabindex="-1"
+                  data-collapsible-target
+                >
+                  {%- comment -%} Link back to level 1 {%- endcomment -%}
+                  <button
+                    class="menu-drawer__back-to-parent level-1 flex w-full cursor-pointer items-center gap-2 px-4 py-5 text-xs font-bold leading-5 text-inherit no-underline states:text-primary"
+                    aria-expanded="true"
+                    data-collapsible-trigger
+                  >
+                    {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
+                    {{- level_1.title | escape -}}
+                  </button>
+
+                  {%- comment -%} Level 2 {%- endcomment -%}
+                  <ul class="menu-drawer__list level-2 pb-8" tabindex="-1">
+                    {%- for level_2 in level_1.links -%}
+                      {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+                      {%- assign level_2_url = level_2.url -%}
+                      {%- if level_2_url contains 'collections'
+                        and level_2_url contains 'filter'
+                      -%}
+                        {%- assign level_2_url = level_2_url | replace: '%3F', '?' -%}
+                      {%- endif -%}
+
+                      {%- comment -%} if link is active {%- endcomment -%}
+                      {%- liquid
+                        if level_2.current
+                          assign level_2_active_class = 'menu-drawer__link--active text-primary-50'
+                        endif
+                      -%}
+
+                      {%- if level_2.links == blank -%}
+                        {%- comment -%} Level 2 without submenu {%- endcomment -%}
+
+                        <li class="menu-drawer__item level-2">
+                          <a
+                            href="{{ level_2_url }}"
+                            class="menu-drawer__link level-2 {{ level_2_active_class }} relative flex w-full items-center justify-between gap-2 break-words py-3 pl-12 pr-12 font-bold text-inherit states:text-primary states:no-underline"
+                            {% if level_2.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{ level_2.title | escape }}
+                          </a>
+                        </li>
+                      {%- else -%}
+                        {%- comment -%} Level 2 with submenu {%- endcomment -%}
+                        <li
+                          class="menu-drawer__item level-2 group/submenu-2"
+                          data-collapsible-group
+                        >
+                          <button
+                            class="menu-drawer__link level-2 {{ level_2_active_class }} relative flex w-full items-center justify-between gap-2 break-words py-3 pl-12 pr-12 font-bold text-inherit states:text-primary states:no-underline"
+                            data-collapsible-trigger
+                          >
+                            <span>
+                              {{- level_2.title | escape -}}
+                            </span>
+                            {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-4' -%}
+                          </button>
+                          <div
+                            id="childlink-{{ level_2.title | handleize }}"
+                            class="menu-drawer__submenu level-2 invisible absolute bottom-0 left-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 bg-color-default group-[.collapsible-is-open]/submenu-2:visible group-[.collapsible-is-open]/submenu-2:translate-x-0"
+                            data-collapsible-target
+                          >
+                            {%- comment -%} Link back to level 2 {%- endcomment -%}
+                            <button
+                              class="menu-drawer__back-to-parent level-2 flex w-full cursor-pointer items-center gap-2 px-4 py-5 text-xs font-bold leading-5 text-inherit no-underline states:text-primary"
+                              aria-expanded="true"
+                              data-collapsible-trigger
+                            >
+                              {%- render 'global-icon',
+                                icon: 'chevron-left',
+                                icon_class: 'w-4 ml-2'
+                              -%}
+                              {{- level_2.title | escape -}}
+                            </button>
+
+                            {%- comment -%} Level 3 {%- endcomment -%}
+                            <ul
+                              class="menu-drawer__list level-3 pb-8"
+                              tabindex="-1"
+                            >
+                              {%- for level_3 in level_2.links -%}
+                                {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+                                {% assign level_3_url = level_3.url %}
+                                {%- if level_3_url contains 'collections'
+                                  and level_3_url contains 'filter'
+                                -%}
+                                  {% assign level_3_url = level_3_url | replace: '%3F', '?' %}
+                                {%- endif -%}
+
+                                {%- comment -%} If link is active {%- endcomment -%}
+                                {%- liquid
+                                  if level_3.current
+                                    assign level_3_active_class = 'menu-drawer__link--active text-primary-50'
+                                  endif
+                                -%}
+
+                                {%- comment -%} Level 3 {%- endcomment -%}
+                                <li class="menu-drawer__item level-3">
+                                  <a
+                                    href="{{ level_3_url }}"
+                                    class="menu-drawer__link level-3 {{ level_3_active_class }} relative flex w-full items-center justify-between gap-2 break-words py-3 pl-12 pr-12 font-bold text-inherit states:text-primary states:no-underline"
+                                    {% if level_3.current %}
+                                      aria-current="page"
+                                    {% endif %}
+                                  >
+                                    {{- level_3.title | escape -}}
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          </div>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- comment -%} Render account link for mobile if it should be hidden in the icon nav {%- endcomment -%}
+          {%- if customer_accounts and section.settings.show_mobile_customer_text -%}
+            <li class="menu-drawer__item level-1 mt-8">
+              <a
+                href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+                class="menu-drawer__link relative flex w-full items-center gap-2 break-words py-3 pl-12 pr-14 font-bold text-inherit states:text-primary states:no-underline {% if request.page_type == 'customers/login' %} text-primary {% endif %}"
+              >
+                {%- liquid
+                  render 'global-icon', icon: 'user', icon_class: 'w-4'
+                  if customer
+                    render 'format-translation', namespace: 'customer', key: 'account_fallback', fallback: 'Account'
+                  else
+                    render 'format-translation', namespace: 'customer', key: 'log_in', fallback: 'Log in'
+                  endif
+                -%}
+              </a>
+            </li>
+          {%- endif -%}
+
+          {%- if section.settings.show_mobile_cart_text -%}
+            <li class="menu-drawer__item level-1 {% unless customer_accounts and section.settings.show_mobile_customer_text %} mt-8{% endunless %}">
+              <a
+                href="{{ routes.cart_url }}"
+                class="menu-drawer__link relative flex w-full items-center gap-2 break-words py-3 pl-12 pr-14 font-bold text-inherit states:text-primary states:no-underline {% if request.page_type == 'cart' %} text-primary {% endif %}"
+              >
+                {%- liquid
+                  render 'global-icon', icon: 'cart', icon_class: 'w-4'
+                  render 'format-translation', namespace: 'templates.cart', key: 'title', fallback: 'Cart'
+                -%}
+              </a>
+            </li>
+          {%- endif -%}
+        </ul>
+      </nav>
+    </collapsible-element>
+    <toggle-mobile-navigation
+      role="button"
+      aria-expanded
+      aria-controls
+      class=" menu-drawer__backdrop backdrop group-[.menu-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop lg:hidden"
+      aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
+      data-options='
+        {
+          "closeSiblings": true,
+          "toggleClass": "menu-drawer-is-open"
+        }
+      '
+    >
+    </toggle-mobile-navigation>
+  </div>
+{%- endif -%}

@@ -1,0 +1,161 @@
+{%- comment -%}
+  Renders a quick shop with variant selection and add to cart functionality.
+
+  Accepts:
+  - product:                        {Object}  Product Liquid object (required)
+  - quick_shop_render_second_option: {Boolean} (optional) If true, renders option2 of each variant, otherwise renders option1
+
+  Usage:
+  {%-
+    render 'quick-shop',
+    product: product,
+    quick_shop_render_second_option: quick_shop_render_second_option
+  -%}
+{%- endcomment -%}
+
+{%- liquid
+  # Check if we use the first or second variant option
+  if quick_shop_render_second_option == true
+    assign option_to_render = product.options_with_values | last
+  else
+    assign option_to_render = product.options_with_values | first
+  endif
+
+  # Get the option name
+  assign option_name = option_to_render.name | downcase
+
+  # Check if option is of type color
+  assign is_color = false
+  assign color_option_name = settings.color_filter_name | handleize
+
+  if option_name == color_option_name
+    assign is_color = true
+  endif
+-%}
+
+{%- comment -%} Output quick shop {%- endcomment -%}
+<quick-shop class="quick-shop pointer-events-none invisible absolute inset-x-2 bottom-2 z-30 block bg-white p-4 text-center opacity-0 group-[.quick-shop--is-open]/product-card:pointer-events-auto group-[.quick-shop--is-open]/product-card:visible group-[.quick-shop--is-open]/product-card:opacity-100 md:group-hover/product-card:pointer-events-auto md:group-hover/product-card:visible  md:group-hover/product-card:opacity-100">
+  {%- comment -%} Title {%- endcomment -%}
+  <div class="quick-shop__title mb-3 text-sm font-bold leading-5 text-color-default md:hidden">
+    {%- render 'format-translation', namespace: 'products.product', key: 'choose_your_option', option: option_name, fallback: 'Choose your {{ option }}' -%}
+  </div>
+
+  {%- comment -%} Options {%- endcomment -%}
+  <div class="quick-shop__options options justify-center">
+    {% for variant in product.variants %}
+      {%- comment -%} Get value of the option {%- endcomment -%}
+      {%- liquid
+        if quick_shop_render_second_option == true and variant.option2
+          assign option_label = variant.option2
+        elsif product.has_only_default_variant == true
+          capture option_label
+            render 'format-translation', namespace: 'products.product.add_to_cart', fallback: 'Add to cart'
+          endcapture
+        else
+          assign option_label = variant.option1
+        endif
+      -%}
+
+      {%- comment -%} If this is a color option get hex color {%- endcomment -%}
+      {%- if is_color == true -%}
+        {%- liquid
+          assign color_mappings = settings.color_mappings | split: ','
+          assign color_option_name = option_label | handleize
+          assign color_hex = ''
+        -%}
+
+        {%- comment -%} Loop through color mappings {%- endcomment -%}
+        {%- liquid
+          for color in color_mappings
+            assign color_name = color | split: '|' | first | handleize
+
+            if color_name == color_option_name
+              assign color_hex = color | split: '|' | last
+            endif
+          endfor
+        -%}
+      {%- endif -%}
+
+      {%- comment -%} Output option {%- endcomment -%}
+      {%- liquid
+        assign disabled_classes = ''
+        if variant.available == false
+          assign disabled_classes = 'option__label--disabled'
+        endif
+      -%}
+      <div class="quick-shop__option option">
+        <input
+          id="quick-shop__item-{{ variant.id }}"
+          class="quick-shop__input option__input"
+          value="{{ variant.id }}"
+          readonly
+          {% if variant.available == false %}
+            disabled
+          {% endif %}
+          data-inventory-quantity="{{- variant.inventory_quantity -}}"
+          data-quick-shop-option
+          {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}
+        >
+        <label
+          class="option__label option__label--{{ color_label }} {{ disabled_classes }}"
+          for="quick-shop__item-{{ variant.id }}"
+          {% if color_hex and is_color == true %}
+            style="background-color: {{ color_hex }}"
+            title="{{ option_label | escape }}"
+            aria-label="{{ option_label | escape }}"
+          {% endif %}
+        >
+          {%- if is_color == false or color_hex == blank -%}
+            {{- option_label | escape -}}
+          {%- endif -%}
+        </label>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} The product form, product id will be update by variant.js {%- endcomment -%}
+  <product-form class="product-form">
+    {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
+    {%- form 'product',
+      product,
+      id: product_form_id,
+      class: 'form',
+      novalidate: 'novalidate',
+      data-type: 'add-to-cart-form'
+    -%}
+      <input
+        type="hidden"
+        name="id"
+        value="{{ product.selected_or_first_available_variant.id }}"
+        readonly
+      >
+      <input
+        type="hidden"
+        name="inventory_quantity"
+        value="{{ product.selected_or_first_available_variant.inventory_quantity }}"
+        readonly
+      >
+
+      {%- comment -%} If preorder is enabiled for this product add a line proprety when adding to the cart {%- endcomment -%}
+      {%- if settings.enable_pre_order
+        and product.selected_or_first_available_variant.inventory_quantity <= 0
+        and product.selected_or_first_available_variant.inventory_policy == 'continue'
+      -%}
+        <input
+          type="hidden"
+          name="properties[Pre-order]"
+          readonly
+          value="{% render 'format-translation', namespace: 'products.product.yes', fallback: 'Yes' %}"
+        >
+      {%- endif -%}
+
+      <button
+        type="submit"
+        name="add"
+        aria-label="Add"
+        class="sr-only"
+        data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"
+      ></button>
+    {%- endform -%}
+  </product-form>
+</quick-shop>

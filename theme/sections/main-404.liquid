@@ -1,0 +1,312 @@
+{%- capture container_content -%}
+  <div class="rich-text space-y-4 text-center">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <{{ block.settings.heading_element }}
+            class="rich-text__title {{ block.settings.heading_size }} {{ block.settings.title_width_layout }}"
+            {{ block.shopify_attributes }}
+          >
+            {{- block.settings.heading | escape -}}
+          </{{ block.settings.heading_element }}>
+        {%- when 'text' -%}
+          <div
+            class="rich-text__text rte {{ block.settings.text_width_layout }}"
+            {{ block.shopify_attributes }}
+          >
+            {{- block.settings.text -}}
+          </div>
+        {%- when 'button' -%}
+          <p class="rich-text__button">
+            <a
+              {% if block.settings.button_link == blank %}
+                aria-disabled="true"
+              {% else %}
+                href="{{ block.settings.button_link }}"
+              {% endif %}
+              class="button button--lg {{ block.settings.button_color_scheme }}"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.button_label | escape }}
+            </a>
+          </p>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+{%- endcapture -%}
+
+{% liquid
+  assign container_class = 'rich-text__container'
+  if section.settings.container_width != blank
+    assign container_class = container_class | append: ' ' | append: section.settings.container_width
+  endif
+  if section.settings.color_scheme != blank
+    assign container_class = container_class | append: ' container--background ' | append: section.settings.color_scheme
+  endif
+%}
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container', content: container_content, class: container_class -%}
+
+{% schema %}
+  {
+    "name": "Main 404",
+    "tag": "section",
+    "class": "main-404-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Appearance settings"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "default": "container--md",
+        "label": "Container width",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--sm",
+            "label": "Small"
+          },
+          {
+            "value": "container--md",
+            "label": "Medium"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "color-scheme color-scheme--white",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Page not found",
+            "label": "Heading"
+          },
+          {
+            "type": "select",
+            "id": "heading_element",
+            "label": "Heading element",
+            "default": "h1",
+            "info": "Change the element of the heading for SEO.",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "default": "h3",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "label": "Change the style of the heading to only influence the look and feel."
+          },
+          {
+            "type": "select",
+            "id": "title_width_layout",
+            "label": "Title width",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "site-center-sm",
+                "label": "Small"
+              },
+              {
+                "value": "site-center-md",
+                "label": "Medium"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "text",
+            "default": "<p>It looks like you've reached a URL that doesn’t exist. Please use the navigation above or try again.</p>",
+            "label": "Description"
+          },
+          {
+            "type": "select",
+            "id": "text_width_layout",
+            "label": "Text width",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "site-center-sm",
+                "label": "Small"
+              },
+              {
+                "value": "site-center-md",
+                "label": "Medium"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "name": "Button",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "button_label",
+            "default": "Back to home",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link",
+            "default": "/"
+          },
+          {
+            "type": "select",
+            "id": "button_color_scheme",
+            "default": "",
+            "label": "Button  type",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "button--outline-white",
+                "label": "Outline white"
+              },
+              {
+                "value": "button--link",
+                "label": "Link"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,49 @@
+/*
+ * Please use custom font sizes for the headings. So when you change the default font sizes in the tailwind config these are not effected.
+ */
+
+@layer components {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6 {
+    @apply font-heading font-bold leading-tight last:mb-0;
+  }
+  h1,
+  .h1 {
+    @apply text-[2.5rem] md:text-[4rem];
+  }
+
+  h2,
+  .h2 {
+    @apply text-[2.25rem] md:text-[3rem];
+  }
+
+  h3,
+  .h3 {
+    @apply text-[1.75rem] md:text-[2.5rem];
+  }
+
+  h4,
+  .h4 {
+    @apply text-[1.75rem];
+  }
+
+  h5,
+  .h5 {
+    @apply text-[1.5rem];
+  }
+
+  h6,
+  .h6 {
+    @apply text-[1.25rem];
+  }
+}

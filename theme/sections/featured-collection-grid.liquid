@@ -1,0 +1,352 @@
+{%- liquid
+  # Global assigns
+  assign collection_object = section.settings.collection
+  assign all_products_count = collection_object.all_products_count
+  assign products_arr = collection_object.products
+
+  # If the number of items is higher than the given setting, use the setting
+  if all_products_count > section.settings.all_products_count
+    assign all_products_count = section.settings.all_products_count
+  endif
+
+  # Assign based on container width
+  case section.settings.container_width
+    when 'container--wide'
+      assign image_max_width = ''
+      assign image_sizes = '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+    else
+      assign image_max_width = 360
+      assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+  endcase
+
+  # Import styles
+  render 'import-styles', file_name: 'section-featured-collection-grid.css'
+-%}
+
+{%- comment -%} Capture content {%- endcomment -%}
+{%- capture container_content -%}
+  <div class="grid grid-cols-2 gap-base lg:grid-cols-4">
+    {%- assign count = 0 -%}
+    {%- for product_object in products_arr -%}
+
+      {%- liquid
+        # Skip current product
+        if product_object.id == product.id
+          continue
+        endif
+
+        # Add 1 to the count for every product that passes the statements
+        assign count = count | plus: 1
+      -%}
+
+      {%- render 'product-card',
+        product_object: product_object,
+        image_max_width: image_max_width,
+        image_sizes: image_sizes,
+        image_lazy: section.settings.lazy
+      -%}
+
+      {% comment %} Break if meet the limit {% endcomment %}
+      {%- if count >= all_products_count -%}
+        {% break %}
+      {%- endif -%}
+
+    {% comment %} Demo slides {% endcomment %}
+    {%- else -%}
+      {%- liquid
+        for i in (1..8)
+          render 'product-card-placeholder'
+        endfor
+      -%}
+    {%- endfor -%}
+  </div>
+{%- endcapture -%}
+
+{%- capture container_footer -%}
+  {%- if section.settings.button_text != blank -%}
+    <a
+      {% if section.settings.button_url != blank or section.settings.collection.url != blank %}
+        href="{{ section.settings.button_url | default: section.settings.collection.url }}"
+      {% else %}
+        disabled
+      {% endif %}
+      class="button {{ section.settings.button_size }} {{ section.settings.button_color_scheme }}"
+    >
+      {{- section.settings.button_text -}}
+    </a>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- liquid
+  # Container class
+  assign container_class = 'featured-collection-grid' | append: ' ' | append: section.settings.container_width
+  if section.settings.color_scheme != blank
+    assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+  endif
+
+  # Container title
+  assign container_title = section.settings.heading | escape
+
+  # Title Class
+  assign title_class = section.settings.heading_size | append: ' text-center'
+-%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  class: container_class,
+  title_tag: section.settings.heading_element,
+  title_class: title_class,
+  title: container_title,
+  content: container_content,
+  footer_class: 'text-center',
+  footer_content: container_footer
+-%}
+
+{% schema %}
+  {
+    "name": "Feat. collection grid",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Appearance settings"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "all_products_count",
+        "min": 4,
+        "max": 12,
+        "step": 2,
+        "default": 8,
+        "label": "Maximum products to show",
+        "info": "When this higher than 4 it will be shown as a slider on desktop and mobile."
+      },
+      {
+        "type": "header",
+        "content": "Content settings"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "checkbox",
+        "id": "lazy",
+        "label": "Lazyload images",
+        "default": true,
+        "info": "For page speed, disable if the image is directly visible on mobile and desktop"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "default": "Featured collection grid",
+        "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h2",
+        "info": "Change the element of the heading for SEO.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h4",
+        "info": "Change the style of the heading to only influence the look and feel.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Button"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Text",
+        "default": "View all"
+      },
+      {
+        "type": "url",
+        "id": "button_url",
+        "label": "Url",
+        "info": "Optional. Overwrite the button link. The default is the selected collection."
+      },
+      {
+        "type": "select",
+        "id": "button_color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "button--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "button--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "button--outline",
+            "label": "Outline"
+          },
+          {
+            "value": "button--outline-white",
+            "label": "Outline white"
+          },
+          {
+            "value": "button--link",
+            "label": "Link"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "button_size",
+        "default": "button--md",
+        "label": "Size",
+        "options": [
+          {
+            "value": "button--sm",
+            "label": "Small"
+          },
+          {
+            "value": "button--md",
+            "label": "Medium"
+          },
+          {
+            "value": "button--lg",
+            "label": "Large"
+          },
+          {
+            "value": "button--xl",
+            "label": "Extra large"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured collection grid"
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

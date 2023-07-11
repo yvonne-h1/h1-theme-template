@@ -1,0 +1,237 @@
+{%- liquid
+  comment
+    - Header section loads 2 different menu elements. One for mobile and one for desktop, as well as
+      a logo and icons. All items are positioned  in the header bases on grid template areas.
+    - Theme settings allow for logo to be positioned left or center
+    - Theme settings allow for header to be transparent on homepage.
+    - For top level menu items, images can be added using blocks.
+    - Icon navigation has icons for search, account and cart.
+    - Search and account can be hidden on mobile and then they will be shown in the mobile menu drawer.
+  endcomment
+
+  comment
+    Load your styles here if there is some
+  endcomment
+
+  comment
+    Check if the index page is transparent
+  endcomment
+  assign is_transparent = false
+  if section.settings.is_transparent and template == 'index'
+    assign is_transparent = true
+  endif
+
+  comment
+    Set default fallback menu when the section.settings.menu is broken on the activate_account template.
+  endcomment
+  assign menu_list = linklists[section.settings.menu]
+
+  comment
+    Load interface snippets
+  endcomment
+  render 'search-modal', max_results: settings.predictive_search_max_results_per_type
+  render 'menu-drawer', menu_list: menu_list
+-%}
+
+{%- comment -%}
+  Capture the logo with the root url, so we can reuse it in the header.
+{%- endcomment -%}
+{%- capture logo_link -%}
+  <a href="{{ routes.root_url }}"
+    class="header__heading-link m-0 flex items-center justify-center justify-self-center break-words text-inherit no-underline states:text-primary states:no-underline lg:block lg:justify-self-start"
+    title="{{ shop.name }}"
+  >
+    {%- render 'global-logo' -%}
+  </a>
+{%- endcapture -%}
+
+{%- comment -%} The shadow for when the header is open state. {%- endcomment -%}
+<div
+  class="header__backdrop backdrop  group-[.header-is-open]/body:backdrop--active z-10"
+></div>
+
+{%- comment -%}
+  The header always relative of absolute based on the is transparent and on index page setting. The whole section is sticky for better native and sticky scroll performance.
+{%- endcomment -%}
+{% liquid
+  assign sticky_header_classes = 'relative bg-color-default text-color-default'
+  if is_transparent
+    assign sticky_header_classes = 'header--transparent absolute top-0 right-0 left-0 bg-transparent group-[.header-sticky]/body:bg-color-default group-[.header-sticky]/body:text-color-default ' | append: section.settings.is_transparent_text_color
+  endif
+%}
+
+<sticky-header
+  id="header"
+  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.header-is-open]/body:duration-0 group-[.header-is-open]/body:bg-color-default group-[.header-is-open]/body:text-color-default {{ sticky_header_classes }}"
+  data-header
+>
+  <div class="header-nav site-center site-spacing-side grid grid-cols-12 items-center gap-base">
+    {%- comment -%} Toggle for mobile navigation {%- endcomment -%}
+    <div class="col-span-4 flex pb-3 pt-3 lg:hidden">
+      {%- if menu_list != blank -%}
+        <toggle-mobile-navigation
+          role="button"
+          aria-expanded="false"
+          aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
+          class="menu-drawer__toggle-button -ml-3 block p-3 px-3 states:text-primary"
+          data-options='
+            {
+              "closeSiblings": true,
+              "toggleClass": "menu-drawer-is-open"
+            }
+          '
+        >
+          {%- render 'global-icon', icon: 'hamburger', icon_class: 'w-6' -%}
+        </toggle-mobile-navigation>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} The menu that is used for desktop. {%- endcomment -%}
+    {%- render 'header-menu', section: section, menu_list: menu_list -%}
+
+    {%- comment -%} Shop logo. {%- endcomment -%}
+    {%- assign header_heading_classes = 'header__heading text-2xl leading-8 mb-0 col-span-4 lg:-order-1 lg:col-span-2 pt-3 pb-3' -%}
+    {%- if request.page_type == 'index' -%}
+      <h1 class="{{ header_heading_classes }}">
+        <span class="sr-only">
+          {{- shop.name -}}
+        </span>
+        {{- logo_link -}}
+      </h1>
+    {%- else -%}
+      <div class="{{ header_heading_classes }}">
+        {{- logo_link -}}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Search, account and cart items. {%- endcomment -%}
+    {%- render 'header-icon-list', section: section -%}
+  </div>
+</sticky-header>
+
+{%- comment -%} Import scripts for this section {%- endcomment -%}
+<script src="{{ 'header.js' | asset_url }}" defer></script>
+
+{% schema %}
+  {
+    "name": "Header",
+    "limit": 1,
+    "class": "sticky z-sticky top-0 left-0 right-0",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "default": "main-menu",
+        "label": "Menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "is_transparent",
+        "label": "Transparent on homepage",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "is_transparent_text_color",
+        "label": "Transparent text color",
+        "options": [
+          {
+            "value": "text-white",
+            "label": "White"
+          },
+          {
+            "value": "text-black",
+            "label": "Black"
+          }
+        ],
+        "default": "text-white",
+        "info": "Set the color of the text when the header is transparent."
+      },
+      {
+        "type": "header",
+        "content": "Icon list options"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_search_icon",
+        "label": "Search icon mobile",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "md_show_search_icon",
+        "label": "Search icon desktop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_customer_icon",
+        "label": "Customer icon mobile",
+        "default": true,
+        "info": "The store customer accounts also need to be enabled."
+      },
+      {
+        "type": "checkbox",
+        "id": "md_show_customer_icon",
+        "label": "Customer icon desktop",
+        "default": true,
+        "info": "The store customer accounts also need to be enabled."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_icon",
+        "label": "Cart icon mobile",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "md_show_cart_icon",
+        "label": "Cart icon desktop",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Mobile menu options"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_mobile_customer_text",
+        "label": "Login text",
+        "default": true,
+        "info": "The store customer accounts also need to be enabled."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_mobile_cart_text",
+        "label": "Cart text",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Images are only visible in a 3 level menu"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Url",
+            "info": "Optional."
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Link item",
+            "info": "Enter the text as the top-level link item is shown in the menu."
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

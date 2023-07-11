@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "login": {
+      "type": "main-account-register"
+    }
+  },
+  "order": ["login"]
+}

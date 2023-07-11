@@ -1,0 +1,353 @@
+{%- comment -%}
+  Set the correct container classes based on section settings.
+{%- endcomment -%}
+{%- capture container_classes -%}
+  {%- if section.settings.color_scheme != "" -%}
+    my-0 container--background
+  {%- endif -%}
+  {{ section.settings.color_scheme | prepend: ' ' -}}
+  {{ section.settings.width_layout | prepend: ' ' -}}
+  {%- if section.settings.height_layout == 'full-height' %}
+    min-h-screen -mt-[90px] pt-[144px] grid content-center
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture blocks -%}
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'heading' -%}
+        {%- if block.settings.heading != blank -%}
+          <{{ block.settings.heading_element }} class="newsletter__heading {{ block.settings.heading_size }} mb-0" {{ block.shopify_attributes }}>
+            {{- block.settings.heading | escape -}}
+          </{{ block.settings.heading_element }}>
+        {%- endif -%}
+      {%- when 'text' -%}
+        {%- if block.settings.text != blank -%}
+          <div class="newsletter__subheading text-color-scheme rte ml-0 mr-0 max-w-none" {{ block.shopify_attributes }}>
+            {{- block.settings.text -}}
+          </div>
+        {%- endif -%}
+      {%- when 'form' -%}
+        <div class="mx-auto w-full max-w-xs" {{ block.shopify_attributes }}>
+          {% form 'customer', class: 'newsletter__form' %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <input type="hidden" name="customer[accepts_marketing]" value="true">
+
+            <div class="field">
+              <label class="field__label" for="newsletter-form-{{ section.id }}">
+                {%- render "format-translation", namespace: "newsletter", key: "label", fallback: "Your e-mail" -%}
+              </label>
+              <input
+                id="newsletter-form-{{ section.id }}"
+                type="email"
+                name="contact[email]"
+                class="field__input"
+                value="{{ form.email }}"
+                aria-required="true"
+                spellcheck="false"
+                autocapitalize="off"
+                autocomplete="email"
+                {% if form.errors %}
+                  autofocus
+                  aria-invalid="true"
+                  aria-describedby="newsletter-error-{{ section.id }}"
+                {% elsif form.posted_successfully? %}
+                  aria-describedby="newsletter-success-{{ section.id }}"
+                {% endif %}
+                placeholder="{%- render "format-translation", namespace: "newsletter", key: "label", fallback: "Your e-mail" -%}"
+                required
+              >
+            </div>
+            {%- if form.errors -%}
+              <small
+                class="newsletter-field__message field__message  field__message--error"
+                id="newsletter-error-{{ section.id }}"
+              >
+                {% render 'global-icon', icon: 'error' %}
+                {{ form.errors.translated_fields['email'] | capitalize }}
+                {{ form.errors.messages['email'] }}
+              </small>
+            {%- endif -%}
+
+
+            <button
+              type="submit"
+              name="commit"
+              class="button {{ block.settings.button_color_scheme }}"
+            >
+              {%- render "format-translation", namespace: "newsletter", key: "button_label", fallback: "Subscribe" -%}
+            </button>
+
+            {%- if form.posted_successfully? -%}
+              <div
+                class="newsletter-field__message bg-green-500 mx-auto mt-4 flex max-w-xs gap-3 p-5 text-white"
+                id="newsletter-success-{{ section.id }}"
+                tabindex="-1"
+                autofocus
+              >
+                {%- render 'global-icon', icon: 'success', icon_class: 'w-6 shrink-0 text-transparent' -%}
+                <p class="text-sm leading-6">
+                  {%- render "format-translation", namespace: "newsletter", key: "success", fallback: "Thanks for subscribing" -%}
+                </p>
+              </div>
+            {%- endif -%}
+          {% endform %}
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- comment -%}
+  Output HTML when we found blocks in the section.
+{%- endcomment -%}
+{%- if blocks != blank -%}
+  {%- comment -%} Import styles for this section {%- endcomment -%}
+  {%- render 'import-styles', file_name: 'component-form.css' -%}
+
+  {%- comment -%} Capture content {%- endcomment -%}
+  {%- capture container_content -%}
+    <div class="newsletter grid grid-cols-1 content-center gap-4 text-center ">
+      {{- blocks -}}
+    </div>
+  {%- endcapture -%}
+
+  {%- comment -%} Render the content {%- endcomment -%}
+  {%- render 'format-container', content: container_content, class: container_classes -%}
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Newsletter",
+    "tag": "section",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "select",
+        "id": "width_layout",
+        "label": "Section content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "max-w-full",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "height_layout",
+        "label": "Section height",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "full-height",
+            "label": "Full viewport height"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "When customers subscribe to emails, customer accounts are created. [Learn more](https://help.shopify.com/en/manual/customers)"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Heading",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Subscribe to our newsletter",
+            "label": "Heading"
+          },
+          {
+            "type": "select",
+            "id": "heading_element",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h2",
+            "label": "Heading element"
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h4",
+            "label": "Heading size"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "text",
+            "default": "<p>Be the first to know about new collections and exclusive offers.</p>",
+            "label": "Text"
+          }
+        ]
+      },
+      {
+        "type": "form",
+        "name": "Form",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id": "button_color_scheme",
+            "default": "button--primary",
+            "label": "Button type",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "button--outline-white",
+                "label": "Outline white"
+              },
+              {
+                "value": "button--link",
+                "label": "Link"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Newsletter",
+        "blocks": [
+          {
+            "type": "heading"
+          },
+          {
+            "type": "text"
+          },
+          {
+            "type": "form"
+          }
+        ]
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

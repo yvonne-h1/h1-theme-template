@@ -1,0 +1,11 @@
+/**
+  * https://tailwindcss.com/docs/functions-and-directives#layer
+*/
+@import 'root-variables';
+@import 'html';
+@import 'body';
+@import 'focus';
+@import 'accessibility';
+@import 'shopify';
+@import 'images';
+@import 'elements';

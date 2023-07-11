@@ -1,0 +1,166 @@
+{%- comment -%} Import styles for this section {%- endcomment -%}
+{%- render 'import-styles', file_name: 'component-form.css', force: true -%}
+
+{%- comment -%} Form icons {%- endcomment -%}
+{%- liquid
+  capture icons
+    echo '<div class="field__icons">'
+    render 'global-icon', icon: 'checkmark', icon_class: 'w-5'
+    render 'global-icon', icon: 'cross', icon_class: 'w-5'
+    echo '</div>'
+  endcapture
+-%}
+
+<form class="form-fields">
+  {%- comment -%} Default field {%- endcomment -%}
+  <div class="field">
+    <label class="field__label" for="field-1">Label</label>
+    <input type="text" class="field__input" id="field-1" placeholder="Label" tabindex="0">
+    <div class="field__message">Form message</div>
+  </div>
+
+  {%- comment -%} E-mail field {%- endcomment -%}
+  <div class="field">
+    <label class="field__label" for="field-2">Email (Type to see the error message)</label>
+    <input
+      type="email"
+      class="field__input"
+      id="field-2"
+      tabindex="0"
+      required=""
+      placeholder="Email"
+    >
+    {{ icons }}
+    <div class="field__message field__message--error">Incorrect email format</div>
+  </div>
+
+  {%- comment -%} Password field {%- endcomment -%}
+  <div class="field">
+    <label class="field__label" for="field-3">Password</label>
+    <input
+      type="password"
+      class="field__input"
+      id="field-3"
+      tabindex="0"
+      required=""
+      placeholder="Password"
+    >
+    {{ icons }}
+    <div class="field__message field__message--error">Incorrect password</div>
+  </div>
+
+  {%- comment -%} Textarea field {%- endcomment -%}
+  <div class="field">
+    <label class="field__label" for="field-4">Textarea</label>
+    <textarea class="field__textarea" id="field-4"></textarea>
+  </div>
+
+  {%- comment -%} Select field {%- endcomment -%}
+  <div class="field">
+    <label class="field__label" for="field-5">Selectbox</label>
+    <select class="field__select" id="field-5" tabindex="0">
+      <option value="">Default</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
+  </div>
+
+  {%- comment -%}
+    Styled select field
+  {%- endcomment -%}
+  <div class="field field--dropdown">
+    <label class="field__label">Option menu</label>
+    <toggle-element-class
+      type="button"
+      class="field__dropdown-button button button--secondary"
+      data-collapsible-trigger
+      aria-expanded="true"
+      aria-haspopup="true"
+      id="select-example-1"
+      data-options='
+        {
+          "toggleClass": "field__dropdown--active",
+          "target": "[data-select-example]"
+        }
+      '
+    >
+      Option menu
+      {%- render 'global-icon', icon: 'caret', icon_class: 'rotate-90 w-3' -%}
+    </toggle-element-class>
+    <div
+      class="field__dropdown"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="select-example-1"
+      tabindex="-1"
+      data-select-example
+    >
+      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Account settings</a>
+      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Support</a>
+      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">License</a>
+    </div>
+  </div>
+
+  {%- comment -%} Checkboxes {%- endcomment -%}
+  <b class="field__header">Checkboxes</b>
+
+  <div class="field field--checkbox">
+    <input type="checkbox" class="sr-only" id="checkbox-1" tabindex="0">
+    <label class="field__checkbox" for="checkbox-1">
+      {%- render 'global-icon', icon: 'checkmark', icon_class: 'w-3' -%}
+    </label>
+    <label class="field__checkbox-label" for="checkbox-1">Checkbox default</label>
+  </div>
+
+  <div class="field field--checkbox">
+    <input type="checkbox" class="sr-only" id="checkbox-2" tabindex="0" checked>
+    <label class="field__checkbox" for="checkbox-2">
+      {%- render 'global-icon', icon: 'checkmark', icon_class: 'w-3' -%}
+    </label>
+    <label class="field__checkbox-label" for="checkbox-2">Checkbox checked</label>
+  </div>
+
+  <div class="field field--checkbox">
+    <input type="checkbox" class="sr-only" id="checkbox-3" tabindex="0" disabled>
+    <label class="field__checkbox" for="checkbox-3">
+      {%- render 'global-icon', icon: 'checkmark', icon_class: 'w-3' -%}
+    </label>
+    <label class="field__checkbox-label" for="checkbox-3">Checkbox disabled</label>
+  </div>
+
+  {%- comment -%} Radio fields {%- endcomment -%}
+  <b class="field__header">Radios</b>
+
+  <div class="field field--radio">
+    <input type="radio" class="sr-only" name="radio-default" id="radio-1" tabindex="0">
+    <label class="field__radio" for="radio-1"></label>
+    <label class="field__radio-label" for="radio-1">Radio input default</label>
+  </div>
+
+  <div class="field field--radio">
+    <input type="radio" class="sr-only" name="radio-default" id="radio-2" tabindex="0" checked>
+    <label class="field__radio" for="radio-2"></label>
+    <label class="field__radio-label" for="radio-2">Radio input checked</label>
+  </div>
+
+  <div class="field field--radio">
+    <input type="radio" class="sr-only" name="radio-default" id="radio-3" tabindex="0" disabled>
+    <label class="field__radio" for="radio-3"></label>
+    <label class="field__radio-label" for="radio-3">Radio input disabled</label>
+  </div>
+
+  {%- comment -%} Toggle field {%- endcomment -%}
+  <b class="field__header">Switch button</b>
+
+  <div class="field field--switch">
+    <input type="checkbox" value="" id="default-toggle-1" class="peer sr-only" tabindex="0">
+    <div class="field__switch"></div>
+    <label class="field__switch-label" for="default-toggle-1">Enable notification</label>
+  </div>
+
+  {%- comment -%} Submit {%- endcomment -%}
+  <b class="field__header">Submit button</b>
+  <button type="submit" class="button button--primary">Submit</button>
+  <button class="button button--outline">Cancel</button>
+</form>

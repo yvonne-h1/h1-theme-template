@@ -1,0 +1,104 @@
+{% comment %}
+  Renders data attributes or klaviyo tracking scripts
+
+  Accepts:
+    - render_script_tags:             {Boolean} Render the script tags. (optional)
+    - render_data_attributes:         {Boolean} Render the data-attributes. (optional)
+    - product_details:                {Object} Product liquid object. (required, when using render_data_attributes)
+
+  Usage:
+  {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}
+
+  Defaults:
+    Render nothing
+{% endcomment %}
+
+{%- assign product_details_collections = product_details.collections
+  | map: 'title'
+  | join: ', '
+  | json
+-%}
+{%- assign product_collections = product.collections | map: 'title' | json | join: ', ' -%}
+
+{% # prettier-ignore %}
+{% if render_data_attributes and product_details -%}
+  data-track-add-to-cart
+  data-track-add-to-cart-name={{- product_details.title | json }}
+  data-track-add-to-cart-product-id={{- product_details.id | json }}
+  data-track-add-to-cart-categories={{- product_details_collections }}
+  data-track-add-to-cart-image-url="https:{{ product_details | image_url: width: 1000 }}"
+  data-track-add-to-cart-url="{{ shop.secure_url -}}{{- product_details.url }}"
+  data-track-add-to-cart-brand={{- product_details.vendor | json }}
+  data-track-add-to-cart-price={{- product_details.price | money | json }}
+  data-track-add-to-cart-compare-at-price={{ product_details.compare_at_price_max | money | json }}
+{% endif %}
+
+{%- if render_script_tags -%}
+  <script type="text/javascript">
+    var _learnq = _learnq || [];
+  </script>
+  {%- if product -%}
+    <script type="text/javascript">
+      var itemDetails = {
+        Name: {{ product.title | json }},
+        ProductID: {{ product.id | json }},
+        Categories: {{- product_collections }},
+        ImageURL: "https:{{ product.featured_image.src | image_url: width: 1024 }}",
+        URL: "{{ canonical_url }}",
+        Locale: "{{ request.locale.iso_code | upcase }}",
+        Price: {{ product.price | money | json }},
+        CompareAtPrice: {{ product.compare_at_price_max | money | json }}
+      };
+      _learnq.push(['track', 'Viewed product', itemDetails]);
+      _learnq.push(['trackVieweditemDetails', {
+        Title: itemDetails.Name,
+        itemDetailsId: itemDetails.ProductID,
+        Categories: itemDetails.Categories,
+        ImageUrl: itemDetails.ImageURL,
+        Url: itemDetails.URL,
+        Locale: itemDetails.Locale,
+        Metadata: {
+          Brand: itemDetails.Brand,
+          Price: itemDetails.Price,
+          CompareAtPrice: itemDetails.CompareAtPrice
+        }
+      }]);
+    </script>
+  {%- elsif collection != blank -%}
+    <script type="text/javascript">
+      var itemDetails = {
+        CategoryName: {{ collection.title | json }},
+        CategoryID: {{ collection.id | json }},
+        ImageURL: "https:{{ collection.featured_image.src | image_url: width: 1024 }}",
+        URL: "{{ canonical_url }}",
+        Locale: "{{ request.locale.iso_code | upcase }}"
+      };
+      _learnq.push(["track", "Viewed collection", itemDetails]);
+    </script>
+  {%- endif -%}
+  {%- comment -%}
+    Always track the add to cart button
+  {%- endcomment -%}
+  <script type="text/javascript">
+    // Bind event to the add to cart button for this product
+    var addToCartButtons = document.querySelectorAll('[data-track-add-to-cart]');
+    addToCartButtons.forEach((elem) => {
+      elem.addEventListener('click', (event) => {
+        const categories = elem.dataset.trackAddToCartCategories.split(',');
+        var cartItemDetails = {
+          Name: elem.dataset.trackAddToCartName || '',
+          ProductID: elem.dataset.trackAddToCartProductId || '',
+          Categories: categories.length > 0 ? categories : null,
+          ImageURL: elem.dataset.trackAddToCartImageUrl || '',
+          URL: elem.dataset.trackAddToCartUrl || '',
+          Brand: elem.dataset.trackAddToCartBrand || '',
+          Price: elem.dataset.trackAddToCartPrice || '',
+          Locale: '{{ request.locale.iso_code | upcase }}',
+          CompareAtPrice: elem.dataset.trackAddToCartCompareAtPrice || '',
+        };
+
+        _learnq.push(['track', 'Added to cart', cartItemDetails]);
+      });
+    });
+  </script>
+{% endif %}

@@ -1,0 +1,60 @@
+{%- comment -%}
+  Renders the filter options as collapsbile elements. This is a section setting that can be toggled off.
+
+  Accepts:
+    - label: shown as the filter label in the main menu. (required)
+    - summary_content: everything that should be in the sub-menu (required)
+    - filter_index: forloop.index from the collection.filters loop. (required)
+    - collapsible: {Boolean} (optional)
+{%- endcomment -%}
+
+{%- liquid
+  unless collapsible
+    assign collapsible = settings.enable_filter_collapsibles
+  endunless
+
+  if label == 'Size' or is_color
+    assign is_size_or_color_class = 'collapsible-is-open'
+  endif
+-%}
+
+<div
+  class="filter__group filter__group--name-{{ label | handleize }} js-filter group/filter-group w-full overflow-y-auto border-b border-b-[var(--border-color-default)] bg-color-default {{ is_size_or_color_class }}"
+  data-filter-option
+  data-index="{{ filter_index }}"
+  {% if collapsible %}
+    data-collapsible-group
+  {% endif %}
+>
+  <button
+    type="button"
+    class="filter__option-trigger flex w-full items-center justify-between py-3 transition-all group-[.collapsible-is-open]/filter-group:pb-2"
+    {% if collapsible %}
+      data-collapsible-trigger
+    {% endif %}
+  >
+    <span class="text-sm font-bold leading-5">
+      {{- label | escape -}}
+    </span>
+    {%- if collapsible -%}
+      {%- render 'global-icon',
+        icon: 'minus',
+        icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block'
+      -%}
+      {%- render 'global-icon',
+        icon: 'plus',
+        icon_class: 'w-3 block group-[.collapsible-is-open]/filter-group:hidden'
+      -%}
+    {%- endif -%}
+  </button>
+  <div
+    class="filter-group__target w-full overflow-y-auto transition-all bg-color-default"
+    {% if collapsible %}
+      data-collapsible-target
+    {% endif %}
+  >
+    <div class="pb-4">
+      {{- summary_content -}}
+    </div>
+  </div>
+</div>

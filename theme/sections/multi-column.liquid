@@ -1,0 +1,711 @@
+{%- liquid
+  assign title = section.settings.heading | escape
+  assign container_class = 'multi-column__container'
+  assign content_class = 'multi-column__content grid gap-8'
+
+  # Container classes
+  if section.settings.container_width != blank
+    assign container_class = container_class | append: ' ' | append: section.settings.container_width
+  endif
+  if section.settings.color_scheme != blank
+    assign container_class = container_class | append: ' container--background ' | append: section.settings.color_scheme
+  endif
+
+  # Set the grid layout.
+  if section.settings.columns_per_row == 1
+    assign content_class = content_class | append: ' grid-cols-1'
+  elsif section.settings.columns_per_row == 2
+    assign content_class = content_class | append: ' grid-cols-1 md:grid-cols-2'
+  elsif section.settings.columns_per_row == 3
+    assign content_class = content_class | append: ' grid-cols-1 md:grid-cols-3'
+  endif
+
+  # Collect the title classnames based on settings.
+  assign title_class = 'multi-column__title' | append: ' ' | append: section.settings.heading_size | append: ' ' | append: section.settings.heading_alignment
+-%}
+
+{%- comment -%} Capture the content {%- endcomment -%}
+{%- capture container_content -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.image != blank or block.settings.heading != blank or block.settings.text != blank or block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+
+      {%- liquid
+        # Get mobile image
+        assign image_mobile = block.settings.image_mobile
+        if image_mobile == blank
+          assign image_mobile = block.settings.image
+        endif
+
+        # Set images sizes depending on the number of columns
+        assign image_size = 100 | divided_by: section.settings.columns_per_row | append: 'vw'
+        assign sizes = '(min-width: 768px) ' | append: image_size | append: ', 100vw'
+
+        # Align buttons with flex as parent based on text align block.
+        assign button_align = ''
+        case block.settings.text_align
+          when 'text-left'
+          when 'text-center'
+            assign button_align = 'justify-center'
+          when 'text-right'
+            assign button_align = 'justify-end'
+        endcase
+      -%}
+
+      {%- comment -%} Render column {%- endcomment -%}
+      <div
+        class="multi-columns__column flex flex-col {{ block.settings.position_vertical }} {{ block.settings.position_horizontal }} {{ block.settings.mobile_order }} md:order-none"
+        style="--max-width: {{ block.settings.max_width }}px;"
+        {{ block.shopify_attributes }}
+      >
+        {%- comment -%} Column inner width and text align {%- endcomment -%}
+        <div class="max-w-[var(--max-width)] space-y-5 {{ block.settings.text_align }}">
+
+          {%- comment -%} Desktop image {%- endcomment -%}
+          {%- if block.settings.image != blank %}
+            {%- render 'format-image',
+              image_object: block.settings.image,
+              lazy: block.settings.lazy,
+              aspect_ratio: block.settings.image_ratio,
+              class: 'multi-columns__image hidden md:block object-cover',
+              max_width: '680px',
+              sizes: sizes
+            -%}
+          {%- endif -%}
+
+          {%- comment -%} Mobile Image {%- endcomment -%}
+          {%- if image_mobile != blank -%}
+            {%- render 'format-image',
+              image_object: image_mobile,
+              lazy: block.settings.lazy,
+              aspect_ratio: block.settings.image_ratio_mobile,
+              class: 'multi-columns__image md:hidden w-full object-cover',
+              max_width: '735px'
+            -%}
+          {%- endif -%}
+
+          {%- comment -%} Heading {%- endcomment -%}
+          {%- if block.settings.heading != blank -%}
+            <p class="{{ block.settings.heading_size }}">
+              {{- block.settings.heading -}}
+            </p>
+          {%- endif -%}
+
+          {%- comment -%} Text {%- endcomment -%}
+          {%- if block.settings.text != blank -%}
+            <div class="rte">
+              {{- block.settings.text -}}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Buttons {%- endcomment -%}
+          {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+            <div class="flex gap-4 {{ button_align }}">
+              {%- if block.settings.button_label_1 != blank -%}
+                <a
+                  href="{{ block.settings.button_url_1 | default: '#' }}"
+                  class="button {{ block.settings.button_color_scheme_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}"
+                >
+                  {{- block.settings.button_label_1 | escape -}}
+                </a>
+              {%- endif -%}
+              {%- if block.settings.button_label_2 != blank -%}
+                <a
+                  href="{{ block.settings.button_url_2 | default: '#' }}"
+                  class="button {{ block.settings.button_color_scheme_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}"
+                >
+                  {{- block.settings.button_label_2 | escape -}}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  class: container_class,
+  title_tag: section.settings.heading_element,
+  title_class: title_class,
+  title: title,
+  content_class: content_class,
+  content: container_content
+-%}
+
+{% schema %}
+  {
+    "name": "Multi-columns",
+    "tag": "section",
+    "class": "multi-columns",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Appearance settings"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--sm",
+            "label": "Small"
+          },
+          {
+            "value": "container--md",
+            "label": "Medium"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          },
+          {
+            "value": "container--full",
+            "label": "Full"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "columns_per_row",
+        "label": "Columns per row",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 2
+      },
+      {
+        "type": "header",
+        "content": "Section heading"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Section heading (optional)"
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "default": "h2",
+        "label": "Heading element",
+        "info": "Change the element of the heading for SEO.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "info": "Change the style of the heading to only influence the look and feel.",
+        "default": "h3",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "column",
+        "name": "Column",
+        "settings": [
+          {
+            "type": "header",
+            "content": "Alignment"
+          },
+          {
+            "type": "select",
+            "id": "position_vertical",
+            "label": "Vertical position",
+            "default": "justify-start",
+            "options": [
+              {
+                "value": "justify-start",
+                "label": "top"
+              },
+              {
+                "value": "justify-center",
+                "label": "center"
+              },
+              {
+                "value": "justify-end",
+                "label": "bottom"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "position_horizontal",
+            "label": "Horizontal position",
+            "default": "items-start",
+            "options": [
+              {
+                "value": "items-start",
+                "label": "left"
+              },
+              {
+                "value": "items-center",
+                "label": "center"
+              },
+              {
+                "value": "items-end",
+                "label": "right"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "max_width",
+            "min": 216,
+            "max": 1440,
+            "unit": "px",
+            "step": 24,
+            "label": "Max width",
+            "default": 1440
+          },
+          {
+            "type": "select",
+            "id": "text_align",
+            "label": "Text align",
+            "default": "text-left",
+            "options": [
+              {
+                "value": "text-left",
+                "label": "Left"
+              },
+              {
+                "value": "text-center",
+                "label": "Center"
+              },
+              {
+                "value": "text-right",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "mobile_order",
+            "label": "Mobile order",
+            "default": "order-none",
+            "options": [
+              {
+                "value": "-order-5",
+                "label": "-5"
+              },
+              {
+                "value": "-order-4",
+                "label": "-4"
+              },
+              {
+                "value": "-order-3",
+                "label": "-3"
+              },
+              {
+                "value": "-order-2",
+                "label": "-2"
+              },
+              {
+                "value": "-order-1",
+                "label": "-1"
+              },
+              {
+                "value": "order-none",
+                "label": "0"
+              },
+              {
+                "value": "order-1",
+                "label": "1"
+              },
+              {
+                "value": "order-2",
+                "label": "2"
+              },
+              {
+                "value": "order-3",
+                "label": "3"
+              },
+              {
+                "value": "order-4",
+                "label": "4"
+              },
+              {
+                "value": "order-5",
+                "label": "5"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Desktop image",
+            "info": "Aspect ratio 1/1"
+          },
+          {
+            "type": "select",
+            "id": "image_ratio",
+            "label": "Destkop image ratio",
+            "default": "1/1",
+            "options": [
+              {
+                "value": "16/9",
+                "label": "16/9"
+              },
+              {
+                "value": "4/3",
+                "label": "4/3"
+              },
+              {
+                "value": "1/1",
+                "label": "1/1"
+              },
+              {
+                "value": "3/4",
+                "label": "3/4"
+              },
+              {
+                "value": "9/16",
+                "label": "9/16"
+              },
+              {
+                "value": "5/6",
+                "label": "5/6"
+              }
+            ]
+          },
+          {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "Mobile image",
+            "info": "Aspect ratio 5/6"
+          },
+          {
+            "type": "select",
+            "id": "image_ratio_mobile",
+            "label": "Mobile image ratio",
+            "default": "5/6",
+            "options": [
+              {
+                "value": "16/9",
+                "label": "16/9"
+              },
+              {
+                "value": "4/3",
+                "label": "4/3"
+              },
+              {
+                "value": "1/1",
+                "label": "1/1"
+              },
+              {
+                "value": "3/4",
+                "label": "3/4"
+              },
+              {
+                "value": "9/16",
+                "label": "9/16"
+              },
+              {
+                "value": "5/6",
+                "label": "5/6"
+              }
+            ]
+          },
+          {
+            "type": "checkbox",
+            "id": "lazy",
+            "label": "Lazy load images",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "Content"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Column"
+          },
+          {
+            "type": "select",
+            "id": "heading_element",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h3",
+            "label": "Heading element",
+            "info": "Change the element of the heading for SEO."
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "label": "Heading size",
+            "info": "Change the style of the heading to only influence the look and feel.",
+            "default": "h5",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ]
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tristique, nibh ut facilisis imperdiet, odio velit suscipit ipsum, rhoncus pretium diam urna sit amet lacus. Aliquam a volutpat quam.</p>"
+          },
+          {
+            "type": "header",
+            "content": "First button",
+            "info": "Remove label to hide button."
+          },
+          {
+            "type": "text",
+            "id": "button_label_1",
+            "label": "Label"
+          },
+          {
+            "type": "url",
+            "id": "button_url_1",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "button_color_scheme_1",
+            "label": "Color scheme",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "button--link",
+                "label": "Link"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Second button",
+            "info": "Remove label to hide button."
+          },
+          {
+            "type": "text",
+            "id": "button_label_2",
+            "label": "Label"
+          },
+          {
+            "type": "url",
+            "id": "button_url_2",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "button_color_scheme_2",
+            "label": "Color scheme",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "button--link",
+                "label": "Link"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Multi-column",
+        "blocks": [
+          {
+            "type": "column"
+          },
+          {
+            "type": "column"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

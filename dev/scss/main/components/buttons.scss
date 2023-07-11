@@ -1,0 +1,209 @@
+@use '../../mixins' as *;
+
+@layer components {
+  .button {
+    background-color: var(--button-background, inherit);
+    border-color: var(--button-border-color, inherit);
+    color: var(--button-text, inherit);
+    @apply relative
+    inline-flex
+    cursor-pointer
+    flex-wrap
+    items-center
+    justify-center
+    gap-2
+    border
+    px-4
+    py-[9px]
+    text-sm
+    font-bold
+    leading-4
+    no-underline
+    transition-colors;
+    @include states(':not([disabled])') {
+      background-color: var(--button-hover-background, inherit);
+      border-color: var(--button-hover-border-color, inherit);
+      color: var(--button-hover-text, inherit);
+      @apply no-underline;
+    }
+
+    &--link {
+      @apply border-transparent;
+    }
+
+    &.loading,
+    &--loading {
+      @apply pointer-events-none text-transparent;
+      &:after {
+        @apply absolute block aspect-square h-[1.5em] animate-spin rounded-full border-[.2em] border-[--button-text] border-l-transparent content-empty;
+      }
+    }
+
+    &:disabled,
+    &[aria-disabled='true'],
+    &.disabled {
+      @apply pointer-events-none cursor-not-allowed opacity-50;
+    }
+  }
+
+  /* Button styles */
+  .button--primary {
+    --button-background: var(--color-primary);
+    --button-border-color: var(--color-primary);
+    --button-text: var(--color-primary-text);
+    --button-hover-background: var(--color-primary-600);
+    --button-hover-border-color: var(--color-primary-600);
+    --button-hover-text: var(--color-primary-text);
+  }
+
+  .button--secondary {
+    --button-background: var(--color-secondary);
+    --button-border-color: var(--color-secondary);
+    --button-text: var(--color-secondary-text);
+    --button-hover-background: var(--color-secondary-400);
+    --button-hover-border-color: var(--color-secondary-400);
+    --button-hover-text: var(--color-secondary-text);
+  }
+
+  .button--tertiary {
+    --button-background: var(--color-secondary-50);
+    --button-border-color: var(--color-secondary-50);
+    --button-text: var(--color-black);
+    --button-hover-background: var(--color-secondary-100);
+    --button-hover-border-color: var(--color-secondary-100);
+    --button-hover-text: var(--color-black);
+  }
+
+  .button--outline {
+    --button-background: transparent;
+    --button-border-color: var(--color-black);
+    --button-text: var(--color-black);
+    --button-hover-background: var(--color-black);
+    --button-hover-border-color: var(--color-black);
+    --button-hover-text: var(--color-white);
+  }
+
+  .button--outline-white {
+    --button-background: transparent;
+    --button-border-color: var(--color-white);
+    --button-text: var(--color-white);
+    --button-hover-background: var(--color-white);
+    --button-hover-border-color: var(--color-white);
+    --button-hover-text: var(--color-black);
+  }
+
+  .button--link {
+    --button-background: transparent;
+    --button-border-color: transparent;
+    --button-text: var(--text-color-default);
+    --button-hover-background: transparent;
+    --button-hover-border-color: transparent;
+    --button-hover-text: var(--color-primary);
+  }
+
+  /* Button sizes */
+  .button--sm {
+    @apply px-3 py-1 text-xs leading-4;
+  }
+
+  .button--md {
+    @apply px-4 py-[9px] text-sm leading-5;
+  }
+
+  .button--lg {
+    @apply px-8 py-3 text-sm leading-5;
+  }
+
+  .button--xl {
+    @apply px-8 py-[19px] text-lg leading-6;
+  }
+
+  /**
+    * Shopify buttons
+  */
+  .shopify-challenge__button {
+    @extend .button;
+    @extend .button--primary;
+    @extend .button--lg;
+  }
+
+  .shopify-payment-button {
+    button {
+      // @extend .button;
+      // @extend .button--secondary;
+      // @extend .button--lg;
+      // @apply box-border rounded-none;
+      @apply button--secondary
+        relative
+        box-border
+        inline-flex
+        cursor-pointer
+        flex-wrap
+        items-center
+        justify-center
+        gap-2
+        rounded-none
+        border
+        border-solid border-none
+        border-[--button-border-color,inherit]
+        bg-[--button-background,inherit]
+        text-sm
+        font-bold
+        leading-normal
+        no-underline
+        transition-colors #{!important};
+      @include states(':not([disabled])') {
+        @apply border-[--button-hover-border-color,inherit]
+        bg-[--button-hover-background,inherit]
+        text-[--button-hover-text,inherit]
+        no-underline #{!important};
+      }
+      + button {
+        @apply mb-2;
+      }
+      &.shopify-payment-button__button--hidden,
+      &[disabled],
+      &[aria-disabled] {
+        display: none !important;
+      }
+    }
+  }
+
+  // Overwrite Shopify styling
+  .shopify-payment-button__more-options,
+  .shopify-payment-button__button--unbranded {
+    all: unset;
+    background: var(--color-secondary) !important;
+    border-radius: 0 !important;
+    @include states() {
+      background: var(--color-secondary-400) !important;
+    }
+  }
+
+  /**
+    * Text link without paddings
+  */
+  .link {
+    @apply inline-flex
+      cursor-pointer
+      flex-wrap
+      items-center
+      justify-center
+      gap-2
+      text-sm
+      font-bold
+      underline
+      transition-colors
+      text-link-color
+      states:text-link-color-states;
+    @include states() {
+      @apply no-underline;
+      color: var(--text-link-color-states);
+    }
+    // link in text color
+    &.link--text {
+      --text-link-color: var(--text-color-default);
+      --text-link-color-states: var(--text-color-default);
+    }
+  }
+}

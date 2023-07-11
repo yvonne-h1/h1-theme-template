@@ -1,0 +1,502 @@
+{%- liquid
+  comment
+    Import styles for this section
+  endcomment
+
+  assign year = 'now' | date: '%Y'
+  assign block_newsletter = blank
+-%}
+
+<footer class="footer bg-gray-200 py-12 text-gray-700 md:py-20">
+  <div class="site-center site-spacing-side flex flex-col gap-y-0">
+    <div class="footer__blocks grid grid-cols-12 gap-y-8 gap-x-base md:gap-x-6 lg:gap-x-12">
+      {%- for block in section.blocks -%}
+        {%- assign block_type = block.type | handleize -%}
+        {%- case block.type -%}
+            {%- comment -%} App block {%- endcomment -%}
+          {%- when '@app' -%}
+            <div class="footer-block footer-block--{{ block_type }} col-span-12 md:col-span-3">
+              {% render block %}
+            </div>
+
+            {%- comment -%} Footer menu {%- endcomment -%}
+          {%- when 'menu' -%}
+            {%- liquid
+              assign target = ''
+              if block.settings.title != blank
+                assign target = 'data-collapsible-target'
+              endif
+            -%}
+
+            <div
+              class="footer-block footer-block--{{ block_type }} col-span-12 md:col-span-3"
+              {{ block.shopify_attributes }}
+            >
+              {%- comment -%} Create collapsible group for mobile {%- endcomment -%}
+              <collapsible-element class="collapsible">
+                <div class="group" data-collapsible-group>
+                  {%- comment -%} Output menu header and collapsilbe tirrger {%- endcomment -%}
+                  {%- if block.settings.title != blank -%}
+                    <button
+                      type="button"
+                      class="footer-block--menu__trigger relative block w-full py-3 text-left text-sm font-bold leading-5 text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
+                      data-collapsible-trigger
+                    >
+                      {{- block.settings.title -}}
+                      {%- render 'global-icon',
+                        icon: 'chevron-down',
+                        icon_class: 'w-4 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180 md:hidden'
+                      -%}
+                    </button>
+                  {%- endif -%}
+
+                  {%- comment -%} Output menu and collapsible content {%- endcomment -%}
+                  <div
+                    class="footer-block--menu__target p-0 text-sm leading-5 js:md:!max-h-min"
+                    {{ target }}
+                  >
+                    {%- if block.settings.menu != blank -%}
+                      {%- render 'footer-menu',
+                        linklist: block.settings.menu,
+                        prefix: 'footer-menu',
+                        collapsible: false
+                      -%}
+                    {%- endif -%}
+
+                    {%- comment -%} Output menu image {%- endcomment -%}
+                    {%- if block.settings.image_src != blank -%}
+                      {%- capture menu_image -%}
+                        {%- render 'format-image',
+                          image_object: block.settings.image_src,
+                          lazy: block.settings.lazy,
+                          alt: block.settings.image_src.alt,
+                          max_width: block.settings.image_max_width,
+                          class: "object-cover"
+                        -%}
+                      {%- endcapture -%}
+                      <div
+                        class="flexible-holder"
+                        style="--max-width: {{ block.settings.image_max_width }}px;"
+                      >
+                        {%- if block.settings.image_url != blank -%}
+                          <a
+                            href="{{ block.settings.image_url }}"
+                            {% if block.settings.image_new_tab %}
+                              target="_blank" rel="noopener"
+                            {% endif %}
+                          >
+                            {{ menu_image }}
+                          </a>
+                        {%- else -%}
+                          {{ menu_image }}
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </collapsible-element>
+            </div>
+
+            {%- comment -%} Free text {%- endcomment -%}
+          {%- when 'text' -%}
+            <div
+              class="footer-block footer-block--{{ block_type }} col-span-12 grid grid-cols-1 gap-y-4 md:col-span-3"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.title != blank -%}
+                <p class="block w-full pt-3 text-sm font-bold text-black md:pt-0">
+                  {{- block.settings.title -}}
+                </p>
+              {%- endif -%}
+
+              {%- comment -%} Capture image with or without link {%- endcomment -%}
+              {%- capture image_block -%}
+                {%- if block.settings.image_src != blank -%}
+
+                  {%- comment -%} Capture image {%- endcomment -%}
+                  {%- capture image -%}
+                    {%- render 'format-image',
+                      image_object: block.settings.image_src,
+                      lazy: block.settings.lazy,
+                      alt: block.settings.image_src.alt,
+                      max_width: block.settings.image_max_width,
+                      class: "object-cover"
+                    -%}
+                  {%- endcapture -%}
+
+                  <div class="flexible-holder" style="--max-width: {{ block.settings.image_max_width }}px;">
+                    {%- if block.settings.image_url != blank -%}
+                      <a href="{{ block.settings.image_url }}" {% if block.settings.image_new_tab %} target="_blank" rel="noopener"{% endif %}>
+                        {{- image -}}
+                      </a>
+                    {%- else -%}
+                      {{- image -}}
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- endcapture -%}
+
+              {%- comment -%} Output block {%- endcomment -%}
+              {%- if block.settings.richtext != blank or image != blank -%}
+                {%- liquid
+                  if block.settings.image_position == 'before' and image_block
+                    echo image_block
+                  endif
+                  if block.settings.richtext != blank
+                    echo '<div class="footer-block--' | append: block_type | append: '__richtext rte">'
+                    echo block.settings.richtext
+                    echo '</div>'
+                  endif
+                  if block.settings.image_position == 'after' and image_block
+                    echo image_block
+                  endif
+                -%}
+              {%- endif -%}
+            </div>
+
+            {%- comment -%} Newsletter block and social links {%- endcomment -%}
+          {%- when 'newsletter' -%}
+            {%- liquid
+              # Assign block object for later use outside this for loop.
+              assign block_newsletter = block
+              # Set spacing class between newsletter and socials
+              assign spacing_class = ''
+              if block.settings.social_icons != blank and block.settings.newsletter
+                assign spacing_class = 'mt-6'
+              endif
+            -%}
+            <div
+              class="footer-block footer-block--{{ block_type }} -order-1 col-span-12 md:order-none md:col-span-3"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.title != blank -%}
+                <p class="mb-4 block w-full text-sm font-bold text-black">
+                  {{- block.settings.title -}}
+                </p>
+              {%- endif -%}
+              {%- if block.settings.newsletter -%}
+                {%- render 'footer-newsletter',
+                  title: block.settings.title,
+                  description: block.settings.description,
+                  button_class: 'button-primary'
+                -%}
+              {%- endif -%}
+              {%- if block.settings.social_icons != blank -%}
+                <div class="{{ spacing_class }} hidden md:block">
+                  {%- render 'global-social-links',
+                    icon_shape: block.settings.social_icons_shape,
+                    icon_size: block.settings.social_icons_size
+                  -%}
+                </div>
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- comment -%} Extra output for social icons position on mobile related to the footer newsletter block if now newsletter block {%- endcomment -%}
+      {%- if block_newsletter != blank -%}
+        <div class="footer-block footer-block--social col-span-12 md:col-span-4 md:hidden lg:col-span-3">
+          {%- if block_newsletter.settings.social_icons != blank -%}
+            {%- render 'global-social-links',
+              icon_shape: block_newsletter.settings.social_icons_shape,
+              icon_size: block_newsletter.settings.social_icons_size
+            -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.payment_icons or section.settings.copyright -%}
+      <div class="footer__info mt-8 grid grid-cols-12 items-center gap-y-8 gap-x-base md:mt-16 md:gap-x-6 lg:gap-x-12">
+        {%- comment -%} Payment icons {%- endcomment -%}
+        {%- if section.settings.payment_icons -%}
+          <div class="col-span-12 md:col-span-9">
+            {%- render 'global-payment-methods', icon_size: section.settings.payment_icons_size, -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Copyright {%- endcomment -%}
+        {%- if section.settings.copyright -%}
+          <div class="col-span-12 md:col-span-3">
+            <p class="text-sm font-bold">
+              {{- 'sections.footer.copyright_html' | t: year: year -}}
+            </p>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</footer>
+
+{%- comment -%} Spacer for the sticky mobile cart cta. {%- endcomment -%}
+{%- if request.page_type == 'cart' -%}
+  <div class="block h-[7.75rem] md:hidden"></div>
+{%- endif -%}
+
+<script src="{{ 'footer.js' | asset_url }}" defer></script>
+
+{% schema %}
+  {
+    "name": "Footer",
+    "max_blocks": 8,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Payment methods",
+        "info": "Choose the icons to show in the theme settings."
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icons",
+        "label": "Enable",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "payment_icons_size",
+        "label": "Size",
+        "default": "w-8",
+        "options": [
+          {
+            "value": "w-3",
+            "label": "Extra small"
+          },
+          {
+            "value": "w-5",
+            "label": "Small"
+          },
+          {
+            "value": "w-6",
+            "label": "Medium"
+          },
+          {
+            "value": "w-8",
+            "label": "Large"
+          },
+          {
+            "value": "w-12",
+            "label": "Extra large"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Copyright"
+      },
+      {
+        "type": "checkbox",
+        "id": "copyright",
+        "label": "Enable",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "menu",
+        "name": "Menu",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "info": "Only set a title when you want the menu to be collapsed on mobile."
+          },
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Menu"
+          },
+          {
+            "type": "header",
+            "content": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_src",
+            "label": "Image",
+            "info": "The best size is the max width @2x."
+          },
+          {
+            "type": "checkbox",
+            "id": "lazy",
+            "label": "Lazyload image",
+            "default": true,
+            "info": "For page speed, disable if the image is directly visible on mobile and desktop"
+          },
+          {
+            "type": "range",
+            "id": "image_max_width",
+            "min": 40,
+            "max": 600,
+            "step": 20,
+            "unit": "px",
+            "label": "Max width",
+            "default": 60
+          },
+          {
+            "type": "url",
+            "id": "image_url",
+            "label": "Url"
+          },
+          {
+            "type": "checkbox",
+            "id": "image_new_tab",
+            "label": "Open in new tab"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "richtext",
+            "label": "Richtext"
+          },
+          {
+            "type": "header",
+            "content": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_src",
+            "label": "Image",
+            "info": "The best size is the max width @2x."
+          },
+          {
+            "type": "checkbox",
+            "id": "lazy",
+            "label": "Lazyload image",
+            "default": true,
+            "info": "For page speed, disable if the image is directly visible on mobile and desktop"
+          },
+          {
+            "type": "range",
+            "id": "image_max_width",
+            "min": 40,
+            "max": 600,
+            "step": 20,
+            "unit": "px",
+            "label": "Max width",
+            "default": 100
+          },
+          {
+            "type": "select",
+            "id": "image_position",
+            "label": "Position",
+            "options": [
+              {
+                "value": "before",
+                "label": "Before text"
+              },
+              {
+                "value": "after",
+                "label": "After text"
+              }
+            ],
+            "default": "before"
+          },
+          {
+            "type": "url",
+            "id": "image_url",
+            "label": "Url"
+          },
+          {
+            "type": "checkbox",
+            "id": "image_new_tab",
+            "label": "Open in new tab"
+          }
+        ]
+      },
+      {
+        "type": "newsletter",
+        "name": "Newsletter and socials",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Newsletter"
+          },
+          {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description",
+            "default": "<p><strong>Subscribe to our newsletter to stay updated on sales and special events.</strong></p>"
+          },
+          {
+            "type": "checkbox",
+            "id": "newsletter",
+            "label": "Enable",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "Social icons",
+            "info": "Choose the icons to show in the theme settings."
+          },
+          {
+            "type": "checkbox",
+            "id": "social_icons",
+            "label": "Enable",
+            "default": true
+          },
+          {
+            "type": "select",
+            "id": "social_icons_shape",
+            "label": "Icon shape",
+            "default": "round",
+            "options": [
+              {
+                "value": "round",
+                "label": "Round"
+              },
+              {
+                "value": "regular",
+                "label": "Regular"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "social_icons_size",
+            "label": "Size",
+            "default": "w-8",
+            "options": [
+              {
+                "value": "w-3",
+                "label": "Extra small"
+              },
+              {
+                "value": "w-5",
+                "label": "Small"
+              },
+              {
+                "value": "w-6",
+                "label": "Medium"
+              },
+              {
+                "value": "w-8",
+                "label": "Large"
+              },
+              {
+                "value": "w-12",
+                "label": "Extra large"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

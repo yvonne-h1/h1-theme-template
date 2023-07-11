@@ -1,0 +1,401 @@
+{%- capture container_content -%}
+  <div class="grid">
+    <cart-items class="group/cart-items cart relative col-span-12 block text-sm lg:col-span-8 lg:col-start-3 {% if cart == empty %} cart-is-empty{% endif %}">
+
+      {%- comment -%} Empty cart {%- endcomment -%}
+      <div class="cart__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex">
+        <p class="h4 cart__empty-text mb-4">
+          {%- render "format-translation", namespace: "sections.cart", key: "empty", fallback: "Your cart is empty" -%}
+        </p>
+        <a href="{{ routes.all_products_collection_url }}" class="button button--link">
+          {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+          {%- render "format-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
+        </a>
+      </div>
+
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="cart__header mb-6 group-[.cart-is-empty]/cart-items:hidden lg:mb-14 lg:grid lg:grid-cols-12 lg:items-center">
+        <div class="lg:col-span-3">
+          <a href="{{ routes.all_products_collection_url }}" class="button button--link px-0 py-0">
+            {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+            {% render "format-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
+          </a>
+        </div>
+        <div class="mt-6 text-center lg:col-span-6 lg:mt-0">
+          <h1 class="h4">
+            {%- render "format-translation", namespace: "sections.cart", key: "title", fallback: "Cart" -%}
+          </h1>
+        </div>
+      </div>
+
+      {%- comment -%} Cart items {%- endcomment -%}
+      <form action="{{ routes.cart_url }}" class="cart__contents group-[.cart-is-empty]/cart-items:hidden" method="post" id="cart">
+        <div class="cart__items relative" id="main-cart-items" data-id="{{ section.id }}">
+          <div class="js-cart-item-contents group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
+            {%- if cart != empty -%}
+              <div class="cart-items">
+                {%- for item in cart.items -%}
+                  {%- render 'cart-item', item: item -%}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <p class="sr-only" id="cart-live-region-text" aria-live="polite" role="status"></p>
+
+        <p
+          class="hidden"
+          id="shopping-cart-line-item-status"
+          aria-live="polite"
+          aria-hidden="true"
+          role="status"
+          data-shopping-cart-line-item-status
+        >
+          {%-
+            render 'format-translation',
+            namespace: 'accessibility',
+            key: 'loading',
+            fallback: 'Loading'
+          -%}
+        </p>
+
+        {%- comment -%} Cart footer {%- endcomment -%}
+        <div
+          id="main-cart-footer"
+          data-id="{{ section.id }}"
+        >
+          <div class="cart__footer grid grid-cols-8 md:mt-14">
+
+            <div class="col-span-8 grid grid-cols-1 gap-y-6 md:col-span-3">
+
+              {%- comment -%} Cart note {%- endcomment -%}
+              {%- if section.settings.show_cart_note -%}
+                <cart-note class="cart__note field mb-0 block">
+                  <label for="Cart-note" class="field__label font-body text-xs leading-5">
+                    {%- render "format-translation", namespace: "sections.cart", key: "note", fallback: "Instructions about shipping, taxes and/or returns." -%}
+                  </label>
+                  <textarea
+                    name="note"
+                    placeholder="{% render "format-translation", namespace: "sections.cart", key: "message", fallback: "Leave a comment here" -%}"
+                    class="field__input"
+                    id="Cart-note"
+                    data-cart-note
+                  >
+                    {{- cart.note -}}
+                  </textarea>
+                </cart-note>
+              {%- endif -%}
+
+              {%- comment -%} USPs & @app blocks {%- endcomment -%}
+              {%- capture usps -%}
+                {%- for block in section.blocks -%}
+                  {%- case block.type -%}
+                    {%- when '@app' -%}
+                      <div class="cart__app-block relative mb-4 border-b border-b-[var(--border-color-default)] py-4 first:pt-0 last:mb-0">
+                        {%- render block -%}
+                      </div>
+                    {%- when 'usp' -%}
+                      {%- if block.settings.text != blank -%}
+                        <li class="cart-usps__item relative flex items-center gap-2">
+                          <div class="cart-usps__icon block w-6 shrink-0 rounded-full bg-primary-100 p-1">
+                            {%- liquid
+                              assign icon = block.settings.icon | downcase
+                              render 'global-icon', icon: icon, icon_class: 'w-4 p-0.5'
+                            -%}
+                          </div>
+                          <p class="cart-usps__text text-xs leading-4">
+                            {{- block.settings.text -}}
+                          </p>
+                        </li>
+                      {%- endif -%}
+                  {%- endcase -%}
+                {% endfor %}
+              {%- endcapture -%}
+
+              {%- if usps != blank -%}
+                <ul class="cart-usps flex flex-col gap-2">
+                  {{- usps -}}
+                </ul>
+              {%- endif -%}
+
+            </div>
+
+            {%- comment -%} Cart subtotal {%- endcomment -%}
+            <div class="cart__subtotal fixed bottom-0 left-0 right-0 z-20 col-span-8 bg-white md:relative md:col-span-3 md:col-start-6 md:bg-transparent">
+
+              <div class="js-cart-footer-contents" {{ block.shopify_attributes }}>
+
+                {%- comment -%} Totals {%- endcomment -%}
+                <div class="cart__totals relative flex flex-wrap items-center justify-between p-4 md:p-0">
+                  <p class="cart__totals-subtotal font-body text-base leading-7">
+                    {%- render 'format-translation', namespace: 'sections.cart', key: 'subtotal', fallback: 'Subtotal' -%}
+                  </p>
+
+                  {%- comment -%} Loading animation {%- endcomment -%}
+                  <div
+                    class="cart__loader absolute right-4 top-1/2 z-10 hidden w-6 -translate-y-1/2 md:right-0"
+                    data-cart-loader-active="show"
+                  >
+                    {%- render 'global-icon',
+                      icon: 'spinner',
+                      icon_class: 'w-6 animate-spin'
+                    -%}
+                  </div>
+
+                  <p class="cart__totals-subtotal-value font-body text-base leading-7" data-cart-loader-active="hidden">
+                    {{ cart.total_price | money_with_currency }}
+                    {% if cart.total_price != cart.original_total_price %}
+                      <s class="price--compare">{{- cart.original_total_price | money_with_currency -}}</s>
+                    {% endif %}
+                  </p>
+                </div>
+
+                {%- comment -%} Cart errors {%- endcomment -%}
+                <div id="cart-errors" class="cart__cart-error my-2 text-sm text-danger empty:hidden"></div>
+
+                <p class="cart__tax-note rte mb-6 mt-2 hidden text-sm text-gray-500 text-secondary-200 md:block">
+                  {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                    {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                  {%- elsif cart.taxes_included -%}
+                    {%-
+                      render 'format-translation',
+                      namespace: 'sections.cart',
+                      key: 'taxes_included_but_shipping_at_checkout',
+                      fallback: 'Taxes are included'
+                    -%}
+                  {%- elsif shop.shipping_policy.body != blank -%}
+                    {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+                  {%- else -%}
+                    {%-
+                      render 'format-translation',
+                      namespace: 'sections.cart',
+                      key: 'taxes_and_shipping_at_checkout',
+                      fallback: 'Taxes and shipping are calculated in checkout'
+                    -%}
+                  {%- endif -%}
+                </p>
+
+              </div>
+
+              {%- comment -%} Checkout button {%- endcomment -%}
+              <div class="cart__ctas grid grid-cols-1 gap-y-2" {{ block.shopify_attributes }}>
+
+                <noscript>
+                  <button type="submit" class="button button--secondary button--xl">
+                    {%- render 'format-translation',
+                      namespace: 'sections.cart',
+                      key: 'update',
+                      fallback: 'Update'
+                    -%}
+                  </button>
+                </noscript>
+                <button
+                  type="submit"
+                  class="button button--primary button--xl"
+                  name="checkout"
+                  {% if cart == empty %}
+                    disabled
+                  {% endif %}
+                >
+                  {%-
+                    render 'format-translation',
+                    namespace: 'sections.cart',
+                    key: 'checkout',
+                    fallback: 'Checkout'
+                  -%}
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </form>
+
+    </cart-items>
+  </div>
+{%- endcapture -%}
+
+{%- comment -%} Output cart content {%- endcomment -%}
+{%- if container_content -%}
+  {%- comment -%} Import styles for this section {%- endcomment -%}
+  {%- liquid
+    render 'import-styles', file_name: 'component-form.css'
+    render 'import-styles', file_name: 'component-quantity-input.css', force: true
+  -%}
+
+  {%- comment -%} Render the content {%- endcomment -%}
+  {%- render 'format-container', content_class: 'site-center-md', content: container_content -%}
+
+  {%- comment -%} Import javascript {%- endcomment -%}
+  <script src="{{ 'cart.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_cart_note",
+        "default": false,
+        "label": "Enable cart note",
+        "info": "When selected, a text field will be displayed on the cart page for customers to add a note to their order."
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "usp",
+        "name": "Cart USP",
+        "settings": [
+          {
+            "type": "select",
+            "id": "icon",
+            "label": "Icon name",
+            "options": [
+              {
+                "value": "account",
+                "label": "Account"
+              },
+              {
+                "value": "arrow",
+                "label": "Arrow"
+              },
+              {
+                "value": "box",
+                "label": "Box"
+              },
+              {
+                "value": "cart",
+                "label": "Cart"
+              },
+              {
+                "value": "caret",
+                "label": "Caret"
+              },
+              {
+                "value": "chat_bubble",
+                "label": "Chat bubble"
+              },
+              {
+                "value": "checkmark",
+                "label": "Check mark"
+              },
+              {
+                "value": "close",
+                "label": "Cross"
+              },
+              {
+                "value": "discount",
+                "label": "Discount"
+              },
+              {
+                "value": "error",
+                "label": "Error"
+              },
+              {
+                "value": "eye",
+                "label": "Eye"
+              },
+              {
+                "value": "heart",
+                "label": "Heart"
+              },
+              {
+                "value": "iron",
+                "label": "Iron"
+              },
+              {
+                "value": "leaf",
+                "label": "Leaf"
+              },
+              {
+                "value": "leather",
+                "label": "Leather"
+              },
+              {
+                "value": "lock",
+                "label": "Lock"
+              },
+              {
+                "value": "map_pin",
+                "label": "Map pin"
+              },
+              {
+                "value": "pants",
+                "label": "Pants"
+              },
+              {
+                "value": "plane",
+                "label": "Plane"
+              },
+              {
+                "value": "play",
+                "label": "Play"
+              },
+              {
+                "value": "plus",
+                "label": "Plus"
+              },
+              {
+                "value": "price_tag",
+                "label": "Price tag"
+              },
+              {
+                "value": "question_mark",
+                "label": "Question mark"
+              },
+              {
+                "value": "search",
+                "label": "Search"
+              },
+              {
+                "value": "shirt",
+                "label": "Shirt"
+              },
+              {
+                "value": "shoe",
+                "label": "Shoe"
+              },
+              {
+                "value": "silhouette",
+                "label": "Silhouette"
+              },
+              {
+                "value": "star",
+                "label": "Star"
+              },
+              {
+                "value": "success",
+                "label": "Success"
+              },
+              {
+                "value": "truck",
+                "label": "Truck"
+              },
+              {
+                "value": "washing",
+                "label": "Washing"
+              },
+              {
+                "value": "zoom",
+                "label": "Zoom"
+              }
+            ],
+            "default": "plus"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

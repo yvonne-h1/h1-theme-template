@@ -1,0 +1,64 @@
+{%- comment -%}
+  EXAMPLE: translate customer.login.title:
+
+  {%- render "format-translation",
+    namespace: "customer.login",    // first part of locale key
+    key: "title",                   // last part of locale key
+    fallback: "Login"               // OPTIONAL hardcoded fallback text
+  -%}
+
+  EXAMPLE: translate products.price.from_html:
+  {%- render "format-translation",
+    namespace: "products.price",    // first part of locale key
+    key: "from_html",               // last part of locale key
+    fallback: "from {{ html }}"     // hardcoded fallback text with translation parameter (must be typed exactly as "{{ html }}").
+    html: "<a href>/cart</a>"       // optional, will be passed as {{ html }} to _html strings that can handle translation parameters
+    count: cart.items.size          // optional, will be passed as {{ count }} to strings that can handle multiple options
+  -%}
+
+  Passing html only works if the translation string contains "{{ html }}"
+{%- endcomment -%}
+
+{%- comment -%} Get the translation {%- endcomment -%}
+{%- liquid
+  assign translation_str = namespace
+  assign fallback_html = html
+  if key != blank
+    assign translation_str = translation_str | append: '.' | append: key
+  endif
+  if html != blank
+    assign translated_str = translation_str | t: html: html
+  elsif count != blank
+    assign translated_str = translation_str | t: count: count
+    assign fallback_html = count
+  elsif option != blank
+    assign translated_str = translation_str | t: option: option
+    assign fallback_html = option
+  elsif price != blank
+    assign translated_str = translation_str | t: price: price
+    assign fallback_html = price
+  elsif product_item != blank
+    assign translated_str = translation_str | t: product: product_item
+    assign fallback_html = product_item
+  elsif date != blank
+    assign translated_str = translation_str | t: date: date
+    assign fallback_html = date
+  else
+    assign translated_str = translation_str | t
+  endif
+
+  comment
+    If translation error, output the fallback
+  endcomment
+  if translated_str contains translation_str and fallback != blank
+    if fallback contains "{{ html }}" and fallback_html != blank
+      assign fallback = fallback | replace: '{{ html }}', fallback_html
+    endif
+    if fallback contains "{{ count }}" and fallback_html != blank
+      assign fallback = fallback | replace: '{{ count }}', fallback_html
+    endif
+    assign translated_str = fallback
+  endif
+
+  echo translated_str
+-%}

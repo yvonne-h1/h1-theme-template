@@ -1,0 +1,165 @@
+{%- liquid
+  capture icons
+    echo '<div class="field__icons">'
+    render 'global-icon', icon: 'checkmark', icon_class: 'w-3'
+    render 'global-icon', icon: 'cross', icon_class: 'w-3'
+    echo '</div>'
+  endcapture
+
+  capture first_name_str
+    render 'format-translation', namespace: 'customer.register', key: 'first_name', fallback: 'First name'
+  endcapture
+
+  capture last_name_str
+    render 'format-translation', namespace: 'customer.register', key: 'last_name', fallback: 'Last name'
+  endcapture
+
+  capture email_str
+    render 'format-translation', namespace: 'customer.register', key: 'email', fallback: 'Email'
+  endcapture
+
+  capture password_str
+    render 'format-translation', namespace: 'customer.register', key: 'password', fallback: 'Password'
+  endcapture
+
+  # Import styles for this section
+  render 'import-styles', file_name: 'component-form.css', force: true
+-%}
+
+{%- capture container_content -%}
+  <div class="mx-auto max-w-sm md:mb-28">
+
+    {%- form 'create_customer', novalidate: 'novalidate', class: 'form' -%}
+
+      {%- comment -%} Show account feedback, also email is send {%- endcomment -%}
+      {{ form.errors | default_errors }}
+
+      <div class="field">
+        <label class="field__label" for="RegisterForm-FirstName">
+          {{- first_name_str -}}
+        </label>
+        <input
+          class="field__input"
+          type="text"
+          name="customer[first_name]"
+          id="RegisterForm-FirstName"
+          required
+          {% if form.first_name %}
+            value="{{ form.first_name }}"
+          {% endif %}
+          autocomplete="given-name"
+          placeholder="{{ first_name_str }}"
+        >
+        {{- icons -}}
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="RegisterForm-LastName">
+          {{- last_name_str -}}
+        </label>
+        <input
+          class="field__input"
+          type="text"
+          name="customer[last_name]"
+          id="RegisterForm-LastName"
+          {% if form.last_name %}
+            value="{{ form.last_name }}"
+          {% endif %}
+          autocomplete="family-name"
+          placeholder="{{ last_name_str }}"
+          required
+        >
+        {{- icons -}}
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="RegisterForm-email">
+          {{- email_str -}}
+        </label>
+        <input
+          type="email"
+          name="customer[email]"
+          {% if form.email %}
+            value="{{ form.email }}"
+          {% endif %}
+          id="RegisterForm-email"
+          class="field__input"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="email"
+          aria-required="true"
+          required
+          {% if form.errors contains 'email' %}
+            aria-invalid="true"
+            aria-describedby="RegisterForm-email-error"
+          {% endif %}
+          placeholder="{{ email_str }}"
+        >
+        {{- icons -}}
+        {%- if form.errors contains 'email' -%}
+          <span id="RegisterForm-email-error" class="field__message field__message--error">
+            {{ form.errors.translated_fields['email'] | capitalize }}
+            {{ form.errors.messages['email'] }}.
+          </span>
+        {%- else -%}
+          <span class="field__message field__message--error">
+            {%-
+              render "format-translation",
+              namespace: "customer.register",
+              key: "email_message_error",
+              fallback: "This email is not in the correct format."
+            -%}
+          </span>
+        {%- endif -%}
+      </div>
+      <div class="field">
+        <label class="field__label" for="RegisterForm-password">
+          {{- password_str -}}
+        </label>
+        <input
+          class="field__input"
+          type="password"
+          name="customer[password]"
+          id="RegisterForm-password"
+          aria-required="true"
+          required
+          {% if form.errors contains 'password' %}
+            aria-invalid="true"
+            aria-describedby="RegisterForm-password-error"
+          {% endif %}
+          placeholder="{{ password_str }}"
+        >
+        {{- icons -}}
+        {%- if form.errors contains 'password' -%}
+          <span id="RegisterForm-password-error" class="field__message field__message--error">
+            {{ form.errors.translated_fields['password'] | capitalize }}
+            {{ form.errors.messages['password'] }}.
+          </span>
+        {%- endif -%}
+      </div>
+
+      <div class="mt-8 flex items-center gap-4">
+        <button class="button button--primary">
+          {%-
+            render "format-translation",
+            namespace: "customer.register",
+            key: "submit",
+            fallback: "Create"
+          -%}
+        </button>
+      </div>
+    {%- endform -%}
+  </div>
+{%- endcapture -%}
+
+{%- render 'account-header' -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container', content: container_content -%}
+
+{% schema %}
+  {
+    "name": "Register",
+    "blocks": []
+  }
+{% endschema %}

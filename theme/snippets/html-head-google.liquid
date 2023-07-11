@@ -1,0 +1,12 @@
+{%- comment %} Render google_site_verifications from settings {%- endcomment %}
+{%- if settings.google_site_verification != blank -%}
+  {%- assign google_site_verifications_arr = settings.google_site_verification
+    | strip_newlines
+    | split: ','
+  -%}
+  {%- for google_site_verification_code in google_site_verifications_arr -%}
+    {%- if google_site_verification_code != blank -%}
+      <meta name="google-site-verification" content="{{ google_site_verification_code | strip }}">
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif %}

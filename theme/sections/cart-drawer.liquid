@@ -1,0 +1,249 @@
+{%- comment -%} Output cart drawer {%- endcomment -%}
+{%- if request.page_type != 'cart' -%}
+  {%- comment -%} Import styles for this section {%- endcomment -%}
+  {%- liquid
+    render 'import-styles', file_name: 'component-form.css'
+    render 'import-styles', file_name: 'component-quantity-input.css'
+  -%}
+
+  <cart-drawer class="cart-drawer" data-cart-drawer>
+    {%- comment -%} Backdrop {%- endcomment -%}
+    <toggle-element-class
+      role="button"
+      class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop"
+      aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
+      data-options='
+        {
+          "toggleClass": "cart-drawer-is-open"
+        }
+      '
+    ></toggle-element-class>
+
+    {%- comment -%} Cart drawer {%- endcomment -%}
+    <div
+      id="cart-drawer"
+      class="invisible fixed bottom-0 right-0 top-0 z-offcanvas flex h-full w-full translate-x-full flex-col overflow-x-hidden bg-white opacity-0 transition-all duration-300 text-color-default group-[.cart-drawer-is-open]/body:visible group-[.cart-drawer-is-open]/body:translate-x-0 group-[.cart-drawer-is-open]/body:opacity-100 xs:max-w-sm"
+      role="dialog"
+      tabindex="-1"
+      aria-label="{%- render 'format-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}"
+    >
+      <cart-items class="cart-items group/cart-items{% if cart == empty %} cart-is-empty{% endif %}">
+        {%- comment -%} Empty cart {%- endcomment -%}
+        <div class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">
+          <p class="h4 cart-drawer__empty-text">
+            {%- render 'format-translation',
+              namespace: 'sections.cart',
+              key: 'empty',
+              fallback: 'Your cart is empty'
+            -%}
+          </p>
+          <button class="button button--link" data-cart-button-close>
+            {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+            {% render 'format-translation',
+              namespace: 'general',
+              key: 'continue_shopping',
+              fallback: 'Continue shopping'
+            -%}
+          </button>
+        </div>
+
+        {%- comment -%} Form {%- endcomment -%}
+        <form
+          action="{{ routes.cart_url }}"
+          class="cart-drawer__form flex min-h-screen flex-col flex-wrap group-[.cart-is-empty]/cart-items:hidden"
+          method="post"
+          id="cart-drawer-form"
+        >
+          {%- comment -%} Header {%- endcomment -%}
+          <header class="cart-drawer__header sticky left-0 right-0 top-0 z-20 border-b bg-white p-4 border-color-default">
+            <button type="button" class="button button--link flex px-0 py-0" data-cart-button-close>
+              {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+              {% render 'format-translation',
+                namespace: 'general',
+                key: 'continue_shopping',
+                fallback: 'Continue shopping'
+              -%}
+            </button>
+          </header>
+
+          {%- comment -%} Cart drawer items {%- endcomment -%}
+          <div
+            class="cart-drawer__content relative z-10 p-4 group-[.cart-is-empty]/cart-items:hidden"
+            id="main-cart-items"
+            data-id="{{ section.id }}"
+          >
+            <div class="js-cart-item-contents group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
+              {%- if cart != empty -%}
+                <div class="cart-drawer-items">
+                  {%- for item in cart.items -%}
+                    {%- render 'cart-drawer-item', item: item -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+            <p class="sr-only" id="cart-live-region-text" aria-live="polite" role="status"></p>
+            <p
+              class="sr-only"
+              id="shopping-cart-line-item-status"
+              aria-live="polite"
+              aria-hidden="true"
+              role="status"
+              data-shopping-cart-line-item-status
+            >
+              {%- render 'format-translation',
+                namespace: 'accessibility',
+                key: 'loading',
+                fallback: 'Loading'
+              -%}
+            </p>
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                  {%- comment -%} App block {%- endcomment -%}
+                {%- when '@app' -%}
+                  <div class="cart-drawer__app-block relative mb-4 border-b border-b-[var(--border-color-default)] py-4 last:mb-0">
+                    {%- render block -%}
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Cart footer {%- endcomment -%}
+          <footer
+            class="cart-drawer__footer sticky bottom-0 left-0 right-0 z-20 mt-auto border-t bg-white p-4 border-color-default"
+            id="main-cart-footer"
+            data-id="{{ section.id }}"
+          >
+            {%- comment -%} Cart subtotal {%- endcomment -%}
+            <div class="js-cart-footer-contents">
+              {%- comment -%} Totals {%- endcomment -%}
+              <div class="cart-drawer__totals relative flex justify-between">
+                <span class="font-body">
+                  {%- render 'format-translation',
+                    namespace: 'sections.cart',
+                    key: 'subtotal',
+                    fallback: 'Subtotal'
+                  -%}
+                </span>
+                {%- comment -%} Loading animation {%- endcomment -%}
+                <div
+                  class="cart__loader absolute right-0 top-1/2 z-10 hidden w-6 -translate-y-1/2"
+                  data-cart-loader-active="show"
+                >
+                  {%- render 'global-icon', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
+                </div>
+
+                <span class="font-body" data-cart-loader-active="hidden">
+                  {{- cart.total_price | money_with_currency -}}
+                  {% if cart.total_price != cart.original_total_price %}
+                    <s class="price--compare">
+                      {{- cart.original_total_price | money_with_currency -}}
+                    </s>
+                  {% endif %}
+                </span>
+              </div>
+
+              {%- comment -%} Cart errors {%- endcomment -%}
+              <div
+                id="cart-errors"
+                class="cart-drawer__cart-error mx-0 my-2 text-sm text-danger empty:hidden"
+              ></div>
+
+              {%- if section.settings.show_tax_note -%}
+                <p class="cart-drawer__tax-note rte mx-0 mt-2 text-sm leading-5 text-gray-500">
+                  {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                    {{
+                      'sections.cart.taxes_included_and_shipping_policy_html'
+                      | t: link: shop.shipping_policy.url
+                    }}
+                  {%- elsif cart.taxes_included -%}
+                    {%- render 'format-translation',
+                      namespace: 'sections.cart',
+                      key: 'taxes_included_but_shipping_at_checkout',
+                      fallback: 'Taxes are included'
+                    -%}
+                  {%- elsif shop.shipping_policy.body != blank -%}
+                    {{
+                      'sections.cart.taxes_and_shipping_policy_at_checkout_html'
+                      | t: link: shop.shipping_policy.url
+                    }}
+                  {%- else -%}
+                    {%- render 'format-translation',
+                      namespace: 'sections.cart',
+                      key: 'taxes_and_shipping_at_checkout',
+                      fallback: 'Taxes and shipping are calculated in checkout'
+                    -%}
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+
+              {%- comment -%} Checkout button {%- endcomment -%}
+              <div class="mt-4 grid grid-cols-1 gap-2">
+                <noscript>
+                  <button type="submit" class="button button--primary w-full">
+                    {%- render 'format-translation',
+                      namespace: 'sections.cart',
+                      key: 'update',
+                      fallback: 'Update'
+                    -%}
+                  </button>
+                </noscript>
+                <button
+                  type="submit"
+                  class="button button--primary button--lg lg:button--xl w-full"
+                  name="checkout"
+                  {% if cart == empty %}
+                    disabled
+                  {% endif %}
+                >
+                  {%- render 'format-translation',
+                    namespace: 'sections.cart',
+                    key: 'checkout',
+                    fallback: 'Checkout'
+                  -%}
+                </button>
+                {%- comment -%} Go to cart button {%- endcomment -%}
+                {%- if section.settings.show_cart_button -%}
+                  <a
+                    href="{{ routes.cart_url }}"
+                    class="button button--secondary button--xl w-full"
+                  >
+                    {{- 'general.cart.view' | t: count: cart.item_count -}}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </footer>
+        </form>
+      </cart-items>
+    </div>
+  </cart-drawer>
+
+  {%- comment -%} Import javascript {%- endcomment -%}
+  <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
+  <script src="{{ 'cart.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Cart drawer",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_cart_button",
+        "default": true,
+        "label": "Show go to cart button."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tax_note",
+        "default": true,
+        "label": "Show tax/shipping message in cart drawer"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      }
+    ]
+  }
+{% endschema %}

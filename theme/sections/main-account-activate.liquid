@@ -1,0 +1,118 @@
+{%- liquid
+  capture icons
+    echo '<div class="field__icons">'
+    render 'global-icon', icon: 'checkmark', icon_class: 'w-5'
+    render 'global-icon', icon: 'cross', icon_class: 'w-5'
+    echo '</div>'
+  endcapture
+
+  capture password_str
+    render 'format-translation', namespace: 'customer.activate_account', key: 'password', fallback: 'Password'
+  endcapture
+
+  capture password_confirm_str
+    render 'format-translation', namespace: 'customer.activate_account', key: 'password_confirm', fallback: 'Confirm password'
+  endcapture
+
+  # Import styles for this section
+  render 'import-styles', file_name: 'component-form.css', force: true
+-%}
+
+{%- capture container_content -%}
+  <div class="mx-auto max-w-sm md:mb-28">
+    {%- form 'activate_customer_password', class: 'form' -%}
+      {%- if form.errors -%}
+        <p class="focus-none font-medium" tabindex="-1" autofocus>
+          {%-
+            render "format-translation",
+            namespace: "templates.contact.form",
+            key: "error_heading",
+            fallback: "Error"
+          -%}
+        </p>
+      {%- endif -%}
+
+      <div class="field">
+        <label class="field__label" for="password">
+          {{- password_str -}}
+        </label>
+        <input
+          type="password"
+          name="customer[password]"
+          id="password"
+          class="field__input"
+          autocomplete="new-password"
+          placeholder="{{ password_str }}"
+          {% if form.errors contains 'password' %}
+            aria-invalid="true"
+            aria-describedby="password-error"
+          {% endif %}
+        >
+        {{- icons -}}
+        {%- if form.errors contains 'password' -%}
+          <div id="password-error" class="field__message field__message--error">
+            {{ form.errors.translated_fields['password'] | capitalize }}
+            {{ form.errors.messages['password'] }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="password_confirmation">
+          {{- password_confirm_str -}}
+        </label>
+        <input
+          type="password"
+          name="customer[password_confirmation]"
+          class="field__input"
+          id="password_confirmation"
+          autocomplete="new-password"
+          placeholder="{{ password_confirm_str }}"
+          {% if form.errors contains 'password' %}
+            aria-invalid="true"
+            aria-describedby="password_confirmation-error"
+          {% endif %}
+        >
+        {{- icons -}}
+        {%- if form.errors contains 'password_confirmation' -%}
+          <div id="password_confirmation-error" class="field__message field__message--error">
+            {{ form.errors.translated_fields['password_confirmation'] | capitalize }}
+            {{ form.errors.messages['password_confirmation'] }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Submit buttons {%- endcomment -%}
+      <div class="form__actions buttons">
+        <button class="button button--primary">
+          {%-
+            render "format-translation",
+            namespace: "customer.activate_account",
+            key: "submit",
+            fallback: "Submit"
+          -%}
+        </button>
+        <button class="button button--link button--sm" name="decline">
+          {%-
+            render "format-translation",
+            namespace: "customer.activate_account",
+            key: "cancel",
+            fallback: "Cancel"
+          -%}
+        </button>
+      </div>
+    {%- endform -%}
+  </div>
+{%- endcapture -%}
+
+{%- render 'account-header' -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container', content: container_content -%}
+
+{% schema %}
+  {
+    "name": "Activate account",
+    "blocks": []
+  }
+{% endschema %}

@@ -1,0 +1,89 @@
+<div class="newsletter-form">
+  {%- form 'customer', class: 'grid gap-0 grid-cols-1 md:grid-cols-12' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <input type="hidden" name="customer[accepts_marketing]" value="true">
+
+    {% comment %} Form posting errors {% endcomment %}
+    <div class="col-span-12">
+      {%- if form.errors -%}
+        <p
+          class="newsletter-form__message newsletter-form__message--error text-danger"
+          id="footer-error"
+        >
+          {%- render 'global-icon', icon: 'error', icon_class: 'w-6 mr-1' -%}
+          <span>
+            {{- form.errors.translated_fields.email | capitalize }}
+            {{ form.errors.messages.email -}}
+          </span>
+        </p>
+      {%- endif -%}
+    </div>
+
+    {% comment %} Form posted successfully {% endcomment %}
+    {%- if form.posted_successfully? -%}
+      <div class="col-span-12">
+        <p
+          class="newsletter-form__message flex items-center"
+          id="footer-success"
+          tabindex="-1"
+          autofocus
+        >
+          {%- render 'global-icon', icon: 'success', icon_class: 'w-6' -%}
+          <span>
+            {% render 'format-translation',
+              namespace: 'newsletter.success',
+              fallback: 'You have successfully subscribed'
+            %}
+          </span>
+        </p>
+      </div>
+
+      {% comment %} Show form {% endcomment %}
+    {%- else -%}
+      {%- if description != blank -%}
+        <div class="newsletter-form__description col-span-9 mb-2 text-xs">
+          {{- description -}}
+        </div>
+      {%- endif -%}
+
+      <div class="col-span-9 md:col-span-12 lg:col-span-9">
+        <div class="field">
+          <label class="field__label sr-only" for="newsletter-form-{{ section.id }}">
+            {%- render 'format-translation',
+              namespace: 'templates.contact.form.email',
+              fallback: 'E-mail'
+            -%}
+          </label>
+          <input
+            id="newsletter-form-{{ section.id }}"
+            type="email"
+            name="contact[email]"
+            class="field__input bg-white"
+            value="{%- if form.email -%}{{ form.email }}{%- elsif customer -%}{{ customer.email }}{%- endif -%}"
+            aria-required="true"
+            spellcheck="false"
+            autocapitalize="off"
+            autocomplete="email"
+            {% if form.errors %}
+              autofocus
+              aria-invalid="true"
+              aria-describedby="footer-error"
+            {% elsif form.posted_successfully? %}
+              aria-describedby="footer-success"
+            {% endif %}
+            placeholder="{% render "format-translation", namespace: "newsletter.label", fallback: "Your e-mail address" %}"
+            required
+          >
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="newsletter-form__submit button button--primary button--md col-span-3 ml-1 md:col-span-12 md:ml-0 md:mt-1 lg:col-span-3 lg:ml-1 lg:mt-0"
+        name="commit"
+        id="Subscribe"
+      >
+        {{- 'sections.newsletter_form.submit' | t -}}
+      </button>
+    {%- endif -%}
+  {%- endform -%}
+</div>

@@ -1,0 +1,148 @@
+{%- comment -%} Import styles for this section {%- endcomment -%}
+{%- liquid
+  render 'import-styles', file_name: 'module-swiper.css', force: true
+  render 'import-styles', file_name: 'module-swiper-navigation.css'
+  render 'import-styles', file_name: 'component-swiper.css'
+-%}
+
+{%- comment -%} Divide the media over 2 columns {%- endcomment -%}
+{%- liquid
+  assign media_content_1 = ''
+  assign media_content_2 = ''
+  assign media_content_slider = ''
+-%}
+
+{%- for media in product.media -%}
+  {%- liquid
+    assign mod_check = forloop.index | modulo: 2
+    assign lazy = true
+    if forloop.index <= 2
+      assign lazy = false
+    endif
+  -%}
+
+  {%- comment -%} Capture media content {%- endcomment -%}
+  {%- capture media_content -%}
+    {% case media.media_type %}
+      {%- when 'image' -%}
+        <a
+          href="{{ media | image_url }}"
+          class="product-media__item relative mb-4 block self-start last:mb-0"
+          data-fancybox="product-media"
+          data-animated="false"
+        >
+        {%- render 'format-image',
+          image_object: media,
+          max_width: 767,
+          sizes: '(min-width: 768px) 29vw, 100vw',
+          alt: media.alt,
+          title: media.alt,
+          class: 'w-full max-w-none',
+          lazy: lazy
+          -%}
+          {%- render 'global-icon', icon: 'zoom', icon_class: 'w-6 absolute right-4 bottom-4 md:hidden' -%}
+        </a>
+      {%- when 'model' -%}
+        <div class="product-media__item product-media__item--model relative mb-4 block aspect-square w-full self-start last:mb-0">
+          {{ media | media_tag: image_size: "2048x", toggleable: true, class: 'absolute inset-0 w-full h-full' }}
+        </div>
+      {%- when 'video' -%}
+        {%- assign aspect_ratio = 100 | divided_by: media.aspect_ratio -%}
+        <div
+          class="product-media__item product-media__item--video relative mb-4 block h-0 w-full self-start last:mb-0"
+          style="padding-bottom: {{ aspect_ratio }}%"
+          data-fancybox="product-media"
+          data-src="{{ media.sources.last.url }}"
+        >
+          {{ media | media_tag: image_size: "2048x", autoplay: false, loop: section.settings.enable_video_looping, controls: true, preload: "none", loading: "lazy", class: "absolute inset-0 w-full h-full" }}
+        </div>
+      {%- when 'external_video' -%}
+        {%- assign video_class = 'absolute inset-0 w-full h-full js-' | append: media.host -%}
+        {%- assign aspect_ratio = 100 | divided_by: media.aspect_ratio -%}
+        {%- comment -%}
+          if it's a vimeo video, make the link into vimeo.com/ID - Fancybox doesn't recognize player.vimeo.com/video/ID
+        {%- endcomment -%}
+        {%- capture host_attributes -%}
+          {%- assign media_external_video_url = media | external_video_url: autoplay: false, loop: false -%}
+          {% if media.host == 'vimeo' and media_external_video_url contains 'player.' -%}
+              data-fancybox="product-media" data-src="{{ media_external_video_url | remove_first: 'player.' | remove_first: 'video/' }}"
+          {% elsif media.host == 'youtube' %}
+            data-fancybox="product-media" data-src="{{ media_external_video_url }}"
+          {% endif %}
+        {%- endcapture -%}
+        <div
+          class="product-media__item product-media__item--external-video relative mb-4 block h-0 w-full self-start last:mb-0"
+          style="padding-bottom: {{ aspect_ratio }}%"
+          {{ host_attributes }}
+        >
+          {%- if media.host == 'youtube' -%}
+            {{ media | external_video_url: autoplay: false, loop: false, playlist: media.external_id | external_video_tag: class: video_class, loading: "lazy" }}
+          {%- else -%}
+            {{ media | external_video_url: autoplay: false, loop: false | external_video_tag: class: video_class, loading: "lazy" }}
+          {%- endif -%}
+        </div>
+    {%- endcase -%}
+  {%- endcapture -%}
+
+  {%- comment -%} Devide content in two columns for desktop {%- endcomment -%}
+  {%- if mod_check == 1 -%}
+    {%- capture media_content_1 -%}
+      {{ media_content_1 }}
+      {{ media_content }}
+    {%- endcapture -%}
+  {%- else -%}
+    {%- capture media_content_2 -%}
+      {{ media_content_2 }}
+      {{ media_content }}
+    {%- endcapture -%}
+  {%- endif -%}
+
+  {%- comment -%} Add content to slider on mobile {%- endcomment -%}
+  {%- capture media_content_slider -%}
+    {{ media_content_slider }}
+    <div class="swiper-slide">
+      {{ media_content | replace: 'data-fancybox="product-media"', 'data-fancybox="product-media-mobile"' }}
+    </div>
+  {%- endcapture -%}
+{%- endfor -%}
+
+{% comment %} Desktop media {% endcomment %}
+<div class="grid-cols-gap product-media__columns hidden gap-y-0 md:-ml-[var(--site-side-spacing)] md:grid md:grid-cols-12 md:!gap-x-4">
+  <div class="product-media__columns-left col-span-6">
+    {{ media_content_1 }}
+  </div>
+  <div class="product-media__columns-right col-span-6">
+    {{ media_content_2 }}
+  </div>
+</div>
+
+{% comment %} Mobile media slider {% endcomment %}
+<div class="md:hidden">
+  <product-media class="product-media__slider">
+    {%- for block in section.blocks -%}
+      <div class="md:hidden">
+        {%- case block.type -%}
+          {%- when 'badges' -%}
+            {%- render 'product-badges',
+              product: product,
+              show_sale_badge: true,
+              class: 'absolute inset-x-2 top-2 md:inset-x-4 md:top-4 badges--md'
+            -%}
+        {%- endcase -%}
+      </div>
+    {%- endfor -%}
+    <div class="swiper overflow-hidden" data-product-media-swiper>
+      <div class="swiper-wrapper">
+        {{ media_content_slider }}
+      </div>
+    </div>
+  </product-media>
+</div>
+
+{%- comment -%} Import styles & javascript {%- endcomment -%}
+<script src="{{ 'product-media.js' | asset_url }}" type="module"></script>
+
+{%- comment -%} Import product media slider in design mode {%- endcomment -%}
+{%- if request.design_mode -%}
+  <script src="{{ 'product-media-slider.js' | asset_url }}" type="module"></script>
+{%- endif -%}

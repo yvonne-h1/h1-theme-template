@@ -1,0 +1,18 @@
+{%- comment -%} Capture container content {%- endcomment -%}
+{%- capture container_content -%}
+  <div class="article-content rte mx-auto mt-4 max-w-screen-lg">
+    {{ article.content }}
+  </div>
+{%- endcapture -%}
+
+{% comment %} Capture container class {% endcomment %}
+{%- capture container_class -%}
+  {{- class }} article-content
+{%- endcapture -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  tag: 'section',
+  content: container_content,
+  class: container_class
+-%}

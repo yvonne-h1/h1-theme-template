@@ -1,0 +1,13 @@
+{% if file_name != blank %}
+  {%- if force == true -%}
+    {{ file_name | asset_url | stylesheet_tag }}
+  {%- else -%}
+    <link
+      rel="stylesheet"
+      href="{{ file_name | asset_url }}"
+      media="print"
+      onload="this.media='all'"
+    >
+    <noscript>{{ file_name | asset_url | stylesheet_tag }}</noscript>
+  {% endif %}
+{% endif %}

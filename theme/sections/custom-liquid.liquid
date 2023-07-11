@@ -1,0 +1,183 @@
+{%- liquid
+  if section.settings.format_container
+    # Container class
+    assign container_class = 'featured-blog-grid' | append: ' ' | append: section.settings.container_width
+    if section.settings.color_scheme != blank
+      assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+    endif
+
+    # Container title
+    assign container_title = section.settings.heading | escape
+
+    assign title_class = 'text-center ' | append: section.settings.heading_size
+
+    # Render format container
+    render 'format-container', class: container_class, title_class: title_class, title_tag: section.settings.heading_element, title: container_title, content: section.settings.custom_liquid
+
+  else
+    # Render without format container
+    echo section.settings.custom_liquid
+  endif
+-%}
+
+{% schema %}
+  {
+    "name": "Custom Liquid",
+    "tag": "section",
+    "class": "liquid-section",
+    "settings": [
+      {
+        "type": "liquid",
+        "id": "custom_liquid",
+        "label": "Custom Liquid"
+      },
+      {
+        "type": "header",
+        "content": "Section appearance"
+      },
+      {
+        "type": "checkbox",
+        "id": "format_container",
+        "default": true,
+        "label": "Render in format container"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h2",
+        "info": "Change the element of the heading for SEO.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h4",
+        "info": "Change the style of the heading to only influence the look and feel.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Liquid"
+      }
+    ],
+    "disabled_on": {
+      "groups": ["header"]
+    }
+  }
+{% endschema %}

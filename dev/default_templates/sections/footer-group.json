@@ -1,0 +1,50 @@
+{
+  "type": "footer",
+  "name": "Footer Group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-support": {
+          "type": "menu",
+          "settings": {
+            "title": "Support",
+            "menu": "support"
+          }
+        },
+        "menu-legal": {
+          "type": "menu",
+          "settings": {
+            "title": "Legal",
+            "menu": "legal"
+          }
+        },
+        "about-text": {
+          "type": "text",
+          "settings": {
+            "title": "Your brand",
+            "richtext": "<p>Slogan about your brand</p>"
+          }
+        },
+        "newsletters-and-socials": {
+          "type": "newsletter",
+          "settings": {
+            "title": "Newsletter",
+            "description": "<p><strong>Subscribe to our newsletter to stay updated on sales and special events.</strong></p>",
+            "newsletter": true,
+            "social_icons": true,
+            "social_icons_shape": "round",
+            "social_icons_size": "w-8"
+          }
+        }
+      },
+      "block_order": ["menu-support", "menu-legal", "about-text", "newsletters-and-socials"],
+      "settings": {
+        "payment_icons": true,
+        "payment_icons_size": "w-8",
+        "copyright": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

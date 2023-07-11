@@ -1,0 +1,141 @@
+{%- comment -%}
+  Main collection header
+  Accepts:
+  - section:         {Object} main-collection.liquid section object (required)
+{%- endcomment -%}
+
+{%- capture collection_header_content -%}
+
+  <div class="flex items-center justify-center">
+
+    {%- comment -%}
+      Toggle collection layout - mobile only
+    {%- endcomment -%}
+    <collection-switch class="collection-layout flex basis-1/4 md:hidden">
+      {%- if section.settings.show_collection_layout_buttons -%}
+        {%- liquid
+          assign collection_view_default_class = 'collection-layout__button--active opacity-100'
+          if template.suffix == 'alt'
+            assign collection_view_default_class = 'opacity-25'
+          endif
+        -%}
+        <a
+          href="{{ collection.url }}"
+          aria-label="Double"
+          class="collection-layout__button block py-3 text-inherit hover:opacity-100  md:py-0 {{ collection_view_default_class }}"
+          data-collection-view=""
+        >
+          {%- render 'global-icon', icon: 'grid-double', icon_class: 'w-6' -%}
+        </a>
+        {%- liquid
+          assign collection_view_alt_class = 'opacity-25'
+          if template.suffix == 'alt'
+            assign collection_view_alt_class = 'collection-layout__button--active opacity-100'
+          endif
+        -%}
+        <a
+          href="{{ collection.url }}?view=alt"
+          aria-label="Single"
+          class="collection-layout__button block py-3 text-inherit hover:opacity-100 md:py-0 {{ collection_view_alt_class }}"
+          data-collection-view="alt"
+        >
+          {%- render 'global-icon', icon: 'grid-single', icon_class: 'w-6' -%}
+        </a>
+      {%- endif -%}
+    </collection-switch>
+
+    {%- comment -%}
+      Render collection title
+    {%- endcomment -%}
+    <div class="basis-2/4 lg:basis-3/4">
+
+      <h1 class="collection-hero__title h4 text-center md:text-left">
+        <span class="sr-only">
+          {%-
+            render "format-translation",
+            namespace: "sections.collection_template",
+            key: "title",
+            fallback: "Collection:"
+          -%}
+          :
+        </span>
+        {{- collection.title | escape -}}
+      </h1>
+
+    </div>
+
+    {% comment %} Collection filter button {% endcomment %}
+    <div class="collection-hero__filters relative flex basis-1/4 justify-end md:basis-2/4 lg:basis-1/4">
+      <toggle-element-class
+        class="flex"
+        data-options='
+          {
+            "toggleClass": "filter-is-open"
+          }
+        '
+      >
+        <button
+          type="button"
+          class="md:button md:button--outline flex whitespace-nowrap border-none px-0 py-3 md:border md:border-solid md:px-5 md:py-3"
+          aria-label="{%- render 'format-translation', namespace: "sections.collection_template.filter_and_sort", fallback: "Filter & sort" -%}"
+        >
+          {%- render 'global-icon', icon: 'filter', icon_class: 'w-6' -%}
+
+          {%- comment -%} Text label {%- endcomment -%}
+          <span class="hidden md:block">
+            {%- liquid
+              if section.settings.enable_sorting
+                render 'format-translation', namespace: 'sections.collection_template', key: 'filter_and_sort', fallback: 'Filter and sort'
+              else
+                render 'format-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter'
+              endif
+            -%}
+            {%- comment -%}
+              Show active number of filters, loaded by js
+            {%- endcomment -%}
+            <span class="" data-filter-total-active-options></span>
+          </span>
+        </button>
+      </toggle-element-class>
+    </div>
+
+  </div>
+
+  {%- comment -%} Collection description {%- endcomment -%}
+  {%- if section.settings.show_collection_description and collection.description != blank -%}
+    <div class="collection-hero__description rte ml-0 mr-auto mt-4 md:w-full lg:w-3/4">
+      {{- collection.description -}}
+    </div>
+  {%- endif -%}
+
+{%- endcapture -%}
+
+{%- liquid
+  # Capture collection image
+  if collection.image != blank and section.settings.show_collection_image
+    capture collection_image
+      render 'format-image', image_object: collection.image, sizes: '100vw', max_width: 1920
+    endcapture
+  endif
+-%}
+
+{%- comment -%} Output collection image. {%- endcomment -%}
+{%- if collection_image != blank -%}
+  {%- render 'format-container',
+    class: 'collection-image my-0',
+    content_class: 'max-w-[120rem] px-0',
+    content: collection_image
+  -%}
+{%- endif -%}
+
+{%- comment -%} Collection header classes {%- endcomment -%}
+{%- capture collection_header_classes -%}
+  collection-header py-3 m-0 md:p-0 md:my-6
+{%- endcapture -%}
+
+{%- comment -%} Output collection header with buttons and filters. {%- endcomment -%}
+{%- render 'format-container',
+  class: collection_header_classes,
+  content: collection_header_content,
+  content_class: section.settings.width_layout
+-%}

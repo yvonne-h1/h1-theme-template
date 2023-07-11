@@ -1,0 +1,213 @@
+{%- comment -%}
+  Files must meet the following requirements:
+    https://help.shopify.com/en/manual/shopify-admin/productivity-tools/file-uploads
+
+  # Parameters:
+    image_object:       { Object }  | Required  | Image object to render the image from
+    aspect_ratio:       { String }  | Optional  | When no value or false is given, defaults to the original image aspect ratio.
+                                                  For example: '16/9' or '4/3'
+    crop:               { String }  | Optional  | Defaults to 'center'. Set to 'center / top / left / right / bottom' to crop the image with the specified size. Requires both height and width in image_size
+    sizes:              { String }  | Optional  | Defaults to '100vw', can be used to get screen widths and load proportional images
+                                                  For example: (min-width: 1200px) 600px, 100vw
+                                                  Example meaning: 600 pixels from 1200 pixels screen width onwards, fallback for the image is always 100vw
+    widths:             { String }  | Optional  | Defaults to value that can be seen below
+    max_width           { Integer } | Optional  | Gives the maximum width of the image in 1dpr, for example if it never becomes wider than 300 pixels, prevent loading any bigger sources, keep DOM size small
+    lazy:               { Boolean } | Optional  | Defaults to true, set to false to disable lazy loading
+    alt                 { String }  | Optional  | Set the image alt
+    title               { String }  | Optional  | Set the image title
+    class               { String }  | Optional  | Set classname(s) for the image
+    figcaption          { String }  | Optional  | Set a figure caption
+                                                  When you add a picture caption, the <img> is automatically wrapped with a picture tag
+
+  # Figure parameters
+    figure_class        { String }  | Optional | Set classname(s) for the figure
+
+    Example usage:
+    {%- render 'format-image',
+      image_object: section.settings.image,
+      lazy: section.settings.lazy,
+      aspect_ratio: '16/9',
+      crop: 'center',
+      sizes: '(min-width: 1200px) 1200px, 100vw'
+    -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign shopify_max = 5120
+
+  # Global assigns
+  assign height = image_object.height
+  assign width = image_object.width
+
+  unless aspect_ratio
+    assign image_ratio = image_object.aspect_ratio
+    assign custom_aspect_ratio = false
+  else
+    assign aspect_width = aspect_ratio | split: '/' | first | times: 1.0
+    assign aspect_height = aspect_ratio | split: '/' | last | times: 1.0
+    assign image_ratio = aspect_width | divided_by: aspect_height | round: 3
+    assign style = 'aspect-ratio: ' | append: aspect_ratio | append: ';'
+    assign custom_aspect_ratio = true
+  endunless
+-%}
+
+{% capture fallback_image %}
+  <div class="svg flex items-center justify-center bg-accent-100 text-accent {{ class -}}" style="{{- style -}}">
+    {{- 'image' | placeholder_svg_tag -}}
+  </div>
+{% endcapture %}
+
+{%- liquid
+  # Fallback image
+  unless image_object
+    echo fallback_image
+
+    # Break here so that the rest has no impact on page speed
+    break
+  endunless
+
+  # If max_width is empty, then set the Shopify max
+  unless max_width
+    assign max_width = shopify_max
+
+    # If the max_width is not empty, multiply it by 2 to support 2 DPR
+  else
+    assign max_width_times_two = max_width | times: 2
+
+    # Check if the multiplied value is within the Shopify max
+    if max_width_times_two <= shopify_max
+      assign max_width = max_width | times: 2
+
+      # If not, then grab the Shopify max
+    else
+      assign max_width = shopify_max
+    endif
+  endunless
+
+  # Image widths
+  unless widths
+    assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 2048, 2560, 3000, 4000'
+  endunless
+
+  # If the max_width is less than 320, create a new array of sizes with that value and that value times 2 to support 2DRP
+  if max_width < 320
+    assign max_width_times_two = max_width | times: 2
+    assign widths = max_width | append: ', ' | append: max_width_times_two
+  endif
+
+  # If the width is less than 320, just output that size to avoid errors. 2 times is not possible since the image isn't bigger than this size.
+  if width < 320
+    assign widths = width
+
+    # Check if there is a max width and if it's lower then the actual image
+    if max_width < width
+      # Create a times 2 width to see if it can handle 2 DPR with the actual image width
+      assign max_width_times_two = max_width | times: 2
+
+      # If so create an array with the max width and the 2 DPR support
+      if max_width_times_two <= width
+        assign widths = max_width | append: ', ' | append: max_width_times_two
+
+        # Else just assign the max width as width
+      else
+        assign widths = max_width
+      endif
+    endif
+  endif
+
+  # Create an array of the image widths
+  assign widths_arr = widths | handleize | split: '-'
+
+  # Image sizes
+  unless sizes
+    assign sizes = '100vw'
+  endunless
+
+  # Image crop
+  unless 'center,top,bottom,left,right' contains crop
+    assign crop = 'center'
+  endunless
+
+  # Image loading
+  if lazy == false
+    assign lazy_value = 'eager'
+    assign preload = true
+  else
+    assign lazy_value = 'lazy'
+    assign preload = false
+  endif
+
+  # Image alt
+  if alt == blank
+    assign alt = image_object.alt | escape
+
+    if alt == blank
+      assign alt = 'Image ' | append: image_object.id | escape
+    endif
+  endif
+
+  # Image title
+  if title == blank
+    assign title = image_object.title
+
+    if title == blank
+      assign title = 'Image ' | append: image_object.id
+    endif
+  endif
+
+  for width_item in widths_arr
+    assign width_int = width_item | plus: 0
+
+    if width_int > max_width
+      break
+    endif
+
+    if image_object.width >= width_int
+      assign new_widths = new_widths | append: ', ' | append: width_int
+      assign image_url = image_object | image_url: width: width_int
+      assign width = width_int
+      assign height = width_int | divided_by: image_ratio | round: 0
+    endif
+  endfor
+
+  assign widths = new_widths | remove_first: ', '
+-%}
+
+{%- capture image_element -%}
+  {%- comment -%}
+    The uploaded desktop image with its intrinsic size
+    Disabled theme check because it does not recognize the lazy loading options the way we use it
+  {%- endcomment -%}
+  {% comment %}theme-check-disable AssetUrlFilters{% endcomment %}
+  {{
+    image_url | image_tag:
+      alt: alt,
+      class: class,
+      crop: crop,
+      height: height,
+      loading: lazy_value,
+      preload: preload,
+      sizes: sizes,
+      style: style,
+      title: title,
+      width: width,
+      widths: widths,
+      data-custom-aspect-ratio: custom_aspect_ratio
+  }}
+  {% comment %}theme-check-enable AssetUrlFilters{% endcomment %}
+{%- endcapture -%}
+
+{%- if figcaption == blank -%}
+  {{ image_element }}
+{%- else -%}
+  <figure
+    {% if figure_class != blank %}
+      class="{{- figure_class -}}"
+    {% endif %}
+  >
+    {{ image_element }}
+    <figcaption>
+      {{- figcaption -}}
+    </figcaption>
+  </figure>
+{%- endif -%}

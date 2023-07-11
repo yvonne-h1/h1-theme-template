@@ -1,0 +1,311 @@
+{% comment %}
+  Renders a product card
+
+  Accepts:
+  - product_object:         {Object} Product liquid object. (required)
+  - image_aspect_ratio:     {String} Aspect of the product image card. Values are "square" and "portrait". Default is "square". (optional)
+  - crop:                   {String} Defaults to 'center'. Set to 'center / top / left / right / bottom' to crop the image with the specified size. Requires both height and width in image_size. (optional)
+  - image_sizes:            {String} The img sizes attribute. (optional)
+  - image_max_width:        {String} The maximum @1x image size, will be * 2 in output. (optional)
+  - image_alt:              {String} The img alt attribute. (optional)
+  - image_title:            {String} The img title attribute. (optional)
+  - image_lazy              {Boolean} Set the img loading to lazy or eager. (optional)
+  - show_vendor:            {Boolean} Show the product vendor. Default: false. (optional)
+  - show_secondary_image:   {Boolean} Show the secondary image on hover. Default: false. (optional)
+  - view:                   {String} The collection template view can be 'default' or 'alt'. For view = alt, the product images are rendered as swipers. (optional)
+
+  Usage:
+    {%- render 'product-card', product_object: product -%}
+
+  Defaults:
+{% endcomment %}
+
+{%- liquid
+  comment
+    Image logic
+  endcomment
+
+  unless image_lazy != null
+    assign image_lazy = true
+  endunless
+
+  unless image_aspect_ratio
+    assign image_aspect_ratio = '5/6'
+  endunless
+
+  unless image_crop
+    assign image_crop = 'center'
+  endunless
+
+  unless image_sizes
+    assign image_sizes = '100vw'
+  endunless
+
+  unless image_max_width
+    assign image_max_width = 328
+  endunless
+
+  unless show_vendor
+    assign show_vendor = settings.show_vendor
+  endunless
+
+  unless show_secondary_image
+    assign show_secondary_image = settings.show_secondary_image
+    assign secondary_image = product_object.images[1]
+  endunless
+
+  assign product_link = product_object.url
+  if settings.use_within_collection_link and collection
+    assign product_link = product_object.url | within: collection
+  endif
+
+  assign product_link_image = product_object.featured_image
+  unless image_alt
+    assign image_alt = product_object.featured_image.alt | escape
+    if image_alt == blank
+      assign image_alt = product_object.title | escape
+    endif
+  endunless
+
+  unless image_title
+    assign image_title = product_object.title | escape
+  endunless
+
+  comment
+    Quick shop logic
+  endcomment
+
+  unless show_quick_shop
+    assign show_quick_shop = false
+  endunless
+
+  if settings.enable_quick_shop == true and product_object.available
+    assign show_quick_shop = true
+
+    if product_object.options_with_values.size == 2
+      if product_object.options_with_values.first.values.size > 1
+        assign multiple_first_option = true
+      endif
+
+      if product_object.options_with_values.last.values.size > 1
+        assign multiple_last_option = true
+      endif
+
+      if multiple_first_option == true and multiple_last_option == true
+        assign show_quick_shop = false
+      elsif multiple_last_option == true
+        assign quick_shop_render_second_option = true
+      endif
+    elsif product_object.options_with_values.size > 2
+      assign show_quick_shop = false
+    endif
+  endif
+-%}
+
+{%- comment -%} Start output product card {%- endcomment -%}
+{%- liquid
+  assign product_card_state_classes = ''
+  if view != blank
+    assign product_card_state_classes = 'z-20 product-card--' | append: view
+  endif
+-%}
+<div
+  class="product-card group/product-card relative z-0 {{ product_card_state_classes }}"
+  data-product-card
+>
+  {%- comment -%} Accesibility text {%- endcomment -%}
+  <a
+    href="{{ product_link }}"
+    class="product-card__sr-link sr-only absolute inset-0 z-10 block text-inherit no-underline focus-visible:outline-dashed focus-visible:outline-1 states:no-underline"
+    title="{{ product_object.title | escape }}"
+  >
+    {{- product_object.title | escape -}}
+  </a>
+
+  {%- comment -%} Upper part of the product card {%- endcomment -%}
+  <div
+    class="product-card__inner relative"
+    tabindex="-1"
+  >
+    {%- if view == 'alt' -%}
+      {%- comment -%} On mobile devices, render the images in a slider {%- endcomment -%}
+      {%- capture swiper_slides -%}
+        {%- for image in product_object.images -%}
+          {%- capture product_card_slide_classes -%}
+            {%- case forloop.index -%}
+              {%- when 1 -%}
+                md:group-hover/product-card:opacity-0
+              {%- when 2 -%}
+                md:opacity-0 md:group-hover/product-card:opacity-100 md:group-hover/product-card:ml-[-100%]
+              {%- else -%}
+                md:hidden
+            {%- endcase -%}
+          {%- endcapture -%}
+          <div class="product-card__slide swiper-slide {{ product_card_slide_classes }}">
+            <a
+              href="{{ product_link }}"
+              class="block"
+              title="{{ product_object.title | escape }}"
+            >
+            {%- render 'format-image',
+              image_object: image,
+              max_width: 767,
+              aspect_ratio: image_aspect_ratio,
+              crop: image_crop,
+              sizes: image_sizes,
+              lazy: image_lazy,
+              alt: image_alt,
+              title: title,
+              class: "object-cover w-full product-card__image--primary"
+            -%}
+            </a>
+          </div>
+        {%- endfor -%}
+      {%- endcapture -%}
+
+      {%- comment -%} Output slides {%- endcomment -%}
+      {%- if swiper_slides != blank -%}
+        <product-card-swiper>
+          <div
+            class="swiper swiper-container"
+            data-product-card-swiper
+          >
+            <div class="swiper-wrapper">
+              {{- swiper_slides -}}
+            </div>
+            <button
+              class="swiper-button-prev left-2 z-10 hidden md:hidden"
+              aria-label="{% render "format-translation", namespace: "accessibility.previous_slide", fallback: "Previous slide" %}"
+            >
+              {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-6' -%}
+            </button>
+            <button
+              class="swiper-button-next right-2 z-10 hidden md:hidden"
+              aria-label="{% render "format-translation", namespace: "accessibility.next_slide", fallback: "Next slide" %}"
+            >
+              {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-6' -%}
+            </button>
+          </div>
+        </product-card-swiper>
+      {%- else -%}
+        <div
+          class="product-card__image bg-gray-50"
+          style="aspect-ratio: {{ image_aspect_ratio }};"
+        ></div>
+      {%- endif -%}
+
+    {%- else -%}
+      {%- comment -%} Render image with hover {%- endcomment -%}
+      <a
+        class="product-card__image relative block"
+        href="{{ product_link }}"
+        title="{{ product_object.title | escape }}"
+      >
+        {%- render 'format-image',
+          image_object: product_link_image,
+          max_width: image_max_width,
+          aspect_ratio: image_aspect_ratio,
+          crop: image_crop,
+          sizes: image_sizes,
+          lazy: image_lazy,
+          alt: image_alt,
+          title: image_title,
+          class: 'product-card__image--primary block mb-0'
+        -%}
+        {%- if secondary_image != null and show_secondary_image -%}
+          {%- render 'format-image',
+            image_object: secondary_image,
+            max_width: image_max_width,
+            aspect_ratio: image_aspect_ratio,
+            crop: image_crop,
+            sizes: image_sizes,
+            lazy: image_lazy,
+            alt: image_alt,
+            title: image_title,
+            class: 'product-card__image--secondary absolute object-cover inset-0 mb-0 transition-opacity duration-300 block opacity-0 group-hover/product-card:opacity-100 group-focus/product-card:opacity-100'
+          -%}
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+
+    {%- comment -%} Render badges {%- endcomment -%}
+    {%- render 'product-badges', product: product_object -%}
+
+    {% comment %} Render quick shop {% endcomment %}
+    {%- if show_quick_shop -%}
+      {%- render 'quick-shop',
+        product: product_object,
+        quick_shop_render_second_option: quick_shop_render_second_option
+      -%}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Output product information {%- endcomment -%}
+  {%- liquid
+    assign product_card_information_classes = 'text-center'
+    if view == 'alt'
+      assign product_card_information_classes = 'pt-3 text-left md:text-center'
+    endif
+  -%}
+  <a
+    href="{{ product_link }}"
+    title="{{ product_object.title | escape }}"
+    class="product-card__information block pt-2 text-sm leading-5 text-color-default states:no-underline states:text-color-default {{ product_card_information_classes }}"
+  >
+    {%- comment -%} Vendor {%- endcomment -%}
+    {%- if show_vendor -%}
+      <p class="product-card__vendor mb-0 text-sm">
+        <span class="sr-only">
+          {%- render 'format-translation',
+            namespace: 'accessibility',
+            key: 'vendor',
+            fallback: 'Vendor'
+          -%}
+        </span>
+        <span class="opacity-70">
+          {{- product_object.vendor -}}
+        </span>
+      </p>
+    {%- endif -%}
+
+    {%- comment -%} Title {%- endcomment -%}
+    {%- if product_object.title -%}
+      <p class="product-card__title label-md">
+        {{- product_object.title -}}
+      </p>
+    {%- endif -%}
+  </a>
+
+  {%- comment -%} Price and quick shop button {%- endcomment -%}
+  {%- liquid
+    assign product_card_price_classes = 'justify-center text-center'
+    if view == 'alt'
+      assign product_card_price_classes = 'product-card__price--alt mt-2 text-left md:text-center justify-between md:justify-center'
+    endif
+  -%}
+  <div class="product-card__price flex items-center text-sm leading-5 {{ product_card_price_classes }}">
+    {% comment %} Render formatted price {% endcomment %}
+    {% render 'format-price', product: product_object %}
+
+    {%- if show_quick_shop -%}
+      {% comment %} Show quick_shop button {% endcomment %}
+      {%- liquid
+        assign quick_shop_button_classes = 'hidden'
+        if view == 'alt'
+          assign quick_shop_button_classes = 'block md:hidden'
+        endif
+      -%}
+      <button
+        type="button"
+        class="button button--primary quick-shop__btn-add relative z-20 {{ quick_shop_button_classes }}"
+        data-quick-shop-toggle
+      >
+        {%- render 'format-translation',
+          namespace: 'products.product',
+          key: 'add_to_cart',
+          fallback: 'Add to cart'
+        -%}
+      </button>
+    {% endif %}
+  </div>
+</div>

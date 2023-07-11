@@ -1,0 +1,12 @@
+@layer code-sections {
+  .featured-blog-slider {
+    &.color-scheme {
+      &--primary,
+      &--accent {
+        .product-card__list-tags__item {
+          @apply text-secondary;
+        }
+      }
+    }
+  }
+}

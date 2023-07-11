@@ -1,0 +1,16 @@
+// Basic component working here.
+// Do not add more default component styles here, use tailwind utilities or shopify normal css component.
+
+@layer components {
+  [data-collapsible-group] {
+    [data-collapsible-target] {
+      @apply js:max-h-0
+      js:overflow-hidden;
+    }
+    &.collapsible-is-open {
+      > [data-collapsible-target] {
+        @apply js:max-h-[9999px] js:overflow-y-auto;
+      }
+    }
+  }
+}

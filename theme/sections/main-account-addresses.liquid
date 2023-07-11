@@ -1,0 +1,516 @@
+{%- comment -%} Capture translations to use later {%- endcomment -%}
+{%- liquid
+  capture first_name_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'first_name', fallback: 'First name'
+  endcapture
+  capture last_name_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'last_name', fallback: 'Last name'
+  endcapture
+  capture company_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'company', fallback: 'Company'
+  endcapture
+  capture address1_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'address1', fallback: 'Address 1'
+  endcapture
+  capture address2_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'address2', fallback: 'Address 2'
+  endcapture
+  capture city_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'city', fallback: 'City'
+  endcapture
+  capture country_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'country', fallback: 'Country'
+  endcapture
+  capture province_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'province', fallback: 'Province'
+  endcapture
+  capture zip_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'zip', fallback: 'ZIP'
+  endcapture
+  capture phone_str
+    render 'format-translation', namespace: 'customer.addresses', key: 'phone', fallback: 'Phone number'
+  endcapture
+
+  # Import styles for this section
+  render 'import-styles', file_name: 'component-form.css', force: true
+-%}
+
+{%- capture container_content -%}
+  {%- paginate customer.addresses by 12 -%}
+    {%- comment -%} Addresses list {%- endcomment -%}
+    <ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      {%- for address in customer.addresses -%}
+        <li class="address" data-address>
+
+          <div class="rounded-2xl border bg-white p-6 text-sm  leading-5 border-color-default">
+
+            {% comment %} Default badge {% endcomment %}
+            {%- if address == customer.default_address -%}
+              <div class="address__default mb-2 inline-flex bg-accent px-3 py-1 text-xs font-medium leading-5 text-white">
+                {%-
+                  render 'format-translation',
+                  namespace: 'customer.addresses',
+                  key: 'default',
+                  fallback: 'Default'
+                -%}
+              </div>
+            {%- endif -%}
+
+            {% comment %} Address {% endcomment %}
+            {{ address | format_address }}
+
+            {% comment %} Buttons {% endcomment %}
+            <div class="mt-4">
+              <button
+                class="button button--primary peer/edit"
+                type="button"
+                id="EditFormButton_{{ address.id }}"
+                aria-label="{%- render 'format-translation', namespace: 'customer.addresses', key: 'edit_address', fallback: 'Edit address' %} {{ forloop.index }}"
+                aria-controls="EditAddress_{{ address.id }}"
+                aria-expanded="false"
+                data-address-id="{{ address.id }}"
+              >
+                {%- render 'format-translation', namespace: 'customer.addresses', key: 'edit', fallback: 'Edit' %}
+              </button>
+              <button
+                class="button button--outline"
+                type="button"
+                aria-label="{%- render "format-translation", namespace: "customer.addresses", key: "delete", fallback: "Delete" %} {{ forloop.index }}"
+                data-target="{{ address.url }}"
+                data-confirm-message="{%- render 'format-translation', namespace: 'customer.addresses', key: 'delete_confirm', fallback: 'Are you sure?' %}"
+              >
+                {%- render 'format-translation', namespace: 'customer.addresses', key: 'delete', fallback: 'Delete' %}
+              </button>
+              {%- comment -%} Edit address form. This should be a modal i.m.o. {%- endcomment -%}
+              <div id="EditAddress_{{ address.id }}" class="addresses__edit mt-4 hidden rounded-md  border p-4 border-color-default peer-aria-expanded/edit:block">
+                {%- form 'customer_address', address, class: 'form addresses__edit-form' -%}
+                  <h2 class="text-lg font-medium">
+                    {%-
+                      render 'format-translation',
+                      namespace: 'customer.addresses',
+                      key: 'edit_address',
+                      fallback: 'Edit address'
+                    -%}
+                  </h2>
+                  <div class="field">
+                    <label class="field__label" for="AddressFirstName_{{ form.id }}">
+                      {{- first_name_str -}}
+                    </label>
+                    <input
+                      class="field__input"
+                      type="text"
+                      id="AddressFirstName_{{ form.id }}"
+                      name="address[first_name]"
+                      value="{{ form.first_name }}"
+                      autocomplete="given-name"
+                      placeholder="{{- first_name_str -}}"
+                    >
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressLastName_{{ form.id }}">
+                      {{- last_name_str -}}
+                    </label>
+                    <input
+                      class="field__input"
+                      type="text"
+                      id="AddressLastName_{{ form.id }}"
+                      name="address[last_name]"
+                      value="{{ form.last_name }}"
+                      autocomplete="family-name"
+                      placeholder="{{- last_name_str -}}"
+                    >
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressCompany_{{ form.id }}">
+                      {{- company_str -}}
+                    </label>
+                    <input
+                      class="field__input"
+                      type="text"
+                      id="AddressCompany_{{ form.id }}"
+                      name="address[company]"
+                      value="{{ form.company }}"
+                      autocomplete="organization"
+                      placeholder="{{- company_str -}}"
+                    >
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressAddress1_{{ form.id }}">
+                      {{- address1_str -}}
+                    </label>
+                    <input
+                      class="field__input"
+                      type="text"
+                      id="AddressAddress1_{{ form.id }}"
+                      name="address[address1]"
+                      value="{{ form.address1 }}"
+                      autocomplete="address-line1"
+                      placeholder="{{- address1_str -}}"
+                    >
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressAddress2_{{ form.id }}">
+                      {{- address2_str -}}
+                    </label>
+                    <input
+                      class="field__input"
+                      type="text"
+                      id="AddressAddress2_{{ form.id }}"
+                      name="address[address2]"
+                      value="{{ form.address2 }}"
+                      autocomplete="address-line2"
+                      placeholder="{{- address2_str -}}"
+                    >
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressCity_{{ form.id }}">
+                      {{- city_str -}}
+                    </label>
+                    <input
+                      class="field__input"
+                      type="text"
+                      id="AddressCity_{{ form.id }}"
+                      name="address[city]"
+                      value="{{ form.city }}"
+                      autocomplete="address-level2"
+                      placeholder="{{- city_str -}}"
+                    >
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressCountry_{{ form.id }}">
+                      {{- country_str -}}
+                    </label>
+                    <div class="select">
+                      <select
+                        class="field__select"
+                        id="AddressCountry_{{ form.id }}"
+                        name="address[country]"
+                        data-address-country-select
+                        data-default="{{ form.country }}"
+                        data-form-id="{{ form.id }}"
+                        autocomplete="country"
+                      >
+                        {{ all_country_option_tags }}
+                      </select>
+                      {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+                    </div>
+                  </div>
+                  <div class="field" id="AddressProvinceContainer_{{ form.id }}" style="display:none;">
+                    <label class="field__label" for="AddressProvince_{{ form.id }}">
+                      {{- province_str -}}
+                    </label>
+                    <div class="select">
+                      <select
+                        class="field__select"
+                        id="AddressProvince_{{ form.id }}"
+                        name="address[province]"
+                        data-default="{{ form.province }}"
+                        autocomplete="address-level1"
+                      ></select>
+                      {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressZip_{{ form.id }}">
+                      {{- zip_str -}}
+                      <input
+                        class="field__input"
+                        type="text"
+                        id="AddressZip_{{ form.id }}"
+                        name="address[zip]"
+                        value="{{ form.zip }}"
+                        autocapitalize="characters"
+                        autocomplete="postal-code"
+                        placeholder="{{- zip_str -}}"
+                      >
+                    </label>
+                  </div>
+                  <div class="field">
+                    <label class="field__label" for="AddressPhone_{{ form.id }}">
+                      {{- phone_str -}}
+                      <input
+                        class="field__input"
+                        type="tel"
+                        id="AddressPhone_{{ form.id }}"
+                        name="address[phone]"
+                        value="{{ form.phone }}"
+                        autocomplete="tel"
+                        placeholder="{{- phone_str -}}"
+                      >
+                    </label>
+                  </div>
+                  <div class="field">
+                    {{ form.set_as_default_checkbox }}
+                    <label for="address_default_address_{{ form.id }}">
+                      {%-
+                        render 'format-translation',
+                        namespace: 'customer.addresses',
+                        key: 'set_default',
+                        fallback: 'Make default'
+                      -%}
+                    </label>
+                  </div>
+
+                  {%- comment -%} Submit {%- endcomment -%}
+                  <div class="buttons">
+                    <button class="button button--primary">
+                      {%-
+                        render 'format-translation',
+                        namespace: 'customer.addresses',
+                        key: 'update',
+                        fallback: 'Update'
+                      -%}
+                    </button>
+                    <button type="reset" class="button button--outline">
+                      {%-
+                        render 'format-translation',
+                        namespace: 'customer.addresses',
+                        key: 'cancel',
+                        fallback: 'Cancel'
+                      -%}
+                    </button>
+                  </div>
+                {%- endform -%}
+              </div>
+            </div>
+          </div>
+
+
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- comment -%} Add address {%- endcomment -%}
+    <div data-address class="addresses__add mt-6">
+      <button class="button button--primary peer/add" type="button" aria-expanded="false" aria-controls="AddAddress">
+        {%-
+          render 'format-translation',
+          namespace: 'customer.addresses',
+          key: 'add_new',
+          fallback: 'Add new address'
+        -%}
+      </button>
+      <div id="AddAddress" class="mt-4 hidden rounded-2xl border bg-white p-6 text-sm  leading-5 border-color-default peer-aria-expanded/add:block">
+        {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading', class: 'form addresses__add-form' -%}
+          <h2 class="text-lg font-medium" id="AddressNewHeading">
+            {%-
+              render 'format-translation',
+              namespace: 'customer.addresses',
+              key: 'add_new',
+              fallback: 'Add new address'
+            -%}
+          </h2>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-0">
+            <div class="field col-span-2 md:col-span-1">
+              <label class="field__label" for="AddressFirstNameNew">
+                {{- first_name_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="text"
+                id="AddressFirstNameNew"
+                name="address[first_name]"
+                value="{{ form.first_name }}"
+                autocomplete="given-name"
+                placeholder="{{- first_name_str -}}"
+              >
+            </div>
+            <div class="field col-span-2 md:col-span-1">
+              <label class="field__label" for="AddressLastNameNew">
+                {{- last_name_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="text"
+                id="AddressLastNameNew"
+                name="address[last_name]"
+                value="{{ form.last_name }}"
+                autocomplete="family-name"
+                placeholder="{{- last_name_str -}}"
+              >
+            </div>
+            <div class="field col-span-2">
+              <label class="field__label" for="AddressCompanyNew">
+                {{- company_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="text"
+                id="AddressCompanyNew"
+                name="address[company]"
+                value="{{ form.company }}"
+                autocomplete="organization"
+                placeholder="{{- company_str -}}"
+              >
+            </div>
+            <div class="field col-span-2">
+              <label class="field__label" for="AddressAddress1New">
+                {{- address1_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="text"
+                id="AddressAddress1New"
+                name="address[address1]"
+                value="{{ form.address1 }}"
+                autocomplete="address-line1"
+                placeholder="{{- address1_str -}}"
+              >
+            </div>
+            <div class="field col-span-2">
+              <label class="field__label" for="AddressAddress2New">
+                {{- address2_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="text"
+                id="AddressAddress2New"
+                name="address[address2]"
+                value="{{ form.address2 }}"
+                autocomplete="address-line2"
+                placeholder="{{- address2_str -}}"
+              >
+            </div>
+            <div class="field col-span-2">
+              <label class="field__label" for="AddressCityNew">
+                {{- city_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="text"
+                id="AddressCityNew"
+                name="address[city]"
+                value="{{ form.city }}"
+                autocomplete="address-level2"
+                placeholder="{{- city_str -}}"
+              >
+            </div>
+            <div class="field col-span-2">
+              <label class="field__label" for="AddressCountryNew">
+                {{- country_str -}}
+              </label>
+              <select
+                name="address[country]"
+                id="AddressCountryNew"
+                class="field__select"
+                data-default="{{ form.country }}"
+                autocomplete="country"
+                required
+              >
+                {{ all_country_option_tags }}
+              </select>
+              {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+            </div>
+
+            <div id="AddressProvinceContainerNew" class="field col-span-2" style="display: none">
+              <label class="field__label" for="AddressProvinceNew">
+                {{- province_str -}}
+              </label>
+                <select
+                  class="field__select"
+                  id="AddressProvinceNew"
+                  name="address[province]"
+                  data-default="{{ form.province }}"
+                  autocomplete="address-level1"
+                ></select>
+                {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+            </div>
+            <div class="field col-span-2">
+              <label class="field__label" for="AddressZipNew">
+                {{- zip_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="text"
+                id="AddressZipNew"
+                name="address[zip]"
+                value="{{ form.zip }}"
+                autocapitalize="characters"
+                autocomplete="postal-code"
+                placeholder="{{- zip_str -}}"
+              >
+            </div>
+            <div class="field col-span-2">
+              <label class="field__label" for="AddressPhoneNew">
+                {{- phone_str -}}
+              </label>
+              <input
+                class="field__input"
+                type="tel"
+                id="AddressPhoneNew"
+                name="address[phone]"
+                value="{{ form.phone }}"
+                autocomplete="tel"
+                placeholder="{{- phone_str -}}"
+              >
+            </div>
+            <div class="field col-span-2">
+              {{ form.set_as_default_checkbox }}
+              <label for="address_default_address_new">
+                {%-
+                  render 'format-translation',
+                  namespace: 'customer.addresses',
+                  key: 'set_default',
+                  fallback: 'Make this default'
+                -%}
+              </label>
+            </div>
+          </div>
+
+          {%- comment -%} Submit {%- endcomment -%}
+          <div class="form__actions buttons mt-4">
+            <button class="button button--primary">
+              {%-
+                render 'format-translation',
+                namespace: 'customer.addresses',
+                key: 'add',
+                fallback: 'Add'
+              -%}
+            </button>
+            <button type="reset" class="button button--outline">
+              {%-
+                render 'format-translation',
+                namespace: 'customer.addresses',
+                key: 'cancel',
+                fallback: 'Cancel'
+              -%}
+            </button>
+          </div>
+        {%- endform -%}
+      </div>
+    </div>
+
+    {%- comment -%} Pagination {%- endcomment -%}
+    {%- liquid
+      if paginate.pages > 1
+        render 'pagination', paginate: paginate
+      endif
+    -%}
+  {%- endpaginate -%}
+{%- endcapture -%}
+
+{%- comment -%} Render the account header {%- endcomment -%}
+{%- render 'account-header' -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  class: 'form-fields address',
+  content: container_content,
+  content_class: 'addresses',
+  data: 'data-customer-addresses'
+-%}
+
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'customer.js' | asset_url }}" defer></script>
+<script>
+  window.onload = () => {
+    typeof CustomerAddresses !== 'undefined' && new CustomerAddresses();
+  };
+</script>
+
+{% schema %}
+  {
+    "name": "Addresses",
+    "blocks": []
+  }
+{% endschema %}

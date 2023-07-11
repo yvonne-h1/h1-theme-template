@@ -1,0 +1,130 @@
+{%- comment -%}
+  Main collection product grid
+  Accepts:
+  - section:         {Object} main-collection.liquid section object (required)
+{%- endcomment -%}
+
+{%- comment -%} container classes {%- endcomment -%}
+{%- capture container_classes -%}
+  collection-wrapper mt-6 md:mt-10
+{%- endcapture -%}
+
+{%- assign container_title = section.settings.title | escape -%}
+
+{% comment %} Loader animation {% endcomment %}
+{%- capture loading_overlay -%}
+  <div class="loading-overlay fixed inset-0 z-50 hidden w-full items-center justify-center opacity-70 bg-color-default group-[.loading]/collection:flex" data-loader>
+    {%- render 'global-icon', icon: 'spinner', icon_class: 'w-12 animate-spin' -%}
+  </div>
+{%- endcapture -%}
+
+{%- comment -%} Collection content {%- endcomment -%}
+{%- capture container_content -%}
+  <div
+    id="CollectionProductGrid"
+    class="group/collection"
+    data-collection-product-grid
+  >
+    {{ loading_overlay }}
+    <div
+      class="collection relative"
+      id="main-collection-product-grid"
+      data-collection-handle="{{ collection.handle }}"
+      data-id="{{ section.id }}"
+    >
+      {%- if collection.products.size == 0 -%}
+        {% comment %} No products found {% endcomment %}
+        <div class="title-wrapper text-center">
+          <p class="title title--primary">
+            {%- render 'format-translation',
+              namespace: 'sections.collection_template',
+              key: 'empty',
+              fallback: 'No products found.'
+            -%}
+          </p>
+          <p>
+            {{
+              'sections.collection_template.use_fewer_filters_html'
+              | t: link: collection.url, class: 'link'
+            }}
+          </p>
+        </div>
+      {%- else -%}
+
+        {%- comment -%}
+          Output product grid
+          Be carefull with the products per page and the ?view=alt templates. The amount of products per page must be the same.
+        {%- endcomment -%}
+        {%- paginate collection.products by settings.products_per_page -%}
+        {%- liquid
+          capture collection_grid_classes
+            if template.suffix contains 'alt'
+              echo 'collection__grid--alt'
+            endif
+          endcapture
+          -%}
+          <ol
+            class="collection__grid {{ collection_grid_classes }} m-0 grid grid-cols-12 gap-x-4 gap-y-8"
+          >
+            {%- liquid
+              assign image_alt = product.title | escape
+              assign image_title = product.title | escape
+
+              assign classes = 'col-span-6 md:col-span-4 xl:col-span-3'
+              assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw'
+
+              comment
+                Overwrite sizes based on template suffix alt layout
+              endcomment
+              if template.suffix contains 'alt'
+                assign classes = 'col-span-12 md:col-span-4 xl:col-span-3'
+                assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 100vw'
+              endif
+            -%}
+
+            {%- for product in collection.products -%}
+              {%- liquid
+                assign lazy = true
+                if forloop.index <= 4
+                  assign lazy = false
+                endif
+              -%}
+              <li class="{{ classes }}">
+                {%- render 'product-card',
+                  product_object: product,
+                  image_aspect_ratio: '5/6',
+                  image_max_width: 1440,
+                  image_sizes: sizes,
+                  image_alt: image_alt,
+                  image_title: image_title,
+                  image_lazy: lazy,
+                  view: template.suffix
+                -%}
+              </li>
+            {%- endfor -%}
+          </ol>
+
+          {%- if paginate.pages > 1 -%}
+            {%- render 'pagination', paginate: paginate, anchor: '', class: '' -%}
+          {%- endif -%}
+        {%- endpaginate -%}
+
+        {%- if section.settings.show_back_to_top == true -%}
+          {%- render 'back-to-top' -%}
+        {%- endif -%}
+      {%- endif -%}
+
+    </div>
+  </div>
+{%- endcapture -%}
+
+{%- render 'format-container',
+  class: container_classes,
+  title: container_title,
+  content: container_content,
+  content_class: section.settings.width_layout
+-%}
+
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'product-card.js' | asset_url }}" type="module"></script>
+<script src="{{ 'back-to-top.js' | asset_url }}" defer></script>

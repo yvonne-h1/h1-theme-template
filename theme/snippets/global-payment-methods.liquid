@@ -1,0 +1,32 @@
+{%- comment -%}
+  Render payment icons. Items to be shown are set in the theme settings.
+
+  # Optional
+  - icon_size {String} Size of the icon. w-5, w-6, w-8 (optional).
+  - list_class {String} Classes that will be placed on the ul (optional).
+  - item_class {String} Classes that will be placed on the li (optional).
+
+  # Example
+  {%- render linklist, linklist: block.settings.menu, prefix: 'footer-menu', collapsible: false -%}
+{%- endcomment -%}
+{%- assign payment_providers = 'riverty,apple_pay,bancontact,google_pay,ideal,klarna,mastercard,maestro,paypal,sofort,visa'
+  | split: ','
+-%}
+
+<p class="sr-only">
+  {%- render 'format-translation',
+    namespace: 'sections.footer.payment_methods',
+    fallback: 'Payment methods'
+  -%}
+</p>
+
+<ul class="payment-icons__list flex flex-wrap gap-2 {{ list_class }}">
+  {%- for payment_provider in payment_providers -%}
+    {%- assign payment_icon = 'payment_icon_' | append: payment_provider -%}
+    {%- if settings[payment_icon] -%}
+      <li class="payment-icons__item {{ item_class }}">
+        {%- render 'global-icon', icon: payment_provider, icon_class: icon_size -%}
+      </li>
+    {% endif %}
+  {%- endfor -%}
+</ul>

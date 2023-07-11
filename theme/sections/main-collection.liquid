@@ -1,0 +1,83 @@
+{%- comment -%} Set container title and import styles for this section {%- endcomment -%}
+{%- liquid
+  render 'import-styles', file_name: 'component-list-options.css'
+  render 'import-styles', file_name: 'module-swiper.css'
+  render 'import-styles', file_name: 'module-swiper-navigation.css'
+  render 'import-styles', file_name: 'component-swiper.css'
+-%}
+
+{%- comment -%} Render the main collection. {%- endcomment -%}
+<div id="main-collection" data-main-collection data-id="{{ section.id }}">
+  {%- render 'collection-header', section: section -%}
+  {%- render 'collection-filters', section: section -%}
+  {%- render 'collection-product-grid', section: section -%}
+</div>
+
+{% schema %}
+  {
+    "name": "Collection",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "To change collection descriptions or collection images, [edit your collections.](/admin/collections)"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_image",
+        "default": false,
+        "label": "Show collection image"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_description",
+        "default": false,
+        "label": "Show collection description"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_layout_buttons",
+        "default": true,
+        "label": "Show collection layout buttons on mobile",
+        "info": "If enabled, buttons will appear on smaller devices to change the layout grid."
+      },
+
+      {
+        "type": "checkbox",
+        "id": "show_back_to_top",
+        "default": true,
+        "label": "Show back to top button"
+      },
+      {
+        "type": "header",
+        "content": "Collection sorting"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sorting",
+        "default": true,
+        "label": "Enable sorting",
+        "info": "If enabled, the sorting option will show in the filter drawer."
+      },
+      {
+        "type": "header",
+        "content": "Section options"
+      },
+      {
+        "type": "select",
+        "id": "width_layout",
+        "label": "Section content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "max-w-full",
+            "label": "Wide"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

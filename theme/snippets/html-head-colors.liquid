@@ -1,0 +1,91 @@
+{%- comment -%}
+  Colors
+{%- endcomment -%}
+{%- liquid
+  assign color_black = '#262626'
+  assign color_white = '#FFFFFF'
+
+  assign bg_color_default = '#ffffff'
+  assign text_color_default = '#262626'
+  assign text_color_light = '#969696'
+  assign text_link_color = '#df9a33'
+  assign text_link_color_states = '#c27f27'
+  assign border_color_default = '#dedede'
+
+  assign color_primary = '#df9a3e'
+  assign color_primary_text = '#FFFFFF'
+
+  assign color_secondary = '#262626'
+  assign color_secondary_text = '#FFFFFF'
+
+  assign color_accent = '#e6cba5'
+  assign color_accent_text = '#262626'
+
+  assign color_info = '#edb407'
+  assign color_success = '#42CC92'
+  assign color_warning = '#ffc107'
+  assign color_danger = '#ff5656'
+-%}
+
+{%- style %}
+  :root {
+    {% comment -%} Base {%- endcomment -%}
+    --color-black:              {{ color_black }};
+    --color-white:              {{ color_white }};
+    --bg-color-default:         {{ bg_color_default }};
+    --text-color-default:       {{ text_color_default }};
+    --text-color-light:         {{ text_color_light }};
+    --text-link-color:          {{ text_link_color }};
+    --text-link-color-states:   {{ text_link_color_states }};
+    --border-color-default:     {{ border_color_default }};
+    --swiper-theme-color:       {{ text_color_default }};
+
+    {% comment %} Primary {% endcomment %}
+    --color-primary:            {{ color_primary }};
+    --color-primary-text:       {{ color_primary_text }};
+    --color-primary-50:         {{ color_primary | color_mix: '#FFF', 10 }};
+    --color-primary-100:        {{ color_primary | color_mix: '#FFF', 20 }};
+    --color-primary-200:        {{ color_primary | color_mix: '#FFF', 40 }};
+    --color-primary-300:        {{ color_primary | color_mix: '#FFF', 60 }};
+    --color-primary-400:        {{ color_primary | color_mix: '#FFF', 80 }};
+    --color-primary-500:        {{ color_primary }};
+    --color-primary-600:        {{ color_primary | color_mix: '#000', 80 }};
+    --color-primary-700:        {{ color_primary | color_mix: '#000', 60 }};
+    --color-primary-800:        {{ color_primary | color_mix: '#000', 40 }};
+    --color-primary-900:        {{ color_primary | color_mix: '#000', 20 }};
+
+    {% comment -%} Secondary {%- endcomment -%}
+    --color-secondary:          {{ color_secondary }};
+    --color-secondary-text:     {{ color_secondary_text }};
+    --color-secondary-50:       {{ color_secondary | color_mix: '#FFF', 10 }};
+    --color-secondary-100:      {{ color_secondary | color_mix: '#FFF', 20 }};
+    --color-secondary-200:      {{ color_secondary | color_mix: '#FFF', 40 }};
+    --color-secondary-300:      {{ color_secondary | color_mix: '#FFF', 60 }};
+    --color-secondary-400:      {{ color_secondary | color_mix: '#FFF', 80 }};
+    --color-secondary-500:      {{ color_secondary }};
+    --color-secondary-600:      {{ color_secondary | color_mix: '#000', 80 }};
+    --color-secondary-700:      {{ color_secondary | color_mix: '#000', 60 }};
+    --color-secondary-800:      {{ color_secondary | color_mix: '#000', 40 }};
+    --color-secondary-900:      {{ color_secondary | color_mix: '#000', 20 }};
+
+    {% comment -%} Accent {%- endcomment -%}
+    --color-accent:             {{ color_accent }};
+    --color-accent-text:        {{ color_accent_text }};
+    --color-accent-50:          {{ color_accent | color_mix: '#FFF', 10 }};
+    --color-accent-100:         {{ color_accent | color_mix: '#FFF', 20 }};
+    --color-accent-200:         {{ color_accent | color_mix: '#FFF', 40 }};
+    --color-accent-300:         {{ color_accent | color_mix: '#FFF', 60 }};
+    --color-accent-400:         {{ color_accent | color_mix: '#FFF', 80 }};
+    --color-accent-500:         {{ color_accent }};
+    --color-accent-600:         {{ color_accent | color_mix: '#000', 80 }};
+    --color-accent-700:         {{ color_accent | color_mix: '#000', 60 }};
+    --color-accent-800:         {{ color_accent | color_mix: '#000', 40 }};
+    --color-accent-900:         {{ color_accent | color_mix: '#000', 20 }};
+
+    {% comment -%} Communication {%- endcomment -%}
+    --color-info:               {{ color_info }};
+    --color-success:            {{ color_success }};
+    --color-warning:            {{ color_warning }};
+    --color-danger:             {{ color_danger }};
+  }
+{%- endstyle %}

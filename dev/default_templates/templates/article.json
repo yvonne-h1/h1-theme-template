@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "blog_show_date": true,
+            "blog_show_author": false,
+            "blog_show_type": true
+          }
+        },
+        "featured_image": {
+          "type": "featured_image",
+          "settings": {}
+        }
+      },
+      "block_order": ["title", "featured_image"]
+    }
+  },
+  "order": ["main"]
+}

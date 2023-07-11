@@ -1,0 +1,26 @@
+<div class="badges pointer-events-none absolute z-10 flex flex-wrap gap-2">
+  <span class="badge badge--new" aria-hidden="true">
+    {%- render 'format-translation', namespace: 'products.product', key: 'new', fallback: 'New' -%}
+  </span>
+  <span class="badge badge--sale" aria-hidden="true">
+    {%- render 'format-translation',
+      namespace: 'products.product',
+      key: 'on_sale',
+      fallback: 'Sale'
+    -%}
+  </span>
+  <span class="badge badge--pre-order" aria-hidden="true">
+    {%- render 'format-translation',
+      namespace: 'products.product',
+      key: 'pre-order',
+      fallback: 'Pre-order'
+    -%}
+  </span>
+  <span class="badge badge--sold-out" aria-hidden="true">
+    {%- render 'format-translation',
+      namespace: 'products.product',
+      key: 'sold_out',
+      fallback: 'Sold out'
+    -%}
+  </span>
+</div>

@@ -1,0 +1,478 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Code Base Theme",
+    "theme_version": "3.1.1",
+    "theme_author": "Code",
+    "theme_documentation_url": "https://shopify.dev/themes",
+    "theme_support_url": "https://www.code.nl"
+  },
+  {
+    "name": "Branding",
+    "settings": [
+      {
+        "type": "text",
+        "id": "shop_name",
+        "label": "Shop name",
+        "info": "The shop name is used in various visible and invisible (SEO) places.",
+        "default": "Code Base Theme"
+      },
+      {
+        "type": "header",
+        "content": "Font families"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "default": "roboto_n4",
+        "label": "Body font family"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "default": "roboto_n7",
+        "label": "Heading font family"
+      }
+    ]
+  },
+  {
+    "name": "SEO",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Linked data",
+        "info": "These SEO values deliver more easily indexable content to search crawlers like Googlebot. Test you data [here](https://search.google.com/test/rich-results)"
+      },
+      {
+        "type": "image_picker",
+        "id": "jsonld_logo",
+        "label": "Shop logo",
+        "info": "Recommended size at least 160x90 pixels and at most 1920x1080 pixels."
+      },
+      {
+        "type": "header",
+        "content": "Contact data",
+        "info": "These values are set to your shops contact settings by default."
+      },
+      {
+        "type": "text",
+        "id": "jsonld_phone_business",
+        "label": "Business phone nr"
+      },
+      {
+        "type": "text",
+        "id": "jsonld_address_street",
+        "label": "Street address"
+      },
+      {
+        "type": "text",
+        "id": "jsonld_address_city",
+        "label": "City"
+      },
+      {
+        "type": "text",
+        "id": "jsonld_address_state",
+        "label": "State / province"
+      },
+      {
+        "type": "text",
+        "id": "jsonld_address_zip",
+        "label": "Zip"
+      },
+      {
+        "type": "text",
+        "id": "jsonld_address_country",
+        "label": "Country"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social links"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook link",
+        "placeholder": "https://facebook.com/your_url"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter link",
+        "placeholder": "https://twitter.com/your_url"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest link",
+        "placeholder": "https://pinterest.com/your_url"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram link",
+        "placeholder": "https://instagram.com/your_url"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat link",
+        "placeholder": "https://snapchat.com/your_url"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr link",
+        "placeholder": "https://tumblr.com/your_url"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "Youtube link",
+        "placeholder": "https://youtube.com/your_url"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo link",
+        "placeholder": "https://vimeo.com/your_url"
+      }
+    ]
+  },
+  {
+    "name": "Klaviyo",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "klaviyo_bis",
+        "label": "Enable Back in stock",
+        "info": "With the API credentials filled in, this will enable the Klaviyo Back in Stock functionality",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "klaviyo_bis_api_key",
+        "label": "Klaviyo account API key",
+        "info": "[Where to find this?](https://help.klaviyo.com/hc/en-us/articles/115005062267-How-to-Manage-Your-Account-s-API-Keys#find-your-api-keys2)"
+      },
+      {
+        "type": "text",
+        "id": "klaviyo_bis_listid",
+        "label": "Klaviyo List ID",
+        "info": "[Where to find this?](https://help.klaviyo.com/hc/en-us/articles/115005078647-How-to-Find-a-List-ID#find-your-list-id1)"
+      },
+      {
+        "type": "header",
+        "content": "Pop-up settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "klaviyo_bis_subscribe_checked",
+        "label": "Check opt-in checkbox by default",
+        "info": "Check the checkbox for the opt-in by default. Make sure this allowed in your country/region.",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "klaviyo_bis_background_color",
+        "label": "Button background color",
+        "default": "#439fdb"
+      },
+      {
+        "type": "color",
+        "id": "klaviyo_bis_button_text_color",
+        "label": "Button text color",
+        "default": "#ffffff"
+      }
+    ]
+  },
+  {
+    "name": "Payment providers",
+    "settings": [
+      {
+        "type": "text",
+        "id": "payment_label",
+        "label": "Payment label",
+        "placeholder": "Payment methods"
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_riverty",
+        "label": "Riverty",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_apple_pay",
+        "label": "Apple Pay",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_bancontact",
+        "label": "Bancontact",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_google_pay",
+        "label": "Google Pay",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_ideal",
+        "label": "iDeal",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_klarna",
+        "label": "Klarna",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_mastercard",
+        "label": "Mastercard",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_maestro",
+        "label": "Maestro",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_paypal",
+        "label": "Paypal",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_sofort",
+        "label": "Sofort",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "payment_icon_visa",
+        "label": "Visa",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Product card",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show vendor",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_secondary_image",
+        "default": true,
+        "label": "Show second image on hover"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_shop",
+        "label": "Enable quick shop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_pre_order",
+        "label": "Enable pre-order possibility",
+        "info": "Enable the pre-order badge when continue when out of stock is enabled and there is no stock available",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "use_within_collection_link",
+        "default": false,
+        "label": "Use within collection link?",
+        "info": "This option changes the full URL path of a product. It adds the current collection to the url path and breadcrumbs. Enabling this setting will change the SEO of the website."
+      }
+    ]
+  },
+  {
+    "name": "Article card",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_article_image",
+        "label": "Show image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_article_type",
+        "label": "Show type",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_article_author",
+        "label": "Show author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_article_date",
+        "label": "Show date",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_article_excerpt",
+        "label": "Show excerpt or content",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_cart_remove",
+        "default": false,
+        "label": "Always show remove option"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_vendor",
+        "default": false,
+        "label": "Show vendor"
+      },
+      {
+        "type": "select",
+        "id": "add_to_cart_behavior",
+        "label": "Add to cart behavior",
+        "info": "Choose what happens after adding an item to the cart.",
+        "options": [
+          {
+            "value": "show_cart_notification",
+            "label": "Show cart notification"
+          },
+          {
+            "value": "open_cart_drawer",
+            "label": "Open cart drawer"
+          }
+        ],
+        "default": "show_cart_notification"
+      }
+    ]
+  },
+  {
+    "name": "Predictive search",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "label": "Enable predictive search",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "predictive_search_max_results_per_type",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "label": "Max search results",
+        "default": 4,
+        "info": "Results per type"
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_products",
+        "label": "Show products",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_collections",
+        "label": "Show collections",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_pages",
+        "label": "Show pages",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_articles",
+        "label": "Show articles",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "General",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "google_site_verification",
+        "label": "Google Site verification code",
+        "info": "The verification code of Google to verify your website. For multiple accounts create a comma separated list"
+      },
+      {
+        "type": "text",
+        "id": "gtm_id",
+        "label": "GTM id",
+        "placeholder": "GTM-XXXXXXX",
+        "info": "Leave empty to disable the GTM tag"
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "text",
+        "id": "color_filter_name",
+        "label": "Color filter name",
+        "default": "Color",
+        "info": "Set the name as it's used for product variants."
+      },
+      {
+        "type": "textarea",
+        "id": "color_mappings",
+        "label": "Color mappings",
+        "info": "Set up color mappings as a comma separated list of color|#hexvalue, where 'color' is lowercase and hyphened, like 'dark-blue'.",
+        "default": "blue|#68b7ff,\nred|#ff0000,\norange|#ff6600,",
+        "placeholder": "blue|#68b7ff,\nred|#ff0000,\norange|#ff6600,"
+      },
+      {
+        "type": "header",
+        "content": "Filter options"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_filter_collapsibles",
+        "default": true,
+        "label": "Enable collapsible panes",
+        "info": "Renders filter groups in collapsible panes"
+      },
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "min": 4,
+        "max": 24,
+        "step": 1,
+        "default": 16,
+        "label": "Products per page"
+      }
+    ]
+  }
+]

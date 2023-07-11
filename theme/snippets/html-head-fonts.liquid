@@ -1,0 +1,34 @@
+{%- comment -%}
+  Fonts
+{%- endcomment -%}
+{%- liquid
+  assign font_body = settings.font_body | font_modify: 'weight', '400'
+  assign font_medium = settings.font_body | font_modify: 'weight', '500'
+  assign font_bold = settings.font_bold | font_modify: 'weight', '700'
+  assign font_heading = settings.font_heading
+-%}
+
+{%- unless settings.font_body.system? -%}
+  <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+{%- endunless %}
+
+{%- style %}
+  {%- unless settings.font_body.system? -%}
+    {{- font_body | font_face: font_display: 'swap' -}}
+    {{- font_body | font_modify: 'style', 'italic' | font_face: font_display: 'swap' -}}
+    {{- font_medium | font_face: font_display: 'swap' -}}
+    {{- font_medium | font_modify: 'style', 'italic' | font_face: font_display: 'swap' -}}
+    {{- font_bold | font_face: font_display: 'swap' -}}
+    {{- font_bold | font_modify: 'style', 'italic' | font_face: font_display: 'swap' -}}
+    {{- font_heading | font_face: font_display: 'swap' -}}
+    {{- font_heading | font_modify: 'style', 'italic' | font_face: font_display: 'swap' -}}
+  {% endunless %}
+
+  :root {
+    {%- comment -%}
+      Fonts
+    {%- endcomment -%}
+    --font-body-family: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
+    --font-heading-family: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+  }
+{%- endstyle %}

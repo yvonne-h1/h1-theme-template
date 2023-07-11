@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs"
+    },
+    "main": {
+      "type": "main-list-collections"
+    }
+  },
+  "order": ["breadcrumbs", "main"]
+}

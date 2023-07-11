@@ -1,0 +1,9 @@
+@layer base {
+  html {
+    @apply m-0
+      font-body
+      leading-normal
+      bg-color-default
+      text-color-default;
+  }
+}

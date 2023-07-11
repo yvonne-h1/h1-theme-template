@@ -1,0 +1,36 @@
+{%- capture tailwind -%}
+  <a href="https://tailwindcss.com/docs/grid-template-columns" target="_blank" rel="noopener">tailwind</a>
+{%- endcapture -%}
+{%- capture css_tricks -%}
+  <a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank" rel="noopener">css-tricks</a>
+{%- endcapture -%}
+
+<p>More info on {{ tailwind }} and {{ css_tricks }}.</p>
+
+{%- assign col_class = 'bg-gray-100 rounded border border-solid border-color-default' -%}
+{%- assign grid_class = 'grid gap-4 grid-cols-1' -%}
+
+<div class="{{- grid_class -}}">
+  <div class="grid grid-cols-12 gap-x-[var(--grid-col-gap)] gap-y-[var(--grid-row-gap)]">
+    {%- for index in (1..2) -%}
+      <div class="col-span-6 {{ col_class -}}">&nbsp;</div>
+    {%- endfor -%}
+  </div>
+
+  <div class="grid grid-cols-12 gap-x-[var(--grid-col-gap)] gap-y-[var(--grid-row-gap)]">
+    {%- for index in (1..3) -%}
+      <div class="col-span-4 {{ col_class -}}">&nbsp;</div>
+    {%- endfor -%}
+  </div>
+
+  <div class="grid grid-cols-12 gap-x-[var(--grid-col-gap)] gap-y-[var(--grid-row-gap)]">
+    {%- for index in (1..4) -%}
+      <div class="col-span-6 md:col-span-3  {{ col_class -}}">&nbsp;</div>
+    {%- endfor -%}
+  </div>
+  <div class="grid grid-cols-12 gap-x-[var(--grid-col-gap)] gap-y-[var(--grid-row-gap)]">
+    {%- for index in (1..6) -%}
+      <div class="col-span-6 md:col-span-2  {{ col_class -}}">&nbsp;</div>
+    {%- endfor -%}
+  </div>
+</div>

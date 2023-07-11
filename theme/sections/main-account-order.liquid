@@ -1,0 +1,111 @@
+{%- capture container_content -%}
+  {%- assign order_date = order.created_at | time_tag: format: "date_at_time" -%}
+
+  <div class="grid grid-cols-12 items-start gap-x-4 md:gap-x-8">
+
+    {%- comment -%} Order info {%- endcomment -%}
+    <div class="order col-span-12 grid grid-cols-1 items-start gap-14 md:col-span-8">
+
+      <div>
+        <h2 class="h4 mb-4">
+          {{ 'customer.order.title' | t: name: order.name }}
+        </h2>
+        <p>
+          {{- 'customer.order.date_html' | t: date: order_date -}}
+        </p>
+        {%- if order.cancelled -%}
+          {%- assign cancelled_at = order.cancelled_at | time_tag: format: "date_at_time" -%}
+          <p class="mb-2">
+            {{- 'customer.order.cancelled_html' | t: date: cancelled_at -}}
+          </p>
+          <p>
+            {{- 'customer.order.cancelled_reason' | t: reason: order.cancel_reason_label -}}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- render 'order-table', order: order -%}
+
+    </div>
+
+    <div class="order__shipping-info col-span-12 mt-14 grid grid-cols-1 gap-14 md:col-span-4 md:mt-0 lg:col-span-3 lg:col-start-10">
+      {%- comment -%} Shipping info {%- endcomment -%}
+      {%- comment -%} Billing {%- endcomment -%}
+      <div class="order__billing-address">
+
+        <h2 class="h5 mb-6">
+          {%-
+            render "format-translation",
+            namespace: "customer.order",
+            key: "billing_address",
+            fallback: "Billing address"
+          -%}
+        </h2>
+
+        <p class="text-md mb-2">
+          {%-
+            render "format-translation",
+            namespace: "customer.order",
+            key: "payment_status",
+            fallback: "Payment Status"
+          -%}:
+          {{ order.financial_status_label }}
+        </p>
+        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic leading-5">
+          {{- order.billing_address | format_address | replace: '<br>', '</p><p>' -}}
+        </address>
+      </div>
+
+      {%- comment -%} Shipping {%- endcomment -%}
+      <div class="order__shipping-address">
+        <h2 class="h5 mb-6">
+          {%-
+            render "format-translation",
+            namespace: "customer.order",
+            key: "shipping_address",
+            fallback: "Shipping address"
+          -%}
+        </h2>
+        <p class="text-md mb-2">
+          {%-
+            render "format-translation",
+            namespace: "customer.order",
+            key: "fulfillment_status",
+            fallback: "Fulfillment Status"
+          -%}: {{ order.fulfillment_status_label }}
+        </p>
+
+
+        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic leading-5">
+          {{- order.shipping_address | format_address | replace: '<br>', '</p><p>' -}}
+        </address>
+
+      </div>
+
+    </div>
+
+  </div>
+
+{%- endcapture -%}
+
+{%- capture page_title -%}
+  {%-
+    render "format-translation",
+    namespace: "customer.orders",
+    key: "details",
+    fallback: "Order details"
+  -%}
+{%- endcapture -%}
+
+{%- comment -%} Render the account header {%- endcomment -%}
+{%- render 'account-header', title: page_title -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container', class: 'form-fields order', content: container_content -%}
+
+{% schema %}
+  {
+    "name": "Order",
+    "blocks": []
+  }
+{% endschema %}

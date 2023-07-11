@@ -1,0 +1,65 @@
+{% liquid
+  capture seo_title
+    assign separator = ' | '
+    assign shop_name = shop.name
+    if template.name == 'index'
+      assign shop_name = page_title
+    endif
+    if shop_name == blank and settings.shop_name != blank
+      assign shop_name = settings.shop_name
+    endif
+
+    comment
+      Title for giftcard
+    endcomment
+    if template contains 'gift_card'
+      assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros: gift_card.currency
+      assign formatted_initial_value_stripped = formatted_initial_value | strip_html
+      echo 'gift_cards.issued.title' | t: value: formatted_initial_value_stripped, shop: shop_name
+    else
+      comment
+        Title for searchresult
+      endcomment
+      if search.performed
+        echo page_title | remove: '*'
+      else
+        echo page_title
+      endif
+
+      comment
+        Add tag filters
+      endcomment
+      if current_tags
+        assign meta_tags = current_tags | join: ', '
+        echo 'general.meta.tags' | t: tags: meta_tags | prepend: separator
+      endif
+
+      comment
+        Add pagination
+      endcomment
+      if current_page != 1
+        echo 'general.meta.page' | t: page: current_page | prepend: separator
+      endif
+
+      comment
+        Escape
+      endcomment
+      assign escaped_page_title = page_title | escape
+    endif
+
+    comment
+      Add shop name
+    endcomment
+    unless escaped_page_title contains shop_name
+      echo shop_name | prepend: separator
+    endunless
+  endcapture
+
+  comment
+    Homepage
+  endcomment
+  if template.name == 'index' and shop_name != blank
+    assign seo_title = shop_name
+  endif
+%}
+<title>{{ seo_title }}</title>

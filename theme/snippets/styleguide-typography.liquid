@@ -1,0 +1,54 @@
+{%- liquid
+  assign font_sizes = 'text-xs , text-sm , text-base , text-lg , text-xl' | split: ' , '
+-%}
+
+<div class="typography__headings">
+  <h3 class="mb-4 border-b pb-2">Headings</h3>
+  <div>
+    <h1>Headline 1</h1>
+    <h2>Headline 2</h2>
+    <h3>Headline 3</h3>
+    <h4>Headline 4</h4>
+    <h5>Headline 5</h5>
+    <h6>Headline 6</h6>
+  </div>
+</div>
+
+<div class="typography__paragraphs">
+  <h3 class="mb-4 border-b pb-2">Paragraphs</h3>
+  <div class="flex flex-col gap-4 sm:flex-row">
+    <div class="flex-1">
+      <h3 class="h6">Sizes</h3>
+      {%- for size in font_sizes -%}
+        <p class="{{ size }}">{{ size | replace: '-', ' ' | capitalize }}</p>
+      {%- endfor -%}
+    </div>
+
+    <div class="flex-1">
+      <h3 class="h6">Label</h3>
+      {%- for size in font_sizes -%}
+        <p class="label {{ size }}">
+          Label {{ size | replace: '-', ' ' | remove: 'text' | capitalize }}
+        </p>
+      {%- endfor -%}
+    </div>
+
+    <div class="flex-1">
+      <h3 class="h6">Transforms</h3>
+      <p class="normal-case">Normal</p>
+      <p class="capitalize">Capitalised</p>
+      <p class="uppercase">Uppercased</p>
+    </div>
+  </div>
+</div>
+
+<div class="typography__styles">
+  <h3 class="mb-4 border-b pb-2">Type styles</h3>
+  <ul>
+    <li><strong>Strong</strong></li>
+    <li><em>Emphasis</em></li>
+    <li><a href="#">Link</a></li>
+    <li><s>Strike</s></li>
+    <li><sup>Sup</sup></li>
+  </ul>
+</div>

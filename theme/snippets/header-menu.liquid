@@ -1,0 +1,220 @@
+{%- comment -%}
+  Outputs the header desktop menu.
+
+  Accepts:
+  - section:          {Object} Section liquid object (required)
+  - menu_list:        {Object} Menu liquid object (required)
+
+  Usage:
+    {%- render 'header-menu', section: section, menu_list: menu_list -%}
+{%- endcomment -%}
+
+{%- if menu_list != blank -%}
+  <collapsible-header
+    class="header__menu hidden text-center lg:col-span-8 lg:block"
+    data-options='
+      {
+        "closeSiblings": true,
+        "toggleClass": "collapsible-is-open",
+        "onHover": true,
+        "hoverDelay": 300,
+        "closeOnMouseleave": true
+      }
+    '
+  >
+    {%- comment -%} Level 1 {%- endcomment -%}
+    <ul class="header__menu-list header__menu-list--level-1 flex flex-wrap justify-center">
+      {%- for level_1 in menu_list.links -%}
+        {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+        {%- assign link_1_url = level_1.url -%}
+        {%- if link_1_url contains 'collections' and link_1_url contains 'filter' -%}
+          {%- assign link_1_url = link_1_url | replace: '%3F', '?' -%}
+        {%- endif -%}
+
+        {%- comment -%} if link is active {%- endcomment -%}
+        {%- liquid
+          assign level_1_active_class = ''
+          if level_1.child_active or level_1.current
+            assign level_1_active_class = 'header__menu-link--active text-primary'
+          endif
+        -%}
+        {%- if level_1.links == blank -%}
+          {%- comment -%} Output level 1 without submenu. {%- endcomment -%}
+          <li class="header__menu-item level-1">
+            <a
+              href="{{ link_1_url }}"
+              class="header__menu-link level-1 {{ level_1_active_class }} level-1 relative flex items-center whitespace-nowrap px-4 py-6 text-left text-sm font-bold leading-6 text-inherit no-underline states:text-primary states:no-underline"
+              {% if level_1.current %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{- level_1.title | escape -}}
+            </a>
+          </li>
+        {%- else -%}
+          {%- liquid
+            # Set the layout type default to single dropdown.
+            assign dropdown_layout = 'single'
+          -%}
+
+          {%- comment -%} Capture level 2 / 3 from current level 1 and collect the section blocks related to level 1. {%- endcomment -%}
+          {%- capture dropdown -%}
+
+            {%- comment -%} Check level 2 items in that level 1 first. {%- endcomment -%}
+            {%- for level_2 in level_1.links -%}
+
+              {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
+              {% assign level_2_url = level_2.url %}
+              {%- if level_2_url contains 'collections' and level_2_url contains 'filter' -%}
+                {% assign level_2_url = level_2_url | replace: '%3F', '?' %}
+              {%- endif -%}
+
+              <li class="col-span-2 {% if forloop.first %} col-start-2{% endif %}">
+
+                {%- if level_2_url == blank or level_2_url == '#' -%}
+                  <div class="header__menu-link header__menu-link--inactive level-2 relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold leading-5 text-inherit no-underline states:text-primary states:no-underline"
+                  >
+                    {{- level_2.title | escape -}}
+                  </div>
+                {%- else -%}
+                  {%- comment -%} if link is active {%- endcomment -%}
+                  {%- liquid
+                    assign level_2_active_class = ''
+                    if level_2.current
+                      assign level_2_active_class = 'header__menu-link--active text-primary'
+                    endif
+                  -%}
+                  <a
+                    href="{{ level_2_url }}"
+                    class="header__menu-link level-2 {{ level_2_active_class }} relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold leading-5 text-inherit no-underline states:text-primary states:no-underline"
+                    {% if level_2.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{- level_2.title | escape -}}
+                  </a>
+                {%- endif -%}
+
+                {%- if level_2.links != blank -%}
+
+                  {%- comment -%} Level 2 with submenu {%- endcomment -%}
+                  {%- assign dropdown_layout = "multi" -%}
+
+                  {%- comment -%} Level 3 {%- endcomment -%}
+                  <ul class="header__menu-list level-3">
+                    {%- for level_3 in level_2.links -%}
+
+                      {%- comment -%}
+                        Get link and fix deep link to native filters
+                      {%- endcomment -%}
+                      {%- liquid
+                        assign grandchildlink_url = level_3.url
+                        if grandchildlink_url contains 'collections' and grandchildlink_url contains 'filter'
+                          assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?'
+                        endif
+                      -%}
+                      {%- comment -%} if link is active {%- endcomment -%}
+                      {%- liquid
+                        assign level_3_active_class = ''
+                        if level_3.current
+                          assign level_3_active_class = 'header__menu-link--active text-primary'
+                        endif
+                      -%}
+                      <li>
+                        <a
+                          href="{{ grandchildlink_url }}"
+                          class="header__menu-link header__menu-link--level-3 {{ level_3_active_class }} flex items-center py-1.5 text-sm font-bold leading-5 text-gray-500 text-inherit states:text-primary states:no-underline states:opacity-100"
+                          {% if level_3.current -%}
+                            aria-current="page"
+                          {% endif -%}
+                        >
+                          {{ level_3.title | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+
+            {%- comment -%} Check for blocks that are linked to level 1. {%- endcomment -%}
+            {%- if section.blocks.size > 0 and dropdown_layout == "multi" -%}
+
+              {%- liquid
+                capture images
+                  # Add the optional menu image for 3 level menu's
+                  for block in section.blocks
+                    if block.settings.image != nil and block.settings.text != blank
+
+                      # Handleize the item to match to make sure it's case-insensitive.
+                      assign image_alt = level_1.title | escape
+                      assign menu_link_title = level_1.title | handleize
+                      assign link_block_title = block.settings.text | handleize
+
+                      # Check if there is a match, if so output.
+                      if menu_link_title == link_block_title
+                        capture block_image
+                          render 'format-image', image_object: block.settings.image, alt: image_alt, sizes: '(min-width: 1440px) 448px, (min-width: 1024px) 31vw, 288px', max_width: 448
+                        endcapture
+                        if block.settings.url != blank
+                          echo '<a href="' | append: block.settings.url | append: '">'
+                          echo block_image
+                          echo '</a>'
+                        else
+                          echo block_image
+                        endif
+                      endif
+
+                    endif
+                  endfor
+                endcapture
+              -%}
+
+              {%- if images != blank -%}
+                <li class="header__image grid-col-start-8 col-span-4 grid grid-cols-1 gap-4">
+                  {{- images -}}
+                </li>
+              {%- endif -%}
+
+            {%- endif -%}
+
+          {%- endcapture -%}
+
+          {%- comment -%} Output level 1 and place the captured 'dropdown' 2/3 with section blocks data in there. {%- endcomment -%}
+          <li
+            class="header__menu-item header__menu-item--{{ dropdown_layout }} level-1 group/menu-item"
+            data-collapsible-group
+          >
+            <a
+              href="{{ link_1_url }}"
+              class="header__menu-link {% if level_1.current %} header__menu-link--active {% endif %} level-1 relative flex items-center gap-1 whitespace-nowrap px-4 py-6 text-left text-sm font-bold leading-6 text-inherit no-underline states:text-primary states:no-underline"
+              {%- if level_1.current %}
+                aria-current="page"
+              {% endif %}
+              data-collapsible-trigger
+            >
+              {{- level_1.title | escape -}}
+              {%- render 'global-icon',
+                icon: 'collapsible',
+                icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]/menu-item:rotate-180'
+              -%}
+            </a>
+            <div
+              class="header__inner-container header-menu__{{ dropdown_layout }} {% if dropdown_layout == 'single' %} {% else %} left-0 right-0 w-full {% endif %} absolute top-full hidden bg-color-default text-color-default group-[.collapsible-is-open]/menu-item:block"
+              data-collapsible-target
+            >
+              <div class="header__navigation-container site-center px-8 py-12">
+                <ul
+                  class="header__menu-list level-2 {% if dropdown_layout == 'single' %} {% else %} grid grid-cols-12 gap-x-4 gap-y-0{% endif %}"
+                  tabindex="-1"
+                >
+                  {{- dropdown -}}
+                </ul>
+              </div>
+            </div>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </collapsible-header>
+{%- endif -%}

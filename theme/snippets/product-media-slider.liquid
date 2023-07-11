@@ -1,0 +1,195 @@
+{%- comment -%} Import styles for this section {%- endcomment -%}
+{%- liquid
+  render 'import-styles', file_name: 'module-swiper.css', force: true
+  render 'import-styles', file_name: 'module-swiper-navigation.css'
+  render 'import-styles', file_name: 'component-swiper.css'
+-%}
+
+{%- liquid
+  assign media_content_slider = ''
+  assign media_content_thumbnails_slider = ''
+-%}
+
+{%- for media in product.media -%}
+  {%- comment -%} Create an array of variants that have this image so the image will show when a variant changes. {%- endcomment -%}
+  {%- liquid
+    capture variant_images
+      for variant in product.variants
+        if variant.featured_image.src == media.src and product.variants.size > 1
+          echo variant.id | prepend: ','
+        endif
+      endfor
+    endcapture
+    assign variant_images = variant_images | remove_first: ','
+  -%}
+
+  {%- comment -%} Get media for the main slider {%- endcomment -%}
+  {%- capture media_content -%}
+    {%- liquid
+      assign lazy = true
+      if forloop.index <= 1
+        assign lazy = false
+      endif
+    -%}
+    {% case media.media_type %}
+      {%- when 'image' -%}
+        <a
+          class="product-media-slider__item relative block w-full"
+          href="{{ media | image_url }}"
+          data-fancybox="product-media-slider"
+          data-animated="false"
+        >
+          {%- render 'format-image',
+            image_object: media,
+            aspect_ratio: '1/1',
+            max_width: 512,
+            sizes: '(min-width: 768px) 512px, 100vw',
+            alt: media.alt,
+            title: media.alt,
+            class: 'w-full md:max-w-lg mx-auto object-contain',
+            lazy: lazy
+            -%}
+          {%- render 'global-icon', icon: 'zoom', icon_class: 'w-6 absolute right-4 bottom-4 md:hidden pointer-events-none' -%}
+        </a>
+      {%- when 'model' -%}
+        <div class="product-media-slider__item product-media-slider__item--model relative mx-auto block aspect-square w-full max-w-lg">
+          {{ media | media_tag: image_size: "2048x", toggleable: true, class: 'absolute inset-0 w-full h-full' }}
+        </div>
+      {%- when 'video' -%}
+        <div
+          class="product-media-slider__item product-media-slider__item--video relative mx-auto block aspect-square w-full max-w-lg"
+          data-fancybox="product-media-slider"
+          data-src="{{ media.sources.last.url }}"
+        >
+          {{ media | media_tag: image_size: "2048x", autoplay: false, loop: section.settings.enable_video_looping, controls: true, preload: "none", loading: "lazy", class: "absolute inset-0 w-full h-full" }}
+        </div>
+      {%- when 'external_video' -%}
+        {%- assign video_class = 'absolute inset-0 w-full h-full js-' | append: media.host -%}
+        {%- comment -%}
+          if it's a vimeo video, make the link into vimeo.com/ID - Fancybox doesn't recognize player.vimeo.com/video/ID
+        {%- endcomment -%}
+        {%- capture host_attributes -%}
+          {%- assign media_external_video_url = media | external_video_url: autoplay: false, loop: false -%}
+          {% if media.host == 'vimeo' and media_external_video_url contains 'player.' -%}
+              data-fancybox="product-media" data-src="{{ media_external_video_url | remove_first: 'player.' | remove_first: 'video/' }}"
+          {% elsif media.host == 'youtube' %}
+            data-fancybox="product-media" data-src="{{ media_external_video_url }}"
+          {% endif %}
+        {%- endcapture -%}
+        <div
+          class="product-media-slider__item product-media-slider__item--external-video relative mx-auto block aspect-square w-full max-w-lg"
+          {{ host_attributes }}
+        >
+          {%- if media.host == 'youtube' -%}
+            {{ media | external_video_url: autoplay: false, loop: false, playlist: media.external_id | external_video_tag: class: video_class, loading: "lazy" }}
+          {%- else -%}
+            {{ media | external_video_url: autoplay: false, loop: false | external_video_tag: class: video_class, loading: "lazy" }}
+          {%- endif -%}
+        </div>
+    {%- endcase -%}
+  {%- endcapture -%}
+
+  {%- capture media_content_slider -%}
+    {{ media_content_slider }}
+    <div
+      class="swiper-slide"
+      {%- if media.media_type == 'image' -%}
+        data-product-variant-image="[{{ variant_images }}]"
+      {%- endif -%}
+    >
+      {{ media_content }}
+    </div>
+  {%- endcapture -%}
+
+  {%- comment -%} Get media for the thumbnails slider {%- endcomment -%}
+  {%- capture media_content_thumbnails -%}
+    <div class="product-media-slider__item">
+      {%- liquid
+        assign image_object = media
+        if media.media_type != 'image'
+          assign image_object = media.preview_image
+        endif
+      -%}
+      {%- render 'format-image',
+        image_object: image_object,
+        aspect_ratio: '1/1',
+        widths: '64, 80',
+        max_width: 80,
+        sizes: '(min-width: 768px) 80px, 64px',
+        alt: media.alt,
+        title: media.alt,
+        class: 'w-full max-w-none object-cover',
+        lazy: true
+        -%}
+    </div>
+  {%- endcapture -%}
+
+  {%- capture media_content_thumbnails_slider -%}
+    {{ media_content_thumbnails_slider }}
+    <div class="swiper-slide relative w-16 cursor-pointer border border-transparent states:border-primary-200 lg:w-20">
+      {{ media_content_thumbnails }}
+    </div>
+  {%- endcapture -%}
+{%- endfor -%}
+
+{%- comment -%} Out put Media slider {%- endcomment -%}
+{%- if product.media != blank -%}
+  <product-media-slider class="product-media-slider relative block w-full overflow-hidden md:-ml-[var(--site-side-spacing)]">
+    {%- comment -%} Main Slider {%- endcomment -%}
+    <div class="product-media-slider__slider relative col-span-12 mb-4 bg-accent-100">
+      {%- comment -%} Main slider {%- endcomment -%}
+      <div
+        class="swiper min-h-0 min-w-0 overflow-hidden"
+        data-product-media-slider="{{ product.selected_or_first_available_variant.id }}"
+      >
+        <div class="swiper-wrapper items-center">
+          {{- media_content_slider -}}
+        </div>
+
+        <button
+          class="swiper-button-next product-media-slider__button-next right-3 md:right-6"
+          aria-label="{{ 'accessibility.previous_slide' | t }}"
+        >
+          {% render 'global-icon', icon: 'chevron-right', icon_class: 'w-4' %}
+        </button>
+        <button
+          class="swiper-button-prev product-media-slider__button-prev left-3 md:left-6"
+          aria-label="{{ 'accessibility.next_slide' | t }}"
+        >
+          {% render 'global-icon', icon: 'chevron-left', icon_class: 'w-4' %}
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} Thumbnails slider {%- endcomment -%}
+    <div class="relative col-span-12">
+      <div class="product-media-slider__thumbnails relative mx-auto w-auto max-w-xs md:max-w-sm">
+        <div class="swiper mx-14 overflow-hidden md:mx-16" data-product-media-thumbnails-slider>
+          <div class="swiper-wrapper items-center">
+            {{- media_content_thumbnails_slider -}}
+          </div>
+        </div>
+        <button
+          class="swiper-button-next swiper-button-thumbnails-next right-0 md:right-2"
+          aria-label="{{ 'accessibility.previous_slide' | t }}"
+        >
+          {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-3' -%}
+        </button>
+        <button
+          class="swiper-button-prev swiper-button-thumbnails-prev left-0 md:left-2"
+          aria-label="{{ 'accessibility.next_slide' | t }}"
+        >
+          {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-3' -%}
+        </button>
+      </div>
+    </div>
+  </product-media-slider>
+{%- endif -%}
+
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'product-media-slider.js' | asset_url }}" type="module"></script>
+
+{%- comment -%} Import product media in design mode {%- endcomment -%}
+{%- if request.design_mode -%}
+  <script src="{{ 'product-media.js' | asset_url }}" type="module"></script>
+{%- endif -%}

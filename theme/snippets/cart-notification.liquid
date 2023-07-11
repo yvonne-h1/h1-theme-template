@@ -1,0 +1,94 @@
+{%- comment -%} Assign and reuse the close notification button. {%- endcomment -%}
+{%- capture close_notification_button -%}
+  <button
+    type="button"
+    class="cart-notification__close button--link absolute right-0 top-0 appearance-none border-none bg-transparent"
+    aria-label="{%- render 'format-translation', namespace: "accessibility.close", fallback: "Close" -%}"
+    data-cart-notification-close
+  >
+    {%- render 'global-icon', icon: 'close', icon_class: 'w-6' -%}
+  </button>
+{%- endcapture -%}
+
+{% comment %} Output notification. {% endcomment %}
+<cart-notification
+  class="cart-notification group/cart-notification"
+>
+  <div
+    class="invisible fixed right-0 top-0 z-modal block w-full max-w-sm -translate-y-full bg-white px-4 pb-2 pt-5 shadow-2xl transition-all focus:shadow-2xl group-[.cart-notification--open]/cart-notification:visible group-[.cart-notification--open]/cart-notification:translate-y-0 md:px-6 md:pb-3 lg:right-8"
+    data-cart-notification
+    aria-modal="true"
+    aria-label="{%- render 'format-translation', namespace: "general.cart.item_added", fallback: "Item added" -%}"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div class="cart-notification__valid" data-cart-notification-valid>
+      <div class="cart-notification__header relative flex items-start pr-6">
+        <p class="cart-notification__heading h6 my-0 flex grow items-center leading-6">
+          {%- render 'format-translation',
+            namespace: 'general.cart.item_added',
+            fallback: 'Item added'
+          -%}
+        </p>
+        {{- close_notification_button -}}
+      </div>
+      <div
+        id="cart-notification-product"
+        class="cart-notification-product mb-4 flex items-start gap-4 border-b border-b-[var(--border-color-default)] pb-4 pt-4 text-sm leading-5"
+      >
+        {% comment %} Will be filled with cart-notification-product.liquid. {% endcomment %}
+      </div>
+      <div class="cart-notification__links grid grid-cols-1 gap-2 text-center">
+        <a
+          href="{{ routes.cart_url }}"
+          id="cart-notification-button"
+          class="button button--md button--secondary w-full"
+        >
+          {% comment %} Will be filled with cart-notification-button.liquid. {% endcomment %}
+        </a>
+        <form action="{{ routes.cart_url }}" method="post" id="cart" class="my-0">
+          <button
+            type="submit"
+            name="checkout"
+            class="button button--md button--primary w-full"
+          >
+            {%- render 'format-translation',
+              namespace: 'sections.cart.checkout',
+              fallback: 'Check out'
+            -%}
+          </button>
+        </form>
+        <button type="button" class="button button--md button--link" data-cart-notification-close>
+          {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-3' -%}
+          {%- render 'format-translation',
+            namespace: 'general.continue_shopping',
+            fallback: 'Continue shopping'
+          -%}
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} When there is an error. {%- endcomment -%}
+    <div class="cart-notification__invalid hidden" data-cart-notification-invalid>
+      <div class="cart-notification__header relative flex items-start pr-6">
+        <p class="cart-notification__heading h6 my-0 flex grow items-center text-danger">
+          <span class="mr-3 block">
+            {%- render 'global-icon', icon: 'error', icon_class: 'w-6' -%}
+          </span>
+          {%- render 'format-translation',
+            namespace: 'general.cart.add_error',
+            fallback: 'Error'
+          -%}
+        </p>
+        {{- close_notification_button -}}
+      </div>
+      <p
+        class="cart-notification__error-message pb-4 pl-0 pr-0 pt-6 text-sm leading-5"
+        data-cart-notification-error-message
+      ></p>
+    </div>
+  </div>
+</cart-notification>
+
+{%- comment -%} Import script for web component. {%- endcomment -%}
+<script src="{{ 'cart-notification.js' | asset_url }}" defer></script>

@@ -1,0 +1,19 @@
+<div class="relative">
+  <toggle-element-class
+    class="button button--primary"
+    data-options='
+      {
+        "toggleClass": "hidden",
+        "target": "[data-toggle-example-target]"
+      }
+    '
+  >
+    Click here
+  </toggle-element-class>
+  <div
+    class="bg-slate-50 absolute top-full z-10 hidden max-w-md rounded p-6 shadow dark:bg-gray-700"
+    data-toggle-example-target
+  >
+    <p>And here is your toggled text :-).</p>
+  </div>
+</div>

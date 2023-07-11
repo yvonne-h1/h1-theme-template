@@ -1,0 +1,42 @@
+{%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Snapchat, Tumblr, YouTube, Vimeo'
+  | split: ', '
+-%}
+
+{%- capture socials -%}
+  {%- for social in social_accounts -%}
+    {%- liquid
+      assign social_handle = social | handleize
+      assign social_icon = social_handle | downcase
+
+      if icon_shape == 'round'
+        assign social_icon = social_handle | append: '_round'
+      endif
+
+      capture social_link
+        echo 'social_' | append: social_handle | append: '_link'
+      endcapture
+    -%}
+    {%- if settings[social_link] != blank -%}
+      <li class="social-icons__item">
+        <a
+          href="{{ settings[social_link] }}"
+          target="_blank"
+          rel="noopener"
+          class="social-icons__url block transition-transform hover:scale-110 focus:scale-110"
+          title="{{ 'sections.footer.social_platform' | t: name: shop.name, platform: social }}"
+        >
+          {%- render 'global-icon', icon: social_icon, icon_class: icon_size -%}
+          <span class="sr-only">
+            {{ social }}
+          </span>
+        </a>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if socials != blank -%}
+  <ul class="social-icons flex flex-wrap gap-2 {{ social_class }}">
+    {{- socials -}}
+  </ul>
+{%- endif -%}

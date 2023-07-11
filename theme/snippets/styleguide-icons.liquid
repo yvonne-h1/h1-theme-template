@@ -1,0 +1,40 @@
+{%- liquid
+  assign ui_icons = '3d_model, account, arrow, box, cart_empty, cart, caret, chat_bubble, checkmark, checkmark, clipboard, close, discount, dryer, error, eye, filter, hamburger, heart, iron, leaf, leather, lock, map_pin, minus, padlock, pants, plane, play, plus, price_tag, question_mark, return, ruler, search, share, shirt, shoe, silhouette, star, success, tick, truck, unavailable, user, washing, zoom' | split: ', '
+  assign payment_icons = 'riverty, apple_pay, bancontact, google_pay, ideal, klarna, maestro, mastercard, paypal, sofort, visa' | split: ', '
+  assign social_icons = 'facebook_round, instagram_round, pinterest_round, snapchat_round, tumblr_round, twitter_round, vimeo_round, youtube_round, facebook, instagram, pinterest, snapchat, tumblr, twitter, vimeo, youtube' | split: ', '
+
+  assign icon_wrapper_class = 'flex flex-wrap gap-4'
+-%}
+
+{% comment %} User Interface icons {% endcomment %}
+<div class="icons__project">
+  <h3 class="h4 mb-4 border-b pb-2">User interface icons</h3>
+
+  <ul class="{{ icon_wrapper_class }}">
+    {%- for icon in ui_icons -%}
+      <li>{%- render 'global-icon', icon: icon, icon_class: 'w-6' -%}</li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% comment %} Payment icons {% endcomment %}
+<div class="icons__payment">
+  <h3 class="h4 mb-4 border-b pb-2">Payment icons</h3>
+
+  <ul class="{{ icon_wrapper_class }}">
+    {%- for icon in payment_icons -%}
+      <li>{%- render 'global-icon', icon: icon, icon_class: 'w-10' -%}</li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% comment %} Spocial icons {% endcomment %}
+<div class="icons__payment">
+  <h3 class="h4 mb-4 border-b pb-2">Social icons</h3>
+
+  <ul class="{{ icon_wrapper_class }}">
+    {%- for icon in social_icons -%}
+      <li>{%- render 'global-icon', icon: icon, icon_class: 'w-6' -%}</li>
+    {%- endfor -%}
+  </ul>
+</div>

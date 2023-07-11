@@ -1,0 +1,116 @@
+{%- liquid
+  capture content
+    for block in section.blocks
+      render block
+    endfor
+  endcapture
+
+  if section.settings.format_container
+    # Container class
+    assign container_class = 'featured-blog-grid' | append: ' ' | append: section.settings.container_width
+    if section.settings.color_scheme != blank
+      assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+    endif
+
+    # Container title
+    assign container_title = section.settings.title | escape
+
+    # Render format container
+    render 'format-container', class: container_class, title_class: 'h4 text-center', title: container_title, content: content
+
+  else
+    # Render without format container
+    echo content
+  endif
+-%}
+
+{% schema %}
+  {
+    "name": "Apps",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Section appearance"
+      },
+      {
+        "type": "checkbox",
+        "id": "format_container",
+        "default": true,
+        "label": "Render in format container"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "@app"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Apps"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,117 @@
+{%- capture container_content -%}
+  {%- liquid
+    case section.settings.sort
+      when 'products_high' or 'products_low'
+        assign collections = collections | sort: 'all_products_count'
+      when 'date' or 'date_reversed'
+        assign collections = collections | sort: 'published_at'
+    endcase
+
+    if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+      assign collections = collections | reverse
+    endif
+  -%}
+
+  <ul class="collection-list grid grid-cols-12 gap-x-4 gap-y-12">
+    {%- for collection in collections -%}
+      {%- if collection.all_products_count > 0 -%}
+        {%- liquid
+          assign lazy = true
+          if forloop.index <= 1
+            assign lazy = false
+          endif
+        -%}
+        <li class="col-span-6 md:col-span-4 xl:col-span-3">
+          {%- render 'collection-card',
+            collection: collection,
+            aspect_ratio: section.settings.image_ratio,
+            image_lazy: lazy
+           -%}
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endcapture -%}
+
+{%- capture container_title -%}
+  {{- section.settings.title | escape -}}
+{%- endcapture -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'format-container',
+  title: container_title,
+  title_tag: 'h1',
+  title_class: 'h3',
+  content: container_content
+-%}
+
+{% schema %}
+  {
+    "name": "Collections",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Collections"
+      },
+      {
+        "type": "select",
+        "id": "sort",
+        "options": [
+          {
+            "value": "alphabetical",
+            "label": "Alphabetically, A-Z"
+          },
+          {
+            "value": "alphabetical_reversed",
+            "label": "Alphabetically, Z-A"
+          },
+          {
+            "value": "date_reversed",
+            "label": "Date, new to old"
+          },
+          {
+            "value": "date",
+            "label": "Date, old to new"
+          },
+          {
+            "value": "products_high",
+            "label": "Product count, high to low"
+          },
+          {
+            "value": "products_low",
+            "label": "Product count, low to high"
+          }
+        ],
+        "default": "alphabetical",
+        "label": "Sort collections by:"
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "default": "1/1",
+        "label": "Image ratio",
+        "info": "To add images, [edit your collections](https://help.shopify.com/en/manual/products/collections).",
+        "options": [
+          {
+            "value": "",
+            "label": "Adapt to image"
+          },
+          {
+            "value": "3/4",
+            "label": "Portrait"
+          },
+          {
+            "value": "4/3",
+            "label": "Landscape"
+          },
+          {
+            "value": "1/1",
+            "label": "Square"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

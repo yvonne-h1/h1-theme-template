@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "addresses": {
+      "type": "main-account-addresses"
+    }
+  },
+  "order": ["addresses"]
+}

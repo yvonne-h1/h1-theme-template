@@ -1,0 +1,621 @@
+<div class="order__table text-left text-sm leading-5">
+  <div class="order__header hidden pb-6 lg:block">
+    <div class="relative grid w-full grid-cols-12 gap-x-6 gap-y-0">
+      {%- comment -%} Image heading {%- endcomment -%}
+      <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
+        <p class="sr-only">
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'image',
+            fallback: 'Image'
+          -%}
+        </p>
+      </div>
+
+      {%- comment -%} Product heading {%- endcomment -%}
+      <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
+        <p>
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'product',
+            fallback: 'Product'
+          -%}
+        </p>
+      </div>
+
+      {%- comment -%} SKU heading {%- endcomment -%}
+      <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
+        <p>
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'sku',
+            fallback: 'SKU'
+          -%}
+        </p>
+      </div>
+
+      {%- comment -%} Price heading {%- endcomment -%}
+      <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
+        <p>
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'price',
+            fallback: 'Price'
+          -%}
+        </p>
+      </div>
+
+      {%- comment -%} Quantity heading {%- endcomment -%}
+      <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
+        <p>
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'quantity',
+            fallback: 'Quantity'
+          -%}
+        </p>
+      </div>
+
+      {%- comment -%} Total heading {%- endcomment -%}
+      <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
+        <p>
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'total',
+            fallback: 'Total'
+          -%}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="order__body border-t border-t-gray-200">
+    {%- for line_item in order.line_items -%}
+      <div class="order__line relative grid w-full grid-cols-12 gap-x-6 gap-y-2 border-b border-b-[var(--border-color-default)] pb-6 pt-6 lg:gap-y-0">
+        {%- comment -%} Image heading {%- endcomment -%}
+        <div
+          class="col-span-12 lg:col-span-2"
+          id="Row{{ line_item.key }}"
+          headers="ColumnImage"
+          role="rowheader"
+          scope="row"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "product",
+              fallback: "Product"
+            -%}
+          "
+        >
+          {%- if line_item.product.url != blank -%}
+            {%- assign alt = line_item.product.title | escape -%}
+            <a href="{{ line_item.product.url }}" class="block w-14">
+              {%- render 'format-image',
+                image_object: line_item.product.featured_image,
+                lazy: true,
+                aspect_ratio: '1/1',
+                crop: 'center',
+                max_width: 56,
+                sizes: '56px',
+                alt: alt,
+                title: alt
+              -%}
+            </a>
+          {%- else -%}
+            <div class="block aspect-square w-14 bg-gray-200"></div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Product heading {%- endcomment -%}
+        <div
+          class="col-span-12 lg:col-span-2"
+          headers="Row{{ line_item.key }} ColumnProduct"
+          headers="ColumnProduct"
+          role="rowheader"
+          scope="row"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "product",
+              fallback: "Product"
+            -%}
+          "
+        >
+          <p class="text-sm font-bold leading-5">
+            {{ line_item.title }}
+          </p>
+
+          {%- assign property_size = line_item.properties | size -%}
+          {%- unless line_item.selling_plan_allocation == null and property_size == 0 -%}
+            <div class="properties">
+              {%- unless line_item.selling_plan_allocation == null -%}
+                <span>
+                  {{ line_item.selling_plan_allocation.selling_plan.name }}
+                </span>
+              {%- endunless -%}
+              {%- if property_size != 0 -%}
+                {%- for property in line_item.properties -%}
+                  {% assign property_first_char = property.first | slice: 0 %}
+                  {%- if property.last != blank and property_first_char != '_' -%}
+                    <span>
+                      {{ property.first }}:&nbsp;
+                      {%- if property.last contains '/uploads/' -%}
+                        <a href="{{ property.last }}">
+                          {{ property.last | split: '/' | last }}
+                        </a>
+                      {%- else -%}
+                        {{ property.last }}
+                      {%- endif -%}
+                    </span>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          {%- endunless -%}
+
+          {%- if line_item.line_level_discount_allocations != blank -%}
+            <ul
+              aria-label="
+                {%- render "format-translation",
+                  namespace: "customer.order",
+                  key: "discount",
+                  fallback: "Discount"
+                -%}
+              "
+            >
+              {%- for discount_allocation in line_item.line_level_discount_allocations -%}
+                <li>
+                  {{- discount_allocation.discount_application.title }} (-
+                  {{- discount_allocation.amount | money -}}
+                  )
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} SKU heading {%- endcomment -%}
+        <div
+          class="col-span-12 lg:col-span-2"
+          headers="Row{{ line_item.key }} ColumnSku"
+          role="cell"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "sku",
+              fallback: "SKU"
+            -%}
+          "
+        >
+          <p class="flex gap-2">
+            <span class="inline-block lg:hidden">
+              {%- render 'format-translation',
+                namespace: 'customer.order',
+                key: 'sku',
+                fallback: 'SKU'
+              -%}
+            </span>
+            {{ line_item.sku }}
+          </p>
+        </div>
+
+        {%- comment -%} Price heading {%- endcomment -%}
+        <div
+          class="col-span-12 lg:col-span-2"
+          headers="Row{{ line_item.key }} ColumnPrice"
+          role="cell"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "price",
+              fallback: "Price"
+            -%}
+          "
+        >
+          <p class="flex gap-2">
+            <span class="inline-block lg:hidden">
+              {%- render 'format-translation',
+                namespace: 'customer.order',
+                key: 'price',
+                fallback: 'Price'
+              -%}
+            </span>
+            {% comment %} class="lg:pt-6 lg:pb-6 lg:pl-0 lg:pr-14" {% endcomment %}
+            {%- if line_item.original_price != line_item.final_price
+              or line_item.unit_price_measurement
+            -%}
+              <dl>
+                {%- if line_item.original_price != line_item.final_price -%}
+                  <dt>
+                    <span class="sr-only">
+                      {%- render 'format-translation',
+                        namespace: 'products.product.price',
+                        key: 'regular_price',
+                        fallback: 'Regular price'
+                      -%}
+                    </span>
+                  </dt>
+                  <dd>
+                    <s>{{ line_item.original_price | money }}</s>
+                  </dd>
+                  <dt>
+                    <span class="sr-only">
+                      {%- render 'format-translation',
+                        namespace: 'products.product.price',
+                        key: 'sale_price',
+                        fallback: 'Sale price'
+                      -%}
+                    </span>
+                  </dt>
+                  <dd>
+                    <span>{{ line_item.final_price | money }}</span>
+                  </dd>
+                {%- else -%}
+                  <dt>
+                    <span class="sr-only">
+                      {%- render 'format-translation',
+                        namespace: 'products.product.price',
+                        key: 'regular_price',
+                        fallback: 'Regular price'
+                      -%}
+                    </span>
+                  </dt>
+                  <dd>
+                    {{ line_item.original_price | money }}
+                  </dd>
+                {%- endif -%}
+                {%- if line_item.unit_price_measurement -%}
+                  <dt>
+                    <span class="sr-only">
+                      {%- render 'format-translation',
+                        namespace: 'products.product.price',
+                        key: 'unit_price',
+                        fallback: 'Unit price'
+                      -%}
+                    </span>
+                  </dt>
+                  <dd>
+                    <span>
+                      {%- capture unit_price_separator -%}
+                        <span aria-hidden="true">/</span>
+                        <span class="sr-only">
+                          {%-
+                            render "format-translation",
+                            namespace: "accessibility",
+                            key: "unit_price_separator",
+                            fallback: "per"
+                          -%}
+                          &nbsp;
+                        </span>
+                      {%- endcapture -%}
+                      {%- capture unit_price_base_unit -%}
+                        {%- if line_item.unit_price_measurement.reference_value != 1 -%}
+                          {{- line_item.unit_price_measurement.reference_value -}}
+                        {%- endif -%}
+                        {{ line_item.unit_price_measurement.reference_unit }}
+                      {%- endcapture -%}
+                      <span data-unit-price>{{ line_item.unit_price | money }}</span>
+                      {{- unit_price_separator -}}
+                      {{- unit_price_base_unit -}}
+                    </span>
+                  </dd>
+                {%- endif -%}
+              </dl>
+            {%- else -%}
+              <span>
+                {{- line_item.final_price | money -}}
+              </span>
+            {%- endif -%}
+          </p>
+        </div>
+
+        {%- comment -%} Quantity heading {%- endcomment -%}
+        <div
+          class="col-span-12 lg:col-span-2"
+          headers="Row{{ line_item.key }} ColumnQuantity"
+          role="cell"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "quantity",
+              fallback: "Quantity"
+            -%}
+          "
+        >
+          <p class="flex gap-2">
+            <span class="inline-block lg:hidden">
+              {%- render 'format-translation',
+                namespace: 'customer.order',
+                key: 'quantity',
+                fallback: 'Quantity'
+              -%}
+            </span>
+            {{- line_item.quantity -}}
+          </p>
+        </div>
+
+        {%- comment -%} Total heading {%- endcomment -%}
+        <div
+          class="col-span-12 lg:col-span-2"
+          headers="Row{{ line_item.key }} ColumnTotal"
+          role="cell"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "total",
+              fallback: "Total"
+            -%}
+          "
+        >
+          <p class="flex gap-2">
+            <span class="inline-block lg:hidden">
+              {%- render 'format-translation',
+                namespace: 'customer.order',
+                key: 'total',
+                fallback: 'Total'
+              -%}
+            </span>
+            {%- if line_item.original_line_price != line_item.final_line_price -%}
+              <dl>
+                <dt>
+                  <span class="sr-only">
+                    {%- render 'format-translation',
+                      namespace: 'products.product.price',
+                      key: 'regular_price',
+                      fallback: 'Regular price'
+                    -%}
+                  </span>
+                </dt>
+                <dd>
+                  <s>{{ line_item.original_line_price | money }}</s>
+                </dd>
+                <dt>
+                  <span class="sr-only">
+                    {%- render 'format-translation',
+                      namespace: 'products.product.price',
+                      key: 'sale_price',
+                      fallback: 'Sale price'
+                    -%}
+                  </span>
+                </dt>
+                <dd>
+                  <span>{{ line_item.final_line_price | money }}</span>
+                </dd>
+              </dl>
+            {%- else -%}
+              {{ line_item.original_line_price | money }}
+            {%- endif -%}
+          </p>
+        </div>
+
+        {%- comment -%} Fulfillment {%- endcomment -%}
+        {%- if line_item.fulfillment -%}
+          <div
+            class="col-span-12 mt-1 lg:col-span-8"
+            headers="Row{{ line_item.key }} ColumnFulfillment"
+            role="cell"
+            data-label="
+              {%- render "format-translation",
+                namespace: "customer.order",
+                key: "fulfillment_status",
+                fallback: "Fulfillment status"
+              -%}
+            "
+          >
+            {% comment %} class="pt-6 pb-6 pl-0 pr-4 lg:pr-14" {% endcomment %}
+            {%- assign created_at = line_item.fulfillment.created_at | time_tag: format: 'date' -%}
+            <p class="flex flex-wrap gap-x-2 text-xs">
+              <span>{{ 'customer.order.fulfilled_at_html' | t: date: created_at }}</span>
+              {%- if line_item.fulfillment.tracking_url -%}
+                <a href="{{ line_item.fulfillment.tracking_url }}">
+                  {%- render 'format-translation',
+                    namespace: 'customer.order',
+                    key: 'track_shipment',
+                    fallback: 'Tracking'
+                  -%}
+                </a>
+              {%- endif -%}
+              <span>
+                {{ line_item.fulfillment.tracking_company }}
+                {%- if line_item.fulfillment.tracking_number -%}
+                  #{{ line_item.fulfillment.tracking_number }}
+                {%- endif -%}
+              </span>
+            </p>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div class="order__footer grid grid-cols-1 gap-y-2 pt-6">
+    {%- comment -%} Subtotal {%- endcomment -%}
+    <div
+      class="grid grid-cols-12"
+      headers="RowSubtotal"
+      role="cell"
+      data-label="
+        {%- render "format-translation",
+          namespace: "customer.order",
+          key: "subtotal",
+          fallback: "Subtotal"
+        -%}
+      "
+    >
+      <div class="col-span-6 lg:col-span-8 lg:col-start-3">
+        <p class="text-gray-400">
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'subtotal',
+            fallback: 'Subtotal'
+          -%}
+        </p>
+      </div>
+      <div class="col-span-6 lg:col-span-2">
+        <p>
+          {{ order.line_items_subtotal_price | money }}
+        </p>
+      </div>
+    </div>
+
+    {%- comment -%} Discounts {%- endcomment -%}
+    {%- capture discounts -%}
+      {%- for discount_application in order.cart_level_discount_applications -%}
+        <div class="col-span-6 lg:col-span-8 lg:col-start-3">
+          <p class="text-gray-400">
+            {%- render 'format-translation',
+              namespace: 'customer.order',
+              key: 'discount',
+              fallback: 'Discount'
+            -%}
+          </p>
+        </div>
+        <div
+          class="col-span-6 lg:col-span-2"
+          headers="RowDiscount"
+          role="cell"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "discount",
+              fallback: "Discount"
+            -%}
+          "
+        >
+          <p>
+            <span>-{{ discount_application.total_allocated_amount | money }}</span>
+            <span class="cart-discount">
+              {{- discount_application.title -}}
+            </span>
+          </p>
+        </div>
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- if discounts != blank -%}
+      <div
+        class="grid grid-cols-12"
+        role="row"
+      >
+        {{- discounts -}}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Shipping {%- endcomment -%}
+    {%- for shipping_method in order.shipping_methods -%}
+      <div
+        class="grid grid-cols-12"
+        data-label="
+          {%-
+            render "format-translation",
+            namespace: "customer.order",
+            key: "shipping",
+            fallback: "Shipping"
+          -%} ({{ shipping_method.title | escape }})
+        "
+      >
+        <div
+          class="col-span-6 lg:col-span-8 lg:col-start-3"
+          id="RowShipping"
+          role="rowheader"
+          scope="row"
+        >
+          <p class="text-gray-400">
+            {%- render 'format-translation',
+              namespace: 'customer.order',
+              key: 'shipping',
+              fallback: 'Shipping'
+            -%}
+            ({{ shipping_method.title }})
+          </p>
+        </div>
+        <div
+          class="col-span-6 lg:col-span-2"
+          headers="RowShipping"
+          role="cell"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "shipping",
+              fallback: "Shipping"
+            -%} ({{ shipping_method.title }})
+          "
+        >
+          <p>
+            {{ shipping_method.price | money }}
+          </p>
+        </div>
+      </div>
+    {%- endfor -%}
+
+    {%- comment -%} Tax lines {%- endcomment -%}
+    {%- for tax_line in order.tax_lines -%}
+      <div
+        class="grid grid-cols-12"
+      >
+        <div
+          class="col-span-6 lg:col-span-8 lg:col-start-3"
+          id="RowTax"
+          role="rowheader"
+          scope="row"
+        >
+          <p class="text-gray-400">
+            {%- render 'format-translation',
+              namespace: 'customer.order',
+              key: 'tax',
+              fallback: 'Tax'
+            -%}
+            ({{ tax_line.title }}
+            {{ tax_line.rate | times: 100 }}%)
+          </p>
+        </div>
+        <div
+          class="col-span-6 lg:col-span-2"
+          headers="RowTax"
+          role="cell"
+          data-label="
+            {%- render "format-translation",
+              namespace: "customer.order",
+              key: "tax",
+              fallback: "Tax"
+            -%} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)
+          "
+        >
+          <p>
+            {{ tax_line.price | money }}
+          </p>
+        </div>
+      </div>
+    {%- endfor -%}
+
+    {%- comment -%} Totals {%- endcomment -%}
+    <div
+      class="grid grid-cols-12"
+    >
+      <div class="col-span-6 lg:col-span-8 lg:col-start-3">
+        <p class="font-bold">
+          {%- render 'format-translation',
+            namespace: 'customer.order',
+            key: 'total',
+            fallback: 'Total'
+          -%}
+        </p>
+      </div>
+      <div
+        class="col-span-6 font-bold lg:col-span-2"
+        headers="RowTotal"
+        role="cell"
+        data-label="
+          {%- render "format-translation",
+            namespace: "customer.order",
+            key: "total",
+            fallback: "Total"
+          -%}
+        "
+      >
+        <p>
+          {{- order.total_price | money_with_currency -}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

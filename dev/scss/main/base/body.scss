@@ -1,0 +1,17 @@
+@layer base {
+  body {
+    @apply m-0
+      flex
+      min-h-screen
+      flex-col
+      font-body
+      text-base
+      not-italic
+      leading-normal
+      bg-color-default
+      text-color-default;
+  }
+  .content-for-layout {
+    @apply flex-auto;
+  }
+}
