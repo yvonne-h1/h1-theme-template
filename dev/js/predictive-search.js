@@ -42,7 +42,7 @@ if (!customElements.get('predictive-search')) {
         'input',
         debounce((event) => {
           this.onChange(event);
-        }, 100).bind(this)
+        }, 100).bind(this),
       );
 
       this.handleInputState();
@@ -80,28 +80,28 @@ if (!customElements.get('predictive-search')) {
      */
     getSearchResults(searchTerm) {
       fetch(
-        `${routes.predictive_search_url}?q=${searchTerm}&resources[type]=${this.predictiveSearchResources}&resources[limit]=${this.predictiveSearchMaxSize}&section_id=predictive-search`
+        `${routes.predictive_search_url}?q=${searchTerm}&resources[type]=${this.predictiveSearchResources}&resources[limit]=${this.predictiveSearchMaxSize}&section_id=predictive-search`,
       )
-        .then((response) => {
-          if (!response.ok) {
-            var error = new Error(response.status);
-            this.close();
-            throw error;
-          }
-
-          return response.text();
-        })
-        .then((text) => {
-          const resultsMarkup = new DOMParser()
-            .parseFromString(text, 'text/html')
-            .querySelector('#shopify-section-predictive-search').innerHTML;
-          this.predictiveSearchResults.innerHTML = resultsMarkup;
-          this.open();
-        })
-        .catch((error) => {
+      .then((response) => {
+        if (!response.ok) {
+          var error = new Error(response.status);
           this.close();
           throw error;
-        });
+        }
+
+        return response.text();
+      })
+      .then((text) => {
+        const resultsMarkup = new DOMParser()
+        .parseFromString(text, 'text/html')
+        .querySelector('#shopify-section-predictive-search').innerHTML;
+        this.predictiveSearchResults.innerHTML = resultsMarkup;
+        this.open();
+      })
+      .catch((error) => {
+        this.close();
+        throw error;
+      });
     }
 
     /**
@@ -128,7 +128,8 @@ if (!customElements.get('predictive-search')) {
       const state = this.input.value.length > 0 ? true : false;
       if (state) {
         this.reset.classList.remove(this.options.hiddenClass);
-      } else {
+      }
+      else {
         this.reset.classList.add(this.options.hiddenClass);
         this.close();
       }

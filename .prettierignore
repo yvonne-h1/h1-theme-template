@@ -18,7 +18,7 @@ theme/locales/*.json
 
 # Ignore all external files
 dev/assets
-dev/js/ext/*.js
+dev/js/**/*.js
 
 # Node artifact files
 node_modules

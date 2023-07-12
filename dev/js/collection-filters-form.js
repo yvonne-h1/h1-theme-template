@@ -101,7 +101,10 @@ if (!customElements.get('collection-filters-form')) {
         .then((response) => response.text())
         .then((responseText) => {
           const html = responseText;
-          this.filterData = [...this.filterData, { html, url }];
+          this.filterData = [...this.filterData, {
+            html,
+            url, 
+          }];
           this.renderFilters(html, event);
           this.renderProductGrid(html);
           this.toggleLoadingState();
@@ -147,17 +150,17 @@ if (!customElements.get('collection-filters-form')) {
     renderFilters(html, event) {
       const parsedHTML = new DOMParser().parseFromString(html, 'text/html');
       const filterOptionElements = parsedHTML.querySelectorAll(
-        '[data-collection-filters-form] [data-filter-option]'
+        '[data-collection-filters-form] [data-filter-option]',
       );
       const matchesIndex = (element) =>
         element.dataset.index === event?.target.closest('[data-filter-option]')?.dataset.index;
       const filterOptionsToRender = Array.from(filterOptionElements).filter(
-        (element) => !matchesIndex(element)
+        (element) => !matchesIndex(element),
       );
 
       filterOptionsToRender.forEach((element) => {
         document.querySelector(
-          `[data-filter-option][data-index="${element.dataset.index}"]`
+          `[data-filter-option][data-index="${element.dataset.index}"]`,
         ).innerHTML = element.innerHTML;
       });
 
@@ -197,10 +200,10 @@ if (!customElements.get('collection-filters-form')) {
       filterOptions.forEach((filterOption) =>
         filterOption.children.length === 0
           ? filterOption.closest('[data-filter-option]').classList.add('hidden')
-          : filterOption.closest('[data-filter-option]').classList.remove('hidden')
+          : filterOption.closest('[data-filter-option]').classList.remove('hidden'),
       );
 
-      // Reinit collapsibles
+      // Re-init collapsibles
       this.reInitCollapsibles();
     }
 
@@ -208,8 +211,8 @@ if (!customElements.get('collection-filters-form')) {
      * reInitCollapsibles
      */
     reInitCollapsibles() {
-      const collapsibles = this.closest('collapsible-element');
-      collapsibles.construct();
+      const collapsibles = this.closest('collapsible-component');
+      collapsibles?.construct();
     }
 
     updateTotalActiveFilterOptionsCount() {
@@ -240,9 +243,9 @@ if (!customElements.get('collection-filters-form')) {
      */
     updateURLHash(searchParams) {
       history.pushState(
-        { searchParams },
+        {searchParams},
         '',
-        `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`
+        `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`,
       );
     }
 
@@ -267,7 +270,7 @@ if (!customElements.get('price-range')) {
     constructor() {
       super();
       this.querySelectorAll('input').forEach((element) =>
-        element.addEventListener('change', this.onRangeChange.bind(this))
+        element.addEventListener('change', this.onRangeChange.bind(this)),
       );
 
       this.setMinAndMaxValues();
@@ -317,8 +320,8 @@ if (!customElements.get('filter-remove')) {
   customElements.define('filter-remove', OptionRemove);
 }
 
-if (!customElements.get('collection-switch')) {
-  class CollectionSwitch extends HTMLElement {
+if (!customElements.get('collection-view')) {
+  class CollectionView extends HTMLElement {
     constructor() {
       super();
       this.CollectionFiltersForm = document.querySelector('collection-filters-form');
@@ -357,5 +360,5 @@ if (!customElements.get('collection-switch')) {
       button.classList.add('opacity-100');
     }
   }
-  customElements.define('collection-switch', CollectionSwitch);
+  customElements.define('collection-view', CollectionView);
 }

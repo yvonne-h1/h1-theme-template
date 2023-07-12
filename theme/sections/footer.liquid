@@ -33,7 +33,7 @@
               {{ block.shopify_attributes }}
             >
               {%- comment -%} Create collapsible group for mobile {%- endcomment -%}
-              <collapsible-element class="collapsible">
+              <collapsible-component class="collapsible">
                 <div class="group" data-collapsible-group>
                   {%- comment -%} Output menu header and collapsilbe tirrger {%- endcomment -%}
                   {%- if block.settings.title != blank -%}
@@ -94,7 +94,7 @@
                     {%- endif -%}
                   </div>
                 </div>
-              </collapsible-element>
+              </collapsible-component>
             </div>
 
             {%- comment -%} Free text {%- endcomment -%}
@@ -329,7 +329,6 @@
   <div class="block h-[7.75rem] md:hidden"></div>
 {%- endif -%}
 
-<script src="{{ 'footer.js' | asset_url }}" defer></script>
 {%- if section.settings.enable_country_selector or section.settings.enable_language_selector -%}
   <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}

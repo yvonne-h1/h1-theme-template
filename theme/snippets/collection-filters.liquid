@@ -12,7 +12,7 @@
   id="main-collection-filters"
   data-id="{{ section.id }}"
 >
-  <collapsible-element>
+  <collapsible-component>
     <collection-filters-form>
       <form
         id="CollectionFiltersForm"
@@ -20,7 +20,7 @@
         data-collection-filters-form
       >
         {%- comment -%} Shadow collection filter overlay {%- endcomment -%}
-        <toggle-element-class
+        <class-toggle-component
           data-options='
             {
               "toggleClass": "filter-is-open"
@@ -28,13 +28,13 @@
           '
           class="filter__backdrop backdrop group-[.filter-is-open]/body:backdrop--active z-modal-backdrop"
         >
-        </toggle-element-class>
+        </class-toggle-component>
 
         {%- comment -%} The collection filter drawer. {%- endcomment -%}
         <div class="filter__drawer invisible fixed bottom-0 right-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto text-sm leading-5 opacity-0 transition-all bg-color-default group-[.filter-is-open]/body:visible group-[.filter-is-open]/body:translate-x-0 group-[.filter-is-open]/body:opacity-100">
           {%- comment -%} The collection drawer header. {%- endcomment -%}
           <div class="filter__header sticky top-0 z-10 border-b border-b-[var(--border-color-default)] bg-white pb-6 pl-6 pr-6 pt-6">
-            <toggle-element-class
+            <class-toggle-component
               class="flex justify-end"
               data-options='
                 {
@@ -49,7 +49,7 @@
               >
                 {%- render 'global-icon', icon: 'close', icon_class: 'w-6' -%}
               </button>
-            </toggle-element-class>
+            </class-toggle-component>
             <div class="flex items-center justify-between gap-2">
               <h2 class="filter-options__heading text-bold m-0 text-base">
                 {%- liquid
@@ -121,7 +121,7 @@
         </div>
       </form>
     </collection-filters-form>
-  </collapsible-element>
+  </collapsible-component>
 </div>
 
 <script src="{{ 'collection-filters-form.js' | asset_url }}" defer></script>

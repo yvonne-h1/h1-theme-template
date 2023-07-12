@@ -12,16 +12,16 @@
   - menu_list: {Object} Menu liquid object (required)
 
   Usage:
-    {%- render 'menu-drawer', menu_list: linklists[section.settings.menu] -%}
+    {%- render 'mobile-menu', menu_list: linklists[section.settings.menu] -%}
 {%- endcomment -%}
 {%- if menu_list != blank -%}
   <div
-    class="menu-drawer lg:hidden"
+    class="mobile-menu lg:hidden"
     tabindex="-1"
-    data-menu-drawer
+    data-mobile-menu
   >
-    <collapsible-element
-      class="menu-drawer__inner invisible fixed bottom-0 left-0 top-0 z-offcanvas flex h-full w-full -translate-x-full flex-col overflow-x-hidden bg-white opacity-0 transition-all duration-300 text-color-default group-[.menu-drawer-is-open]/body:visible group-[.menu-drawer-is-open]/body:translate-x-0 group-[.menu-drawer-is-open]/body:opacity-100 xs:max-w-sm"
+    <collapsible-component
+      class="menu-drawer__inner invisible fixed bottom-0 left-0 top-0 z-offcanvas flex h-full w-full -translate-x-full flex-col overflow-x-hidden bg-white opacity-0 transition-all duration-300 text-color-default group-[.mobile-menu-is-open]/body:visible group-[.mobile-menu-is-open]/body:translate-x-0 group-[.mobile-menu-is-open]/body:opacity-100 xs:max-w-sm"
       data-options='
         {
           "closeSiblings": true,
@@ -30,14 +30,14 @@
       '
     >
       <div class="menu-drawer__header px-4 py-3">
-        <toggle-mobile-navigation
+        <mobile-nav-toggle
           aria-expanded="false"
           aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
           class="inline-flex h-full"
           data-options='
             {
               "closeSiblings": true,
-              "toggleClass": "menu-drawer-is-open"
+              "toggleClass": "mobile-menu-is-open"
             }
           '
         >
@@ -47,7 +47,7 @@
           >
             {%- render 'global-icon', icon: 'close', icon_class: 'w-6' -%}
           </button>
-        </toggle-mobile-navigation>
+        </mobile-nav-toggle>
       </div>
 
       <nav class="menu-drawer__content relative flex-1">
@@ -251,20 +251,20 @@
           {%- endif -%}
         </ul>
       </nav>
-    </collapsible-element>
-    <toggle-mobile-navigation
+    </collapsible-component>
+    <mobile-nav-toggle
       role="button"
       aria-expanded
       aria-controls
-      class=" menu-drawer__backdrop backdrop group-[.menu-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop lg:hidden"
+      class=" menu-drawer__backdrop backdrop group-[.mobile-menu-is-open]/body:backdrop--active z-offcanvas-backdrop lg:hidden"
       aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
       data-options='
         {
           "closeSiblings": true,
-          "toggleClass": "menu-drawer-is-open"
+          "toggleClass": "mobile-menu-is-open"
         }
       '
     >
-    </toggle-mobile-navigation>
+    </mobile-nav-toggle>
   </div>
 {%- endif -%}

@@ -1,14 +1,14 @@
 /*
-Toggle class on another element.
+  Toggle class on another element.
 
-HTML Usage:
-<toggle-element-class data-options='{}'>
-  Toggle element class button
-</toggle-element-class>
+  HTML Usage:
+  <class-toggle-component data-options='{}'>
+    <button>Click me</button>
+  </class-toggle-component>
 */
 
-if (!customElements.get('toggle-element-class')) {
-  class ToggleElementClass extends HTMLElement {
+if (!customElements.get('class-toggle-component')) {
+  class ClassToggleComponent extends HTMLElement {
     constructor() {
       super();
 
@@ -40,19 +40,17 @@ if (!customElements.get('toggle-element-class')) {
         mouseLeave: (e) => this.debouncedOnMouse(e, 'remove'),
       };
 
-      // Construct webcomponent
+      // Construct web component
       this.construct();
     }
 
     /*
-      Construct webcomponent
+      Construct web component
     */
     construct() {
       this.target = document.querySelector(this.options.target);
 
-      if (!this.target) {
-        return false;
-      }
+      if (!this.target) return false;
 
       // Click
       this.removeEventListener('click', this.reducer.click);
@@ -67,13 +65,11 @@ if (!customElements.get('toggle-element-class')) {
 
     /*
       Debounce click event
-      @param e {object}: mouseevent
+      @param e {object}: mouse event
       Called by add event listener -> reducer.
     */
     debounceClickEvent(e) {
-      if (!e) {
-        return false;
-      }
+      if (!e) return false;
       this.preventDefault(e);
       this.stopPropagation(e);
       this.toggle();
@@ -86,20 +82,18 @@ if (!customElements.get('toggle-element-class')) {
       Called by add event listener -> reducer.
     */
     debouncedOnMouse(e, type) {
-      if (!e) {
-        return false;
-      }
+      if (!e) return false;
       const debouncer = debounce((type) => {
         switch (type) {
-          case 'add':
-            this.add();
-            break;
-          case 'remove':
-            this.remove();
-            break;
-          default:
-            this.toggle();
-            break;
+        case 'add':
+          this.add();
+          break;
+        case 'remove':
+          this.remove();
+          break;
+        default:
+          this.toggle();
+          break;
         }
       }, this.options.hoverDelay);
       debouncer(type);
@@ -120,7 +114,7 @@ if (!customElements.get('toggle-element-class')) {
     }
 
     add() {
-      const { toggleClass, toggleTriggerClass } = this.options;
+      const {toggleClass, toggleTriggerClass} = this.options;
       if (this.target) {
         this.target.classList.add(toggleClass);
       }
@@ -134,7 +128,7 @@ if (!customElements.get('toggle-element-class')) {
     }
 
     remove() {
-      const { toggleClass, toggleTriggerClass } = this.options;
+      const {toggleClass, toggleTriggerClass} = this.options;
       if (this.target) {
         this.target.classList.remove(toggleClass);
       }
@@ -148,19 +142,18 @@ if (!customElements.get('toggle-element-class')) {
     }
 
     toggle() {
-      const { toggleClass } = this.options;
-      if (!this.target) {
-        return false;
-      }
+      const {toggleClass} = this.options;
+      if (!this.target) return false;
       if (!this.target.classList.contains(toggleClass)) {
         this.add();
-      } else {
+      }
+      else {
         this.remove();
       }
     }
   }
 
-  window.ToggleElementClass = ToggleElementClass;
+  window.ClassToggleComponent = ClassToggleComponent;
 
-  customElements.define('toggle-element-class', ToggleElementClass);
+  customElements.define('class-toggle-component', ClassToggleComponent);
 }

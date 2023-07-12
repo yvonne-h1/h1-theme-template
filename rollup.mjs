@@ -85,7 +85,7 @@ const config = {
  * Define Rollup, Eslint, Terser & scss options
  */
 const eslintOptions = {
-  fix: false,
+  fix: true,
   throwOnError: false,
   throwOnWarning: false,
   include: [...config.js.files, ...config.js.modules],

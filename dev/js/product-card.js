@@ -33,7 +33,9 @@
           slidesPerView: 1,
           direction: 'horizontal',
           breakpoints: {
-            768: { allowTouchMove: false },
+            768: {
+              allowTouchMove: false, 
+            },
           },
         };
 
@@ -55,7 +57,8 @@
         let windowWidth = window.innerWidth;
         if (windowWidth < 768) {
           this.querySelectorAll('button').forEach((button) => button.classList.remove('hidden'));
-        } else if (this.swiperInstance) {
+        }
+        else if (this.swiperInstance) {
           this.querySelectorAll('button').forEach((button) => button.classList.add('hidden'));
         }
       }

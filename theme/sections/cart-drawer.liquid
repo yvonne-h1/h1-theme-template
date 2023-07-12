@@ -8,7 +8,7 @@
 
   <cart-drawer class="cart-drawer" data-cart-drawer>
     {%- comment -%} Backdrop {%- endcomment -%}
-    <toggle-element-class
+    <class-toggle-component
       role="button"
       class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop"
       aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
@@ -17,7 +17,7 @@
           "toggleClass": "cart-drawer-is-open"
         }
       '
-    ></toggle-element-class>
+    ></class-toggle-component>
 
     {%- comment -%} Cart drawer {%- endcomment -%}
     <div

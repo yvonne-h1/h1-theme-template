@@ -30,7 +30,7 @@
     Load interface snippets
   endcomment
   render 'search-modal', max_results: settings.predictive_search_max_results_per_type
-  render 'menu-drawer', menu_list: menu_list
+  render 'mobile-menu', menu_list: menu_list
 -%}
 
 {%- comment -%}
@@ -47,8 +47,7 @@
 
 {%- comment -%} The shadow for when the header is open state. {%- endcomment -%}
 <div
-  class="header__backdrop backdrop  group-[.header-is-open]/body:backdrop--active z-10"
-></div>
+  class="header__backdrop backdrop  group-[.header-is-open]/body:backdrop--active z-10"></div>
 
 {%- comment -%}
   The header always relative of absolute based on the is transparent and on index page setting. The whole section is sticky for better native and sticky scroll performance.
@@ -60,29 +59,28 @@
   endif
 %}
 
-<sticky-header
+<header-component
   id="header"
   class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.header-is-open]/body:duration-0 group-[.header-is-open]/body:bg-color-default group-[.header-is-open]/body:text-color-default {{ sticky_header_classes }}"
-  data-header
->
+  data-header>
   <div class="header-nav site-center site-spacing-side grid grid-cols-12 items-center gap-base">
     {%- comment -%} Toggle for mobile navigation {%- endcomment -%}
     <div class="col-span-4 flex pb-3 pt-3 lg:hidden">
       {%- if menu_list != blank -%}
-        <toggle-mobile-navigation
-          role="button"
+        <mobile-nav-toggle
           aria-expanded="false"
           aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
           class="menu-drawer__toggle-button -ml-3 block p-3 px-3 states:text-primary"
           data-options='
             {
               "closeSiblings": true,
-              "toggleClass": "menu-drawer-is-open"
+              "toggleClass": "mobile-menu-is-open"
             }
-          '
-        >
-          {%- render 'global-icon', icon: 'hamburger', icon_class: 'w-6' -%}
-        </toggle-mobile-navigation>
+          '>
+          <button type="button">
+            {%- render 'global-icon', icon: 'hamburger', icon_class: 'w-6' -%}
+          </button>
+        </mobile-nav-toggle>
       {%- endif -%}
     </div>
 
@@ -107,7 +105,7 @@
     {%- comment -%} Search, account and cart items. {%- endcomment -%}
     {%- render 'header-icon-list', section: section -%}
   </div>
-</sticky-header>
+</header-component>
 
 {%- comment -%} Import scripts for this section {%- endcomment -%}
 <script src="{{ 'header.js' | asset_url }}" defer></script>

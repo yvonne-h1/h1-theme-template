@@ -1,4 +1,4 @@
-class CollapsibleHeader extends Collapsible {
+class HeaderCollapsibleComponent extends Collapsible {
   constructor() {
     super();
     this.header = this.closest('[data-header]');
@@ -30,7 +30,7 @@ class CollapsibleHeader extends Collapsible {
     if (event?.code.toUpperCase() !== 'ESCAPE') {
       return;
     }
-    const { toggleClass } = this.options;
+    const {toggleClass} = this.options;
     let group = this.querySelector(`[data-collapsible-group].${toggleClass}`);
     if (group) {
       this.close(group);
@@ -83,11 +83,13 @@ class CollapsibleHeader extends Collapsible {
       // set header open
       document.body.classList.add('header-is-open');
       this.inverse && this.header.classList.add('header-inverse-solid');
-    } else {
+    }
+    else {
       // set header closed if all menu items are closed
       let close = true;
+      const {toggleClass} = this.options;
       this.groups.forEach((group) => {
-        if (group.classList.contains(this.options.toggleClass)) {
+        if (group.classList.contains(toggleClass)) {
           close = false;
         }
       });
@@ -99,7 +101,7 @@ class CollapsibleHeader extends Collapsible {
   }
 }
 
-class ToggleMobileNavigation extends ToggleElementClass {
+class MobileNavToggle extends ClassToggleComponent {
   constructor() {
     super();
 
@@ -127,13 +129,13 @@ class ToggleMobileNavigation extends ToggleElementClass {
   }
 
   onKeyUp(event) {
-    if (!document.body.classList.contains('menu-drawer-is-open')) {
+    if (!document.body.classList.contains('mobile-menu-is-open')) {
       return;
     }
     if (event?.code.toUpperCase() !== 'ESCAPE') {
       return;
     }
-    const { toggleClass } = this.options;
+    const {toggleClass} = this.options;
     if (this.target?.classList.contains(toggleClass)) {
       this.remove();
     }
@@ -151,12 +153,12 @@ class ToggleMobileNavigation extends ToggleElementClass {
   }
 
   closeAllSibblings() {
-    const collapsibles = this.target.querySelector('collapsible-element');
+    const collapsibles = this.target.querySelector('collapsible-component');
     collapsibles.closeAll();
   }
 }
 
-class ToggleSearch extends ToggleElementClass {
+class SearchToggle extends ClassToggleComponent {
   constructor() {
     super();
   }
@@ -167,9 +169,6 @@ class ToggleSearch extends ToggleElementClass {
     // elements
     this.header = this.closest('[data-header]');
 
-    // options
-    const { toggleClass, target } = this.options;
-
     // key up escape
     document.addEventListener('keyup', (event) => {
       this.onKeyUp(event);
@@ -178,7 +177,7 @@ class ToggleSearch extends ToggleElementClass {
     // Remove classes incase the header navigation drawer is open.
     this.addEventListener('click', () => {
       document.body.classList.remove('header-is-open');
-      document.body.classList.remove('menu-drawer-is-open');
+      document.body.classList.remove('mobile-menu-is-open');
       // Focus on input element if provided
       if (this.options.focusTarget) {
         document.querySelector(this.options.focusTarget)?.focus();
@@ -193,7 +192,7 @@ class ToggleSearch extends ToggleElementClass {
     if (event?.code.toUpperCase() !== 'ESCAPE') {
       return;
     }
-    const { toggleClass } = this.options;
+    const {toggleClass} = this.options;
     if (this.target?.classList.contains(toggleClass)) {
       this.remove();
     }
@@ -218,7 +217,7 @@ class ToggleSearch extends ToggleElementClass {
   }
 }
 
-class StickyHeader extends HTMLElement {
+class HeaderComponent extends HTMLElement {
   constructor() {
     super();
 
@@ -228,10 +227,10 @@ class StickyHeader extends HTMLElement {
     this.headerWrapper = document.querySelector('.shopify-section-group-header-group');
     this.announcementBar = document.querySelector('#shopify-section-announcement-bar');
     this.headerInverse = !!this.headerElement.classList.contains('header--inverse');
-    this.headerNav = this.querySelector('collapsible-header');
-    this.mobileNav = this.querySelector('toggle-mobile-navigation');
+    this.headerNav = this.querySelector('header-collapsible-component');
+    this.mobileNavToggle = this.querySelector('mobile-nav-toggle');
     this.search = this.querySelector('[data-header-search]');
-    this.searchToggle = this.querySelector('toggle-search');
+    this.searchToggle = this.querySelector('search-toggle');
     this.productInfo = document.querySelector('[data-product-info]');
 
     if (this.headerWrapper) {
@@ -253,22 +252,20 @@ class StickyHeader extends HTMLElement {
       // scroll event
       this.raf = null; // Safe request animation frame
       (this.timer = null), // Safe scroll timer
-        window.addEventListener(
-          'scroll',
-          () => {
-            clearTimeout(this.timer);
-            if (!this.raf) {
-              // A request animation frame is used to animate on max 60fps.
-              this.raf = requestAnimationFrame(this.scrollAnimation.bind(this));
-            }
-            this.timer = setTimeout(() => {
-              // Stop animation, cancel request animation frame
-              cancelAnimationFrame(this.raf);
-              this.raf = null;
-            }, 50);
-          },
-          false
-        );
+      window.addEventListener('scroll', () => {
+        clearTimeout(this.timer);
+        if (!this.raf) {
+          // A request animation frame is used to animate on max 60fps.
+          this.raf = requestAnimationFrame(this.scrollAnimation.bind(this));
+        }
+        this.timer = setTimeout(() => {
+          // Stop animation, cancel request animation frame
+          cancelAnimationFrame(this.raf);
+          this.raf = null;
+        }, 50);
+      },
+      false,
+      );
     }
   }
 
@@ -278,11 +275,14 @@ class StickyHeader extends HTMLElement {
     if (!document.body.classList.contains('header-is-open')) {
       if (scrollTop + window.innerHeight > document.body.clientHeight) {
         this.hide();
-      } else if (scrollTop > this.currentScrollTop && scrollTop > this.scrollOffset) {
+      }
+      else if (scrollTop > this.currentScrollTop && scrollTop > this.scrollOffset) {
         this.hide();
-      } else if (scrollTop <= this.headerStart) {
+      }
+      else if (scrollTop <= this.headerStart) {
         this.revealTop();
-      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerStart) {
+      }
+      else if (scrollTop < this.currentScrollTop && scrollTop > this.headerStart) {
         this.reveal();
       }
     }
@@ -319,23 +319,17 @@ class StickyHeader extends HTMLElement {
   }
 
   closeHeaderNav() {
-    if (!this.headerNav || window.innerWidth < 768) {
-      return false;
-    }
+    if (!this.headerNav || window.innerWidth < 768) return false;
     this.headerNav.closeAll();
   }
 
   closeMobileNav() {
-    if (!this.mobileNav) {
-      return false;
-    }
-    this.mobileNav.remove();
+    if (!this.mobileNavToggle) return false;
+    this.mobileNavToggle.remove();
   }
 
   closeSearch() {
-    if (!this.search || !this.searchToggle) {
-      return false;
-    }
+    if (!this.search || !this.searchToggle) return false;
     if (this.search.classList.contains('header__search--is-active')) {
       this.searchToggle.remove();
     }
@@ -347,24 +341,25 @@ class StickyHeader extends HTMLElement {
     }
     if (pos == 'down') {
       this.productInfo.classList.replace('top-0', 'top-[4.5rem]');
-    } else {
+    }
+    else {
       this.productInfo.classList.replace('top-[4.5rem]', 'top-0');
     }
   }
 }
 
-if (!customElements.get('collapsible-header')) {
-  customElements.define('collapsible-header', CollapsibleHeader);
+if (!customElements.get('header-collapsible-component')) {
+  customElements.define('header-collapsible-component', HeaderCollapsibleComponent);
 }
 
-if (!customElements.get('toggle-mobile-navigation')) {
-  customElements.define('toggle-mobile-navigation', ToggleMobileNavigation);
+if (!customElements.get('mobile-nav-toggle')) {
+  customElements.define('mobile-nav-toggle', MobileNavToggle);
 }
 
-if (!customElements.get('toggle-search')) {
-  customElements.define('toggle-search', ToggleSearch);
+if (!customElements.get('search-toggle')) {
+  customElements.define('search-toggle', SearchToggle);
 }
 
-if (!customElements.get('sticky-header')) {
-  customElements.define('sticky-header', StickyHeader);
+if (!customElements.get('header-component')) {
+  customElements.define('header-component', HeaderComponent);
 }

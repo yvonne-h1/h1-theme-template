@@ -15,10 +15,50 @@
   },
   "plugins": [],
   "rules": {
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "object-curly-newline": [
+      "warn",
+      {
+        "ObjectExpression": "always",
+        "ObjectPattern": { "multiline": true },
+        "ImportDeclaration": "never",
+        "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+      }
+    ],
+    "object-property-newline": "warn",
+    "object-curly-spacing": ["warn", "always", { "arraysInObjects": false }],
+    "array-bracket-spacing": ["warn", "never", { "objectsInArrays": true }],
+    "brace-style": ["warn", "stroustrup", { "allowSingleLine": false }],
+    "no-extra-boolean-cast": "off",
     "no-undef": "off",
-    "no-unused-vars": "off",
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "all"
+      }
+    ],
+    "block-spacing": ["error", "never"],
     "no-debugger": "warn",
-    "no-extra-boolean-cast": "off"
+    "quotes": ["error", "single"],
+    "indent": ["warn", 2, { "MemberExpression": 1 }],
+    "comma-dangle": ["error", "always-multiline"],
+    "semi": ["error", "always"],
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1
+      }
+    ],
+    "no-multi-spaces": [
+      "error",
+      {
+        "exceptions": {
+          "VariableDeclarator": true,
+          "ImportDeclaration": true
+        }
+      }
+    ],
+    "no-irregular-whitespace": "warn"
   },
   "ignorePatterns": ["dev/js/ext/*.js"]
 }

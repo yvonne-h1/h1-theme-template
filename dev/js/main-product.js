@@ -7,9 +7,7 @@ if (!customElements.get('product-detail-swiper')) {
 
       this.swiperElement = this.querySelector('[data-product-detail-swiper]');
 
-      this.swiperOptions = {
-        direction: 'horizontal',
-      };
+      this.swiperOptions = {direction: 'horizontal'};
 
       this.init();
     }
@@ -33,7 +31,7 @@ if (!customElements.get('product-info')) {
   class ProductInfo extends HTMLElement {
     constructor() {
       super();
-      this.productForm = this.querySelector('product-form');
+      this.productForm = this.querySelector('product-form-component');
       this.productFormQuantity = this.productForm?.querySelector('input[name="quantity"]');
       this.quantityInput = this.querySelector('quantity-input');
       this.quantityInputElement = this.quantityInput?.querySelector('input[name="quantity"]');

@@ -1,4 +1,6 @@
 {
+  "arrowParens": "always",
+  "bracketSameLine": true,
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "css",
   "plugins": ["@shopify/prettier-plugin-liquid", "prettier-plugin-tailwindcss"],

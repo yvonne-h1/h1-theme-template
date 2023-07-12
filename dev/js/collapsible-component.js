@@ -1,8 +1,6 @@
 /*
-Make a collapsible webcomponent
-
 HTML Usage with single group
-<collapsible-element data-options='{}'>
+<collapsible-component data-options='{}'>
   <div class="group" data-collapsible-group>
     <button
       type="button"
@@ -23,10 +21,10 @@ HTML Usage with single group
       Your content goes here.
     </div>
   </div>
-</collapsible-element>
+</collapsible-component>
 
 HTML Usage with multiple & nested groups
-<collapsible-element
+<collapsible-component
   data-options='
     {
       "closeSiblings": true
@@ -69,10 +67,10 @@ HTML Usage with multiple & nested groups
       Your content goes here.
     </div>
   </div>
-</collapsible-element>
+</collapsible-component>
 */
 
-if (!customElements.get('collapsible-element')) {
+if (!customElements.get('collapsible-component')) {
   class Collapsible extends HTMLElement {
     constructor() {
       super();
@@ -143,7 +141,7 @@ if (!customElements.get('collapsible-element')) {
         }
       });
 
-      // Trigger mouseleave on container <collapsible-element>
+      // Trigger mouseleave on container <collapsible-component>
       if (this.options.closeOnMouseleave) {
         this.removeEventListener('mouseleave', this.reducer.mouseLeaveContainer);
         this.addEventListener('mouseleave', this.reducer.mouseLeaveContainer);
@@ -320,5 +318,5 @@ if (!customElements.get('collapsible-element')) {
 
   window.Collapsible = Collapsible;
 
-  customElements.define('collapsible-element', Collapsible);
+  customElements.define('collapsible-component', Collapsible);
 }

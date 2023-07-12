@@ -10,7 +10,7 @@
 {%- endcomment -%}
 
 {%- if menu_list != blank -%}
-  <collapsible-header
+  <header-collapsible-component
     class="header__menu hidden text-center lg:col-span-8 lg:block"
     data-options='
       {
@@ -20,8 +20,7 @@
         "hoverDelay": 300,
         "closeOnMouseleave": true
       }
-    '
-  >
+    '>
     {%- comment -%} Level 1 {%- endcomment -%}
     <ul class="header__menu-list header__menu-list--level-1 flex flex-wrap justify-center">
       {%- for level_1 in menu_list.links -%}
@@ -46,8 +45,7 @@
               class="header__menu-link level-1 {{ level_1_active_class }} level-1 relative flex items-center whitespace-nowrap px-4 py-6 text-left text-sm font-bold leading-6 text-inherit no-underline states:text-primary states:no-underline"
               {% if level_1.current %}
                 aria-current="page"
-              {% endif %}
-            >
+              {% endif %}>
               {{- level_1.title | escape -}}
             </a>
           </li>
@@ -175,24 +173,20 @@
                   {{- images -}}
                 </li>
               {%- endif -%}
-
             {%- endif -%}
-
           {%- endcapture -%}
 
           {%- comment -%} Output level 1 and place the captured 'dropdown' 2/3 with section blocks data in there. {%- endcomment -%}
           <li
             class="header__menu-item header__menu-item--{{ dropdown_layout }} level-1 group/menu-item"
-            data-collapsible-group
-          >
+            data-collapsible-group>
             <a
               href="{{ link_1_url }}"
               class="header__menu-link {% if level_1.current %} header__menu-link--active {% endif %} level-1 relative flex items-center gap-1 whitespace-nowrap px-4 py-6 text-left text-sm font-bold leading-6 text-inherit no-underline states:text-primary states:no-underline"
               {%- if level_1.current %}
                 aria-current="page"
               {% endif %}
-              data-collapsible-trigger
-            >
+              data-collapsible-trigger>
               {{- level_1.title | escape -}}
               {%- render 'global-icon',
                 icon: 'collapsible',
@@ -201,13 +195,11 @@
             </a>
             <div
               class="header__inner-container header-menu__{{ dropdown_layout }} {% if dropdown_layout == 'single' %} {% else %} left-0 right-0 w-full {% endif %} absolute top-full hidden bg-color-default text-color-default group-[.collapsible-is-open]/menu-item:block"
-              data-collapsible-target
-            >
+              data-collapsible-target>
               <div class="header__navigation-container site-center px-8 py-12">
                 <ul
                   class="header__menu-list level-2 {% if dropdown_layout == 'single' %} {% else %} grid grid-cols-12 gap-x-4 gap-y-0{% endif %}"
-                  tabindex="-1"
-                >
+                  tabindex="-1">
                   {{- dropdown -}}
                 </ul>
               </div>
@@ -216,5 +208,5 @@
         {%- endif -%}
       {%- endfor -%}
     </ul>
-  </collapsible-header>
+  </header-collapsible-component>
 {%- endif -%}

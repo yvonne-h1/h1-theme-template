@@ -31,21 +31,18 @@ class CartNotification extends HTMLElement {
     if (hasError) {
       this.validContent.classList.add('hidden');
       this.invalidContent.classList.remove('hidden');
-    } else {
+    }
+    else {
       this.validContent.classList.remove('hidden');
       this.invalidContent.classList.add('hidden');
     }
 
     this.toggleOpenState();
 
-    this.notification.addEventListener(
-      'transitionend',
-      () => {
-        this.notification.focus();
-        trapFocus(this.notification);
-      },
-      { once: true }
-    );
+    this.notification.addEventListener('transitionend', () => {
+      this.notification.focus();
+      trapFocus(this.notification);
+    }, {once: true});
 
     document.body.addEventListener('click', this.onBodyClick);
   }
@@ -68,7 +65,7 @@ class CartNotification extends HTMLElement {
     this.getSectionsToRender().forEach((section) => {
       document.getElementById(section.id).innerHTML = this.getSectionInnerHTML(
         parsedState.sections[section.section],
-        section.selector
+        section.selector,
       );
     });
     this.open();
@@ -80,13 +77,13 @@ class CartNotification extends HTMLElement {
    */
   renderQuantityError(inventoryQuantity) {
     const errorMessageElem = this.notification.querySelector(
-      '[data-cart-notification-error-message]'
+      '[data-cart-notification-error-message]',
     );
     const inventoryQty = parseInt(inventoryQuantity) || 0;
 
     errorMessageElem.innerText = window.cartStrings.quantityError.replace(
       '[quantity]',
-      inventoryQty
+      inventoryQty,
     );
 
     this.open(true);
@@ -122,7 +119,8 @@ class CartNotification extends HTMLElement {
    * @returns
    */
   getSectionInnerHTML(html, selector = '.shopify-section') {
-    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
+    return new DOMParser().parseFromString(html, 'text/html')
+    .querySelector(selector).innerHTML;
   }
 
   /**

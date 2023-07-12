@@ -105,7 +105,7 @@
           {%- when 'collapsible_tab' -%}
 
             {%- if block.settings.content != blank or block.settings.page.content != nil -%}
-              <collapsible-element class="product__collapsible collapsible group block  border-t border-color-default last:border-b first-of-type:mt-8" data-collapsible-group {{ block.shopify_attributes }}>
+              <collapsible-component class="product__collapsible collapsible group block  border-t border-color-default last:border-b first-of-type:mt-8" data-collapsible-group {{ block.shopify_attributes }}>
                 <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-left text-sm font-bold leading-5" data-collapsible-trigger>
                   <span class="flex w-full justify-items-start gap-2">
                     {%- if block.settings.icon != blank -%}
@@ -122,7 +122,7 @@
                     {{- block.settings.page.content -}}
                   </div>
                 </div>
-              </collapsible-element>
+              </collapsible-component>
             {%- endif -%}
 
           {%- comment -%} Quantity input {%- endcomment -%}
@@ -360,7 +360,7 @@
             -%}
 
             <div class="my-4 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
-              <product-form class="product-form mt-4 block">
+              <product-form-component class="product-form mt-4 block">
                 {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
                   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
                   <input type="hidden" name="quantity" min="1" value="1" readonly>
@@ -404,7 +404,7 @@
                     {%- endif -%}
                   </div>
                 {%- endform -%}
-              </product-form>
+              </product-form-component>
             </div>
           {%- endcase -%}
         {%- endfor -%}

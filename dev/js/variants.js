@@ -12,7 +12,8 @@ class VariantSelects extends HTMLElement {
     if (!this.currentVariant) {
       this.toggleAddButton(true, '', true);
       this.setUnavailable();
-    } else {
+    }
+    else {
       this.updateMedia();
       this.updateURL();
       this.updateVariantInput();
@@ -46,14 +47,14 @@ class VariantSelects extends HTMLElement {
         detail: {
           variant: this.currentVariant,
         },
-      })
+      }),
     );
   }
 
   updateMedia() {
     if (!this.currentVariant || !this.currentVariant?.featured_media) return;
     const newMedia = document.querySelector(
-      `[data-media-id="${this.dataset.section}-${this.currentVariant.featured_media.id}"]`
+      `[data-media-id="${this.dataset.section}-${this.currentVariant.featured_media.id}"]`,
     );
     if (!newMedia) return;
     const parent = newMedia.parentElement;
@@ -65,23 +66,26 @@ class VariantSelects extends HTMLElement {
 
   updateURL() {
     if (!this.currentVariant) return;
-    window.history.replaceState({}, '', `${this.dataset.url}?variant=${this.currentVariant.id}`);
+    window.history.replaceState({
+    }, '', `${this.dataset.url}?variant=${this.currentVariant.id}`);
   }
 
   updateVariantInput() {
     const productForms = document.querySelectorAll(
-      `#product-form-${this.dataset.section}, #product-form-installment`
+      `#product-form-${this.dataset.section}, #product-form-installment`,
     );
     productForms.forEach((productForm) => {
       const input = productForm.querySelector('input[name="id"]');
       input.value = this.currentVariant.id;
-      input.dispatchEvent(new Event('change', { bubbles: true }));
+      input.dispatchEvent(new Event('change', {
+        bubbles: true, 
+      }));
     });
   }
 
   renderProductInfo() {
     fetch(
-      `${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`
+      `${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`,
     )
       .then((response) => response.text())
       .then((responseText) => {
@@ -126,7 +130,8 @@ class VariantSelects extends HTMLElement {
     if (disable) {
       addButton.setAttribute('disabled', true);
       if (text) addButtonText.textContent = text;
-    } else {
+    }
+    else {
       addButton.removeAttribute('disabled');
       addButtonText.textContent = window.variantStrings.addToCart;
     }
@@ -212,12 +217,12 @@ class VariantRadios extends VariantSelects {
           if (variant.options[optionIndex] == value && variant.available) {
             // Create variant options, remove option based on option value
             const variantOptions = [...variant.options].filter(
-              (option, index) => index != optionIndex
+              (option, index) => index != optionIndex,
             );
 
             // Check if compare options is the same as variant options
             return variantOptions.every(
-              (item, index) => item.toLowerCase() === compareOptions[index].toLowerCase()
+              (item, index) => item.toLowerCase() === compareOptions[index].toLowerCase(),
             );
           }
 

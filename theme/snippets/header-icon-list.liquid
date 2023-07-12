@@ -23,9 +23,8 @@
     -%}
     <li
       class="icon-list__item {{ search_item_class }} {{ search_item_class_md }}"
-      data-header-search
-    >
-      <toggle-search
+      data-header-search>
+      <search-toggle
         class="flex"
         data-options='
           {
@@ -33,19 +32,17 @@
             "target": "body",
             "focusTarget": "#desktopSearchInModal"
           }
-        '
-      >
+        '>
         <button
           type="button"
           aria-expanded="false"
           aria-controls
           aria-haspopup="dialog"
           aria-label="{%- render "format-translation", namespace: "general.search", key: "search", fallback: "Search" -%}"
-          class="px-1 py-3 text-inherit states:text-primary"
-        >
+          class="px-1 py-3 text-inherit states:text-primary">
           {%- render 'global-icon', icon: 'search', icon_class: 'w-6' -%}
         </button>
-      </toggle-search>
+      </search-toggle>
     </li>
   {%- endif -%}
 
@@ -67,8 +64,7 @@
     <li class="icon-list__item {{ customer_item_class }} {{ customer_item_class_md }}">
       <a
         href="{%- if customer -%}{{- routes.account_url -}}{%- else -%}{{- routes.account_login_url -}}{%- endif -%}"
-        class="header__icon block px-1 py-3 text-inherit states:text-primary"
-      >
+        class="header__icon block px-1 py-3 text-inherit states:text-primary">
         {%- render 'global-icon', icon: 'user', icon_class: 'w-6' -%}
         <span class="sr-only">
           {%- liquid

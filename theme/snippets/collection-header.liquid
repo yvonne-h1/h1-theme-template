@@ -11,7 +11,7 @@
     {%- comment -%}
       Toggle collection layout - mobile only
     {%- endcomment -%}
-    <collection-switch class="collection-layout flex basis-1/4 md:hidden">
+    <collection-view class="collection-layout flex basis-1/4 md:hidden">
       {%- if section.settings.show_collection_layout_buttons -%}
         {%- liquid
           assign collection_view_default_class = 'collection-layout__button--active opacity-100'
@@ -42,7 +42,7 @@
           {%- render 'global-icon', icon: 'grid-single', icon_class: 'w-6' -%}
         </a>
       {%- endif -%}
-    </collection-switch>
+    </collection-view>
 
     {%- comment -%}
       Render collection title
@@ -66,7 +66,7 @@
 
     {% comment %} Collection filter button {% endcomment %}
     <div class="collection-hero__filters relative flex basis-1/4 justify-end md:basis-2/4 lg:basis-1/4">
-      <toggle-element-class
+      <class-toggle-component
         class="flex"
         data-options='
           {
@@ -96,7 +96,7 @@
             <span class="" data-filter-total-active-options></span>
           </span>
         </button>
-      </toggle-element-class>
+      </class-toggle-component>
     </div>
 
   </div>

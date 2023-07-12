@@ -61,7 +61,7 @@ if (!customElements.get('quick-shop')) {
      * @param {String} inventoryQuantity
      */
     onOptionSelect(variantId, inventoryQuantity) {
-      const productForm = this.querySelector('product-form');
+      const productForm = this.querySelector('product-form-component');
       const hiddenId = productForm.querySelector('input[name="id"]');
       const hiddenInventoryQty = productForm.querySelector('input[name="inventory_quantity"]');
       const submitButton = productForm.querySelector('[type="submit"]');

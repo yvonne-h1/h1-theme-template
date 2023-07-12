@@ -7,7 +7,7 @@ if (!customElements.get('cart-items')) {
       this.lineItemStatusElement = document.getElementById('shopping-cart-line-item-status');
       this.currentItemCount = Array.from(this.querySelectorAll('[name="updates[]"]')).reduce(
         (total, quantityInput) => total + parseInt(quantityInput.value),
-        0
+        0,
       );
 
       this.debouncedOnChange = debounce((event) => {
@@ -23,7 +23,7 @@ if (!customElements.get('cart-items')) {
       this.updateQuantity(
         event.target.dataset.index,
         event.target.value,
-        document.activeElement.getAttribute('name')
+        document.activeElement.getAttribute('name'),
       );
     }
 
@@ -57,7 +57,12 @@ if (!customElements.get('cart-items')) {
         sections_url: window.location.pathname,
       });
 
-      fetch(`${routes.cart_change_url}`, { ...fetchConfig(), ...{ body } })
+      fetch(`${routes.cart_change_url}`, {
+        ...fetchConfig(),
+        ...{
+          body,
+        },
+      })
         .then((response) => {
           return response.text();
         })
@@ -65,19 +70,20 @@ if (!customElements.get('cart-items')) {
           const parsedState = JSON.parse(state);
           this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
 
+          this.updateLiveRegions(line, parsedState.item_count);
+
           this.getSectionsToRender().forEach((section) => {
             const elementToReplace =
-              document.getElementById(section.id).querySelector(section.selector) ||
-              document.getElementById(section.id);
+            document.getElementById(section.id).querySelector(section.selector) ||
+            document.getElementById(section.id);
 
             elementToReplace.innerHTML = this.getSectionInnerHTML(
               parsedState.sections[section.section],
-              section.selector
+              section.selector,
             );
           });
-
-          this.updateLiveRegions(line, parsedState.item_count);
-          document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)?.focus();
+          document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)
+            ?.focus();
           this.disableLoading();
         })
         .catch((error) => {
@@ -91,13 +97,7 @@ if (!customElements.get('cart-items')) {
     // show error texts, should not be deleted.
     updateLiveRegions(line, itemCount) {
       if (this.currentItemCount === itemCount) {
-        document
-          .getElementById(`Line-item-error-${line}`)
-          .querySelector('.cart-item__error-text').innerHTML =
-          window.cartStrings.quantityError.replace(
-            '[quantity]',
-            document.getElementById(`Quantity-${line}`).value
-          );
+        document.getElementById(`Line-item-error-${line}`).querySelector('.cart-item__error-text').innerHTML = window.cartStrings.quantityError.replace('[quantity]',document.getElementById(`Quantity-${line}`).value);
       }
 
       this.currentItemCount = itemCount;
@@ -112,7 +112,8 @@ if (!customElements.get('cart-items')) {
     }
 
     getSectionInnerHTML(html, selector = '.shopify-section') {
-      return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
+      return new DOMParser().parseFromString(html, 'text/html')
+        .querySelector(selector).innerHTML;
     }
 
     enableLoading(line) {
@@ -152,9 +153,16 @@ if (!customElements.get('cart-note')) {
       this.addEventListener(
         'change',
         debounce((event) => {
-          const body = JSON.stringify({ note: event.target.value });
-          fetch(`${routes.cart_update_url}`, { ...fetchConfig(), ...{ body } });
-        }, 300)
+          const body = JSON.stringify({
+            note: event.target.value,
+          });
+          fetch(`${routes.cart_update_url}`, {
+            ...fetchConfig(),
+            ...{
+              body,
+            },
+          });
+        }, 300),
       );
     }
   }

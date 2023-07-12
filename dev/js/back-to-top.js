@@ -3,7 +3,10 @@ if (!customElements.get('back-to-top')) {
     constructor() {
       super();
       this.button = this.querySelector('button');
-      this.button.addEventListener('click', () => window.scroll({ top: 0, behavior: 'smooth' }));
+      this.button.addEventListener('click', () => window.scroll({
+        top: 0,
+        behavior: 'smooth', 
+      }));
     }
   }
 

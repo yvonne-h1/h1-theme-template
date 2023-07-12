@@ -15,8 +15,7 @@
 {%- capture swiper_slides -%}
   {%- for block in section.blocks -%}
     {%- if block.settings.text != blank -%}
-      <div
-        class="swiper-slide announcement-bar__slide text-center text-sm font-bold leading-5 {{ section.settings.color_scheme }}"
+      <div class="swiper-slide announcement-bar__slide text-center text-sm font-bold leading-5 {{ section.settings.color_scheme }}"
         data-swiper-slide-index="{{ forloop.index }}"
         {{ block.shopify_attributes }}
       >
@@ -60,8 +59,7 @@
   <div class="announcement-bar relative h-10 overflow-hidden">
     <{{ wrapper_element | default: 'div' }}
       role="region"
-      aria-label="{% render "format-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}"
-    >
+      aria-label="{% render "format-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}">
       <div class="swiper" data-swiper {{ swiper_options }}>
         <div class="swiper-wrapper">
           {{ swiper_slides }}
