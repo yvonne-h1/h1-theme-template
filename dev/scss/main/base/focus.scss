@@ -3,17 +3,19 @@
     Focus ring - default (with offset)
   */
   *:focus-visible {
-    @apply outline outline-1 outline-offset-0 outline-accent;
+    @apply outline outline-dashed  outline-offset-0 outline-primary-500;
   }
 
   /* Fallback - for browsers that don't support :focus-visible, a fallback is set for :focus */
-  *:focus {
-    @apply outline outline-1 outline-offset-0 outline-accent;
+  @supports not selector(:focus-visible) {
+    *:focus {
+      @apply outline outline-dashed  outline-offset-0 outline-primary-500;
+    }
   }
 
-  /* Negate the fallback side-effect for browsers that support :focus-visible */
-  *:focus:not(:focus-visible) {
-    @apply shadow-none outline-0;
+  ::selection {
+    color: var(--color-white);
+    background: var(--color-primary-500);
   }
 
   /* Dangerous for a11y - Use with care */

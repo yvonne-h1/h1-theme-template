@@ -166,7 +166,7 @@
               {%- for discount_allocation in line_item.line_level_discount_allocations -%}
                 <li>
                   {{- discount_allocation.discount_application.title }} (-
-                  {{- discount_allocation.amount | money -}}
+                  {{- discount_allocation.amount | money_with_currency -}}
                   )
                 </li>
               {%- endfor -%}
@@ -236,7 +236,7 @@
                     </span>
                   </dt>
                   <dd>
-                    <s>{{ line_item.original_price | money }}</s>
+                    <s>{{ line_item.original_price | money_with_currency }}</s>
                   </dd>
                   <dt>
                     <span class="sr-only">
@@ -248,7 +248,7 @@
                     </span>
                   </dt>
                   <dd>
-                    <span>{{ line_item.final_price | money }}</span>
+                    <span>{{ line_item.final_price | money_with_currency }}</span>
                   </dd>
                 {%- else -%}
                   <dt>
@@ -261,7 +261,7 @@
                     </span>
                   </dt>
                   <dd>
-                    {{ line_item.original_price | money }}
+                    {{ line_item.original_price | money_with_currency }}
                   </dd>
                 {%- endif -%}
                 {%- if line_item.unit_price_measurement -%}
@@ -294,7 +294,7 @@
                         {%- endif -%}
                         {{ line_item.unit_price_measurement.reference_unit }}
                       {%- endcapture -%}
-                      <span data-unit-price>{{ line_item.unit_price | money }}</span>
+                      <span data-unit-price>{{ line_item.unit_price | money_with_currency }}</span>
                       {{- unit_price_separator -}}
                       {{- unit_price_base_unit -}}
                     </span>
@@ -303,7 +303,7 @@
               </dl>
             {%- else -%}
               <span>
-                {{- line_item.final_price | money -}}
+                {{- line_item.final_price | money_with_currency -}}
               </span>
             {%- endif -%}
           </p>
@@ -367,7 +367,7 @@
                   </span>
                 </dt>
                 <dd>
-                  <s>{{ line_item.original_line_price | money }}</s>
+                  <s>{{ line_item.original_line_price | money_with_currency }}</s>
                 </dd>
                 <dt>
                   <span class="sr-only">
@@ -379,11 +379,11 @@
                   </span>
                 </dt>
                 <dd>
-                  <span>{{ line_item.final_line_price | money }}</span>
+                  <span>{{ line_item.final_line_price | money_with_currency }}</span>
                 </dd>
               </dl>
             {%- else -%}
-              {{ line_item.original_line_price | money }}
+              {{ line_item.original_line_price | money_with_currency }}
             {%- endif -%}
           </p>
         </div>
@@ -453,7 +453,7 @@
       </div>
       <div class="col-span-6 lg:col-span-2">
         <p>
-          {{ order.line_items_subtotal_price | money }}
+          {{ order.line_items_subtotal_price | money_with_currency }}
         </p>
       </div>
     </div>
@@ -483,7 +483,7 @@
           "
         >
           <p>
-            <span>-{{ discount_application.total_allocated_amount | money }}</span>
+            <span>-{{ discount_application.total_allocated_amount  | money_with_currency }}</span>
             <span class="cart-discount">
               {{- discount_application.title -}}
             </span>
@@ -541,7 +541,7 @@
           "
         >
           <p>
-            {{ shipping_method.price | money }}
+            {{ shipping_method.price | money_with_currency }}
           </p>
         </div>
       </div>
@@ -581,7 +581,7 @@
           "
         >
           <p>
-            {{ tax_line.price | money }}
+            {{ tax_line.price | money_with_currency }}
           </p>
         </div>
       </div>

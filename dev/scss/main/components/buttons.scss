@@ -2,7 +2,7 @@
 
 @layer components {
   .button {
-    background-color: var(--button-background, inherit);
+    background: var(--button-background, inherit);
     border-color: var(--button-border-color, inherit);
     color: var(--button-text, inherit);
     @apply relative
@@ -12,6 +12,7 @@
     items-center
     justify-center
     gap-2
+    rounded-sm
     border
     px-4
     py-[9px]
@@ -19,9 +20,9 @@
     font-bold
     leading-4
     no-underline
-    transition-colors;
+    transition-all;
     @include states(':not([disabled])') {
-      background-color: var(--button-hover-background, inherit);
+      background: var(--button-hover-background, inherit);
       border-color: var(--button-hover-border-color, inherit);
       color: var(--button-hover-text, inherit);
       @apply no-underline;
@@ -48,7 +49,7 @@
 
   /* Button styles */
   .button--primary {
-    --button-background: var(--color-primary);
+    --button-background: var(--color-primary-500);
     --button-border-color: var(--color-primary);
     --button-text: var(--color-primary-text);
     --button-hover-background: var(--color-primary-600);

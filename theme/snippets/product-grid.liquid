@@ -1,0 +1,131 @@
+
+{%- comment -%}
+Output product grid
+Be carefull with the products per page and the ?view=alt templates. The amount of products per page must be the same.
+{%- endcomment -%}
+{%- liquid
+  capture collection_grid_classes
+    if template.suffix contains 'alt'
+      echo 'collection__grid--alt'
+    endif
+  endcapture
+
+  paginate collection.products by settings.products_per_page
+    assign total_for_first_pages = paginate.items | divided_by: settings.products_per_page | times: settings.products_per_page
+    assign items_on_last_page = paginate.items | minus: total_for_first_pages
+    if items_on_last_page == 0
+      assign items_on_last_page = settings.products_per_page
+    endif
+
+    assign progress_end = settings.products_per_page
+    if progress_end > paginate.items
+      assign progress_end = paginate.items
+    elsif paginate.pages == paginate.current_page
+      assign progress_end = items_on_last_page
+    endif
+
+    assign current_html = progress_end | prepend: '<span data-progress-current>' | append: '</span>'
+    assign total_html = paginate.items | prepend: '<span data-progress-total>' | append: '</span>'
+  endpaginate
+-%}
+
+{%- if view == 'load-more' -%}
+  <load-more>
+    <input type="hidden" value="{{ paginate.pages }}" data-total-pages>
+    <input type="hidden" value="{{ paginate.items }}" data-total-items>
+    <input type="hidden" value="{{ items_on_last_page }}" data-items-on-last-page>
+    <input type="hidden" value="{{ paginate.current_page }}" data-current-page>
+    {%- if paginate.pages > 1 -%}
+      <div class="load-more load-more--prev  text-center mt-20 flex justify-center items-center" data-pagination-prev>
+        {%- if paginate.current_page > 1 -%}
+          <a href="{{ paginate.previous.url }}" class="button button--primary" data-load-trigger="prev">
+            <span data-load-text>{% render "format-translation", namespace: "sections.collection_template.load_more.previous", fallback: "Previous" %}</span>
+            <span class="hidden" data-loader>{% render "format-translation", namespace: "sections.collection_template.load_more.loading", fallback: "" %}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+{%- endif -%}
+
+  <ol
+    class="collection__grid {{ collection_grid_classes }} m-0 grid grid-cols-12 gap-x-4 gap-y-8"
+    data-products-wrapper>
+    {%- liquid
+      assign image_alt = product.title | escape
+      assign image_title = product.title | escape
+
+      assign classes = 'col-span-6 md:col-span-4 xl:col-span-3'
+      assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw'
+
+      comment
+        Overwrite sizes based on template suffix alt layout
+      endcomment
+      if template.suffix contains 'alt'
+        assign classes = 'col-span-12 md:col-span-4 xl:col-span-3'
+        assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 100vw'
+      endif
+    -%}
+
+    {%- for product in collection.products -%}
+      {%- liquid
+        assign lazy = true
+        if forloop.index <= 4
+          assign lazy = false
+        endif
+      -%}
+      <li class="{{ classes }}">
+        {%- render 'product-card',
+          product_object: product,
+          image_max_width: 1440,
+          image_sizes: sizes,
+          image_alt: image_alt,
+          image_title: image_title,
+          image_lazy: lazy,
+          view: template.suffix
+        -%}
+      </li>
+    {%- endfor -%}
+  </ol>
+
+  {%- if view == 'load-more' and paginate.pages > 1 -%}
+    <div class="load-more-wrapper text-center mt-20">
+      <div class="load-more load-more--next flex items-center justify-center mb-4" data-pagination-next>
+        {%- if paginate.current_page < paginate.pages -%}
+          <a href="{{ paginate.next.url }}" class="button button--primary" data-load-trigger="next">
+            <span data-load-text>{% render "format-translation", namespace: "sections.collection_template.load_more.next", fallback: "Next" %}</span>
+            <span class="hidden" data-loader>{% render "format-translation", namespace: "sections.collection_template.load_more.loading", fallback: "" %}</span>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <p class="text-black center" data-totals-text>
+        {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html  }}
+      </p>
+    </div>
+  </load-more>
+{%- endif -%}
+
+
+{%- if collection -%}
+  <script>
+    window.collection = {
+      totalItems: {{ paginate.items }},
+      totalPages: {{ paginate.pages }},
+      itemsPerPage: {{ settings.products_per_page }},
+      {% if items_on_last_page != nil %}
+        itemsOnLastPage: {{ items_on_last_page }},
+      {% endif %}
+    }
+  </script>
+{%- else -%}
+  <script>
+    window.search = {
+      totalItems: {{ paginate.items }},
+      totalPages: {{ paginate.pages }},
+      itemsPerPage: {{ settings.products_per_page }},
+      {% if items_on_last_page != nil %}
+        itemsOnLastPage: {{ items_on_last_page }},
+      {% endif %}
+    }
+  </script>
+{%- endif -%}

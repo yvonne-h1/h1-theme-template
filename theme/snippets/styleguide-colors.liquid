@@ -41,12 +41,13 @@
       </div>
     {%- endfor -%}
   </div>
-
+  {{ settings.font_body.name }}
+  {{ settings.font_heading | json }}
   {% comment %} Primary {% endcomment %}
   <div class="{{ color_wrapper_class }}">
     <div
       class="{{ circle_class_full }}"
-      style="background-color: var(--color-primary);"
+      style="background: var(--color-primary);"
       title="Primary"
     >
       <p class="text-white">Primary</p>

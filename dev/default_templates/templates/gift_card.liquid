@@ -74,7 +74,7 @@
         %}
       </h1>
       <div class="gift-card__price">
-        <p>{{ gift_card.initial_value | money }}</p>
+        <p>{{ gift_card.initial_value | money_with_currency }}</p>
         {%- if gift_card.enabled == false or gift_card.expired -%}
           <p class="gift-card__label badge {{ settings.sold_out_badge_color_scheme | prepend: 'badge--' }}">
             {% render 'format-translation',
@@ -85,7 +85,7 @@
         {%- endif -%}
       </div>
 
-      {%- assign gift_card_balance = gift_card.balance | money -%}
+      {%- assign gift_card_balance = gift_card.balance | money_with_currency -%}
       {%- if gift_card.balance != gift_card.initial_value -%}
         <p class="gift-card__label">
           {{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}

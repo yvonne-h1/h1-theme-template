@@ -247,7 +247,7 @@
     },
     "footer": {
       "social_platform": "{{ name }} on {{ platform }}",
-      "copyright_html": "© Code {{ year }}. All rights reserved.",
+      "copyright_html": "© H1 Webdevelopment {{ year }}. All rights reserved.",
       "payment_methods": "Payment methods accepted"
     },
     "main_blog": {
@@ -294,7 +294,13 @@
       "sort_by_label": "Sort by",
       "title": "Collection",
       "to": "To",
-      "use_fewer_filters_html": "Use fewer filters or <a class=\"{{ class }}\" href=\"{{ link }}\">clear all</a>"
+      "use_fewer_filters_html": "Use fewer filters or <a class=\"{{ class }}\" href=\"{{ link }}\">clear all</a>",
+      "load_more": {
+        "next": "Load more",
+        "previous": "Load previous items",
+        "info_html": "Showing {{ current }} of {{ total }} products",
+        "loading": "Loading..."
+      }
     }
   },
   "localization": {

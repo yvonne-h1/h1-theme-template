@@ -34,7 +34,7 @@
 -%}
 
 {%- comment -%} Output quick shop {%- endcomment -%}
-<quick-shop class="quick-shop pointer-events-none invisible absolute inset-x-2 bottom-2 z-30 block bg-white p-4 text-center opacity-0 group-[.quick-shop--is-open]/product-card:pointer-events-auto group-[.quick-shop--is-open]/product-card:visible group-[.quick-shop--is-open]/product-card:opacity-100 md:group-hover/product-card:pointer-events-auto md:group-hover/product-card:visible  md:group-hover/product-card:opacity-100">
+<quick-shop class="quick-shop pointer-events-none invisible absolute inset-x-2 bottom-2 z-30 block bg-gray-100 p-4 text-center opacity-0 transition group-[.quick-shop--is-open]/product-card:pointer-events-auto group-[.quick-shop--is-open]/product-card:visible group-[.quick-shop--is-open]/product-card:opacity-100 md:group-hover/product-card:pointer-events-auto md:group-hover/product-card:visible  md:group-hover/product-card:opacity-100">
   {%- comment -%} Title {%- endcomment -%}
   <div class="quick-shop__title mb-3 text-sm font-bold leading-5 text-color-default md:hidden">
     {%- render 'format-translation', namespace: 'products.product', key: 'choose_your_option', option: option_name, fallback: 'Choose your {{ option }}' -%}

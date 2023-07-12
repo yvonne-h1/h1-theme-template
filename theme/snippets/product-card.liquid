@@ -30,7 +30,7 @@
   endunless
 
   unless image_aspect_ratio
-    assign image_aspect_ratio = '5/6'
+    assign image_aspect_ratio = settings.product_card_image_aspect
   endunless
 
   unless image_crop
@@ -156,7 +156,7 @@
               lazy: image_lazy,
               alt: image_alt,
               title: title,
-              class: "object-cover w-full product-card__image--primary"
+              class: "object-contain w-full product-card__image--primary"
             -%}
             </a>
           </div>
@@ -189,15 +189,14 @@
         </product-card-swiper>
       {%- else -%}
         <div
-          class="product-card__image bg-gray-50"
-          style="aspect-ratio: {{ image_aspect_ratio }};"
+          class="product-card__image aspect-[{{ image_aspect_ratio }}] bg-gray-50"
         ></div>
       {%- endif -%}
 
     {%- else -%}
       {%- comment -%} Render image with hover {%- endcomment -%}
       <a
-        class="product-card__image relative block"
+        class="product-card__image aspect-[{{ image_aspect_ratio }}] relative block  {% unless product_object.available -%}opacity-50 saturate-50{%- endunless -%}"
         href="{{ product_link }}"
         title="{{ product_object.title | escape }}"
       >

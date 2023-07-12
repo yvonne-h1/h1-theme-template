@@ -23,7 +23,7 @@
 <cart-icon-bubble class="cart-icon-bubble flex">
   <a
     id="cart-icon-bubble"
-    class="header__icon relative px-1 py-3 text-inherit states:text-primary"
+    class="header__icon relative px-1 py-3 text-inherit states:text-primary {% if request.page_type == 'cart' %}pointer-events-none{%- endif -%}"
     href="{{- routes.cart_url -}}"
     {%- if template.name != 'cart' -%}
       aria-controls="cart-drawer"
@@ -34,7 +34,7 @@
   >
     {%- render 'global-icon', icon: cart_icon, icon_class: 'w-6' -%}
 
-    <div class="cart-icon-bubble__count absolute right-0 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-secondary px-1 text-2xs leading-4 text-white empty:hidden{% if cart == empty %} hidden{% endif -%}">
+    <div class="cart-icon-bubble__count absolute right-0 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs leading-4 text-white empty:hidden{% if cart == empty %} hidden{% endif -%}">
       <span class="cart-count">
         {{- cart.item_count -}}
       </span>

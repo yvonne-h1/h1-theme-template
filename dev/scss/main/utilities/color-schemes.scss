@@ -1,6 +1,6 @@
 @layer utilities {
   .color-scheme {
-    background-color: var(--color-scheme-background-color);
+    background: var(--color-scheme-background-color);
     color: var(--color-scheme-text);
     --swiper-theme-color: var(--color-scheme-text);
     --text-link-color: var(--color-scheme-text);
@@ -14,7 +14,7 @@
       --color-scheme-text: var(--color-black);
     }
     &--primary {
-      --color-scheme-background-color: var(--color-primary);
+      --color-scheme-background-color: var(--color-primary-gradient);
       --color-scheme-text: var(--color-primary-text);
     }
     &--secondary {

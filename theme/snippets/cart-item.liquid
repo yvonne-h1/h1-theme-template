@@ -52,7 +52,7 @@
             -%}
           </dt>
           <dd class="price price--sale">
-            {{ item.discounted_price | money }}
+            {{ item.discounted_price | money_with_currency }}
           </dd>
           {%- comment -%} Old price {%- endcomment -%}
           <dt class="sr-only">
@@ -64,13 +64,13 @@
           </dt>
           <dd>
             <s class="price price--compare ml-2">
-              {{ item.original_price | money }}
+              {{ item.original_price | money_with_currency }}
             </s>
           </dd>
         </dl>
       {%- else -%}
         <span class="price">
-          {{ item.original_price | money }}
+          {{ item.original_price | money_with_currency }}
         </span>
       {%- endif -%}
     </div>

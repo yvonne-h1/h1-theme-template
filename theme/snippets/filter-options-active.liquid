@@ -79,15 +79,15 @@
                 {{ filter.label }}:
                 {%- liquid
                   if filter.min_value.value
-                    echo filter.min_value.value | money
+                    echo filter.min_value.value | money_with_currency
                   else
-                    echo 0 | money
+                    echo 0 | money_with_currency
                   endif
                   echo ' - '
                   if filter.max_value.value
-                    echo filter.max_value.value | money
+                    echo filter.max_value.value | money_with_currency
                   else
-                    echo filter.range_max | money
+                    echo filter.range_max | money_with_currency
                   endif
                 -%}
               </a>

@@ -1,0 +1,74 @@
+{%- comment -%}
+  This template is used for the tag filters and will retrieve the products and the filters. Those elements are then loaded in the collection page.
+  https://shopify.dev/api/section-rendering
+{%- endcomment -%}
+{%- layout none -%}
+
+{%- liquid
+  paginate collection.products by settings.products_per_page
+    assign total_for_first_pages = paginate.items | divided_by: settings.products_per_page | times: settings.products_per_page
+    assign items_on_last_page = paginate.items | minus: total_for_first_pages
+    if items_on_last_page == 0
+      assign items_on_last_page = settings.products_per_page
+    endif
+
+    assign progress_end = settings.products_per_page
+    if progress_end > paginate.items
+      assign progress_end = paginate.items
+    elsif paginate.pages == paginate.current_page
+      assign progress_end = items_on_last_page
+    endif
+
+    assign current_html = progress_end | prepend: '<span data-progress-current>' | append: '</span>'
+    assign total_html = paginate.items | prepend: '<span data-progress-total>' | append: '</span>'
+  endpaginate
+
+  # check for filters
+  assign filtered_collection = false
+  for filter in collection.filters
+    if filter.active_values.size > 0 or filter.max_value.value > 0 or filter.min_value.value > 0
+      assign filtered_collection = true
+      break
+    endif
+  endfor
+-%}
+
+{% comment %}
+  <div id="filters">
+    {%- render 'filters-native', sort_by: collection.sort_by -%}
+  </div>
+{% endcomment %}
+
+<div id="products" data-results-size="{{ collection.products.size }}">
+  {%- if collection.products.size == 0 -%}
+    <div class="is-grid collection__empty-text">
+      <div class="is-col-6 grid-col-start-4 center">
+        <h3 class="h4">
+          {%- render 'format-translation',
+            namespace: 'sections.collection_template',
+            key: 'empty',
+            fallback: 'No products found.'
+          -%}
+        </h3>
+        {%- if filtered_collection -%}
+          <p>
+            {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url }}
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- else -%}
+    {%- comment -%} Render collection products list {%- endcomment -%}
+    {%- paginate collection.products by settings.products_per_page -%}
+      {%- render 'product-grid',
+        collection: collection,
+        paginate: paginate,
+        view: 'load-more',
+        current_html: current_html,
+        total_html: total_html,
+        items_on_last_page: items_on_last_page,
+        product_card_extra_id: section.id
+      -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>

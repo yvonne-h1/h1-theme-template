@@ -21,7 +21,7 @@
   assign compare_at_price = target.compare_at_price
   assign price = target.price | default: 1999
   assign available = target.available | default: false
-  assign money_price = price | money
+  assign money_price = price | money_with_currency
 
   capture sale_price_str
     render 'format-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale'
@@ -70,7 +70,7 @@
         </dt>
         <dd>
           <s class="price__item price__item--compare">
-            {{ compare_at_price | money }}
+            {{ compare_at_price | money_with_currency }}
           </s>
         </dd>
       </div>

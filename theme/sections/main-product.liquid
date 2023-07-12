@@ -342,7 +342,7 @@
                           fallback: "Sold out"
                         -%}
                       {% endif %}
-                      - {{ variant.price | money | strip_html }}
+                      - {{ variant.price  | money_with_currency | strip_html }}
                     </option>
                   {%- endfor -%}
                 </select>

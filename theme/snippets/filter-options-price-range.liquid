@@ -15,7 +15,7 @@
 -%}
 
 {%- capture summary_content -%}
-  {%- assign max_price_amount = filter.range_max | money | strip_html | escape -%}
+  {%- assign max_price_amount = filter.range_max  | money_with_currency | strip_html | escape -%}
   <p class="filter-options__info">
     {%- render 'format-translation',
       namespace: "sections.collection_template",

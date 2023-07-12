@@ -69,15 +69,15 @@
       {% comment %} Buttons {% endcomment %}
       {%- liquid
         # First button
-        assign button_1 = false
-        if section.settings.button_label_1 != blank
-          assign button_1 = true
+        assign button_1 = true
+        if section.settings.button_label_1 == blank or section.settings.button_url_1 == blank
+          assign button_1 = false
         endif
 
         # Second button
-        assign button_2 = false
-        if section.settings.button_label_2 != blank
-          assign button_2 = true
+        assign button_2 = true
+        if section.settings.button_label_2 == blank or section.settings.button_url_2 == blank
+          assign button_2 = false
         endif
 
         # Button alligment

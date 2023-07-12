@@ -2,24 +2,23 @@
   Colors
 {%- endcomment -%}
 {%- liquid
-  assign color_black = '#262626'
+  assign color_black = '#111'
   assign color_white = '#FFFFFF'
 
   assign bg_color_default = '#ffffff'
   assign text_color_default = '#262626'
   assign text_color_light = '#969696'
-  assign text_link_color = '#df9a33'
-  assign text_link_color_states = '#c27f27'
-  assign border_color_default = '#dedede'
+  assign border_color_default = '#e9ecef'
 
-  assign color_primary = '#df9a3e'
+  assign color_primary_gradient = 'linear-gradient(90deg,#e42f26,#e46a26 50%,#e42f26) 0/200%'
+  assign color_primary = '#e42f26'
   assign color_primary_text = '#FFFFFF'
 
-  assign color_secondary = '#262626'
+  assign color_secondary = '#d63384'
   assign color_secondary_text = '#FFFFFF'
 
-  assign color_accent = '#e6cba5'
-  assign color_accent_text = '#262626'
+  assign color_accent = '#fff3cd'
+  assign color_accent_text = '#111'
 
   assign color_info = '#edb407'
   assign color_success = '#42CC92'
@@ -29,18 +28,9 @@
 
 {%- style %}
   :root {
-    {% comment -%} Base {%- endcomment -%}
-    --color-black:              {{ color_black }};
-    --color-white:              {{ color_white }};
-    --bg-color-default:         {{ bg_color_default }};
-    --text-color-default:       {{ text_color_default }};
-    --text-color-light:         {{ text_color_light }};
-    --text-link-color:          {{ text_link_color }};
-    --text-link-color-states:   {{ text_link_color_states }};
-    --border-color-default:     {{ border_color_default }};
-    --swiper-theme-color:       {{ text_color_default }};
 
     {% comment %} Primary {% endcomment %}
+    --color-primary-gradient:   {{ color_primary_gradient }};
     --color-primary:            {{ color_primary }};
     --color-primary-text:       {{ color_primary_text }};
     --color-primary-50:         {{ color_primary | color_mix: '#FFF', 10 }};
@@ -87,5 +77,16 @@
     --color-success:            {{ color_success }};
     --color-warning:            {{ color_warning }};
     --color-danger:             {{ color_danger }};
+
+    {% comment -%} Base {%- endcomment -%}
+    --color-black:              {{ color_black }};
+    --color-white:              {{ color_white }};
+    --bg-color-default:         {{ bg_color_default }};
+    --text-color-default:       {{ text_color_default }};
+    --text-color-light:         {{ text_color_light }};
+    --text-link-color:          var(--color-primary-500);
+    --text-link-color-states:   var(--color-primary-600);
+    --border-color-default:     {{ border_color_default }};
+    --swiper-theme-color:       {{ text_color_default }};
   }
 {%- endstyle %}

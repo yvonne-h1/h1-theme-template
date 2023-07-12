@@ -46,7 +46,7 @@
                     {{- product.title | highlight: predictive_search.terms -}}
                   </p>
                   <p class="predictive-search__item__price text-sm leading-5">
-                    {{ product.price | money }}
+                    {{ product.price  | money_with_currency }}
                   </p>
                 </div>
               </a>
@@ -131,7 +131,7 @@
                     {{- article.title | highlight: predictive_search.terms -}}
                   </p>
                   <p class="text-sm leading-5">
-                    {{- product.price | money -}}
+                    {{- product.price  | money_with_currency -}}
                   </p>
                 </div>
               </a>

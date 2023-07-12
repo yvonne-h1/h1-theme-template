@@ -25,7 +25,10 @@
   <body class="group/body {% render 'html-template-class' %}">
     {%- render 'html-head-gtm', container: 'body' -%}
 
-    <a class="skip-to-content button button--secondary sr-only self-start" href="#MainContent">
+    <a
+      class="skip-to-content button button--secondary sr-only self-start focus:not-sr-only"
+      href="#MainContent"
+    >
       {% render 'format-translation',
         namespace: 'accessibility',
         key: 'skip_to_text',

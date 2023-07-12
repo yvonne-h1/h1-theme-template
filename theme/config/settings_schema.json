@@ -1,11 +1,11 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Code Base Theme",
-    "theme_version": "3.1.1",
-    "theme_author": "Code",
+    "theme_name": "H1 Demo Store",
+    "theme_version": "1.0.0",
+    "theme_author": "H1 Webdevelopment",
     "theme_documentation_url": "https://shopify.dev/themes",
-    "theme_support_url": "https://www.code.nl"
+    "theme_support_url": "https://www.h1.nl"
   },
   {
     "name": "Branding",
@@ -15,7 +15,7 @@
         "id": "shop_name",
         "label": "Shop name",
         "info": "The shop name is used in various visible and invisible (SEO) places.",
-        "default": "Code Base Theme"
+        "default": "H1 Demo Store"
       },
       {
         "type": "header",
@@ -24,13 +24,13 @@
       {
         "type": "font_picker",
         "id": "font_body",
-        "default": "roboto_n4",
+        "default": "poppins_n4",
         "label": "Body font family"
       },
       {
         "type": "font_picker",
         "id": "font_heading",
-        "default": "roboto_n7",
+        "default": "poppins_n7",
         "label": "Heading font family"
       }
     ]
@@ -301,6 +301,59 @@
         "default": false,
         "label": "Use within collection link?",
         "info": "This option changes the full URL path of a product. It adds the current collection to the url path and breadcrumbs. Enabling this setting will change the SEO of the website."
+      },
+      {
+        "type": "select",
+        "id": "product_card_image_aspect",
+        "label": "Image ratio",
+        "info": "Be sure to choose the correct aspect ratio for your content or clipping might occur.",
+        "default": "aspect-[1/1]",
+        "options": [
+          {
+            "value": "aspect-[1/1]",
+            "label": "Square"
+          },
+          {
+            "value": "aspect-[1/2]",
+            "label": "1/2",
+            "group": "Portrait"
+          },
+          {
+            "value": "aspect-[2/3]",
+            "label": "2/3",
+            "group": "Portrait"
+          },
+          {
+            "value": "aspect-[3/4]",
+            "label": "3/4",
+            "group": "Portrait"
+          },
+          {
+            "value": "aspect-[5/6]",
+            "label": "5/6",
+            "group": "Portrait"
+          },
+          {
+            "value": "aspect-[2/1]",
+            "label": "2/1",
+            "group": "Landscape"
+          },
+          {
+            "value": "aspect-[3/2]",
+            "label": "3/2",
+            "group": "Landscape"
+          },
+          {
+            "value": "aspect-[4/3]",
+            "label": "4/3",
+            "group": "Landscape"
+          },
+          {
+            "value": "16/9",
+            "label": "16/9",
+            "group": "Landscape"
+          }
+        ]
       }
     ]
   },

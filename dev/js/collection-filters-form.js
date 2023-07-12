@@ -105,6 +105,10 @@ if (!customElements.get('collection-filters-form')) {
           this.renderFilters(html, event);
           this.renderProductGrid(html);
           this.toggleLoadingState();
+        })
+        .then(() => {
+          this.loadMore = document.querySelector('load-more');
+          this.loadMore?.initLoadMoreButtons();
         });
     }
 
