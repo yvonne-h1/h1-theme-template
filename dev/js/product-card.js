@@ -34,7 +34,7 @@
           direction: 'horizontal',
           breakpoints: {
             768: {
-              allowTouchMove: false, 
+              allowTouchMove: false,
             },
           },
         };

@@ -9,40 +9,39 @@
     - Search and account can be hidden on mobile and then they will be shown in the mobile menu drawer.
   endcomment
 
-  comment
-    Load your styles here if there is some
-  endcomment
-
-  comment
-    Check if the index page is transparent
-  endcomment
+  # Check if the index page is transparent
   assign is_transparent = false
   if section.settings.is_transparent and template == 'index'
     assign is_transparent = true
   endif
 
-  comment
-    Set default fallback menu when the section.settings.menu is broken on the activate_account template.
-  endcomment
+  # Set default fallback menu when the section.settings.menu is broken on the activate_account template.
   assign menu_list = linklists[section.settings.menu]
 
-  comment
-    Load interface snippets
-  endcomment
+  # Load interface snippets
   render 'search-modal', max_results: settings.predictive_search_max_results_per_type
-  render 'mobile-menu', menu_list: menu_list
+  render 'menu-mobile', menu_list: menu_list
 -%}
 
 {%- comment -%}
   Capture the logo with the root url, so we can reuse it in the header.
 {%- endcomment -%}
+{%- liquid
+  assign logo_el = 'div'
+  if request.page_type == 'index'
+    assign logo_el = 'h1'
+  endif
+-%}
 {%- capture logo_link -%}
-  <a href="{{ routes.root_url }}"
-    class="header__heading-link m-0 flex items-center justify-center justify-self-center break-words text-inherit no-underline states:text-primary states:no-underline lg:block lg:justify-self-start"
-    title="{{ shop.name }}"
-  >
-    {%- render 'global-logo' -%}
-  </a>
+  <{{ logo_el }} class="header__heading col-span-4 mb-0 pb-3 pt-3 text-2xl leading-8 lg:-order-1 lg:col-span-2">
+    <a href="{{ routes.root_url }}"
+      class="header__heading-link m-0 flex items-center justify-center justify-self-center break-words text-inherit no-underline states:text-primary states:no-underline lg:block lg:justify-self-start"
+      title="{{ shop.name }}"
+    >
+      {%- render 'global-logo' -%}
+      <span class="sr-only">{{ shop.name }}</span>
+    </a>
+  </{{ logo_el }}>
 {%- endcapture -%}
 
 {%- comment -%} The shadow for when the header is open state. {%- endcomment -%}
@@ -69,12 +68,14 @@
       {%- if menu_list != blank -%}
         <mobile-nav-toggle
           aria-expanded="false"
+          aria-controls="mobileMenu"
+          aria-haspopup="dialog"
           aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
           class="menu-drawer__toggle-button -ml-3 block p-3 px-3 states:text-primary"
           data-options='
             {
               "closeSiblings": true,
-              "toggleClass": "mobile-menu-is-open"
+              "classToToggle": "mobile-menu-is-open"
             }
           '>
           <button type="button">
@@ -85,22 +86,10 @@
     </div>
 
     {%- comment -%} The menu that is used for desktop. {%- endcomment -%}
-    {%- render 'header-menu', section: section, menu_list: menu_list -%}
+    {%- render 'menu-desktop', section: section, menu_list: menu_list -%}
 
     {%- comment -%} Shop logo. {%- endcomment -%}
-    {%- assign header_heading_classes = 'header__heading text-2xl leading-8 mb-0 col-span-4 lg:-order-1 lg:col-span-2 pt-3 pb-3' -%}
-    {%- if request.page_type == 'index' -%}
-      <h1 class="{{ header_heading_classes }}">
-        <span class="sr-only">
-          {{- shop.name -}}
-        </span>
-        {{- logo_link -}}
-      </h1>
-    {%- else -%}
-      <div class="{{ header_heading_classes }}">
-        {{- logo_link -}}
-      </div>
-    {%- endif -%}
+    {{- logo_link -}}
 
     {%- comment -%} Search, account and cart items. {%- endcomment -%}
     {%- render 'header-icon-list', section: section -%}

@@ -78,7 +78,7 @@ class VariantSelects extends HTMLElement {
       const input = productForm.querySelector('input[name="id"]');
       input.value = this.currentVariant.id;
       input.dispatchEvent(new Event('change', {
-        bubbles: true, 
+        bubbles: true,
       }));
     });
   }

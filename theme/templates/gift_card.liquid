@@ -17,8 +17,7 @@
 
     <meta
       name="description"
-      content="{% render "format-translation", namespace: "gift_cards.issued.subtext", fallback: "Your gift card" %}"
-    >
+      content="{% render "format-translation", namespace: "gift_cards.issued.subtext", fallback: "Your gift card" %}">
 
     {%- liquid
       render 'html-head-canonical'
@@ -41,7 +40,9 @@
   </head>
 
   <body class="group/body {% render 'html-template-class' %}">
-    <a class="skip-to-content button button--secondary sr-only self-start" href="#MainContent">
+    <a
+      class="skip-to-content button button--secondary sr-only !absolute z-10 self-start focus:not-sr-only focus:px-4 focus:py-2 focus:text-secondary-text"
+      href="#MainContent">
       {% render 'format-translation',
         namespace: 'accessibility',
         key: 'skip_to_text',

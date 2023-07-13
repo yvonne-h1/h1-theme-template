@@ -31,37 +31,37 @@ if (!customElements.get('product-form-component')) {
       config.body = formData;
 
       fetch(`${routes.cart_add_url}`, config)
-      .then((response) => response.json())
-      .then((parsedState) => {
-        if (parsedState.status == 422) {
+        .then((response) => response.json())
+        .then((parsedState) => {
+          if (parsedState.status == 422) {
           // When quantity error
-          this.cartNotification.setActiveElement(document.activeElement);
-          this.cartNotification.renderQuantityError(formData.get('inventory_quantity'));
-          return;
-        }
+            this.cartNotification.setActiveElement(document.activeElement);
+            this.cartNotification.renderQuantityError(formData.get('inventory_quantity'));
+            return;
+          }
 
-        this.cartDrawer.renderContents(parsedState);
+          this.cartDrawer.renderContents(parsedState);
 
-        switch (submitButton.dataset.addToCartBehavior) {
-        case 'open_cart_drawer':
+          switch (submitButton.dataset.addToCartBehavior) {
+          case 'open_cart_drawer':
           // Set timeout to force animation. Because content is just updated with renderContents
-          setTimeout(() => {
-            this.cartDrawer.open();
-          });
-          break;
-        case 'show_cart_notification':
-        default:
-          this.cartNotification.setActiveElement(document.activeElement);
-          this.cartNotification.renderContents(parsedState);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      })
-      .finally(() => {
-        submitButton.classList.remove('button--loading');
-        submitButton.removeAttribute('disabled');
-      });
+            setTimeout(() => {
+              this.cartDrawer.open();
+            } );
+            break;
+          case 'show_cart_notification':
+          default:
+            this.cartNotification.setActiveElement(document.activeElement);
+            this.cartNotification.renderContents(parsedState);
+          }
+        } )
+        .catch((e) => {
+          console.error(e);
+        } )
+        .finally(() => {
+          submitButton.classList.remove('button--loading');
+          submitButton.removeAttribute('disabled');
+        } );
     }
   }
 

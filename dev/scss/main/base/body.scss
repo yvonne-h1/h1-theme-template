@@ -1,3 +1,5 @@
+@use '../../mixins' as *;
+
 @layer base {
   body {
     @apply m-0
@@ -13,5 +15,10 @@
   }
   .content-for-layout {
     @apply flex-auto;
+  }
+  * {
+    @include states() {
+      @apply transition-colors;
+    }
   }
 }

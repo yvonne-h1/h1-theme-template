@@ -13,7 +13,7 @@ class HeaderCollapsibleComponent extends Collapsible {
       // on key up
       document.addEventListener('keyup', (event) => {
         this.onKeyUp(event);
-      });
+      } );
     }
   }
 
@@ -30,8 +30,8 @@ class HeaderCollapsibleComponent extends Collapsible {
     if (event?.code.toUpperCase() !== 'ESCAPE') {
       return;
     }
-    const {toggleClass} = this.options;
-    let group = this.querySelector(`[data-collapsible-group].${toggleClass}`);
+    const { classToToggle } = this.options;
+    let group = this.querySelector(`[data-collapsible-group].${classToToggle}`);
     if (group) {
       this.close(group);
     }
@@ -87,12 +87,12 @@ class HeaderCollapsibleComponent extends Collapsible {
     else {
       // set header closed if all menu items are closed
       let close = true;
-      const {toggleClass} = this.options;
+      const { classToToggle } = this.options;
       this.groups.forEach((group) => {
-        if (group.classList.contains(toggleClass)) {
+        if (group.classList.contains(classToToggle)) {
           close = false;
         }
-      });
+      } );
       if (close) {
         document.body.classList.remove('header-is-open');
         this.inverse && document.body.classList.remove('header-inverse-solid');
@@ -114,11 +114,11 @@ class MobileNavToggle extends ClassToggleComponent {
       // Extra events
       document.addEventListener('keyup', (event) => {
         this.onKeyUp(event);
-      });
+      } );
 
       this.shadow?.addEventListener('click', (event) => {
         this.remove(event);
-      });
+      } );
     }
   }
 
@@ -129,14 +129,14 @@ class MobileNavToggle extends ClassToggleComponent {
   }
 
   onKeyUp(event) {
-    if (!document.body.classList.contains('mobile-menu-is-open')) {
+    if (!document.body.classList.contains(window.drawerToggleClasses.mobileMenu)) {
       return;
     }
     if (event?.code.toUpperCase() !== 'ESCAPE') {
       return;
     }
-    const {toggleClass} = this.options;
-    if (this.target?.classList.contains(toggleClass)) {
+    const { classToToggle } = this.options;
+    if (this.target?.classList.contains(classToToggle)) {
       this.remove();
     }
   }
@@ -172,28 +172,28 @@ class SearchToggle extends ClassToggleComponent {
     // key up escape
     document.addEventListener('keyup', (event) => {
       this.onKeyUp(event);
-    });
+    } );
 
     // Remove classes incase the header navigation drawer is open.
     this.addEventListener('click', () => {
       document.body.classList.remove('header-is-open');
-      document.body.classList.remove('mobile-menu-is-open');
+      document.body.classList.remove(window.drawerToggleClasses.mobileMenu);
       // Focus on input element if provided
       if (this.options.focusTarget) {
         document.querySelector(this.options.focusTarget)?.focus();
       }
-    });
+    } );
   }
 
   onKeyUp(event) {
-    if (!document.body.classList.contains('header-search-is-open')) {
+    if (!document.body.classList.contains(window.drawerToggleClasses.headerSearch)) {
       return;
     }
     if (event?.code.toUpperCase() !== 'ESCAPE') {
       return;
     }
-    const {toggleClass} = this.options;
-    if (this.target?.classList.contains(toggleClass)) {
+    const { classToToggle } = this.options;
+    if (this.target?.classList.contains(classToToggle)) {
       this.remove();
     }
   }
@@ -201,7 +201,7 @@ class SearchToggle extends ClassToggleComponent {
   add() {
     super.add();
     if (this.header) {
-      document.body.classList.add('header-search-is-open');
+      document.body.classList.add(window.drawerToggleClasses.headerSearch);
     }
     if (this.target) {
       trapFocus(this.target);
@@ -211,7 +211,7 @@ class SearchToggle extends ClassToggleComponent {
   remove() {
     super.remove();
     if (this.header) {
-      document.body.classList.remove('header-search-is-open');
+      document.body.classList.remove(window.drawerToggleClasses.headerSearch);
     }
     removeTrapFocus();
   }

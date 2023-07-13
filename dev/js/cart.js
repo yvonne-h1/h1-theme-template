@@ -47,7 +47,7 @@ if (!customElements.get('cart-items')) {
       ];
     }
 
-    updateQuantity(line, quantity, name) {
+    async updateQuantity(line, quantity, name) {
       this.enableLoading(line);
 
       const body = JSON.stringify({
@@ -57,45 +57,92 @@ if (!customElements.get('cart-items')) {
         sections_url: window.location.pathname,
       });
 
-      fetch(`${routes.cart_change_url}`, {
-        ...fetchConfig(),
-        ...{
-          body,
-        },
-      })
-        .then((response) => {
-          return response.text();
-        })
-        .then((state) => {
-          const parsedState = JSON.parse(state);
-          this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
-
-          this.updateLiveRegions(line, parsedState.item_count);
-
-          this.getSectionsToRender().forEach((section) => {
-            const elementToReplace =
-            document.getElementById(section.id).querySelector(section.selector) ||
-            document.getElementById(section.id);
-
-            elementToReplace.innerHTML = this.getSectionInnerHTML(
-              parsedState.sections[section.section],
-              section.selector,
-            );
-          });
-          document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)
-            ?.focus();
-          this.disableLoading();
-        })
-        .catch((error) => {
-          document.querySelector('[data-cart-loader-active="show"]')?.classList.add('hidden');
-          document.querySelector('[data-cart-loader-active="hidden"]')?.classList.remove('hidden');
-          document.getElementById('cart-errors').textContent = window.cartStrings.error;
-          this.disableLoading();
+      try {
+        const response = await fetch(routes.cart_change_url, {
+          ...fetchConfig(),
+          ...{
+            body,
+          },
         });
+
+        if (!response.ok) throw new Error(response.status);
+
+        // On success:
+        const parsedState = JSON.parse(response);
+        console.log('parsedState', parsedState);
+
+        this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
+
+        this.updateLiveRegions(line, parsedState.item_count);
+
+        this.getSectionsToRender().forEach((section) => {
+          const elementToReplace =
+          document.getElementById(section.id).querySelector(section.selector) ||
+          document.getElementById(section.id);
+
+          elementToReplace.innerHTML = this.getSectionInnerHTML(
+            parsedState.sections[section.section],
+            section.selector,
+          );
+        });
+        document.getElementById(`CartItem-${line}`)
+          ?.querySelector(`[name="${name}"]`)
+          ?.focus();
+        this.disableLoading();
+
+      }
+      catch (error) {
+        debug() && console.log('Error updating the item.', error);
+
+        document.querySelector('[data-cart-loader-active="show"]')?.classList.add('hidden');
+        document.querySelector('[data-cart-loader-active="hidden"]')?.classList.remove('hidden');
+        document.getElementById('cart-errors').textContent = window.cartStrings.error;
+        this.disableLoading();
+      }
+
+      // fetch(`${routes.cart_change_url}`, {
+      //   ...fetchConfig(),
+      //   ...{
+      //     body,
+      //   },
+      // })
+      //   .then((response) => {
+      //     return response.text();
+      //   })
+      //   .then((state) => {
+      //     const parsedState = JSON.parse(state);
+      //     console.log('parsedState', parsedState);
+
+      //     this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
+
+      //     this.updateLiveRegions(line, parsedState.item_count);
+
+      //     this.getSectionsToRender().forEach((section) => {
+      //       const elementToReplace =
+      //       document.getElementById(section.id).querySelector(section.selector) ||
+      //       document.getElementById(section.id);
+
+      //       elementToReplace.innerHTML = this.getSectionInnerHTML(
+      //         parsedState.sections[section.section],
+      //         section.selector,
+      //       );
+      //     });
+      //     document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)
+      //       ?.focus();
+      //     this.disableLoading();
+      //   })
+      //   .catch((error) => {
+      //     document.querySelector('[data-cart-loader-active="show"]')?.classList.add('hidden');
+      //     document.querySelector('[data-cart-loader-active="hidden"]')?.classList.remove('hidden');
+      //     document.getElementById('cart-errors').textContent = window.cartStrings.error;
+      //     this.disableLoading();
+      //   });
     }
 
     // show error texts, should not be deleted.
     updateLiveRegions(line, itemCount) {
+      console.log('updateLiveRegions', line, itemCount);
+
       if (this.currentItemCount === itemCount) {
         document.getElementById(`Line-item-error-${line}`).querySelector('.cart-item__error-text').innerHTML = window.cartStrings.quantityError.replace('[quantity]',document.getElementById(`Quantity-${line}`).value);
       }

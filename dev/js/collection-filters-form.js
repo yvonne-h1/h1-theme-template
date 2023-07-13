@@ -103,8 +103,8 @@ if (!customElements.get('collection-filters-form')) {
           const html = responseText;
           this.filterData = [...this.filterData, {
             html,
-            url, 
-          }];
+            url,
+          } ];
           this.renderFilters(html, event);
           this.renderProductGrid(html);
           this.toggleLoadingState();
@@ -243,7 +243,9 @@ if (!customElements.get('collection-filters-form')) {
      */
     updateURLHash(searchParams) {
       history.pushState(
-        {searchParams},
+        {
+          searchParams,
+        },
         '',
         `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`,
       );

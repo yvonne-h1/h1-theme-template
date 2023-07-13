@@ -393,13 +393,21 @@
     ]
   },
   {
-    "name": "Cart",
+    "name": "Cart & Cart drawer",
     "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_cart_drawer_section",
+        "default": true,
+        "label": "Enable Cart Drawer",
+        "info": "Enable Cart Drawer on cart icon click."
+      },
       {
         "type": "checkbox",
         "id": "show_cart_remove",
         "default": false,
-        "label": "Always show remove option"
+        "label": "Always show remove option",
+        "info": "Else cart item can only be removed by using the quantity selector."
       },
       {
         "type": "checkbox",
@@ -412,6 +420,7 @@
         "id": "add_to_cart_behavior",
         "label": "Add to cart behavior",
         "info": "Choose what happens after adding an item to the cart.",
+        "default": "show_cart_notification",
         "options": [
           {
             "value": "show_cart_notification",
@@ -421,8 +430,7 @@
             "value": "open_cart_drawer",
             "label": "Open cart drawer"
           }
-        ],
-        "default": "show_cart_notification"
+        ]
       }
     ]
   },

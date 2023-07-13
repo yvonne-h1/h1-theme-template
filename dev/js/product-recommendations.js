@@ -44,31 +44,31 @@
       init() {
         if (this.dataset && this.dataset.url) {
           fetch(this.dataset.url)
-          .then((response) => response.text())
-          .then((text) => {
-            const html = new DOMParser()
-            .parseFromString(text, 'text/html')
-            .querySelector('[data-recommended-products]').innerHTML;
+            .then((response) => response.text())
+            .then((text) => {
+              const html = new DOMParser()
+                .parseFromString(text, 'text/html')
+                .querySelector('[data-recommended-products]').innerHTML;
 
-            this.querySelector('[data-recommended-products]').innerHTML = html;
+              this.querySelector('[data-recommended-products]').innerHTML = html;
 
-            this.swiperInstance.update();
-            if (this.swiperOptions.navigation) {
-              this.swiperInstance.navigation.init();
-              this.swiperInstance.navigation.update();
-            }
-            if (this.swiperOptions.pagination) {
-              this.swiperInstance.pagination.init();
-              this.swiperInstance.pagination.update();
-            }
-            if (this.swiperOptions.scrollbar) {
-              this.swiperInstance.scrollbar.init();
-              this.swiperInstance.scrollbar.updateSize();
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+              this.swiperInstance.update();
+              if (this.swiperOptions.navigation) {
+                this.swiperInstance.navigation.init();
+                this.swiperInstance.navigation.update();
+              }
+              if (this.swiperOptions.pagination) {
+                this.swiperInstance.pagination.init();
+                this.swiperInstance.pagination.update();
+              }
+              if (this.swiperOptions.scrollbar) {
+                this.swiperInstance.scrollbar.init();
+                this.swiperInstance.scrollbar.updateSize();
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
       }
     }

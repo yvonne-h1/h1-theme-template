@@ -7,7 +7,9 @@ if (!customElements.get('product-detail-swiper')) {
 
       this.swiperElement = this.querySelector('[data-product-detail-swiper]');
 
-      this.swiperOptions = {direction: 'horizontal'};
+      this.swiperOptions = {
+        direction: 'horizontal',
+      };
 
       this.init();
     }

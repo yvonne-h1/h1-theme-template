@@ -14,7 +14,7 @@ if (!customElements.get('class-toggle-component')) {
 
       // Options
       this.options = {
-        toggleClass: 'toggle--is-active',
+        classToToggle: 'toggle--is-active',
         toggleTriggerClass: '',
         target: 'body',
         onHover: false,
@@ -32,6 +32,11 @@ if (!customElements.get('class-toggle-component')) {
           ...dataOptions,
         };
       }
+      // For the menu drawer, filters, cart drawer and search, define the content they expand
+      if (this.options.classToToggle === window.drawerToggleClasses.mobileMenu) this.targetID = 'menuDrawer';
+      if (this.options.classToToggle === window.drawerToggleClasses.cartDrawer) this.targetID = 'cartDrawer';
+      if (this.options.classToToggle === window.drawerToggleClasses.filters) this.targetID = 'CollectionFiltersForm';
+      if (this.options.classToToggle === window.drawerToggleClasses.headerSearch) this.targetID = 'SearchModal';
 
       // Reduce actions (So the event can also be removed)
       this.reducer = {
@@ -113,38 +118,68 @@ if (!customElements.get('class-toggle-component')) {
       }
     }
 
+    keyUpCloseEvent(event) {
+      if (event?.code?.toUpperCase() !== 'ESCAPE') return;
+      this.remove();
+      removeTrapFocus();
+    }
+
     add() {
-      const {toggleClass, toggleTriggerClass} = this.options;
+      const { classToToggle, toggleTriggerClass } = this.options;
       if (this.target) {
-        this.target.classList.add(toggleClass);
+        this.target.classList.add(classToToggle);
       }
       if (toggleTriggerClass) {
         this.classList.add(toggleTriggerClass);
       }
       // Switch aria-expanded
-      if (this.options.ariaExpanded) {
-        this.setAttribute('aria-expanded', true);
+      if (this.options.ariaExpanded && this.querySelector('button')) {
+        this.querySelector('button').setAttribute('aria-expanded', true);
+      }
+
+      // listen for key up event
+      if (classToToggle === window.drawerToggleClasses.mobileMenu || classToToggle === window.drawerToggleClasses.filters || classToToggle === window.drawerToggleClasses.headerSearch || classToToggle === window.drawerToggleClasses.cartDrawer) {
+        document.addEventListener('keyup', this.keyUpCloseEvent.bind(this));
+        document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', true));
+
+        trapFocus(document.getElementById(this.targetID));
       }
     }
 
     remove() {
-      const {toggleClass, toggleTriggerClass} = this.options;
+      const { classToToggle, toggleTriggerClass } = this.options;
       if (this.target) {
-        this.target.classList.remove(toggleClass);
+        this.target.classList.remove(classToToggle);
       }
       if (toggleTriggerClass) {
         this.classList.remove(toggleTriggerClass);
       }
       // Switch aria-expanded
-      if (this.options.ariaExpanded) {
-        this.setAttribute('aria-expanded', false);
+      if (this.options.ariaExpanded && this.querySelector('button')) {
+        this.querySelector('button').setAttribute('aria-expanded', false);
+      }
+
+      if (classToToggle === window.drawerToggleClasses.mobileMenu || classToToggle === window.drawerToggleClasses.filters || classToToggle === window.drawerToggleClasses.headerSearch || classToToggle === window.drawerToggleClasses.cartDrawer) {
+
+        removeTrapFocus();
+
+        const predictiveSearch = document.querySelector('predictive-search');
+        if (predictiveSearch && classToToggle === window.drawerToggleClasses.headerSearch) {
+          predictiveSearch.close();
+        }
+
+        document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', false));
+        document.removeEventListener('keyup', this.keyUpCloseEvent.bind(this));
+
+        // return the focus to the trigger
+        this.querySelector('button')?.focus();
       }
     }
 
     toggle() {
-      const {toggleClass} = this.options;
+      const { classToToggle } = this.options;
       if (!this.target) return false;
-      if (!this.target.classList.contains(toggleClass)) {
+      if (!this.target.classList.contains(classToToggle)) {
         this.add();
       }
       else {

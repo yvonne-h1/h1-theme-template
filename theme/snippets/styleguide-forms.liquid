@@ -28,8 +28,7 @@
       id="field-2"
       tabindex="0"
       required=""
-      placeholder="Email"
-    >
+      placeholder="Email">
     {{ icons }}
     <div class="field__message field__message--error">Incorrect email format</div>
   </div>
@@ -43,8 +42,7 @@
       id="field-3"
       tabindex="0"
       required=""
-      placeholder="Password"
-    >
+      placeholder="Password">
     {{ icons }}
     <div class="field__message field__message--error">Incorrect password</div>
   </div>
@@ -80,11 +78,10 @@
       id="select-example-1"
       data-options='
         {
-          "toggleClass": "field__dropdown--active",
+          "classToToggle": "field__dropdown--active",
           "target": "[data-select-example]"
         }
-      '
-    >
+      '>
       Option menu
       {%- render 'global-icon', icon: 'caret', icon_class: 'rotate-90 w-3' -%}
     </class-toggle-component>
@@ -94,8 +91,7 @@
       aria-orientation="vertical"
       aria-labelledby="select-example-1"
       tabindex="-1"
-      data-select-example
-    >
+      data-select-example>
       <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Account settings</a>
       <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Support</a>
       <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">License</a>

@@ -1,12 +1,25 @@
+/* eslint no-unused-vars: 0 */
+
+// debug function check, returns true when on localhost or myshopify.com domain
+const debug = () => window.location.hostname === '127.0.0.1' || window.location.hostname.indexOf('myshopify.com') !== -1;
+
 function getFocusableElements(container) {
   return Array.from(
     container.querySelectorAll(
-      "summary, a[href], button:enabled, [tabindex]:not([tabindex^='-']), [draggable], area, input:not([type=hidden]):enabled, select:enabled, textarea:enabled, object, iframe"
-    )
+      'summary, a[href], button:enabled, [tabindex]:not([tabindex^=\'-\']), [draggable], area, input:not([type=hidden]):enabled, select:enabled, textarea:enabled, object, iframe',
+    ),
   );
 }
 
-const trapFocusHandlers = {};
+window.drawerToggleClasses = {
+  filters: 'filter-is-open',
+  cartDrawer: 'cart-drawer-is-open',
+  mobileMenu: 'mobile-menu-is-open',
+  headerSearch: 'header-search-is-open',
+};
+
+const trapFocusHandlers = {
+};
 
 function trapFocus(container, elementToFocus = container) {
   var elements = getFocusableElements(container);
@@ -50,12 +63,12 @@ function pauseAllMedia() {
   document.querySelectorAll('.js-youtube').forEach((video) => {
     video.contentWindow.postMessage(
       '{"event":"command","func":"' + 'pauseVideo' + '","args":""}',
-      '*'
+      '*',
     );
-  });
+  } );
   document.querySelectorAll('.js-vimeo').forEach((video) => {
     video.contentWindow.postMessage('{"method":"pause"}', '*');
-  });
+  } );
   document.querySelectorAll('video').forEach((video) => video.pause());
   document.querySelectorAll('product-model').forEach((model) => model.modelViewerUI?.pause());
 }
@@ -73,10 +86,12 @@ if (!customElements.get('quantity-input')) {
     constructor() {
       super();
       this.input = this.querySelector('input');
-      this.changeEvent = new Event('change', { bubbles: true });
+      this.changeEvent = new Event('change', {
+        bubbles: true,
+      } );
 
       this.querySelectorAll('button').forEach((button) =>
-        button.addEventListener('click', this.onButtonClick.bind(this))
+        button.addEventListener('click', this.onButtonClick.bind(this)),
       );
     }
 
@@ -103,7 +118,8 @@ function debounce(fn, wait) {
 }
 
 const serializeForm = (form) => {
-  const obj = {};
+  const obj = {
+  };
   const formData = new FormData(form);
   for (const key of formData.keys()) {
     obj[key] = formData.get(key);
@@ -114,7 +130,10 @@ const serializeForm = (form) => {
 function fetchConfig(type = 'json') {
   return {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: `application/${type}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: `application/${type}`,
+    },
   };
 }
 
@@ -130,21 +149,26 @@ document.querySelectorAll('.prevent-hashjump').forEach((link) => {
       if (targetElem) {
         const scrollTop = window.pageYOffset;
 
-        window.scrollTo({ top: scrollTop });
+        window.scrollTo( {
+          top: scrollTop,
+        } );
         setTimeout(function () {
-          window.scrollTo({ top: scrollTop });
+          window.scrollTo( {
+            top: scrollTop,
+          } );
         }, 1);
       }
     }
-  });
-});
+  } );
+} );
 
 /*
  * Shopify Common JS
  *
  */
 if (typeof window.Shopify == 'undefined') {
-  window.Shopify = {};
+  window.Shopify = {
+  };
 }
 
 Shopify.bind = function (fn, scope) {
@@ -223,7 +247,8 @@ Shopify.CountryProvinceSelector.prototype = {
     this.clearOptions(this.provinceEl);
     if (provinces && provinces.length == 0) {
       this.provinceContainer.style.display = 'none';
-    } else {
+    }
+    else {
       for (var i = 0; i < provinces.length; i++) {
         var opt2 = document.createElement('option');
         opt2.value = provinces[i][0];

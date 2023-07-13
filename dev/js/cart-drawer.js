@@ -4,11 +4,8 @@ class CartDrawer extends HTMLElement {
 
     this.drawer = this;
     this.body = document.querySelector('body');
-    this.activeClass = 'cart-drawer-is-open';
-    this.cartIconBubble = document.querySelector('cart-icon-bubble');
-
-    this.closeButtons = this.querySelectorAll('[data-cart-button-close]');
-    this.closeButtons.forEach((btn) => btn.addEventListener('click', this.close.bind(this)));
+    this.activeClass = window.drawerToggleClasses.cartDrawer;
+    this.cartIconBubble = document.querySelectorAll('[aria-controls="cartDrawer"]');
 
     this.onBodyClick = this.handleBodyClick.bind(this);
 
@@ -17,18 +14,16 @@ class CartDrawer extends HTMLElement {
 
   open() {
     this.body.classList.add(this.activeClass);
-    this.cartIconBubble.toggleButton.setAttribute('aria-expanded', true);
+    this.cartIconBubble.forEach(button => button.setAttribute('aria-expanded', true));
 
     this.drawer.focus();
     trapFocus(this.drawer);
-    document.body.addEventListener('click', this.onBodyClick);
   }
 
   close() {
     this.body.classList.remove(this.activeClass);
-    this.cartIconBubble.toggleButton.setAttribute('aria-expanded', false);
+    this.cartIconBubble.forEach(button => button.setAttribute('aria-expanded', false));
 
-    document.body.removeEventListener('click', this.onBodyClick);
     removeTrapFocus();
   }
 
@@ -40,16 +35,11 @@ class CartDrawer extends HTMLElement {
         if (selector) {
           selector.innerHTML = this.getSectionInnerHTML(
             parsedState.sections[section.section],
-            section.selector
+            section.selector,
           );
         }
       }
-    });
-
-    // Re-bind the close drawer buttons
-    this.querySelectorAll('[data-cart-button-close]').forEach((btn) =>
-      btn.addEventListener('click', this.close.bind(this))
-    );
+    } );
   }
 
   getSectionsToRender() {

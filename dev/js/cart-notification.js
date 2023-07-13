@@ -42,7 +42,9 @@ class CartNotification extends HTMLElement {
     this.notification.addEventListener('transitionend', () => {
       this.notification.focus();
       trapFocus(this.notification);
-    }, {once: true});
+    }, {
+      once: true,
+    });
 
     document.body.addEventListener('click', this.onBodyClick);
   }
@@ -120,7 +122,7 @@ class CartNotification extends HTMLElement {
    */
   getSectionInnerHTML(html, selector = '.shopify-section') {
     return new DOMParser().parseFromString(html, 'text/html')
-    .querySelector(selector).innerHTML;
+      .querySelector(selector).innerHTML;
   }
 
   /**

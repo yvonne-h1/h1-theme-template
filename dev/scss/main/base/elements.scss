@@ -1,6 +1,7 @@
 @layer base {
   a {
     @apply no-underline
+      transition-colors
       text-link-color
       states:underline
       states:text-link-color-states;

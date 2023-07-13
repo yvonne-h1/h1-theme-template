@@ -1,5 +1,5 @@
 if (!customElements.get('quick-shop')) {
-  class QuickShop extends HTMLElement {
+  class QuickAdd extends HTMLElement {
     constructor() {
       super();
 
@@ -72,6 +72,6 @@ if (!customElements.get('quick-shop')) {
     }
   }
 
-  window.QuickShop = QuickShop;
-  customElements.define('quick-shop', QuickShop);
+  window.QuickShop = QuickAdd;
+  customElements.define('quick-shop', QuickAdd);
 }

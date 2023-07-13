@@ -19,13 +19,12 @@
     "object-curly-newline": [
       "warn",
       {
-        "ObjectExpression": "always",
-        "ObjectPattern": { "multiline": true },
-        "ImportDeclaration": "never",
-        "ExportDeclaration": { "multiline": true, "minProperties": 3 }
+        "consistent": true
       }
     ],
+    "no-trailing-spaces": "error",
     "object-property-newline": "warn",
+    "space-in-parens": ["warn", "never", { "exceptions": ["{}"] }],
     "object-curly-spacing": ["warn", "always", { "arraysInObjects": false }],
     "array-bracket-spacing": ["warn", "never", { "objectsInArrays": true }],
     "brace-style": ["warn", "stroustrup", { "allowSingleLine": false }],

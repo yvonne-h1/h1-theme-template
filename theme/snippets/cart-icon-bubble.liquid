@@ -10,39 +10,71 @@
 
   assign aria_label = cart_item_count | append: '. ' | append: open_cart_drawer_string
 
-  comment
-    Cart icon
-  endcomment
+  # Cart icon
   assign cart_icon = 'cart_empty'
   if cart != empty
     assign cart_icon = 'cart'
   endif
+
+  assign classes = 'header__icon relative px-1 py-3 text-inherit states:text-primary'
+  if request.page_type == 'cart'
+    assign classes = classes | append: ' pointer-events-none'
+  endif
 -%}
 
 {% comment %} The actual cart icon {% endcomment %}
-<cart-icon-bubble class="cart-icon-bubble flex">
-  <a
-    id="cart-icon-bubble"
-    class="header__icon relative px-1 py-3 text-inherit states:text-primary {% if request.page_type == 'cart' %}pointer-events-none{%- endif -%}"
-    href="{{- routes.cart_url -}}"
-    {%- if template.name != 'cart' -%}
-      aria-controls="cart-drawer"
+<cart-icon-bubble class="cart-icon-bubble no-js-hidden flex">
+  {%- if settings.enable_cart_drawer_section -%}
+    <button
+      type="button"
+      id="cart-icon-bubble"
+      class="{{ classes }}"
+      aria-controls="cartDrawer"
+      aria-label="{{- aria_label -}}"
       aria-haspopup="dialog"
-    {%- endif -%}
-    aria-label="{{- aria_label -}}"
-    data-cart-icon-bubble
-  >
-    {%- render 'global-icon', icon: cart_icon, icon_class: 'w-6' -%}
+      aria-expanded="false"
+      data-cart-icon-bubble>
+  {%- else -%}
+    <a
+      id="cart-icon-bubble"
+      class="{{ classes }}"
+      href="{{- routes.cart_url -}}"
+      {%- if template.name != 'cart' -%}
+        aria-controls="cartDrawer"
+        aria-haspopup="dialog"
+      {%- endif -%}
+      aria-label="{{- aria_label -}}"
+      data-cart-icon-bubble>
+  {%- endif -%}
 
-    <div class="cart-icon-bubble__count absolute right-0 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs leading-4 text-white empty:hidden{% if cart == empty %} hidden{% endif -%}">
-      <span class="cart-count">
-        {{- cart.item_count -}}
-      </span>
-      <span class="sr-only">
-        {{- 'sections.header.cart_count' | t: count: cart.item_count -}}
-      </span>
-    </div>
-  </a>
+  {%- render 'global-icon', icon: cart_icon, icon_class: 'w-6' -%}
+  <span class="cart-icon-bubble__count absolute right-0 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs leading-4 text-white empty:hidden{% if cart == empty %} hidden{% endif -%}">
+    <span class="cart-count">
+      {{- cart.item_count -}}
+    </span>
+    <span class="sr-only">
+      {{- 'sections.header.cart_count' | t: count: cart.item_count -}}
+    </span>
+  </span>
+
+  {%- if settings.enable_cart_drawer_section -%}
+    </button>
+  {%- else -%}
+    </a>
+  {%- endif -%}
 </cart-icon-bubble>
+
+{%- comment -%} No-js cart link {%- endcomment -%}
+<a href="{{ routes.cart_url }}" class="no-js[visible] hidden">
+  <span class="visually-hidden">
+    {% render 'format-translation',
+      namespace: 'general.cart',
+      key: 'view',
+      count: cart.item_count,
+      fallback: 'View cart'
+    %}
+  </span>
+  {%- render 'global-icon', icon: 'cart' -%}
+</a>
 
 <script src="{{ 'cart-icon-bubble.js' | asset_url }}" type="module"></script>

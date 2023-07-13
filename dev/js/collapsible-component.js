@@ -77,7 +77,7 @@ if (!customElements.get('collapsible-component')) {
 
       // Options
       this.options = {
-        toggleClass: 'collapsible-is-open',
+        classToToggle: 'collapsible-is-open',
         toggleBodyClass: '',
         closeSiblings: false,
         closeChildren: true,
@@ -160,7 +160,7 @@ if (!customElements.get('collapsible-component')) {
       const buttonType = e.currentTarget.nodeName.toLowerCase();
       const group = e.currentTarget.closest('[data-collapsible-group]');
       // only toggle if is closed or target is not an <a> tag
-      if (!group.classList.contains(this.options.toggleClass) || buttonType != 'a') {
+      if (!group.classList.contains(this.options.classToToggle) || buttonType != 'a') {
         e.preventDefault();
         this.toggle(group);
       }
@@ -184,17 +184,17 @@ if (!customElements.get('collapsible-component')) {
       this.timeout = setTimeout(() => {
         const group = e?.target?.closest('[data-collapsible-group]');
         switch (type) {
-          case 'open':
-            this.open(group);
-            break;
-          case 'close':
-            this.close(group);
-            break;
-          case 'closeAll':
-            this.closeAll();
-            break;
-          default:
-            break;
+        case 'open':
+          this.open(group);
+          break;
+        case 'close':
+          this.close(group);
+          break;
+        case 'closeAll':
+          this.closeAll();
+          break;
+        default:
+          break;
         }
       }, this.options.hoverDelay);
     }
@@ -212,7 +212,7 @@ if (!customElements.get('collapsible-component')) {
       this.options.closeSiblings && this.closeSiblings(group);
 
       // Open active group
-      group.classList.add(this.options.toggleClass);
+      group.classList.add(this.options.classToToggle);
 
       // Add body class
       this.toggleBodyClass(true);
@@ -228,7 +228,7 @@ if (!customElements.get('collapsible-component')) {
       }
 
       // Close active group
-      group.classList.remove(this.options.toggleClass);
+      group.classList.remove(this.options.classToToggle);
 
       // Close child collapsibles
       if (this.options.closeChildren) {
@@ -251,10 +251,11 @@ if (!customElements.get('collapsible-component')) {
       }
 
       // Check if already open
-      if (!group.classList.contains(this.options.toggleClass)) {
+      if (!group.classList.contains(this.options.classToToggle)) {
         // Open
         this.open(group);
-      } else {
+      }
+      else {
         // Close
         this.close(group);
       }
@@ -281,7 +282,7 @@ if (!customElements.get('collapsible-component')) {
     */
     openAll() {
       this.groups.forEach((group) => {
-        group.classList.add(this.options.toggleClass);
+        group.classList.add(this.options.classToToggle);
       });
 
       // Add body class
@@ -293,7 +294,7 @@ if (!customElements.get('collapsible-component')) {
     */
     closeAll() {
       this.groups.forEach((group) => {
-        group.classList.remove(this.options.toggleClass);
+        group.classList.remove(this.options.classToToggle);
       });
 
       // Remove body class
@@ -310,7 +311,8 @@ if (!customElements.get('collapsible-component')) {
       }
       if (add) {
         document.querySelector('body').classList.add(this.options.toggleBodyClass);
-      } else {
+      }
+      else {
         document.querySelector('body').classList.remove(this.options.toggleBodyClass);
       }
     }

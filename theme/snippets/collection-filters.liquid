@@ -10,24 +10,21 @@
 
 <div
   id="main-collection-filters"
-  data-id="{{ section.id }}"
->
+  data-id="{{ section.id }}">
   <collapsible-component>
     <collection-filters-form>
       <form
         id="CollectionFiltersForm"
         class="group/filter filter"
-        data-collection-filters-form
-      >
+        data-collection-filters-form>
         {%- comment -%} Shadow collection filter overlay {%- endcomment -%}
         <class-toggle-component
+          class="filter__backdrop backdrop group-[.filter-is-open]/body:backdrop--active z-modal-backdrop"
           data-options='
             {
-              "toggleClass": "filter-is-open"
+              "classToToggle": "filter-is-open"
             }
-          '
-          class="filter__backdrop backdrop group-[.filter-is-open]/body:backdrop--active z-modal-backdrop"
-        >
+          '>
         </class-toggle-component>
 
         {%- comment -%} The collection filter drawer. {%- endcomment -%}
@@ -38,15 +35,13 @@
               class="flex justify-end"
               data-options='
                 {
-                  "toggleClass": "filter-is-open"
+                  "classToToggle": "filter-is-open"
                 }
-              '
-            >
+              '>
               <button
                 type="button"
                 class="filter__close button button--link -mr-3 -mt-3 border-none p-3"
-                aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}"
-              >
+                aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
                 {%- render 'global-icon', icon: 'close', icon_class: 'w-6' -%}
               </button>
             </class-toggle-component>
@@ -66,8 +61,7 @@
                   href="{{ collection.url }}?sort_by={{ sort_by }}"
                   class="js-filter-remove button button--sm button--link pl-0 pr-0 font-body"
                   data-filter-remove
-                  data-filter-reset
-                >
+                  data-filter-reset>
                   {%- render 'format-translation',
                     namespace: 'sections.collection_template',
                     key: 'clear_all',
@@ -115,8 +109,7 @@
             <input
               type="hidden"
               name="q"
-              value="{{ collection.current_vendor }}{{ collection.current_type }}"
-            >
+              value="{{ collection.current_vendor }}{{ collection.current_type }}">
           {%- endif -%}
         </div>
       </form>

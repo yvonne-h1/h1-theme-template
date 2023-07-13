@@ -71,8 +71,8 @@ if (!customElements.get('load-more')) {
 
         // update the elements on the page with the values
         document
-        .querySelectorAll('[data-progress-current]')
-        .forEach((el) => (el.innerHTML = currentItems));
+          .querySelectorAll('[data-progress-current]')
+          .forEach((el) => (el.innerHTML = currentItems));
       }
     }
 
@@ -102,63 +102,65 @@ if (!customElements.get('load-more')) {
      */
     renderElementsFromFetch(url, page, direction) {
       fetch(url)
-      .then((response) => response.text())
-      .then((responseText) => {
-        const html = new DOMParser().parseFromString(responseText, 'text/html');
-        let wrapperID = '#products';
+        .then((response) => response.text())
+        .then((responseText) => {
+          const html = new DOMParser().parseFromString(responseText, 'text/html');
+          let wrapperID = '#products';
 
-        if (!html.querySelector(`${wrapperID}`)) {
-          return;
-        }
+          if (!html.querySelector(`${wrapperID}`)) {
+            return;
+          }
 
-        let elementsWrapper = document.querySelector('#CollectionProductGrid');
-        let wrapperIDSelector = '[data-products-wrapper]';
-        if (this.currentTemplate === 'search') {
-          elementsWrapper = document.querySelector('#SearchProductGrid');
-        }
-        // update the wrapper with the new elements (products/articles)
-        const newContent = html.querySelector(`${wrapperID} ${wrapperIDSelector}`).innerHTML;
-        const newElement = document.createRange().createContextualFragment(newContent);
+          let elementsWrapper = document.querySelector('#CollectionProductGrid');
+          let wrapperIDSelector = '[data-products-wrapper]';
+          if (this.currentTemplate === 'search') {
+            elementsWrapper = document.querySelector('#SearchProductGrid');
+          }
+          // update the wrapper with the new elements (products/articles)
+          const newContent = html.querySelector(`${wrapperID} ${wrapperIDSelector}`).innerHTML;
+          const newElement = document.createRange().createContextualFragment(newContent);
 
-        // depending on the direction of the click, append or prepend the products/articles and update the pagination
-        if (direction == 'next') {
-          elementsWrapper.querySelector(`${wrapperIDSelector}`).append(newElement);
-          // update the pagination
-          const paginationNextHtml = html.querySelector('[data-pagination-next]').innerHTML;
-          elementsWrapper.querySelector('[data-pagination-next]').innerHTML = paginationNextHtml;
-        }
-        else {
-          elementsWrapper.querySelector(`${wrapperIDSelector}`).prepend(newElement);
-          // update the pagination
-          const paginationPrevHtml = html.querySelector('[data-pagination-prev]').innerHTML;
-          elementsWrapper.querySelector('[data-pagination-prev]').innerHTML = paginationPrevHtml;
-        }
+          // depending on the direction of the click, append or prepend the products/articles and update the pagination
+          if (direction == 'next') {
+            elementsWrapper.querySelector(`${wrapperIDSelector}`).append(newElement);
+            // update the pagination
+            const paginationNextHtml = html.querySelector('[data-pagination-next]').innerHTML;
+            elementsWrapper.querySelector('[data-pagination-next]').innerHTML = paginationNextHtml;
+          }
+          else {
+            elementsWrapper.querySelector(`${wrapperIDSelector}`).prepend(newElement);
+            // update the pagination
+            const paginationPrevHtml = html.querySelector('[data-pagination-prev]').innerHTML;
+            elementsWrapper.querySelector('[data-pagination-prev]').innerHTML = paginationPrevHtml;
+          }
 
-        // update the variables because the returned amount of products will likely have different pagination values
-        this.currentPageValue = +html.querySelector('[data-current-page]').value;
-        this.totalPagesValue = +html.querySelector('[data-total-pages]').value;
-        this.totalItemsValue = +html.querySelector('[data-total-items]').value;
-        this.totalItemsOnLastPageValue = +html.querySelector('[data-items-on-last-page]').value;
+          // update the variables because the returned amount of products will likely have different pagination values
+          this.currentPageValue = +html.querySelector('[data-current-page]').value;
+          this.totalPagesValue = +html.querySelector('[data-total-pages]').value;
+          this.totalItemsValue = +html.querySelector('[data-total-items]').value;
+          this.totalItemsOnLastPageValue = +html.querySelector('[data-items-on-last-page]').value;
 
-        // update the array of loaded pages
-        if (this.loadedPages.indexOf(this.currentPageValue) === -1) {
-          this.loadedPages.push(this.currentPageValue);
-        }
+          // update the array of loaded pages
+          if (this.loadedPages.indexOf(this.currentPageValue) === -1) {
+            this.loadedPages.push(this.currentPageValue);
+          }
 
-        // reload the function since variables might have been changed
-        this.initLoadMoreButtons(true);
+          // reload the function since variables might have been changed
+          this.initLoadMoreButtons(true);
 
-        // update url
-        this.updateURLHash(page);
+          // update url
+          this.updateURLHash(page);
 
-        // update the hidden input with the new value
-        this.querySelector('[data-current-page]').value = page.split('page=')[1];
+          // update the hidden input with the new value
+          this.querySelector('[data-current-page]').value = page.split('page=')[1];
 
-        // trigger a window event that we use in the set-creator.js
-        window.dispatchEvent(
-          new CustomEvent('load-more', {bubbles: true}),
-        );
-      });
+          // trigger a window event that we use in the set-creator.js
+          window.dispatchEvent(
+            new CustomEvent('load-more', {
+              bubbles: true,
+            }),
+          );
+        });
     }
 
     /**

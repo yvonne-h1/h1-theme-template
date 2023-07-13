@@ -24,14 +24,15 @@ class CustomerAddresses {
     const container = document.querySelector(selectors.customerAddresses);
     return container
       ? {
-          container,
-          addressContainer: container.querySelector(selectors.addressContainer),
-          toggleButtons: document.querySelectorAll(selectors.toggleAddressButton),
-          cancelButtons: container.querySelectorAll(selectors.cancelAddressButton),
-          deleteButtons: container.querySelectorAll(selectors.deleteAddressButton),
-          countrySelects: container.querySelectorAll(selectors.addressCountrySelect),
-        }
-      : {};
+        container,
+        addressContainer: container.querySelector(selectors.addressContainer),
+        toggleButtons: document.querySelectorAll(selectors.toggleAddressButton),
+        cancelButtons: container.querySelectorAll(selectors.cancelAddressButton),
+        deleteButtons: container.querySelectorAll(selectors.deleteAddressButton),
+        countrySelects: container.querySelectorAll(selectors.addressCountrySelect),
+      }
+      : {
+      };
   }
 
   _setupCountries() {
@@ -48,7 +49,7 @@ class CustomerAddresses {
           `AddressProvince_${formId}`,
           {
             hideElement: `AddressProvinceContainer_${formId}`,
-          }
+          },
         );
       });
     }
@@ -75,7 +76,7 @@ class CustomerAddresses {
   _toggleExpanded(target) {
     target.setAttribute(
       attributes.expanded,
-      (target.getAttribute(attributes.expanded) === 'false').toString()
+      (target.getAttribute(attributes.expanded) === 'false').toString(),
     );
   }
 
@@ -85,7 +86,7 @@ class CustomerAddresses {
 
   _handleCancelButtonClick({ currentTarget }) {
     this._toggleExpanded(
-      currentTarget.closest(selectors.addressContainer).querySelector(`[${attributes.expanded}]`)
+      currentTarget.closest(selectors.addressContainer).querySelector(`[${attributes.expanded}]`),
     );
   }
 
@@ -93,7 +94,9 @@ class CustomerAddresses {
     // eslint-disable-next-line no-alert
     if (confirm(currentTarget.getAttribute(attributes.confirmMessage))) {
       Shopify.postLink(currentTarget.dataset.target, {
-        parameters: { _method: 'delete' },
+        parameters: {
+          _method: 'delete',
+        },
       });
     }
   }

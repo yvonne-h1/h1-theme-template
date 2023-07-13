@@ -1,8 +1,0 @@
-@layer base {
-  .skip-to-content {
-    @apply focus:not-sr-only
-      focus:px-4
-      focus:py-2
-      focus:text-secondary-text;
-  }
-}

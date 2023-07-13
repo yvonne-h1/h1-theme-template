@@ -55,7 +55,7 @@
     >
       {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-5' -%}
     </button>
-      
+
     <div class="swiper-pagination swiper-pagination-{{ section.id }} flex justify-center"></div>
     <div class="swiper-scrollbar"></div>
   </div>
