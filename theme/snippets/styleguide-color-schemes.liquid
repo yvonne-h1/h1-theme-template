@@ -1,0 +1,28 @@
+{%- assign scheme_types = 'gradient, black, white, primary, secondary, accent, gray'
+  | split: ', '
+-%}
+
+<div class="grid grid-cols-2">
+  {% comment %}
+    Color schemes
+  {% endcomment %}
+  {%- for type in scheme_types -%}
+    <div class="color-scheme color-scheme--{{ type }} p-10">
+      <h3 class="h5">
+        <em>{{ type | capitalize }}</em> color scheme
+      </h3>
+      <p>
+        Lorem ipsum dolor sit amet consectetur <a href="#">adipisicing</a> elit. Consectetur
+        <strong>libero ut consequuntur</strong> fugiat dignissimos atque id saepe
+        <em>explicabo exercitationem</em> at facilis asperiores, expedita natus autem facere! Neque
+        quia in praesentium.
+      </p>
+      <hr class="my-8">
+      <a href="#" class="link mb-4">
+        Link with arrow {% render 'global-icon', icon: 'arrow', icon_class: 'w-3' -%}
+      </a>
+      <br>
+      <button class="button">Default button</button>
+    </div>
+  {%- endfor -%}
+</div>

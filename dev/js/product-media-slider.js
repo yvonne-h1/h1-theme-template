@@ -63,7 +63,7 @@
             setTimeout(() => {
               this.swiperThumbsInstance.update();
             }, 300);
-          });
+          } );
         }
       }
 
@@ -118,7 +118,7 @@
         if (Shopify.designMode && this.swiperMainInstance) {
           window.addEventListener('shopify:section:load', () => {
             this.swiperMainInstance.update();
-          });
+          } );
         }
       }
 
@@ -135,7 +135,7 @@
           animated: false,
           showClass: false,
           mainClass: 'image-zoom',
-        });
+        } );
       }
 
       /*
@@ -172,7 +172,7 @@
           if (slideVariants.includes(id)) {
             return slide;
           }
-        });
+        } );
 
         // return false if no slide found
         if (!slide) {
@@ -180,7 +180,7 @@
         }
 
         // return matched slide index
-        return getNodeIndex(slide);
+        return this.getNodeIndex(slide);
       }
 
       /*
@@ -193,10 +193,14 @@
         }
 
         // Get index, transform node to slide index or string to int
-        const index = typeof slide == 'number' ? parseInt(slide) : getNodeIndex(slide);
+        const index = typeof slide == 'number' ? parseInt(slide) : this.getNodeIndex(slide);
 
         // go to slide
         this.swiperMainInstance.slideTo(index);
+      }
+
+      getNodeIndex(node) {
+        return Array.from(node.parentNode.children).indexOf(node);
       }
     }
 
@@ -204,4 +208,4 @@
 
     customElements.define('product-media-slider', ProductMediaSlider);
   }
-})();
+} )();

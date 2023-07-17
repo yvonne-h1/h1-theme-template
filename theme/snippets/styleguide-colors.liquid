@@ -19,8 +19,7 @@
         <div
           class="{{ circle_class }}"
           style="background-color: var(--{{- color_class -}});"
-          title="{{- color_capitalized -}}"
-        ></div>
+          title="{{- color_capitalized -}}"></div>
         <p>{{- color_capitalized -}}</p>
       </div>
     {%- endfor -%}
@@ -35,21 +34,18 @@
         <div
           class="{{ circle_class }}"
           style="background-color: var(--color-{{- color -}});"
-          title="{{- color_capitalized -}}"
-        ></div>
+          title="{{- color_capitalized -}}"></div>
         <p>{{- color_capitalized -}}</p>
       </div>
     {%- endfor -%}
   </div>
-  {{ settings.font_body.name }}
-  {{ settings.font_heading | json }}
+
   {% comment %} Primary {% endcomment %}
   <div class="{{ color_wrapper_class }}">
     <div
       class="{{ circle_class_full }}"
       style="background: var(--color-primary);"
-      title="Primary"
-    >
+      title="Primary">
       <p class="text-white">Primary</p>
     </div>
 
@@ -58,8 +54,7 @@
         <div
           class="{{ circle_class }}"
           style="background-color: var(--color-primary-{{ type }});"
-          title="Primary {{ type }}"
-        ></div>
+          title="Primary {{ type }}"></div>
         <p>{{ type }}</p>
       </div>
     {%- endfor -%}
@@ -70,8 +65,7 @@
     <div
       class="{{ circle_class_full }}"
       style="background-color: var(--color-secondary);"
-      title="Primary"
-    >
+      title="Primary">
       <p class="text-white">Secondary</p>
     </div>
 
@@ -80,8 +74,7 @@
         <div
           class="{{ circle_class }}"
           style="background-color: var(--color-secondary-{{ type }});"
-          title="Secondary {{ type }}"
-        ></div>
+          title="Secondary {{ type }}"></div>
         <p>{{ type }}</p>
       </div>
     {%- endfor -%}
@@ -92,8 +85,7 @@
     <div
       class="{{ circle_class_full }}"
       style="background-color: var(--color-accent);"
-      title="Primary"
-    >
+      title="Primary">
       <p class="text-white">Accent</p>
     </div>
 
@@ -102,8 +94,7 @@
         <div
           class="{{ circle_class }}"
           style="background-color: var(--color-accent-{{ type }});"
-          title="Accent {{ type }}"
-        ></div>
+          title="Accent {{ type }}"></div>
         <p>{{ type }}</p>
       </div>
     {%- endfor -%}
@@ -119,8 +110,7 @@
       <div>
         <div
           class="{{ circle_class }} {{ type | prepend: 'bg-gray-' }}"
-          title="Gray {{ type }}"
-        ></div>
+          title="Gray {{ type }}"></div>
         <p>{{ type }}</p>
       </div>
     {%- endfor -%}

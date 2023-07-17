@@ -1,6 +1,6 @@
 .template-policy {
   .shopify-policy__container {
-    @apply mx-auto my-[var(--container-spacing)] max-w-[var(--site-center-md)];
+    @apply mx-auto my-[var(--container-spacing)] max-w-[var(--content-wrapper-md)];
   }
   .rte {
     @apply max-w-none;

@@ -2,7 +2,7 @@
   Handles all the account pages: customers/account, customers/activate_account, customers/addresses, customers/login, customers/order, customers/register, customers/reset_password.
 {% endcomment %}
 
-<header class="account-header site-center site-spacing-side my-14">
+<header class="account-header content-wrapper content-wrapper-padding my-14">
   {%- case request.page_type -%}
     {%- when 'customers/account' -%}
       <h1 class="block text-center text-sm font-bold uppercase leading-5 tracking-widest">
@@ -53,8 +53,7 @@
         </h1>
         <a
           href="{{ routes.account_register_url }}"
-          class="block text-sm font-bold uppercase leading-5 tracking-widest text-inherit"
-        >
+          class="block text-sm font-bold uppercase leading-5 tracking-widest text-inherit">
           {%- render 'format-translation',
             namespace: 'customer.register',
             key: 'title',
@@ -88,8 +87,7 @@
       <div class="flex items-center justify-center gap-4 px-6 md:gap-10">
         <a
           href="{{ routes.account_login_url }}"
-          class="block text-sm font-bold uppercase leading-5 tracking-widest text-inherit"
-        >
+          class="block text-sm font-bold uppercase leading-5 tracking-widest text-inherit">
           {%- render 'format-translation',
             namespace: 'customer.login_page',
             key: 'title',

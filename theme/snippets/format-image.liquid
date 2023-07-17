@@ -132,9 +132,11 @@
   if lazy == false
     assign lazy_value = 'eager'
     assign preload = true
+    assign fetchpriority = 'high'
   else
     assign lazy_value = 'lazy'
     assign preload = false
+    assign fetchpriority = 'low'
   endif
 
   # Image alt
@@ -192,6 +194,7 @@
       title: title,
       width: width,
       widths: widths,
+      fetchpriority: fetchpriority,
       data-custom-aspect-ratio: custom_aspect_ratio
   }}
   {% comment %}theme-check-enable AssetUrlFilters{% endcomment %}

@@ -8,7 +8,7 @@
 -%}
 
 <footer class="footer bg-gray-200 py-8 text-gray-700 md:pt-10">
-  <div class="site-center site-spacing-side flex flex-col gap-y-0">
+  <div class="content-wrapper content-wrapper-padding flex flex-col gap-y-0">
     <div class="footer__blocks grid grid-cols-12 gap-y-8 gap-x-base md:gap-x-6 lg:gap-x-12">
       {%- for block in section.blocks -%}
         {%- assign block_type = block.type | handleize -%}
@@ -30,8 +30,7 @@
 
             <div
               class="footer-block footer-block--{{ block_type }} col-span-12 md:col-span-3"
-              {{ block.shopify_attributes }}
-            >
+              {{ block.shopify_attributes }}>
               {%- comment -%} Create collapsible group for mobile {%- endcomment -%}
               <collapsible-component class="collapsible">
                 <div class="group" data-collapsible-group>
@@ -40,8 +39,7 @@
                     <button
                       type="button"
                       class="footer-block--menu__trigger relative block w-full py-3 text-left text-sm font-bold leading-5 text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
-                      data-collapsible-trigger
-                    >
+                      data-collapsible-trigger>
                       {{- block.settings.title -}}
                       {%- render 'global-icon',
                         icon: 'chevron-down',
@@ -53,8 +51,7 @@
                   {%- comment -%} Output menu and collapsible content {%- endcomment -%}
                   <div
                     class="footer-block--menu__target p-0 text-sm leading-5 js:md:!max-h-min"
-                    {{ target }}
-                  >
+                    {{ target }}>
                     {%- if block.settings.menu != blank -%}
                       {%- render 'footer-menu',
                         linklist: block.settings.menu,
@@ -76,15 +73,13 @@
                       {%- endcapture -%}
                       <div
                         class="flexible-holder"
-                        style="--max-width: {{ block.settings.image_max_width }}px;"
-                      >
+                        style="--max-width: {{ block.settings.image_max_width }}px;">
                         {%- if block.settings.image_url != blank -%}
                           <a
                             href="{{ block.settings.image_url }}"
                             {% if block.settings.image_new_tab %}
                               target="_blank" rel="noopener"
-                            {% endif %}
-                          >
+                            {% endif %}>
                             {{ menu_image }}
                           </a>
                         {%- else -%}
@@ -101,8 +96,7 @@
           {%- when 'text' -%}
             <div
               class="footer-block footer-block--{{ block_type }} col-span-12 grid grid-cols-1 gap-y-4 md:col-span-3"
-              {{ block.shopify_attributes }}
-            >
+              {{ block.shopify_attributes }}>
               {%- if block.settings.title != blank -%}
                 <p class="block w-full pt-3 text-sm font-bold text-black md:pt-0">
                   {{- block.settings.title -}}
@@ -167,8 +161,7 @@
             -%}
             <div
               class="footer-block footer-block--{{ block_type }} -order-1 col-span-12 md:order-none md:col-span-3"
-              {{ block.shopify_attributes }}
-            >
+              {{ block.shopify_attributes }}>
               {%- if block.settings.title != blank -%}
                 <p class="mb-4 block w-full text-sm font-bold text-black">
                   {{- block.settings.title -}}
@@ -218,15 +211,13 @@
                 <select
                   class="localization-selector link"
                   name="country_code"
-                  aria-labelledby="FooterCountryLabelNoScript"
-                >
+                  aria-labelledby="FooterCountryLabelNoScript">
                   {%- for country in localization.available_countries -%}
                     <option
                       value="{{ country.iso_code }}"
                       {%- if country.iso_code == localization.country.iso_code %}
                         selected
-                      {% endif %}
-                    >
+                      {% endif %}>
                       {{ country.name }} ({{ country.currency.iso_code }}
                       {{ country.currency.symbol }})
                     </option>
@@ -266,16 +257,14 @@
                 <select
                   class="localization-selector link"
                   name="locale_code"
-                  aria-labelledby="FooterLanguageLabelNoScript"
-                >
+                  aria-labelledby="FooterLanguageLabelNoScript">
                   {%- for language in localization.available_languages -%}
                     <option
                       value="{{ language.iso_code }}"
                       lang="{{ language.iso_code }}"
                       {%- if language.iso_code == localization.language.iso_code %}
                         selected
-                      {% endif %}
-                    >
+                      {% endif %}>
                       {{ language.endonym_name | capitalize }}
                     </option>
                   {%- endfor -%}

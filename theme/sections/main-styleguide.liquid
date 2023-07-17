@@ -1,4 +1,4 @@
-{%- assign style_guide_sections = 'colors, typography, rte, grid, logo, icons, buttons, forms, options, quantity-input, collapsibles, toggle-element, badges, prices, collection-cards, product-cards, article-cards'
+{%- assign style_guide_sections = 'colors, color-schemes, typography, rte, grid, logo, icons, buttons, forms, options, quantity-input, collapsibles, toggle-element, badges, prices, collection-cards, product-cards, article-cards'
   | split: ', '
 -%}
 
@@ -8,7 +8,8 @@
     <div class="col-span-12 divide-y lg:col-span-9">
       <div id="intro" class="pb-10 lg:pb-16">
         <h1>
-          {{- page.title | default: 'Styles' -}}
+          {{- page.title | default: 'Styles' }}
+          | <span class="text-color-gradient">&lt;H1&gt;</span>
         </h1>
         <p>
           This page is here to show off styles and components for standard page elements such as typography, form
@@ -24,7 +25,7 @@
 
         <div id="styleguide-{{- section -}}" class="style-guide__section py-10 lg:py-16">
 
-          <h2 class="mb-12 rounded bg-gray-100 p-4">
+          <h2 class="">
             {{- heading -}}
           </h2>
 
@@ -33,6 +34,8 @@
               case section
                 when 'colors'
                   render 'styleguide-colors'
+                when 'color-schemes'
+                  render 'styleguide-color-schemes'
                 when 'typography'
                   render 'styleguide-typography'
                 when 'rte'

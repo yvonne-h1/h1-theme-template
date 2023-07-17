@@ -16,6 +16,7 @@
   ::selection {
     color: var(--color-white);
     background: var(--color-primary-500);
+    -webkit-text-fill-color: var(--color-white);
   }
 
   /* Dangerous for a11y - Use with care */

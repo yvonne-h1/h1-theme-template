@@ -151,7 +151,7 @@ We strive to work for the smallest to the biggest elements. For this workflow, w
 - Screen sizes for breakpoints are defined inside Tailwind.config (theme.screens).
 - Common variables for the layout are set inside root-variables.scss.
 - We use the format-container.liquid snippet to align each section the same way.
-- Inside container.scss, site-center.scss and site-spacing.scss the layout system classes are build.
+- Inside container.scss, content-wrapper.scss and site-spacing.scss the layout system classes are build.
 
 ### Logo, favicons & webmanifest
 

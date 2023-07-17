@@ -1,6 +1,6 @@
 {%- comment -%} Capture header classes {%- endcomment -%}
 {%- capture header_class %}
-  grid grid-cols-1 gap-y-4 {{ section.settings.text_align }} site-center site-center-sm
+  grid grid-cols-1 gap-y-4 {{ section.settings.text_align }} content-wrapper content-wrapper-sm
 {%- endcapture -%}
 
 {%- comment -%} Capture title {%- endcomment -%}
@@ -22,7 +22,7 @@
 
 {%- comment -%} Capture content classes {%- endcomment -%}
 {%- capture content_classes -%}
- {{- section.settings.text_align }} site-center site-center-sm grid gap-y-6 flex-col items-center justify-items-center
+ {{- section.settings.text_align }} content-wrapper content-wrapper-sm grid gap-y-6 flex-col items-center justify-items-center
 {%- endcapture -%}
 
 {%- comment -%} Capture Container header {%- endcomment -%}
@@ -82,7 +82,7 @@
         alt="Gift card"
         height="{{ 540 | divided_by: 1.5 }}"
         width="540"
-        loading="eager"
+        fetchpriority="high"
       >
     {%- endif -%}
 

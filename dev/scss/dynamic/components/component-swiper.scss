@@ -33,10 +33,10 @@
       }
     }
     &-button-prev {
-      @apply left-[var(--site-side-spacing)];
+      @apply left-[var(--content-wrapper-padding)];
     }
     &-button-next {
-      @apply right-[var(--site-side-spacing)];
+      @apply right-[var(--content-wrapper-padding)];
     }
 
     // swiper-scrollbar

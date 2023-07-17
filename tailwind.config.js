@@ -30,7 +30,7 @@ module.exports = {
     /**
      * Default screen sizes
      * Usage: md:[class-name] or @screen md { ... your css }
-     * Advise: leave as it is
+     * Advice: Adjust according to design but keep when possible
      */
     screens: {
       xs: '360px',
@@ -46,7 +46,7 @@ module.exports = {
     /**
      * Font family's
      * Usage: font-body
-     * Advise: Adjust to project needs in html-head-colors.liquid
+     * Advice: Adjust to project needs in html-head-colors.liquid
      */
     fontFamily: {
       body: 'var(--font-body-family)',
@@ -57,7 +57,7 @@ module.exports = {
      * Usage text-base
      * Default line height is set on the body
      * Exceptions in line-height text-base leading-tight
-     * Advise: leave as it is
+     * Advice: leave as it is
      */
     fontSize: {
       '2xs': '0.625rem',
@@ -79,7 +79,7 @@ module.exports = {
      * Colors
      * We extend the tailwind colors with our own colors
      * Usage: text-primary, bg-secondary, bg-gray-500
-     * Advise: Adjust to project needs
+     * Advice: Adjust to project needs
      */
     colors: {
       inherit: colors.inherit,
@@ -163,6 +163,19 @@ module.exports = {
           css: {
             '--tw-prose-counters': 'color: inherit',
             '--tw-prose-bullets': 'color: inherit',
+            '--tw-prose-links': 'color: var(--text-primary-500)',
+            color: 'var(--text-color-default)',
+            a: {
+              color: 'var(--text-primary-500)',
+              textDecoration: 'none',
+              '&:hover': {
+                color: 'var(--text-primary-800)',
+                textDecoration: 'underline',
+              },
+            },
+            p: {
+              marginBottom: '1rem',
+            },
           },
         },
       }),
@@ -201,6 +214,9 @@ module.exports = {
         },
         '.text-color-default': {
           color: 'var(--text-color-default)',
+        },
+        '.text-color-gradient': {
+          backgroundImage: 'var(--color-primary-gradient)',
         },
         '.text-color-light': {
           color: 'var(--text-color-light)',

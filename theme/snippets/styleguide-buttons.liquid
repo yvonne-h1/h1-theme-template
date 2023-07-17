@@ -1,5 +1,5 @@
-{%- assign button_wrapper_class = 'flex gap-2 flex-wrap' -%}
-{%- assign button_types = 'primary, secondary, tertiary, outline' | split: ', ' -%}
+{%- assign button_wrapper_class = 'flex flex-wrap gap-2' -%}
+{%- assign button_types = 'primary, secondary, tertiary, outline, gradient' | split: ', ' -%}
 
 <div class="space-y-6">
   {% comment %} Icon buttons {% endcomment %}
@@ -12,7 +12,10 @@
     </button>
   </div>
 
-  {% comment %} Button types {% endcomment %}
+  {% comment %}
+    Button types
+    Will render buttons for button--primary, button--secondary, button--tertiary, button--outline
+  {% endcomment %}
   {%- for type in button_types -%}
     <div class="{{ button_wrapper_class }}">
       {%- assign type_label = type | replace: '-', ' ' | capitalize -%}
@@ -28,7 +31,7 @@
       </button>
       <button type="button" class="button button--{{ type }}">
         {{ type_label }} icon button
-        {%- render 'global-icon', icon: 'caret', icon_class: 'w-5' -%}
+        {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%}
       </button>
       <button type="button" disabled="disabled" class="button button--{{ type }}">
         {{ type_label }} button disabled
@@ -36,7 +39,7 @@
     </div>
   {%- endfor -%}
 
-  {% comment %} Link {% endcomment %}
+  {% comment %} Links {% endcomment %}
   <div class="{{ button_wrapper_class }}">
     <a href="#" class="button button--link">
       Link anchor

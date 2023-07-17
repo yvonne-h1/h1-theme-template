@@ -1,39 +1,67 @@
+@use '../../mixins' as *;
+
 @layer utilities {
   .color-scheme {
     background: var(--color-scheme-background-color);
-    color: var(--color-scheme-text);
-    --swiper-theme-color: var(--color-scheme-text);
-    --text-link-color: var(--color-scheme-text);
-    --text-link-color-states: var(--color-scheme-text);
+    color: var(--text-color-default);
+    --swiper-theme-color: var(--text-color-default);
+    --text-link-color: var(--text-color-default);
+    --text-link-color-states: var(--text-color-default);
+    a {
+      color: var(--text-link-color);
+      text-decoration: underline;
+      @include states() {
+        text-decoration: none;
+      }
+    }
+
+    // .color-scheme--black
     &--black {
       --color-scheme-background-color: var(--color-black);
-      --color-scheme-text: var(--color-white);
+      --text-color-default: var(--color-white);
     }
+    // .color-scheme--white
     &--white {
       --color-scheme-background-color: var(--color-white);
-      --color-scheme-text: var(--color-black);
+      --text-color-default: var(--color-black);
     }
+    // .color-scheme--primary
     &--primary {
-      --color-scheme-background-color: var(--color-primary-gradient);
-      --color-scheme-text: var(--color-primary-text);
+      --color-scheme-background-color: var(--color-primary);
+      --text-color-default: var(--color-primary-text);
     }
+    // .color-scheme--gradient
+    &--gradient {
+      --color-scheme-background-color: var(--color-primary-gradient);
+      --text-color-default: var(--color-primary-text);
+      background-image: var(--color-scheme-background-color);
+    }
+    // .color-scheme--secondary
     &--secondary {
       --color-scheme-background-color: var(--color-secondary);
-      --color-scheme-text: var(--color-secondary-text);
+      --text-color-default: var(--color-secondary-text);
     }
+    // .color-scheme--accent
     &--accent {
       --color-scheme-background-color: var(--color-accent);
-      --color-scheme-text: var(--color-accent-text);
+      --text-color-default: var(--color-accent-text);
     }
+    // .color-scheme--gray
     &--gray {
       --color-scheme-background-color: theme(colors.gray.200);
-      --color-scheme-text: var(--color-black);
+      --text-color-default: var(--color-black);
     }
-  }
-  .text-color-scheme {
-    color: var(--color-scheme-text);
-  }
-  .bg-color-scheme {
-    background: var(--color-scheme-color);
+
+    // .color-scheme--black
+    // .color-scheme--secondary
+    &--black,
+    &--secondary {
+      --button-background: var(--color-primary-500);
+      --button-border-color: var(--color-primary);
+      --button-text: var(--color-primary-text);
+      --button-hover-background: var(--color-primary-700);
+      --button-hover-border-color: var(--color-primary-700);
+      --button-hover-text: var(--color-primary-text);
+    }
   }
 }

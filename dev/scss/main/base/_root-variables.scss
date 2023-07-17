@@ -3,17 +3,17 @@
     /*
      * Site dimensions
      */
-    --site-center: 1440px;
-    --site-center-md: 820px;
-    --site-center-sm: 620px;
+    --content-wrapper: 1440px;
+    --content-wrapper-md: 820px;
+    --content-wrapper-sm: 620px;
 
     /*
      * Spacings
      */
     // Site side spacing
-    --site-side-spacing: theme(spacing.4);
+    --content-wrapper-padding: theme(spacing.4);
     @screen md {
-      --site-side-spacing: theme(spacing.10);
+      --content-wrapper-padding: theme(spacing.10);
     }
 
     // Container

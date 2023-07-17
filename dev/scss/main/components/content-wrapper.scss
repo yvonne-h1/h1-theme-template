@@ -1,0 +1,17 @@
+@layer components {
+  .content-wrapper {
+    @apply mx-auto max-w-[var(--content-wrapper)];
+  }
+  .content-wrapper-sm {
+    @apply mx-auto max-w-[var(--content-wrapper-sm)];
+  }
+  .content-wrapper-md {
+    @apply mx-auto max-w-[var(--content-wrapper-md)];
+  }
+  .content-wrapper-wide {
+    @apply mx-auto max-w-full;
+  }
+  .content-wrapper-full {
+    @apply max-w-full px-0;
+  }
+}

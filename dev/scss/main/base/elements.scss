@@ -16,4 +16,9 @@
   table {
     word-break: break-word;
   }
+  .text-color-gradient {
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    color: #000;
+  }
 }

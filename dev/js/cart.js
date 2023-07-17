@@ -50,12 +50,12 @@ if (!customElements.get('cart-items')) {
     async updateQuantity(line, quantity, name) {
       this.enableLoading(line);
 
-      const body = JSON.stringify({
+      const body = JSON.stringify( {
         line,
         quantity,
         sections: this.getSectionsToRender().map((section) => section.section),
         sections_url: window.location.pathname,
-      });
+      } );
 
       try {
         const response = await fetch(routes.cart_change_url, {
@@ -63,7 +63,7 @@ if (!customElements.get('cart-items')) {
           ...{
             body,
           },
-        });
+        } );
 
         if (!response.ok) throw new Error(response.status);
 
@@ -84,7 +84,7 @@ if (!customElements.get('cart-items')) {
             parsedState.sections[section.section],
             section.selector,
           );
-        });
+        } );
         document.getElementById(`CartItem-${line}`)
           ?.querySelector(`[name="${name}"]`)
           ?.focus();
@@ -186,7 +186,7 @@ if (!customElements.get('cart-remove-button')) {
       this.addEventListener('click', (event) => {
         event.preventDefault();
         this.closest('cart-items').updateQuantity(this.dataset.index, 0);
-      });
+      } );
     }
   }
   customElements.define('cart-remove-button', CartRemoveButton);
@@ -197,20 +197,17 @@ if (!customElements.get('cart-note')) {
   class CartNote extends HTMLElement {
     constructor() {
       super();
-      this.addEventListener(
-        'change',
-        debounce((event) => {
-          const body = JSON.stringify({
-            note: event.target.value,
-          });
-          fetch(`${routes.cart_update_url}`, {
-            ...fetchConfig(),
-            ...{
-              body,
-            },
-          });
-        }, 300),
-      );
+      this.addEventListener('change', debounce((event) => {
+        const body = JSON.stringify( {
+          note: event.target.value,
+        } );
+        fetch(`${routes.cart_update_url}`, {
+          ...fetchConfig(),
+          ...{
+            body,
+          },
+        } );
+      }, 300));
     }
   }
   customElements.define('cart-note', CartNote);

@@ -13,12 +13,12 @@
     justify-center
     gap-2
     rounded-sm
-    border
+    border-2
     px-4
-    py-[9px]
+    py-3
     text-sm
     font-bold
-    leading-4
+    leading-none
     no-underline
     transition-all;
     @include states(':not([disabled])') {
@@ -48,13 +48,22 @@
   }
 
   /* Button styles */
-  .button--primary {
+  .button--primary,
+  .button--gradient {
     --button-background: var(--color-primary-500);
     --button-border-color: var(--color-primary);
     --button-text: var(--color-primary-text);
     --button-hover-background: var(--color-primary-600);
     --button-hover-border-color: var(--color-primary-600);
     --button-hover-text: var(--color-primary-text);
+  }
+
+  .button--gradient {
+    @apply duration-500 ease-in;
+    --button-border-color: transparent;
+    --button-hover-border-color: transparent;
+    --button-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 0/200%;
+    --button-hover-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 100%/200%;
   }
 
   .button--secondary {
@@ -77,10 +86,10 @@
 
   .button--outline {
     --button-background: transparent;
-    --button-border-color: var(--color-black);
-    --button-text: var(--color-black);
-    --button-hover-background: var(--color-black);
-    --button-hover-border-color: var(--color-black);
+    --button-border-color: var(--color-secondary);
+    --button-text: var(--color-secondary);
+    --button-hover-background: var(--color-secondary);
+    --button-hover-border-color: var(--color-secondary);
     --button-hover-text: var(--color-white);
   }
 
@@ -130,10 +139,6 @@
 
   .shopify-payment-button {
     button {
-      // @extend .button;
-      // @extend .button--secondary;
-      // @extend .button--lg;
-      // @apply box-border rounded-none;
       @apply button--secondary
         relative
         box-border

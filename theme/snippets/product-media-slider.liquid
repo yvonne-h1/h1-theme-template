@@ -134,28 +134,25 @@
 
 {%- comment -%} Out put Media slider {%- endcomment -%}
 {%- if product.media != blank -%}
-  <product-media-slider class="product-media-slider relative block w-full overflow-hidden md:-ml-[var(--site-side-spacing)]">
+  <product-media-slider class="product-media-slider relative block w-full overflow-hidden md:-ml-[var(--content-wrapper-padding)]">
     {%- comment -%} Main Slider {%- endcomment -%}
     <div class="product-media-slider__slider relative col-span-12 mb-4 bg-accent-100">
       {%- comment -%} Main slider {%- endcomment -%}
       <div
         class="swiper min-h-0 min-w-0 overflow-hidden"
-        data-product-media-slider="{{ product.selected_or_first_available_variant.id }}"
-      >
+        data-product-media-slider="{{ product.selected_or_first_available_variant.id }}">
         <div class="swiper-wrapper items-center">
           {{- media_content_slider -}}
         </div>
 
         <button
           class="swiper-button-next product-media-slider__button-next right-3 md:right-6"
-          aria-label="{{ 'accessibility.previous_slide' | t }}"
-        >
+          aria-label="{{ 'accessibility.previous_slide' | t }}">
           {% render 'global-icon', icon: 'chevron-right', icon_class: 'w-4' %}
         </button>
         <button
           class="swiper-button-prev product-media-slider__button-prev left-3 md:left-6"
-          aria-label="{{ 'accessibility.next_slide' | t }}"
-        >
+          aria-label="{{ 'accessibility.next_slide' | t }}">
           {% render 'global-icon', icon: 'chevron-left', icon_class: 'w-4' %}
         </button>
       </div>
@@ -171,14 +168,12 @@
         </div>
         <button
           class="swiper-button-next swiper-button-thumbnails-next right-0 md:right-2"
-          aria-label="{{ 'accessibility.previous_slide' | t }}"
-        >
+          aria-label="{{ 'accessibility.previous_slide' | t }}">
           {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-3' -%}
         </button>
         <button
           class="swiper-button-prev swiper-button-thumbnails-prev left-0 md:left-2"
-          aria-label="{{ 'accessibility.next_slide' | t }}"
-        >
+          aria-label="{{ 'accessibility.next_slide' | t }}">
           {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-3' -%}
         </button>
       </div>

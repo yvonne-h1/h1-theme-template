@@ -24,7 +24,7 @@
     {%- comment -%} Sidebar {%- endcomment -%}
     <div class="col-span-12 md:col-span-5 lg:col-span-4">
       <product-info
-        class="product-info-col block {% if section.settings.enable_sticky_info == true %} product-info-col--sticky sticky top-0 transition-all duration-300{% endif %} px-[var(--site-side-spacing)] pt-6"
+        class="product-info-col block {% if section.settings.enable_sticky_info == true %} product-info-col--sticky sticky top-0 transition-all duration-300{% endif %} px-[var(--content-wrapper-padding)] pt-6"
         data-product-info
       >
 
@@ -417,7 +417,7 @@
 {%- render 'format-container',
   class: 'my-0',
   content: container_content,
-  content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--site-side-spacing)]'
+  content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--content-wrapper-padding)]'
 -%}
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'main-product.js' | asset_url }}" defer></script>

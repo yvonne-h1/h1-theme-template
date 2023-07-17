@@ -10,20 +10,20 @@
   assign text_color_light = '#969696'
   assign border_color_default = '#e9ecef'
 
-  assign color_primary_gradient = 'linear-gradient(90deg,#e42f26,#e46a26 50%,#e42f26) 0/200%'
+  assign color_primary_gradient = 'linear-gradient(90deg,#e42f26 0,#e46a26)'
   assign color_primary = '#e42f26'
   assign color_primary_text = '#FFFFFF'
 
-  assign color_secondary = '#d63384'
+  assign color_secondary = '#212529'
   assign color_secondary_text = '#FFFFFF'
 
   assign color_accent = '#fff3cd'
   assign color_accent_text = '#111'
 
-  assign color_info = '#edb407'
-  assign color_success = '#42CC92'
+  assign color_info = '#0dcaf0'
+  assign color_success = '#198754'
   assign color_warning = '#ffc107'
-  assign color_danger = '#ff5656'
+  assign color_danger = '#dc3545'
 -%}
 
 {%- style %}
@@ -85,8 +85,17 @@
     --text-color-default:       {{ text_color_default }};
     --text-color-light:         {{ text_color_light }};
     --text-link-color:          var(--color-primary-500);
-    --text-link-color-states:   var(--color-primary-600);
+    --text-link-color-states:   var(--color-primary-800);
     --border-color-default:     {{ border_color_default }};
     --swiper-theme-color:       {{ text_color_default }};
+
+    {% comment -%} Button base {%- endcomment -%}
+    --button-background:          var(--color-secondary);
+    --button-border-color:        var(--color-secondary);
+    --button-text:                var(--color-secondary-text);
+    --button-hover-background:    var(--color-secondary-800);
+    --button-hover-border-color:  var(--color-secondary-800);
+    --button-hover-text:          var(--color-secondary-text);
+
   }
 {%- endstyle %}

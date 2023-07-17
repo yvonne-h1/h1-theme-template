@@ -1,8 +1,22 @@
 /* eslint no-unused-vars: 0 */
 
-// debug function check, returns true when on localhost or myshopify.com domain
+window.drawerToggleClasses = {
+  filters: 'filter-is-open',
+  cartDrawer: 'cart-drawer-is-open',
+  mobileMenu: 'mobile-menu-is-open',
+  headerSearch: 'header-search-is-open',
+};
+
+/**
+ * debug function check, returns true when on localhost or myshopify.com domain
+*/
 const debug = () => window.location.hostname === '127.0.0.1' || window.location.hostname.indexOf('myshopify.com') !== -1;
 
+const trapFocusHandlers = {};
+/**
+ * @param {Object} element the element to check
+ * @returns true if the element is in the viewport
+ */
 function getFocusableElements(container) {
   return Array.from(
     container.querySelectorAll(
@@ -11,16 +25,11 @@ function getFocusableElements(container) {
   );
 }
 
-window.drawerToggleClasses = {
-  filters: 'filter-is-open',
-  cartDrawer: 'cart-drawer-is-open',
-  mobileMenu: 'mobile-menu-is-open',
-  headerSearch: 'header-search-is-open',
-};
-
-const trapFocusHandlers = {
-};
-
+/**
+ * Traps focus within a container
+ * @param {Object} container the container to trap focus within
+ * @param {Object} elementToFocus the element to focus when trapFocus is called
+ */
 function trapFocus(container, elementToFocus = container) {
   var elements = getFocusableElements(container);
   var first = elements[0];
@@ -59,6 +68,9 @@ function trapFocus(container, elementToFocus = container) {
   elementToFocus.focus();
 }
 
+/**
+ * Pauses all media on the page
+ */
 function pauseAllMedia() {
   document.querySelectorAll('.js-youtube').forEach((video) => {
     video.contentWindow.postMessage(
@@ -73,6 +85,10 @@ function pauseAllMedia() {
   document.querySelectorAll('product-model').forEach((model) => model.modelViewerUI?.pause());
 }
 
+/**
+ * Removes the event listeners added by trapFocus()
+ * @param {Object} elementToFocus
+ */
 function removeTrapFocus(elementToFocus = null) {
   document.removeEventListener('focusin', trapFocusHandlers.focusin);
   document.removeEventListener('focusout', trapFocusHandlers.focusout);
@@ -81,6 +97,9 @@ function removeTrapFocus(elementToFocus = null) {
   if (elementToFocus) elementToFocus.focus();
 }
 
+/**
+ * A custom element that wraps a quantity input
+*/
 if (!customElements.get('quantity-input')) {
   class QuantityInput extends HTMLElement {
     constructor() {
@@ -109,6 +128,11 @@ if (!customElements.get('quantity-input')) {
   customElements.define('quantity-input', QuantityInput);
 }
 
+/**
+ * @param {Function} fn function to debounce
+ * @param {Integer} wait time in ms
+ * @returns a timeout function that will only execute fn after wait ms have passed since the last time it was called
+ */
 function debounce(fn, wait) {
   let t;
   return (...args) => {
@@ -117,9 +141,12 @@ function debounce(fn, wait) {
   };
 }
 
+/**
+ * @param {Object} form the form to serialize
+ * @returns a JSON string of the form data
+ */
 const serializeForm = (form) => {
-  const obj = {
-  };
+  const obj = {};
   const formData = new FormData(form);
   for (const key of formData.keys()) {
     obj[key] = formData.get(key);
@@ -127,6 +154,10 @@ const serializeForm = (form) => {
   return JSON.stringify(obj);
 };
 
+/**
+ * @param {*} type the type of data to fetch
+ * @returns a config object for fetch
+ */
 function fetchConfig(type = 'json') {
   return {
     method: 'POST',
@@ -137,10 +168,9 @@ function fetchConfig(type = 'json') {
   };
 }
 
-function getNodeIndex(node) {
-  return Array.from(node.parentNode.children).indexOf(node);
-}
-
+/**
+ * Prevents the default action of an event
+ */
 document.querySelectorAll('.prevent-hashjump').forEach((link) => {
   link.addEventListener('click', (e) => {
     const hashtag = e.target.href.split('#');
@@ -163,7 +193,7 @@ document.querySelectorAll('.prevent-hashjump').forEach((link) => {
 } );
 
 /*
- * Shopify Common JS
+ * Shopify Common JS - Don't change
  *
  */
 if (typeof window.Shopify == 'undefined') {
