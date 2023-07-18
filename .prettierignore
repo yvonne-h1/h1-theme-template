@@ -19,6 +19,7 @@ theme/locales/*.json
 # Ignore all external files
 dev/assets
 dev/js/**/*.js
+tailwind.config.js
 
 # Node artifact files
 node_modules

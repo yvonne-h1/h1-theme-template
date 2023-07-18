@@ -5,10 +5,10 @@ class HeaderCollapsibleComponent extends Collapsible {
     this.headerWrapper = this.closest('.shopify-section-group-header-group');
     if (this.header) {
       this.inverse = !!this.header.classList.contains('header--inverse');
-      this.shadow = this.header.querySelector('.header-shadow');
+      this.backdrop = this.header.querySelector('.header-backdrop');
 
       // extra events
-      this.shadow?.addEventListener('click', this.closeAll.bind(this));
+      this.backdrop?.addEventListener('click', this.closeAll.bind(this));
 
       // on key up
       document.addEventListener('keyup', (event) => {
@@ -108,7 +108,7 @@ class MobileNavToggle extends ClassToggleComponent {
     this.header = this.closest('[data-header]');
 
     if (this.header) {
-      this.shadow = this.header.querySelector('.header-shadow');
+      this.backdrop = this.header.querySelector('.header-backdrop');
       this.inverse = !!this.header.classList.contains('header--inverse');
 
       // Extra events
@@ -116,7 +116,7 @@ class MobileNavToggle extends ClassToggleComponent {
         this.onKeyUp(event);
       } );
 
-      this.shadow?.addEventListener('click', (event) => {
+      this.backdrop?.addEventListener('click', (event) => {
         this.remove(event);
       } );
     }

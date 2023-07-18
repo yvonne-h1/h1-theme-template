@@ -1,9 +1,10 @@
 @layer base {
   html {
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
     @apply m-0
       font-body
-      leading-normal
-      bg-color-default
-      text-color-default;
+      leading-normal;
   }
 }

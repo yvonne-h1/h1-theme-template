@@ -15,6 +15,12 @@
 
     &__input {
       @apply sr-only;
+      &:focus-visible + .option__label {
+        &:before {
+          @apply ring-2
+          ring-primary-300;
+        }
+      }
     }
 
     &__label {
@@ -74,8 +80,8 @@
       }
     }
 
-    &__input:checked + .option__label,
-    .option__label--checked {
+    &__input:checked + &__label,
+    &__label--checked {
       @apply bg-primary-100;
       &:before {
         @apply opacity-100;

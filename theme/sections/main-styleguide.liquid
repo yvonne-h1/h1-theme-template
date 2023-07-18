@@ -21,13 +21,25 @@
       </div>
 
       {%- for section in style_guide_sections -%}
-        {%- assign heading = section | replace: '-', ' ' | capitalize -%}
+        {%- liquid
+          assign instructions = ''
+          assign heading = section | replace: '-', ' ' | capitalize
+          if section == 'rte'
+            assign heading = "RTE (Rich text editor)"
+          endif
+          if section == 'color-schemes'
+            assign instructions = "Add classs 'color-scheme color-scheme--type' to your element, where 'type' is any of the ones listed below (gradient, black, white, primary, secondary, accent, gray)"
+          endif
+        -%}
 
         <div id="styleguide-{{- section -}}" class="style-guide__section py-10 lg:py-16">
 
           <h2 class="">
             {{- heading -}}
           </h2>
+          {%- if instructions -%}
+            <p>{{ instructions }}</p>
+          {%- endif -%}
 
           <div class="space-y-12">
             {%- liquid
@@ -53,7 +65,7 @@
                 when 'options'
                   render 'styleguide-options'
                 when 'quantity-input'
-                  render 'styleguide-quantity-input'
+                  render 'quantity-input'
                 when 'collapsibles'
                   render 'styleguide-collapsibles'
                 when 'toggle-element'
@@ -77,6 +89,7 @@
 
     {% comment %} Menu {% endcomment %}
     <div class="sticky top-24 hidden self-start rounded bg-gray-100 p-4 lg:col-span-3 lg:block">
+      <h2 class="h4">Index</h2>
       <ul class="z-10 flex flex-col gap-2">
         {%- for section in style_guide_sections -%}
           {%- assign heading = section | replace: '-', ' ' | capitalize -%}

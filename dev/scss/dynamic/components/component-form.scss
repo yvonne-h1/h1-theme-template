@@ -37,7 +37,7 @@ endcapture
 
 @use '../../mixins' as *;
 
-@layer code-components {
+@layer h1-styles-components {
   .field {
     @apply relative
     mb-element-spacing
@@ -64,7 +64,7 @@ endcapture
       @apply block
       w-full
       border-transparent
-      bg-primary-50
+      bg-gray-50
       px-4
       py-2.5
       font-body
@@ -72,26 +72,23 @@ endcapture
       leading-5
       text-black
       shadow-none
-      outline-none
       ring-transparent
       transition-all
       duration-75
       ease-linear
       placeholder:text-black;
       &:focus {
-        @apply border-primary-100
+        @apply border-primary-200
         bg-primary-100
         text-black
         shadow-none
         shadow-transparent
-        outline-none
         ring-transparent;
       }
       &:focus-visible {
         @apply border-primary-100
         bg-primary-100
-        text-black
-        outline-none;
+        text-black;
       }
       &:invalid:not(:placeholder-shown),
       &[aria-invalid='true']:invalid {
@@ -109,7 +106,7 @@ endcapture
       &:active(:not(:disabled)),
       &:focus(:not(:disabled)),
       &:focus-visible(:not(:disabled)) {
-        @apply bg-primary-50 outline-none;
+        @apply bg-primary-50;
       }
       &:valid[required],
       &:invalid:not(:placeholder-shown) {
@@ -184,9 +181,8 @@ endcapture
       }
     }
     input:focus-visible + .field__checkbox {
-      @apply outline-none
-      ring-2
-      ring-primary-200;
+      @apply ring-2
+      ring-primary-300;
     }
     input:checked + .field__checkbox {
       @apply cursor-default;
@@ -251,9 +247,8 @@ endcapture
       }
     }
     input:focus-visible + .field__radio {
-      @apply outline-none
-      ring-2
-      ring-primary-200;
+      @apply ring-2
+      ring-primary-300;
     }
     &:hover .field__radio,
     input:checked + .field__radio {
@@ -297,7 +292,8 @@ endcapture
 
     // .field__select-icon
     &__select-icon {
-      @apply absolute
+      @apply pointer-events-none
+      absolute
       right-5
       top-1/2
       origin-center
@@ -322,8 +318,7 @@ endcapture
       opacity-0
       shadow-md
       transition-opacity
-      border-color-default
-      focus:outline-none;
+      border-color-default;
       &--active {
         @apply pointer-events-auto opacity-100;
       }
@@ -375,9 +370,8 @@ endcapture
       }
     }
     input:focus-visible + .field__switch {
-      @apply outline-none
-      ring-2
-      ring-primary-200;
+      @apply ring-2
+      ring-primary-300;
     }
     input:checked + .field__switch:after {
       @apply translate-x-full

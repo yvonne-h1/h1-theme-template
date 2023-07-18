@@ -54,14 +54,15 @@
 
     // .color-scheme--black
     // .color-scheme--secondary
+    // These use the gradient button by default
     &--black,
     &--secondary {
-      --button-background: var(--color-primary-500);
-      --button-border-color: var(--color-primary);
       --button-text: var(--color-primary-text);
-      --button-hover-background: var(--color-primary-700);
-      --button-hover-border-color: var(--color-primary-700);
       --button-hover-text: var(--color-primary-text);
+      --button-border-color: transparent;
+      --button-hover-border-color: transparent;
+      --button-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 0/200%;
+      --button-hover-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 100%/200%;
     }
   }
 }

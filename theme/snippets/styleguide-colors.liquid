@@ -44,7 +44,7 @@
   <div class="{{ color_wrapper_class }}">
     <div
       class="{{ circle_class_full }}"
-      style="background: var(--color-primary);"
+      style="background: var(--color-primary); color: var(--color-primary-text)"
       title="Primary">
       <p class="text-white">Primary</p>
     </div>
@@ -64,9 +64,9 @@
   <div class="{{ color_wrapper_class }}">
     <div
       class="{{ circle_class_full }}"
-      style="background-color: var(--color-secondary);"
-      title="Primary">
-      <p class="text-white">Secondary</p>
+      style="background-color: var(--color-secondary); color: var(--color-secondary-text)"
+      title="Secondary">
+      <p>Secondary</p>
     </div>
 
     {%- for type in palette_types -%}
@@ -84,9 +84,9 @@
   <div class="{{ color_wrapper_class }}">
     <div
       class="{{ circle_class_full }}"
-      style="background-color: var(--color-accent);"
-      title="Primary">
-      <p class="text-white">Accent</p>
+      style="background-color: var(--color-accent); color: var(--color-accent-text);"
+      title="Accent">
+      <p>Accent</p>
     </div>
 
     {%- for type in palette_types -%}
@@ -102,16 +102,21 @@
 
   {% comment %} Gray {% endcomment %}
   <div class="{{ color_wrapper_class }}">
-    <div class="{{ circle_class_full }} bg-gray-200" title="Primary">
-      <p class="text-black">Gray</p>
+    <div
+      class="{{ circle_class_full }} bg-gray-400 text-white"
+      title="Gray">
+      <p>Gray</p>
     </div>
 
-    {%- for type in palette_types -%}
+    {%- assign gray_palette_types = 'bg-gray-50, bg-gray-100, bg-gray-200, bg-gray-300, bg-gray-400, bg-gray-500, bg-gray-600, bg-gray-700, bg-gray-800, bg-gray-900'
+      | split: ', '
+    -%}
+    {%- for type in gray_palette_types -%}
       <div>
         <div
-          class="{{ circle_class }} {{ type | prepend: 'bg-gray-' }}"
+          class="{{ circle_class }} {{ type }}"
           title="Gray {{ type }}"></div>
-        <p>{{ type }}</p>
+        <p>{{ type | split: '-' | last }}</p>
       </div>
     {%- endfor -%}
   </div>

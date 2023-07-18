@@ -75,19 +75,63 @@ module.exports = {
       '8xl': '6rem',
       '9xl': '8rem',
     },
+    extend: {
+      /**
+       * Extend content classes
+       * Results in content: ''
+       * Usage: before:content-empty
+       */
+      content: {
+        empty: '\'\'',
+      },
+      spacing: {
+        'element-spacing': 'var(--element-spacing)',
+      },
+      zIndex: {
+        dropdown: '1000',
+        sticky: '1020',
+        fixed: '1030',
+        'offcanvas-backdrop': '1040',
+        offcanvas: '1045',
+        'modal-backdrop': '1050',
+        modal: '1055',
+        popover: '1070',
+        tooltip: '1080',
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            '--tw-prose-links': theme('colors.primary.500'),
+            '--tw-prose-counters': theme('colors.primary.500'),
+            '--tw-prose-bullets': theme('colors.primary.500'),
+            '--tw-prose-quote-borders': theme('colors.primary.500'),
+            color: 'var(--text-color-default)',
+            a: {
+              color: theme('colors.primary.500'),
+              textDecoration: 'underline',
+              transition: 'all .2s',
+              '&:hover': {
+                color: theme('colors.primary.600'),
+                textDecoration: 'none',
+              },
+            },
+          },
+        },
+      }),
+    },
     /**
      * Colors
      * We extend the tailwind colors with our own colors
-     * Usage: text-primary, bg-secondary, bg-gray-500
-     * Advice: Adjust to project needs
+     * Usage: text-primary, bg-secondary
+     * Advice: Adjust to project needs.
      */
     colors: {
       inherit: colors.inherit,
       current: colors.current,
       transparent: colors.transparent,
       white: 'var(--color-white)',
-      gray: colors.neutral,
       black: 'var(--color-black)',
+      'primary-gradient': 'var(--color-primary-gradient)',
       primary: {
         DEFAULT: 'var(--color-primary)',
         text: 'var(--color-primary-text)',
@@ -130,55 +174,23 @@ module.exports = {
         800: 'var(--color-accent-800)',
         900: 'var(--color-accent-900)',
       },
+      gray: {
+        DEFAULT: 'var(--color-gray)',
+        50: 'var(--color-gray-50)',
+        100: 'var(--color-gray-100)',
+        200: 'var(--color-gray-200)',
+        300: 'var(--color-gray-300)',
+        400: 'var(--color-gray-400)',
+        500: 'var(--color-gray-500)',
+        600: 'var(--color-gray-600)',
+        700: 'var(--color-gray-700)',
+        800: 'var(--color-gray-800)',
+        900: 'var(--color-gray-900)',
+      },
       info: 'var(--color-info)',
       success: 'var(--color-success)',
       warning: 'var(--color-warning)',
       danger: 'var(--color-danger)',
-    },
-    extend: {
-      /**
-       * Extend content classes
-       * Results in content: ''
-       * Usage: before:content-empty
-       */
-      content: {
-        empty: "''",
-      },
-      spacing: {
-        'element-spacing': 'var(--element-spacing)',
-      },
-      zIndex: {
-        dropdown: '1000',
-        sticky: '1020',
-        fixed: '1030',
-        'offcanvas-backdrop': '1040',
-        offcanvas: '1045',
-        'modal-backdrop': '1050',
-        modal: '1055',
-        popover: '1070',
-        tooltip: '1080',
-      },
-      typography: (theme) => ({
-        DEFAULT: {
-          css: {
-            '--tw-prose-counters': 'color: inherit',
-            '--tw-prose-bullets': 'color: inherit',
-            '--tw-prose-links': 'color: var(--text-primary-500)',
-            color: 'var(--text-color-default)',
-            a: {
-              color: 'var(--text-primary-500)',
-              textDecoration: 'none',
-              '&:hover': {
-                color: 'var(--text-primary-800)',
-                textDecoration: 'underline',
-              },
-            },
-            p: {
-              marginBottom: '1rem',
-            },
-          },
-        },
-      }),
     },
   },
   plugins: [
@@ -189,7 +201,7 @@ module.exports = {
     require('@tailwindcss/forms'),
 
     /**
-     * Line-clamp
+     * Typography
      * More info: https://tailwindcss.com/docs/typography-plugin
      */
     require('@tailwindcss/typography')({
@@ -203,11 +215,41 @@ module.exports = {
      * More info: https://tailwindcss.com/docs/plugins
      */
     plugin(function ({ addBase, addComponents, addUtilities, addVariant, theme }) {
+      /*
+       Style base classes
+      */
+      addBase({
+        p: {
+          marginBottom: '1rem',
+          '&:last-child': {
+            marginBottom: 0,
+          },
+        },
+        hr: {
+          backgroundColor: 'var(--border-color-default)',
+          marginBlock: '40px',
+          display: 'block',
+          height: '1px',
+          border: 'none',
+        },
+        table: {
+          wordBreak: 'break-word',
+        },
+        a: {
+          color: theme('colors.primary.500'),
+          textDecoration: 'underline',
+          transition: 'all .2s',
+          '&:hover': {
+            color: theme('colors.primary.600'),
+            textDecoration: 'none',
+          },
+        },
+      }),
       /**
-       * Utilities
-       * Add base color classes that can be reused for certain specific css selectors
-       * Usage: bg-color-default, text-link-color, states:text-link-color-states
-       */
+         * Utilities
+         * Add base color classes that can be reused for certain specific css selectors
+         * Usage: bg-color-default, text-link-color, states:text-link-color-states
+         */
       addUtilities({
         '.bg-color-default': {
           backgroundColor: 'var(--bg-color-default)',
@@ -217,6 +259,7 @@ module.exports = {
         },
         '.text-color-gradient': {
           backgroundImage: 'var(--color-primary-gradient)',
+          color: '#000',
         },
         '.text-color-light': {
           color: 'var(--text-color-light)',

@@ -99,13 +99,13 @@ The dev/scss folder is divided in three folders to give you to possibility to op
 - The `main` folder loads all critical CSS.
 - The `mixins` folder is used for SCSS mixins that can be used inside the other CSS files.
 
-Inside these folders you have different folders that correspond with the tailwind layers. In each file you should wrap your code inside the corresponding `@layer ... { }`. All the layers will be rendered in order inside the browser. So for the browser `code-base` is the most less important layer and `code-sections` the most important.
+Inside these folders you have different folders that correspond with the tailwind layers. In each file you should wrap your code inside the corresponding `@layer ... { }`. All the layers will be rendered in order inside the browser. So for the browser `code-base` is the most less important layer and `h1-styles-sections` the most important.
 
 - The `code-base` layer injects base styling and resets added by the tailwind algorithm and the scss/main/base folder.
 - The `code-modules` is used to add third party CSS from the dynamic/modules folder like SwiperJs or Fancybox. The intention is that you only import files here and do not apply any custom styling. That's how we keep the hierarchy intact. To apply custom styling to a third-party library you can use the component layer.
-- The `code-components` layer injects components classes added by the tailwind algorithm, the scss/main/components folder, and the scss/dynamic/components folder. You can choose by loading your component dynamic or critical. Use critical only for styles that are used really often, for example, a button.
-- The `code-utilities` layer injects utility classes added by the tailwind algorithm and the scss/main/utilities folder. This layer utilizes the biggest Tailwind power. All utility classes from tailwind will be rendered in here. For example `text-md`, `bg-primary`, and `states:underline`.
-- The `code-sections` layer is used to add custom section styling that cannot be easily done with component or utilities classes. For example, add a color scheme update for a product card inside the code-sections directive. You should be very strict with this layer.
+- The `h1-styles-components` layer injects components classes added by the tailwind algorithm, the scss/main/components folder, and the scss/dynamic/components folder. You can choose by loading your component dynamic or critical. Use critical only for styles that are used really often, for example, a button.
+- The `h1-styles-utilities` layer injects utility classes added by the tailwind algorithm and the scss/main/utilities folder. This layer utilizes the biggest Tailwind power. All utility classes from tailwind will be rendered in here. For example `text-md`, `bg-primary`, and `states:underline`.
+- The `h1-styles-sections` layer is used to add custom section styling that cannot be easily done with component or utilities classes. For example, add a color scheme update for a product card inside the h1-styles-sections directive. You should be very strict with this layer.
 
 ---
 

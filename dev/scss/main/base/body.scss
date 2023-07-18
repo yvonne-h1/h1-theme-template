@@ -1,6 +1,11 @@
 @use '../../mixins' as *;
 
 @layer base {
+  * {
+    @include states() {
+      @apply transition-colors;
+    }
+  }
   body {
     @apply m-0
       flex
@@ -9,16 +14,9 @@
       font-body
       text-base
       not-italic
-      leading-normal
-      bg-color-default
-      text-color-default;
+      leading-normal;
   }
   .content-for-layout {
     @apply flex-auto;
-  }
-  * {
-    @include states() {
-      @apply transition-colors;
-    }
   }
 }

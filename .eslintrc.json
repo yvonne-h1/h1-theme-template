@@ -24,7 +24,6 @@
     ],
     "no-trailing-spaces": "error",
     "object-property-newline": "warn",
-    "space-in-parens": ["warn", "never", { "exceptions": ["{}"] }],
     "object-curly-spacing": ["warn", "always", { "arraysInObjects": false }],
     "array-bracket-spacing": ["warn", "never", { "objectsInArrays": true }],
     "brace-style": ["warn", "stroustrup", { "allowSingleLine": false }],

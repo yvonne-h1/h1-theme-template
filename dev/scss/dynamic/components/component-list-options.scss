@@ -5,18 +5,24 @@
   * Inside the main there are also button style options
 */
 
-@layer code-components {
+@layer h1-styles-components {
   .list-options {
     @apply flex flex-col gap-2;
   }
 
   .list-option {
     @apply relative p-0.5;
-
+    // .list-option__input
     &__input {
       @apply sr-only;
+      &:focus-visible + .list-option__label {
+        &:before {
+          @apply ring-2
+          ring-primary-300;
+        }
+      }
     }
-
+    // .list-option__label
     &__label {
       @apply relative
         flex
@@ -57,15 +63,16 @@
 
       .icon {
         @apply absolute
-        left-0.5
+        left-0
         top-1/2
+        w-5
         -translate-y-1/2
         text-secondary
         opacity-0
         transition-opacity;
       }
 
-      // Use a checkbox style
+      // .list-option--checkmark
       &--checkmark {
         @apply before:rounded-none
         after:hidden
@@ -79,7 +86,7 @@
           @apply opacity-100;
         }
       }
-
+      // .list-option--disabled
       &--disabled {
         @apply pointer-events-none
           cursor-default
@@ -93,8 +100,10 @@
       }
     }
 
-    &__input:checked + .list-option__label,
-    .list-option__label--checked {
+    // .list-option__input
+    // .list-option__label
+    &__input:checked + &__label,
+    &__label--checked {
       .icon,
       &:after {
         @apply opacity-100;

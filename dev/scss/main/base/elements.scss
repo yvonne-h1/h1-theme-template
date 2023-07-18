@@ -1,24 +1,6 @@
 @layer base {
-  a {
-    @apply no-underline
-      transition-colors
-      text-link-color
-      states:underline
-      states:text-link-color-states;
-  }
-  hr {
-    background-color: var(--border-color-default);
-    @apply my-16
-      block
-      h-px
-      border-0;
-  }
-  table {
-    word-break: break-word;
-  }
   .text-color-gradient {
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
-    color: #000;
   }
 }

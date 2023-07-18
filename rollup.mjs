@@ -45,8 +45,8 @@ const config = {
       {
         input: 'main-base',
         inputFull: './dev/scss/main/main-base.scss',
-        dest: `./theme/snippets`,
-        rename: `main-base-css.liquid`,
+        dest: './theme/snippets',
+        rename: 'main-base-css.liquid',
         wrapper: '@layer h1-styles-base { [[ stylesheet_content ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/base/**/*.scss'],
         watchLiquid: false,
@@ -54,8 +54,8 @@ const config = {
       {
         input: 'main-components',
         inputFull: './dev/scss/main/main-components.scss',
-        dest: `./theme/snippets`,
-        rename: `main-components-css.liquid`,
+        dest: './theme/snippets',
+        rename: 'main-components-css.liquid',
         wrapper: '@layer h1-styles-components { [[ stylesheet_content ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/components/**/*.scss'],
         watchLiquid: true,
@@ -63,8 +63,8 @@ const config = {
       {
         input: 'main-utilities',
         inputFull: './dev/scss/main/main-utilities.scss',
-        dest: `./theme/snippets`,
-        rename: `main-utilities-css.liquid`,
+        dest: './theme/snippets',
+        rename: 'main-utilities-css.liquid',
         wrapper: '@layer h1-styles-utilities { [[ stylesheet_content ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/utilities/**/*.scss'],
         watchLiquid: true,
@@ -191,7 +191,7 @@ function notifyUpdates(type) {
 
       // JS file will trigger a full reload
       if (type == 'JS') {
-        notify(`Trigger reload...`);
+        notify('Trigger reload...');
       }
     },
   };
@@ -389,7 +389,7 @@ class Watcher {
     chokidar.watch(config.js.modules).on('change', (file) => {
       if (this.freeze) return false;
       this.timer();
-      notify(`Processing all js...`);
+      notify('Processing all js...');
       processJs(globify(config.js.files));
     });
   }

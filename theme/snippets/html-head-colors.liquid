@@ -4,6 +4,7 @@
 {%- liquid
   assign color_black = '#111'
   assign color_white = '#FFFFFF'
+  assign color_gray = '#6c757d'
 
   assign bg_color_default = '#ffffff'
   assign text_color_default = '#262626'
@@ -17,8 +18,8 @@
   assign color_secondary = '#212529'
   assign color_secondary_text = '#FFFFFF'
 
-  assign color_accent = '#fff3cd'
-  assign color_accent_text = '#111'
+  assign color_accent = '#e46a26'
+  assign color_accent_text = '#FFFFFF'
 
   assign color_info = '#0dcaf0'
   assign color_success = '#198754'
@@ -72,6 +73,20 @@
     --color-accent-800:         {{ color_accent | color_mix: '#000', 40 }};
     --color-accent-900:         {{ color_accent | color_mix: '#000', 20 }};
 
+    {% comment -%} Gray {%- endcomment -%}
+    --color-gray:             {{ color_gray }};
+    --color-gray-50:          {{ color_gray | color_mix: '#FFF', 10 }};
+    --color-gray-100:         {{ color_gray | color_mix: '#FFF', 20 }};
+    --color-gray-200:         {{ color_gray | color_mix: '#FFF', 40 }};
+    --color-gray-300:         {{ color_gray | color_mix: '#FFF', 60 }};
+    --color-gray-400:         {{ color_gray | color_mix: '#FFF', 80 }};
+    --color-gray-500:         {{ color_gray }};
+    --color-gray-600:         {{ color_gray | color_mix: '#000', 80 }};
+    --color-gray-700:         {{ color_gray | color_mix: '#000', 60 }};
+    --color-gray-800:         {{ color_gray | color_mix: '#000', 40 }};
+    --color-gray-900:         {{ color_gray | color_mix: '#000', 20 }};
+
+
     {% comment -%} Communication {%- endcomment -%}
     --color-info:               {{ color_info }};
     --color-success:            {{ color_success }};
@@ -84,10 +99,10 @@
     --bg-color-default:         {{ bg_color_default }};
     --text-color-default:       {{ text_color_default }};
     --text-color-light:         {{ text_color_light }};
+    --swiper-theme-color:       {{ text_color_default }};
     --text-link-color:          var(--color-primary-500);
     --text-link-color-states:   var(--color-primary-800);
-    --border-color-default:     {{ border_color_default }};
-    --swiper-theme-color:       {{ text_color_default }};
+    --border-color-default:     var(--color-gray-50);
 
     {% comment -%} Button base {%- endcomment -%}
     --button-background:          var(--color-secondary);

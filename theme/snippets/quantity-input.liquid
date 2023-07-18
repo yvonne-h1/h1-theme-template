@@ -1,0 +1,37 @@
+{%- liquid
+  assign button_classes = 'flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-transparent p-0 text-black transition-all border-color-default no-js:hidden hover:border-primary hover:text-black group states:border-primary states:bg-primary states:text-white'
+  assign icon_class = 'w-3 group-hover:scale-110 pointer-events-none transition-transform duration-75 ease-linear'
+-%}
+
+<quantity-input class="quantity relative flex">
+  <button class="quantity__button {{ button_classes }}" name="minus" type="button">
+    <span class="sr-only">
+      {%- render 'format-translation',
+        namespace: 'products.product.quantity',
+        key: 'decrease',
+        fallback: 'Decrease'
+      -%}
+    </span>
+    {% comment %} {%- render 'global-icon', icon: 'trash', icon_class: 'w-3' -%} {% endcomment %}
+    {%- render 'global-icon', icon: 'minus', icon_class: icon_class -%}
+  </button>
+  <input
+    class="quantity__input h-10 w-7 appearance-none border-none bg-transparent p-0 text-center text-sm font-bold text-current opacity-80 focus:border-none"
+    type="number"
+    name="quantity"
+    id="Quantity-{{ section.id }}"
+    value="1"
+    min="0"
+    pattern="[0-9]*"
+    inputmode="numeric">
+  <button class="quantity__button {{ button_classes }} " name="plus" type="button">
+    <span class="sr-only">
+      {%- render 'format-translation',
+        namespace: 'products.product.quantity',
+        key: 'increase',
+        fallback: 'Increase'
+      -%}
+    </span>
+    {% render 'global-icon', icon: 'plus', icon_class: icon_class %}
+  </button>
+</quantity-input>

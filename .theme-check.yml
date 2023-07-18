@@ -3,13 +3,12 @@
 # The directory where theme folders are located
 root: theme
 
-# Disable a few checks that are incompatible with some of our settings
 SpaceInsideBraces:
   enabled: false
 
 LiquidTag:
   enabled: true
-  min_consecutive_statements: 6
+  min_consecutive_statements: 4
 
 NestedSnippet:
   enabled: true
