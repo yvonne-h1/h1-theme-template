@@ -64,7 +64,7 @@ endcapture
       @apply block
       w-full
       border-transparent
-      bg-gray-50
+      bg-gray-100
       px-4
       py-2.5
       font-body
@@ -159,8 +159,7 @@ endcapture
 
     // .field--checkbox
     &--checkbox {
-      @apply flex
-      gap-2;
+      @apply flex gap-2;
     }
 
     // input .field__checkbox
@@ -172,45 +171,65 @@ endcapture
       cursor-pointer
       items-center
       justify-center
+      gap-2
       border-none
       bg-gray-100
       text-black;
-      svg {
-        @apply opacity-0
-        transition-opacity;
-      }
     }
-    input:focus-visible + .field__checkbox {
-      @apply ring-2
-      ring-primary-300;
-    }
-    input:checked + .field__checkbox {
-      @apply cursor-default;
-      svg {
-        @apply opacity-100;
-      }
-    }
-    input:disabled + .field__checkbox {
-      @apply pointer-events-none;
-      svg {
-        @apply opacity-0;
-      }
-    }
-
     // .field__checkbox-label
     &__checkbox-label {
-      @apply mb-0
-      block
+      @apply relative
+      mb-0
+      flex
+      shrink-0
       cursor-pointer
+      items-center
+      justify-center
+      pl-7
       text-sm
       leading-5
-      transition-colors
-      text-color-default;
+      text-black
+      transition-colors;
+      &:before,
+      &:after {
+        @apply absolute
+        left-0
+        h-5
+        w-5
+        content-[''];
+      }
+      &:before {
+        @apply absolute
+        left-0
+        h-5
+        w-5
+        border-none
+        bg-gray-100
+        content-[''];
+      }
     }
-    &:hover .field__checkbox-label {
+    input:focus-visible + &__checkbox-label:before {
+      @apply ring-2 ring-primary-300;
+    }
+
+    input:checked + &__checkbox-label,
+    &:hover + &__checkbox-label {
+      &:after {
+        @apply h-5 w-5 content-[''];
+        background: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='presentation' viewBox='0 0 20 20'%3E%3Cpath stroke='white' fill='currentColor' d='M16.136 6.979h0l.003-.004a1.499 1.499 0 00-2.275-1.954l-5.945 6.777-1.858-1.859A1.499 1.499 0 103.94 12.06l2.999 3s0 0 0 0c.289.29.675.44 1.1.439h.019a1.5 1.5 0 001.08-.522l6.998-7.998z'/%3E%3C/svg%3E")
+          no-repeat;
+      }
+    }
+    input:checked + &__checkbox-label {
+      @apply cursor-default;
+    }
+    &:hover &__checkbox-label {
       @apply text-primary;
+      &:after:not(:checked) {
+        @apply opacity-50;
+      }
     }
-    input:disabled ~ .field__checkbox-label {
+    input:disabled ~ &__checkbox-label {
       @apply pointer-events-none
       cursor-default
       line-through
@@ -220,44 +239,20 @@ endcapture
 
     // .field--radio
     &--radio {
-      @apply flex
-      gap-2;
+      @apply flex gap-2;
     }
 
-    // input label.field__radio
-    &__radio {
-      @apply flex
-      h-5
-      w-5
-      shrink-0
-      cursor-pointer
-      items-center
-      justify-center
-      rounded-full
-      border-none
-      bg-gray-100;
-      &:after {
-        @apply h-2
-        w-2
-        rounded-full
-        bg-black
-        opacity-0
-        transition-opacity
-        content-[''];
-      }
-    }
-    input:focus-visible + .field__radio {
+    input:focus-visible + &__radio-label:before {
       @apply ring-2
       ring-primary-300;
     }
-    &:hover .field__radio,
-    input:checked + .field__radio {
+    input:checked + &__radio-label {
       @apply cursor-default;
       &:after {
         @apply opacity-100;
       }
     }
-    input:disabled + .field__radio {
+    input:disabled + &__radio-label {
       @apply pointer-events-none;
       &:after {
         @apply opacity-0;
@@ -266,13 +261,38 @@ endcapture
 
     // .field__radio-label
     &__radio-label {
-      @apply mb-0
-      block
+      @apply relative
+      mb-0
+      flex
+      shrink-0
       cursor-pointer
+      items-center
+      justify-center
+      gap-2
       text-sm
       leading-5
       transition-colors
       text-color-default;
+      &:before {
+        @apply h-5
+        w-5
+        cursor-pointer
+        rounded-full
+        border-none
+        bg-gray-100
+        content-[''];
+      }
+      &:after {
+        @apply absolute
+        left-1.5
+        h-2
+        w-2
+        rounded-full
+        bg-black
+        opacity-0
+        transition-opacity
+        content-[''];
+      }
     }
     &:hover .field__radio-label {
       @apply text-primary;
@@ -317,8 +337,8 @@ endcapture
       py-3
       opacity-0
       shadow-md
-      transition-opacity
-      border-color-default;
+      transition-opacity;
+      // .field__dropdown--active
       &--active {
         @apply pointer-events-auto opacity-100;
       }
@@ -348,13 +368,13 @@ endcapture
       gap-2;
     }
 
-    // .field--switch-label
+    // .field__switch
     &__switch {
       @apply relative
      h-5
      w-9
      rounded-full
-     bg-gray-200;
+     bg-gray-100;
       &:after {
         @apply absolute
         left-0.5
@@ -363,25 +383,13 @@ endcapture
         w-4
         rounded-full
         border
-      bg-white
+        bg-white
         transition-all
-        content-['']
-        border-color-default;
+        content-[''];
       }
     }
-    input:focus-visible + .field__switch {
-      @apply ring-2
-      ring-primary-300;
-    }
-    input:checked + .field__switch:after {
-      @apply translate-x-full
-      border-primary
-      bg-primary;
-    }
-    input:disabled + .field__switch {
-      @apply pointer-events-none;
-    }
 
+    // .field__switch-label
     &__switch-label {
       @apply mb-0
       block
@@ -391,8 +399,20 @@ endcapture
       transition-colors
       text-color-default;
     }
+    input:focus-visible + .field__switch {
+      @apply ring-2
+      ring-primary-300;
+    }
+    input:checked + .field__switch:after {
+      @apply translate-x-full
+      border-black
+      bg-black;
+    }
+    input:disabled + .field__switch {
+      @apply pointer-events-none;
+    }
     &:hover .field__switch-label {
-      @apply text-primary;
+      @apply text-black;
     }
     input:disabled ~ .field__switch-label {
       @apply pointer-events-none

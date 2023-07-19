@@ -1,73 +1,66 @@
 {%- capture container_content -%}
-  <div class="grid">
-    <cart-items class="group/cart-items cart relative col-span-12 block text-sm lg:col-span-8 lg:col-start-3 {% if cart == empty %} cart-is-empty{% endif %}">
+  <cart-items class="group/cart-items cart relative col-span-12 block text-sm lg:col-span-8 lg:col-start-3 {% if cart == empty %} cart-is-empty{% endif %}">
 
-      {%- comment -%} Empty cart {%- endcomment -%}
-      <div class="cart__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex">
-        <p class="h4 cart__empty-text mb-4">
-          {%- render "format-translation", namespace: "sections.cart", key: "empty", fallback: "Your cart is empty" -%}
-        </p>
-        <a href="{{ routes.all_products_collection_url }}" class="button button--link">
-          {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
-          {%- render "format-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
-        </a>
-      </div>
+    {%- comment -%} Empty cart {%- endcomment -%}
+    <div class="cart__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex">
+      <p class="h4 cart__empty-text mb-4">
+        {%- render "format-translation", namespace: "sections.cart", key: "empty", fallback: "Your cart is empty" -%}
+      </p>
+    </div>
 
-      {%- comment -%} Header {%- endcomment -%}
-      <div class="cart__header mb-6 group-[.cart-is-empty]/cart-items:hidden lg:mb-14 lg:grid lg:grid-cols-12 lg:items-center">
-        <div class="lg:col-span-3">
-          <a href="{{ routes.all_products_collection_url }}" class="button button--link px-0 py-0">
-            {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
-            {% render "format-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
-          </a>
-        </div>
-        <div class="mt-6 text-center lg:col-span-6 lg:mt-0">
-          <h1 class="h4">
-            {%- render "format-translation", namespace: "sections.cart", key: "title", fallback: "Cart" -%}
-          </h1>
-        </div>
-      </div>
+    {%- comment -%} Header {%- endcomment -%}
+    <div class="cart__header mb-6 group-[.cart-is-empty]/cart-items:hidden lg:mb-14">
+      <h1 class="h4 text-center">
+        {%- render "format-translation", namespace: "sections.cart", key: "title", fallback: "Cart" -%}
+      </h1>
+    </div>
 
-      {%- comment -%} Cart items {%- endcomment -%}
-      <form action="{{ routes.cart_url }}" class="cart__contents group-[.cart-is-empty]/cart-items:hidden" method="post" id="cart">
-        <div class="cart__items relative" id="main-cart-items" data-id="{{ section.id }}">
-          <div class="js-cart-item-contents group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
-            {%- if cart != empty -%}
-              <div class="cart-items">
-                {%- for item in cart.items -%}
-                  {%- render 'cart-item', item: item -%}
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
+    {%- comment -%} Cart items {%- endcomment -%}
+    <form action="{{ routes.cart_url }}" class="cart__contents group-[.cart-is-empty]/cart-items:hidden" method="post" id="cart">
+      <div class="gap-base lg:grid lg:grid-cols-12">
+
+        {% comment %} Left column {% endcomment %}
+        <div class="col-span-8">
+          <div class="cart__items relative" id="main-cart-items" data-id="{{ section.id }}">
+            <div class="js-cart-item-contents group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
+              {%- if cart != empty -%}
+                <div class="cart-items">
+                  {%- for item in cart.items -%}
+                    {%- render 'cart-item', item: item -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
           </div>
+
+          <p class="sr-only" id="cart-live-region-text" aria-live="polite" role="status"></p>
+
+          <p
+            class="hidden"
+            id="shopping-cart-line-item-status"
+            aria-live="polite"
+            aria-hidden="true"
+            role="status"
+            data-shopping-cart-line-item-status
+          >
+            {%-
+              render 'format-translation',
+              namespace: 'accessibility',
+              key: 'loading',
+              fallback: 'Loading'
+            -%}
+          </p>
         </div>
 
-        <p class="sr-only" id="cart-live-region-text" aria-live="polite" role="status"></p>
-
-        <p
-          class="hidden"
-          id="shopping-cart-line-item-status"
-          aria-live="polite"
-          aria-hidden="true"
-          role="status"
-          data-shopping-cart-line-item-status
-        >
-          {%-
-            render 'format-translation',
-            namespace: 'accessibility',
-            key: 'loading',
-            fallback: 'Loading'
-          -%}
-        </p>
-
+        {% comment %} Right column {% endcomment %}
         {%- comment -%} Cart footer {%- endcomment -%}
         <div
           id="main-cart-footer"
           data-id="{{ section.id }}"
-        >
-          <div class="cart__footer grid grid-cols-8 md:mt-14">
+          class="col-span-4">
+          <div class="cart__footer grid grid-cols-8 md:mt-14 lg:mt-0 lg:grid-cols-1 lg:gap-base">
 
-            <div class="col-span-8 grid grid-cols-1 gap-y-6 md:col-span-3">
+            <div class="col-span-8 grid grid-cols-1 gap-y-6 md:col-span-3 lg:col-span-1">
 
               {%- comment -%} Cart note {%- endcomment -%}
               {%- if section.settings.show_cart_note -%}
@@ -92,7 +85,7 @@
                 {%- for block in section.blocks -%}
                   {%- case block.type -%}
                     {%- when '@app' -%}
-                      <div class="cart__app-block relative mb-4 border-b border-b-[var(--border-color-default)] py-4 first:pt-0 last:mb-0">
+                      <div class="cart__app-block relative mb-4 border-b  py-4 first:pt-0 last:mb-0">
                         {%- render block -%}
                       </div>
                     {%- when 'usp' -%}
@@ -122,13 +115,13 @@
             </div>
 
             {%- comment -%} Cart subtotal {%- endcomment -%}
-            <div class="cart__subtotal fixed bottom-0 left-0 right-0 z-20 col-span-8 bg-white md:relative md:col-span-3 md:col-start-6 md:bg-transparent">
+            <div class="cart__subtotal fixed bottom-0 left-0 right-0 z-20 col-span-8 bg-white md:relative md:col-span-3 md:col-start-6 lg:col-span-1 lg:bg-transparent">
 
               <div class="js-cart-footer-contents" {{ block.shopify_attributes }}>
 
                 {%- comment -%} Totals {%- endcomment -%}
                 <div class="cart__totals relative flex flex-wrap items-center justify-between p-4 md:p-0">
-                  <p class="cart__totals-subtotal font-body text-base leading-7">
+                  <p class="cart__totals-subtotal mb-0 font-body text-base leading-7">
                     {%- render 'format-translation', namespace: 'sections.cart', key: 'subtotal', fallback: 'Subtotal' -%}
                   </p>
 
@@ -182,7 +175,7 @@
               <div class="cart__ctas grid grid-cols-1 gap-y-2" {{ block.shopify_attributes }}>
 
                 <noscript>
-                  <button type="submit" class="button button--secondary button--xl">
+                  <button type="submit" class="button button--secondary button--lg">
                     {%- render 'format-translation',
                       namespace: 'sections.cart',
                       key: 'update',
@@ -192,7 +185,7 @@
                 </noscript>
                 <button
                   type="submit"
-                  class="button button--primary button--xl"
+                  class="button button--primary button--lg"
                   name="checkout"
                   {% if cart == empty %}
                     disabled
@@ -211,11 +204,15 @@
 
           </div>
         </div>
+      </div>
+    </form>
+  </cart-items>
 
-      </form>
-
-    </cart-items>
-  </div>
+  {% comment %} 'Continue shopping' link {% endcomment %}
+  <a href="{{ routes.all_products_collection_url }}" class="link py-10">
+    {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+    {%- render "format-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
+  </a>
 {%- endcapture -%}
 
 {%- comment -%} Output cart content {%- endcomment -%}
@@ -223,11 +220,14 @@
   {%- comment -%} Import styles for this section {%- endcomment -%}
   {%- liquid
     render 'import-styles', file_name: 'component-form.css'
-    render 'import-styles', file_name: 'component-quantity-input.css', force: true
   -%}
 
   {%- comment -%} Render the content {%- endcomment -%}
-  {%- render 'format-container', content_class: 'content-wrapper-md', content: container_content -%}
+  {%- render 'format-container',
+    class: 'mb-0',
+    content_class: 'content-wrapper',
+    content: container_content
+  -%}
 
   {%- comment -%} Import javascript {%- endcomment -%}
   <script src="{{ 'cart.js' | asset_url }}" defer></script>

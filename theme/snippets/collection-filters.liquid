@@ -30,7 +30,7 @@
         {%- comment -%} The collection filter drawer. {%- endcomment -%}
         <div class="filter__drawer invisible fixed bottom-0 right-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto text-sm leading-5 opacity-0 transition-all bg-color-default group-[.filter-is-open]/body:visible group-[.filter-is-open]/body:translate-x-0 group-[.filter-is-open]/body:opacity-100">
           {%- comment -%} The collection drawer header. {%- endcomment -%}
-          <div class="filter__header sticky top-0 z-10 border-b border-b-[var(--border-color-default)] bg-white pb-6 pl-6 pr-6 pt-6">
+          <div class="filter__header sticky top-0 z-10 border-b  bg-white pb-6 pl-6 pr-6 pt-6">
             <class-toggle-component
               class="flex justify-end"
               data-options='
@@ -94,7 +94,7 @@
           </div>
 
           {%- comment -%} The collection drawer footer. {%- endcomment -%}
-          <div class="filter__footer sticky bottom-0 z-10 border-t border-t-[var(--border-color-default)] px-6 py-4 bg-color-default js:hidden no-js:block">
+          <div class="filter__footer sticky bottom-0 z-10 border-t px-6 py-4 bg-color-default js:hidden no-js:block">
             <button class="button button--primary button--lg group-[.loading]/filter:button--loading flex w-full">
               {%- render 'format-translation',
                 namespace: 'sections.collection_template',

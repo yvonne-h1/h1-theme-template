@@ -3,7 +3,6 @@
   {%- comment -%} Import styles for this section {%- endcomment -%}
   {%- liquid
     render 'import-styles', file_name: 'component-form.css'
-    render 'import-styles', file_name: 'component-quantity-input.css'
   -%}
 
   <cart-drawer class="cart-drawer" data-cart-drawer>
@@ -64,7 +63,7 @@
           method="post"
           id="cart-drawer-form">
           {%- comment -%} Header {%- endcomment -%}
-          <header class="cart-drawer__header sticky left-0 right-0 top-0 z-20 border-b bg-white p-4 border-color-default">
+          <header class="cart-drawer__header sticky left-0 right-0 top-0 z-20 border-b bg-white p-4">
             <class-toggle-component
               data-options='
                 {
@@ -96,7 +95,7 @@
               {%- if cart != empty -%}
                 <div class="cart-drawer-items">
                   {%- for item in cart.items -%}
-                    {%- render 'cart-drawer-item', item: item -%}
+                    {%- render 'cart-item', item: item, image_size: 80 -%}
                   {%- endfor -%}
                 </div>
               {%- endif -%}
@@ -119,7 +118,7 @@
               {%- case block.type -%}
                   {%- comment -%} App block {%- endcomment -%}
                 {%- when '@app' -%}
-                  <div class="cart-drawer__app-block relative mb-4 border-b border-b-[var(--border-color-default)] py-4 last:mb-0">
+                  <div class="cart-drawer__app-block relative mb-4 border-b  py-4 last:mb-0">
                     {%- render block -%}
                   </div>
               {%- endcase -%}
@@ -128,7 +127,7 @@
 
           {%- comment -%} Cart footer {%- endcomment -%}
           <footer
-            class="cart-drawer__footer sticky bottom-0 left-0 right-0 z-20 mt-auto border-t bg-white p-4 border-color-default"
+            class="cart-drawer__footer sticky bottom-0 left-0 right-0 z-20 mt-auto border-t bg-white p-4"
             id="main-cart-footer"
             data-id="{{ section.id }}">
             {%- comment -%} Cart subtotal {%- endcomment -%}

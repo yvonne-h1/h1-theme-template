@@ -34,11 +34,15 @@
   capture from_price_str
     render 'format-translation', namespace: 'products.product.price', key: 'from_price_html', price: money_price, fallback: 'From'
   endcapture
+
+  unless font_size
+    assign font_size = 'text-sm'
+  endunless
 -%}
 
 <div
   class="
-    price m-0 flex flex-wrap items-center justify-items-center gap-2
+    price {{ font_size }} flex flex-wrap items-center justify-items-center gap-2
     {%- liquid
       if price_class
         echo price_class
@@ -50,9 +54,8 @@
         echo ' price--on-sale'
       endif
     -%}
-  "
->
-  <dl class="m-0 flex">
+  ">
+  <dl class="flex">
     {%- comment -%} Product or variant is on sale {%- endcomment -%}
     {%- if target.compare_at_price > target.price
       or target.price_varies
@@ -62,14 +65,14 @@
         <dt class="sr-only">
           {{ sale_price_str }}
         </dt>
-        <dd class="price__item price__item--sale">
+        <dd class="price__item price__item--sale font-bold text-primary">
           {{ money_price }}
         </dd>
-        <dt class="sr-only">
+        <dt class="sr-only ">
           {{ regular_price_str }}
         </dt>
-        <dd>
-          <s class="price__item price__item--compare">
+        <dd class="">
+          <s class="price__item price__item--compare text-gray-400">
             {{ compare_at_price | money_with_currency }}
           </s>
         </dd>
@@ -78,7 +81,7 @@
       {%- comment -%} Different compare at prices, so display 'from' label (on collection pages) {%- endcomment -%}
     {%- elsif target.price_varies or target.compare_at_price_varies %}
       <div class="price__regular">
-        <dt class="sr-only">
+        <dt class="sr-only ">
           {{ regular_price_str }}
         </dt>
         <dd class="price__item price__item--regular">
@@ -89,7 +92,7 @@
       {%- comment -%} Regular price {%- endcomment -%}
     {%- else -%}
       <div class="price__regular">
-        <dt class="sr-only">
+        <dt class="sr-only ">
           {{ regular_price_str }}
         </dt>
         <dd class="price__item price__item--regular">
@@ -111,8 +114,7 @@
         %}
           <span
             class="price__badge-sale badge badge--sale px-2 py-1 text-xs"
-            aria-hidden="true"
-          >
+            aria-hidden="true">
             {% render 'format-translation',
               namespace: 'products.product.on_sale',
               fallback: 'Sale'
@@ -121,8 +123,7 @@
         {%- elsif product.available == false -%}
           <span
             class="price__badge-sold-out badge badge--sold-out px-2 py-1 text-xs"
-            aria-hidden="true"
-          >
+            aria-hidden="true">
             {% render 'format-translation',
               namespace: 'products.product.sold_out',
               fallback: 'Sold out'

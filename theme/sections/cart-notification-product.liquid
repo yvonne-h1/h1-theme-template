@@ -8,47 +8,16 @@
           alt: item.title | escape,
           max_width: 80,
           aspect_ratio: "1/1",
-          class: "w-20 border border-color-default"
+          class: "w-20 border"
         -%}
       {%- endif -%}
       <div class="flex grow flex-col">
         <p class="cart-notification-product__name my-0 font-bold">
           {{ item.product.title | escape }}
         </p>
-        <div class="text-sm">
-          {%- if item.final_price < item.variant.compare_at_price -%}
-            <dl class="price cart-notification-product__price mt-0.5">
-              {%- comment -%} New price {%- endcomment -%}
-              <dt class="sr-only">
-                {%- render 'format-translation',
-                  namespace: 'products.product.price',
-                  key: 'sale_price',
-                  fallback: 'Sale price'
-                -%}
-              </dt>
-              <dd class="price price--sale inline-block text-inherit">
-                {{ item.final_price | money_with_currency }}
-              </dd>
-              {%- comment -%} Old price {%- endcomment -%}
-              <dt class="sr-only">
-                {%- render 'format-translation',
-                  namespace: 'products.product.price',
-                  key: 'regular_price',
-                  fallback: 'Regular price'
-                -%}
-              </dt>
-              <dd class="inline-block">
-                <s class="price price--compare ml-2">
-                  {{ item.variant.compare_at_price | money_with_currency }}
-                </s>
-              </dd>
-            </dl>
-          {%- else -%}
-            <span class="price">
-              {{ item.original_price | money_with_currency }}
-            </span>
-          {%- endif -%}
-        </div>
+
+        {% comment %} Price {% endcomment %}
+        {% render 'format-price', product: item.variant %}
 
         <div class="mt-auto">
           {%- unless item.product.has_only_default_variant -%}

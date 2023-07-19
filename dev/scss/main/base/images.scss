@@ -3,6 +3,6 @@
     @apply object-cover;
   }
   .svg svg {
-    @apply m-auto max-h-full max-w-full;
+    @apply m-auto max-h-full max-w-full fill-current;
   }
 }

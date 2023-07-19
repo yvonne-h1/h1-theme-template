@@ -8,6 +8,9 @@
   .content-wrapper-md {
     @apply mx-auto max-w-[var(--content-wrapper-md)];
   }
+  .content-wrapper-lg {
+    @apply mx-auto max-w-[var(--content-wrapper-lg)];
+  }
   .content-wrapper-wide {
     @apply mx-auto max-w-full;
   }

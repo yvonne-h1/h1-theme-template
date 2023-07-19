@@ -69,7 +69,7 @@
                 product: product,
                 use_variant: true,
                 show_badges: false,
-                text_size: 'large'
+                font_size: 'text-lg'
               -%}
             </div>
             {%- comment -%} Form that is used to set and read the selected variant id. {%- endcomment -%}
@@ -105,7 +105,7 @@
           {%- when 'collapsible_tab' -%}
 
             {%- if block.settings.content != blank or block.settings.page.content != nil -%}
-              <collapsible-component class="product__collapsible collapsible group block  border-t border-color-default last:border-b first-of-type:mt-8" data-collapsible-group {{ block.shopify_attributes }}>
+              <collapsible-component class="product__collapsible collapsible group block  border-t last:border-b first-of-type:mt-8" data-collapsible-group {{ block.shopify_attributes }}>
                 <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-left text-sm font-bold leading-5" data-collapsible-trigger>
                   <span class="flex w-full justify-items-start gap-2">
                     {%- if block.settings.icon != blank -%}
@@ -142,36 +142,14 @@
                     fallback: "Quantity"
                   -%}
                 </label>
-                <quantity-input class="quantity">
-                  <button class="quantity__button no-js:hidden" name="minus" type="button">
-                    <span class="sr-only">
-                      {%- render 'format-translation',
-                        namespace: 'products.product.quantity',
-                        key: 'decrease',
-                        fallback: 'Decrease'
-                      -%}
-                    </span>
-                    {% render 'global-icon', icon: 'minus' %}
-                  </button>
-                  <input class="quantity__input"
-                      type="number"
-                      name="quantity"
-                      id="Quantity-{{ section.id }}"
-                      value="1"
-                      pattern="[0-9]*"
-                      inputmode="numeric"
-                    >
-                  <button class="quantity__button no-js:hidden" name="plus" type="button">
-                    <span class="sr-only">
-                      {%- render 'format-translation',
-                        namespace: 'products.product.quantity',
-                        key: 'increase',
-                        fallback: 'Increase'
-                      -%}
-                    </span>
-                    {% render 'global-icon', icon: 'plus' %}
-                  </button>
-                </quantity-input>
+
+                {% comment %} Quantity input {% endcomment %}
+                {%- render 'quantity-input',
+                  id: section.id,
+                  value: 1,
+                  qty_product: product,
+                  type: 'pdp'
+                -%}
               </div>
             {%- endif -%}
 

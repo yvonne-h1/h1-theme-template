@@ -19,20 +19,18 @@
 -%}
 
 <div
-  class="filter__group filter__group--name-{{ label | handleize }} js-filter group/filter-group w-full overflow-y-auto border-b border-b-[var(--border-color-default)] bg-color-default {{ is_size_or_color_class }}"
+  class="filter__group filter__group--name-{{ label | handleize }} js-filter group/filter-group w-full overflow-y-auto border-b  bg-color-default {{ is_size_or_color_class }}"
   data-filter-option
   data-index="{{ filter_index }}"
   {% if collapsible %}
     data-collapsible-group
-  {% endif %}
->
+  {% endif %}>
   <button
     type="button"
     class="filter__option-trigger flex w-full items-center justify-between py-3 transition-all group-[.collapsible-is-open]/filter-group:pb-2"
     {% if collapsible %}
       data-collapsible-trigger
-    {% endif %}
-  >
+    {% endif %}>
     <span class="text-sm font-bold leading-5">
       {{- label | escape -}}
     </span>
@@ -51,8 +49,7 @@
     class="filter-group__target w-full overflow-y-auto transition-all bg-color-default"
     {% if collapsible %}
       data-collapsible-target
-    {% endif %}
-  >
+    {% endif %}>
     <div class="pb-4">
       {{- summary_content -}}
     </div>

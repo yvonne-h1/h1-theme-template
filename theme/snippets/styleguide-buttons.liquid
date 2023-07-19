@@ -1,7 +1,11 @@
-{%- assign button_wrapper_class = 'flex flex-wrap gap-2' -%}
-{%- assign button_types = 'primary, secondary, tertiary, outline, gradient' | split: ', ' -%}
+{%- liquid
+  assign button_wrapper_class = 'flex flex-wrap gap-2'
+  assign button_types = 'primary, secondary, tertiary, outline, gradient' | split: ', '
+  assign button_sizes = 'sm, md, lg, xl' | split: ', '
+-%}
 
 <div class="space-y-6">
+  <h3>Button types</h3>
   {% comment %} Icon buttons {% endcomment %}
   <div class="{{ button_wrapper_class }}">
     <a href="#" class="button button--primary rounded-full border-none p-3">
@@ -18,10 +22,12 @@
   {% endcomment %}
   {%- for type in button_types -%}
     <div class="{{ button_wrapper_class }}">
-      {%- assign type_label = type | replace: '-', ' ' | capitalize -%}
-      {%- if type == blank -%}
-        {%- assign type_label = 'Default' -%}
-      {%- endif -%}
+      {%- liquid
+        assign type_label = type | replace: '-', ' ' | capitalize
+        if type == blank
+          assign type_label = 'Default'
+        endif
+      -%}
 
       <a href="#" class="button button--{{ type }}">{{ type_label }} anchor</a>
       <input type="button" class="button button--{{ type }}" value="{{ type_label }} input">
@@ -65,5 +71,21 @@
 
   <div>
     <button class="button w-full">Default full width button</button>
+  </div>
+
+  <hr>
+  <h3>Button sizes</h3>
+  {% comment %} Button sizes {% endcomment %}
+  <div class="{{ button_wrapper_class }} items-baseline">
+    {%- for size in button_sizes -%}
+      {%- liquid
+        assign size_label = size | replace: '-', ' ' | upcase
+        if size == blank
+          assign size_label = 'Default'
+        endif
+      -%}
+
+      <button type="button" class="button button--{{ size }}">{{ size_label }} button</button>
+    {%- endfor -%}
   </div>
 </div>

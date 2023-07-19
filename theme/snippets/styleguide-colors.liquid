@@ -3,7 +3,7 @@
   assign circle_class = 'flex h-20 w-20 items-center justify-center rounded p-1 text-center mb-1'
   assign circle_class_full = 'flex h6 mb-0 w-full items-center justify-center rounded p-2 text-center'
 
-  assign global_colors = 'color-bg|background, text-color-default|text, text-color-light| text light, text-link-color|link, text-link-color-states|link hover, border-color-default|border' | split: ', '
+  assign global_colors = 'color-bg|background, text-color-default|text, text-link-color|link, text-link-color-states|link hover' | split: ', '
   assign palette_types = '50, 100, 200, 300, 400, 500, 600, 700, 800, 900' | split: ', '
   assign communication_colors = 'info, success, warning, danger' | split: ', '
 -%}
@@ -12,8 +12,10 @@
 <div class="space-y-8">
   <div class="{{ color_wrapper_class }}">
     {%- for color in global_colors -%}
-      {%- assign color_class = color | split: '|' | first -%}
-      {%- assign color_capitalized = color | split: '|' | last | capitalize -%}
+      {%- liquid
+        assign color_class = color | split: '|' | first
+        assign color_capitalized = color | split: '|' | last | capitalize
+      -%}
 
       <div>
         <div

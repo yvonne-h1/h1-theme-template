@@ -61,8 +61,8 @@
         @apply pointer-events-none
           cursor-default
           overflow-hidden
+          text-gray-700
           opacity-50
-          text-color-light
           before:hidden;
         &:after {
           @apply absolute

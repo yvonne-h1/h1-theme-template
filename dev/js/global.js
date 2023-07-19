@@ -31,9 +31,9 @@ function getFocusableElements(container) {
  * @param {Object} elementToFocus the element to focus when trapFocus is called
  */
 function trapFocus(container, elementToFocus = container) {
-  var elements = getFocusableElements(container);
-  var first = elements[0];
-  var last = elements[elements.length - 1];
+  const elements = getFocusableElements(container);
+  const first = elements[0];
+  const last = elements[elements.length - 1];
 
   removeTrapFocus();
 

@@ -42,7 +42,7 @@
       {%- for address in customer.addresses -%}
         <li class="address" data-address>
 
-          <div class="rounded-2xl border bg-white p-6 text-sm  leading-5 border-color-default">
+          <div class="rounded-2xl border bg-white p-6 text-sm  leading-5">
 
             {% comment %} Default badge {% endcomment %}
             {%- if address == customer.default_address -%}
@@ -82,7 +82,7 @@
                 {%- render 'format-translation', namespace: 'customer.addresses', key: 'delete', fallback: 'Delete' %}
               </button>
               {%- comment -%} Edit address form. This should be a modal i.m.o. {%- endcomment -%}
-              <div id="EditAddress_{{ address.id }}" class="addresses__edit mt-4 hidden rounded-md  border p-4 border-color-default peer-aria-expanded/edit:block">
+              <div id="EditAddress_{{ address.id }}" class="addresses__edit mt-4 hidden rounded-md  border p-4 peer-aria-expanded/edit:block">
                 {%- form 'customer_address', address, class: 'form addresses__edit-form' -%}
                   <h2 class="text-lg font-medium">
                     {%-
@@ -290,7 +290,7 @@
           fallback: 'Add new address'
         -%}
       </button>
-      <div id="AddAddress" class="mt-4 hidden rounded-2xl border bg-white p-6 text-sm  leading-5 border-color-default peer-aria-expanded/add:block">
+      <div id="AddAddress" class="mt-4 hidden rounded-2xl border bg-white p-6 text-sm leading-5 peer-aria-expanded/add:block">
         {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading', class: 'form addresses__add-form' -%}
           <h2 class="text-lg font-medium" id="AddressNewHeading">
             {%-

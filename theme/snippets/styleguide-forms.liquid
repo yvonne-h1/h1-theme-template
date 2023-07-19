@@ -15,7 +15,7 @@
   {%- comment -%} Default field {%- endcomment -%}
   <div class="field">
     <label class="field__label" for="field-1">Label</label>
-    <input type="text" class="field__input" id="field-1" placeholder="Label" tabindex="0">
+    <input type="text" class="field__input" id="field-1" placeholder="Label">
     <div class="field__message">Form message</div>
   </div>
 
@@ -26,7 +26,6 @@
       type="email"
       class="field__input"
       id="field-2"
-      tabindex="0"
       required=""
       placeholder="Email">
     {{ icons }}
@@ -40,7 +39,6 @@
       type="password"
       class="field__input"
       id="field-3"
-      tabindex="0"
       required=""
       placeholder="Password">
     {{ icons }}
@@ -73,95 +71,93 @@
     Styled select field
   {%- endcomment -%}
   <div class="field field--dropdown">
-    <label class="field__label">Option menu</label>
+    <label class="field__label">Custom dropdown menu</label>
     <class-toggle-component
-      type="button"
-      class="field__dropdown-button button button--secondary"
+      class="field__dropdown-button"
       data-collapsible-trigger
-      aria-expanded="true"
       aria-haspopup="true"
       id="select-example-1"
       data-options='
         {
           "classToToggle": "field__dropdown--active",
-          "target": "[data-select-example]"
+          "target": "[data-select-example]",
+          "ariaExpanded": true
         }
       '>
-      Option menu
-      {%- render 'global-icon', icon: 'caret', icon_class: 'rotate-90 w-3' -%}
+      <button
+        class="button button--secondary"
+        aria-controls="dropdownMenu"
+        aria-expanded="true">
+        Custom dropdown menu
+        {%- render 'global-icon', icon: 'caret', icon_class: 'rotate-90 w-3' -%}
+      </button>
     </class-toggle-component>
     <div
+      id="dropdownMenu"
       class="field__dropdown"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="select-example-1"
       tabindex="-1"
       data-select-example>
-      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Account settings</a>
-      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Support</a>
-      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">License</a>
+      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Link 1</a>
+      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Link 2</a>
+      <a href="#" class="field__dropdown-item" role="menuitem" tabindex="-1">Link 3</a>
     </div>
   </div>
 
   {%- comment -%} Checkboxes {%- endcomment -%}
-  <b class="field__header">Checkboxes</b>
+  <p class="field__header font-bold">Checkboxes</p>
 
   <div class="field field--checkbox">
     <input type="checkbox" class="sr-only" id="checkbox-1" tabindex="0">
-    <label class="field__checkbox" for="checkbox-1">
-      {%- render 'global-icon', icon: 'checkmark', icon_class: 'w-3' -%}
-    </label>
     <label class="field__checkbox-label" for="checkbox-1">Checkbox default</label>
   </div>
 
   <div class="field field--checkbox">
     <input type="checkbox" class="sr-only" id="checkbox-2" tabindex="0" checked>
-    <label class="field__checkbox" for="checkbox-2">
-      {%- render 'global-icon', icon: 'checkmark', icon_class: 'w-3' -%}
-    </label>
     <label class="field__checkbox-label" for="checkbox-2">Checkbox checked</label>
   </div>
 
   <div class="field field--checkbox">
     <input type="checkbox" class="sr-only" id="checkbox-3" tabindex="0" disabled>
-    <label class="field__checkbox" for="checkbox-3">
-      {%- render 'global-icon', icon: 'checkmark', icon_class: 'w-3' -%}
-    </label>
     <label class="field__checkbox-label" for="checkbox-3">Checkbox disabled</label>
   </div>
 
   {%- comment -%} Radio fields {%- endcomment -%}
-  <b class="field__header">Radios</b>
+  <p class="field__header font-bold">Radios</p>
 
   <div class="field field--radio">
     <input type="radio" class="sr-only" name="radio-default" id="radio-1" tabindex="0">
-    <label class="field__radio" for="radio-1"></label>
+    {% comment %} <label class="field__radio" for="radio-1"></label> {% endcomment %}
     <label class="field__radio-label" for="radio-1">Radio input default</label>
   </div>
 
   <div class="field field--radio">
     <input type="radio" class="sr-only" name="radio-default" id="radio-2" tabindex="0" checked>
-    <label class="field__radio" for="radio-2"></label>
+    {% comment %} <label class="field__radio" for="radio-2"></label> {% endcomment %}
     <label class="field__radio-label" for="radio-2">Radio input checked</label>
   </div>
 
   <div class="field field--radio">
     <input type="radio" class="sr-only" name="radio-default" id="radio-3" tabindex="0" disabled>
-    <label class="field__radio" for="radio-3"></label>
+    {% comment %} <label class="field__radio" for="radio-3"></label> {% endcomment %}
     <label class="field__radio-label" for="radio-3">Radio input disabled</label>
   </div>
 
   {%- comment -%} Toggle field {%- endcomment -%}
-  <b class="field__header">Switch button</b>
+  <p class="field__header font-bold">Switch button</p>
 
   <div class="field field--switch">
-    <input type="checkbox" value="" id="default-toggle-1" class="peer sr-only" tabindex="0">
-    <div class="field__switch"></div>
-    <label class="field__switch-label" for="default-toggle-1">Enable notification</label>
+    <label class="field__switch-label flex gap-4" for="default-toggle-1">
+      <input type="checkbox" value="" id="default-toggle-1" class="peer sr-only" tabindex="0">
+      <div class="field__switch"></div>
+      Enable notification
+    </label>
   </div>
 
   {%- comment -%} Submit {%- endcomment -%}
-  <b class="field__header">Submit button</b>
+  <p class="field__header font-bold">Submit button</p>
   <button type="submit" class="button button--primary">Submit</button>
   <button class="button button--outline">Cancel</button>
 </form>

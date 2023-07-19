@@ -7,7 +7,7 @@
   {%- capture results -%}
 
     {%- if predictive_search.resources.products.size > 0 and settings.predictive_search_products -%}
-      <div class="predictive-search__group mb-4 border-b border-b-[var(--border-color-default)] last:mb-0">
+      <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase leading-5 text-primary">
             {%-
@@ -33,7 +33,7 @@
         <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
           {%- for product in predictive_search.resources.products -%}
             <li class="predictive-search__list-item mb-4" role="option">
-              <a href="{{ product.url }}" class="predictive-search__list__link flex gap-4 text-inherit hover:opacity-70 active:opacity-100 states:no-underline" tabindex="-1">
+              <a href="{{ product.url }}" class="predictive-search__list__link flex gap-4 text-inherit no-underline hover:opacity-70 active:opacity-100 states:no-underline" tabindex="-1">
                 <div class="predictive-search__item__image w-16">
                   {%- render 'format-image',
                     image_object: product.featured_media,
@@ -42,12 +42,12 @@
                   -%}
                 </div>
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title text-sm font-medium leading-5">
+                  <p class="predictive-search__item__title mb-2 text-sm font-medium leading-5">
                     {{- product.title | highlight: predictive_search.terms -}}
                   </p>
-                  <p class="predictive-search__item__price text-sm leading-5">
-                    {{ product.price  | money_with_currency }}
-                  </p>
+                  <div class="predictive-search__item__price text-sm leading-5">
+                    {% render 'format-price', product: product %}
+                  </div>
                 </div>
               </a>
             </li>
@@ -57,7 +57,7 @@
     {%- endif -%}
 
     {%- if predictive_search.resources.collections.size > 0 and settings.predictive_search_collections -%}
-      <div class="predictive-search__group mb-4 border-b border-b-[var(--border-color-default)] last:mb-0">
+      <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase leading-5 text-primary">
             {%-
@@ -92,7 +92,7 @@
     {%- endif -%}
 
     {%- if predictive_search.resources.articles.size > 0 and settings.predictive_search_articles -%}
-      <div class="predictive-search__group mb-4 border-b border-b-[var(--border-color-default)] last:mb-0">
+      <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase leading-5 text-primary">
             {%-
@@ -130,9 +130,9 @@
                   <p class="predictive-search__item__title text-sm font-medium leading-5">
                     {{- article.title | highlight: predictive_search.terms -}}
                   </p>
-                  <p class="text-sm leading-5">
-                    {{- product.price  | money_with_currency -}}
-                  </p>
+                  <div class="predictive-search__item__price text-sm leading-5">
+                    {% render 'format-price', product: product %}
+                  </div>
                 </div>
               </a>
             </li>
@@ -142,7 +142,7 @@
     {%- endif -%}
 
     {%- if predictive_search.resources.pages.size > 0 and settings.predictive_search_pages -%}
-      <div class="predictive-search__group mb-4 border-b border-b-[var(--border-color-default)] last:mb-0">
+      <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase leading-5 text-primary">
             {%-
@@ -215,8 +215,7 @@
             <a
               href="{{ routes.search_url }}?q={{ predictive_search.terms }}{{ type_query }}&options[prefix]=last"
               class="button button--link button--sm px-0"
-              tabindex="-1"
-            >
+              tabindex="-1">
               {%-
                 render "format-translation",
                 namespace: "sections.predictive_search",

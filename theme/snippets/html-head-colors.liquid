@@ -9,7 +9,6 @@
   assign bg_color_default = '#ffffff'
   assign text_color_default = '#262626'
   assign text_color_light = '#969696'
-  assign border_color_default = '#e9ecef'
 
   assign color_primary_gradient = 'linear-gradient(90deg,#e42f26 0,#e46a26)'
   assign color_primary = '#e42f26'
@@ -98,11 +97,9 @@
     --color-white:              {{ color_white }};
     --bg-color-default:         {{ bg_color_default }};
     --text-color-default:       {{ text_color_default }};
-    --text-color-light:         {{ text_color_light }};
     --swiper-theme-color:       {{ text_color_default }};
     --text-link-color:          var(--color-primary-500);
-    --text-link-color-states:   var(--color-primary-800);
-    --border-color-default:     var(--color-gray-50);
+    --text-link-color-states:   var(--color-primary-600);
 
     {% comment -%} Button base {%- endcomment -%}
     --button-background:          var(--color-secondary);

@@ -40,10 +40,12 @@
   <ul class="{{ prefix }}__list level-1">
     {%- for link in menu.links -%}
       {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
-      {%- assign link_1_url = link.url -%}
-      {%- if link_1_url contains 'collections' and link_1_url contains 'filter' -%}
-        {%- assign link_1_url = link_1_url | replace: '%3F', '?' -%}
-      {%- endif -%}
+      {%- liquid
+        assign link_1_url = link.url
+        if link_1_url contains 'collections' and link_1_url contains 'filter'
+          assign link_1_url = link_1_url | replace: '%3F', '?'
+        endif
+      -%}
 
       {%- comment -%} if link is active {%- endcomment -%}
       {%- liquid
@@ -55,15 +57,13 @@
       {%- if link.links == blank -%}
         {%- comment -%} Level 1 without submenu {%- endcomment -%}
         <li
-          class="{{ prefix }}__item level-1"
-        >
+          class="{{ prefix }}__item level-1">
           <a
             href="{{ link_1_url }}"
             class="{{ prefix }}__link {{ level_1_active_class }} level-1 inline-flex py-2 font-bold text-inherit no-underline hover:text-primary focus:text-primary states:no-underline"
             {%- if link.current %}
               aria-current="page"
-            {% endif %}
-          >
+            {% endif %}>
             {{ link.title | escape }}
           </a>
         </li>
@@ -71,15 +71,13 @@
         {%- comment -%} Level 1 with submenu {%- endcomment -%}
         <li
           class="{{ prefix }}__item level-1"
-          {{ data_collapsible_group }}
-        >
+          {{ data_collapsible_group }}>
           <a
             href="{{ link_1_url }}"
             class="{{ prefix }}__link {{ level_1_active_class }} level-1 inline-flex py-2 font-bold text-inherit no-underline states:text-primary states:no-underline"
             {%- if link.current %}
               aria-current="page"
-            {% endif %}
-          >
+            {% endif %}>
             {{- link.title | escape -}}
           </a>
 
@@ -87,8 +85,7 @@
             <button
               type="button"
               class="{{ prefix }}__link {{ level_1_active_class }} level-1"
-              {{ data_collapsible_trigger }}
-            >
+              {{ data_collapsible_trigger }}>
               {%- render 'global-icon', icon: 'collapsible', icon_class: 'w-4' -%}
             </button>
           {%- endif -%}
@@ -97,8 +94,7 @@
           <ul
             class="{{ prefix }}__list level-2 list-inside list-disc"
             tabindex="-1"
-            {{ data_collapsible_target }}
-          >
+            {{ data_collapsible_target }}>
             {%- for childlink in link.links -%}
               {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
               {% assign childlink_url = childlink.url %}
@@ -122,8 +118,7 @@
                     class="{{ prefix }}__link {{ level_2_active_class }} level-2 inline-flex py-2 text-inherit no-underline states:text-primary states:no-underline"
                     {% if childlink.current %}
                       aria-current="page"
-                    {% endif %}
-                  >
+                    {% endif %}>
                     {{- childlink.title | escape -}}
                   </a>
                 </li>
@@ -131,12 +126,10 @@
                 {%- comment -%} Level 2 with submenu {%- endcomment -%}
                 <li
                   class="{{ prefix }}__item level-2"
-                  {{ data_collapsible_group }}
-                >
+                  {{ data_collapsible_group }}>
                   <a
                     href="{{ link.url }}"
-                    class="{{ prefix }}__link {{ level_2_active_class }} level-2 inline-flex py-2 text-inherit no-underline states:text-primary states:no-underline"
-                  >
+                    class="{{ prefix }}__link {{ level_2_active_class }} level-2 inline-flex py-2 text-inherit no-underline states:text-primary states:no-underline">
                     {{- childlink.title | escape -}}
                   </a>
 
@@ -144,8 +137,7 @@
                     <button
                       type="button"
                       class="{{ prefix }}__link {{ level_2_active_class }} level-2"
-                      {{ data_collapsible_trigger }}
-                    >
+                      {{ data_collapsible_trigger }}>
                       {%- render 'global-icon', icon: 'collapsible', icon_class: 'w-4' -%}
                     </button>
                   {%- endif -%}
@@ -153,8 +145,7 @@
                   {%- comment -%} Level 3 {%- endcomment -%}
                   <ul
                     class="{{ prefix }}__list level-3 list-inside list-disc pl-3"
-                    {{ data_collapsible_target }}
-                  >
+                    {{ data_collapsible_target }}>
                     {%- for grandchildlink in childlink.links -%}
                       {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
                       {% assign grandchildlink_url = grandchildlink.url %}
@@ -178,8 +169,7 @@
                           class="{{ prefix }}__link {{ level_3_active_class }} level-3 inline-flex py-2 text-inherit no-underline hover:text-primary focus:text-primary states:no-underline"
                           {% if grandchildlink.current %}
                             aria-current="page"
-                          {% endif %}
-                        >
+                          {% endif %}>
                           {{- grandchildlink.title | escape -}}
                         </a>
                       </li>

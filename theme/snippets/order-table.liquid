@@ -71,7 +71,7 @@
 
   <div class="order__body border-t border-t-gray-200">
     {%- for line_item in order.line_items -%}
-      <div class="order__line relative grid w-full grid-cols-12 gap-x-6 gap-y-2 border-b border-b-[var(--border-color-default)] pb-6 pt-6 lg:gap-y-0">
+      <div class="order__line relative grid w-full grid-cols-12 gap-x-6 gap-y-2 border-b  pb-6 pt-6 lg:gap-y-0">
         {%- comment -%} Image heading {%- endcomment -%}
         <div
           class="col-span-12 lg:col-span-2"
@@ -85,8 +85,7 @@
               key: "product",
               fallback: "Product"
             -%}
-          "
-        >
+          ">
           {%- if line_item.product.url != blank -%}
             {%- assign alt = line_item.product.title | escape -%}
             <a href="{{ line_item.product.url }}" class="block w-14">
@@ -119,8 +118,7 @@
               key: "product",
               fallback: "Product"
             -%}
-          "
-        >
+          ">
           <p class="text-sm font-bold leading-5">
             {{ line_item.title }}
           </p>
@@ -161,8 +159,7 @@
                   key: "discount",
                   fallback: "Discount"
                 -%}
-              "
-            >
+              ">
               {%- for discount_allocation in line_item.line_level_discount_allocations -%}
                 <li>
                   {{- discount_allocation.discount_application.title }} (-
@@ -185,8 +182,7 @@
               key: "sku",
               fallback: "SKU"
             -%}
-          "
-        >
+          ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
               {%- render 'format-translation',
@@ -210,8 +206,7 @@
               key: "price",
               fallback: "Price"
             -%}
-          "
-        >
+          ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
               {%- render 'format-translation',
@@ -320,8 +315,7 @@
               key: "quantity",
               fallback: "Quantity"
             -%}
-          "
-        >
+          ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
               {%- render 'format-translation',
@@ -345,8 +339,7 @@
               key: "total",
               fallback: "Total"
             -%}
-          "
-        >
+          ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
               {%- render 'format-translation',
@@ -400,8 +393,7 @@
                 key: "fulfillment_status",
                 fallback: "Fulfillment status"
               -%}
-            "
-          >
+            ">
             {% comment %} class="pt-6 pb-6 pl-0 pr-4 lg:pr-14" {% endcomment %}
             {%- assign created_at = line_item.fulfillment.created_at | time_tag: format: 'date' -%}
             <p class="flex flex-wrap gap-x-2 text-xs">
@@ -440,8 +432,7 @@
           key: "subtotal",
           fallback: "Subtotal"
         -%}
-      "
-    >
+      ">
       <div class="col-span-6 lg:col-span-8 lg:col-start-3">
         <p class="text-gray-400">
           {%- render 'format-translation',
@@ -494,8 +485,7 @@
     {%- if discounts != blank -%}
       <div
         class="grid grid-cols-12"
-        role="row"
-      >
+        role="row">
         {{- discounts -}}
       </div>
     {%- endif -%}
@@ -511,14 +501,12 @@
             key: "shipping",
             fallback: "Shipping"
           -%} ({{ shipping_method.title | escape }})
-        "
-      >
+        ">
         <div
           class="col-span-6 lg:col-span-8 lg:col-start-3"
           id="RowShipping"
           role="rowheader"
-          scope="row"
-        >
+          scope="row">
           <p class="text-gray-400">
             {%- render 'format-translation',
               namespace: 'customer.order',
@@ -538,8 +526,7 @@
               key: "shipping",
               fallback: "Shipping"
             -%} ({{ shipping_method.title }})
-          "
-        >
+          ">
           <p>
             {{ shipping_method.price | money_with_currency }}
           </p>
@@ -550,14 +537,12 @@
     {%- comment -%} Tax lines {%- endcomment -%}
     {%- for tax_line in order.tax_lines -%}
       <div
-        class="grid grid-cols-12"
-      >
+        class="grid grid-cols-12">
         <div
           class="col-span-6 lg:col-span-8 lg:col-start-3"
           id="RowTax"
           role="rowheader"
-          scope="row"
-        >
+          scope="row">
           <p class="text-gray-400">
             {%- render 'format-translation',
               namespace: 'customer.order',
@@ -578,8 +563,7 @@
               key: "tax",
               fallback: "Tax"
             -%} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)
-          "
-        >
+          ">
           <p>
             {{ tax_line.price | money_with_currency }}
           </p>
@@ -589,8 +573,7 @@
 
     {%- comment -%} Totals {%- endcomment -%}
     <div
-      class="grid grid-cols-12"
-    >
+      class="grid grid-cols-12">
       <div class="col-span-6 lg:col-span-8 lg:col-start-3">
         <p class="font-bold">
           {%- render 'format-translation',
@@ -610,8 +593,7 @@
             key: "total",
             fallback: "Total"
           -%}
-        "
-      >
+        ">
         <p>
           {{- order.total_price | money_with_currency -}}
         </p>

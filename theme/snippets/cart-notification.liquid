@@ -12,16 +12,14 @@
 
 {% comment %} Output notification. {% endcomment %}
 <cart-notification
-  class="cart-notification group/cart-notification"
->
+  class="cart-notification group/cart-notification">
   <div
     class="invisible fixed right-0 top-0 z-modal block w-full max-w-sm -translate-y-full bg-white px-4 pb-2 pt-5 shadow-2xl transition-all focus:shadow-2xl group-[.cart-notification--open]/cart-notification:visible group-[.cart-notification--open]/cart-notification:translate-y-0 md:px-6 md:pb-3 lg:right-8"
     data-cart-notification
     aria-modal="true"
     aria-label="{%- render 'format-translation', namespace: "general.cart.item_added", fallback: "Item added" -%}"
     role="dialog"
-    tabindex="-1"
-  >
+    tabindex="-1">
     <div class="cart-notification__valid" data-cart-notification-valid>
       <div class="cart-notification__header relative flex items-start pr-6">
         <p class="cart-notification__heading h6 my-0 flex grow items-center leading-6">
@@ -34,24 +32,21 @@
       </div>
       <div
         id="cart-notification-product"
-        class="cart-notification-product mb-4 flex items-start gap-4 border-b border-b-[var(--border-color-default)] pb-4 pt-4 text-sm leading-5"
-      >
+        class="cart-notification-product mb-4 flex items-start gap-4 border-b  pb-4 pt-4 text-sm leading-5">
         {% comment %} Will be filled with cart-notification-product.liquid. {% endcomment %}
       </div>
       <div class="cart-notification__links grid grid-cols-1 gap-2 text-center">
         <a
           href="{{ routes.cart_url }}"
           id="cart-notification-button"
-          class="button button--md button--secondary w-full"
-        >
+          class="button button--md button--secondary w-full">
           {% comment %} Will be filled with cart-notification-button.liquid. {% endcomment %}
         </a>
         <form action="{{ routes.cart_url }}" method="post" id="cart" class="my-0">
           <button
             type="submit"
             name="checkout"
-            class="button button--md button--primary w-full"
-          >
+            class="button button--md button--primary w-full">
             {%- render 'format-translation',
               namespace: 'sections.cart.checkout',
               fallback: 'Check out'
@@ -84,8 +79,7 @@
       </div>
       <p
         class="cart-notification__error-message pb-4 pl-0 pr-0 pt-6 text-sm leading-5"
-        data-cart-notification-error-message
-      ></p>
+        data-cart-notification-error-message></p>
     </div>
   </div>
 </cart-notification>

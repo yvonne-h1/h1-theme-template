@@ -59,9 +59,10 @@
             </a>
           </li>
         {%- else -%}
-          {% comment %} Set the layout type default to single dropdown. {% endcomment %}
-          {%- assign dropdown_layout = 'single' -%}
-
+          {%- liquid
+            # Set the layout type default to single dropdown.
+            assign dropdown_layout = 'single'
+          -%}
           {%- comment -%} Capture level 2 / 3 from current level 1 and collect the section blocks related to level 1. {%- endcomment -%}
           {%- capture dropdown -%}
 
@@ -104,24 +105,24 @@
 
                 {%- if level_2.links != blank -%}
 
-                  {%- comment -%} Level 2 with submenu {%- endcomment -%}
-                  {%- assign dropdown_layout = "multi" -%}
+                  {%- liquid
+                    # Level 2 with submenu
+                    assign dropdown_layout = "multi"
+                  -%}
 
                   {%- comment -%} Level 3 {%- endcomment -%}
                   <ul class="header__menu-list level-3">
                     {%- for level_3 in level_2.links -%}
 
-                      {%- comment -%}
-                        Get link and fix deep link to native filters
-                      {%- endcomment -%}
                       {%- liquid
+                        # Get link and fix deep link to native filters
                         assign grandchildlink_url = level_3.url
                         if grandchildlink_url contains 'collections' and grandchildlink_url contains 'filter'
                           assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?'
                         endif
                       -%}
-                      {%- comment -%} if link is active {%- endcomment -%}
                       {%- liquid
+                        # If link is active
                         assign level_3_active_class = ''
                         if level_3.current
                           assign level_3_active_class = 'header__menu-link--active text-primary'

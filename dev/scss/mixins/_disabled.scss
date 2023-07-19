@@ -1,0 +1,7 @@
+@mixin disabled($pseudo: null) {
+  &:disabled#{$pseudo},
+  &.disabled#{$pseudo},
+  &[aria-disabled='true']#{$pseudo} {
+    @content;
+  }
+}

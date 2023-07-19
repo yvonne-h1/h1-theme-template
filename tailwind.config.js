@@ -87,6 +87,9 @@ module.exports = {
       spacing: {
         'element-spacing': 'var(--element-spacing)',
       },
+      borderColor: ({ theme }) => ({
+        DEFAULT: theme('colors.gray.50'),
+      }),
       zIndex: {
         dropdown: '1000',
         sticky: '1020',
@@ -244,6 +247,12 @@ module.exports = {
             textDecoration: 'none',
           },
         },
+        dt: {
+          margin: 0,
+        },
+        dd: {
+          margin: 0,
+        },
       }),
       /**
          * Utilities
@@ -261,17 +270,11 @@ module.exports = {
           backgroundImage: 'var(--color-primary-gradient)',
           color: '#000',
         },
-        '.text-color-light': {
-          color: 'var(--text-color-light)',
-        },
         '.text-link-color': {
           color: 'var(--text-link-color)',
         },
         '.text-link-color-states': {
           color: 'var(--text-link-color-states)',
-        },
-        '.border-color-default': {
-          borderColor: 'var(--border-color-default)',
         },
         '.gap-base': {
           gap: 'var(--grid-row-gap) var(--grid-col-gap)',
@@ -298,7 +301,7 @@ module.exports = {
       addVariant('no-js', ['.no-js &']);
       addVariant('touch', ['.touch &']);
       addVariant('no-touch', ['.no-touch &']);
-      addVariant('disabled', ['&:disabled', '&.disabled']);
+      addVariant('disabled', ['&:disabled', '&.disabled', '&[aria-disabled="true"]']);
     }),
   ],
 };

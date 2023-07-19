@@ -13,12 +13,10 @@
     Render nothing
 {% endcomment %}
 
-{%- assign product_details_collections = product_details.collections
-  | map: 'title'
-  | join: ', '
-  | json
+{%- liquid
+  assign product_details_collections = product_details.collections | map: 'title' | join: ', ' | json
+  assign product_collections = product.collections | map: 'title' | json | join: ', '
 -%}
-{%- assign product_collections = product.collections | map: 'title' | json | join: ', ' -%}
 
 {% # prettier-ignore %}
 {% if render_data_attributes and product_details -%}

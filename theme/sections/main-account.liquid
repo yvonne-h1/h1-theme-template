@@ -99,7 +99,7 @@
           <tbody role="rowgroup" class="">
             {%- for order in customer.orders -%}
               {%- assign td_class = 'text-sm leading-5 py-1 md:py-4 md:pl-0 md:pr-4 text-left align-top md:w-52 last:w-24' -%}
-              <tr role="row" class="flex flex-col justify-start border-b border-b-[var(--border-color-default)] py-3 md:table-row md:py-0">
+              <tr role="row" class="flex flex-col justify-start border-b  py-3 md:table-row md:py-0">
                 <td id="RowOrder" role="cell" headers="ColumnOrder" data-label="{{ order_nr_str }}" class="{{ td_class }}">
                   <a
                     href="{{ order.customer_url }}"
