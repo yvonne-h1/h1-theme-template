@@ -3,7 +3,7 @@
     <div id="cart-notification-product-{{ item.id }}" class="cart-item">
       {%- if item.image != blank -%}
         {%-
-          render 'format-image',
+          render 'responsive-image',
           image_object: item.image,
           alt: item.title | escape,
           max_width: 80,

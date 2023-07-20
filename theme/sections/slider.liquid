@@ -91,7 +91,7 @@
 
             <div class="slider__image absolute inset-0">
               {% comment %} Desktop image {% endcomment %}
-              {%- render 'format-image',
+              {%- render 'responsive-image',
                 image_object: block.settings.image_desktop,
                 class: image_class_desktop,
                 max_width: max_width,
@@ -100,7 +100,7 @@
 
               {% comment %} Mobile image {% endcomment %}
               {%- if image_mobile != blank -%}
-                {%- render 'format-image',
+                {%- render 'responsive-image',
                   image_object: image_mobile,
                   class: image_class_mobile,
                   max_width: 768,

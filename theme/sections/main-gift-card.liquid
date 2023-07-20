@@ -68,7 +68,7 @@
 {%- capture container_content -%}
 
     {%- if section.settings.image != blank -%}
-      {%- render 'format-image',
+      {%- render 'responsive-image',
         image_object: section.settings.image,
         max_width: 540,
         sizes: '(min-width: 768px) 540px, 96vw',

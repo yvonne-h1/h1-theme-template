@@ -112,7 +112,7 @@
   # Capture collection image
   if collection.image != blank and section.settings.show_collection_image
     capture collection_image
-      render 'format-image', image_object: collection.image, sizes: '100vw', max_width: 1920
+      render 'responsive-image', image_object: collection.image, sizes: '100vw', max_width: 1920
     endcapture
   endif
 -%}

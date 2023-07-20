@@ -35,7 +35,7 @@
             <li class="predictive-search__list-item mb-4" role="option">
               <a href="{{ product.url }}" class="predictive-search__list__link flex gap-4 text-inherit no-underline hover:opacity-70 active:opacity-100 states:no-underline" tabindex="-1">
                 <div class="predictive-search__item__image w-16">
-                  {%- render 'format-image',
+                  {%- render 'responsive-image',
                     image_object: product.featured_media,
                     max_width: 64,
                     aspect_ratio: "1/1"
@@ -73,7 +73,7 @@
             <li class="predictive-search__list-item mb-4" role="option">
               <a href="{{ collection.url }}" class="predictive-search__list__link flex gap-4 text-inherit hover:opacity-70 active:opacity-100 states:no-underline" tabindex="-1">
                 <div class="predictive-search__item__image w-16">
-                  {%- render 'format-image',
+                  {%- render 'responsive-image',
                     image_object: collection.image,
                     max_width: 64,
                     aspect_ratio: "1/1"
@@ -120,7 +120,7 @@
             <li class="predictive-search__list-item mb-4" role="option">
               <a href="{{ article.url }}" class="predictive-search__list__link flex gap-4 text-inherit hover:opacity-70 active:opacity-100 states:no-underline" tabindex="-1">
                 <div class="predictive-search__item__image w-16">
-                  {%- render 'format-image',
+                  {%- render 'responsive-image',
                     image_object: article.image,
                     max_width: 64,
                     aspect_ratio: "1/1"

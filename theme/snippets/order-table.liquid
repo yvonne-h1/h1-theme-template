@@ -65,7 +65,7 @@
           {%- if line_item.product.url != blank -%}
             {%- assign alt = line_item.product.title | escape -%}
             <a href="{{ line_item.product.url }}" class="block w-14">
-              {%- render 'format-image', image_object: line_item.product.featured_image, lazy: true, aspect_ratio: '1/1', crop: 'center', max_width: 56, sizes: '56px', alt: alt, title: alt -%}
+              {%- render 'responsive-image', image_object: line_item.product.featured_image, lazy: true, aspect_ratio: '1/1', crop: 'center', max_width: 56, sizes: '56px', alt: alt, title: alt -%}
             </a>
           {%- else -%}
             <div class="block aspect-square w-14 bg-gray-200"></div>

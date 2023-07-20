@@ -62,7 +62,7 @@
 
           {%- comment -%} Desktop image {%- endcomment -%}
           {%- if block.settings.image != blank %}
-            {%- render 'format-image',
+            {%- render 'responsive-image',
               image_object: block.settings.image,
               lazy: block.settings.lazy,
               aspect_ratio: block.settings.image_ratio,
@@ -74,7 +74,7 @@
 
           {%- comment -%} Mobile Image {%- endcomment -%}
           {%- if image_mobile != blank -%}
-            {%- render 'format-image',
+            {%- render 'responsive-image',
               image_object: image_mobile,
               lazy: block.settings.lazy,
               aspect_ratio: block.settings.image_ratio_mobile,
@@ -126,14 +126,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  class: container_class,
-  title_tag: section.settings.heading_element,
-  title_class: title_class,
-  title: title,
-  content_class: content_class,
-  content: container_content
--%}
+{%- render 'format-container', class: container_class, title_tag: section.settings.heading_element, title_class: title_class, title: title, content_class: content_class, content: container_content -%}
 
 {% schema %}
   {

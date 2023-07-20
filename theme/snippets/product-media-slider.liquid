@@ -39,7 +39,7 @@
           data-fancybox="product-media-slider"
           data-animated="false"
         >
-          {%- render 'format-image',
+          {%- render 'responsive-image',
             image_object: media,
             aspect_ratio: '1/1',
             max_width: 512,
@@ -110,7 +110,7 @@
           assign image_object = media.preview_image
         endif
       -%}
-      {%- render 'format-image',
+      {%- render 'responsive-image',
         image_object: image_object,
         aspect_ratio: '1/1',
         widths: '64, 80',

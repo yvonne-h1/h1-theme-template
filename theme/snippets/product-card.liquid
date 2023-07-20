@@ -136,7 +136,7 @@
               class="block"
               title="{{ product_object.title | escape }}"
             >
-            {%- render 'format-image',
+            {%- render 'responsive-image',
               image_object: image,
               max_width: 767,
               aspect_ratio: image_aspect_ratio,
@@ -184,7 +184,7 @@
         href="{{ product_link }}"
         title="{{ product_object.title | escape }}"
         tabindex="-1">
-        {%- render 'format-image',
+        {%- render 'responsive-image',
           image_object: product_link_image,
           max_width: image_max_width,
           aspect_ratio: image_aspect_ratio,
@@ -196,7 +196,7 @@
           class: 'product-card__image--primary block mb-0'
         -%}
         {%- if secondary_image != null and show_secondary_image -%}
-          {%- render 'format-image',
+          {%- render 'responsive-image',
             image_object: secondary_image,
             max_width: image_max_width,
             aspect_ratio: image_aspect_ratio,

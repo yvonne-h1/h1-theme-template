@@ -62,7 +62,7 @@
             class="article-header__featured-image"
             {{ block.shopify_attributes }}
           >
-            {%- render 'format-image',
+            {%- render 'responsive-image',
               image_object: article.image,
               alt: article.title,
               max_width: 1360,
@@ -84,9 +84,4 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  tag: 'header',
-  class: container_class,
-  content_class: 'space-y-8',
-  content: container_content
--%}
+{%- render 'format-container', tag: 'header', class: container_class, content_class: 'space-y-8', content: container_content -%}

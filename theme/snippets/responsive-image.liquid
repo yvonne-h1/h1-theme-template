@@ -23,7 +23,7 @@
     figure_class        { String }  | Optional | Set classname(s) for the figure
 
     Example usage:
-    {%- render 'format-image',
+    {%- render 'responsive-image',
       image_object: section.settings.image,
       lazy: section.settings.lazy,
       aspect_ratio: '16/9',
@@ -206,8 +206,7 @@
   <figure
     {% if figure_class != blank %}
       class="{{- figure_class -}}"
-    {% endif %}
-  >
+    {% endif %}>
     {{ image_element }}
     <figcaption>
       {{- figcaption -}}

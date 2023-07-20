@@ -27,7 +27,7 @@
     class="cart-item__media block w-24 shrink-0 cursor-pointer"
     title="{{ item.product.title }}">
     {%- if item.image -%}
-      {%- render 'format-image', image_object: item.image, alt: item.title, max_width: image_size, aspect_ratio: aspect_ratio -%}
+      {%- render 'responsive-image', image_object: item.image, alt: item.title, max_width: image_size, aspect_ratio: aspect_ratio -%}
     {%- endif -%}
   </a>
 

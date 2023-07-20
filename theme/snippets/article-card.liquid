@@ -107,7 +107,7 @@
       class="article-card__link group/article-card relative block overflow-hidden bg-accent text-white no-underline focus-visible:outline-dashed focus-visible:outline-1">
       {% comment %} Image {% endcomment %}
       {%- if show_image -%}
-        {%- render 'format-image',
+        {%- render 'responsive-image',
           image_object: image_object,
           alt: article.title,
           max_width: 1360,
@@ -162,7 +162,7 @@
       class="article-card__link group/article-card relative block overflow-hidden text-inherit no-underline focus-visible:outline-dashed focus-visible:outline-1">
       {%- if show_image -%}
         <div class="article-card__image-wrapper mb-4">
-          {%- render 'format-image',
+          {%- render 'responsive-image',
             image_object: image_object,
             lazy: image_lazy,
             alt: article.title,

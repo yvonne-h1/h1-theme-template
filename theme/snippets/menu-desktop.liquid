@@ -162,7 +162,7 @@
                       # Check if there is a match, if so output.
                       if menu_link_title == link_block_title
                         capture block_image
-                          render 'format-image', image_object: block.settings.image, alt: image_alt, sizes: '(min-width: 1440px) 448px, (min-width: 1024px) 31vw, 288px', max_width: 448
+                          render 'responsive-image', image_object: block.settings.image, alt: image_alt, sizes: '(min-width: 1440px) 448px, (min-width: 1024px) 31vw, 288px', max_width: 448
                         endcapture
                         if block.settings.url != blank
                           echo '<a href="' | append: block.settings.url | append: '">'

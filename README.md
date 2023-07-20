@@ -166,7 +166,7 @@ We strive to work for the smallest to the biggest elements. For this workflow, w
 
 ### Images
 
-- Images are loaded with format-image.liquid. Here you can lazy load the images, preserve space for cls and optimize for all screen sizes.
+- Images are loaded with responsive-image.liquid. Here you can lazy load the images, preserve space for cls and optimize for all screen sizes.
 - Load images lazy by default. Images above the fold don't need to be lazy.
 - Create for sections create a lazy option in the customizer.
 - Placeholders are set inside
