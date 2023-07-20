@@ -192,7 +192,7 @@
                       >
                         {{ all_country_option_tags }}
                       </select>
-                      {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+                      {% comment %} {%- render 'icons', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
                     </div>
                   </div>
                   <div class="field" id="AddressProvinceContainer_{{ form.id }}" style="display:none;">
@@ -207,7 +207,7 @@
                         data-default="{{ form.province }}"
                         autocomplete="address-level1"
                       ></select>
-                      {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+                      {% comment %} {%- render 'icons', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
                     </div>
                   </div>
                   <div class="field">
@@ -399,7 +399,7 @@
               >
                 {{ all_country_option_tags }}
               </select>
-              {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+              {% comment %} {%- render 'icons', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
             </div>
 
             <div id="AddressProvinceContainerNew" class="field col-span-2" style="display: none">
@@ -413,7 +413,7 @@
                   data-default="{{ form.province }}"
                   autocomplete="address-level1"
                 ></select>
-                {% comment %} {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
+                {% comment %} {%- render 'icons', icon: 'caret', icon_class: 'w-3' -%} {% endcomment %}
             </div>
             <div class="field col-span-2">
               <label class="field__label" for="AddressZipNew">
@@ -493,12 +493,7 @@
 {%- render 'account-header' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  class: 'form-fields address',
-  content: container_content,
-  content_class: 'addresses',
-  data: 'data-customer-addresses'
--%}
+{%- render 'format-container', class: 'form-fields address', content: container_content, content_class: 'addresses', data: 'data-customer-addresses' -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'customer.js' | asset_url }}" defer></script>

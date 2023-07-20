@@ -39,9 +39,9 @@
 
     {% comment %} Trash icon or regular minus {% endcomment %}
     {%- if type == 'cart' and value == 1 and settings.show_cart_remove == false -%}
-      {%- render 'global-icon', icon: 'trash', icon_class: icon_class -%}
+      {%- render 'icons', icon: 'trash', icon_class: icon_class -%}
     {%- else -%}
-      {%- render 'global-icon', icon: 'minus', icon_class: icon_class -%}
+      {%- render 'icons', icon: 'minus', icon_class: icon_class -%}
     {%- endif -%}
   </button>
 
@@ -70,6 +70,6 @@
     <span class="sr-only">
       {{- button_plus_accessibility_text -}}
     </span>
-    {% render 'global-icon', icon: 'plus', icon_class: icon_class %}
+    {% render 'icons', icon: 'plus', icon_class: icon_class %}
   </button>
 </quantity-input>

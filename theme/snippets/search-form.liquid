@@ -50,11 +50,7 @@
     class="search-modal__form relative mx-auto w-full lg:max-w-xs">
     <div class="search-field relative mb-0 w-full">
       <label class="search-field__label hidden" for="{{ prefix }}SearchInModal">
-        {%- render 'format-translation',
-          namespace: 'general.search',
-          key: 'search',
-          fallback: 'Search'
-        -%}
+        {%- render 'format-translation', namespace: 'general.search', key: 'search', fallback: 'Search' -%}
       </label>
       <input
         placeholder="{% render "format-translation", namespace: "general.search", key: "search", fallback: "Search" %}"
@@ -75,14 +71,14 @@
       type="button"
       class="absolute right-0 top-2/4 -translate-y-2/4 states:text-primary"
       data-predicative-search="reset">
-      {%- render 'global-icon', icon: 'cross', icon_class: 'w-4' -%}
+      {%- render 'icons', icon: 'cross', icon_class: 'w-4' -%}
     </button>
     {%- comment -%} Submit button. {%- endcomment -%}
     <button
       type="submit"
       class="search-modal__button absolute left-0 top-2/4 block -translate-y-2/4 cursor-pointer states:text-primary lg:left-0"
       aria-label="{% render "format-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
-      {%- render 'global-icon', icon: 'search', icon_class: 'w-6' -%}
+      {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
     </button>
   </form>
   {%- if predictive_search_enabled == true -%}

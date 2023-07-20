@@ -94,7 +94,7 @@
               <p class="my-2 flex w-full items-center justify-items-start gap-4 text-left text-xs leading-5 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
                 {%- if block.settings.icon != blank and block.settings.icon != 'none' -%}
                   <span class="rounded-full bg-primary-200 p-1">
-                    {%- render 'global-icon', icon: block.settings.icon, icon_class: 'w-4 shrink-0 grow-0' -%}
+                    {%- render 'icons', icon: block.settings.icon, icon_class: 'w-4 shrink-0 grow-0' -%}
                   </span>
                 {%- endif -%}
                 {{- block.settings.heading -}}
@@ -109,12 +109,12 @@
                 <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-left text-sm font-bold leading-5" data-collapsible-trigger>
                   <span class="flex w-full justify-items-start gap-2">
                     {%- if block.settings.icon != blank -%}
-                      {%- render 'global-icon', icon: block.settings.icon, icon_class: 'w-5 shrink-0 grow-0' -%}
+                      {%- render 'icons', icon: block.settings.icon, icon_class: 'w-5 shrink-0 grow-0' -%}
                     {%- endif -%}
                     {{ block.settings.heading | default: block.settings.page.title }}
                   </span>
-                  {%- render 'global-icon', icon: 'plus', icon_class: 'w-4 shrink-0 no-js:hidden group-[.collapsible-is-open]:hidden' -%}
-                  {%- render 'global-icon', icon: 'minus', icon_class: 'w-4 shrink-0 hidden no-js:hidden group-[.collapsible-is-open]:block' -%}
+                  {%- render 'icons', icon: 'plus', icon_class: 'w-4 shrink-0 no-js:hidden group-[.collapsible-is-open]:hidden' -%}
+                  {%- render 'icons', icon: 'minus', icon_class: 'w-4 shrink-0 hidden no-js:hidden group-[.collapsible-is-open]:block' -%}
                 </button>
                 <div class="collapsible__target w-full overflow-y-auto bg-color-default" data-collapsible-target>
                   <div class="rte pb-4 text-sm leading-5">
@@ -360,7 +360,7 @@
                       data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"
                       {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}
                     >
-                      {%- render 'global-icon', icon: 'cart', icon_class: 'w-6' -%}
+                      {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
                       <span data-add-to-cart-button-text>
                         {%- if product.selected_or_first_available_variant.available -%}
                           {%- render 'format-translation',

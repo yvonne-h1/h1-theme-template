@@ -15,8 +15,8 @@ Set the field input element attribute to required and add icons in the example s
 
 capture icons
   echo '<div class="field__icons">'
-  render 'global-icon', icon: 'checkmark', icon_class: 'w-5'
-  render 'global-icon', icon: 'cross', icon_class: 'w-5'
+  render 'icons', icon: 'checkmark', icon_class: 'w-5'
+  render 'icons', icon: 'cross', icon_class: 'w-5'
   echo '</div>'
 endcapture
 

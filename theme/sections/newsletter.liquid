@@ -63,7 +63,7 @@
                 class="newsletter-field__message field__message  field__message--error"
                 id="newsletter-error-{{ section.id }}"
               >
-                {% render 'global-icon', icon: 'error' %}
+                {% render 'icons', icon: 'error' %}
                 {{ form.errors.translated_fields['email'] | capitalize }}
                 {{ form.errors.messages['email'] }}
               </small>
@@ -85,7 +85,7 @@
                 tabindex="-1"
                 autofocus
               >
-                {%- render 'global-icon', icon: 'success', icon_class: 'w-6 shrink-0 text-transparent' -%}
+                {%- render 'icons', icon: 'success', icon_class: 'w-6 shrink-0 text-transparent' -%}
                 <p class="text-sm leading-6">
                   {%- render "format-translation", namespace: "newsletter", key: "success", fallback: "Thanks for subscribing" -%}
                 </p>

@@ -11,19 +11,17 @@
     class="localization-form__button flex items-center gap-4 whitespace-nowrap bg-white p-2"
     aria-expanded="false"
     aria-controls="{{ localPosition }}List"
-    aria-describedby="{{ localPosition }}Label"
-  >
+    aria-describedby="{{ localPosition }}Label">
     <span>
       {{- localization.country.currency.iso_code }}
       {{ localization.country.currency.symbol }} | {{ localization.country.name -}}
     </span>
-    {% render 'global-icon', icon: 'chevron-down' %}
+    {% render 'icons', icon: 'chevron-down' %}
   </button>
   <div
     class="localization-form__list-wrapper absolute top-10 bg-white p-2"
     hidden
-    data-localization-list
-  >
+    data-localization-list>
     <ul id="{{ localPosition }}List" role="list" class="localization-form__list list-unstyled">
       {%- for country in localization.available_countries -%}
         {%- if localization.country.currency.iso_code != country.currency.iso_code -%}
@@ -34,12 +32,11 @@
               {% if country.iso_code == localization.country.iso_code %}
                 aria-current="true"
               {% endif %}
-              data-value="{{ country.iso_code }}"
-            >
+              data-value="{{ country.iso_code }}">
               <span class="localization-form__currency">
                 {{- country.currency.iso_code }}
-                {{ country.currency.symbol }} |</span
-              >
+                {{ country.currency.symbol }} |
+              </span>
               {{ country.name }}
             </a>
           </li>

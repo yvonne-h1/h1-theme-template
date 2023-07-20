@@ -94,7 +94,7 @@
                           <div class="cart-usps__icon block w-6 shrink-0 rounded-full bg-primary-100 p-1">
                             {%- liquid
                               assign icon = block.settings.icon | downcase
-                              render 'global-icon', icon: icon, icon_class: 'w-4 p-0.5'
+                              render 'icons', icon: icon, icon_class: 'w-4 p-0.5'
                             -%}
                           </div>
                           <p class="cart-usps__text text-xs leading-4">
@@ -130,7 +130,7 @@
                     class="cart__loader absolute right-4 top-1/2 z-10 hidden w-6 -translate-y-1/2 md:right-0"
                     data-cart-loader-active="show"
                   >
-                    {%- render 'global-icon',
+                    {%- render 'icons',
                       icon: 'spinner',
                       icon_class: 'w-6 animate-spin'
                     -%}
@@ -210,7 +210,7 @@
 
   {% comment %} 'Continue shopping' link {% endcomment %}
   <a href="{{ routes.all_products_collection_url }}" class="link py-10">
-    {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-5' -%}
+    {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
     {%- render "format-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
   </a>
 {%- endcapture -%}

@@ -11,16 +11,14 @@
     class="localization-form__button flex items-center gap-4 whitespace-nowrap bg-white p-2"
     aria-expanded="false"
     aria-controls="{{ localPosition }}List"
-    aria-describedby="{{ localPosition }}Label"
-  >
+    aria-describedby="{{ localPosition }}Label">
     <span>{{ localization.language.endonym_name | capitalize }}</span>
-    {% render 'global-icon', icon: 'chevron-down' %}
+    {% render 'icons', icon: 'chevron-down' %}
   </button>
   <div
     class="localization-form__list-wrapper absolute top-10 bg-white p-2"
     hidden
-    data-localization-list
-  >
+    data-localization-list>
     <ul id="{{ localPosition }}List" role="list" class="localization-form__list list-unstyled">
       {%- for language in localization.available_languages -%}
         {%- if localization.language.endonym_name != language.endonym_name -%}
@@ -33,8 +31,7 @@
               {% if language.iso_code == localization.language.iso_code %}
                 aria-current="true"
               {% endif %}
-              data-value="{{ language.iso_code }}"
-            >
+              data-value="{{ language.iso_code }}">
               {{ language.endonym_name | capitalize }}
             </a>
           </li>

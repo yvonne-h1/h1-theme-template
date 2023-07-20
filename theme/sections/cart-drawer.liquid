@@ -14,8 +14,7 @@
         {
           "classToToggle": "cart-drawer-is-open"
         }
-      '>
-    </class-toggle-component>
+      '></class-toggle-component>
 
     {%- comment -%} Cart drawer {%- endcomment -%}
     <div
@@ -28,11 +27,7 @@
         {%- comment -%} Empty cart {%- endcomment -%}
         <div class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">
           <p class="h4 cart-drawer__empty-text">
-            {%- render 'format-translation',
-              namespace: 'sections.cart',
-              key: 'empty',
-              fallback: 'Your cart is empty'
-            -%}
+            {%- render 'format-translation', namespace: 'sections.cart', key: 'empty', fallback: 'Your cart is empty' -%}
           </p>
 
           <class-toggle-component
@@ -46,12 +41,8 @@
               class="button button--link flex px-0 py-0"
               aria-controls="cartDrawer"
               aria-expanded="true">
-              {%- render 'global-icon', icon: 'chevron-left', icon_size: 'w-5' -%}
-              {%- render 'format-translation',
-                namespace: 'general',
-                key: 'continue_shopping',
-                fallback: 'Continue shopping'
-              -%}
+              {%- render 'icons', icon: 'chevron-left', icon_size: 'w-5' -%}
+              {%- render 'format-translation', namespace: 'general', key: 'continue_shopping', fallback: 'Continue shopping' -%}
             </button>
           </class-toggle-component>
         </div>
@@ -76,12 +67,8 @@
                 aria-controls="cartDrawer"
                 aria-expanded="true"
                 tabindex="0">
-                {%- render 'global-icon', icon: 'chevron-left', icon_size: 'w-5' -%}
-                {%- render 'format-translation',
-                  namespace: 'general',
-                  key: 'continue_shopping',
-                  fallback: 'Continue shopping'
-                -%}
+                {%- render 'icons', icon: 'chevron-left', icon_size: 'w-5' -%}
+                {%- render 'format-translation', namespace: 'general', key: 'continue_shopping', fallback: 'Continue shopping' -%}
               </button>
             </class-toggle-component>
           </header>
@@ -108,11 +95,7 @@
               aria-hidden="true"
               role="status"
               data-shopping-cart-line-item-status>
-              {%- render 'format-translation',
-                namespace: 'accessibility',
-                key: 'loading',
-                fallback: 'Loading'
-              -%}
+              {%- render 'format-translation', namespace: 'accessibility', key: 'loading', fallback: 'Loading' -%}
             </p>
             {%- for block in section.blocks -%}
               {%- case block.type -%}
@@ -135,17 +118,13 @@
               {%- comment -%} Totals {%- endcomment -%}
               <div class="cart-drawer__totals relative flex justify-between">
                 <span class="font-body">
-                  {%- render 'format-translation',
-                    namespace: 'sections.cart',
-                    key: 'subtotal',
-                    fallback: 'Subtotal'
-                  -%}
+                  {%- render 'format-translation', namespace: 'sections.cart', key: 'subtotal', fallback: 'Subtotal' -%}
                 </span>
                 {%- comment -%} Loading animation {%- endcomment -%}
                 <div
                   class="cart__loader absolute right-0 top-1/2 z-10 hidden w-6 -translate-y-1/2"
                   data-cart-loader-active="show">
-                  {%- render 'global-icon', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
+                  {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
                 </div>
 
                 <span class="font-body" data-cart-loader-active="hidden">
@@ -166,27 +145,13 @@
               {%- if section.settings.show_tax_note -%}
                 <p class="cart-drawer__tax-note rte mx-0 mt-2 text-sm leading-5 text-gray-500">
                   {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
-                    {{
-                      'sections.cart.taxes_included_and_shipping_policy_html'
-                      | t: link: shop.shipping_policy.url
-                    }}
+                    {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
                   {%- elsif cart.taxes_included -%}
-                    {%- render 'format-translation',
-                      namespace: 'sections.cart',
-                      key: 'taxes_included_but_shipping_at_checkout',
-                      fallback: 'Taxes are included'
-                    -%}
+                    {%- render 'format-translation', namespace: 'sections.cart', key: 'taxes_included_but_shipping_at_checkout', fallback: 'Taxes are included' -%}
                   {%- elsif shop.shipping_policy.body != blank -%}
-                    {{
-                      'sections.cart.taxes_and_shipping_policy_at_checkout_html'
-                      | t: link: shop.shipping_policy.url
-                    }}
+                    {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
                   {%- else -%}
-                    {%- render 'format-translation',
-                      namespace: 'sections.cart',
-                      key: 'taxes_and_shipping_at_checkout',
-                      fallback: 'Taxes and shipping are calculated in checkout'
-                    -%}
+                    {%- render 'format-translation', namespace: 'sections.cart', key: 'taxes_and_shipping_at_checkout', fallback: 'Taxes and shipping are calculated in checkout' -%}
                   {%- endif -%}
                 </p>
               {%- endif -%}
@@ -195,11 +160,7 @@
               <div class="mt-4 grid grid-cols-1 gap-2">
                 <noscript>
                   <button type="submit" class="button button--primary w-full">
-                    {%- render 'format-translation',
-                      namespace: 'sections.cart',
-                      key: 'update',
-                      fallback: 'Update'
-                    -%}
+                    {%- render 'format-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}
                   </button>
                 </noscript>
                 <button
@@ -209,11 +170,7 @@
                   {% if cart == empty %}
                     disabled
                   {% endif %}>
-                  {%- render 'format-translation',
-                    namespace: 'sections.cart',
-                    key: 'checkout',
-                    fallback: 'Checkout'
-                  -%}
+                  {%- render 'format-translation', namespace: 'sections.cart', key: 'checkout', fallback: 'Checkout' -%}
                 </button>
                 {%- comment -%} Go to cart button {%- endcomment -%}
                 {%- if section.settings.show_cart_button -%}

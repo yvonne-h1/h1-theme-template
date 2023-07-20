@@ -33,7 +33,7 @@
             </div>
             <input name="options[prefix]" type="hidden" value="last">
             <button type="submit" class="search__button absolute left-0 top-2/4 block -translate-y-2/4 states:text-primary" aria-label="{{ search_str }}">
-              {%- render 'global-icon', icon: 'search', icon_class: 'w-6' -%}
+              {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
             </button>
           </div>
         </form>
@@ -82,14 +82,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  class: 'mt-8',
-  header_class: 'mb-8',
-  title: container_title,
-  title_tag: 'h1',
-  title_class: 'h5 text-center',
-  content: container_content
--%}
+{%- render 'format-container', class: 'mt-8', header_class: 'mb-8', title: container_title, title_tag: 'h1', title_class: 'h5 text-center', content: container_content -%}
 
 {% schema %}
   {

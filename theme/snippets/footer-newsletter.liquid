@@ -8,9 +8,8 @@
       {%- if form.errors -%}
         <p
           class="newsletter-form__message newsletter-form__message--error text-danger"
-          id="footer-error"
-        >
-          {%- render 'global-icon', icon: 'error', icon_class: 'w-6 mr-1' -%}
+          id="footer-error">
+          {%- render 'icons', icon: 'error', icon_class: 'w-6 mr-1' -%}
           <span>
             {{- form.errors.translated_fields.email | capitalize }}
             {{ form.errors.messages.email -}}
@@ -26,14 +25,10 @@
           class="newsletter-form__message flex items-center"
           id="footer-success"
           tabindex="-1"
-          autofocus
-        >
-          {%- render 'global-icon', icon: 'success', icon_class: 'w-6' -%}
+          autofocus>
+          {%- render 'icons', icon: 'success', icon_class: 'w-6' -%}
           <span>
-            {% render 'format-translation',
-              namespace: 'newsletter.success',
-              fallback: 'You have successfully subscribed'
-            %}
+            {% render 'format-translation', namespace: 'newsletter.success', fallback: 'You have successfully subscribed' %}
           </span>
         </p>
       </div>
@@ -49,10 +44,7 @@
       <div class="col-span-9 md:col-span-12 lg:col-span-9">
         <div class="field">
           <label class="field__label sr-only" for="newsletter-form-{{ section.id }}">
-            {%- render 'format-translation',
-              namespace: 'templates.contact.form.email',
-              fallback: 'E-mail'
-            -%}
+            {%- render 'format-translation', namespace: 'templates.contact.form.email', fallback: 'E-mail' -%}
           </label>
           <input
             id="newsletter-form-{{ section.id }}"
@@ -72,16 +64,14 @@
               aria-describedby="footer-success"
             {% endif %}
             placeholder="{% render "format-translation", namespace: "newsletter.label", fallback: "Your e-mail address" %}"
-            required
-          >
+            required>
         </div>
       </div>
       <button
         type="submit"
         class="newsletter-form__submit button button--primary button--md col-span-3 ml-1 md:col-span-12 md:ml-0 md:mt-1 lg:col-span-3 lg:ml-1 lg:mt-0"
         name="commit"
-        id="Subscribe"
-      >
+        id="Subscribe">
         {{- 'sections.newsletter_form.submit' | t -}}
       </button>
     {%- endif -%}

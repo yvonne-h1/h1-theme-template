@@ -40,17 +40,14 @@
           aria-haspopup="dialog"
           aria-label="{%- render "format-translation", namespace: "general.search", key: "search", fallback: "Search" -%}"
           class="px-1 py-3 text-inherit states:text-primary">
-          {%- render 'global-icon', icon: 'search', icon_class: 'w-6' -%}
+          {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
         </button>
       </search-toggle>
     </li>
   {%- endif -%}
 
   {%- comment -%} Customer icon {%- endcomment -%}
-  {%- if customer_accounts
-    and section.settings.show_customer_icon
-    or section.settings.md_show_customer_icon
-  -%}
+  {%- if customer_accounts and section.settings.show_customer_icon or section.settings.md_show_customer_icon -%}
     {%- liquid
       assign customer_item_class = 'hidden'
       if section.settings.show_customer_icon
@@ -65,7 +62,7 @@
       <a
         href="{%- if customer -%}{{- routes.account_url -}}{%- else -%}{{- routes.account_login_url -}}{%- endif -%}"
         class="header__icon block px-1 py-3 text-inherit states:text-primary">
-        {%- render 'global-icon', icon: 'user', icon_class: 'w-6' -%}
+        {%- render 'icons', icon: 'user', icon_class: 'w-6' -%}
         <span class="sr-only">
           {%- liquid
             if customer

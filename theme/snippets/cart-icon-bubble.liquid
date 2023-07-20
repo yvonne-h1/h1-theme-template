@@ -41,7 +41,7 @@
       data-cart-icon-bubble>
   {%- endif -%}
 
-  {%- render 'global-icon', icon: 'cart', icon_class: 'w-6' -%}
+  {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
   <span class="cart-icon-bubble__count absolute right-0 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs leading-4 text-white empty:hidden{% if cart == empty %} hidden{% endif -%}">
     <span class="cart-count">
       {{- cart.item_count -}}
@@ -63,7 +63,7 @@
   <span class="visually-hidden">
     {% render 'format-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart' %}
   </span>
-  {%- render 'global-icon', icon: 'cart' -%}
+  {%- render 'icons', icon: 'cart' -%}
 </a>
 
 <script src="{{ 'cart-icon-bubble.js' | asset_url }}" type="module"></script>

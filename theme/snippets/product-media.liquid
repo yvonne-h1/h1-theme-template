@@ -40,7 +40,7 @@
           class: 'w-full max-w-none',
           lazy: lazy
           -%}
-          {%- render 'global-icon', icon: 'zoom', icon_class: 'w-6 absolute right-4 bottom-4 md:hidden' -%}
+          {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute right-4 bottom-4 md:hidden' -%}
         </a>
       {%- when 'model' -%}
         <div class="product-media__item product-media__item--model relative mb-4 block aspect-square w-full self-start last:mb-0">
@@ -123,11 +123,7 @@
       <div class="md:hidden">
         {%- case block.type -%}
           {%- when 'badges' -%}
-            {%- render 'product-badges',
-              product: product,
-              show_sale_badge: true,
-              class: 'absolute inset-x-2 top-2 md:inset-x-4 md:top-4 badges--md'
-            -%}
+            {%- render 'product-badges', product: product, show_sale_badge: true, class: 'absolute inset-x-2 top-2 md:inset-x-4 md:top-4 badges--md' -%}
         {%- endcase -%}
       </div>
     {%- endfor -%}

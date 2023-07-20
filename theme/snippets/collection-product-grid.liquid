@@ -14,7 +14,7 @@
 {% comment %} Loader animation {% endcomment %}
 {%- capture loading_overlay -%}
   <div class="loading-overlay fixed inset-0 z-50 hidden w-full items-center justify-center opacity-70 bg-color-default group-[.loading]/collection:flex" data-loader>
-    {%- render 'global-icon', icon: 'spinner', icon_class: 'w-12 animate-spin' -%}
+    {%- render 'icons', icon: 'spinner', icon_class: 'w-12 animate-spin' -%}
   </div>
 {%- endcapture -%}
 
@@ -51,8 +51,8 @@
         </div>
       {%- else -%}
         {%- paginate collection.products by settings.products_per_page -%}
-          {%- render 'product-grid', 
-            collection: collection, 
+          {%- render 'product-grid',
+            collection: collection,
             paginate: paginate,
             view: section.settings.pagination_view,
             product_card_extra_id: section.id
@@ -72,11 +72,7 @@
   </div>
 {%- endcapture -%}
 
-{%- render 'format-container',
-  class: container_classes,
-  title: container_title,
-  content: container_content
--%}
+{%- render 'format-container', class: container_classes, title: container_title, content: container_content -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if section.settings.pagination_view == 'load-more' -%}

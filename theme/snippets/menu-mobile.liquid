@@ -43,7 +43,7 @@
           <button
             type="button"
             class="mobile-menu__toggle-button button button--primary button--rounded relative cursor-pointer rounded-full p-3">
-            {%- render 'global-icon', icon: 'close', icon_class: 'w-6' -%}
+            {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
           </button>
         </mobile-nav-toggle>
       </div>
@@ -94,7 +94,7 @@
                   <span>
                     {{- link_1_title | escape -}}
                   </span>
-                  {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-4' -%}
+                  {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
                 </button>
                 <div
                   id="link-{{ link_1_title | handleize }}"
@@ -106,7 +106,7 @@
                     class="mobile-menu__back-to-parent level-1 flex w-full cursor-pointer items-center gap-2 px-4 py-5 text-xs font-bold leading-5 text-inherit no-underline states:text-primary"
                     aria-expanded="true"
                     data-collapsible-trigger>
-                    {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
+                    {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
                     {{- link_1_title | escape -}}
                   </button>
 
@@ -115,9 +115,7 @@
                     {%- for level_2 in level_1.links -%}
                       {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
                       {%- assign level_2_url = level_2.url -%}
-                      {%- if level_2_url contains 'collections'
-                        and level_2_url contains 'filter'
-                      -%}
+                      {%- if level_2_url contains 'collections' and level_2_url contains 'filter' -%}
                         {%- assign level_2_url = level_2_url | replace: '%3F', '?' -%}
                       {%- endif -%}
 
@@ -152,7 +150,7 @@
                             <span>
                               {{- level_2.title | escape -}}
                             </span>
-                            {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-4' -%}
+                            {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
                           </button>
                           <div
                             id="childlink-{{ level_2.title | handleize }}"
@@ -163,10 +161,7 @@
                               class="mobile-menu__back-to-parent level-2 flex w-full cursor-pointer items-center gap-2 px-4 py-5 text-xs font-bold leading-5 text-inherit no-underline states:text-primary"
                               aria-expanded="true"
                               data-collapsible-trigger>
-                              {%- render 'global-icon',
-                                icon: 'chevron-left',
-                                icon_class: 'w-4 ml-2'
-                              -%}
+                              {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
                               {{- level_2.title | escape -}}
                             </button>
 
@@ -177,9 +172,7 @@
                               {%- for level_3 in level_2.links -%}
                                 {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
                                 {% assign level_3_url = level_3.url %}
-                                {%- if level_3_url contains 'collections'
-                                  and level_3_url contains 'filter'
-                                -%}
+                                {%- if level_3_url contains 'collections' and level_3_url contains 'filter' -%}
                                   {% assign level_3_url = level_3_url | replace: '%3F', '?' %}
                                 {%- endif -%}
 
@@ -220,7 +213,7 @@
                 href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
                 class="mobile-menu__link relative flex w-full items-center gap-2 break-words py-3 pl-12 pr-14 font-bold text-inherit states:text-primary states:no-underline {% if request.page_type == 'customers/login' %} text-primary {% endif %}">
                 {%- liquid
-                  render 'global-icon', icon: 'user', icon_class: 'w-4'
+                  render 'icons', icon: 'user', icon_class: 'w-4'
                   if customer
                     render 'format-translation', namespace: 'customer', key: 'account_fallback', fallback: 'Account'
                   else
@@ -237,7 +230,7 @@
                 href="{{ routes.cart_url }}"
                 class="mobile-menu__link relative flex w-full items-center gap-2 break-words py-3 pl-12 pr-14 font-bold text-inherit states:text-primary states:no-underline {% if request.page_type == 'cart' %} text-primary {% endif %}">
                 {%- liquid
-                  render 'global-icon', icon: 'cart', icon_class: 'w-4'
+                  render 'icons', icon: 'cart', icon_class: 'w-4'
                   render 'format-translation', namespace: 'templates.cart', key: 'title', fallback: 'Cart'
                 -%}
               </a>
@@ -257,7 +250,6 @@
           "closeSiblings": true,
           "classToToggle": "mobile-menu-is-open"
         }
-      '>
-    </mobile-nav-toggle>
+      '></mobile-nav-toggle>
   </div>
 {%- endif -%}

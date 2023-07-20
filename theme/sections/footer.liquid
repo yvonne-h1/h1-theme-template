@@ -41,10 +41,7 @@
                       class="footer-block--menu__trigger relative block w-full py-3 text-left text-sm font-bold leading-5 text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
                       data-collapsible-trigger>
                       {{- block.settings.title -}}
-                      {%- render 'global-icon',
-                        icon: 'chevron-down',
-                        icon_class: 'w-4 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180 md:hidden'
-                      -%}
+                      {%- render 'icons', icon: 'chevron-down', icon_class: 'w-4 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180 md:hidden' -%}
                     </button>
                   {%- endif -%}
 
@@ -53,11 +50,7 @@
                     class="footer-block--menu__target p-0 text-sm leading-5 js:md:!max-h-min"
                     {{ target }}>
                     {%- if block.settings.menu != blank -%}
-                      {%- render 'footer-menu',
-                        linklist: block.settings.menu,
-                        prefix: 'footer-menu',
-                        collapsible: false
-                      -%}
+                      {%- render 'footer-menu', linklist: block.settings.menu, prefix: 'footer-menu', collapsible: false -%}
                     {%- endif -%}
 
                     {%- comment -%} Output menu image {%- endcomment -%}
@@ -168,18 +161,11 @@
                 </p>
               {%- endif -%}
               {%- if block.settings.newsletter -%}
-                {%- render 'footer-newsletter',
-                  title: block.settings.title,
-                  description: block.settings.description,
-                  button_class: 'button-primary'
-                -%}
+                {%- render 'footer-newsletter', title: block.settings.title, description: block.settings.description, button_class: 'button-primary' -%}
               {%- endif -%}
               {%- if block.settings.social_icons != blank -%}
                 <div class="{{ spacing_class }} hidden md:block">
-                  {%- render 'global-social-links',
-                    icon_shape: block.settings.social_icons_shape,
-                    icon_size: block.settings.social_icons_size
-                  -%}
+                  {%- render 'global-social-links', icon_shape: block.settings.social_icons_shape, icon_size: block.settings.social_icons_size -%}
                 </div>
               {%- endif -%}
             </div>
@@ -190,18 +176,13 @@
       {%- if block_newsletter != blank -%}
         <div class="footer-block footer-block--social col-span-12 md:col-span-4 md:hidden lg:col-span-3">
           {%- if block_newsletter.settings.social_icons != blank -%}
-            {%- render 'global-social-links',
-              icon_shape: block_newsletter.settings.social_icons_shape,
-              icon_size: block_newsletter.settings.social_icons_size
-            -%}
+            {%- render 'global-social-links', icon_shape: block_newsletter.settings.social_icons_shape, icon_size: block_newsletter.settings.social_icons_size -%}
           {%- endif -%}
         </div>
       {%- endif -%}
 
       <div class="footer-block isolate flex gap-10">
-        {%- if section.settings.enable_country_selector
-          and localization.available_countries.size > 1
-        -%}
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
           <noscript>
             {%- form 'localization', id: 'FooterCountryFormNoScript', class: 'localization-form' -%}
               <div class="localization-form__select">
@@ -223,7 +204,7 @@
                     </option>
                   {%- endfor -%}
                 </select>
-                {% render 'global-icon', icon: 'caret' %}
+                {% render 'icons', icon: 'caret' %}
               </div>
               <button class="button button--tertiary">
                 {{ 'localization.update_country' | t }}
@@ -242,14 +223,9 @@
           </localization-form>
         {%- endif -%}
 
-        {%- if section.settings.enable_language_selector
-          and localization.available_languages.size > 1
-        -%}
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
           <noscript>
-            {%- form 'localization',
-              id: 'FooterLanguageFormNoScript',
-              class: 'localization-form'
-            -%}
+            {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form' -%}
               <div class="localization-form__select">
                 <h2 class="visually-hidden" id="FooterLanguageLabelNoScript">
                   {{ 'localization.language_label' | t }}
@@ -269,7 +245,7 @@
                     </option>
                   {%- endfor -%}
                 </select>
-                {% render 'global-icon', icon: 'caret' %}
+                {% render 'icons', icon: 'caret' %}
               </div>
               <button class="button button--tertiary">
                 {{ 'localization.update_language' | t }}

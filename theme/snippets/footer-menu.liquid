@@ -86,7 +86,7 @@
               type="button"
               class="{{ prefix }}__link {{ level_1_active_class }} level-1"
               {{ data_collapsible_trigger }}>
-              {%- render 'global-icon', icon: 'collapsible', icon_class: 'w-4' -%}
+              {%- render 'icons', icon: 'collapsible', icon_class: 'w-4' -%}
             </button>
           {%- endif -%}
 
@@ -138,7 +138,7 @@
                       type="button"
                       class="{{ prefix }}__link {{ level_2_active_class }} level-2"
                       {{ data_collapsible_trigger }}>
-                      {%- render 'global-icon', icon: 'collapsible', icon_class: 'w-4' -%}
+                      {%- render 'icons', icon: 'collapsible', icon_class: 'w-4' -%}
                     </button>
                   {%- endif -%}
 
@@ -149,9 +149,7 @@
                     {%- for grandchildlink in childlink.links -%}
                       {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
                       {% assign grandchildlink_url = grandchildlink.url %}
-                      {%- if grandchildlink_url contains 'collections'
-                        and grandchildlink_url contains 'filter'
-                      -%}
+                      {%- if grandchildlink_url contains 'collections' and grandchildlink_url contains 'filter' -%}
                         {% assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?' %}
                       {%- endif -%}
 

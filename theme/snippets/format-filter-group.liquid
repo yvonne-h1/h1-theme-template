@@ -35,14 +35,8 @@
       {{- label | escape -}}
     </span>
     {%- if collapsible -%}
-      {%- render 'global-icon',
-        icon: 'minus',
-        icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block'
-      -%}
-      {%- render 'global-icon',
-        icon: 'plus',
-        icon_class: 'w-3 block group-[.collapsible-is-open]/filter-group:hidden'
-      -%}
+      {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block' -%}
+      {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]/filter-group:hidden' -%}
     {%- endif -%}
   </button>
   <div

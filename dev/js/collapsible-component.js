@@ -7,7 +7,7 @@ HTML Usage with single group
       data-collapsible-trigger
     >
       The trigger
-      {%- render 'global-icon',
+      {%- render 'icons',
         icon: 'chevron-down',
         icon_class: 'w-3 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
       -%}
@@ -37,7 +37,7 @@ HTML Usage with multiple & nested groups
       data-collapsible-trigger
     >
       The trigger
-      {%- render 'global-icon',
+      {%- render 'icons',
         icon: 'chevron-down',
         icon_class: 'w-3 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
       -%}
@@ -55,7 +55,7 @@ HTML Usage with multiple & nested groups
       data-collapsible-trigger
     >
       The trigger
-      {%- render 'global-icon',
+      {%- render 'icons',
         icon: 'chevron-down',
         icon_class: 'w-3 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
       -%}

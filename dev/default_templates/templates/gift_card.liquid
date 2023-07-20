@@ -15,18 +15,14 @@
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
-    {%- assign formatted_initial_value = gift_card.initial_value
-      | money_without_trailing_zeros: gift_card.currency
-      | strip_html
-    -%}
+    {%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros: gift_card.currency | strip_html -%}
     <title>
       {{ 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name }}
     </title>
 
     <meta
       name="description"
-      content="{% render "format-translation", namespace: "gift_cards.issued.subtext", fallback: "Your gift card" %}"
-    >
+      content="{% render "format-translation", namespace: "gift_cards.issued.subtext", fallback: "Your gift card" %}">
 
     {{ content_for_header }}
 
@@ -68,19 +64,13 @@
     <header class="gift-card__title">
       <span class="h2">{{ shop.name }}</span>
       <h1 class="gift-card__heading">
-        {% render 'format-translation',
-          namespace: 'gift_cards.issued.subtext',
-          fallback: 'Your gift card'
-        %}
+        {% render 'format-translation', namespace: 'gift_cards.issued.subtext', fallback: 'Your gift card' %}
       </h1>
       <div class="gift-card__price">
         <p>{{ gift_card.initial_value | money_with_currency }}</p>
         {%- if gift_card.enabled == false or gift_card.expired -%}
           <p class="gift-card__label badge {{ settings.sold_out_badge_color_scheme | prepend: 'badge--' }}">
-            {% render 'format-translation',
-              namespace: 'gift_cards.issued.expired',
-              fallback: 'Expired'
-            %}
+            {% render 'format-translation', namespace: 'gift_cards.issued.expired', fallback: 'Expired' %}
           </p>
         {%- endif -%}
       </div>
@@ -101,8 +91,7 @@
           class="gift-card__image"
           height="{{ 570 | divided_by: 1.5 }}"
           width="570"
-          loading="lazy"
-        >
+          loading="lazy">
       </div>
       <div class="gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
       <div class="gift-card__information">
@@ -111,22 +100,15 @@
           class="gift-card__number"
           value="{{ gift_card.code | format_code }}"
           aria-label="{% render "format-translation", namespace: "gift_cards.issued.gift_card_code", fallback: "Gift card code" %}"
-          readonly
-        >
+          readonly>
         <div class="gift-card__copy-code">
           <button class="link gift-card__copy-link">
-            {% render 'format-translation',
-              namespace: 'gift_cards.issued.copy_code',
-              fallback: 'Copy code'
-            %}
+            {% render 'format-translation', namespace: 'gift_cards.issued.copy_code', fallback: 'Copy code' %}
           </button>
           <span class="gift-card__copy-success field__message" role="status"></span>
           <template>
-            {%- render 'global-icon', icon: 'success' -%}
-            {% render 'format-translation',
-              namespace: 'gift_cards.issued.copy_code_success',
-              fallback: 'Successfully copied code'
-            %}
+            {%- render 'icons', icon: 'success' -%}
+            {% render 'format-translation', namespace: 'gift_cards.issued.copy_code_success', fallback: 'Successfully copied code' %}
           </template>
         </div>
         {%- if gift_card.pass_url -%}
@@ -136,8 +118,7 @@
               width="120"
               height="40"
               alt="{% render "format-translation", namespace: "gift_cards.issued.add_to_apple_wallet", fallback: "Add to Apple Wallet" %}"
-              loading="lazy"
-            >
+              loading="lazy">
           </a>
         {%- endif -%}
         <div class="gift-card__buttons no-print">
@@ -146,21 +127,13 @@
             class="button"
             target="_blank"
             rel="noopener"
-            aria-describedby="a11y-new-window-message"
-          >
-            {% render 'format-translation',
-              namespace: 'gift_cards.issued.shop_link',
-              fallback: 'Continue shopping'
-            %}
+            aria-describedby="a11y-new-window-message">
+            {% render 'format-translation', namespace: 'gift_cards.issued.shop_link', fallback: 'Continue shopping' %}
           </a>
           <button
             class="button button--secondary"
-            onclick="window.print();"
-          >
-            {% render 'format-translation',
-              namespace: 'gift_cards.issued.print_gift_card',
-              fallback: 'Print gift card'
-            %}
+            onclick="window.print();">
+            {% render 'format-translation', namespace: 'gift_cards.issued.print_gift_card', fallback: 'Print gift card' %}
           </button>
         </div>
       </div>
@@ -168,10 +141,7 @@
 
     <div hidden>
       <span id="a11y-new-window-message">
-        {% render 'format-translation',
-          namespace: 'accessibility.link_messages.new_window',
-          fallback: 'New window'
-        %}
+        {% render 'format-translation', namespace: 'accessibility.link_messages.new_window', fallback: 'New window' %}
       </span>
     </div>
   </body>

@@ -17,29 +17,15 @@
       class="filter__option-trigger flex w-full items-center justify-between py-3 transition-all group-[.collapsible-is-open]/filter-group:pb-2"
       data-collapsible-trigger>
       <span class="text-sm font-bold leading-5">
-        {%- render 'format-translation',
-          namespace: 'products.sections.collection_template',
-          key: 'current_filters',
-          fallback: 'Current filters'
-        -%}
+        {%- render 'format-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
       </span>
-      {%- render 'global-icon',
-        icon: 'minus',
-        icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block'
-      -%}
-      {%- render 'global-icon',
-        icon: 'plus',
-        icon_class: 'w-3 block group-[.collapsible-is-open]/filter-group:hidden'
-      -%}
+      {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block' -%}
+      {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]/filter-group:hidden' -%}
     </button>
   {%- else -%}
     <div class="filter__option-trigger flex w-full items-center justify-between gap-4 pb-2 pt-4 font-bold">
       <span class="font-bold">
-        {%- render 'format-translation',
-          namespace: 'products.sections.collection_template',
-          key: 'current_filters',
-          fallback: 'Current filters'
-        -%}
+        {%- render 'format-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
       </span>
     </div>
   {%- endif -%}
@@ -57,7 +43,7 @@
               href="{{ value.url_to_remove }}"
               class="js-filter-remove flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
               data-filter-remove>
-              {%- render 'global-icon', icon: 'close', icon_class: 'w-4 shrink-0' -%}
+              {%- render 'icons', icon: 'close', icon_class: 'w-4 shrink-0' -%}
               {{ filter.label }}: {{ value.label | escape }}
             </a>
           </filter-remove>
@@ -70,7 +56,7 @@
                 href="{{ filter.url_to_remove }}"
                 class="js-filter-remove flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
                 data-filter-remove>
-                {%- render 'global-icon', icon: 'close', icon_class: 'w-4 shrink-0' -%}
+                {%- render 'icons', icon: 'close', icon_class: 'w-4 shrink-0' -%}
                 {{ filter.label }}:
                 {%- liquid
                   if filter.min_value.value

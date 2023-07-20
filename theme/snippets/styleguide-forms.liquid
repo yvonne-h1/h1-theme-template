@@ -5,8 +5,8 @@
 {%- liquid
   capture icons
     echo '<div class="field__icons">'
-    render 'global-icon', icon: 'checkmark', icon_class: 'w-5'
-    render 'global-icon', icon: 'cross', icon_class: 'w-5'
+    render 'icons', icon: 'checkmark', icon_class: 'w-5'
+    render 'icons', icon: 'cross', icon_class: 'w-5'
     echo '</div>'
   endcapture
 -%}
@@ -56,7 +56,7 @@
     <label class="field__label" for="field-5">Selectbox</label>
     <div class="select relative">
       <span class="field__select-icon">
-        {%- render 'global-icon', icon: 'chevron-down', icon_class: 'w-5' -%}
+        {%- render 'icons', icon: 'chevron-down', icon_class: 'w-5' -%}
       </span>
       <select class="field__select" id="field-5" tabindex="0">
         <option value="">Default</option>
@@ -90,7 +90,7 @@
         aria-expanded="true"
         type="button">
         Custom dropdown menu
-        {%- render 'global-icon', icon: 'caret', icon_class: 'rotate-90 w-3' -%}
+        {%- render 'icons', icon: 'caret', icon_class: 'rotate-90 w-3' -%}
       </button>
     </class-toggle-component>
     <div

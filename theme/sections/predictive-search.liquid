@@ -27,7 +27,7 @@
               key: "see_all",
               fallback: "See all"
             -%}
-            {%- render 'global-icon', icon: 'arrow', icon_class: 'w-3' -%}
+            {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
           </a>
         </div>
         <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
@@ -112,7 +112,7 @@
               key: "see_all",
               fallback: "See all"
             -%}
-            {%- render 'global-icon', icon: 'arrow', icon_class: 'w-3' -%}
+            {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
           </a>
         </div>
         <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
@@ -162,7 +162,7 @@
               key: "see_all",
               fallback: "See all"
             -%}
-            {%- render 'global-icon', icon: 'arrow', icon_class: 'w-3' -%}
+            {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
           </a>
         </div>
         <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
@@ -188,10 +188,7 @@
       {%- if results != blank -%}
         {{- results -}}
         {%- comment -%} Only show the go to /search with params when products, articles or pages is enabled. The normal /search page is not supporting collections. {%- endcomment -%}
-        {%- if settings.predictive_search_products
-          or settings.predictive_search_articles
-          or settings.predictive_search_pages
-        -%}
+        {%- if settings.predictive_search_products or settings.predictive_search_articles or settings.predictive_search_pages -%}
           {%- comment -%} Create types for show all link {%- endcomment -%}
           {% liquid
             if settings.predictive_search_products and settings.predictive_search_articles and settings.predictive_search_pages
@@ -223,16 +220,12 @@
                 fallback: 'Search for "{{ html }}".',
                 html: predictive_search.terms
               -%}
-              {%- render 'global-icon', icon: 'arrow', icon_class: 'w-3' -%}
+              {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
             </a>
           </div>
         {%- endif -%}
       {%- else -%}
-        {%- render 'format-translation',
-          namespace: 'sections.predictive_search',
-          key: 'nothing_found_title',
-          fallback: 'Nothing found'
-        -%}
+        {%- render 'format-translation', namespace: 'sections.predictive_search', key: 'nothing_found_title', fallback: 'Nothing found' -%}
       {%- endif -%}
     </div>
   </div>

@@ -6,80 +6,48 @@
   {%- case request.page_type -%}
     {%- when 'customers/account' -%}
       <h1 class="block text-center text-sm font-bold uppercase leading-5 tracking-widest">
-        {%- render 'format-translation',
-          namespace: 'customer.account',
-          key: 'details',
-          fallback: 'Account details'
-        -%}
+        {%- render 'format-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details' -%}
       </h1>
     {%- when 'customers/activate_account' -%}
       <h1 class="block text-center text-sm font-bold uppercase leading-5 tracking-widest">
-        {%- render 'format-translation',
-          namespace: 'customer.activate_account',
-          key: 'title',
-          fallback: 'Activate account'
-        -%}
+        {%- render 'format-translation', namespace: 'customer.activate_account', key: 'title', fallback: 'Activate account' -%}
       </h1>
     {%- when 'customers/addresses' -%}
       <div class="grid items-center">
         <div class="col-span-12 md:col-span-4">
           <a href="{{ routes.account_url }}" class="button button--link px-0">
-            {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-4' -%}
-            {%- render 'format-translation',
-              namespace: 'customer.account',
-              key: 'return',
-              fallback: 'Return'
-            %}
+            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4' -%}
+            {%- render 'format-translation', namespace: 'customer.account', key: 'return', fallback: 'Return' %}
           </a>
         </div>
         <div class="col-span-12 md:col-span-4">
           <h1 class="block text-center font-body text-sm font-bold uppercase leading-5 tracking-widest">
-            {%- render 'format-translation',
-              namespace: 'customer.addresses',
-              key: 'title',
-              fallback: 'Addresses'
-            -%}
+            {%- render 'format-translation', namespace: 'customer.addresses', key: 'title', fallback: 'Addresses' -%}
           </h1>
         </div>
       </div>
     {%- when 'customers/login' -%}
       <div class="flex justify-center gap-4 px-6 md:gap-10">
         <h1 class="block font-body text-sm font-bold uppercase leading-5 tracking-widest text-primary">
-          {%- render 'format-translation',
-            namespace: 'customer.login_page',
-            key: 'title',
-            fallback: 'Login'
-          -%}
+          {%- render 'format-translation', namespace: 'customer.login_page', key: 'title', fallback: 'Login' -%}
         </h1>
         <a
           href="{{ routes.account_register_url }}"
           class="block text-sm font-bold uppercase leading-5 tracking-widest text-inherit">
-          {%- render 'format-translation',
-            namespace: 'customer.register',
-            key: 'title',
-            fallback: 'Register'
-          -%}
+          {%- render 'format-translation', namespace: 'customer.register', key: 'title', fallback: 'Register' -%}
         </a>
       </div>
     {%- when 'customers/order' -%}
       <div class="grid items-center">
         <div class="col-span-12 md:col-span-4">
           <a href="{{ routes.account_url }}" class="button button--link px-0">
-            {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-4' -%}
-            {%- render 'format-translation',
-              namespace: 'customer.account',
-              key: 'return',
-              fallback: 'Return'
-            %}
+            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4' -%}
+            {%- render 'format-translation', namespace: 'customer.account', key: 'return', fallback: 'Return' %}
           </a>
         </div>
         <div class="col-span-12 md:col-span-4">
           <h1 class="block text-center text-sm font-bold uppercase leading-5 tracking-widest">
-            {%- render 'format-translation',
-              namespace: 'customer.orders',
-              key: 'details',
-              fallback: 'Order details'
-            -%}
+            {%- render 'format-translation', namespace: 'customer.orders', key: 'details', fallback: 'Order details' -%}
           </h1>
         </div>
       </div>
@@ -88,27 +56,15 @@
         <a
           href="{{ routes.account_login_url }}"
           class="block text-sm font-bold uppercase leading-5 tracking-widest text-inherit">
-          {%- render 'format-translation',
-            namespace: 'customer.login_page',
-            key: 'title',
-            fallback: 'Login'
-          -%}
+          {%- render 'format-translation', namespace: 'customer.login_page', key: 'title', fallback: 'Login' -%}
         </a>
         <h1 class="block font-body text-sm font-bold uppercase leading-5 tracking-widest text-primary">
-          {%- render 'format-translation',
-            namespace: 'customer.register',
-            key: 'title',
-            fallback: 'Register'
-          -%}
+          {%- render 'format-translation', namespace: 'customer.register', key: 'title', fallback: 'Register' -%}
         </h1>
       </div>
     {%- when 'customers/reset_password' -%}
       <h1 class="block text-center font-body text-sm font-bold uppercase leading-5 tracking-widest">
-        {%- render 'format-translation',
-          namespace: 'customer.reset_password',
-          key: 'title',
-          fallback: 'Reset password'
-        -%}
+        {%- render 'format-translation', namespace: 'customer.reset_password', key: 'title', fallback: 'Reset password' -%}
       </h1>
     {%- else -%}
   {%- endcase -%}

@@ -9,10 +9,10 @@
   {% comment %} Icon buttons {% endcomment %}
   <div class="{{ button_wrapper_class }}">
     <a href="#" class="button button--primary rounded-full border-none p-3">
-      {%- render 'global-icon', icon: 'cart', icon_class: 'w-5' -%}
+      {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
     </a>
     <button class="button button--primary rounded-full border-none p-3">
-      {%- render 'global-icon', icon: 'heart', icon_class: 'w-5' -%}
+      {%- render 'icons', icon: 'heart', icon_class: 'w-5' -%}
     </button>
   </div>
 
@@ -35,7 +35,7 @@
       <button type="button" class="button button--{{ type }} loading">{{ type_label }} button</button>
       <button type="button" class="button button--{{ type }}">
         {{ type_label }} icon button
-        {%- render 'global-icon', icon: 'caret_h1', icon_class: 'w-3' -%}
+        {%- render 'icons', icon: 'caret_h1', icon_class: 'w-3' -%}
       </button>
       <button type="button" disabled="disabled" class="button button--{{ type }}">{{ type_label }} button disabled</button>
     </div>
@@ -45,23 +45,23 @@
   <div class="{{ button_wrapper_class }}">
     <a href="#" class="button button--link">
       Link anchor
-      {% render 'global-icon', icon: 'arrow', icon_class: 'w-3' %}
+      {% render 'icons', icon: 'arrow', icon_class: 'w-3' %}
     </a>
     <input type="button" class="button button--link" value="Link input">
     <button type="button" class="button button--link">
       Link button
-      {% render 'global-icon', icon: 'arrow', icon_class: 'w-3' %}
+      {% render 'icons', icon: 'arrow', icon_class: 'w-3' %}
     </button>
     <button type="button" disabled="disabled" class="button button--link">
       Link button disabled
-      {% render 'global-icon', icon: 'arrow', icon_class: 'w-3' %}
+      {% render 'icons', icon: 'arrow', icon_class: 'w-3' %}
     </button>
   </div>
 
   <div>
     <a href="#" class="link">
       Link without padding
-      {% render 'global-icon', icon: 'arrow', icon_class: 'w-3' %}
+      {% render 'icons', icon: 'arrow', icon_class: 'w-3' %}
     </a>
   </div>
 

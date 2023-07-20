@@ -160,7 +160,7 @@ We strive to work for the smallest to the biggest elements. For this workflow, w
 
 ### Icons
 
-- We have divided the SVG icons in three section: UI, Payment and socials. The icons can be changed inside the global-icon-[type].liquid file.
+- We have divided the SVG icons in three section: UI, Payment and socials. The icons can be changed inside the icons-[type].liquid file.
 - The icons sizes are defined inside icons.scss
 - The size can be given to each icon with icon_class property. For example `icon_class: 'w-3 md:w-3'`
 

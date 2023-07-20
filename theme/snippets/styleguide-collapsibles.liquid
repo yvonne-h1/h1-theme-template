@@ -16,14 +16,8 @@
         data-collapsible-trigger>
         Collapsible button 1
         <span class="collapsible__trigger-icons">
-          {%- render 'global-icon',
-            icon: 'plus',
-            icon_class: 'w-3 block group-[.collapsible-is-open]:hidden'
-          -%}
-          {%- render 'global-icon',
-            icon: 'minus',
-            icon_class: 'w-3 hidden group-[.collapsible-is-open]:block'
-          -%}
+          {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
+          {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
         </span>
       </button>
       <div
@@ -33,7 +27,7 @@
       </div>
     </div>
     <div
-      class="collapsible__group group block border-b border-solid border-t-0"
+      class="collapsible__group group block border-b border-t-0 border-solid"
       data-collapsible-group>
       <button
         type="button"
@@ -41,14 +35,8 @@
         data-collapsible-trigger>
         Collapsible button 2
         <span class="collapsible__trigger-icons">
-          {%- render 'global-icon',
-            icon: 'plus',
-            icon_class: 'w-3 block group-[.collapsible-is-open]:hidden'
-          -%}
-          {%- render 'global-icon',
-            icon: 'minus',
-            icon_class: 'w-3 hidden group-[.collapsible-is-open]:block'
-          -%}
+          {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
+          {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
         </span>
       </button>
       <div
@@ -58,7 +46,7 @@
       </div>
     </div>
     <div
-      class="collapsible__group group block border-b border-solid border-t-0"
+      class="collapsible__group group block border-b border-t-0 border-solid"
       data-collapsible-group>
       <button
         type="button"
@@ -66,14 +54,8 @@
         data-collapsible-trigger>
         Collapsible button 3
         <span class="collapsible__trigger-icons">
-          {%- render 'global-icon',
-            icon: 'plus',
-            icon_class: 'w-3 block group-[.collapsible-is-open]:hidden'
-          -%}
-          {%- render 'global-icon',
-            icon: 'minus',
-            icon_class: 'w-3 hidden group-[.collapsible-is-open]:block'
-          -%}
+          {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
+          {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
         </span>
       </button>
       <div
@@ -100,10 +82,7 @@
         class="collapsible__trigger button button--gradient w-full items-center justify-between"
         data-collapsible-trigger>
         Collapsible button 1
-        {%- render 'global-icon',
-          icon: 'collapsible',
-          icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180'
-        -%}
+        {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
       </button>
       <div
         class="collapsible__content rte max-w-none break-words"
@@ -117,10 +96,7 @@
         class="collapsible__trigger button button--gradient w-full items-center justify-between"
         data-collapsible-trigger>
         Collapsible button 2
-        {%- render 'global-icon',
-          icon: 'collapsible',
-          icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180'
-        -%}
+        {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
       </button>
       <div
         class="collapsible__content rte max-w-none break-words"
@@ -134,10 +110,7 @@
         class="collapsible__trigger button button--gradient w-full items-center justify-between"
         data-collapsible-trigger>
         Collapsible button 3
-        {%- render 'global-icon',
-          icon: 'collapsible',
-          icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180'
-        -%}
+        {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
       </button>
       <div
         class="collapsible__content rte max-w-none break-words"

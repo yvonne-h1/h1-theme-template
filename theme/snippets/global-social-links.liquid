@@ -1,6 +1,4 @@
-{%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Snapchat, Tumblr, YouTube, Vimeo'
-  | split: ', '
--%}
+{%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Snapchat, Tumblr, YouTube, Vimeo' | split: ', ' -%}
 
 {%- capture socials -%}
   {%- for social in social_accounts -%}
@@ -25,7 +23,7 @@
           class="social-icons__url block transition-transform hover:scale-110 focus:scale-110"
           title="{{ 'sections.footer.social_platform' | t: name: shop.name, platform: social }}"
         >
-          {%- render 'global-icon', icon: social_icon, icon_class: icon_size -%}
+          {%- render 'icons', icon: social_icon, icon_class: icon_size -%}
           <span class="sr-only">
             {{ social }}
           </span>

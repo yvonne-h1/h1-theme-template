@@ -25,7 +25,7 @@
           class="collection-layout__button block py-3 text-inherit hover:opacity-100  md:py-0 {{ collection_view_default_class }}"
           data-collection-view=""
         >
-          {%- render 'global-icon', icon: 'grid-double', icon_class: 'w-6' -%}
+          {%- render 'icons', icon: 'grid-double', icon_class: 'w-6' -%}
         </a>
         {%- liquid
           assign collection_view_alt_class = 'opacity-25'
@@ -39,7 +39,7 @@
           class="collection-layout__button block py-3 text-inherit hover:opacity-100 md:py-0 {{ collection_view_alt_class }}"
           data-collection-view="alt"
         >
-          {%- render 'global-icon', icon: 'grid-single', icon_class: 'w-6' -%}
+          {%- render 'icons', icon: 'grid-single', icon_class: 'w-6' -%}
         </a>
       {%- endif -%}
     </collection-view>
@@ -77,7 +77,7 @@
           class="md:button md:button--outline flex whitespace-nowrap border-none px-0 py-3 md:border md:border-solid md:px-5 md:py-3"
           aria-label="{%- render 'format-translation', namespace: "sections.collection_template.filter_and_sort", fallback: "Filter & sort" -%}"
         >
-          {%- render 'global-icon', icon: 'filter', icon_class: 'w-6' -%}
+          {%- render 'icons', icon: 'filter', icon_class: 'w-6' -%}
 
           {%- comment -%} Text label {%- endcomment -%}
           <span class="hidden md:block">
@@ -119,11 +119,7 @@
 
 {%- comment -%} Output collection image. {%- endcomment -%}
 {%- if collection_image != blank -%}
-  {%- render 'format-container',
-    class: 'collection-image my-0',
-    content_class: 'max-w-[120rem] px-0',
-    content: collection_image
-  -%}
+  {%- render 'format-container', class: 'collection-image my-0', content_class: 'max-w-[120rem] px-0', content: collection_image -%}
 {%- endif -%}
 
 {%- comment -%} Collection header classes {%- endcomment -%}
@@ -132,7 +128,4 @@
 {%- endcapture -%}
 
 {%- comment -%} Output collection header with buttons and filters. {%- endcomment -%}
-{%- render 'format-container',
-  class: collection_header_classes,
-  content: collection_header_content
--%}
+{%- render 'format-container', class: collection_header_classes, content: collection_header_content -%}
