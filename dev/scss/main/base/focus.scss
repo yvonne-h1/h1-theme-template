@@ -3,13 +3,13 @@
     Focus ring - default (with offset)
   */
   *:focus-visible {
-    @apply outline-dashed outline-offset-0 outline-primary-500;
+    @apply outline-dashed outline-offset-2 outline-primary-300;
   }
 
   /* Fallback - for browsers that don't support :focus-visible, a fallback is set for :focus */
   @supports not selector(:focus-visible) {
     *:focus {
-      @apply outline-dashed outline-offset-0 outline-primary-500;
+      @apply outline-dashed outline-offset-2 outline-primary-300;
     }
   }
 

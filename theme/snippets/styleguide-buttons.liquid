@@ -32,16 +32,12 @@
       <a href="#" class="button button--{{ type }}">{{ type_label }} anchor</a>
       <input type="button" class="button button--{{ type }}" value="{{ type_label }} input">
       <button type="button" class="button button--{{ type }}">{{ type_label }} button</button>
-      <button type="button" class="button button--{{ type }} loading">
-        {{ type_label }} button
-      </button>
+      <button type="button" class="button button--{{ type }} loading">{{ type_label }} button</button>
       <button type="button" class="button button--{{ type }}">
         {{ type_label }} icon button
-        {%- render 'global-icon', icon: 'caret', icon_class: 'w-3' -%}
+        {%- render 'global-icon', icon: 'caret_h1', icon_class: 'w-3' -%}
       </button>
-      <button type="button" disabled="disabled" class="button button--{{ type }}">
-        {{ type_label }} button disabled
-      </button>
+      <button type="button" disabled="disabled" class="button button--{{ type }}">{{ type_label }} button disabled</button>
     </div>
   {%- endfor -%}
 

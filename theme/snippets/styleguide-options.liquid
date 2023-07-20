@@ -3,13 +3,12 @@
 -%}
 
 <p>For variants, filters and sorting</p>
-
 <div>
-  <h3 class="h5 mb-4 border-b pb-2">Button style</h3>
+  <h3 class="h5 mb-4 border-b pb-2">Input button style</h3>
   <div class="options">
     <div class="option">
       <input name="radio" class="option__input sr-only" type="radio" id="options-1" tabindex="0">
-      <label class="option__label" for="options-1" tabindex="-1">Option default</label>
+      <label class="option__label" for="options-1" tabindex="-1">Default</label>
     </div>
     <div class="option">
       <input
@@ -19,9 +18,7 @@
         id="options-2"
         tabindex="0"
         disabled>
-      <label class="option__label option__label--disabled" for="options-2" tabindex="-1"
-        >Option disabled</label
-      >
+      <label class="option__label option__label--disabled" for="options-2" tabindex="-1">Unavailable</label>
     </div>
     <div class="option">
       <input name="radio" class="option__input sr-only" type="radio" id="options-3" tabindex="0">
@@ -30,7 +27,7 @@
         for="options-3"
         tabindex="-1"
         style="background-color: #68b7ff;">
-        <span class="sr-only">Option blue</span>
+        <span class="sr-only">Blue</span>
       </label>
     </div>
     <div class="option">
@@ -41,15 +38,13 @@
         id="options-4"
         tabindex="0"
         checked>
-      <label class="option__label option__label--checked" for="options-4" tabindex="-1"
-        >Option checked</label
-      >
+      <label class="option__label option__label--checked" for="options-4" tabindex="-1">Checked</label>
     </div>
   </div>
 </div>
 
 <div>
-  <h3 class="h5 mb-4 border-b pb-2">List style</h3>
+  <h3 class="h5 mb-4 border-b pb-2">Input list style</h3>
   <div class="list-options">
     <div class="list-option">
       <input
@@ -58,9 +53,7 @@
         type="radio"
         id="options-list-1"
         tabindex="0">
-      <label class="list-option__label" for="options-list-1" tabindex="-1"
-        >Option radio style</label
-      >
+      <label class="list-option__label" for="options-list-1" tabindex="-1">Option radio style</label>
     </div>
     <div class="list-option">
       <input
@@ -89,7 +82,6 @@
         for="options-list-3"
         tabindex="-1">
         Option checkbox style
-        {%- render 'global-icon', icon: 'checkmark' -%}
       </label>
     </div>
   </div>

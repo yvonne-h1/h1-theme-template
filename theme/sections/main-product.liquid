@@ -392,11 +392,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  class: 'my-0',
-  content: container_content,
-  content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--content-wrapper-padding)]'
--%}
+{%- render 'format-container', class: 'my-0', content: container_content, content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--content-wrapper-padding)]' -%}
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'main-product.js' | asset_url }}" defer></script>
 
@@ -662,10 +658,6 @@
                 "label": "Shoe"
               },
               {
-                "value": "silhouette",
-                "label": "Silhouette"
-              },
-              {
                 "value": "star",
                 "label": "Star"
               },
@@ -776,10 +768,6 @@
               {
                 "value": "shoe",
                 "label": "Shoe"
-              },
-              {
-                "value": "silhouette",
-                "label": "Silhouette"
               },
               {
                 "value": "star",

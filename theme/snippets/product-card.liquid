@@ -21,10 +21,7 @@
 {% endcomment %}
 
 {%- liquid
-  comment
-    Image logic
-  endcomment
-
+  # Image logic
   unless image_lazy != null
     assign image_lazy = true
   endunless
@@ -71,10 +68,7 @@
     assign image_title = product_object.title | escape
   endunless
 
-  comment
-    Quick shop logic
-  endcomment
-
+  # Quick shop logic
   unless show_quick_shop
     assign show_quick_shop = false
   endunless
@@ -102,31 +96,26 @@
   endif
 -%}
 
-{%- comment -%} Start output product card {%- endcomment -%}
 {%- liquid
+  # Start output product card
   assign product_card_state_classes = ''
   if view != blank
     assign product_card_state_classes = 'z-20 product-card--' | append: view
   endif
 -%}
 <div
-  class="product-card group/product-card relative z-0 {{ product_card_state_classes }}"
-  data-product-card
->
+  class=" product-card group/product-card relative z-0 overflow-hidden {{ product_card_state_classes }}"
+  data-product-card>
   {%- comment -%} Accesibility text {%- endcomment -%}
   <a
     href="{{ product_link }}"
-    class="product-card__sr-link sr-only absolute inset-0 z-10 block text-inherit no-underline focus-visible:outline-dashed focus-visible:outline-1 states:no-underline"
-    title="{{ product_object.title | escape }}"
-  >
+    class="product-card__sr-link button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline"
+    title="{{ product_object.title | escape }}">
     {{- product_object.title | escape -}}
   </a>
 
   {%- comment -%} Upper part of the product card {%- endcomment -%}
-  <div
-    class="product-card__inner relative"
-    tabindex="-1"
-  >
+  <div class="product-card__inner relative">
     {%- if view == 'alt' -%}
       {%- comment -%} On mobile devices, render the images in a slider {%- endcomment -%}
       {%- capture swiper_slides -%}
@@ -168,38 +157,33 @@
         <product-card-swiper>
           <div
             class="swiper swiper-container"
-            data-product-card-swiper
-          >
+            data-product-card-swiper>
             <div class="swiper-wrapper">
               {{- swiper_slides -}}
             </div>
             <button
               class="swiper-button-prev left-2 z-10 hidden md:hidden"
-              aria-label="{% render "format-translation", namespace: "accessibility.previous_slide", fallback: "Previous slide" %}"
-            >
+              aria-label="{% render "format-translation", namespace: "accessibility.previous_slide", fallback: "Previous slide" %}">
               {%- render 'global-icon', icon: 'chevron-left', icon_class: 'w-6' -%}
             </button>
             <button
               class="swiper-button-next right-2 z-10 hidden md:hidden"
-              aria-label="{% render "format-translation", namespace: "accessibility.next_slide", fallback: "Next slide" %}"
-            >
+              aria-label="{% render "format-translation", namespace: "accessibility.next_slide", fallback: "Next slide" %}">
               {%- render 'global-icon', icon: 'chevron-right', icon_class: 'w-6' -%}
             </button>
           </div>
         </product-card-swiper>
       {%- else -%}
-        <div
-          class="product-card__image aspect-[{{ image_aspect_ratio }}] bg-gray-50"
-        ></div>
+        <div class="product-card__image aspect-[{{ image_aspect_ratio }}] bg-gray-50"></div>
       {%- endif -%}
 
     {%- else -%}
       {%- comment -%} Render image with hover {%- endcomment -%}
       <a
-        class="product-card__image aspect-[{{ image_aspect_ratio }}] relative block  {% unless product_object.available -%}opacity-50 saturate-50{%- endunless -%}"
+        class="product-card__image aspect-[ block{{ image_aspect_ratio }}] relative block  {% unless product_object.available -%}opacity-50 saturate-50{%- endunless -%}"
         href="{{ product_link }}"
         title="{{ product_object.title | escape }}"
-      >
+        tabindex="-1">
         {%- render 'format-image',
           image_object: product_link_image,
           max_width: image_max_width,
@@ -227,16 +211,15 @@
       </a>
     {%- endif -%}
 
-    {%- comment -%} Render badges {%- endcomment -%}
-    {%- render 'product-badges', product: product_object -%}
+    {%- liquid
+      # Render badges
+      render 'product-badges', product: product_object
 
-    {% comment %} Render quick shop {% endcomment %}
-    {%- if show_quick_shop -%}
-      {%- render 'quick-shop',
-        product: product_object,
-        quick_shop_render_second_option: quick_shop_render_second_option
-      -%}
-    {%- endif -%}
+      # Render quick shop
+      if show_quick_shop
+        render 'quick-shop', product: product_object, quick_shop_render_second_option: quick_shop_render_second_option
+      endif
+    -%}
   </div>
 
   {%- comment -%} Output product information {%- endcomment -%}
@@ -249,19 +232,15 @@
   <a
     href="{{ product_link }}"
     title="{{ product_object.title | escape }}"
-    class="product-card__information block pt-2 text-sm leading-5 text-color-default states:no-underline states:text-color-default {{ product_card_information_classes }}"
-  >
+    class="product-card__information block pt-2 text-sm leading-5 no-underline text-color-default states:no-underline states:text-color-default {{ product_card_information_classes }}"
+    tabindex="-1">
     {%- comment -%} Vendor {%- endcomment -%}
     {%- if show_vendor -%}
       <p class="product-card__vendor mb-0 text-sm">
         <span class="sr-only">
-          {%- render 'format-translation',
-            namespace: 'accessibility',
-            key: 'vendor',
-            fallback: 'Vendor'
-          -%}
+          {%- render 'format-translation', namespace: 'accessibility', key: 'vendor', fallback: 'Vendor' -%}
         </span>
-        <span class="opacity-70">
+        <span class="block opacity-70">
           {{- product_object.vendor -}}
         </span>
       </p>
@@ -269,7 +248,7 @@
 
     {%- comment -%} Title {%- endcomment -%}
     {%- if product_object.title -%}
-      <p class="product-card__title label-md">
+      <p class="product-card__title label-md block group-hover/product-card:text-primary">
         {{- product_object.title -}}
       </p>
     {%- endif -%}
@@ -297,13 +276,8 @@
       <button
         type="button"
         class="button button--primary quick-shop__btn-add relative z-20 {{ quick_shop_button_classes }}"
-        data-quick-shop-toggle
-      >
-        {%- render 'format-translation',
-          namespace: 'products.product',
-          key: 'add_to_cart',
-          fallback: 'Add to cart'
-        -%}
+        data-quick-shop-toggle>
+        {%- render 'format-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
       </button>
     {% endif %}
   </div>

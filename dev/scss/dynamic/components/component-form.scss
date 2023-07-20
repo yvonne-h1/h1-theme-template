@@ -86,9 +86,7 @@ endcapture
         ring-transparent;
       }
       &:focus-visible {
-        @apply border-primary-100
-        bg-primary-100
-        text-black;
+        @apply border-primary-100 bg-primary-100 text-black ring-2 ring-primary-300 ring-offset-2;
       }
       &:invalid:not(:placeholder-shown),
       &[aria-invalid='true']:invalid {
@@ -209,14 +207,14 @@ endcapture
       }
     }
     input:focus-visible + &__checkbox-label:before {
-      @apply ring-2 ring-primary-300;
+      @apply ring-2 ring-primary-300 ring-offset-2;
     }
 
     input:checked + &__checkbox-label,
     &:hover + &__checkbox-label {
       &:after {
         @apply h-5 w-5 content-[''];
-        background: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='presentation' viewBox='0 0 20 20'%3E%3Cpath stroke='white' fill='currentColor' d='M16.136 6.979h0l.003-.004a1.499 1.499 0 00-2.275-1.954l-5.945 6.777-1.858-1.859A1.499 1.499 0 103.94 12.06l2.999 3s0 0 0 0c.289.29.675.44 1.1.439h.019a1.5 1.5 0 001.08-.522l6.998-7.998z'/%3E%3C/svg%3E")
+        background: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='presentation' viewBox='0 0 20 20'%3E%3Cpath fill='currentColor' d='M16.136 6.979h0l.003-.004a1.499 1.499 0 00-2.275-1.954l-5.945 6.777-1.858-1.859A1.499 1.499 0 103.94 12.06l2.999 3s0 0 0 0c.289.29.675.44 1.1.439h.019a1.5 1.5 0 001.08-.522l6.998-7.998z'/%3E%3C/svg%3E")
           no-repeat;
       }
     }
@@ -243,8 +241,7 @@ endcapture
     }
 
     input:focus-visible + &__radio-label:before {
-      @apply ring-2
-      ring-primary-300;
+      @apply ring-2 ring-primary-300 ring-offset-2;
     }
     input:checked + &__radio-label {
       @apply cursor-default;
@@ -400,8 +397,7 @@ endcapture
       text-color-default;
     }
     input:focus-visible + .field__switch {
-      @apply ring-2
-      ring-primary-300;
+      @apply ring-2 ring-primary-300 ring-offset-2;
     }
     input:checked + .field__switch:after {
       @apply translate-x-full

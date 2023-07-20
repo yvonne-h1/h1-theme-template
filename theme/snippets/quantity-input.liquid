@@ -19,7 +19,8 @@
     assign type = 'pdp'
   endunless
 
-  assign button_classes = 'flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-transparent p-0 text-black transition-all no-js:hidden hover:border-primary hover:text-black group states:border-primary states:bg-primary states:text-white'
+  assign state_classes = 'states:border-primary focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none focus-visible:ring-offset-2'
+  assign button_classes = 'flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-transparent p-0 text-black transition-all no-js:hidden group states:bg-primary states:text-primary-text  ' | append: state_classes
   assign icon_class = 'w-3 group-hover:scale-110 pointer-events-none transition-transform duration-75 ease-linear'
 
   capture button_minus_accessibility_text
@@ -46,7 +47,7 @@
 
   {% comment %} PDP {% endcomment %}
   <input
-    class="quantity__input h-10 w-7 appearance-none border-none bg-transparent p-0 text-center text-sm font-bold text-current opacity-80 focus:border-none"
+    class="quantity__input h-10 w-7 appearance-none border-none bg-transparent p-0 text-center text-sm font-bold text-current opacity-80 {{ state_classes }}"
     type="number"
     name="{%- if type == 'cart' -%}updates[]{%- else -%}quantity{%- endif -%}"
     id="Quantity-{{ id }}"

@@ -201,12 +201,6 @@
       },
       {
         "type": "checkbox",
-        "id": "payment_icon_riverty",
-        "label": "Riverty",
-        "default": true
-      },
-      {
-        "type": "checkbox",
         "id": "payment_icon_apple_pay",
         "label": "Apple Pay",
         "default": true

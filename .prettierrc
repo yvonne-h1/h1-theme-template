@@ -2,15 +2,16 @@
   "arrowParens": "always",
   "bracketSameLine": true,
   "bracketSpacing": true,
-  "htmlWhitespaceSensitivity": "css",
+  "htmlWhitespaceSensitivity": "ignore",
   "plugins": ["@shopify/prettier-plugin-liquid", "prettier-plugin-tailwindcss"],
   "pluginSearchDirs": false,
-  "printWidth": 100,
+  "printWidth": 200,
   "semi": true,
   "singleQuote": true,
   "tabWidth": 2,
   "trailingComma": "es5",
   "useTabs": false,
+  "singleAttributePerLine": false,
   "overrides": [
     {
       "files": ["*.liquid"],

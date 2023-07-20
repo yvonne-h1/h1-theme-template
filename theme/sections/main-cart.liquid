@@ -223,11 +223,7 @@
   -%}
 
   {%- comment -%} Render the content {%- endcomment -%}
-  {%- render 'format-container',
-    class: 'mb-0',
-    content_class: 'content-wrapper',
-    content: container_content
-  -%}
+  {%- render 'format-container', class: 'mb-0', content_class: 'content-wrapper', content: container_content -%}
 
   {%- comment -%} Import javascript {%- endcomment -%}
   <script src="{{ 'cart.js' | asset_url }}" defer></script>
@@ -361,10 +357,6 @@
               {
                 "value": "shoe",
                 "label": "Shoe"
-              },
-              {
-                "value": "silhouette",
-                "label": "Silhouette"
               },
               {
                 "value": "star",

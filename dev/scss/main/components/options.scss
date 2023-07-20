@@ -11,18 +11,16 @@
   }
 
   .option {
-    @apply relative p-1.5;
-
+    @apply relative p-1;
+    // .option__input
     &__input {
       @apply sr-only;
       &:focus-visible + .option__label {
-        &:before {
-          @apply ring-2
-          ring-primary-300;
-        }
+        @apply ring-2 ring-primary-300 ring-offset-2;
       }
     }
 
+    // .option__label
     &__label {
       @apply relative
         flex
@@ -32,59 +30,53 @@
         items-center
         justify-center
         rounded-[1.125rem]
-        bg-primary-200
+        border
+        border-gray-100
+        bg-white
+        p-1
         px-2
-        py-2
         text-center
         text-xs
         leading-4
         no-underline
         transition-colors
         text-color-default;
-
-      &:before {
-        @apply absolute
-          -inset-[5px]
-          rounded-[24px]
-          border
-          border-solid
-          border-black
-          opacity-0
-          transition-opacity
-          content-empty;
-      }
       @include states() {
-        @apply no-underline text-color-default before:opacity-100;
+        @apply border-black bg-primary text-primary-text no-underline before:opacity-100;
       }
 
+      // .option__label--disabled
       &--disabled {
         @apply pointer-events-none
-          cursor-default
+          cursor-not-allowed
           overflow-hidden
           text-gray-700
           opacity-50
           before:hidden;
         &:after {
           @apply absolute
-            left-1/2
-            top-1/2
-            block
-            h-[200%]
-            w-0.5
-            -translate-x-1/2
-            -translate-y-1/2
-            rotate-45
-            content-empty;
-          background-color: var(--text-color-default);
+          left-1/2
+          top-1/2
+          block
+          h-[100%]
+          w-[1px]
+          -translate-x-1/2
+          -translate-y-1/2
+          rotate-45
+          bg-gray-400
+          content-empty;
         }
       }
     }
 
+    // .option__input
+    // .option__label
+    // .option__label--checked
     &__input:checked + &__label,
     &__label--checked {
-      @apply bg-primary-100;
-      &:before {
-        @apply opacity-100;
+      @apply border-black bg-primary text-primary-text;
+      &:hover {
+        @apply bg-primary-300;
       }
     }
   }

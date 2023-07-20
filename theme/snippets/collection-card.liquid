@@ -37,8 +37,10 @@
     assign aspect_ratio = '1/1'
   endunless
 -%}
-<a href="{{ collection.url }}" class="collection-card text-current states:text-current">
-  <div class="collection-card__image">
+<a
+  href="{{ collection.url }}"
+  class="collection-card group/collection-card block text-center text-current group-hover/collection-card:no-underline group-focus-visible/collection-card:no-underline">
+  <div class="collection-card__image transition-all group-hover/collection-card:scale-110 group-focus-visible/collection-card:scale-110">
     {%- render 'format-image',
       image_object: featured_image,
       alt: image_alt,
@@ -46,11 +48,12 @@
       sizes: '(min-width: 1440px) 316px, (min-width: 1280px) 21.56vw, (min-width: 768px) 27vw, 43vw',
       max_width: 379,
       aspect_ratio: aspect_ratio,
-      lazy: image_lazy
+      lazy: image_lazy,
+      class: 'object-contain mx-auto'
     -%}
   </div>
   <div class="collection-card__content pt-3">
-    <p class="collection-card__title text-lg">
+    <p class="collection-card__title h4 text-center transition-colors group-hover/collection-card:text-primary  group-focus-visible/collection-card:text-primary">
       {{- collection.title | escape -}}
     </p>
   </div>

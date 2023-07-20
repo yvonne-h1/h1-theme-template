@@ -10,12 +10,6 @@
 
   assign aria_label = cart_item_count | append: '. ' | append: open_cart_drawer_string
 
-  # Cart icon
-  assign cart_icon = 'cart_empty'
-  if cart != empty
-    assign cart_icon = 'cart'
-  endif
-
   assign classes = 'header__icon relative px-1 py-3 text-inherit states:text-primary'
   if request.page_type == 'cart'
     assign classes = classes | append: ' pointer-events-none'
@@ -47,7 +41,7 @@
       data-cart-icon-bubble>
   {%- endif -%}
 
-  {%- render 'global-icon', icon: cart_icon, icon_class: 'w-6' -%}
+  {%- render 'global-icon', icon: 'cart', icon_class: 'w-6' -%}
   <span class="cart-icon-bubble__count absolute right-0 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-2xs leading-4 text-white empty:hidden{% if cart == empty %} hidden{% endif -%}">
     <span class="cart-count">
       {{- cart.item_count -}}
@@ -67,12 +61,7 @@
 {%- comment -%} No-js cart link {%- endcomment -%}
 <a href="{{ routes.cart_url }}" class="no-js[visible] hidden">
   <span class="visually-hidden">
-    {% render 'format-translation',
-      namespace: 'general.cart',
-      key: 'view',
-      count: cart.item_count,
-      fallback: 'View cart'
-    %}
+    {% render 'format-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart' %}
   </span>
   {%- render 'global-icon', icon: 'cart' -%}
 </a>

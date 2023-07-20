@@ -29,7 +29,7 @@ if (!customElements.get('quick-shop')) {
     }
 
     /**
-     * labelstate
+     * label state
      * @description Toggles the option labels active state.
      */
     updateLabelState(label) {

@@ -88,8 +88,8 @@
     </div>
 
     {% comment %} Menu {% endcomment %}
-    <div class="sticky top-24 hidden self-start rounded bg-gray-100 p-4 lg:col-span-3 lg:block">
-      <h2 class="h4">Index</h2>
+    <div class="sticky top-24 hidden self-start rounded border border-dashed border-primary p-4 text-sm lg:col-span-3 lg:block">
+      <h2 class="h5">Index</h2>
       <ul class="z-10 flex flex-col gap-2">
         {%- for section in style_guide_sections -%}
           {%- assign heading = section | replace: '-', ' ' | capitalize -%}

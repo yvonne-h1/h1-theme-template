@@ -17,8 +17,7 @@
       @apply sr-only;
       &:focus-visible + .list-option__label {
         &:before {
-          @apply ring-2
-          ring-primary-300;
+          @apply ring-2 ring-primary-300 ring-offset-2;
         }
       }
     }
@@ -54,49 +53,48 @@
           h-2
           w-2
           -translate-y-1/2
-          rounded-full
-          bg-secondary
           opacity-0
           transition-opacity
           content-empty;
       }
 
-      .icon {
-        @apply absolute
-        left-0
-        top-1/2
-        w-5
-        -translate-y-1/2
-        text-secondary
-        opacity-0
-        transition-opacity;
+      // .list-option__label--checkmark
+      &:not(.list-option__label--checkmark):after {
+        @apply rounded-full
+        bg-secondary;
       }
-
-      // .list-option--checkmark
+      &:not(.list-option__label--checkmark):hover:after {
+        @apply opacity-50;
+      }
+      // .list-option__label--checkmark
       &--checkmark {
-        @apply before:rounded-none
-        after:hidden
-        after:content-none;
-      }
-
-      @include states() {
-        @apply text-primary;
-        .icon,
-        &:after {
-          @apply opacity-100;
+        @apply before:rounded-none;
+        &:hover {
+          @apply text-primary;
+          &:after:not(:checked) {
+            @apply opacity-50;
+          }
         }
       }
-      // .list-option--disabled
+      // .list-option__label--disabled
       &--disabled {
         @apply pointer-events-none
           cursor-default
           text-gray-700
           line-through
           opacity-50;
-        .icon,
         &:after {
           @apply hidden;
         }
+      }
+    }
+    // .list-option__label--checkmark
+    input:checked + &__label--checkmark,
+    &__label--checkmark:hover {
+      &:after {
+        @apply left-0 h-5 w-5 content-[''];
+        background: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='presentation' viewBox='0 0 20 20'%3E%3Cpath fill='currentColor' d='M16.136 6.979h0l.003-.004a1.499 1.499 0 00-2.275-1.954l-5.945 6.777-1.858-1.859A1.499 1.499 0 103.94 12.06l2.999 3s0 0 0 0c.289.29.675.44 1.1.439h.019a1.5 1.5 0 001.08-.522l6.998-7.998z'/%3E%3C/svg%3E")
+          no-repeat;
       }
     }
 
@@ -104,7 +102,6 @@
     // .list-option__label
     &__input:checked + &__label,
     &__label--checked {
-      .icon,
       &:after {
         @apply opacity-100;
       }

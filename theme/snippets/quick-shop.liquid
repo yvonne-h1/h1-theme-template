@@ -34,13 +34,32 @@
 -%}
 
 {%- comment -%} Output quick shop {%- endcomment -%}
-<quick-shop class="quick-shop pointer-events-none invisible absolute inset-x-2 bottom-2 z-30 block bg-gray-100 p-4 text-center opacity-0 transition group-[.quick-shop--is-open]/product-card:pointer-events-auto group-[.quick-shop--is-open]/product-card:visible group-[.quick-shop--is-open]/product-card:opacity-100 md:group-hover/product-card:pointer-events-auto md:group-hover/product-card:visible  md:group-hover/product-card:opacity-100">
+<quick-shop
+  class="
+    quick-shop
+    pointer-events-none
+    invisible
+    absolute
+    inset-x-2
+    bottom-2
+    z-30
+    translate-y-[300%]
+    bg-gray-50
+    p-2
+    text-center
+    transition
+    duration-200
+    group-[.quick-shop--is-open]/product-card:pointer-events-auto
+    md:group-hover/product-card:pointer-events-auto
+    md:group-hover/product-card:visible
+    md:group-hover/product-card:translate-y-0
+  ">
   {%- comment -%} Title {%- endcomment -%}
-  <div class="quick-shop__title mb-3 text-sm font-bold leading-5 text-color-default md:hidden">
+  <p class="quick-shop__title mb-1 text-sm font-bold leading-5 text-color-default">
     {%- render 'format-translation', namespace: 'products.product', key: 'choose_your_option', option: option_name, fallback: 'Choose your {{ option }}' -%}
-  </div>
+  </p>
 
-  {%- comment -%} Options {%- endcomment -%}
+  {%- comment -%} Variant options {%- endcomment -%}
   <div class="quick-shop__options options justify-center">
     {% for variant in product.variants %}
       {%- comment -%} Get value of the option {%- endcomment -%}
@@ -103,9 +122,15 @@
             title="{{ option_label | escape }}"
             aria-label="{{ option_label | escape }}"
           {% endif %}>
-          {%- if is_color == false or color_hex == blank -%}
-            {{- option_label | escape -}}
-          {%- endif -%}
+          {%- liquid
+            # for labels with only 3 letters, make them uppercase
+            if option_label.size < 4
+              assign option_label = option_label | upcase
+            endif
+            if is_color == false or color_hex == blank
+              echo option_label | escape
+            endif
+          -%}
         </label>
       </div>
     {%- endfor -%}
@@ -114,13 +139,7 @@
   {%- comment -%} The product form, product id will be update by variant.js {%- endcomment -%}
   <product-form-component class="product-form">
     {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
-    {%- form 'product',
-      product,
-      id: product_form_id,
-      class: 'form',
-      novalidate: 'novalidate',
-      data-type: 'add-to-cart-form'
-    -%}
+    {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
       <input
         type="hidden"
         name="id"
@@ -133,10 +152,7 @@
         readonly>
 
       {%- comment -%} If preorder is enabiled for this product add a line proprety when adding to the cart {%- endcomment -%}
-      {%- if settings.enable_pre_order
-        and product.selected_or_first_available_variant.inventory_quantity <= 0
-        and product.selected_or_first_available_variant.inventory_policy == 'continue'
-      -%}
+      {%- if settings.enable_pre_order and product.selected_or_first_available_variant.inventory_quantity <= 0 and product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
         <input
           type="hidden"
           name="properties[Pre-order]"
