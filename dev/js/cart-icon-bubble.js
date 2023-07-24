@@ -2,8 +2,7 @@ if (!customElements.get('cart-icon-bubble')) {
   class CartIconBubble extends HTMLElement {
     constructor() {
       super();
-
-      this.toggleButton = this.querySelector('[aria-controls="cart-drawer"]');
+      this.toggleButton = this.querySelector('[aria-controls="cartDrawer"]');
       this.cartDrawer = document.querySelector('cart-drawer');
 
       if (this.cartDrawer) {

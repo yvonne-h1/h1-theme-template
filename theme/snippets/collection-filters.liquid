@@ -15,7 +15,7 @@
     <collection-filters-form>
       <form
         id="CollectionFiltersForm"
-        class="group/filter filter"
+        class="group/filter filter {% if settings.filter_display == 'grid' -%}group/grid{%- endif -%}"
         data-collection-filters-form>
         {%- comment -%} backdrop collection filter overlay {%- endcomment -%}
         <class-toggle-component
@@ -27,7 +27,38 @@
           '></class-toggle-component>
 
         {%- comment -%} The collection filter drawer. {%- endcomment -%}
-        <div class="filter__drawer invisible fixed bottom-0 right-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto text-sm leading-5 opacity-0 transition-all bg-color-default group-[.filter-is-open]/body:visible group-[.filter-is-open]/body:translate-x-0 group-[.filter-is-open]/body:opacity-100">
+        <div
+          class="
+            filter__drawer
+            group-[.filter]/grid:lg:inset-unset
+            group-[.filter]/grid:lg:max-w-unset
+            invisible
+            fixed
+            bottom-0
+            right-0
+            top-0
+            z-modal
+            w-full
+
+            max-w-sm
+            translate-x-full
+            overflow-y-auto
+            text-sm
+            leading-5
+            opacity-0
+
+            transition-all
+            bg-color-default
+            group-[.filter-is-open]/body:visible
+
+            group-[.filter-is-open]/body:translate-x-0
+            group-[.filter-is-open]/body:opacity-100
+            group-[.filter]/grid:lg:visible
+
+            group-[.filter]/grid:lg:relative
+            group-[.filter]/grid:lg:translate-x-0
+            group-[.filter]/grid:lg:opacity-100
+          ">
           {%- comment -%} The collection drawer header. {%- endcomment -%}
           <div class="filter__header sticky top-0 z-10 border-b  bg-white pb-6 pl-6 pr-6 pt-6">
             <class-toggle-component
@@ -39,7 +70,7 @@
               '>
               <button
                 type="button"
-                class="filter__close button button--link -mr-3 -mt-3 border-none p-3"
+                class="filter__close button button--link -mr-3 -mt-3 border-none p-3 {% if settings.filter_display == 'grid' -%}hidden{%- endif -%}"
                 aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
                 {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
               </button>

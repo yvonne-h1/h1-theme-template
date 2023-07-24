@@ -60,16 +60,13 @@ if (!customElements.get('cart-items')) {
       try {
         const response = await fetch(routes.cart_change_url, {
           ...fetchConfig(),
-          ...{
-            body,
-          },
+          ...{ body },
         } );
 
         if (!response.ok) throw new Error(response.status);
 
         // On success:
-        const parsedState = JSON.parse(response);
-        console.log('parsedState', parsedState);
+        const parsedState = await response.json();
 
         this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
 

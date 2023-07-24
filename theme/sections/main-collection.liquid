@@ -9,8 +9,19 @@
 {%- comment -%} Render the main collection. {%- endcomment -%}
 <div id="main-collection" data-main-collection data-id="{{ section.id }}">
   {%- render 'collection-header', section: section -%}
-  {%- render 'collection-filters', section: section -%}
-  {%- render 'collection-product-grid', section: section -%}
+  {%- if settings.filter_display == 'drawer' -%}
+    {%- render 'collection-filters', section: section -%}
+    {%- render 'collection-product-grid', section: section -%}
+  {%- else -%}
+    <div class="lg:grid lg:grid-cols-12">
+      <div class="lg:col-span-3">
+        {%- render 'collection-filters', section: section -%}
+      </div>
+      <div class="lg:col-span-9">
+        {%- render 'collection-product-grid', section: section -%}
+      </div>
+    </div>
+  {%- endif -%}
 </div>
 
 {% schema %}

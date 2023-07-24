@@ -6,9 +6,9 @@
   "license": "ISC",
   "scripts": {
     "copytemplates": "copyfiles -f dev/default_templates/templates/*.json theme/templates && copyfiles -f dev/default_templates/templates/customers/*.json theme/templates/customers && copyfiles -f dev/default_templates/sections/*.json theme/sections",
-    "start": "node rollup.mjs --all --watch & env-cmd -r shops.js -e shop, shopify theme dev --theme-editor-sync --ignore snippets/main-*-css.liquid ",
     "start:dev": "node rollup.mjs --all --watch & env-cmd -r shops.js --environments dev, shopify theme dev --theme-editor-sync  --ignore snippets/main-*-css.liquid",
     "start:stage": "node rollup.mjs --all --watch & env-cmd -r shops.js --environments stage, shopify theme dev --theme-editor-sync  --ignore snippets/main-*-css.liquid",
+    "start": "node rollup.mjs --all --watch & env-cmd -r shops.js -e shop, shopify theme dev --theme-editor-sync --ignore snippets/main-*-css.liquid ",
     "build": "node rollup.mjs --all",
     "build:js": "node rollup.mjs --js",
     "build:css": "node rollup.mjs --css",

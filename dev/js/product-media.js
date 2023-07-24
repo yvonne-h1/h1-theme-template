@@ -14,9 +14,7 @@
 
       swiper() {
         // Check if Swiper exists
-        if (typeof Swiper == 'undefined') {
-          return false;
-        }
+        if (typeof Swiper == 'undefined') return false;
 
         // Get swiper element
         this.swiperElement = this.querySelector('[data-product-media-swiper]');
@@ -43,9 +41,7 @@
        */
       fancybox() {
         // Check if Fancybox exists
-        if (typeof Fancybox == 'undefined') {
-          return false;
-        }
+        if (typeof Fancybox == 'undefined') return false;
 
         Fancybox.bind('[data-fancybox]', {
           animated: false,

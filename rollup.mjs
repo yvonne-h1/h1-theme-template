@@ -50,6 +50,7 @@ const config = {
         wrapper: '@layer h1-styles-base { [[ stylesheet_content ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/base/**/*.scss'],
         watchLiquid: false,
+        watchJs: false,
       },
       {
         input: 'main-components',
@@ -59,6 +60,7 @@ const config = {
         wrapper: '@layer h1-styles-components { [[ stylesheet_content ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/components/**/*.scss'],
         watchLiquid: true,
+        watchJs: true,
       },
       {
         input: 'main-utilities',
@@ -68,16 +70,12 @@ const config = {
         wrapper: '@layer h1-styles-utilities { [[ stylesheet_content ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/utilities/**/*.scss'],
         watchLiquid: true,
+        watchJs: true,
       },
     ],
   },
   liquid: {
-    files: [
-      './theme/layout/*.liquid',
-      './theme/sections/*.liquid',
-      './theme/snippets/*.liquid',
-      './theme/templates/**/*.liquid',
-    ],
+    files: ['./theme/layout/*.liquid', './theme/sections/*.liquid', './theme/snippets/*.liquid', './theme/templates/**/*.liquid'],
   },
 };
 
@@ -174,20 +172,20 @@ function usedInMainCss(file) {
 
 /*
  * Rollup plugin
- * Notify file updates see you see in the terminal which file is updated
+ * Notify file updates so in the terminal you see which file has been updated
  * @param type {string}: file extension (.js/.css)
  */
 function notifyUpdates(type) {
   return {
     name: 'notify-updates',
-    writeBundle(options, bundle) {
+    writeBundle(bundle) {
       // Show updated file notifications
-      for (let filename in bundle) {
-        let file = `${config.dest}/${filename}`;
-        if (!filename.includes('.old.js')) {
-          notify(`Updated: ${file}`);
-        }
-      }
+      // for (let filename in bundle) {
+      //   let file = `${config.dest}/${filename}`;
+      //   if (!filename.includes('.old.js')) {
+      //     notify(`Updated: ${file}`);
+      //   }
+      // }
 
       // JS file will trigger a full reload
       if (type == 'JS') {
@@ -255,7 +253,7 @@ async function bundle(type, inputOptions, outputOptions) {
 }
 
 /*
- * Process and optimise Javascript.
+ * Process and optimize Javascript.
  * @param input {string / array}: input files or array.
  */
 async function processJs(input) {
@@ -276,7 +274,7 @@ async function processJs(input) {
 }
 
 /*
- * Process and optimise CSS.
+ * Process and optimize CSS.
  * @param input {string / array}: input files or array.
  */
 async function processCss(input) {
@@ -319,10 +317,7 @@ async function processCss(input) {
             dest: mainItem.dest,
             rename: () => mainItem.rename,
             transform: (contents) => {
-              return `{% style %}${mainItem.wrapper.replace(
-                '[[ stylesheet_content ]]',
-                contents.toString()
-              )}{% endstyle %}`;
+              return `{% style %}${mainItem.wrapper.replace('[[ stylesheet_content ]]', contents.toString())}{% endstyle %}`;
             },
           },
         ],
@@ -383,6 +378,7 @@ class Watcher {
       this.timer();
       notify(`Processing ${file}...`);
       processJs(file);
+      this.buildCSSafterJSupdate();
     });
 
     // Watch module files and process
@@ -391,6 +387,7 @@ class Watcher {
       this.timer();
       notify('Processing all js...');
       processJs(globify(config.js.files));
+      this.buildCSSafterJSupdate();
     });
   }
 
@@ -437,7 +434,7 @@ class Watcher {
         return mainFiles;
       }, []);
       if (mainFiles.length >= 1 && !isMainFile) {
-        // Process main files one for on to have a nice hot reload
+        // Process main files separately
         mainFiles.map((file, index) => {
           setTimeout(() => {
             notify(` Processing ${file}...`);
@@ -446,6 +443,27 @@ class Watcher {
         });
       }
     });
+  }
+
+  /*
+   * When js files are changed, rebuild the Tailwind CSS
+   */
+  buildCSSafterJSupdate() {
+    const mainFiles = config.scss.main.reduce((mainFiles, mainItem) => {
+      if (mainItem.watchJs) {
+        mainFiles.push(globify(mainItem.inputFull));
+      }
+      return mainFiles;
+    }, []);
+    if (mainFiles.length >= 1) {
+      // Process main files separately
+      mainFiles.map((file, index) => {
+        setTimeout(() => {
+          notify(` Processing ${file}...`);
+          processCss(file);
+        }, index * 250);
+      });
+    }
   }
 
   /*

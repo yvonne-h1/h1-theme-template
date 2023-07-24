@@ -1,4 +1,6 @@
 {% comment %}
+  Default icons come from https://heroicons.com/
+
   {%- render 'icons',
     icon: 'arrow',
     icon_class: "my-class" (optional),
@@ -9,8 +11,9 @@
   if icon != blank
     assign icon = icon | downcase
     assign class = 'icon icon--' | append: icon | append: ' ' | append: icon_class
+
     comment
-      Add same attributes to all icons except hamburger, close, account, user, cart and search, since they should not be hidden from screen readers.
+      Add same attributes to all icons except hamburger, close, account, user, cart and search, since they should not be hidden from screen readers. role="presentation" means the icon is treated as alt="", so it's skipped. Make sure icons that are functional don't have this attribute.
     endcomment
     assign attributes = 'xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation"'
     render 'icons-payment', icon: icon, class: class, attributes: attributes

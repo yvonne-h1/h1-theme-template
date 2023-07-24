@@ -78,7 +78,7 @@
       {%- comment -%} If this is a color option get hex color {%- endcomment -%}
       {%- if is_color == true -%}
         {%- liquid
-          assign color_mappings = settings.color_mappings | split: ','
+          assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
           assign color_option_name = option_label | handleize
           assign color_hex = ''
         -%}

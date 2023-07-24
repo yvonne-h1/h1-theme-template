@@ -25,9 +25,17 @@
       {%- comment -%} Only render if there are items {%- endcomment -%}
       {%- if value.count > 0 -%}
 
+        {%- liquid
+          assign option_label = value.label
+          # for labels with only 3 letters, make them uppercase
+          if option_label.size < 4
+            assign option_label = option_label | upcase
+          endif
+        -%}
+
         {%- capture label -%}
           <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="option__label option__label--{{ filter_label }}{% if value.count == 0 and value.active == false %} filter-options__label--disabled{% endif %}">
-            {{ value.label | escape }}
+            {{ option_label | escape }}
           </label>
         {%- endcapture -%}
 
@@ -44,15 +52,15 @@
           {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
           {%- if is_color -%}
             {%- liquid
-              assign variant_color = value.label | handleize
-              assign color_mappings = settings.color_mappings | split: ','
+              assign variant_color = option_label | handleize
+              assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
               assign color_is_mapped = false
             -%}
 
             {%- comment -%} Loop through color mapping {%- endcomment -%}
             {%- for color in color_mappings -%}
               {%- liquid
-                assign variant_color = value.label | handleize
+                assign variant_color = option_label | handleize
                 assign color_name = color | split: '|' | first | handleize
                 assign color_hex = color | split: '|' | last
               -%}
@@ -61,7 +69,7 @@
                 {%- comment -%} Render with background-color {%- endcomment -%}
                 {%- assign color_is_mapped = true -%}
                 <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="option__label option__label--{{ filter_label }} {% if value.count == 0 and value.active == false %} option__label--disabled{% endif %}" style="background-color: {{ color_hex }};">
-                  <span class="sr-only">{{ value.label | escape }}</span>
+                  <span class="sr-only">{{ option_label | escape }}</span>
                 </label>
               {%- endif -%}
             {%- endfor -%}
@@ -81,9 +89,4 @@
   </ul>
 {%- endcapture -%}
 
-{%- render 'format-filter-group',
-  summary_content: summary_content,
-  label: filter.label,
-  filter_index: filter_index,
-  is_color: is_color
--%}
+{%- render 'format-filter-group', summary_content: summary_content, label: filter.label, filter_index: filter_index, is_color: is_color -%}

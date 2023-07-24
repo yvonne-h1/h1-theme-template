@@ -65,7 +65,7 @@
     </div>
 
     {% comment %} Collection filter button {% endcomment %}
-    <div class="collection-hero__filters relative flex basis-1/4 justify-end md:basis-2/4 lg:basis-1/4">
+    <div class="collection-hero__filters relative flex basis-1/4 justify-end md:basis-2/4 lg:basis-1/4 {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}">
       <class-toggle-component
         class="flex"
         data-options='{

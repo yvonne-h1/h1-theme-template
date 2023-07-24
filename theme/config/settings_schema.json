@@ -36,6 +36,24 @@
     ]
   },
   {
+    "name": "Google settings",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "google_site_verification",
+        "label": "Google Site verification code",
+        "info": "The verification code of Google to verify your website. For multiple accounts create a comma separated list"
+      },
+      {
+        "type": "text",
+        "id": "gtm_id",
+        "label": "GTM id",
+        "placeholder": "GTM-XXXXXXX",
+        "info": "Leave empty to disable the GTM tag."
+      }
+    ]
+  },
+  {
     "name": "SEO",
     "settings": [
       {
@@ -262,7 +280,72 @@
     ]
   },
   {
-    "name": "Product card",
+    "name": "Collection page",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Filter colors"
+      },
+      {
+        "type": "text",
+        "id": "color_filter_name",
+        "label": "Color filter name",
+        "default": "Color",
+        "info": "Set the name as it's used for product variants. This will be used to determine the color option in the filters and the product options so they can be displayed as swatches."
+      },
+      {
+        "type": "textarea",
+        "id": "color_mappings",
+        "label": "Color mappings",
+        "info": "Set up color mappings. One per line. color|#hexvalue or color name, where 'color' is lowercase and hyphened, like 'dark-blue'. For a list of accepted color names or hex codes, [got to this page](https://htmlcolorcodes.com/color-names/).",
+        "default": "blue|SteelBlue\nred|Red\norange|DarkOrange\nblack|#000\ngray|Silver\nlight_brown|Tan\nwhite|white\nyellow|Gold",
+        "placeholder": "blue|#68b7ff\nred|#ff0000\nblack|#000"
+      },
+      {
+        "type": "header",
+        "content": "Filter display"
+      },
+      {
+        "type": "select",
+        "id": "filter_display",
+        "label": "Filter display",
+        "info": "Applies to larger screens. Either keep the filters always visible or hide them in a drawer.",
+        "default": "drawer",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "In drawer"
+          },
+          {
+            "value": "grid",
+            "label": "In grid"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Filter options"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_filter_collapsibles",
+        "default": true,
+        "label": "Enable collapsible panes",
+        "info": "Renders filter groups in collapsible panes."
+      },
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "min": 4,
+        "max": 24,
+        "step": 1,
+        "default": 16,
+        "label": "Products per page"
+      }
+    ]
+  },
+  {
+    "name": "Product & Product card",
     "settings": [
       {
         "type": "checkbox",
@@ -343,7 +426,7 @@
             "group": "Landscape"
           },
           {
-            "value": "16/9",
+            "value": "aspect-[16/9]",
             "label": "16/9",
             "group": "Landscape"
           }
@@ -470,63 +553,6 @@
         "id": "predictive_search_articles",
         "label": "Show articles",
         "default": false
-      }
-    ]
-  },
-  {
-    "name": "General",
-    "settings": [
-      {
-        "type": "textarea",
-        "id": "google_site_verification",
-        "label": "Google Site verification code",
-        "info": "The verification code of Google to verify your website. For multiple accounts create a comma separated list"
-      },
-      {
-        "type": "text",
-        "id": "gtm_id",
-        "label": "GTM id",
-        "placeholder": "GTM-XXXXXXX",
-        "info": "Leave empty to disable the GTM tag"
-      },
-      {
-        "type": "header",
-        "content": "Colors"
-      },
-      {
-        "type": "text",
-        "id": "color_filter_name",
-        "label": "Color filter name",
-        "default": "Color",
-        "info": "Set the name as it's used for product variants."
-      },
-      {
-        "type": "textarea",
-        "id": "color_mappings",
-        "label": "Color mappings",
-        "info": "Set up color mappings as a comma separated list of color|#hexvalue, where 'color' is lowercase and hyphened, like 'dark-blue'.",
-        "default": "blue|#68b7ff,\nred|#ff0000,\norange|#ff6600,",
-        "placeholder": "blue|#68b7ff,\nred|#ff0000,\norange|#ff6600,"
-      },
-      {
-        "type": "header",
-        "content": "Filter options"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_filter_collapsibles",
-        "default": true,
-        "label": "Enable collapsible panes",
-        "info": "Renders filter groups in collapsible panes"
-      },
-      {
-        "type": "range",
-        "id": "products_per_page",
-        "min": 4,
-        "max": 24,
-        "step": 1,
-        "default": 16,
-        "label": "Products per page"
       }
     ]
   }

@@ -165,18 +165,19 @@
                 </noscript>
                 <button
                   type="submit"
-                  class="button button--primary button--lg lg:button--xl w-full"
+                  class="button button--primary button--lg w-full"
                   name="checkout"
                   {% if cart == empty %}
                     disabled
                   {% endif %}>
                   {%- render 'format-translation', namespace: 'sections.cart', key: 'checkout', fallback: 'Checkout' -%}
                 </button>
+
                 {%- comment -%} Go to cart button {%- endcomment -%}
                 {%- if section.settings.show_cart_button -%}
                   <a
                     href="{{ routes.cart_url }}"
-                    class="button button--secondary button--xl w-full">
+                    class="button button--secondary button--lg w-full font-normal">
                     {{- 'general.cart.view' | t: count: cart.item_count -}}
                   </a>
                 {%- endif -%}
