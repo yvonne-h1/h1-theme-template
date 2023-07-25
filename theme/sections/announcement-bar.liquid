@@ -13,7 +13,7 @@
 {%- capture swiper_slides -%}
   {%- for block in section.blocks -%}
     {%- if block.settings.text != blank -%}
-      <div class="swiper-slide announcement-bar__slide text-center text-sm font-bold leading-5 {{ section.settings.color_scheme }}"
+      <div class="swiper-slide announcement-bar__slide text-center text-sm {{ section.settings.color_scheme }}"
         data-swiper-slide-index="{{ forloop.index }}"
         {{ block.shopify_attributes }}
       >
@@ -24,12 +24,12 @@
               target="_blank"
               rel="noopener"
             {% endif %}
-            class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-[0.625rem] text-inherit no-underline hover:opacity-60 active:opacity-100 states:text-inherit states:no-underline"
+            class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-1 text-inherit no-underline states:text-inherit states:no-underline states:opacity-60"
           >
             {{- block.settings.text | escape -}}
           </a>
         {%- else -%}
-          <p class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-[0.625rem]">
+          <p class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-1">
             {{- block.settings.text | escape -}}
           </p>
         {%- endif -%}
@@ -55,7 +55,7 @@
   {%- comment -%}
     Output all the html.
   {%- endcomment -%}
-  <div class="announcement-bar relative h-10 overflow-hidden">
+  <div class="announcement-bar relative overflow-hidden">
     <{{ wrapper_element | default: 'div' }}
       role="region"
       aria-label="{% render "format-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}">

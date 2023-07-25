@@ -18,8 +18,8 @@
                 case platform
                   when 'facebook'
                     assign share_url = 'https://www.facebook.com/sharer.php?u=' | append: shop.url | append: request.path
-                  when 'twitter'
-                    assign share_url = 'https://twitter.com/intent/tweet?url=' | append: shop.url | append: request.path
+                  when 'x'
+                    assign share_url = 'https://x.com/intent/tweet?url=' | append: shop.url | append: request.path
                   when 'pinterest'
                     assign share_url = 'https://pinterest.com/pin/create/button/?url=' | append: shop.url | append: request.path
                 endcase
@@ -276,7 +276,7 @@
                 "label": "Facebook"
               },
               {
-                "value": "twitter",
+                "value": "x",
                 "label": "Twitter"
               },
               {
@@ -301,7 +301,7 @@
           {
             "type": "platform",
             "settings": {
-              "platform": "twitter"
+              "platform": "x"
             }
           },
           {

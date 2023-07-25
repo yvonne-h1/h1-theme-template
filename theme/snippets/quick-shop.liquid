@@ -62,8 +62,8 @@
   {%- comment -%} Variant options {%- endcomment -%}
   <div class="quick-shop__options options justify-center">
     {% for variant in product.variants %}
-      {%- comment -%} Get value of the option {%- endcomment -%}
       {%- liquid
+        # Get value of the option
         if quick_shop_render_second_option == true and variant.option2
           assign option_label = variant.option2
         elsif product.has_only_default_variant == true
@@ -73,18 +73,14 @@
         else
           assign option_label = variant.option1
         endif
-      -%}
 
-      {%- comment -%} If this is a color option get hex color {%- endcomment -%}
-      {%- if is_color == true -%}
-        {%- liquid
+        # If this is a color option get hex color
+        if is_color == true
           assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
           assign color_option_name = option_label | handleize
           assign color_hex = ''
-        -%}
 
-        {%- comment -%} Loop through color mappings {%- endcomment -%}
-        {%- liquid
+          # Loop through color mappings
           for color in color_mappings
             assign color_name = color | split: '|' | first | handleize
 
@@ -92,16 +88,15 @@
               assign color_hex = color | split: '|' | last
             endif
           endfor
-        -%}
-      {%- endif -%}
+        endif
 
-      {%- comment -%} Output option {%- endcomment -%}
-      {%- liquid
+        # Output option
         assign disabled_classes = ''
         if variant.available == false
           assign disabled_classes = 'option__label--disabled'
         endif
       -%}
+
       <div class="quick-shop__option option">
         <input
           id="quick-shop__item-{{ variant.id }}"

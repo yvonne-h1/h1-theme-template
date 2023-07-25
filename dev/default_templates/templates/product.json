@@ -1,5 +1,8 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs"
+    },
     "main": {
       "type": "main-product",
       "blocks": {
@@ -60,18 +63,7 @@
           "settings": {}
         }
       },
-      "block_order": [
-        "badges",
-        "title",
-        "price",
-        "quantity_selector",
-        "variant_picker",
-        "buy_buttons",
-        "usp_1",
-        "usp_2",
-        "usp_3",
-        "description"
-      ],
+      "block_order": ["badges", "title", "price", "quantity_selector", "variant_picker", "buy_buttons", "usp_1", "usp_2", "usp_3", "description"],
       "settings": {
         "enable_sticky_info": true,
         "enable_media_slider": false,
@@ -85,5 +77,5 @@
       }
     }
   },
-  "order": ["main", "product-recommendations"]
+  "order": ["breadcrumbs", "main", "product-recommendations"]
 }

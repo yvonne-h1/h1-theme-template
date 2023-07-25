@@ -3,6 +3,10 @@ class HeaderCollapsibleComponent extends Collapsible {
     super();
     this.header = this.closest('[data-header]');
     this.headerWrapper = this.closest('.shopify-section-group-header-group');
+
+    // add a class to this section so the header doesn't take up space
+    this.headerWrapper.classList.add('group-[.header-hidden]/body:invisible');
+
     if (this.header) {
       this.inverse = !!this.header.classList.contains('header--inverse');
       this.backdrop = this.header.querySelector('.header-backdrop');
@@ -98,63 +102,6 @@ class HeaderCollapsibleComponent extends Collapsible {
         this.inverse && document.body.classList.remove('header-inverse-solid');
       }
     }
-  }
-}
-
-class MobileNavToggle extends ClassToggleComponent {
-  constructor() {
-    super();
-
-    this.header = this.closest('[data-header]');
-
-    if (this.header) {
-      this.backdrop = this.header.querySelector('.header-backdrop');
-      this.inverse = !!this.header.classList.contains('header--inverse');
-
-      // Extra events
-      document.addEventListener('keyup', (event) => {
-        this.onKeyUp(event);
-      } );
-
-      this.backdrop?.addEventListener('click', (event) => {
-        this.remove(event);
-      } );
-    }
-  }
-
-  events() {
-    if (!this.header) {
-      super.events();
-    }
-  }
-
-  onKeyUp(event) {
-    if (!document.body.classList.contains(window.drawerToggleClasses.mobileMenu)) {
-      return;
-    }
-    if (event?.code.toUpperCase() !== 'ESCAPE') {
-      return;
-    }
-    const { classToToggle } = this.options;
-    if (this.target?.classList.contains(classToToggle)) {
-      this.remove();
-    }
-  }
-
-  add() {
-    super.add();
-    trapFocus(this.header);
-  }
-
-  remove() {
-    super.remove();
-    this.closeAllSibblings();
-    removeTrapFocus();
-  }
-
-  closeAllSibblings() {
-    const collapsibles = this.target.querySelector('collapsible-component');
-    collapsibles.closeAll();
   }
 }
 
@@ -350,10 +297,6 @@ class HeaderComponent extends HTMLElement {
 
 if (!customElements.get('header-collapsible-component')) {
   customElements.define('header-collapsible-component', HeaderCollapsibleComponent);
-}
-
-if (!customElements.get('mobile-nav-toggle')) {
-  customElements.define('mobile-nav-toggle', MobileNavToggle);
 }
 
 if (!customElements.get('search-toggle')) {

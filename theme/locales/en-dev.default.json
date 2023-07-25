@@ -9,7 +9,7 @@
         "share_on_pinterest": "Pin on Pinterest"
       },
       "links": {
-        "twitter": "Twitter",
+        "x": "Twitter",
         "facebook": "Facebook",
         "pinterest": "Pinterest",
         "instagram": "Instagram",
@@ -78,7 +78,10 @@
     "of": "of",
     "next_slide": "Slide right",
     "previous_slide": "Slide left",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "mobile_menu": "Mobile menu",
+    "desktop_menu": "Desktop menu",
+    "footer_menu": "Footer menu"
   },
   "blogs": {
     "article": {

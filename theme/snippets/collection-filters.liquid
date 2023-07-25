@@ -29,38 +29,24 @@
         {%- comment -%} The collection filter drawer. {%- endcomment -%}
         <div
           class="
-            filter__drawer
-            group-[.filter]/grid:lg:inset-unset
-            group-[.filter]/grid:lg:max-w-unset
-            invisible
-            fixed
-            bottom-0
-            right-0
-            top-0
-            z-modal
-            w-full
+            filter__drawer invisible fixed bottom-0 right-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto text-sm leading-5 opacity-0 transition-all bg-color-default
 
-            max-w-sm
-            translate-x-full
-            overflow-y-auto
-            text-sm
-            leading-5
-            opacity-0
-
-            transition-all
-            bg-color-default
+            {% comment %} If the body group has class filter-is-open, add these styles {% endcomment %}
             group-[.filter-is-open]/body:visible
-
             group-[.filter-is-open]/body:translate-x-0
             group-[.filter-is-open]/body:opacity-100
-            group-[.filter]/grid:lg:visible
 
+            {% comment %} On LG screens, if the group has group/grid, add these styles {% endcomment %}
+            group-[.filter]/grid:lg:inset-unset
+            group-[.filter]/grid:lg:max-w-unset
+            group-[.filter]/grid:lg:visible
             group-[.filter]/grid:lg:relative
+            group-[.filter]/grid:lg:z-10
             group-[.filter]/grid:lg:translate-x-0
             group-[.filter]/grid:lg:opacity-100
           ">
           {%- comment -%} The collection drawer header. {%- endcomment -%}
-          <div class="filter__header sticky top-0 z-10 border-b  bg-white pb-6 pl-6 pr-6 pt-6">
+          <div class="filter__header sticky top-0 z-10 border-b bg-white pb-6 pl-6 pr-6 pt-6">
             <class-toggle-component
               class="flex justify-end"
               data-options='

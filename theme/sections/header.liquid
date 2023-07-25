@@ -20,7 +20,6 @@
 
   # Load interface snippets
   render 'search-modal', max_results: settings.predictive_search_max_results_per_type
-  render 'menu-mobile', menu_list: menu_list
 -%}
 
 {%- comment -%}
@@ -64,24 +63,25 @@
   data-header>
   <div class="header-nav content-wrapper content-wrapper-padding grid grid-cols-12 items-center gap-base">
     {%- comment -%} Toggle for mobile navigation {%- endcomment -%}
-    <div class="col-span-4 flex pb-3 pt-3 lg:hidden">
+    <div class="col-span-4 flex lg:hidden">
       {%- if menu_list != blank -%}
-        <mobile-nav-toggle
+        <class-toggle-component
           aria-expanded="false"
           aria-controls="mobileMenu"
           aria-haspopup="dialog"
           aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
-          class="menu-drawer__toggle-button -ml-3 block p-3 px-3 states:text-primary"
+          class="menu-drawer__toggle-button block"
           data-options='
             {
               "closeSiblings": true,
               "classToToggle": "mobile-menu-is-open"
             }
           '>
-          <button type="button">
+          <button type="button" class="-ml-3 p-3 states:text-primary">
             {%- render 'icons', icon: 'hamburger', icon_class: 'w-6' -%}
           </button>
-        </mobile-nav-toggle>
+          {%- render 'menu-mobile', menu_list: menu_list -%}
+        </class-toggle-component>
       {%- endif -%}
     </div>
 

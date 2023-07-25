@@ -8,7 +8,7 @@
 {%- comment -%}
   Icon list with search, account and cart icons.
 {%- endcomment -%}
-<ul class="icon-list col-span-4 flex flex-wrap items-center justify-end gap-y-6 pb-3 pt-3 lg:col-span-2">
+<ul class="icon-list col-span-4 flex flex-wrap items-center justify-end gap-2 lg:col-span-2">
   {%- comment -%} Search icon {%- endcomment -%}
   {%- if section.settings.show_search_icon or section.settings.md_show_search_icon -%}
     {%- liquid
@@ -39,7 +39,7 @@
           aria-controls
           aria-haspopup="dialog"
           aria-label="{%- render "format-translation", namespace: "general.search", key: "search", fallback: "Search" -%}"
-          class="px-1 py-3 text-inherit states:text-primary">
+          class="py-3 text-inherit states:text-primary">
           {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
         </button>
       </search-toggle>
@@ -61,7 +61,7 @@
     <li class="icon-list__item {{ customer_item_class }} {{ customer_item_class_md }}">
       <a
         href="{%- if customer -%}{{- routes.account_url -}}{%- else -%}{{- routes.account_login_url -}}{%- endif -%}"
-        class="header__icon block px-1 py-3 text-inherit states:text-primary">
+        class="header__icon block p-3 text-inherit states:text-primary {% if template.directory == 'customers' %}text-primary{%- endif -%}">
         {%- render 'icons', icon: 'user', icon_class: 'w-6' -%}
         <span class="sr-only">
           {%- liquid

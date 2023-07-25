@@ -22,10 +22,10 @@
     no-underline
     transition-all;
     @include states(':not([disabled])') {
+      @apply no-underline;
       background: var(--button-hover-background, inherit);
       border-color: var(--button-hover-border-color, inherit);
       color: var(--button-hover-text, inherit);
-      @apply no-underline;
     }
     @include disabled() {
       @apply pointer-events-none cursor-not-allowed opacity-50;
@@ -47,6 +47,14 @@
 
     svg {
       @apply fill-current;
+    }
+
+    // for a links with a button class
+    &:link {
+      color: var(--button-text, inherit);
+      @include states(':not([disabled])') {
+        color: var(--button-hover-text, inherit);
+      }
     }
   }
 
@@ -101,7 +109,7 @@
     --button-border-color: var(--color-white);
     --button-text: var(--color-white);
     --button-hover-background: var(--color-white);
-    --button-hover-border-color: var(--color-white);
+    --button-hover-border-color: var(--color-black);
     --button-hover-text: var(--color-black);
   }
 

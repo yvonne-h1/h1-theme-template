@@ -41,54 +41,53 @@
             <p>{{ instructions }}</p>
           {%- endif -%}
 
-          <div class="space-y-12">
-            {%- liquid
-              case section
-                when 'colors'
-                  render 'styleguide-colors'
-                when 'color-schemes'
-                  render 'styleguide-color-schemes'
-                when 'typography'
-                  render 'styleguide-typography'
-                when 'rte'
-                  render 'styleguide-rte'
-                when 'grid'
-                  render 'styleguide-grid'
-                when 'logo'
-                  render 'styleguide-logo'
-                when 'icons'
-                  render 'styleguide-icons'
-                when 'buttons'
-                  render 'styleguide-buttons'
-                when 'forms'
-                  render 'styleguide-forms'
-                when 'options'
-                  render 'styleguide-options'
-                when 'quantity-input'
-                  render 'quantity-input'
-                when 'collapsibles'
-                  render 'styleguide-collapsibles'
-                when 'toggle-element'
-                  render 'styleguide-toggle-element'
-                when 'badges'
-                  render 'styleguide-badges'
-                when 'prices'
-                  render 'styleguide-prices'
-                when 'product-cards'
-                  render 'styleguide-product-cards'
-                when 'article-cards'
-                  render 'styleguide-article-cards'
-                when 'collection-cards'
-                  render 'styleguide-collection-cards'
-              endcase
-            -%}
-          </div>
+          {%- liquid
+            case section
+              when 'colors'
+                render 'styleguide-colors'
+              when 'color-schemes'
+                render 'styleguide-color-schemes'
+              when 'typography'
+                render 'styleguide-typography'
+              when 'rte'
+                render 'styleguide-rte'
+              when 'grid'
+                render 'styleguide-grid'
+              when 'logo'
+                render 'styleguide-logo'
+              when 'icons'
+                render 'styleguide-icons'
+              when 'buttons'
+                render 'styleguide-buttons'
+              when 'forms'
+                render 'styleguide-forms'
+              when 'options'
+                render 'styleguide-options'
+              when 'quantity-input'
+                render 'quantity-input'
+              when 'collapsibles'
+                render 'styleguide-collapsibles'
+              when 'toggle-element'
+                render 'styleguide-toggle-element'
+              when 'badges'
+                render 'styleguide-badges'
+              when 'prices'
+                render 'styleguide-prices'
+              when 'product-cards'
+                render 'styleguide-product-cards'
+              when 'article-cards'
+                render 'styleguide-article-cards'
+              when 'collection-cards'
+                render 'styleguide-collection-cards'
+            endcase
+          -%}
         </div>
       {%- endfor -%}
     </div>
 
     {% comment %} Menu {% endcomment %}
-    <div class="sticky top-24 hidden self-start rounded border border-dashed border-primary p-4 text-sm lg:col-span-3 lg:block">
+    <div class="sticky top-10 hidden max-h-90vh self-start overflow-auto rounded border border-dashed border-primary p-4 text-sm group-[.header-sticky:not(.header-hidden)]/body:top-20 group-[.header-sticky:not(.header-hidden)]/body:max-h-80vh
+      lg:col-span-3 lg:block">
       <h2 class="h5">Index</h2>
       <ul class="z-10 flex flex-col gap-2">
         {%- for section in style_guide_sections -%}

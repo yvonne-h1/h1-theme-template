@@ -2,9 +2,7 @@
   Define on which templates breadcrumbs will be shown.
   Can be: index,collection,list-collections,product,blog,article,page,cart,login,register,account,addresses,order,reset_password'
 {% endcomment %}
-{%- assign template_arr = 'collection,list-collections,product,blog,article,page,cart,login,register,account,addresses,order,reset_password'
-  | split: ','
--%}
+{%- assign template_arr = 'collection,list-collections,product,blog,article,page,cart,login,register,account,addresses,order,reset_password' | split: ',' -%}
 {%- if template_arr contains template.name -%}
   {%- comment -%} hide on mobile {%- endcomment -%}
   {%- liquid
@@ -152,13 +150,10 @@
     assign breadcrumb_arr = breadcrumb_str | strip_newlines | remove_first: '||' | split: '||' | uniq
   -%}
 
-  {%- comment -%}
-    RENDER BREADCRUMB
-  {%- endcomment -%}
   {%- comment -%} Render breadcrumbs {%- endcomment -%}
   {% if breadcrumb_arr != blank %}
     <div class="content-wrapper content-wrapper-padding my-4 md:my-6 {{ hide_on_mobile_class }}">
-      <ol class="breadcrumbs flex {{ section.settings.alignment }} list-none gap-2 text-xs font-bold leading-5 text-gray-400 md:text-sm">
+      <ol class="breadcrumbs flex {{ section.settings.alignment }} list-none gap-2 text-xs">
         {%- comment -%} Loop the array {%- endcomment -%}
         {%- for path in breadcrumb_arr -%}
           {%- liquid
@@ -196,7 +191,7 @@
             else
               if path_url != blank and path_url != '#'
                 echo '<li class="breadcrumbs__item">'
-                echo '<a class="breadcrumbs__link text-gray-400 transition-colors states:no-underline states:text-color-primary" href="'
+                echo '<a class="breadcrumbs__link text-primary transition-colors states:no-underline" href="'
                 echo path_url | strip
                 echo '">'
                 echo path_name_item
@@ -211,7 +206,7 @@
                   echo '</li>'
                 endif
               endif
-              echo '<li class="breadcrumbs__divider before:content-empty before:block border-l border-gray-400 h-4 w-0 mt-0.5"></span>'
+              echo '<li class="breadcrumbs__divider before:content-empty before:block border-l border-gray border- h-4 w-0 mt-0.5"></span>'
             endif
           -%}
         {%- endfor -%}

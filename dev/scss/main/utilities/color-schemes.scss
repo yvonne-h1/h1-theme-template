@@ -8,10 +8,12 @@
     --text-link-color: var(--text-color-default);
     --text-link-color-states: var(--text-color-default);
     a {
-      color: var(--text-link-color);
-      text-decoration: underline;
-      @include states() {
-        text-decoration: none;
+      &:not(.button) {
+        color: var(--text-link-color);
+        text-decoration: underline;
+        @include states() {
+          text-decoration: none;
+        }
       }
     }
 

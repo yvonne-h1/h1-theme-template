@@ -1,8 +1,11 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs"
+    },
     "collection-settings": {
       "type": "main-collection"
     }
   },
-  "order": ["collection-settings"]
+  "order": ["breadcrumbs", "collection-settings"]
 }

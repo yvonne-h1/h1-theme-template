@@ -1,5 +1,8 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs"
+    },
     "main": {
       "type": "main-article",
       "blocks": {
@@ -19,5 +22,5 @@
       "block_order": ["title", "featured_image"]
     }
   },
-  "order": ["main"]
+  "order": ["breadcrumbs", "main"]
 }

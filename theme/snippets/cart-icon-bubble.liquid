@@ -12,7 +12,7 @@
 
   assign classes = 'header__icon relative px-1 py-3 text-inherit states:text-primary'
   if request.page_type == 'cart'
-    assign classes = classes | append: ' pointer-events-none'
+    assign classes = classes | append: ' pointer-events-none text-primary'
   endif
 -%}
 

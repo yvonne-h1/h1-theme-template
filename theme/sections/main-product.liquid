@@ -1,28 +1,43 @@
 {%- comment -%} Import styles for this section {%- endcomment -%}
 {%- liquid
   render 'import-styles', file_name: 'component-quantity-input.css', force: true
-
   render 'import-styles', file_name: 'section-main-product.css'
   render 'import-styles', file_name: 'module-fancybox.css'
   render 'import-styles', file_name: 'component-fancybox.css'
 -%}
 
-{%- assign product_form_id = 'product-form-' | append: section.id -%}
+{%- assign product_form_id = 'product-form-' | append: product.id -%}
 
 {%- capture container_content -%}
-  <div class="grid grid-cols-12 gap-0">
+{%- comment -%} Product title {%- endcomment -%}
+<h1 class="product__title h5 my-2 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
+  {{ product.title | escape }}
+</h1>
+  <div class="product grid grid-cols-12 gap-0">
 
-    {% comment %} Product media {% endcomment %}
+    {% comment %} Left column: Product media {% endcomment %}
     <div class="product-media relative col-span-12 md:col-span-7 lg:col-span-8">
-      {%- if section.settings.enable_media_slider == true -%}
-        {%- render 'product-media-slider' -%}
-      {%- else -%}
-        {%- render 'product-media' -%}
-      {%- endif -%}
+
+      {%- comment -%} Skiplink so users can go straight to the product info {%- endcomment -%}
+      <a class="button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline" href="#ProductInfo">
+        {% render "format-translation",
+          namespace: "accessibility",
+          key: "skip_to_product_info",
+          fallback: "Skip to product information"
+        -%}
+      </a>
+
+      {%- liquid
+        if section.settings.enable_media_slider == true
+          render 'product-media-slider'
+        else
+          render 'product-media'
+        endif
+      -%}
     </div>
 
-    {%- comment -%} Sidebar {%- endcomment -%}
-    <div class="col-span-12 md:col-span-5 lg:col-span-4">
+    {%- comment -%} Right col: Product info {%- endcomment -%}
+    <div id="ProductInfo" class="product__info col-span-12 md:col-span-5 lg:col-span-4">
       <product-info
         class="product-info-col block {% if section.settings.enable_sticky_info == true %} product-info-col--sticky sticky top-0 transition-all duration-300{% endif %} px-[var(--content-wrapper-padding)] pt-6"
         data-product-info
@@ -39,20 +54,15 @@
 
           {%- comment -%} Product badges {%- endcomment -%}
           {%- when 'badges' -%}
+            {%- assign badges_classes = 'inset-0 relative ' | append: block.settings.badge_size -%}
             {% capture badges %}
-              {%- render 'product-badges', product: product, class: 'inset-0 relative badges-md' -%}
+              {%- render 'product-badges', product: product, class: badges_classes -%}
             {% endcapture %}
             {% if badges != blank %}
               <div class="my-2 hidden first:mt-0 last:mb-0 empty:my-0 md:block" {{ block.shopify_attributes }}>
                 {{- badges -}}
               </div>
             {% endif %}
-
-          {%- comment -%} Product title {%- endcomment -%}
-          {%- when 'title' -%}
-            <h1 class="product__title h5 my-2 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
-              {{ product.title | escape }}
-            </h1>
 
           {%- comment -%} Text block {%- endcomment -%}
           {%- when 'text' -%}
@@ -64,7 +74,7 @@
 
           {%- comment -%} Product price {%- endcomment -%}
           {%- when 'price' -%}
-            <div class="product__price my-2 text-base leading-7 first:mt-0 last:mb-0 no-js:hidden" id="price-{{ section.id }}" {{ block.shopify_attributes }}>
+            <div class="product__price my-2 text-base leading-7 first:mt-0 last:mb-0 no-js:hidden" id="price-{{ product.id }}" {{ block.shopify_attributes }}>
               {%- render 'format-price',
                 product: product,
                 use_variant: true,
@@ -91,13 +101,15 @@
           {%- comment -%} usp content {%- endcomment -%}
           {%- when 'usp' -%}
             {%- if block.settings.heading != blank -%}
-              <p class="my-2 flex w-full items-center justify-items-start gap-4 text-left text-xs leading-5 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
-                {%- if block.settings.icon != blank and block.settings.icon != 'none' -%}
-                  <span class="rounded-full bg-primary-200 p-1">
+              <p class="usp my-2 flex w-full items-center justify-items-start gap-4 text-left text-xs first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon != 'none' -%}
+                  <span class="usp__icon rounded-full bg-primary-200 p-2">
                     {%- render 'icons', icon: block.settings.icon, icon_class: 'w-4 shrink-0 grow-0' -%}
                   </span>
                 {%- endif -%}
-                {{- block.settings.heading -}}
+                <span class="usp__text">
+                  {{- block.settings.heading -}}
+                </span>
               </p>
             {%- endif -%}
 
@@ -135,7 +147,7 @@
                     assign quantity_label_class = 'hidden'
                   endif
                 -%}
-                <label class="quantity__label mb-2 block text-sm font-medium {{ quantity_label_class }}" for="Quantity-{{ section.id }}">
+                <label class="quantity__label mb-2 block text-sm font-medium {{ quantity_label_class }}" for="Quantity-{{ product.id }}">
                   {%- render 'format-translation',
                     namespace: "products.product.quantity",
                     key: "label",
@@ -145,7 +157,7 @@
 
                 {% comment %} Quantity input {% endcomment %}
                 {%- render 'quantity-input',
-                  id: section.id,
+                  id: product.id,
                   value: 1,
                   qty_product: product,
                   type: 'pdp'
@@ -161,105 +173,115 @@
                 {%- comment -%} Show variants as radio buttons {%- endcomment -%}
                 <variant-radios
                   class="product__variant-selector product__variant-selector--buttons block no-js:hidden"
-                  data-section="{{ section.id }}"
+                  data-section="{{ product.id }}"
                   data-url="{{ product.url }}"
-                  {{ block.shopify_attributes }}
-                >
+                  {{ block.shopify_attributes }}>
+
                   {%- for option in product.options_with_values -%}
-                      {%- comment -%} Check if this is a color filter {%- endcomment -%}
-                      {%- liquid
-                        assign option_size = product.options.size
-                        assign is_color = false
-                        assign color_variant_label = settings.color_filter_name | handleize
-                        assign color_label = option.name | handleize
-                        if color_variant_label == color_label
-                          assign is_color = true
-                        endif
-                      -%}
+                    {%- liquid
+                      # Check if this is a color filter
+                      assign is_color = false
+                      assign option_size = product.options.size
+                      assign color_variant_label = settings.color_filter_name | handleize
+                      assign color_label = option.name | handleize
 
-                      <fieldset class="options options--{{ color_label }} js product-form__input my-3 flex items-center last:mb-0" data-option-group="{{ forloop.index | minus: 1 }}">
-                        <legend class="mb-2 text-sm font-medium {% if block.settings.picker_label == false %} sr-only{% endif %}">
-                          {{- option.name -}}
-                        </legend>
-                        {%- for value in option.values -%}
-                          {%- assign index = forloop.index -%}
+                      if color_variant_label == color_label
+                        assign is_color = true
+                      endif
+                    -%}
 
-                          {% comment %} Check if it is available if we only have 1 option {% endcomment %}
-                          {%- liquid
-                            assign index = forloop.index
-                            assign option_available_class = ''
+                    <fieldset class="options options--{{ color_label }} js product-form__input my-3 flex items-center last:mb-0" data-option-group="{{ forloop.index | minus: 1 }}">
 
-                            if option_size == 1
-                              for loop_variant in product.variants
-                                if loop_variant.option1 == value
-                                  if loop_variant.available == false
-                                    assign option_available_class = 'option__label--disabled'
-                                  endif
+                      <legend class="mb-2 text-sm font-medium {% if block.settings.picker_label == false %} sr-only{% endif %}">
+                        {{- option.name -}}
+                      </legend>
+
+                      {%- for value in option.values -%}
+                        {%- liquid
+                          assign index = forloop.index
+
+                          # Check if it is available if we only have 1 option
+                          assign index = forloop.index
+                          assign option_available_class = ''
+
+                          if option_size == 1
+                            for loop_variant in product.variants
+                              if loop_variant.option1 == value
+                                if loop_variant.available == false
+                                  assign option_available_class = 'option__label--disabled'
                                 endif
-                              endfor
-                            endif
+                              endif
+                            endfor
+                          endif
+
+                          # for labels with only 3 letters, make them uppercase
+                          assign value_text = value
+                          if value.size < 4
+                            assign value_text = value | upcase
+                          endif
+                        -%}
+
+                        {%- capture label -%}
+                          <label class="option__label option__label--{{ color_label }} {{ option_available_class }}" for="{{ product.id }}-{{ option.name }}-{{ index }}" data-option-label>
+                            {{ value_text }}
+                          </label>
+                        {%- endcapture -%}
+
+                        <div class="option option--{{ color_label }}" data-option>
+                          <input
+                            class="option__input option__input--{{ color_label }} sr-only"
+                            type="radio"
+                            id="{{ product.id }}-{{ option.name }}-{{ index }}"
+                            name="{{ option.name }}"
+                            value="{{ value | escape }}"
+                            data-option-input
+                            {% if option.selected_value == value %}checked{% endif %}
+                          >
+
+                          {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
+                          {%- if is_color -%}
+                            {%- liquid
+                            assign variant_color = value | handleize
+                            assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
+                            assign color_is_mapped = false
+                            assign color_hex = ''
                           -%}
 
-                          {%- capture label -%}
-                            <label class="option__label option__label--{{ color_label }} {{ option_available_class }}" for="{{ section.id }}-{{ option.name }}-{{ index }}" data-option-label>
-                              {{ value }}
-                            </label>
-                          {%- endcapture -%}
+                            {%- comment -%} Loop through color mapping {%- endcomment -%}
+                            {%- for color in color_mappings -%}
+                              {%- assign color_name = color | split: '|' | first | handleize -%}
 
-                          <div class="option option--{{ color_label }}" data-option>
-
-                            <input
-                              class="option__input option__input--{{ color_label }} sr-only"
-                              type="radio"
-                              id="{{ section.id }}-{{ option.name }}-{{ index }}"
-                              name="{{ option.name }}"
-                              value="{{ value | escape }}"
-                              data-option-input
-                              {% if option.selected_value == value %}checked{% endif %}
-                            >
-
-                            {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
-                            {%- if is_color -%}
-                              {%- liquid
-                                assign variant_color = value | handleize
-                                assign color_mappings = settings.color_mappings | split: ','
-                                assign color_is_mapped = false
-                              -%}
-
-                              {%- comment -%} Loop through color mapping {%- endcomment -%}
-                              {%- for color in color_mappings -%}
+                              {%- if color_name == variant_color -%}
                                 {%- liquid
-                                  assign variant_color = value | handleize
-                                  assign color_name = color | split: '|' | first | handleize
+                                  # Render with background-color
                                   assign color_hex = color | split: '|' | last
+                                  assign color_is_mapped = true
                                 -%}
-                                {%- if color_name == variant_color -%}
 
-                                  {%- comment -%} Render with background-color {%- endcomment -%}
-                                  {%- assign color_is_mapped = true -%}
-                                  <label
-                                    class="option__label option__label--{{ color_label }}"
-                                    for="{{ section.id }}-{{ option.name }}-{{ index }}"
-                                    style="background-color: {{ color_hex }};"
-                                    data-option-label
-                                  >
-                                    <span class="sr-only">{{ value }}</span>
-                                  </label>
-                                {%- endif -%}
-                              {%- endfor -%}
+                                <label
+                                  class="option__label option__label--{{ color_label }}"
+                                  for="{{ product.id }}-{{ option.name }}-{{ index }}"
+                                  style="background-color: {{ color_hex }};"
+                                  title="{{ value | escape }}"
+                                  data-option-label
+                                >
+                                  <span class="sr-only">{{ value_text }}</span>
+                                </label>
+                              {%- endif -%}
+                            {%- endfor -%}
 
-                              {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
-                              {%- unless color_is_mapped -%}
-                                {{ label }}
-                              {%- endunless -%}
-
-                            {%- comment -%} Else render default filter option {%- endcomment -%}
-                            {%- else -%}
+                            {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
+                            {%- unless color_is_mapped -%}
                               {{ label }}
-                            {%- endif -%}
-                          </div>
-                        {%- endfor -%}
-                      </fieldset>
+                            {%- endunless -%}
+
+                          {%- comment -%} Else render default filter option {%- endcomment -%}
+                          {%- else -%}
+                            {{ label }}
+                          {%- endif -%}
+                        </div>
+                      {%- endfor -%}
+                    </fieldset>
                   {%- endfor -%}
                   <script type="application/json">
                     {{ product.variants | json }}
@@ -271,13 +293,13 @@
                 {%- render 'import-styles', file_name: 'component-form.css' -%}
 
                 {%- comment -%} Show variants in dropdowns {%- endcomment -%}
-                <variant-selects class="product__variant-selector product__variant-selector--select block no-js:hidden" data-section="{{ section.id }}" data-url="{{ product.url }}" {{ block.shopify_attributes }}>
+                <variant-selects class="product__variant-selector product__variant-selector--select block no-js:hidden" data-section="{{ product.id }}" data-url="{{ product.url }}" {{ block.shopify_attributes }}>
                   {%- for option in product.options_with_values -%}
                     <div class="field">
-                      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+                      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Option-{{ product.id }}-{{ forloop.index0 }}">
                         {{ option.name }}
                       </label>
-                      <select id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                      <select id="Option-{{ product.id }}-{{ forloop.index0 }}"
                         class="field__select"
                         name="options[{{ option.name | escape }}]"
                       >
@@ -298,14 +320,14 @@
 
             <noscript>
               <div class="product-form__input field{% if product.has_only_default_variant %} hidden{% endif %}">
-                <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ section.id }}">
+                <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ product.id }}">
                   {%- render 'format-translation',
                     namespace: "products.product",
                     key: "product_variants",
                     fallback: "Variants"
                   -%}
                 </label>
-                <select name="id" id="Variants-{{ section.id }}" class="field__select">
+                <select name="id" id="Variants-{{ product.id }}" class="field__select">
                   {%- for variant in product.variants -%}
                     <option
                       {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
@@ -472,7 +494,33 @@
       {
         "type": "badges",
         "name": "Badges",
-        "limit": 1
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id": "badge_size",
+            "default": "",
+            "label": "Badge size",
+            "options": [
+              {
+                "value": "",
+                "label": "Default (responsive)"
+              },
+              {
+                "value": "badges--sm",
+                "label": "Small"
+              },
+              {
+                "value": "badges--md",
+                "label": "Medium"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": "Define the colors displayed as buttons in the theme settings under 'General'."
+          }
+        ]
       },
       {
         "type": "title",

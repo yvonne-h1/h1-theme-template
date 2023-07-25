@@ -208,7 +208,7 @@ if (!customElements.get('collapsible-component')) {
         return false;
       }
 
-      // Close sibblings if option is on
+      // Close Siblings if option is on
       this.options.closeSiblings && this.closeSiblings(group);
 
       // Open active group

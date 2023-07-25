@@ -33,7 +33,7 @@ if (!customElements.get('class-toggle-component')) {
         };
       }
       // For the menu drawer, filters, cart drawer and search, define the content they expand
-      if (this.options.classToToggle === window.drawerToggleClasses.mobileMenu) this.targetID = 'menuDrawer';
+      if (this.options.classToToggle === window.drawerToggleClasses.mobileMenu) this.targetID = 'mobileMenu';
       if (this.options.classToToggle === window.drawerToggleClasses.cartDrawer) this.targetID = 'cartDrawer';
       if (this.options.classToToggle === window.drawerToggleClasses.filters) this.targetID = 'CollectionFiltersForm';
       if (this.options.classToToggle === window.drawerToggleClasses.headerSearch) this.targetID = 'SearchModal';
@@ -158,6 +158,8 @@ if (!customElements.get('class-toggle-component')) {
       if (classToToggle === window.drawerToggleClasses.mobileMenu || classToToggle === window.drawerToggleClasses.filters || classToToggle === window.drawerToggleClasses.headerSearch || classToToggle === window.drawerToggleClasses.cartDrawer) {
         document.addEventListener('keyup', this.keyUpCloseEvent.bind(this));
         document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', true));
+
+        console.log('here', document.getElementById(this.targetID));
 
         trapFocus(document.getElementById(this.targetID));
       }

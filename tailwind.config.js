@@ -84,6 +84,14 @@ module.exports = {
       content: {
         empty: '\'\'',
       },
+      height: {
+        '80vh': '80vh',
+        '90vh': '90vh',
+      },
+      maxHeight: {
+        '80vh': '80vh',
+        '90vh': '90vh',
+      },
       spacing: {
         'element-spacing': 'var(--element-spacing)',
       },
@@ -229,7 +237,7 @@ module.exports = {
           },
         },
         hr: {
-          backgroundColor: 'var(--border-color-default)',
+          backgroundColor: 'currentColor',
           marginBlock: '40px',
           display: 'block',
           height: '1px',
@@ -254,6 +262,7 @@ module.exports = {
           margin: 0,
         },
       }),
+
       /**
          * Utilities
          * Add base color classes that can be reused for certain specific css selectors

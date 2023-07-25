@@ -10,10 +10,7 @@
             {{- block.settings.heading | escape -}}
           </{{ block.settings.heading_element }}>
         {%- when 'text' -%}
-          <div
-            class="rich-text__text rte {{ block.settings.text_width_layout }}"
-            {{ block.shopify_attributes }}
-          >
+          <div class="rich-text__text rte {{ block.settings.text_width_layout }}" {{ block.shopify_attributes }}>
             {{- block.settings.text -}}
           </div>
         {%- when 'button' -%}
@@ -277,7 +274,7 @@
             "type": "select",
             "id": "button_color_scheme",
             "default": "",
-            "label": "Button  type",
+            "label": "Button type",
             "options": [
               {
                 "value": "",
