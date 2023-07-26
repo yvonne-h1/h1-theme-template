@@ -232,7 +232,7 @@
   <a
     href="{{ product_link }}"
     title="{{ product_object.title | escape }}"
-    class="product-card__information block pt-2 text-sm leading-5 no-underline text-color-default states:no-underline states:text-color-default {{ product_card_information_classes }}"
+    class="product-card__information block pt-2 text-sm no-underline text-color-default states:no-underline states:text-color-default {{ product_card_information_classes }}"
     tabindex="-1">
     {%- comment -%} Vendor {%- endcomment -%}
     {%- if show_vendor -%}
@@ -261,7 +261,7 @@
       assign product_card_price_classes = 'product-card__price--alt mt-2 text-left md:text-center justify-between md:justify-center'
     endif
   -%}
-  <div class="product-card__price flex items-center text-sm leading-5 {{ product_card_price_classes }}">
+  <div class="product-card__price flex items-center text-sm {{ product_card_price_classes }}">
     {% comment %} Render formatted price {% endcomment %}
     {% render 'format-price', product: product_object %}
 

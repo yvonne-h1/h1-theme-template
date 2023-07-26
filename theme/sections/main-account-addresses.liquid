@@ -42,11 +42,11 @@
       {%- for address in customer.addresses -%}
         <li class="address" data-address>
 
-          <div class="rounded-2xl border bg-white p-6 text-sm  leading-5">
+          <div class="rounded-2xl border bg-white p-6 text-sm ">
 
             {% comment %} Default badge {% endcomment %}
             {%- if address == customer.default_address -%}
-              <div class="address__default mb-2 inline-flex bg-accent px-3 py-1 text-xs font-medium leading-5 text-white">
+              <div class="address__default mb-2 inline-flex bg-accent px-3 py-1 text-xs font-medium text-white">
                 {%-
                   render 'format-translation',
                   namespace: 'customer.addresses',
@@ -290,7 +290,7 @@
           fallback: 'Add new address'
         -%}
       </button>
-      <div id="AddAddress" class="mt-4 hidden rounded-2xl border bg-white p-6 text-sm leading-5 peer-aria-expanded/add:block">
+      <div id="AddAddress" class="mt-4 hidden rounded-2xl border bg-white p-6 text-sm peer-aria-expanded/add:block">
         {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading', class: 'form addresses__add-form' -%}
           <h2 class="text-lg font-medium" id="AddressNewHeading">
             {%-

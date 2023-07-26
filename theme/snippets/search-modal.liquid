@@ -1,36 +1,19 @@
+{%- comment -%} The backdrop for when the search is open state. {%- endcomment -%}
+<class-toggle-component
+  data-options='
+    {
+      "classToToggle": "search-is-open"
+    }
+  '
+  tabindex="-1"
+  class="search-modal__backdrop backdrop group-[.search-is-open]/body:backdrop--active z-modal-backdrop"></class-toggle-component>
+
 {%- comment -%} Search modal component. {%- endcomment -%}
-
-<div class="search-modal relative">
-  {%- comment -%} The backdrop for when the search is open state. {%- endcomment -%}
-  <class-toggle-component
-    data-options='
-      {
-        "classToToggle": "header-search-is-open",
-        "target": "body"
-      }
-    '
-    class="search-modal__backdrop backdrop group-[.header-search-is-open]/body:backdrop--active z-modal-backdrop"></class-toggle-component>
-
-  <div
-    class="search-modal__content fixed bottom-0 left-0 right-0 top-0 z-modal hidden overflow-y-auto bg-white px-6 py-6 group-[.header-search-is-open]/body:block lg:absolute lg:bottom-[unset] lg:max-h-[72vh] lg:p-4"
-    role="dialog"
-    aria-modal="true"
-    aria-label="{% render "format-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
-    <search-toggle
-      class="block"
-      data-options='
-        {
-          "classToToggle": "header-search-is-open",
-          "target": "body"
-        }
-      '>
-      <button
-        type="button"
-        class="-mr-3 -mt-3 mb-8 ml-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:right-0 lg:top-3 lg:z-10 lg:mb-0 lg:ml-0 lg:mr-[var(--content-wrapper-padding)] lg:mt-0"
-        aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}">
-        {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
-      </button>
-    </search-toggle>
-    {%- render 'search-form', predictive_search_enabled: true, prefix: 'desktop', max_results: max_results -%}
-  </div>
+<div
+  id="SearchModal"
+  class="search-modal__content fixed bottom-0 left-0 right-0 top-0 z-modal hidden overflow-y-auto bg-white px-6 py-6 group-[.search-is-open]/body:block lg:absolute lg:bottom-[unset] lg:max-h-[72vh] lg:p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{% render "format-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
+  {%- render 'search-form', predictive_search_enabled: true, prefix: 'desktop', max_results: max_results -%}
 </div>

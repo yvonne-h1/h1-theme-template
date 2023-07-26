@@ -1,6 +1,14 @@
 /*
   Toggle class on another element.
 
+  Options:
+    classToToggle: The class to toggle
+    target: The element the class will be applied to. 'body' is default
+    onHover: Open on hover instead on click
+    hoverDelay: Delay after hovering
+    ariaExpanded: For accessibility purposes set this when you are displaying a modal
+    isDropdown: if this is an element with only a menu-list dropdown, set to true, so the focus is applied properly (see styleguide-forms.liquid for an example)
+
   HTML Usage:
   <class-toggle-component data-options='{}'>
     <button>Click me</button>
@@ -15,13 +23,11 @@ if (!customElements.get('class-toggle-component')) {
       // Options
       this.options = {
         classToToggle: 'toggle--is-active',
-        toggleTriggerClass: '',
         target: 'body',
         onHover: false,
         hoverDelay: 0,
-        preventDefault: true,
-        stopPropagation: true,
         ariaExpanded: false,
+        isDropdown: false,
       };
 
       // Get options from element data and combine with this.options
@@ -32,14 +38,29 @@ if (!customElements.get('class-toggle-component')) {
           ...dataOptions,
         };
       }
+
       // For the menu drawer, filters, cart drawer and search, define the content they expand
-      if (this.options.classToToggle === window.drawerToggleClasses.mobileMenu) this.targetID = 'mobileMenu';
       if (this.options.classToToggle === window.drawerToggleClasses.cartDrawer) this.targetID = 'cartDrawer';
       if (this.options.classToToggle === window.drawerToggleClasses.filters) this.targetID = 'CollectionFiltersForm';
-      if (this.options.classToToggle === window.drawerToggleClasses.headerSearch) this.targetID = 'SearchModal';
+
+      // for the mobile menu, define the collapsible menu so we can close it, otherwise the wrong pane might be visible upon opening
+      if (this.options.classToToggle === window.drawerToggleClasses.mobileMenu) {
+        this.targetID = 'mobileMenu';
+
+        this.mobileMenuCollapsible = document.getElementById(this.targetID).querySelector('collapsible-component');
+      }
+
+      // For the search modal, close other modals
+      if (this.options.classToToggle === window.drawerToggleClasses.headerSearch) {
+        this.targetID = 'SearchModal';
+
+        // remove the classes for when other elements are open
+        document.body.classList.remove('desktop-submenu-is-open');
+        document.body.classList.remove(window.drawerToggleClasses.mobileMenu);
+      }
 
       // All toggle components should have a button for accessibility purposes
-      this.button = this.querySelector('button') || null;
+      this.button = document.querySelector(`[aria-controls="${this.targetID}"`) || this.querySelector('button') || null;
 
       // Reduce actions (So the event can also be removed)
       this.reducer = {
@@ -78,14 +99,14 @@ if (!customElements.get('class-toggle-component')) {
     */
     debounceClickEvent(e) {
       if (!e) return false;
-      this.preventDefault(e);
-      this.stopPropagation(e);
+      e.preventDefault(e);
+      e.stopPropagation(e);
       this.toggle();
     }
 
     /*
       Debounced mouse event
-      @param e {object}: mouseevent
+      @param e {object}: mouse event
       @param type {string}: open/close/closeAll
       Called by add event listener -> reducer.
     */
@@ -107,38 +128,42 @@ if (!customElements.get('class-toggle-component')) {
       debouncer(type);
     }
 
-    // @param e {object}: click event
-    preventDefault(e) {
-      if (this.options.preventDefault) {
-        e.preventDefault();
-      }
-    }
-
-    // @param e {object}: click event
-    stopPropagation(e) {
-      if (this.options.stopPropagation) {
-        e.stopPropagation();
-      }
-    }
-
     keyUpCloseEvent(event) {
       if (event?.code?.toUpperCase() !== 'ESCAPE') return;
       this.remove();
-      removeTrapFocus();
+
+      removeTrapFocus(this.button);
     }
 
     add() {
-      const { classToToggle, toggleTriggerClass } = this.options;
+      console.trace('add');
+      // add the event listener to close the modal again
+      document.addEventListener('keyup', this.keyUpCloseEvent.bind(this));
+
+      const { classToToggle } = this.options;
+
+      // toggle the class
       if (this.target) {
         this.target.classList.add(classToToggle);
       }
-      if (toggleTriggerClass) {
-        this.classList.add(toggleTriggerClass);
+
+      // focus the element and listen for key up event so we can close on ESCAPE
+      if (this.targetID) {
+        document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', true));
+
+        const focusTarget = document.getElementById(this.targetID);
+        const elementToFocus = (this.targetID === 'SearchModal') ? focusTarget.querySelector('input') : focusTarget;
+
+        trapFocus(focusTarget, elementToFocus);
       }
+
       // Switch aria-expanded
       if (this.options.ariaExpanded && this.button) {
-        console.trace('here');
-        this.button.setAttribute('aria-expanded', false);
+        this.button.setAttribute('aria-expanded', true);
+      }
+
+      // Switch aria-expanded
+      if (this.isDropdown) {
 
         // get the modal this trigger controls and trap the focus on the expanded area
         const targetID = this.button.attributes['aria-controls'].value;
@@ -150,33 +175,40 @@ if (!customElements.get('class-toggle-component')) {
           elements.forEach(el => el.setAttribute('tabindex', 0));
           trapFocus(targetEl, targetEl.firstElementChild);
         }
-
-        document.addEventListener('keyup', this.keyUpCloseEvent.bind(this));
-      }
-
-      // listen for key up event
-      if (classToToggle === window.drawerToggleClasses.mobileMenu || classToToggle === window.drawerToggleClasses.filters || classToToggle === window.drawerToggleClasses.headerSearch || classToToggle === window.drawerToggleClasses.cartDrawer) {
-        document.addEventListener('keyup', this.keyUpCloseEvent.bind(this));
-        document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', true));
-
-        console.log('here', document.getElementById(this.targetID));
-
-        trapFocus(document.getElementById(this.targetID));
       }
     }
 
     remove() {
-      const { classToToggle, toggleTriggerClass } = this.options;
+      console.trace('remove');
+      const { classToToggle } = this.options;
       if (this.target) {
         this.target.classList.remove(classToToggle);
       }
-      if (toggleTriggerClass) {
-        this.classList.remove(toggleTriggerClass);
-      }
+
       // Switch aria-expanded
       if (this.options.ariaExpanded && this.button) {
         this.button.setAttribute('aria-expanded', false);
+      }
 
+      // remove the trap focus
+      if (this.targetID) {
+        removeTrapFocus(this.button);
+
+        this.mobileMenuCollapsible?.closeAll();
+
+        // Close the predictive search
+        const predictiveSearch = document.querySelector('predictive-search');
+        if (predictiveSearch && classToToggle === window.drawerToggleClasses.headerSearch) {
+          predictiveSearch.close();
+        }
+
+        document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', false));
+
+        // return the focus to the trigger
+        this.button?.focus();
+      }
+
+      if (this.isDropdown) {
         // get the modal this trigger controls and trap the focus on the expanded area
         const targetID = this.button.attributes['aria-controls'].value;
         const targetEl = document.getElementById(targetID);
@@ -188,23 +220,7 @@ if (!customElements.get('class-toggle-component')) {
           removeTrapFocus(targetEl);
         }
 
-        document.addEventListener('keyup', this.keyUpCloseEvent.bind(this));
-      }
-
-      if (classToToggle === window.drawerToggleClasses.mobileMenu || classToToggle === window.drawerToggleClasses.filters || classToToggle === window.drawerToggleClasses.headerSearch || classToToggle === window.drawerToggleClasses.cartDrawer) {
-
-        removeTrapFocus(this.button);
-
-        const predictiveSearch = document.querySelector('predictive-search');
-        if (predictiveSearch && classToToggle === window.drawerToggleClasses.headerSearch) {
-          predictiveSearch.close();
-        }
-
-        document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', false));
         document.removeEventListener('keyup', this.keyUpCloseEvent.bind(this));
-
-        // return the focus to the trigger
-        this.button?.focus();
       }
     }
 
@@ -221,6 +237,5 @@ if (!customElements.get('class-toggle-component')) {
   }
 
   window.ClassToggleComponent = ClassToggleComponent;
-
   customElements.define('class-toggle-component', ClassToggleComponent);
 }

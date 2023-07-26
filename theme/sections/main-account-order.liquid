@@ -51,7 +51,7 @@
           -%}:
           {{ order.financial_status_label }}
         </p>
-        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic leading-5">
+        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic">
           {{- order.billing_address | format_address | replace: '<br>', '</p><p>' -}}
         </address>
       </div>
@@ -76,7 +76,7 @@
         </p>
 
 
-        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic leading-5">
+        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic">
           {{- order.shipping_address | format_address | replace: '<br>', '</p><p>' -}}
         </address>
 

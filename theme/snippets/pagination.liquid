@@ -13,12 +13,12 @@
 {% endcomment %}
 
 {%- if paginate.parts.size > 0 -%}
-  {%- assign pagination_item_class = 'block p-3 text-sm leading-5' -%}
+  {%- assign pagination_item_class = 'block p-3 text-sm' -%}
 
   <nav
     class="pagination {{ class | default: 'my-14 block lg:my-16' }}"
     aria-label="{% render "format-translation", namespace: "general.pagination.label", fallback: "Label" %}">
-    <ul class="pagination__list flex flex-wrap items-center justify-center text-sm font-bold leading-5">
+    <ul class="pagination__list flex flex-wrap items-center justify-center text-sm font-bold">
       {%- if paginate.previous -%}
         <li class="mr-3">
           <a

@@ -4,11 +4,11 @@ window.drawerToggleClasses = {
   filters: 'filter-is-open',
   cartDrawer: 'cart-drawer-is-open',
   mobileMenu: 'mobile-menu-is-open',
-  headerSearch: 'header-search-is-open',
+  headerSearch: 'search-is-open',
 };
 
 /**
- * debug function check, returns true when on localhost or myshopify.com domain
+  * debug function check, returns true when on localhost or myshopify.com domain
 */
 const debug = () => window.location.hostname === '127.0.0.1' || window.location.hostname.indexOf('myshopify.com') !== -1;
 
@@ -31,16 +31,20 @@ function getFocusableElements(container) {
  * @param {Object} elementToFocus the element to focus when trapFocus is called
  */
 function trapFocus(container, elementToFocus = container) {
-  console.trace('trapFocus');
-  console.log('container, elementToFocus', container, elementToFocus);
   const elements = getFocusableElements(container);
+
   const first = elements[0];
   const last = elements[elements.length - 1];
 
   removeTrapFocus();
 
   trapFocusHandlers.focusin = (event) => {
-    if (event.target !== container && event.target !== last && event.target !== first) return;
+    if (
+      event.target !== container &&
+      event.target !== last &&
+      event.target !== first
+    )
+      return;
 
     document.addEventListener('keydown', trapFocusHandlers.keydown);
   };
@@ -51,6 +55,7 @@ function trapFocus(container, elementToFocus = container) {
 
   trapFocusHandlers.keydown = function (event) {
     if (event?.code.toUpperCase() !== 'TAB') return; // If not TAB key
+
     // On the last focusable element and tab forward, focus the first element.
     if (event.target === last && !event.shiftKey) {
       event.preventDefault();
@@ -71,6 +76,18 @@ function trapFocus(container, elementToFocus = container) {
 }
 
 /**
+ * Removes the event listeners added by trapFocus()
+ * @param {Object} elementToFocus
+ */
+function removeTrapFocus(elementToFocus = null) {
+  document.removeEventListener('focusin', trapFocusHandlers.focusin);
+  document.removeEventListener('focusout', trapFocusHandlers.focusout);
+  document.removeEventListener('keydown', trapFocusHandlers.keydown);
+
+  if (elementToFocus) elementToFocus.focus();
+}
+
+/**
  * Pauses all media on the page
  */
 function pauseAllMedia() {
@@ -85,18 +102,6 @@ function pauseAllMedia() {
   } );
   document.querySelectorAll('video').forEach((video) => video.pause());
   document.querySelectorAll('product-model').forEach((model) => model.modelViewerUI?.pause());
-}
-
-/**
- * Removes the event listeners added by trapFocus()
- * @param {Object} elementToFocus
- */
-function removeTrapFocus(elementToFocus = null) {
-  document.removeEventListener('focusin', trapFocusHandlers.focusin);
-  document.removeEventListener('focusout', trapFocusHandlers.focusout);
-  document.removeEventListener('keydown', trapFocusHandlers.keydown);
-
-  if (elementToFocus) elementToFocus.focus();
 }
 
 /**

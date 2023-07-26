@@ -65,7 +65,7 @@
               {%- comment -%} Cart note {%- endcomment -%}
               {%- if section.settings.show_cart_note -%}
                 <cart-note class="cart__note field mb-0 block">
-                  <label for="Cart-note" class="field__label font-body text-xs leading-5">
+                  <label for="Cart-note" class="field__label font-body text-xs">
                     {%- render "format-translation", namespace: "sections.cart", key: "note", fallback: "Instructions about shipping, taxes and/or returns." -%}
                   </label>
                   <textarea

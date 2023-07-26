@@ -38,7 +38,7 @@
                   {%- if block.settings.title != blank -%}
                     <button
                       type="button"
-                      class="footer-block--menu__trigger relative block w-full py-3 text-left text-sm font-bold leading-5 text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
+                      class="footer-block--menu__trigger relative block w-full py-3 text-left text-sm font-bold text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
                       data-collapsible-trigger>
                       {{- block.settings.title -}}
                       {%- render 'icons', icon: 'chevron-down', icon_class: 'w-4 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180 md:hidden' -%}
@@ -47,7 +47,7 @@
 
                   {%- comment -%} Output menu and collapsible content {%- endcomment -%}
                   <div
-                    class="footer-block--menu__target p-0 text-sm leading-5 js:md:!max-h-min"
+                    class="footer-block--menu__target p-0 text-sm js:md:!max-h-min"
                     {{ target }}>
                     {%- if block.settings.menu != blank -%}
                       {%- render 'footer-menu', linklist: block.settings.menu, prefix: 'footer-menu', collapsible: false -%}

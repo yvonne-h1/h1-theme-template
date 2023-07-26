@@ -18,8 +18,8 @@
       assign product_card_information_class = 'pt-3 text-left'
     endif
   -%}
-  <div class="product-card__information {{ product_card_information_class }} block pt-2 text-sm leading-5">
-    <p class="product-card__title block text-sm font-bold leading-5">
+  <div class="product-card__information {{ product_card_information_class }} block pt-2 text-sm">
+    <p class="product-card__title block text-sm font-bold">
       {%- render 'format-translation', namespace: 'onboarding.product_title', fallback: 'Example product title' -%}
     </p>
   </div>
@@ -29,7 +29,7 @@
       assign product_card_price_class = 'product-card__price--alt mt-2 text-left justify-between'
     endif
   -%}
-  <div class="product-card__price flex items-center text-sm leading-5 {{ product_card_price_class }}">
+  <div class="product-card__price flex items-center text-sm {{ product_card_price_class }}">
     {%- render 'format-price' -%}
   </div>
 </div>

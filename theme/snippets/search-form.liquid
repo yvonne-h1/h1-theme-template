@@ -41,23 +41,40 @@
   endif
 -%}
 
-{%- comment -%} Render output. {%- endcomment -%}
+{% comment %} Close trigger {% endcomment %}
+<class-toggle-component
+  data-options='
+    {
+      "classToToggle": "search-is-open",
+      "ariaExpanded": true
+    }
+  '>
+  <button
+    type="button"
+    class="-mr-3 -mt-3 mb-8 ml-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:right-0 lg:top-3 lg:z-10 lg:mb-0 lg:ml-0 lg:mr-[var(--content-wrapper-padding)] lg:mt-0"
+    aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}">
+    {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
+  </button>
+</class-toggle-component>
+
+{%- comment -%} Render search form {%- endcomment -%}
 <{{ search_form_element }} class="relative block">
   <form
     action="{{ routes.search_url }}"
     method="get"
     role="search"
-    class="search-modal__form relative mx-auto w-full lg:max-w-xs">
+    class="search-modal__form relative mx-auto w-full lg:max-w-2xl">
     <div class="search-field relative mb-0 w-full">
       <label class="search-field__label hidden" for="{{ prefix }}SearchInModal">
         {%- render 'format-translation', namespace: 'general.search', key: 'search', fallback: 'Search' -%}
       </label>
       <input
         placeholder="{% render "format-translation", namespace: "general.search", key: "search", fallback: "Search" %}"
-        class="search-field__input state:text-black block w-full appearance-none border border-x-transparent  border-t-transparent bg-transparent py-[5px] pl-6 font-body text-sm leading-7 ring-transparent placeholder:text-black states:border-transparent states:border-b-secondary states:bg-transparent states:ring-transparent lg:border-b-transparent lg:pl-8 lg:pr-10 lg:text-base lg:states:border-b-transparent"
+        class="search-field__input state:text-black block w-full appearance-none border border-x-transparent  border-t-transparent bg-transparent py-[5px] pl-0 pr-6 font-body text-sm leading-7 ring-transparent placeholder:text-black states:border-transparent states:border-b-secondary states:bg-transparent states:ring-transparent lg:border-b-transparent lg:pr-8 lg:text-base lg:states:border-b-transparent"
         id="{{ prefix }}SearchInModal"
         type="search"
         name="q"
+        autofocus
         value="{{ search.terms | escape }}"
         {% if predictive_search_enabled %}
           data-predicative-search="input"
@@ -66,17 +83,20 @@
       {%- comment -%} Extra options for search. {%- endcomment -%}
       <input type="hidden" name="options[prefix]" value="last">
     </div>
+
     {%- comment -%} Button for clear input field. {%- endcomment -%}
     <button
       type="button"
-      class="absolute right-0 top-2/4 -translate-y-2/4 states:text-primary"
-      data-predicative-search="reset">
+      class="absolute right-14 top-2/4 -translate-y-2/4 states:text-primary"
+      data-predicative-search="reset"
+      aria-label="{% render "format-translation", namespace: "general.search", key: "reset", fallback: "Reset" %}">
       {%- render 'icons', icon: 'cross', icon_class: 'w-4' -%}
     </button>
+
     {%- comment -%} Submit button. {%- endcomment -%}
     <button
       type="submit"
-      class="search-modal__button absolute left-0 top-2/4 block -translate-y-2/4 cursor-pointer states:text-primary lg:left-0"
+      class="search-modal__button absolute right-0 top-2/4 block -translate-y-2/4 cursor-pointer p-3 states:text-primary"
       aria-label="{% render "format-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
       {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
     </button>

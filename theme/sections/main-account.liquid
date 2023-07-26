@@ -76,7 +76,7 @@
               fallback: 'Orders'
             -%}
           </caption>
-          <thead role="rowgroup" class="hidden text-left text-sm leading-5 md:table-header-group">
+          <thead role="rowgroup" class="hidden text-left text-sm md:table-header-group">
             {%- assign th_class = 'pt-0 pl-0 pr-4 pb-6 align-top md:w-52 last:w-24' -%}
             <tr role="row">
               <th id="ColumnOrder" scope="col" role="columnheader" class="{{ th_class }}">
@@ -98,7 +98,7 @@
           </thead>
           <tbody role="rowgroup" class="">
             {%- for order in customer.orders -%}
-              {%- assign td_class = 'text-sm leading-5 py-1 md:py-4 md:pl-0 md:pr-4 text-left align-top md:w-52 last:w-24' -%}
+              {%- assign td_class = 'text-sm py-1 md:py-4 md:pl-0 md:pr-4 text-left align-top md:w-52 last:w-24' -%}
               <tr role="row" class="flex flex-col justify-start border-b  py-3 md:table-row md:py-0">
                 <td id="RowOrder" role="cell" headers="ColumnOrder" data-label="{{ order_nr_str }}" class="{{ td_class }}">
                   <a
@@ -158,11 +158,7 @@
 {%- render 'account-header' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  class: 'account',
-  content: container_content,
-  content_class: 'account__grid grid grid-cols-12'
--%}
+{%- render 'format-container', class: 'account', content: container_content, content_class: 'account__grid grid grid-cols-12' -%}
 
 {% schema %}
   {

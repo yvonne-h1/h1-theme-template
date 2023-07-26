@@ -45,7 +45,7 @@
 
 {%- comment -%} The backdrop for when the header is open state. {%- endcomment -%}
 <div
-  class="header-backdrop backdrop group-[.header-is-open]/body:backdrop--active z-10"></div>
+  class="header-backdrop backdrop group-[.desktop-submenu-is-open]/body:backdrop--active z-10"></div>
 
 {%- comment -%}
   The header always relative of absolute based on the is transparent and on index page setting. The whole section is sticky for better native and sticky scroll performance.
@@ -59,29 +59,30 @@
 
 <header-component
   id="header"
-  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.header-is-open]/body:duration-0 group-[.header-is-open]/body:bg-color-default group-[.header-is-open]/body:text-color-default {{ sticky_header_classes }}"
+  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.desktop-submenu-is-open]/body:duration-0 group-[.desktop-submenu-is-open]/body:bg-color-default group-[.desktop-submenu-is-open]/body:text-color-default {{ sticky_header_classes }}"
   data-header>
   <div class="header-nav content-wrapper content-wrapper-padding grid grid-cols-12 items-center gap-base">
     {%- comment -%} Toggle for mobile navigation {%- endcomment -%}
     <div class="col-span-4 flex lg:hidden">
       {%- if menu_list != blank -%}
         <class-toggle-component
-          aria-expanded="false"
-          aria-controls="mobileMenu"
-          aria-haspopup="dialog"
-          aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
-          class="menu-drawer__toggle-button block"
+          class="mobile-menu__toggle-button"
           data-options='
             {
-              "closeSiblings": true,
               "classToToggle": "mobile-menu-is-open"
             }
           '>
-          <button type="button" class="-ml-3 p-3 states:text-primary">
+          <button
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobileMenu"
+            aria-haspopup="dialog"
+            aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
+            class="-ml-3 p-3 states:text-primary">
             {%- render 'icons', icon: 'hamburger', icon_class: 'w-6' -%}
           </button>
-          {%- render 'menu-mobile', menu_list: menu_list -%}
         </class-toggle-component>
+        {%- render 'menu-mobile', menu_list: menu_list -%}
       {%- endif -%}
     </div>
 
@@ -139,6 +140,10 @@
         "content": "Icon list options"
       },
       {
+        "type": "paragraph",
+        "content": "Search icon"
+      },
+      {
         "type": "checkbox",
         "id": "show_search_icon",
         "label": "Search icon mobile",
@@ -151,10 +156,14 @@
         "default": true
       },
       {
+        "type": "paragraph",
+        "content": "Account icon. It's recommended to only show the account icon on desktop screens."
+      },
+      {
         "type": "checkbox",
         "id": "show_customer_icon",
         "label": "Customer icon mobile",
-        "default": true,
+        "default": false,
         "info": "The store customer accounts also need to be enabled."
       },
       {
@@ -163,6 +172,10 @@
         "label": "Customer icon desktop",
         "default": true,
         "info": "The store customer accounts also need to be enabled."
+      },
+      {
+        "type": "paragraph",
+        "content": "Cart icon"
       },
       {
         "type": "checkbox",
@@ -181,17 +194,27 @@
         "content": "Mobile menu options"
       },
       {
+        "type": "paragraph",
+        "content": "Enable these links so you can disable icons on mobile screens."
+      },
+      {
         "type": "checkbox",
-        "id": "show_mobile_customer_text",
-        "label": "Login text",
+        "id": "show_mobile_customer_link",
+        "label": "Show link to account pages",
         "default": true,
         "info": "The store customer accounts also need to be enabled."
       },
       {
         "type": "checkbox",
-        "id": "show_mobile_cart_text",
-        "label": "Cart text",
-        "default": true
+        "id": "show_mobile_cart_link",
+        "label": "Show link to the cart",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_mobile_search_link",
+        "label": "Show link to the search page",
+        "default": false
       }
     ],
     "blocks": [

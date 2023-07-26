@@ -35,10 +35,10 @@
   <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
 {%- endif -%}
 
-{%- if settings.social_twitter_link != blank -%}
+{%- if settings.social_x_link != blank -%}
   <meta
     name="x:site"
-    content="{{ settings.social_twitter_link | split: 'x.com/' | last | prepend: '@' }}">
+    content="{{ settings.social_x_link | split: 'x.com/' | last | prepend: '@' }}">
 {%- endif -%}
 <meta name="x:card" content="summary_large_image">
 <meta name="x:title" content="{{ og_title | escape }}">

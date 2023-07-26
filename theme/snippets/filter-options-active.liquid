@@ -16,7 +16,7 @@
       type="button"
       class="filter__option-trigger flex w-full items-center justify-between py-3 transition-all group-[.collapsible-is-open]/filter-group:pb-2"
       data-collapsible-trigger>
-      <span class="text-sm font-bold leading-5">
+      <span class="text-sm font-bold">
         {%- render 'format-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
       </span>
       {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block' -%}

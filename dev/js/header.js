@@ -28,7 +28,7 @@ class HeaderCollapsibleComponent extends Collapsible {
   }
 
   onKeyUp(event) {
-    if (!document.body.classList.contains('header-is-open')) {
+    if (!document.body.classList.contains('desktop-submenu-is-open')) {
       return;
     }
     if (event?.code.toUpperCase() !== 'ESCAPE') {
@@ -44,7 +44,7 @@ class HeaderCollapsibleComponent extends Collapsible {
   open(group) {
     super.open(group);
     if (this.headerWrapper) {
-      document.body.classList.add('header-is-open');
+      document.body.classList.add('desktop-submenu-is-open');
     }
     this.toggleHeaderClass(true);
   }
@@ -52,7 +52,7 @@ class HeaderCollapsibleComponent extends Collapsible {
   close(group) {
     super.close(group);
     if (this.headerWrapper) {
-      document.body.classList.remove('header-is-open');
+      document.body.classList.remove('desktop-submenu-is-open');
     }
     this.toggleHeaderClass(false);
   }
@@ -66,7 +66,7 @@ class HeaderCollapsibleComponent extends Collapsible {
     super.openAll();
     this.toggleHeaderClass(true);
     if (this.headerWrapper) {
-      document.body.classList.add('header-is-open');
+      document.body.classList.add('desktop-submenu-is-open');
     }
   }
 
@@ -74,7 +74,7 @@ class HeaderCollapsibleComponent extends Collapsible {
     super.closeAll();
     this.toggleHeaderClass(false);
     if (this.headerWrapper) {
-      document.body.classList.remove('header-is-open');
+      document.body.classList.remove('desktop-submenu-is-open');
     }
   }
 
@@ -85,7 +85,7 @@ class HeaderCollapsibleComponent extends Collapsible {
 
     if (open) {
       // set header open
-      document.body.classList.add('header-is-open');
+      document.body.classList.add('desktop-submenu-is-open');
       this.inverse && this.header.classList.add('header-inverse-solid');
     }
     else {
@@ -98,69 +98,10 @@ class HeaderCollapsibleComponent extends Collapsible {
         }
       } );
       if (close) {
-        document.body.classList.remove('header-is-open');
+        document.body.classList.remove('desktop-submenu-is-open');
         this.inverse && document.body.classList.remove('header-inverse-solid');
       }
     }
-  }
-}
-
-class SearchToggle extends ClassToggleComponent {
-  constructor() {
-    super();
-  }
-
-  construct() {
-    super.construct();
-
-    // elements
-    this.header = this.closest('[data-header]');
-
-    // key up escape
-    document.addEventListener('keyup', (event) => {
-      this.onKeyUp(event);
-    } );
-
-    // Remove classes incase the header navigation drawer is open.
-    this.addEventListener('click', () => {
-      document.body.classList.remove('header-is-open');
-      document.body.classList.remove(window.drawerToggleClasses.mobileMenu);
-      // Focus on input element if provided
-      if (this.options.focusTarget) {
-        document.querySelector(this.options.focusTarget)?.focus();
-      }
-    } );
-  }
-
-  onKeyUp(event) {
-    if (!document.body.classList.contains(window.drawerToggleClasses.headerSearch)) {
-      return;
-    }
-    if (event?.code.toUpperCase() !== 'ESCAPE') {
-      return;
-    }
-    const { classToToggle } = this.options;
-    if (this.target?.classList.contains(classToToggle)) {
-      this.remove();
-    }
-  }
-
-  add() {
-    super.add();
-    if (this.header) {
-      document.body.classList.add(window.drawerToggleClasses.headerSearch);
-    }
-    if (this.target) {
-      trapFocus(this.target);
-    }
-  }
-
-  remove() {
-    super.remove();
-    if (this.header) {
-      document.body.classList.remove(window.drawerToggleClasses.headerSearch);
-    }
-    removeTrapFocus();
   }
 }
 
@@ -219,7 +160,7 @@ class HeaderComponent extends HTMLElement {
   scrollAnimation() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     // only animate if header is closed.
-    if (!document.body.classList.contains('header-is-open')) {
+    if (!document.body.classList.contains('desktop-submenu-is-open')) {
       if (scrollTop + window.innerHeight > document.body.clientHeight) {
         this.hide();
       }
@@ -258,7 +199,7 @@ class HeaderComponent extends HTMLElement {
   }
 
   revealTop() {
-    if (this.headerInverse && !document.body.classList.contains('header-is-open')) {
+    if (this.headerInverse && !document.body.classList.contains('desktop-submenu-is-open')) {
       document.body.classList.remove('header-inverse-solid');
     }
     document.body.classList.remove('header-hidden', 'header-sticky');
@@ -299,10 +240,45 @@ if (!customElements.get('header-collapsible-component')) {
   customElements.define('header-collapsible-component', HeaderCollapsibleComponent);
 }
 
-if (!customElements.get('search-toggle')) {
-  customElements.define('search-toggle', SearchToggle);
-}
-
 if (!customElements.get('header-component')) {
   customElements.define('header-component', HeaderComponent);
 }
+
+// class CartIconBubble extends ClassToggleComponent {
+//   //     constructor() {
+//   //       super();
+//   //       this.toggleButton = this.querySelector('[aria-controls="cartDrawer"]');
+//   //       this.cartDrawer = document.querySelector('cart-drawer');
+
+//   //       if (this.cartDrawer) {
+//   //         this.toggleButton.addEventListener('click', this.toggle.bind(this));
+//   //       }
+//   //     }
+
+//   //     toggle(event) {
+//   //       event.preventDefault();
+//   //       event.stopPropagation();
+
+//   //       this.cartDrawer.drawer.classList.contains(this.cartDrawer.activeClass)
+//   //         ? this.cartDrawer.close()
+//   //         : this.cartDrawer.open();
+//   //     }
+//   //   }
+//   constructor() {
+//     super();
+//     console.log('this', this);
+
+//     // Get options from element data and combine with this.options
+//     if (this?.dataset?.options) {
+//       const dataOptions = JSON.parse(this.dataset.options);
+//       this.options = {
+//         ...super.options,
+//         ...dataOptions,
+//       };
+//     }
+//     console.log('this.options', this.options);
+//   }
+// }
+// if (!customElements.get('cart-icon-bubble')) {
+//   customElements.define('cart-icon-bubble', CartIconBubble);
+// }

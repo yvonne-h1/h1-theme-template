@@ -12,73 +12,73 @@
 
 {%- capture container_content -%}
 
-      {% comment %} Search form {% endcomment %}
-      <form action="{{ routes.search_url }}" method="get" role="search" class="grid grid-cols-12">
-        <div class="relative col-span-12  md:col-span-6 md:col-start-4 lg:col-span-4 lg:col-start-5">
-            <div class="field mb-0">
-              <label class="field__label sr-only" for="search-in-template" aria-hidden="true">
-                {{ search_str }}
-              </label>
-              <input
-                class="field__input cursor-pointer border-b  bg-transparent py-2.5 pl-10 pr-0 text-sm leading-7 states:border-transparent states:border-b-secondary states:bg-transparent md:py-3 lg:text-base"
-                id="search-in-template"
-                type="search"
-                name="q"
-                value="{{ search.terms | escape }}"
-                {% if search.performed %}
-                  autofocus
-                {% endif %}
-                placeholder="{{ search_str }}"
-              >
-            </div>
-            <input name="options[prefix]" type="hidden" value="last">
-            <button type="submit" class="search__button absolute left-0 top-2/4 block -translate-y-2/4 states:text-primary" aria-label="{{ search_str }}">
-              {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
-            </button>
-          </div>
-        </form>
+  {% comment %} Search form {% endcomment %}
+  <form action="{{ routes.search_url }}" method="get" role="search" class="grid grid-cols-12">
+    <div class="relative col-span-12  md:col-span-6 md:col-start-4 lg:col-span-4 lg:col-start-5">
+        <div class="field mb-0">
+          <label class="field__label sr-only" for="search-in-template" aria-hidden="true">
+            {{ search_str }}
+          </label>
+          <input
+            class="field__input cursor-pointer border-b  bg-transparent py-2.5 pl-10 pr-0 text-sm leading-7 states:border-transparent states:border-b-secondary states:bg-transparent md:py-3 lg:text-base"
+            id="search-in-template"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            {% if search.performed %}
+              autofocus
+            {% endif %}
+            placeholder="{{ search_str }}"
+          >
+        </div>
+        <input name="options[prefix]" type="hidden" value="last">
+        <button type="submit" class="search__button absolute left-0 top-2/4 block -translate-y-2/4 states:text-primary" aria-label="{{ search_str }}">
+          {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
+        </button>
+      </div>
+    </form>
 
-      {% comment %} Search results {% endcomment %}
-      {%- if search.performed and search.results.size > 0 -%}
-        {%- paginate search.results by 16 -%}
-            <ul class="search-results mt-14 grid grid-cols-12 gap-base">
-              {%- for item in search.results -%}
-                <li class="col-span-6 md:col-span-4 lg:col-span-3">
-                  {%- liquid
-                    case item.object_type
-                      when 'product'
-                        render 'product-card', product_object: item
-                      when 'article'
-                        render 'article-card', article: item
-                      when 'page'
-                        render 'page-card', page: item
-                    endcase
-                  -%}
-                </li>
-              {%- endfor -%}
-            </ul>
-            {%- liquid
-              if paginate.pages > 1
-                render 'pagination', paginate: paginate, class: 'pagination-wrapper-small mt-8'
-              endif
-            -%}
-        {%- endpaginate -%}
-      {%- endif -%}
-
-
+    {% comment %} Search results {% endcomment %}
+    {%- if search.performed and search.results.size > 0 -%}
+      {%- paginate search.results by 16 -%}
+          <ul class="search-results mt-14 grid grid-cols-12 gap-base">
+            {%- for item in search.results -%}
+              <li class="col-span-6 md:col-span-4 lg:col-span-3">
+                {%- liquid
+                  case item.object_type
+                    when 'product'
+                      render 'product-card', product_object: item
+                    when 'article'
+                      render 'article-card', article: item
+                    when 'page'
+                      render 'page-card', page: item
+                  endcase
+                -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+          {%- liquid
+            if paginate.pages > 1
+              render 'pagination', paginate: paginate, class: 'pagination-wrapper-small mt-8'
+            endif
+          -%}
+      {%- endpaginate -%}
+    {%- endif -%}
 {%- endcapture -%}
 
 {%- comment -%} Set container title and import styles for this section {%- endcomment -%}
 {%- capture container_title -%}
-  {%- if search.performed -%}
-    {%- if search.results_count == 0 -%}
-      {{ 'sections.main_search.no_results' | t: terms: search.terms }}
-    {%- else -%}
-      {{ 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count }}
-    {%- endif -%}
-  {%- else -%}
-    {{ search_str }}
-  {%- endif -%}
+  {%- liquid
+    if search.performed
+      if search.results_count == 0
+       echo 'sections.main_search.no_results' | t: terms: search.terms
+      else
+       echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
+      endif
+    else
+     echo search_str
+    endif
+  -%}
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}

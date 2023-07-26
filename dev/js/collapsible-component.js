@@ -78,12 +78,12 @@ if (!customElements.get('collapsible-component')) {
       // Options
       this.options = {
         classToToggle: 'collapsible-is-open',
-        toggleBodyClass: '',
         closeSiblings: false,
         closeChildren: true,
         onHover: false,
         hoverDelay: 0,
         closeOnMouseleave: false,
+        isMobileMenu: false,
       };
 
       // Get options from element data and combine with this.options
@@ -94,6 +94,8 @@ if (!customElements.get('collapsible-component')) {
           ...dataOptions,
         };
       }
+
+      this.state = [this.querySelector('nav')];
 
       // Reduce actions (So the event can also be removed)
       this.reducer = {
@@ -154,9 +156,7 @@ if (!customElements.get('collapsible-component')) {
       Called by add event listener -> reducer.
     */
     debounceClickEvent(e) {
-      if (!e) {
-        return false;
-      }
+      if (!e) return false;
       const buttonType = e.currentTarget.nodeName.toLowerCase();
       const group = e.currentTarget.closest('[data-collapsible-group]');
       // only toggle if is closed or target is not an <a> tag
@@ -173,9 +173,7 @@ if (!customElements.get('collapsible-component')) {
       Called by add event listener -> reducer.
     */
     debouncedOnMouse(e, type) {
-      if (!e) {
-        return false;
-      }
+      if (!e) return false;
 
       // clear old trigger
       clearTimeout(this.timeout);
@@ -204,9 +202,7 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     open(group) {
-      if (!group) {
-        return false;
-      }
+      if (!group) return false;
 
       // Close Siblings if option is on
       this.options.closeSiblings && this.closeSiblings(group);
@@ -214,8 +210,12 @@ if (!customElements.get('collapsible-component')) {
       // Open active group
       group.classList.add(this.options.classToToggle);
 
-      // Add body class
-      this.toggleBodyClass(true);
+      // Only use focus when item is not hovered
+      !this.options.onHover && trapFocus(group);
+
+      // Keep track of the state so we know where to add the focus when moving between the mobile menu items
+      this.options.isMobileMenu && this.state.push(group);
+
     }
 
     /*
@@ -223,22 +223,17 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     close(group) {
-      if (!group) {
-        return false;
-      }
+      console.trace('close', group);
+
+      if (!group) return false;
+
+      removeTrapFocus(group);
+
+      // Set the focus to the trigger when closing a collapsible
+      !this.options.onHover && group.querySelector('[data-collapsible-trigger]').focus();
 
       // Close active group
       group.classList.remove(this.options.classToToggle);
-
-      // Close child collapsibles
-      if (this.options.closeChildren) {
-        group.querySelectorAll('[data-collapsible-group]').forEach((group) => {
-          this.close(group);
-        });
-      }
-
-      // Remove body class
-      this.toggleBodyClass(false);
     }
 
     /*
@@ -246,9 +241,7 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     toggle(group) {
-      if (!group) {
-        return false;
-      }
+      if (!group) return false;
 
       // Check if already open
       if (!group.classList.contains(this.options.classToToggle)) {
@@ -256,8 +249,25 @@ if (!customElements.get('collapsible-component')) {
         this.open(group);
       }
       else {
-        // Close
+        // Close child collapsibles
+        if (this.options.closeChildren) {
+          group.querySelectorAll('[data-collapsible-group]').forEach((group) => {
+            this.close(group);
+          });
+        }
+
+        // Close this group
         this.close(group);
+
+        // Focus the previous menu
+        if (this.options.isMobileMenu) {
+          // remove the last item of the states
+          this.state.splice(-1);
+          const lastItem = this.state[this.state.length - 1];
+
+          // focus the last item in the array
+          trapFocus(lastItem);
+        }
       }
     }
 
@@ -285,8 +295,6 @@ if (!customElements.get('collapsible-component')) {
         group.classList.add(this.options.classToToggle);
       });
 
-      // Add body class
-      this.toggleBodyClass(true);
     }
 
     /*
@@ -297,24 +305,7 @@ if (!customElements.get('collapsible-component')) {
         group.classList.remove(this.options.classToToggle);
       });
 
-      // Remove body class
-      this.toggleBodyClass(false);
-    }
-
-    /*
-      Toggle body class
-      @param add {boolean}: true/false
-    */
-    toggleBodyClass(add) {
-      if (!this.options.toggleBodyClass) {
-        return false;
-      }
-      if (add) {
-        document.querySelector('body').classList.add(this.options.toggleBodyClass);
-      }
-      else {
-        document.querySelector('body').classList.remove(this.options.toggleBodyClass);
-      }
+      this.state = [this.querySelector('nav')];
     }
   }
 

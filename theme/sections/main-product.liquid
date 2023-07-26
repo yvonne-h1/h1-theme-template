@@ -9,10 +9,11 @@
 {%- assign product_form_id = 'product-form-' | append: product.id -%}
 
 {%- capture container_content -%}
-{%- comment -%} Product title {%- endcomment -%}
-<h1 class="product__title h5 my-2 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
-  {{ product.title | escape }}
-</h1>
+  {%- comment -%} Product title {%- endcomment -%}
+  <h1 class="product__title h5 my-2 first:mt-0 last:mb-0" {{ block.shopify_attributes }}>
+    {{ product.title | escape }}
+  </h1>
+
   <div class="product grid grid-cols-12 gap-0">
 
     {% comment %} Left column: Product media {% endcomment %}
@@ -93,7 +94,7 @@
           {%- comment -%} Product description {%- endcomment -%}
           {%- when 'description' -%}
             {%- if product.description != blank -%}
-              <div class="product__description rte my-4 text-sm leading-5 first:mt-0 last:mb-0">
+              <div class="product__description rte my-4 text-sm first:mt-0 last:mb-0">
                 {{ product.description }}
               </div>
             {%- endif -%}
@@ -118,7 +119,7 @@
 
             {%- if block.settings.content != blank or block.settings.page.content != nil -%}
               <collapsible-component class="product__collapsible collapsible group block  border-t last:border-b first-of-type:mt-8" data-collapsible-group {{ block.shopify_attributes }}>
-                <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-left text-sm font-bold leading-5" data-collapsible-trigger>
+                <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-left text-sm font-bold" data-collapsible-trigger>
                   <span class="flex w-full justify-items-start gap-2">
                     {%- if block.settings.icon != blank -%}
                       {%- render 'icons', icon: block.settings.icon, icon_class: 'w-5 shrink-0 grow-0' -%}
@@ -129,7 +130,7 @@
                   {%- render 'icons', icon: 'minus', icon_class: 'w-4 shrink-0 hidden no-js:hidden group-[.collapsible-is-open]:block' -%}
                 </button>
                 <div class="collapsible__target w-full overflow-y-auto bg-color-default" data-collapsible-target>
-                  <div class="rte pb-4 text-sm leading-5">
+                  <div class="rte pb-4 text-sm">
                     {{- block.settings.content -}}
                     {{- block.settings.page.content -}}
                   </div>

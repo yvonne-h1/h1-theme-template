@@ -9,7 +9,7 @@
     {%- if predictive_search.resources.products.size > 0 and settings.predictive_search_products -%}
       <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
-          <p class="text-sm font-bold uppercase leading-5 text-primary">
+          <p class="text-sm font-bold uppercase text-primary">
             {%-
               render "format-translation",
               namespace: "sections.predictive_search",
@@ -42,10 +42,10 @@
                   -%}
                 </div>
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title mb-2 text-sm font-medium leading-5">
+                  <p class="predictive-search__item__title mb-2 text-sm font-medium">
                     {{- product.title | highlight: predictive_search.terms -}}
                   </p>
-                  <div class="predictive-search__item__price text-sm leading-5">
+                  <div class="predictive-search__item__price text-sm">
                     {% render 'format-price', product: product %}
                   </div>
                 </div>
@@ -59,7 +59,7 @@
     {%- if predictive_search.resources.collections.size > 0 and settings.predictive_search_collections -%}
       <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
-          <p class="text-sm font-bold uppercase leading-5 text-primary">
+          <p class="text-sm font-bold uppercase text-primary">
             {%-
               render "format-translation",
               namespace: "sections.predictive_search",
@@ -80,7 +80,7 @@
                   -%}
                 </div>
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title text-sm font-medium leading-5">
+                  <p class="predictive-search__item__title text-sm font-medium">
                     {{- collection.title | highlight: predictive_search.terms -}}
                   </p>
                 </div>
@@ -94,7 +94,7 @@
     {%- if predictive_search.resources.articles.size > 0 and settings.predictive_search_articles -%}
       <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
-          <p class="text-sm font-bold uppercase leading-5 text-primary">
+          <p class="text-sm font-bold uppercase text-primary">
             {%-
               render "format-translation",
               namespace: "sections.predictive_search",
@@ -127,10 +127,10 @@
                   -%}
                 </div>
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title text-sm font-medium leading-5">
+                  <p class="predictive-search__item__title text-sm font-medium">
                     {{- article.title | highlight: predictive_search.terms -}}
                   </p>
-                  <div class="predictive-search__item__price text-sm leading-5">
+                  <div class="predictive-search__item__price text-sm">
                     {% render 'format-price', product: product %}
                   </div>
                 </div>
@@ -144,7 +144,7 @@
     {%- if predictive_search.resources.pages.size > 0 and settings.predictive_search_pages -%}
       <div class="predictive-search__group mb-4 border-b  last:mb-0">
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
-          <p class="text-sm font-bold uppercase leading-5 text-primary">
+          <p class="text-sm font-bold uppercase text-primary">
             {%-
               render "format-translation",
               namespace: "sections.predictive_search",
@@ -170,7 +170,7 @@
             <li class="predictive-search__list-item mb-4" role="option">
               <a href="{{ page.url }}" class="predictive-search__list__link flex gap-4 text-inherit hover:opacity-70 active:opacity-100 states:no-underline" tabindex="-1">
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title text-sm font-medium leading-5">
+                  <p class="predictive-search__item__title text-sm font-medium">
                     {{- page.title | highlight: predictive_search.terms -}}
                   </p>
                 </div>

@@ -3,12 +3,12 @@
   if shop.customer_accounts_enabled or shop.customer_accounts_optional
     assign customer_accounts = true
   endif
+
+  assign icon_classes = 'p-3 text-inherit states:text-primary'
 -%}
 
-{%- comment -%}
-  Icon list with search, account and cart icons.
-{%- endcomment -%}
-<ul class="icon-list col-span-4 flex flex-wrap items-center justify-end gap-2 lg:col-span-2">
+{%- comment -%} Icon list with search, account and cart icons. {%- endcomment -%}
+<ul class="icon-list col-span-4 flex flex-wrap items-center justify-end lg:col-span-2">
   {%- comment -%} Search icon {%- endcomment -%}
   {%- if section.settings.show_search_icon or section.settings.md_show_search_icon -%}
     {%- liquid
@@ -21,28 +21,27 @@
         assign search_item_class_md = 'md:block'
       endif
     -%}
+
     <li
-      class="icon-list__item {{ search_item_class }} {{ search_item_class_md }}"
+      class="icon-list__item {{ search_item_class }} {{ search_item_class_md }} {% if template.name == 'search' %}text-primary{%- endif -%}"
       data-header-search>
-      <search-toggle
-        class="flex"
+      <class-toggle-component
         data-options='
           {
-            "classToToggle": "header-search-is-open",
-            "target": "body",
-            "focusTarget": "#desktopSearchInModal"
+            "classToToggle": "search-is-open",
+            "ariaExpanded": true
           }
         '>
         <button
           type="button"
           aria-expanded="false"
-          aria-controls
+          aria-controls="SearchModal"
           aria-haspopup="dialog"
           aria-label="{%- render "format-translation", namespace: "general.search", key: "search", fallback: "Search" -%}"
-          class="py-3 text-inherit states:text-primary">
+          class="{{ icon_classes }}">
           {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
         </button>
-      </search-toggle>
+      </class-toggle-component>
     </li>
   {%- endif -%}
 
@@ -57,20 +56,21 @@
       if section.settings.md_show_customer_icon
         assign customer_item_class_md = 'md:block'
       endif
+
+      if customer
+        assign sr_text = 'customer.account_fallback' | t
+      else
+        assign sr_text = 'customer.log_in' | t
+      endif
     -%}
+
     <li class="icon-list__item {{ customer_item_class }} {{ customer_item_class_md }}">
       <a
         href="{%- if customer -%}{{- routes.account_url -}}{%- else -%}{{- routes.account_login_url -}}{%- endif -%}"
-        class="header__icon block p-3 text-inherit states:text-primary {% if template.directory == 'customers' %}text-primary{%- endif -%}">
+        class="header__icon block {{ icon_classes }} {% if template.directory == 'customers' %}text-primary{%- endif -%}">
         {%- render 'icons', icon: 'user', icon_class: 'w-6' -%}
         <span class="sr-only">
-          {%- liquid
-            if customer
-              echo 'customer.account_fallback' | t
-            else
-              echo 'customer.log_in' | t
-            endif
-          -%}
+          {{- text -}}
         </span>
       </a>
     </li>
@@ -89,7 +89,7 @@
       endif
     -%}
     <li class="icon-list__item {{ cart_item_class }} {{ cart_item_class_md }}">
-      {%- render 'cart-icon-bubble' -%}
+      {%- render 'cart-icon-bubble', icon_classes: icon_classes -%}
     </li>
   {%- endif -%}
 </ul>

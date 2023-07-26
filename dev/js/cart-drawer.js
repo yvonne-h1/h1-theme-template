@@ -6,11 +6,9 @@ class CartDrawer extends HTMLElement {
     this.body = document.querySelector('body');
     this.activeClass = window.drawerToggleClasses.cartDrawer;
     this.cartIconBubble = document.querySelectorAll('[aria-controls="cartDrawer"]');
-    this.cartDrawerTrigger = document.querySelector('[data-cart-icon-bubble]');
 
     this.onBodyClick = this.handleBodyClick.bind(this);
 
-    this.cartDrawerTrigger.addEventListener('click', this.open.bind(this));
     this.drawer.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
   }
 

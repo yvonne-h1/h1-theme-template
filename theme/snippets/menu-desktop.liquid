@@ -81,7 +81,7 @@
                 <li class="col-span-2 {% if forloop.first %} col-start-2{% endif %}">
 
                   {%- if level_2_url == blank or level_2_url == '#' -%}
-                    <div class="header__menu-link header__menu-link--inactive level-2 relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold leading-5 text-inherit no-underline states:text-primary states:no-underline"
+                    <div class="header__menu-link header__menu-link--inactive level-2 relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold text-inherit no-underline states:text-primary states:no-underline"
                     >
                       {{- level_2.title | escape -}}
                     </div>
@@ -95,7 +95,7 @@
                     -%}
                     <a
                       href="{{ level_2_url }}"
-                      class="header__menu-link level-2 {{ level_2_active_class }} relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold leading-5 text-inherit no-underline states:text-primary states:no-underline"
+                      class="header__menu-link level-2 {{ level_2_active_class }} relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold text-inherit no-underline states:text-primary states:no-underline"
                       {% if level_2.current %}
                         aria-current="page"
                       {% endif %}
@@ -132,7 +132,7 @@
                         <li>
                           <a
                             href="{{ grandchildlink_url }}"
-                            class="header__menu-link header__menu-link--level-3 {{ level_3_active_class }} flex items-center py-1.5 text-sm font-bold leading-5 text-gray-500 text-inherit states:text-primary states:no-underline states:opacity-100"
+                            class="header__menu-link header__menu-link--level-3 {{ level_3_active_class }} flex items-center py-1.5 text-sm font-bold text-gray-500 text-inherit states:text-primary states:no-underline states:opacity-100"
                             {% if level_3.current -%}
                               aria-current="page"
                             {% endif -%}
