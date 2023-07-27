@@ -70,14 +70,19 @@
               if level_1.links != blank
                 assign dropdown_layout = 'multi'
               endif
+
+              # Capture the images
+              if section.blocks.size > 0 and dropdown_layout == 'multi'
+                capture images
+                  render 'header-images', section: section, link_1_title: link_1_title
+                endcapture
+              endif
             -%}
 
             {%- comment -%} Capture level 2 / 3 from current level 1 and collect the section blocks related to level 1. {%- endcomment -%}
             {%- capture dropdown -%}
 
-              {%- comment -%} Check level 2 items in that level 1 first. {%- endcomment -%}
               {%- for level_2 in level_1.links -%}
-
                 {%- liquid
                   # Get link and fix deep link to native filters
                   assign level_2_url = level_2.url
@@ -146,40 +151,6 @@
                   {%- endif -%}
                 </li>
               {%- endfor -%}
-
-              {%- comment -%} Check for blocks that are linked to level 1. {%- endcomment -%}
-              {%- if section.blocks.size > 0 and dropdown_layout == 'multi' -%}
-
-                {%- liquid
-                  capture images
-                    # Add the optional menu image for 3 level menu's
-                    for block in section.blocks
-                      if block.settings.image != nil and block.settings.text != blank
-
-                        # Handleize the item to match to make sure it's case-insensitive.
-                        assign image_alt = link_1_title | escape
-                        assign menu_link_title = link_1_title | handleize
-                        assign link_block_title = block.settings.text | handleize
-
-                        # Check if there is a match, if so output.
-                        if menu_link_title == link_block_title
-                          capture block_image
-                            render 'responsive-image', image_object: block.settings.image, alt: image_alt, sizes: '(min-width: 1440px) 448px, (min-width: 1024px) 31vw, 288px', max_width: 448
-                          endcapture
-                          if block.settings.url != blank
-                            echo '<a href="' | append: block.settings.url | append: '">'
-                            echo block_image
-                            echo '</a>'
-                          else
-                            echo block_image
-                          endif
-                        endif
-
-                      endif
-                    endfor
-                  endcapture
-                -%}
-              {%- endif -%}
             {%- endcapture -%}
 
             {%- comment -%} Output level 1 and place the captured 'dropdown' 2/3 with section blocks data in there. {%- endcomment -%}
