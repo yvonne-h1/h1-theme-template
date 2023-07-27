@@ -21,19 +21,9 @@ class HeaderCollapsibleComponent extends Collapsible {
     }
   }
 
-  events() {
-    if (!this.header) {
-      super.events();
-    }
-  }
-
   onKeyUp(event) {
-    if (!document.body.classList.contains('desktop-submenu-is-open')) {
-      return;
-    }
-    if (event?.code.toUpperCase() !== 'ESCAPE') {
-      return;
-    }
+    if (!document.body.classList.contains('desktop-submenu-is-open') || event?.code.toUpperCase() !== 'ESCAPE') return;
+
     const { classToToggle } = this.options;
     let group = this.querySelector(`[data-collapsible-group].${classToToggle}`);
     if (group) {
@@ -43,17 +33,11 @@ class HeaderCollapsibleComponent extends Collapsible {
 
   open(group) {
     super.open(group);
-    if (this.headerWrapper) {
-      document.body.classList.add('desktop-submenu-is-open');
-    }
     this.toggleHeaderClass(true);
   }
 
   close(group) {
     super.close(group);
-    if (this.headerWrapper) {
-      document.body.classList.remove('desktop-submenu-is-open');
-    }
     this.toggleHeaderClass(false);
   }
 
@@ -65,23 +49,15 @@ class HeaderCollapsibleComponent extends Collapsible {
   openAll() {
     super.openAll();
     this.toggleHeaderClass(true);
-    if (this.headerWrapper) {
-      document.body.classList.add('desktop-submenu-is-open');
-    }
   }
 
   closeAll() {
     super.closeAll();
     this.toggleHeaderClass(false);
-    if (this.headerWrapper) {
-      document.body.classList.remove('desktop-submenu-is-open');
-    }
   }
 
   toggleHeaderClass(open = true) {
-    if (!this.header) {
-      return false;
-    }
+    if (!this.header) return false;
 
     if (open) {
       // set header open
@@ -96,7 +72,7 @@ class HeaderCollapsibleComponent extends Collapsible {
         if (group.classList.contains(classToToggle)) {
           close = false;
         }
-      } );
+      });
       if (close) {
         document.body.classList.remove('desktop-submenu-is-open');
         this.inverse && document.body.classList.remove('header-inverse-solid');
@@ -243,42 +219,3 @@ if (!customElements.get('header-collapsible-component')) {
 if (!customElements.get('header-component')) {
   customElements.define('header-component', HeaderComponent);
 }
-
-// class CartIconBubble extends ClassToggleComponent {
-//   //     constructor() {
-//   //       super();
-//   //       this.toggleButton = this.querySelector('[aria-controls="cartDrawer"]');
-//   //       this.cartDrawer = document.querySelector('cart-drawer');
-
-//   //       if (this.cartDrawer) {
-//   //         this.toggleButton.addEventListener('click', this.toggle.bind(this));
-//   //       }
-//   //     }
-
-//   //     toggle(event) {
-//   //       event.preventDefault();
-//   //       event.stopPropagation();
-
-//   //       this.cartDrawer.drawer.classList.contains(this.cartDrawer.activeClass)
-//   //         ? this.cartDrawer.close()
-//   //         : this.cartDrawer.open();
-//   //     }
-//   //   }
-//   constructor() {
-//     super();
-//     console.log('this', this);
-
-//     // Get options from element data and combine with this.options
-//     if (this?.dataset?.options) {
-//       const dataOptions = JSON.parse(this.dataset.options);
-//       this.options = {
-//         ...super.options,
-//         ...dataOptions,
-//       };
-//     }
-//     console.log('this.options', this.options);
-//   }
-// }
-// if (!customElements.get('cart-icon-bubble')) {
-//   customElements.define('cart-icon-bubble', CartIconBubble);
-// }

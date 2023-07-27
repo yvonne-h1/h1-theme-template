@@ -84,6 +84,7 @@ if (!customElements.get('collapsible-component')) {
         hoverDelay: 0,
         closeOnMouseleave: false,
         isMobileMenu: false,
+        desktopSubmenu: false,
       };
 
       // Get options from element data and combine with this.options
@@ -107,13 +108,10 @@ if (!customElements.get('collapsible-component')) {
 
       this.timeout = null;
 
-      // Construct webcomponent
+      // Construct web component
       this.construct();
     }
 
-    /*
-      Construct webcomponent
-    */
     construct() {
       // Init elements
       this.groups = this.hasAttribute('data-collapsible-group')
@@ -223,8 +221,6 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     close(group) {
-      console.trace('close', group);
-
       if (!group) return false;
 
       removeTrapFocus(group);

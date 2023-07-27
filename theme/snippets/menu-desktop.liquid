@@ -40,11 +40,15 @@
               assign link_classes = 'button button--primary button--sm text-white states:bg-white border-transparent inline'
             endif
 
+            assign header_link_active_class = 'header__menu-link--active text-primary'
+
             # if link is active
-            assign level_1_active_class = ''
+            assign level_1_active = false
             if level_1.child_active or level_1.current
-              assign level_1_active_class = 'header__menu-link--active text-primary'
+              assign level_1_active = true
             endif
+
+            assign header_menu_link_classes = 'header__menu-link relative flex items-center whitespace-nowrap text-left text-sm font-bold no-underline states:text-primary states:no-underline text-inherit'
           -%}
 
           {%- if level_1.links == blank -%}
@@ -52,7 +56,7 @@
             <li class="header__menu-item level-1">
               <a
                 href="{{ link_1_url }}"
-                class="header__menu-link level-1 {{ level_1_active_class }} level-1 relative flex items-center whitespace-nowrap text-left text-sm font-bold leading-6 text-inherit no-underline states:text-primary states:no-underline {{ link_classes }}"
+                class="{{ header_menu_link_classes }} level-1 {{ link_classes }} {% if level_1_active -%}{{ header_link_active_class }}{%- endif %}"
                 {% if level_1.current %}
                   aria-current="page"
                 {% endif %}>
@@ -63,7 +67,11 @@
             {%- liquid
               # Set the layout type default to single dropdown.
               assign dropdown_layout = 'single'
+              if level_1.links != blank
+                assign dropdown_layout = 'multi'
+              endif
             -%}
+
             {%- comment -%} Capture level 2 / 3 from current level 1 and collect the section blocks related to level 1. {%- endcomment -%}
             {%- capture dropdown -%}
 
@@ -78,24 +86,57 @@
                   endif
                 -%}
 
-                <li class="col-span-2 {% if forloop.first %} col-start-2{% endif %}">
+                <li>
+                  {% comment %} Render the level 2 as a collapsible {% endcomment %}
+                  {%- if level_2.links != blank -%}
+                    <div data-collapsible-group>
+                      <button class="{{ header_menu_link_classes }} header__menu-link--inactive level-2 w-full py-1.5" data-collapsible-trigger>
+                        {{- level_2.title | escape -}}
+                        {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
+                      </button>
+                      {%- comment -%} Level 3 {%- endcomment -%}
+                      <ul class="header__menu-list level-3 absolute left-full top-0 h-full" data-collapsible-target tabindex="-1">
+                        {%- for level_3 in level_2.links -%}
 
-                  {%- if level_2_url == blank or level_2_url == '#' -%}
-                    <div class="header__menu-link header__menu-link--inactive level-2 relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold text-inherit no-underline states:text-primary states:no-underline"
-                    >
-                      {{- level_2.title | escape -}}
+                          {%- liquid
+                            # Get link and fix deep link to native filters
+                            assign grandchildlink_url = level_3.url
+                            if grandchildlink_url contains 'collections' and grandchildlink_url contains 'filter'
+                              assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?'
+                            endif
+
+                            # if link is active
+                            assign level_3_active = false
+                            if level_3.current
+                              assign level_3_active = true
+                            endif
+                          -%}
+                          <li>
+                            <a
+                              href="{{ grandchildlink_url }}"
+                              class="{{ header_menu_link_classes }} level-3 py-1.5 font-normal focus-visible:-outline-offset-1 {% if level_3_active -%}{{ header_link_active_class }}{%- endif %}"
+                              {% if level_3.current -%}
+                                aria-current="page"
+                              {% endif -%}
+                            >
+                              {{ level_3.title | escape }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
                     </div>
+
                   {%- else -%}
-                    {%- comment -%} if link is active {%- endcomment -%}
                     {%- liquid
-                      assign level_2_active_class = ''
-                      if level_2.current
-                        assign level_2_active_class = 'header__menu-link--active text-primary'
+                      # if link is active
+                      assign level_2_active = false
+                      if level_2.child_active or level_2.current
+                        assign level_2_active = true
                       endif
                     -%}
                     <a
                       href="{{ level_2_url }}"
-                      class="header__menu-link level-2 {{ level_2_active_class }} relative flex items-center whitespace-nowrap py-1.5 text-left text-sm font-bold text-inherit no-underline states:text-primary states:no-underline"
+                      class="{{ header_menu_link_classes }} level-2 py-1.5 {% if level_2_active -%}{{ header_link_active_class }}{%- endif %}"
                       {% if level_2.current %}
                         aria-current="page"
                       {% endif %}
@@ -103,51 +144,11 @@
                       {{- level_2.title | escape -}}
                     </a>
                   {%- endif -%}
-
-                  {%- if level_2.links != blank -%}
-
-                    {%- liquid
-                      # Level 2 with submenu
-                      assign dropdown_layout = "multi"
-                    -%}
-
-                    {%- comment -%} Level 3 {%- endcomment -%}
-                    <ul class="header__menu-list level-3">
-                      {%- for level_3 in level_2.links -%}
-
-                        {%- liquid
-                          # Get link and fix deep link to native filters
-                          assign grandchildlink_url = level_3.url
-                          if grandchildlink_url contains 'collections' and grandchildlink_url contains 'filter'
-                            assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?'
-                          endif
-                        -%}
-                        {%- liquid
-                          # If link is active
-                          assign level_3_active_class = ''
-                          if level_3.current
-                            assign level_3_active_class = 'header__menu-link--active text-primary'
-                          endif
-                        -%}
-                        <li>
-                          <a
-                            href="{{ grandchildlink_url }}"
-                            class="header__menu-link header__menu-link--level-3 {{ level_3_active_class }} flex items-center py-1.5 text-sm font-bold text-gray-500 text-inherit states:text-primary states:no-underline states:opacity-100"
-                            {% if level_3.current -%}
-                              aria-current="page"
-                            {% endif -%}
-                          >
-                            {{ level_3.title | escape }}
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  {%- endif -%}
                 </li>
               {%- endfor -%}
 
               {%- comment -%} Check for blocks that are linked to level 1. {%- endcomment -%}
-              {%- if section.blocks.size > 0 and dropdown_layout == "multi" -%}
+              {%- if section.blocks.size > 0 and dropdown_layout == 'multi' -%}
 
                 {%- liquid
                   capture images
@@ -178,22 +179,16 @@
                     endfor
                   endcapture
                 -%}
-
-                {%- if images != blank -%}
-                  <li class="header__image grid-col-start-8 col-span-4 grid grid-cols-1 gap-4">
-                    {{- images -}}
-                  </li>
-                {%- endif -%}
               {%- endif -%}
             {%- endcapture -%}
 
             {%- comment -%} Output level 1 and place the captured 'dropdown' 2/3 with section blocks data in there. {%- endcomment -%}
             <li
-              class="header__menu-item header__menu-item--{{ dropdown_layout }} level-1 group/menu-item"
+              class="header__menu-item header__menu-item--multi level-1 group/menu-item"
               data-collapsible-group>
               <a
                 href="{{ link_1_url }}"
-                class="header__menu-link {% if level_1.current %} header__menu-link--active {% endif %} level-1 relative flex items-center gap-1 whitespace-nowrap text-left text-sm font-bold leading-6 text-inherit no-underline states:text-primary states:no-underline {{ link_classes }}"
+                class="{{ header_menu_link_classes }} level-1 {{ link_classes }} {% if level_1_active -%}{{ header_link_active_class }}{%- endif %} flex gap-1"
                 {%- if level_1.current %}
                   aria-current="page"
                 {% endif %}
@@ -202,14 +197,20 @@
                 {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]/menu-item:rotate-180' -%}
               </a>
               <div
-                class="header__inner-container header-menu__{{ dropdown_layout }} {% if dropdown_layout == 'single' %} {% else %} left-0 right-0 w-full {% endif %} absolute top-full hidden bg-color-default text-color-default group-[.collapsible-is-open]/menu-item:block"
-                data-collapsible-target>
-                <div class="header__navigation-container content-wrapper p-4">
+                class="header__inner-container {% if images != blank %}left-0 right-0 w-full {% endif %} absolute top-full hidden pl-10 bg-color-default text-color-default group-[.collapsible-is-open]/menu-item:block"
+                data-collapsible-target
+                tabindex="-1">
+                <div class="header__navigation-container content-wrapper grid grid-cols-12 gap-x-4 gap-y-0 p-4">
                   <ul
-                    class="header__menu-list level-2 {% if dropdown_layout == 'single' %} {% else %} grid grid-cols-12 gap-x-4 gap-y-0{% endif %}"
-                    tabindex="-1">
+                    class="header__menu-list level-2 relative col-span-2 flex flex-col gap-y-2">
                     {{- dropdown -}}
                   </ul>
+
+                  {%- if images != blank -%}
+                    <div class="header__image col-span-4 col-start-9 grid gap-4">
+                      {{- images -}}
+                    </div>
+                  {%- endif -%}
                 </div>
               </div>
             </li>

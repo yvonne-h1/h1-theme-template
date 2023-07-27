@@ -23,7 +23,7 @@
     "search": {
       "search": "search",
       "reset": "reset"
-    }
+    },
     "pagination": {
       "label": "Pagination",
       "page": "Page {{ number }}",
