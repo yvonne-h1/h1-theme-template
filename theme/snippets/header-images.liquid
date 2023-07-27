@@ -1,0 +1,22 @@
+{%- liquid
+  # Add the optional menu image for 3 level menu's
+  for block in section.blocks
+    if block.settings.image != null and block.settings.text != blank
+      # Handleize the item to match to make sure it's case-insensitive.
+      assign image_alt = link_1_title | escape
+      assign menu_link_title = link_1_title | handleize
+      assign link_block_title = block.settings.text | handleize
+
+      # Check if there is a match, if so output.
+      if menu_link_title == link_block_title
+        if block.settings.url != blank
+          echo '<a href="' | append: block.settings.url | append: '">'
+        endif
+        render 'responsive-image', image_object: block.settings.image, alt: image_alt, sizes: '(min-width: 1440px) 448px, (min-width: 1024px) 31vw, 288px, (min-width: 400px) 400px, (min-width: 320px) 320px', max_width: 448, class: 'lg:object-cover lg:h-full'
+        if block.settings.url != blank
+          echo '</a>'
+        endif
+      endif
+    endif
+  endfor
+-%}

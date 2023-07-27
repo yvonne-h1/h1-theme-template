@@ -27,7 +27,6 @@
       flex-col
       overflow-x-hidden
       bg-white
-      pb-8
       opacity-0
       transition-all
       duration-300
@@ -94,7 +93,7 @@
 
             assign mobile_menu_link_class = 'mobile-menu__link block no-underline text-inherit states:text-primary py-3 px-8'
             assign mobile_return_link_class = 'mobile-menu__return flex w-full items-center gap-2 px-4 py-5 text-xs text-inherit no-underline states:text-primary'
-            assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 left-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 bg-color-default'
+            assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 left-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 bg-color-default flex flex-col'
           -%}
 
           {%- if level_1.links == blank -%}
@@ -135,7 +134,7 @@
                 </button>
 
                 {%- comment -%} Level 2 {%- endcomment -%}
-                <ul class="mobile-menu__list level-2 pb-8" tabindex="-1">
+                <ul class="mobile-menu__list level-2 flex-1 pb-8" tabindex="-1">
                   {%- for level_2 in level_1.links -%}
                     {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
                     {%- assign level_2_url = level_2.url -%}
@@ -225,8 +224,24 @@
                         </div>
                       </li>
                     {%- endif -%}
+
+                    {%- liquid
+                      # Check for blocks that are linked to level 1.
+                      if section.blocks.size > 0
+                        capture images
+                          render 'header-images', section: section, link_1_title: link_1_title
+                        endcapture
+                      endif
+                    -%}
                   {%- endfor -%}
                 </ul>
+
+                {% comment %} Render the images, if they exist {% endcomment %}
+                {%- if images != blank -%}
+                  <div class="header__image justify-self-end">
+                    {{ images }}
+                  </div>
+                {%- endif -%}
               </div>
             </li>
           {%- endif -%}

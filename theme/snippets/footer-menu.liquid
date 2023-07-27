@@ -37,7 +37,7 @@
 
 {%- if menu.links.size > 0 -%}
   {%- comment -%} Level 1 {%- endcomment -%}
-  <ul class="{{ prefix }}__list level-1">
+  <ul class="{{ prefix }}__list level-1 flex list-none gap-x-10">
     {%- for link in menu.links -%}
       {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
       {%- liquid

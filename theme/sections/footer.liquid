@@ -5,11 +5,13 @@
 
   assign year = 'now' | date: '%Y'
   assign block_newsletter = blank
+  assign enable_country_selector = false
+  assign enable_language_selector = false
 -%}
 
-<footer class="footer bg-gray-200 py-8 text-gray-700 md:pt-10">
+<footer class="footer py-8 md:pt-10 {{ section.settings.color_scheme }}">
   <div class="content-wrapper content-wrapper-padding flex flex-col gap-y-0">
-    <div class="footer__blocks grid grid-cols-12 gap-y-8 gap-x-base md:gap-x-6 lg:gap-x-12">
+    <div class="footer__blocks grid grid-cols-12 gap-base">
       {%- for block in section.blocks -%}
         {%- assign block_type = block.type | handleize -%}
         {%- case block.type -%}
@@ -29,7 +31,7 @@
             -%}
 
             <div
-              class="footer-block footer-block--{{ block_type }} col-span-12 md:col-span-3"
+              class="footer-block footer-block--{{ block_type }} col-span-12 xl:col-span-9"
               {{ block.shopify_attributes }}>
               {%- comment -%} Create collapsible group for mobile {%- endcomment -%}
               <collapsible-component class="collapsible">
@@ -38,7 +40,7 @@
                   {%- if block.settings.title != blank -%}
                     <button
                       type="button"
-                      class="footer-block--menu__trigger relative block w-full py-3 text-left text-sm font-bold text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
+                      class="footer-block--menu__trigger relative block w-full py-3 text-left font-bold text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
                       data-collapsible-trigger>
                       {{- block.settings.title -}}
                       {%- render 'icons', icon: 'chevron-down', icon_class: 'w-4 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180 md:hidden' -%}
@@ -47,7 +49,7 @@
 
                   {%- comment -%} Output menu and collapsible content {%- endcomment -%}
                   <div
-                    class="footer-block--menu__target p-0 text-sm js:md:!max-h-min"
+                    class="footer-block--menu__target p-0 js:md:!max-h-min"
                     {{ target }}>
                     {%- if block.settings.menu != blank -%}
                       {%- render 'footer-menu', linklist: block.settings.menu, prefix: 'footer-menu', collapsible: false -%}
@@ -56,14 +58,14 @@
                     {%- comment -%} Output menu image {%- endcomment -%}
                     {%- if block.settings.image_src != blank -%}
                       {%- capture menu_image -%}
-                        {%- render 'responsive-image',
-                          image_object: block.settings.image_src,
-                          lazy: block.settings.lazy,
-                          alt: block.settings.image_src.alt,
-                          max_width: block.settings.image_max_width,
-                          class: "object-cover"
-                        -%}
-                      {%- endcapture -%}
+                          {%- render 'responsive-image',
+                            image_object: block.settings.image_src,
+                            lazy: block.settings.lazy,
+                            alt: block.settings.image_src.alt,
+                            max_width: block.settings.image_max_width,
+                            class: "object-cover"
+                          -%}
+                        {%- endcapture -%}
                       <div
                         class="flexible-holder"
                         style="--max-width: {{ block.settings.image_max_width }}px;">
@@ -85,186 +87,120 @@
               </collapsible-component>
             </div>
 
-            {%- comment -%} Optional text {%- endcomment -%}
-          {%- when 'text' -%}
-            <div
-              class="footer-block footer-block--{{ block_type }} col-span-12 grid grid-cols-1 gap-y-4 md:col-span-3"
-              {{ block.shopify_attributes }}>
-              {%- if block.settings.title != blank -%}
-                <p class="block w-full pt-3 text-sm font-bold text-black md:pt-0">
-                  {{- block.settings.title -}}
-                </p>
-              {%- endif -%}
-
-              {%- comment -%} Capture image with or without link {%- endcomment -%}
-              {%- capture image_block -%}
-                {%- if block.settings.image_src != blank -%}
-
-                  {%- comment -%} Capture image {%- endcomment -%}
-                  {%- capture image -%}
-                    {%- render 'responsive-image',
-                      image_object: block.settings.image_src,
-                      lazy: block.settings.lazy,
-                      alt: block.settings.image_src.alt,
-                      max_width: block.settings.image_max_width,
-                      class: "object-cover"
-                    -%}
-                  {%- endcapture -%}
-
-                  <div class="flexible-holder" style="--max-width: {{ block.settings.image_max_width }}px;">
-                    {%- if block.settings.image_url != blank -%}
-                      <a href="{{ block.settings.image_url }}" {% if block.settings.image_new_tab %} target="_blank" rel="noopener"{% endif %}>
-                        {{- image -}}
-                      </a>
-                    {%- else -%}
-                      {{- image -}}
-                    {%- endif -%}
-                  </div>
-                {%- endif -%}
-              {%- endcapture -%}
-
-              {%- comment -%} Output block {%- endcomment -%}
-              {%- if block.settings.richtext != blank or image != blank -%}
-                {%- liquid
-                  if block.settings.image_position == 'before' and image_block
-                    echo image_block
-                  endif
-                  if block.settings.richtext != blank
-                    echo '<div class="footer-block--' | append: block_type | append: '__richtext rte">'
-                    echo block.settings.richtext
-                    echo '</div>'
-                  endif
-                  if block.settings.image_position == 'after' and image_block
-                    echo image_block
-                  endif
-                -%}
-              {%- endif -%}
+            {%- comment -%} Social links {%- endcomment -%}
+          {%- when 'socials' -%}
+            <div class="footer-block footer-block--social col-span-12 md:col-span-4 lg:col-span-3">
+              {%- render 'global-social-links', icon_shape: block.settings.social_icons_shape, icon_size: block.settings.social_icons_size -%}
             </div>
 
-            {%- comment -%} Newsletter block and social links {%- endcomment -%}
+            {% comment %} Newsletter {% endcomment %}
           {%- when 'newsletter' -%}
             {%- liquid
               # Assign block object for later use outside this for loop.
               assign block_newsletter = block
-              # Set spacing class between newsletter and socials
-              assign spacing_class = ''
-              if block.settings.social_icons != blank and block.settings.newsletter
-                assign spacing_class = 'mt-6'
-              endif
             -%}
             <div
-              class="footer-block footer-block--{{ block_type }} -order-1 col-span-12 md:order-none md:col-span-3"
+              class="footer-block footer-block--{{ block_type }} col-span-12 md:col-span-6 xl:col-span-3"
               {{ block.shopify_attributes }}>
               {%- if block.settings.title != blank -%}
-                <p class="mb-4 block w-full text-sm font-bold text-black">
+                <p class="mb-4 block w-full font-bold">
                   {{- block.settings.title -}}
                 </p>
               {%- endif -%}
               {%- if block.settings.newsletter -%}
                 {%- render 'footer-newsletter', title: block.settings.title, description: block.settings.description, button_class: 'button-primary' -%}
               {%- endif -%}
-              {%- if block.settings.social_icons != blank -%}
-                <div class="{{ spacing_class }} hidden md:block">
-                  {%- render 'global-social-links', icon_shape: block.settings.social_icons_shape, icon_size: block.settings.social_icons_size -%}
-                </div>
+            </div>
+
+          {%- when 'localization' -%}
+            <div class="footer-block isolate col-span-12 flex flex-wrap gap-10 md:col-span-6 xl:col-span-3">
+              {%- if block.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+                {%- assign enable_country_selector = true -%}
+                <noscript>
+                  {%- form 'localization', id: 'FooterCountryFormNoScript', class: 'localization-form' -%}
+                    <div class="localization-form__select">
+                      <h2 class="visually-hidden" id="FooterCountryLabelNoScript">
+                        {{ 'localization.country_label' | t }}
+                      </h2>
+                      <select
+                        class="localization-selector link"
+                        name="country_code"
+                        aria-labelledby="FooterCountryLabelNoScript">
+                        {%- for country in localization.available_countries -%}
+                          <option
+                            value="{{ country.iso_code }}"
+                            {%- if country.iso_code == localization.country.iso_code %}
+                              selected
+                            {% endif %}>
+                            {{ country.name }} ({{ country.currency.iso_code }}
+                            {{ country.currency.symbol }})
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                      {% render 'icons', icon: 'caret' %}
+                    </div>
+                    <button class="button button--outline">
+                      {{ 'localization.update_country' | t }}
+                    </button>
+                  {%- endform -%}
+                </noscript>
+                <localization-form>
+                  {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+                    <div class="no-js-hidden flex flex-wrap items-center gap-4">
+                      <p class="m-0" id="FooterCountryLabel">
+                        {{ 'localization.country_label' | t }}
+                      </p>
+                      {%- render 'country-localization', localPosition: 'FooterCountry' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
+              {%- endif -%}
+
+              {%- if block.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+                {%- assign enable_language_selector = true -%}
+                <noscript>
+                  {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form' -%}
+                    <div class="localization-form__select">
+                      <h2 class="visually-hidden" id="FooterLanguageLabelNoScript">
+                        {{ 'localization.language_label' | t }}
+                      </h2>
+                      <select
+                        class="localization-selector link"
+                        name="locale_code"
+                        aria-labelledby="FooterLanguageLabelNoScript">
+                        {%- for language in localization.available_languages -%}
+                          <option
+                            value="{{ language.iso_code }}"
+                            lang="{{ language.iso_code }}"
+                            {%- if language.iso_code == localization.language.iso_code %}
+                              selected
+                            {% endif %}>
+                            {{ language.endonym_name | capitalize }}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                      {% render 'icons', icon: 'caret' %}
+                    </div>
+                    <button class="button button--outline">
+                      {{ 'localization.update_language' | t }}
+                    </button>
+                  {%- endform -%}
+                </noscript>
+
+                <localization-form>
+                  {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+                    <div class="no-js-hidden flex flex-wrap items-center gap-4">
+                      <p class="m-0" id="FooterLanguageLabel">
+                        {{ 'localization.language_label' | t }}
+                      </p>
+                      {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
+                    </div>
+                  {%- endform -%}
+                </localization-form>
               {%- endif -%}
             </div>
         {%- endcase -%}
       {%- endfor -%}
-
-      {%- comment -%} Extra output for social icons position on mobile related to the footer newsletter block if now newsletter block {%- endcomment -%}
-      {%- if block_newsletter != blank -%}
-        <div class="footer-block footer-block--social col-span-12 md:col-span-4 md:hidden lg:col-span-3">
-          {%- if block_newsletter.settings.social_icons != blank -%}
-            {%- render 'global-social-links', icon_shape: block_newsletter.settings.social_icons_shape, icon_size: block_newsletter.settings.social_icons_size -%}
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-
-      <div class="footer-block isolate flex flex-wrap gap-10">
-        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
-          <noscript>
-            {%- form 'localization', id: 'FooterCountryFormNoScript', class: 'localization-form' -%}
-              <div class="localization-form__select">
-                <h2 class="visually-hidden" id="FooterCountryLabelNoScript">
-                  {{ 'localization.country_label' | t }}
-                </h2>
-                <select
-                  class="localization-selector link"
-                  name="country_code"
-                  aria-labelledby="FooterCountryLabelNoScript">
-                  {%- for country in localization.available_countries -%}
-                    <option
-                      value="{{ country.iso_code }}"
-                      {%- if country.iso_code == localization.country.iso_code %}
-                        selected
-                      {% endif %}>
-                      {{ country.name }} ({{ country.currency.iso_code }}
-                      {{ country.currency.symbol }})
-                    </option>
-                  {%- endfor -%}
-                </select>
-                {% render 'icons', icon: 'caret' %}
-              </div>
-              <button class="button button--tertiary">
-                {{ 'localization.update_country' | t }}
-              </button>
-            {%- endform -%}
-          </noscript>
-          <localization-form>
-            {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
-              <div class="no-js-hidden flex flex-wrap items-center gap-4">
-                <p class="m-0" id="FooterCountryLabel">
-                  {{ 'localization.country_label' | t }}
-                </p>
-                {%- render 'country-localization', localPosition: 'FooterCountry' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {%- endif -%}
-
-        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-          <noscript>
-            {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form' -%}
-              <div class="localization-form__select">
-                <h2 class="visually-hidden" id="FooterLanguageLabelNoScript">
-                  {{ 'localization.language_label' | t }}
-                </h2>
-                <select
-                  class="localization-selector link"
-                  name="locale_code"
-                  aria-labelledby="FooterLanguageLabelNoScript">
-                  {%- for language in localization.available_languages -%}
-                    <option
-                      value="{{ language.iso_code }}"
-                      lang="{{ language.iso_code }}"
-                      {%- if language.iso_code == localization.language.iso_code %}
-                        selected
-                      {% endif %}>
-                      {{ language.endonym_name | capitalize }}
-                    </option>
-                  {%- endfor -%}
-                </select>
-                {% render 'icons', icon: 'caret' %}
-              </div>
-              <button class="button button--tertiary">
-                {{ 'localization.update_language' | t }}
-              </button>
-            {%- endform -%}
-          </noscript>
-
-          <localization-form>
-            {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
-              <div class="no-js-hidden flex flex-wrap items-center gap-4">
-                <p class="m-0" id="FooterLanguageLabel">
-                  {{ 'localization.language_label' | t }}
-                </p>
-                {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {%- endif -%}
-      </div>
     </div>
 
     {%- if section.settings.payment_icons or section.settings.copyright -%}
@@ -279,7 +215,7 @@
         {%- comment -%} Copyright {%- endcomment -%}
         {%- if section.settings.copyright -%}
           <div class="col-span-12 md:col-span-3">
-            <p class="text-sm font-bold">
+            <p class="font-bold">
               {{- 'sections.footer.copyright_html' | t: year: year -}}
             </p>
           </div>
@@ -294,7 +230,7 @@
   <div class="block h-[7.75rem] md:hidden"></div>
 {%- endif -%}
 
-{%- if section.settings.enable_country_selector or section.settings.enable_language_selector -%}
+{%- if enable_country_selector or enable_language_selector -%}
   <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
@@ -302,15 +238,53 @@
   {
     "name": "Footer",
     "max_blocks": 8,
-    "locales": {
-      "en": {
-        "title": "Slideshow"
-      },
-      "fr": {
-        "title": "Diaporama"
-      }
-    },
     "settings": [
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
       {
         "type": "header",
         "content": "Payment methods",
@@ -328,14 +302,6 @@
         "label": "Size",
         "default": "w-8",
         "options": [
-          {
-            "value": "w-3",
-            "label": "Extra small"
-          },
-          {
-            "value": "w-5",
-            "label": "Small"
-          },
           {
             "value": "w-6",
             "label": "Medium"
@@ -359,22 +325,6 @@
         "id": "copyright",
         "label": "Enable",
         "default": true
-      },
-      {
-        "type": "header",
-        "content": "Localization & Currency"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_country_selector",
-        "default": true,
-        "label": "Enable country selector"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_language_selector",
-        "default": true,
-        "label": "Enable language selector"
       }
     ],
     "blocks": [
@@ -384,6 +334,7 @@
       {
         "type": "menu",
         "name": "Menu",
+        "limit": 1,
         "settings": [
           {
             "type": "text",
@@ -395,118 +346,31 @@
             "type": "link_list",
             "id": "menu",
             "label": "Menu"
-          },
-          {
-            "type": "header",
-            "content": "Image"
-          },
-          {
-            "type": "image_picker",
-            "id": "image_src",
-            "label": "Image",
-            "info": "The best size is the max width @2x."
-          },
-          {
-            "type": "checkbox",
-            "id": "lazy",
-            "label": "Lazyload image",
-            "default": true,
-            "info": "For page speed, disable if the image is directly visible on mobile and desktop"
-          },
-          {
-            "type": "range",
-            "id": "image_max_width",
-            "min": 40,
-            "max": 600,
-            "step": 20,
-            "unit": "px",
-            "label": "Max width",
-            "default": 60
-          },
-          {
-            "type": "url",
-            "id": "image_url",
-            "label": "Url"
-          },
-          {
-            "type": "checkbox",
-            "id": "image_new_tab",
-            "label": "Open in new tab"
           }
         ]
       },
       {
-        "type": "text",
-        "name": "Text",
+        "type": "localization",
+        "name": "Localization",
+        "limit": 1,
         "settings": [
           {
-            "type": "text",
-            "id": "title",
-            "label": "Title"
-          },
-          {
-            "type": "richtext",
-            "id": "richtext",
-            "label": "Richtext"
-          },
-          {
-            "type": "header",
-            "content": "Image"
-          },
-          {
-            "type": "image_picker",
-            "id": "image_src",
-            "label": "Image",
-            "info": "The best size is the max width @2x."
-          },
-          {
             "type": "checkbox",
-            "id": "lazy",
-            "label": "Lazyload image",
+            "id": "enable_country_selector",
             "default": true,
-            "info": "For page speed, disable if the image is directly visible on mobile and desktop"
-          },
-          {
-            "type": "range",
-            "id": "image_max_width",
-            "min": 40,
-            "max": 600,
-            "step": 20,
-            "unit": "px",
-            "label": "Max width",
-            "default": 100
-          },
-          {
-            "type": "select",
-            "id": "image_position",
-            "label": "Position",
-            "options": [
-              {
-                "value": "before",
-                "label": "Before text"
-              },
-              {
-                "value": "after",
-                "label": "After text"
-              }
-            ],
-            "default": "before"
-          },
-          {
-            "type": "url",
-            "id": "image_url",
-            "label": "Url"
+            "label": "Enable country selector"
           },
           {
             "type": "checkbox",
-            "id": "image_new_tab",
-            "label": "Open in new tab"
+            "id": "enable_language_selector",
+            "default": true,
+            "label": "Enable language selector"
           }
         ]
       },
       {
         "type": "newsletter",
-        "name": "Newsletter and socials",
+        "name": "Newsletter",
         "limit": 1,
         "settings": [
           {
@@ -528,15 +392,22 @@
             "default": true
           },
           {
+            "type": "html",
+            "id": "klaviyo_newsletter",
+            "label": "Klaviyo newsletter",
+            "info": "Add the embed code from Klaviyo."
+          }
+        ]
+      },
+      {
+        "type": "socials",
+        "name": "Socials",
+        "limit": 1,
+        "settings": [
+          {
             "type": "header",
             "content": "Social icons",
-            "info": "Choose the icons to show in the theme settings."
-          },
-          {
-            "type": "checkbox",
-            "id": "social_icons",
-            "label": "Enable",
-            "default": true
+            "info": "Choose the icons to show by adding a link in the Theme Settings under 'Social media'."
           },
           {
             "type": "select",

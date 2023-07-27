@@ -5,25 +5,8 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "menu-support": {
-          "type": "menu",
-          "settings": {
-            "title": "Support",
-            "menu": "support"
-          }
-        },
-        "menu-legal": {
-          "type": "menu",
-          "settings": {
-            "title": "Legal",
-            "menu": "legal"
-          }
-        },
-        "about-text": {
-          "type": "text",
-          "settings": {
-            "title": "Your brand",
-            "richtext": "<p>Slogan about your brand</p>"
+        "menu": {
+          "type": "menu"
           }
         },
         "newsletters-and-socials": {
@@ -38,7 +21,7 @@
           }
         }
       },
-      "block_order": ["menu-support", "menu-legal", "about-text", "newsletters-and-socials"],
+      "block_order": ["menu", "newsletters-and-socials"],
       "settings": {
         "payment_icons": true,
         "payment_icons_size": "w-8",
