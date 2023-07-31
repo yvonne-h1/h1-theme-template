@@ -1,8 +1,4 @@
 {%- liquid
-  comment
-    Import styles for this section
-  endcomment
-
   assign year = 'now' | date: '%Y'
   assign block_newsletter = blank
   assign enable_country_selector = false
@@ -10,14 +6,13 @@
 -%}
 
 <footer class="footer py-8 md:pt-10 {{ section.settings.color_scheme }}">
-  <div class="content-wrapper content-wrapper-padding flex flex-col gap-y-0">
-    <div class="footer__blocks grid grid-cols-12 gap-base">
+  <div class="content-wrapper content-wrapper-padding flex flex-col">
+    <div class="footer__blocks grid grid-cols-12 gap-y-10 md:gap-base">
       {%- for block in section.blocks -%}
-        {%- assign block_type = block.type | handleize -%}
         {%- case block.type -%}
             {%- comment -%} App block {%- endcomment -%}
           {%- when '@app' -%}
-            <div class="footer-block footer-block--{{ block_type }} col-span-12 md:col-span-3">
+            <div class="footer-block footer-block--{{ block.type }} col-span-12 md:col-span-3">
               {% render block %}
             </div>
 
@@ -31,33 +26,27 @@
             -%}
 
             <div
-              class="footer-block footer-block--{{ block_type }} col-span-12 xl:col-span-9"
+              class="footer-block footer-block--{{ block.type }} {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}"
               {{ block.shopify_attributes }}>
               {%- comment -%} Create collapsible group for mobile {%- endcomment -%}
-              <collapsible-component class="collapsible">
-                <div class="group" data-collapsible-group>
-                  {%- comment -%} Output menu header and collapsilbe tirrger {%- endcomment -%}
-                  {%- if block.settings.title != blank -%}
-                    <button
-                      type="button"
-                      class="footer-block--menu__trigger relative block w-full py-3 text-left font-bold text-black states:text-primary md:pointer-events-none md:mb-4 md:p-0"
-                      data-collapsible-trigger>
-                      {{- block.settings.title -}}
-                      {%- render 'icons', icon: 'chevron-down', icon_class: 'w-4 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180 md:hidden' -%}
-                    </button>
+              <collapsible-component
+                class="collapsible"
+                data-options='
+                  {
+                    "breakpointMax": 768
+                  }
+                '>
+                {%- comment -%} Output menu and collapsible content {%- endcomment -%}
+                <div
+                  class="footer-block--menu__target p-0 js:md:!max-h-min"
+                  {{ target }}>
+                  {%- if block.settings.menu != blank -%}
+                    {%- render 'footer-menu', linklist: block.settings.menu, collapsible: block.settings.enable_collapsible -%}
                   {%- endif -%}
 
-                  {%- comment -%} Output menu and collapsible content {%- endcomment -%}
-                  <div
-                    class="footer-block--menu__target p-0 js:md:!max-h-min"
-                    {{ target }}>
-                    {%- if block.settings.menu != blank -%}
-                      {%- render 'footer-menu', linklist: block.settings.menu, prefix: 'footer-menu', collapsible: false -%}
-                    {%- endif -%}
-
-                    {%- comment -%} Output menu image {%- endcomment -%}
-                    {%- if block.settings.image_src != blank -%}
-                      {%- capture menu_image -%}
+                  {%- comment -%} Output menu image {%- endcomment -%}
+                  {%- if block.settings.image_src != blank -%}
+                    {%- capture menu_image -%}
                           {%- render 'responsive-image',
                             image_object: block.settings.image_src,
                             lazy: block.settings.lazy,
@@ -66,30 +55,29 @@
                             class: "object-cover"
                           -%}
                         {%- endcapture -%}
-                      <div
-                        class="flexible-holder"
-                        style="--max-width: {{ block.settings.image_max_width }}px;">
-                        {%- if block.settings.image_url != blank -%}
-                          <a
-                            href="{{ block.settings.image_url }}"
-                            {% if block.settings.image_new_tab %}
-                              target="_blank" rel="noopener"
-                            {% endif %}>
-                            {{ menu_image }}
-                          </a>
-                        {%- else -%}
+                    <div
+                      class="flexible-holder"
+                      style="--max-width: {{ block.settings.image_max_width }}px;">
+                      {%- if block.settings.image_url != blank -%}
+                        <a
+                          href="{{ block.settings.image_url }}"
+                          {% if block.settings.image_new_tab %}
+                            target="_blank" rel="noopener"
+                          {% endif %}>
                           {{ menu_image }}
-                        {%- endif -%}
-                      </div>
-                    {%- endif -%}
-                  </div>
+                        </a>
+                      {%- else -%}
+                        {{ menu_image }}
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
                 </div>
               </collapsible-component>
             </div>
 
             {%- comment -%} Social links {%- endcomment -%}
           {%- when 'socials' -%}
-            <div class="footer-block footer-block--social col-span-12 md:col-span-4 lg:col-span-3">
+            <div class="footer-block footer-block--social {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}">
               {%- render 'global-social-links', icon_shape: block.settings.social_icons_shape, icon_size: block.settings.social_icons_size -%}
             </div>
 
@@ -100,7 +88,7 @@
               assign block_newsletter = block
             -%}
             <div
-              class="footer-block footer-block--{{ block_type }} col-span-12 md:col-span-6 xl:col-span-3"
+              class="footer-block footer-block--{{ block_type }} {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}"
               {{ block.shopify_attributes }}>
               {%- if block.settings.title != blank -%}
                 <p class="mb-4 block w-full font-bold">
@@ -113,7 +101,9 @@
             </div>
 
           {%- when 'localization' -%}
-            <div class="footer-block isolate col-span-12 flex flex-wrap gap-10 md:col-span-6 xl:col-span-3">
+            <div
+              class="footer-block footer-block--{{ block.type }} isolate flex flex-wrap gap-10 {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}"
+              {{ block.shopify_attributes }}>
               {%- if block.settings.enable_country_selector and localization.available_countries.size > 1 -%}
                 {%- assign enable_country_selector = true -%}
                 <noscript>
@@ -146,11 +136,11 @@
                 </noscript>
                 <localization-form>
                   {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
-                    <div class="no-js-hidden flex flex-wrap items-center gap-4">
+                    <div class="no-js-hidden flex flex-col gap-4">
                       <p class="m-0" id="FooterCountryLabel">
                         {{ 'localization.country_label' | t }}
                       </p>
-                      {%- render 'country-localization', localPosition: 'FooterCountry' -%}
+                      {%- render 'country-localization', localPosition: 'FooterCountry', color_scheme: section.settings.color_scheme -%}
                     </div>
                   {%- endform -%}
                 </localization-form>
@@ -189,11 +179,11 @@
 
                 <localization-form>
                   {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
-                    <div class="no-js-hidden flex flex-wrap items-center gap-4">
+                    <div class="no-js-hidden flex flex-col gap-4">
                       <p class="m-0" id="FooterLanguageLabel">
                         {{ 'localization.language_label' | t }}
                       </p>
-                      {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
+                      {%- render 'language-localization', localPosition: 'FooterLanguage', color_scheme: section.settings.color_scheme -%}
                     </div>
                   {%- endform -%}
                 </localization-form>
@@ -237,7 +227,6 @@
 {% schema %}
   {
     "name": "Footer",
-    "max_blocks": 8,
     "settings": [
       {
         "type": "header",
@@ -337,15 +326,88 @@
         "limit": 1,
         "settings": [
           {
-            "type": "text",
-            "id": "title",
-            "label": "Title",
-            "info": "Only set a title when you want the menu to be collapsed on mobile."
+            "type": "checkbox",
+            "id": "enable_collapsible",
+            "label": "Enable mobile collapsibles",
+            "info": "Show as collapsibles on small screens.",
+            "default": true
           },
           {
             "type": "link_list",
             "id": "menu",
             "label": "Menu"
+          },
+          {
+            "type": "select",
+            "id": "width_mobile",
+            "label": "Width mobile",
+            "default": "col-span-12",
+            "options": [
+              {
+                "value": "col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "col-span-6",
+                "label": "1/2"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_tablet",
+            "label": "Width tablet",
+            "default": "md:col-span-6",
+            "options": [
+              {
+                "value": "md:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "md:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "md:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "md:col-span-8",
+                "label": "2/3"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_desktop",
+            "label": "Width desktop",
+            "default": "xl:col-span-9",
+            "options": [
+              {
+                "value": "xl:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "xl:col-span-3",
+                "label": "1/4"
+              },
+              {
+                "value": "xl:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "xl:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "xl:col-span-8",
+                "label": "2/3"
+              },
+              {
+                "value": "xl:col-span-9",
+                "label": "3/4"
+              }
+            ]
           }
         ]
       },
@@ -365,6 +427,78 @@
             "id": "enable_language_selector",
             "default": true,
             "label": "Enable language selector"
+          },
+          {
+            "type": "select",
+            "id": "width_mobile",
+            "label": "Width mobile",
+            "default": "col-span-12",
+            "options": [
+              {
+                "value": "col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "col-span-6",
+                "label": "1/2"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_tablet",
+            "label": "Width tablet",
+            "default": "md:col-span-6",
+            "options": [
+              {
+                "value": "md:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "md:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "md:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "md:col-span-8",
+                "label": "2/3"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_desktop",
+            "label": "Width desktop",
+            "default": "xl:col-span-9",
+            "options": [
+              {
+                "value": "xl:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "xl:col-span-3",
+                "label": "1/4"
+              },
+              {
+                "value": "xl:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "xl:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "xl:col-span-8",
+                "label": "2/3"
+              },
+              {
+                "value": "xl:col-span-9",
+                "label": "3/4"
+              }
+            ]
           }
         ]
       },
@@ -396,6 +530,78 @@
             "id": "klaviyo_newsletter",
             "label": "Klaviyo newsletter",
             "info": "Add the embed code from Klaviyo."
+          },
+          {
+            "type": "select",
+            "id": "width_mobile",
+            "label": "Width mobile",
+            "default": "col-span-12",
+            "options": [
+              {
+                "value": "col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "col-span-6",
+                "label": "1/2"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_tablet",
+            "label": "Width tablet",
+            "default": "md:col-span-6",
+            "options": [
+              {
+                "value": "md:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "md:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "md:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "md:col-span-8",
+                "label": "2/3"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_desktop",
+            "label": "Width desktop",
+            "default": "xl:col-span-9",
+            "options": [
+              {
+                "value": "xl:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "xl:col-span-3",
+                "label": "1/4"
+              },
+              {
+                "value": "xl:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "xl:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "xl:col-span-8",
+                "label": "2/3"
+              },
+              {
+                "value": "xl:col-span-9",
+                "label": "3/4"
+              }
+            ]
           }
         ]
       },
@@ -450,6 +656,78 @@
               {
                 "value": "w-12",
                 "label": "Extra large"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_mobile",
+            "label": "Width mobile",
+            "default": "col-span-12",
+            "options": [
+              {
+                "value": "col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "col-span-6",
+                "label": "1/2"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_tablet",
+            "label": "Width tablet",
+            "default": "md:col-span-6",
+            "options": [
+              {
+                "value": "md:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "md:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "md:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "md:col-span-8",
+                "label": "2/3"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "width_desktop",
+            "label": "Width desktop",
+            "default": "xl:col-span-9",
+            "options": [
+              {
+                "value": "xl:col-span-12",
+                "label": "Full"
+              },
+              {
+                "value": "xl:col-span-3",
+                "label": "1/4"
+              },
+              {
+                "value": "xl:col-span-4",
+                "label": "1/3"
+              },
+              {
+                "value": "xl:col-span-6",
+                "label": "1/2"
+              },
+              {
+                "value": "xl:col-span-8",
+                "label": "2/3"
+              },
+              {
+                "value": "xl:col-span-9",
+                "label": "3/4"
               }
             ]
           }
