@@ -298,18 +298,21 @@ module.exports = {
 
       /**
        * Variants
-       * Create a combined variant for active, focus and hover
-       * Usage: :states[class-name]
-       * Create a combined variant for js and no-js, class will be applied in html-head-js
-       * Usage: :no-js[class-name]
-       * Create a combined variant for touch and no-touch, class will be applied in html-head-js
-       * Usage: :touch[class-name]
        */
+      // Create a combined variant for active, focus and hover
       addVariant('states', ['&:hover', '&:focus', '&:active']);
+      addVariant('group-states', [
+        ':merge(.group):hover &',
+        ':merge(.group):focus &',
+        ':merge(.group):active &',
+      ]);
+      //  Create a combined variant for js and no-js, class will be applied in html-head-js
       addVariant('js', ['.js &']);
       addVariant('no-js', ['.no-js &']);
+      // Create a combined variant for touch and no-touch, class will be applied in html-head-jsVariant('touch', ['.touch &']);
       addVariant('touch', ['.touch &']);
       addVariant('no-touch', ['.no-touch &']);
+      // Create a combined variant for disabled, class will be applied in html-head-jsVariant('touch', ['.touch &']);
       addVariant('disabled', ['&:disabled', '&.disabled', '&[aria-disabled="true"]']);
     }),
   ],

@@ -7,13 +7,22 @@
     --swiper-theme-color: var(--text-color-default);
     --text-link-color: var(--text-color-default);
     --text-link-color-states: var(--text-color-default);
+    --text-active-color: var(--text-color-default);
     a {
       &:not(.button) {
         color: var(--text-link-color);
-        text-decoration: underline;
         @include states() {
           text-decoration: none;
+          color: var(--text-active-color);
         }
+      }
+      &.active {
+        color: var(--text-active-color);
+      }
+    }
+    .button--outline {
+      @include states() {
+        background-color: var(--text-active-color);
       }
     }
 
@@ -21,37 +30,44 @@
     &--black {
       --color-scheme-background-color: var(--color-black);
       --text-color-default: var(--color-white);
+      --text-active-color: var(--color-primary);
     }
     // .color-scheme--white
     &--white {
       --color-scheme-background-color: var(--color-white);
       --text-color-default: var(--color-black);
+      --text-active-color: var(--color-primary);
     }
     // .color-scheme--primary
     &--primary {
       --color-scheme-background-color: var(--color-primary);
       --text-color-default: var(--color-primary-text);
+      --text-active-color: var(--color-secondary);
     }
     // .color-scheme--gradient
     &--gradient {
       --color-scheme-background-color: var(--color-primary-gradient);
       --text-color-default: var(--color-primary-text);
       background-image: var(--color-scheme-background-color);
+      --text-active-color: var(--color-secondary);
     }
     // .color-scheme--secondary
     &--secondary {
       --color-scheme-background-color: var(--color-secondary);
       --text-color-default: var(--color-secondary-text);
+      --text-active-color: var(--color-primary);
     }
     // .color-scheme--accent
     &--accent {
       --color-scheme-background-color: var(--color-accent);
       --text-color-default: var(--color-accent-text);
+      --text-active-color: var(--color-secondary);
     }
     // .color-scheme--gray
     &--gray {
       --color-scheme-background-color: theme(colors.gray.200);
       --text-color-default: var(--color-black);
+      --text-active-color: var(--color-primary);
     }
 
     // .color-scheme--black

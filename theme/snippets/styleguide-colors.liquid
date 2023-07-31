@@ -1,7 +1,7 @@
 {%- liquid
-  assign color_wrapper_class = 'flex flex-wrap gap-2 text-xs'
-  assign circle_class = 'flex h-20 w-20 items-center justify-center rounded p-1 text-center mb-1'
-  assign circle_class_full = 'flex h6 mb-0 w-full items-center justify-center rounded p-2 text-center'
+  assign color_wrapper_class = 'flex flex-wrap gap-2 text-xs items-center'
+  assign circle_class = 'h-16 w-16 rounded-full p-1 text-center mb-1'
+  assign circle_class_full = 'text-lg mb-0 w-[150px] rounded-full h-fit p-2 text-center'
 
   assign global_colors = 'color-bg|background, text-color-default|text, text-link-color|link, text-link-color-states|link hover' | split: ', '
   assign palette_types = '50, 100, 200, 300, 400, 500, 600, 700, 800, 900' | split: ', '
@@ -17,7 +17,7 @@
         assign color_capitalized = color | split: '|' | last | capitalize
       -%}
 
-      <div>
+      <div class="{{ color_wrapper_class }} flex-col items-center justify-center">
         <div
           class="{{ circle_class }}"
           style="background-color: var(--{{- color_class -}});"
@@ -32,7 +32,7 @@
     {%- for color in communication_colors -%}
       {%- assign color_capitalized = color | capitalize -%}
 
-      <div>
+      <div class="{{ color_wrapper_class }} flex-col items-center justify-center">
         <div
           class="{{ circle_class }}"
           style="background-color: var(--color-{{- color -}});"
@@ -52,7 +52,7 @@
     </div>
 
     {%- for type in palette_types -%}
-      <div>
+      <div class="{{ color_wrapper_class }} flex-col items-center justify-center ">
         <div
           class="{{ circle_class }}"
           style="background-color: var(--color-primary-{{ type }});"
@@ -110,9 +110,7 @@
       <p>Gray</p>
     </div>
 
-    {%- assign gray_palette_types = 'bg-gray-50, bg-gray-100, bg-gray-200, bg-gray-300, bg-gray-400, bg-gray-500, bg-gray-600, bg-gray-700, bg-gray-800, bg-gray-900'
-      | split: ', '
-    -%}
+    {%- assign gray_palette_types = 'bg-gray-50, bg-gray-100, bg-gray-200, bg-gray-300, bg-gray-400, bg-gray-500, bg-gray-600, bg-gray-700, bg-gray-800, bg-gray-900' | split: ', ' -%}
     {%- for type in gray_palette_types -%}
       <div>
         <div

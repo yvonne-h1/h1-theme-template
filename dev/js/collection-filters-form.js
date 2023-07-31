@@ -212,7 +212,7 @@ if (!customElements.get('collection-filters-form')) {
      */
     reInitCollapsibles() {
       const collapsibles = this.closest('collapsible-component');
-      collapsibles?.construct();
+      collapsibles?.init();
     }
 
     updateTotalActiveFilterOptionsCount() {

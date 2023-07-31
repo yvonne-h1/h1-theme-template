@@ -12,6 +12,8 @@ window.drawerToggleClasses = {
 */
 const debug = () => window.location.hostname === '127.0.0.1' || window.location.hostname.indexOf('myshopify.com') !== -1;
 
+const windowWidth = () => window.innerWidth;
+
 const trapFocusHandlers = {};
 /**
  * @param {Object} element the element to check
@@ -198,6 +200,11 @@ document.querySelectorAll('.prevent-hashjump').forEach((link) => {
     }
   } );
 } );
+
+// listen for resize event
+window.addEventListener( 'resize', debounce(() => {
+  windowWidth();
+}, 50));
 
 /*
  * Shopify Common JS - Don't change

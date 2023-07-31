@@ -54,8 +54,7 @@
       }
 
       handleSwiperButtons() {
-        let windowWidth = window.innerWidth;
-        if (windowWidth < 768) {
+        if (windowWidth() < 768) {
           this.querySelectorAll('button').forEach((button) => button.classList.remove('hidden'));
         }
         else if (this.swiperInstance) {

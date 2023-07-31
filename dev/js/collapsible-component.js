@@ -85,6 +85,7 @@ if (!customElements.get('collapsible-component')) {
         closeOnMouseleave: false,
         isMobileMenu: false,
         desktopSubmenu: false,
+        breakpointMax: false,
       };
 
       // Get options from element data and combine with this.options
@@ -96,6 +97,7 @@ if (!customElements.get('collapsible-component')) {
         };
       }
 
+      // Used for the main menu to retain the nested levels for the mobile menu
       this.state = [this.querySelector('nav')];
 
       // Reduce actions (So the event can also be removed)
@@ -108,42 +110,95 @@ if (!customElements.get('collapsible-component')) {
 
       this.timeout = null;
 
-      // Construct web component
-      this.construct();
+      window.addEventListener('resize', debounce(() => {
+        this.init();
+      }, 50));
+
+      this.init();
     }
 
-    construct() {
+    init() {
+      // Check if the window width allows for the collapsibles to be rendered
+      let init;
+      if (this.options.breakpointMax === false) {
+        init = true;
+      }
+      else {
+        if (this.options.breakpointMax < windowWidth()) {
+          init = false;
+        }
+        else {
+          init = true;
+        }
+      }
+      this.construct(init);
+    }
+
+    construct(init = true) {
       // Init elements
       this.groups = this.hasAttribute('data-collapsible-group')
         ? [this.closest('[data-collapsible-group]')]
         : this.querySelectorAll('[data-collapsible-group]');
       this.triggers = this.querySelectorAll('[data-collapsible-trigger]');
 
-      // Init events
-      // Trigger events on [data-collapsible-trigger]
+      // Remove all event listeners
       this.triggers.forEach((trigger) => {
         trigger.removeEventListener('click', this.reducer.clickTarget);
-        trigger.addEventListener('click', this.reducer.clickTarget);
-
-        // Mouse enter
         if (this.options.onHover) {
           trigger.removeEventListener('mouseenter', this.reducer.mouseEnterTarget);
+        }
+      });
+      this.groups.forEach((group) => {
+        if (this.options.onHover) {
+          group.removeEventListener('mouseleave', this.reducer.mouseLeaveGroup);
+        }
+      });
+      if (this.options.closeOnMouseleave) {
+        this.removeEventListener('mouseleave', this.reducer.mouseLeaveContainer);
+      }
+
+      // the collapsible breakpoint has been reached, so the collapsibles should be opened
+      if (!init) {
+        this.groups.forEach((group) => {
+          this.open(group);
+        });
+
+        // hide all trigger icons
+        this.triggers.forEach((trigger) => {
+          trigger.querySelector('.icon').classList.add('hidden');
+        });
+
+        return;
+      }
+      // close the collapsibles because the breakpoint demands them to be collapsed
+      else if (init && this.options.breakpointMax !== false) {
+        this.groups.forEach((group) => {
+          this.close(group);
+        });
+      }
+
+      // Trigger events on [data-collapsible-trigger]
+      this.triggers.forEach((trigger) => {
+
+        // show all icons
+        trigger.querySelector('.icon').classList.remove('hidden');
+
+        // add event listeners
+        trigger.addEventListener('click', this.reducer.clickTarget);
+        if (this.options.onHover) {
           trigger.addEventListener('mouseenter', this.reducer.mouseEnterTarget);
         }
       });
 
       // Trigger events on [data-collapsible-group]
       this.groups.forEach((group) => {
-        // Mouse leave
         if (this.options.onHover) {
-          group.removeEventListener('mouseleave', this.reducer.mouseLeaveGroup);
           group.addEventListener('mouseleave', this.reducer.mouseLeaveGroup);
         }
       });
 
       // Trigger mouseleave on container <collapsible-component>
       if (this.options.closeOnMouseleave) {
-        this.removeEventListener('mouseleave', this.reducer.mouseLeaveContainer);
         this.addEventListener('mouseleave', this.reducer.mouseLeaveContainer);
       }
     }

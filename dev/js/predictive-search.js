@@ -38,12 +38,9 @@ if (!customElements.get('predictive-search')) {
       this.predictiveSearchMaxSize =
         this.predictiveSearchResults.getAttribute('data-max-results') || 4;
 
-      this.input.addEventListener(
-        'input',
-        debounce((event) => {
-          this.onChange(event);
-        }, 100).bind(this),
-      );
+      this.input.addEventListener( 'input', debounce((event) => {
+        this.onChange(event);
+      }, 100).bind(this));
 
       this.handleInputState();
 

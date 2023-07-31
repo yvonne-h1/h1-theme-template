@@ -5,6 +5,12 @@
     - localPosition: pass in the position in which the form is coming up to create specific IDs
 {%- endcomment -%}
 
+{%- liquid
+  unless color_scheme
+    assign color_scheme = 'color-scheme--white'
+  endunless
+-%}
+
 <div class="localization-form relative">
   <button
     type="button"
@@ -19,7 +25,7 @@
     {% render 'icons', icon: 'chevron-down' %}
   </button>
   <div
-    class="localization-form__list-wrapper absolute top-10 bg-white p-2"
+    class="localization-form__list-wrapper color-scheme absolute top-10 {{ color_scheme }} p-2"
     hidden
     data-localization-list>
     <ul id="{{ localPosition }}List" role="list" class="localization-form__list list-unstyled">
