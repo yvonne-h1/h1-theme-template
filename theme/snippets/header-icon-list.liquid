@@ -4,7 +4,7 @@
     assign customer_accounts = true
   endif
 
-  assign icon_classes = 'p-3 text-inherit states:text-primary'
+  assign icon_classes = 'p-3 text-inherit'
 -%}
 
 {%- comment -%} Icon list with search, account and cart icons. {%- endcomment -%}
@@ -23,7 +23,7 @@
     -%}
 
     <li
-      class="icon-list__item {{ search_item_class }} {{ search_item_class_md }} {% if template.name == 'search' %}text-primary{%- endif -%}"
+      class="icon-list__item {{ search_item_class }} {{ search_item_class_md }} {% if template.name == 'search' %}active{%- endif -%}"
       data-header-search>
       <class-toggle-component
         data-options='
@@ -67,7 +67,7 @@
     <li class="icon-list__item {{ customer_item_class }} {{ customer_item_class_md }}">
       <a
         href="{%- if customer -%}{{- routes.account_url -}}{%- else -%}{{- routes.account_login_url -}}{%- endif -%}"
-        class="header__icon block {{ icon_classes }} {% if template.directory == 'customers' %}text-primary{%- endif -%}">
+        class="header__icon block {{ icon_classes }} {% if template.directory == 'customers' %}active{%- endif -%}">
         {%- render 'icons', icon: 'user', icon_class: 'w-6' -%}
         <span class="sr-only">
           {{- text -}}

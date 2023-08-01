@@ -3,12 +3,17 @@
   if shop.customer_accounts_enabled or shop.customer_accounts_optional
     assign customer_accounts = true
   endif
+
+  capture menu_name
+    render 'format-translation', namespace: 'sections.header', key: 'menu', fallback: 'Menu'
+  endcapture
+  assign menu_name = menu_name | downcase
 -%}
 
 {%- comment -%}  Renders the menu drawer {%- endcomment -%}
 <div
   id="mobileMenu"
-  class="mobile-menu lg:hidden"
+  class="mobile-menu lg:hidden {{ section.settings.color_scheme }}"
   tabindex="-1"
   role="dialog">
   <collapsible-component
@@ -26,11 +31,11 @@
       -translate-x-full
       flex-col
       overflow-x-hidden
-      bg-white
+      bg-inherit
+      text-inherit
       opacity-0
       transition-all
       duration-300
-      text-color-default
 
       {% comment %} When the body has class mobile-menu-is-open {% endcomment %}
       group-[.mobile-menu-is-open]/body:visible
@@ -57,7 +62,7 @@
         '>
         <button
           type="button"
-          class="mobile-menu__toggle-button button button--outline button--rounded relative cursor-pointer rounded-full border-0 p-3">
+          class="mobile-menu__toggle-button button button--outline button--rounded relative cursor-pointer rounded-full border-0 p-3 text-inherit">
           {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
         </button>
       </class-toggle-component>
@@ -71,40 +76,47 @@
         {%- for level_1 in menu_list.links -%}
           {%- liquid
             # Get link and fix deep link to native filters
-            assign link_1_url = level_1.url
-            if link_1_url contains 'collections' and link_1_url contains 'filter'
+            assign level_1_url = level_1.url
+            if level_1_url contains 'collections' and level_1_url contains 'filter'
               assign link_1_url = link_1_url | replace: '%3F', '?'
             endif
 
             # check if item should be highlighted
             assign link_classes = ''
-            assign link_1_title = level_1.title
-            if link_1_title contains '[HIGHLIGHT]'
-              assign link_1_title = level_1.title | remove: '[HIGHLIGHT]' | strip
-              assign link_classes = 'button button--primary button--lg lg:button--md text-white states:bg-white border-transparent'
+            assign level_1_title = level_1.title
+            if level_1_title contains '[HIGHLIGHT]'
+              assign level_1_title = level_1.title | remove: '[HIGHLIGHT]' | strip
+              assign link_classes = 'button button--lg lg:button--md border-transparent'
             endif
 
             # if link is active
-            assign link_active_class = 'mobile-menu__link--active text-primary'
+            assign link_active_class = 'active'
             assign level_1_is_active = false
             if level_1.child_active or level_1.current
               assign level_1_is_active = true
             endif
 
-            assign mobile_menu_link_class = 'mobile-menu__link block no-underline text-inherit states:text-primary py-3 px-8'
-            assign mobile_return_link_class = 'mobile-menu__return flex w-full items-center gap-2 px-4 py-5 text-xs text-inherit no-underline states:text-primary'
-            assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 left-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 bg-color-default flex flex-col'
+            assign level_1_has_link = true
+            if level_1_url == '#'
+              assign level_1_has_link = false
+            endif
+
+            assign sublevel_title_class = 'h3 m-0 px-8 py-4 no-underline'
+
+            assign mobile_menu_link_class = 'mobile-menu__link block no-underline py-3 px-8'
+            assign mobile_return_link_class = 'mobile-menu__return flex w-full items-center gap-2 px-4 py-5 text-sm no-underline'
+            assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 left-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 flex flex-col'
           -%}
 
           {%- if level_1.links == blank -%}
             <li class="mobile-menu__item level-1">
               <a
-                href="{{ link_1_url }}"
+                href="{{ level_1_url }}"
                 class="{{ mobile_menu_link_class }} level-1 {{ link_classes }} {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
                 {% if level_1.current %}
                   aria-current="page"
                 {% endif %}>
-                {{ link_1_title | escape }}
+                {{ level_1_title | escape }}
               </a>
             </li>
 
@@ -115,13 +127,13 @@
                 class="{{ mobile_menu_link_class }} level-1 flex w-full items-center justify-between gap-2 {{ link_classes }} {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
                 data-collapsible-trigger>
                 <span>
-                  {{- link_1_title | escape -}}
+                  {{- level_1_title | escape -}}
                 </span>
                 {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
               </button>
               <div
-                id="link-{{ link_1_title | handleize }}"
-                class="{{ mobile_submenu_class }} level-1 group/submenu-2 group-[.collapsible-is-open]/submenu-1:visible group-[.collapsible-is-open]/submenu-1:translate-x-0"
+                id="link-{{ level_1_title | handleize }}"
+                class="{{ mobile_submenu_class }} level-1 group/submenu-2 group-[.collapsible-is-open]/submenu-1:visible group-[.collapsible-is-open]/submenu-1:translate-x-0 {{ section.settings.color_scheme }}"
                 tabindex="-1"
                 data-collapsible-target>
                 {%- comment -%} Link back to level 1 {%- endcomment -%}
@@ -130,24 +142,45 @@
                   aria-expanded="true"
                   data-collapsible-trigger>
                   {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
-                  {{- link_1_title | escape -}}
+                  {%- render 'format-translation', namespace: 'sections.header', key: 'back_to_title', title: menu_name, fallback: 'Back' -%}
                 </button>
+
+                {%- liquid
+                  # Level 1 title
+                  assign level_1_title_start_el = 'div'
+                  assign level_1_title_end_el = 'div'
+                  if level_1_has_link
+                    assign level_1_title_start_el = 'a href="' | append: level_1_url | append: '"'
+                    assign level_1_title_end_el = 'a'
+                  endif
+                -%}
+
+                <{{ level_1_title_start_el }} class="{{ sublevel_title_class }}">
+                  {{- level_1_title | escape -}}
+                </{{ level_1_title_end_el }}>
 
                 {%- comment -%} Level 2 {%- endcomment -%}
                 <ul class="mobile-menu__list level-2 flex-1 pb-8" tabindex="-1">
                   {%- for level_2 in level_1.links -%}
-                    {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
-                    {%- assign level_2_url = level_2.url -%}
-                    {%- if level_2_url contains 'collections' and level_2_url contains 'filter' -%}
-                      {%- assign level_2_url = level_2_url | replace: '%3F', '?' -%}
-                    {%- endif -%}
-
-                    {%- comment -%} if link is active {%- endcomment -%}
                     {%- liquid
+                      # Get link and fix deep link to native filters
+                      assign level_2_url = level_2.url
+                      if level_2_url contains 'collections' and level_2_url contains 'filter'
+                        assign level_2_url = level_2_url | replace: '%3F', '?'
+                      endif
+
+                      # if link is active
                       assign level_2_is_active = false
                       if level_2.child_active or level_2.current
                         assign level_2_is_active = true
                       endif
+
+                      assign level_2_has_link = true
+                      if level_2_url == '#'
+                        assign level_2_has_link = false
+                      endif
+
+                      assign level_2_title = level_2.title | escape
                     -%}
 
                     {%- if level_2.links == blank -%}
@@ -160,7 +193,7 @@
                           {% if level_2.current %}
                             aria-current="page"
                           {% endif %}>
-                          {{ level_2.title | escape }}
+                          {{ level_2_title }}
                         </a>
                       </li>
                     {%- else -%}
@@ -172,13 +205,14 @@
                           class="{{ mobile_menu_link_class }} level-2 flex w-full items-center justify-between gap-2 {% if level_2_is_active -%}{{ link_active_class }}{%- endif -%}"
                           data-collapsible-trigger>
                           <span>
-                            {{- level_2.title | escape -}}
+                            {{- level_2_title -}}
                           </span>
                           {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
                         </button>
+
                         <div
                           id="childlink-{{ level_2.title | handleize }}"
-                          class="{{ mobile_submenu_class }} level-2 group-[.collapsible-is-open]/submenu-2:visible group-[.collapsible-is-open]/submenu-2:translate-x-0"
+                          class="{{ mobile_submenu_class }} level-2 group-[.collapsible-is-open]/submenu-2:visible group-[.collapsible-is-open]/submenu-2:translate-x-0 {{ section.settings.color_scheme }}"
                           data-collapsible-target>
                           {%- comment -%} Link back to level 2 {%- endcomment -%}
                           <button
@@ -186,8 +220,21 @@
                             aria-expanded="true"
                             data-collapsible-trigger>
                             {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
-                            {{- level_2.title | escape -}}
+                            {%- render 'format-translation', namespace: 'sections.header', key: 'back_to_title', title: level_1_title, fallback: 'Back' -%}
                           </button>
+
+                          {%- liquid
+                            # Level 2 title
+                            assign level_2_title_start_el = 'div'
+                            assign level_2_title_end_el = 'div'
+                            if level_2_has_link
+                              assign level_2_title_start_el = 'a href="' | append: level_2_url | append: '"'
+                              assign level_2_title_end_el = 'a'
+                            endif
+                          -%}
+                          <{{ level_2_title_start_el }} class="{{ sublevel_title_class }}">
+                            {{- level_2_title -}}
+                          </{{ level_2_title_end_el }}>
 
                           {%- comment -%} Level 3 {%- endcomment -%}
                           <ul
@@ -226,10 +273,11 @@
                     {%- endif -%}
 
                     {%- liquid
+                      assign images = ''
                       # Check for blocks that are linked to level 1.
                       if section.blocks.size > 0
                         capture images
-                          render 'header-images', section: section, link_1_title: link_1_title
+                          render 'header-images', section: section, level_1_title: level_1_title
                         endcapture
                       endif
                     -%}
@@ -237,7 +285,7 @@
                 </ul>
 
                 {% comment %} Render the images, if they exist {% endcomment %}
-                {%- if images != blank -%}
+                {%- if images != '' -%}
                   <div class="header__image justify-self-end">
                     {{ images }}
                   </div>
@@ -250,7 +298,7 @@
 
       {%- comment -%} Links to account, cart and search {%- endcomment -%}
       {%- if section.settings.show_mobile_cart_link or section.settings.show_mobile_search_link or customer_accounts and section.settings.show_mobile_customer_link -%}
-        {%- assign link_class = 'mobile-menu__link relative flex w-full items-center gap-2 py-3 px-8 text-inherit no-underline states:text-primary' -%}
+        {%- assign link_class = 'mobile-menu__link relative flex w-full items-center gap-2 py-3 px-8 text-inherit no-underline' -%}
 
         <ul class="mt-4">
           {%- comment -%} Render account link for mobile if it should be hidden in the icon nav {%- endcomment -%}
@@ -258,7 +306,7 @@
             <li class="mobile-menu__item level-1">
               <a
                 href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
-                class="{{ link_class }} {% if request.page_type == 'customers/login' %} text-primary {% endif %}">
+                class="{{ link_class }} {% if request.page_type == 'customers/login' %}active{% endif %}">
                 {%- liquid
                   render 'icons', icon: 'user', icon_class: 'w-4'
                   if customer
@@ -276,7 +324,7 @@
             <li class="mobile-menu__item level-1">
               <a
                 href="{{ routes.cart_url }}"
-                class="{{ link_class }} {% if request.page_type == 'cart' %} text-primary {% endif %}">
+                class="{{ link_class }} {% if request.page_type == 'cart' %}active{% endif %}">
                 {%- liquid
                   render 'icons', icon: 'cart', icon_class: 'w-4'
                   render 'format-translation', namespace: 'templates.cart', key: 'title', fallback: 'Cart'
@@ -290,7 +338,7 @@
             <li class="mobile-menu__item level-1">
               <a
                 href="{{ routes.search_url }}"
-                class="{{ link_class }} {% if template.name == 'search' %} text-primary {% endif %}">
+                class="{{ link_class }} {% if template.name == 'search' %}active{% endif %}">
                 {%- liquid
                   render 'icons', icon: 'search', icon_class: 'w-4'
                   render 'format-translation', namespace: 'general.search', key: 'search', fallback: 'Search'

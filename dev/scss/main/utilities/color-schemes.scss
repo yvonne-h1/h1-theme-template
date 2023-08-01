@@ -8,6 +8,7 @@
     --text-link-color: var(--text-color-default);
     --text-link-color-states: var(--text-color-default);
     --text-active-color: var(--text-color-default);
+    button,
     a {
       &:not(.button) {
         color: var(--text-link-color);
@@ -19,6 +20,9 @@
       &.active {
         color: var(--text-active-color);
       }
+    }
+    *::marker {
+      color: var(--text-active-color);
     }
     .button--outline {
       @include states() {
@@ -70,9 +74,11 @@
       --text-active-color: var(--color-primary);
     }
 
+    // .color-scheme--white
     // .color-scheme--black
     // .color-scheme--secondary
     // These use the gradient button by default
+    &--white,
     &--black,
     &--secondary {
       --button-text: var(--color-primary-text);

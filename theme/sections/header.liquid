@@ -37,7 +37,7 @@
       class="header__heading-link m-0 flex items-center justify-center justify-self-center break-words text-inherit no-underline states:text-primary states:no-underline lg:block lg:justify-self-start"
       title="{{ shop.name }}"
     >
-      {%- render 'global-logo' -%}
+      {%- render 'global-logo', classes: 'max-w-[100px]' -%}
       <span class="sr-only">{{ shop.name }}</span>
     </a>
   </{{ logo_el }}>
@@ -51,7 +51,7 @@
   The header always relative of absolute based on the is transparent and on index page setting. The whole section is sticky for better native and sticky scroll performance.
 {%- endcomment -%}
 {% liquid
-  assign sticky_header_classes = 'relative bg-color-default text-color-default'
+  assign sticky_header_classes = 'relative'
   if is_transparent
     assign sticky_header_classes = 'header--transparent absolute top-0 right-0 left-0 bg-transparent group-[.header-sticky]/body:bg-color-default group-[.header-sticky]/body:text-color-default ' | append: section.settings.is_transparent_text_color
   endif
@@ -59,7 +59,7 @@
 
 <header-component
   id="header"
-  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.desktop-submenu-is-open]/body:duration-0 group-[.desktop-submenu-is-open]/body:bg-color-default group-[.desktop-submenu-is-open]/body:text-color-default {{ sticky_header_classes }}"
+  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.desktop-submenu-is-open]/body:duration-0 {{ sticky_header_classes }} {{ section.settings.color_scheme }}"
   data-header>
   <div class="header-nav content-wrapper content-wrapper-padding grid grid-cols-12 items-center gap-base">
     {%- comment -%} Toggle for mobile navigation {%- endcomment -%}
@@ -107,6 +107,52 @@
     "class": "sticky z-sticky top-0 left-0 right-0",
     "settings": [
       {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "color-scheme color-scheme--white",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Menu"
+      },
+      {
         "type": "link_list",
         "id": "menu",
         "default": "main-menu",
@@ -122,6 +168,8 @@
         "type": "select",
         "id": "is_transparent_text_color",
         "label": "Transparent text color",
+        "default": "text-white",
+        "info": "Set the color of the text when the header is transparent.",
         "options": [
           {
             "value": "text-white",
@@ -131,9 +179,11 @@
             "value": "text-black",
             "label": "Black"
           }
-        ],
-        "default": "text-white",
-        "info": "Set the color of the text when the header is transparent."
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Secondary nav icons"
       },
       {
         "type": "header",

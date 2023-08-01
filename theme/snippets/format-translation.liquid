@@ -37,6 +37,9 @@
   elsif price != blank
     assign translated_str = translation_str | t: price: price
     assign fallback_html = price
+  elsif title != blank
+    assign translated_str = translation_str | t: title: title
+    assign fallback_html = title
   elsif product_item != blank
     assign translated_str = translation_str | t: product: product_item
     assign fallback_html = product_item

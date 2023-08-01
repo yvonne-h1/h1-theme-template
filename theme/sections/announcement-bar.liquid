@@ -5,11 +5,9 @@
     render 'import-styles', file_name: 'module-swiper.css'
     render 'import-styles', file_name: 'component-swiper.css'
   endif
-
-  comment
-    Collect slides that are used in the swiper.
-  endcomment
 -%}
+
+{% comment %} Capture the slides first so we know  {% endcomment %}
 {%- capture swiper_slides -%}
   {%- for block in section.blocks -%}
     {%- if block.settings.text != blank -%}
@@ -38,10 +36,8 @@
   {%- endfor -%}
 {%- endcapture -%}
 
+{% comment %} Render the content if there are slides {% endcomment %}
 {%- if swiper_slides != blank -%}
-  {%- comment -%}
-    Options for the swiper slider.
-  {%- endcomment -%}
   {%- capture swiper_options -%}
     data-options='{ "speed": {{ section.settings.swiper_speed }},
     {%- if section.settings.swiper_autoplay %}
@@ -52,10 +48,7 @@
     "loop": {{ section.settings.swiper_loop }}, "slidesPerView": 1, "direction": "horizontal" }'
   {%- endcapture -%}
 
-  {%- comment -%}
-    Output all the html.
-  {%- endcomment -%}
-  <div class="announcement-bar relative overflow-hidden">
+  <div class="announcement-bar relative overflow-hidden lg:z-offcanvas-backdrop">
     <{{ wrapper_element | default: 'div' }}
       role="region"
       aria-label="{% render "format-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}">
@@ -66,9 +59,7 @@
       </div>
     </{{ wrapper_element | default: 'div' }}>
   </div>
-{%- endif -%}
 
-{%- if section.blocks.size > 1 or request.design_mode -%}
   <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
 {%- endif -%}
 
@@ -78,6 +69,48 @@
     "max_blocks": 4,
     "limit": 1,
     "settings": [
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "color-scheme color-scheme--primary",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
       {
         "type": "header",
         "content": "Swiper options"
@@ -109,52 +142,6 @@
         "unit": "ms",
         "label": "Effect speed",
         "default": 750
-      },
-      {
-        "type": "header",
-        "content": "Section options"
-      },
-      {
-        "type": "select",
-        "id": "color_scheme",
-        "options": [
-          {
-            "value": "",
-            "label": "Default"
-          },
-          {
-            "value": "color-scheme color-scheme--primary",
-            "label": "Primary",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--secondary",
-            "label": "Secondary",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--accent",
-            "label": "Accent",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--white",
-            "label": "White",
-            "group": "Standard"
-          },
-          {
-            "value": "color-scheme color-scheme--gray",
-            "label": "Gray",
-            "group": "Standard"
-          },
-          {
-            "value": "color-scheme color-scheme--black",
-            "label": "Black",
-            "group": "Standard"
-          }
-        ],
-        "default": "color-scheme color-scheme--primary",
-        "label": "Color scheme"
       }
     ],
     "blocks": [

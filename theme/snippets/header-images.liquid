@@ -1,7 +1,8 @@
 {%- liquid
   # Add the optional menu image for 3 level menu's
   for block in section.blocks
-    if block.settings.image != null and block.settings.text != blank
+    echo block.settings.image.url
+    if block.settings.image != blank and block.settings.text != blank
       # Handleize the item to match to make sure it's case-insensitive.
       assign image_alt = link_1_title | escape
       assign menu_link_title = link_1_title | handleize

@@ -1,6 +1,5 @@
 {%- liquid
   assign year = 'now' | date: '%Y'
-  assign block_newsletter = blank
   assign enable_country_selector = false
   assign enable_language_selector = false
 -%}
@@ -33,7 +32,8 @@
                 class="collapsible"
                 data-options='
                   {
-                    "breakpointMax": 768
+                    "breakpointMax": 768,
+                    "closeSiblings": true
                   }
                 '>
                 {%- comment -%} Output menu and collapsible content {%- endcomment -%}
@@ -83,20 +83,20 @@
 
             {% comment %} Newsletter {% endcomment %}
           {%- when 'newsletter' -%}
-            {%- liquid
-              # Assign block object for later use outside this for loop.
-              assign block_newsletter = block
-            -%}
             <div
               class="footer-block footer-block--{{ block_type }} {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}"
               {{ block.shopify_attributes }}>
-              {%- if block.settings.title != blank -%}
-                <p class="mb-4 block w-full font-bold">
-                  {{- block.settings.title -}}
-                </p>
-              {%- endif -%}
-              {%- if block.settings.newsletter -%}
-                {%- render 'footer-newsletter', title: block.settings.title, description: block.settings.description, button_class: 'button-primary' -%}
+              {% comment %} Check for Klaviyo first {% endcomment %}
+              {%- if block.settings.klaviyo_newsletter != blank -%}
+                {{- klaviyo_newsletter -}}
+                {% comment %} Render the default newsletter {% endcomment %}
+              {%- else -%}
+                {%- if block.settings.title != blank -%}
+                  <p class="mb-4 block w-full font-bold">
+                    {{- block.settings.title -}}
+                  </p>
+                {%- endif -%}
+                {%- render 'footer-newsletter', title: block.settings.title, description: block.settings.description -%}
               {%- endif -%}
             </div>
 
@@ -194,18 +194,18 @@
     </div>
 
     {%- if section.settings.payment_icons or section.settings.copyright -%}
-      <div class="footer__info mt-8 grid grid-cols-12 items-center gap-y-8 gap-x-base md:mt-16 md:gap-x-6 lg:gap-x-12">
+      <div class="footer__bottom mt-8 grid grid-cols-12 items-center gap-y-8 gap-x-base">
         {%- comment -%} Payment icons {%- endcomment -%}
         {%- if section.settings.payment_icons -%}
-          <div class="col-span-12 md:col-span-9">
+          <div class="col-span-12 md:col-span-8 xl:col-span-9">
             {%- render 'global-payment-methods', icon_size: section.settings.payment_icons_size, -%}
           </div>
         {%- endif -%}
 
         {%- comment -%} Copyright {%- endcomment -%}
         {%- if section.settings.copyright -%}
-          <div class="col-span-12 md:col-span-3">
-            <p class="font-bold">
+          <div class="col-span-12 md:col-span-4 xl:col-span-3">
+            <p class="text-sm">
               {{- 'sections.footer.copyright_html' | t: year: year -}}
             </p>
           </div>
@@ -517,13 +517,7 @@
             "type": "richtext",
             "id": "description",
             "label": "Description",
-            "default": "<p><strong>Subscribe to our newsletter to stay updated on sales and special events.</strong></p>"
-          },
-          {
-            "type": "checkbox",
-            "id": "newsletter",
-            "label": "Enable",
-            "default": true
+            "default": "<p>Subscribe to our newsletter to stay updated on sales and special events.</p>"
           },
           {
             "type": "html",
