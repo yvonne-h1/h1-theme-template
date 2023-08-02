@@ -2,7 +2,6 @@
 
 /**
   * button style options
-  * There are also dynamic list style options
 */
 
 @layer components {
@@ -63,7 +62,7 @@
           -translate-x-1/2
           -translate-y-1/2
           rotate-45
-          bg-gray-400
+          bg-gray-300
           content-empty;
         }
       }

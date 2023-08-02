@@ -4,6 +4,22 @@
 
 {%- capture container_content -%}
   <div class="grid grid-cols-12 gap-base">
+
+    {% comment %} Menu {% endcomment %}
+    <div class="sticky top-10 hidden max-h-90vh self-start overflow-auto rounded border border-dashed border-primary p-4 text-sm group-[.header-sticky:not(.header-hidden)]/body:top-20 group-[.header-sticky:not(.header-hidden)]/body:max-h-80vh
+      lg:col-span-3 lg:block">
+      <h2 class="h5">Index</h2>
+      <ul class="z-10 flex flex-col gap-2">
+        {%- for section in style_guide_sections -%}
+          {%- assign heading = section | replace: '-', ' ' | capitalize -%}
+
+          <li>
+            <a href="#styleguide-{{- section -}}">{{- heading -}}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
     {% comment %} Content {% endcomment %}
     <div class="col-span-12 divide-y lg:col-span-9">
       <div id="intro" class="pb-10 lg:pb-16">
@@ -83,21 +99,6 @@
           -%}
         </div>
       {%- endfor -%}
-    </div>
-
-    {% comment %} Menu {% endcomment %}
-    <div class="sticky top-10 hidden max-h-90vh self-start overflow-auto rounded border border-dashed border-primary p-4 text-sm group-[.header-sticky:not(.header-hidden)]/body:top-20 group-[.header-sticky:not(.header-hidden)]/body:max-h-80vh
-      lg:col-span-3 lg:block">
-      <h2 class="h5">Index</h2>
-      <ul class="z-10 flex flex-col gap-2">
-        {%- for section in style_guide_sections -%}
-          {%- assign heading = section | replace: '-', ' ' | capitalize -%}
-
-          <li>
-            <a href="#styleguide-{{- section -}}">{{- heading -}}</a>
-          </li>
-        {%- endfor -%}
-      </ul>
     </div>
   </div>
 {%- endcapture -%}

@@ -1,5 +1,6 @@
 @layer h1-styles-components {
   .swiper {
+    --swiper-theme-color: theme('colors.text');
     @apply select-none;
 
     // swiper-button-prev

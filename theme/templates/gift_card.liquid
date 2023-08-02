@@ -7,10 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    {%- assign formatted_initial_value = gift_card.initial_value
-      | money_without_trailing_zeros: gift_card.currency
-      | strip_html
-    -%}
+    {%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros: gift_card.currency | strip_html -%}
     <title>
       {{ 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name }}
     </title>
@@ -27,7 +24,6 @@
       render 'html-head-description'
       render 'html-head-tags'
       render 'html-head-fonts'
-      render 'html-head-colors'
       render 'html-head-css'
       render 'html-head-js'
       render 'html-head-google'
@@ -43,11 +39,7 @@
     <a
       class="skip-to-content button button--secondary sr-only !absolute z-10 self-start focus:not-sr-only focus:px-4 focus:py-2 focus:text-secondary-text"
       href="#MainContent">
-      {% render 'format-translation',
-        namespace: 'accessibility',
-        key: 'skip_to_text',
-        fallback: 'Skip to text'
-      -%}
+      {% render 'format-translation', namespace: 'accessibility', key: 'skip_to_text', fallback: 'Skip to text' -%}
     </a>
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">

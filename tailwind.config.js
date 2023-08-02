@@ -1,5 +1,8 @@
 /**
  * https://tailwindcss.com/docs/configuration
+ *
+ * Examples:
+ *  - use opacity with one of the predefined colors:  color: theme(colors.primary.500 / 75%); // here 75% is the opacity value
  */
 
 const plugin = require('tailwindcss/plugin');
@@ -30,7 +33,8 @@ module.exports = {
     /**
      * Default screen sizes
      * Usage: md:[class-name] or @screen md { ... your css }
-     * Advice: Adjust according to design but keep when possible
+     *
+     * It's recommended to not change these
      */
     screens: {
       xs: '360px',
@@ -46,7 +50,6 @@ module.exports = {
     /**
      * Font family's
      * Usage: font-body
-     * Advice: Adjust to project needs in html-head-colors.liquid
      */
     fontFamily: {
       body: 'var(--font-body-family)',
@@ -57,7 +60,8 @@ module.exports = {
      * Usage text-base
      * Default line height is set on the body
      * Exceptions in line-height text-base leading-tight
-     * Advice: leave as it is
+     *
+     * It's recommended to not change these
      */
     fontSize: {
       '2xs': '0.625rem',
@@ -112,17 +116,17 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            '--tw-prose-links': theme('colors.primary.500'),
-            '--tw-prose-counters': theme('colors.primary.500'),
-            '--tw-prose-bullets': theme('colors.primary.500'),
-            '--tw-prose-quote-borders': theme('colors.primary.500'),
-            color: 'var(--text-color-default)',
+            '--tw-prose-links': theme('colors.primary.600'),
+            '--tw-prose-counters': theme('colors.primary.600'),
+            '--tw-prose-bullets': theme('colors.primary.600'),
+            '--tw-prose-quote-borders': theme('colors.primary.600'),
+            color: theme('colors.text'),
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.primary.600'),
               textDecoration: 'underline',
               transition: 'all .2s',
               '&:hover': {
-                color: theme('colors.primary.600'),
+                color: theme('colors.primary.700'),
                 textDecoration: 'none',
               },
             },
@@ -132,76 +136,81 @@ module.exports = {
     },
     /**
      * Colors
-     * We extend the tailwind colors with our own colors
+     * Extend the tailwind colors with our own colors for primary, secondary and accent.
      * Usage: text-primary, bg-secondary
-     * Advice: Adjust to project needs.
+     * Resources: Use https://www.tailwindshades.com/ to create shades based on your colors. Note that 500 should be your base color.
      */
     colors: {
       inherit: colors.inherit,
       current: colors.current,
       transparent: colors.transparent,
-      white: 'var(--color-white)',
-      black: 'var(--color-black)',
-      'primary-gradient': 'var(--color-primary-gradient)',
+      white: '#FFFFFF',
+      black: '#111',
+      text: '#262626',
+      'primary-gradient': 'linear-gradient(90deg,#e42f26 0,#e46a26)',
       primary: {
-        DEFAULT: 'var(--color-primary)',
-        text: 'var(--color-primary-text)',
-        50: 'var(--color-primary-50)',
-        100: 'var(--color-primary-100)',
-        200: 'var(--color-primary-200)',
-        300: 'var(--color-primary-300)',
-        400: 'var(--color-primary-400)',
-        500: 'var(--color-primary-500)',
-        600: 'var(--color-primary-600)',
-        700: 'var(--color-primary-700)',
-        800: 'var(--color-primary-800)',
-        900: 'var(--color-primary-900)',
+        text: '#FFFFFF',
+        DEFAULT: '#E42F26',
+        50: '#F8CCC9',
+        100: '#F6BAB7',
+        200: '#F29793',
+        300: '#ED756F',
+        400: '#E9524A',
+        500: '#E42F26',
+        600: '#BB1F17',
+        700: '#891711',
+        800: '#570E0B',
+        900: '#250605',
+        950: '#0C0201',
       },
       secondary: {
-        DEFAULT: 'var(--color-secondary)',
-        text: 'var(--color-secondary-text)',
-        50: 'var(--color-secondary-50)',
-        100: 'var(--color-secondary-100)',
-        200: 'var(--color-secondary-200)',
-        300: 'var(--color-secondary-300)',
-        400: 'var(--color-secondary-400)',
-        500: 'var(--color-secondary-500)',
-        600: 'var(--color-secondary-600)',
-        700: 'var(--color-secondary-700)',
-        800: 'var(--color-secondary-800)',
-        900: 'var(--color-secondary-900)',
+        text: '#FFFFFF',
+        DEFAULT: '#212529',
+        50: '#73818E',
+        100: '#6A7783',
+        200: '#58626D',
+        300: '#454E56',
+        400: '#333940',
+        500: '#212529',
+        600: '#08090A',
+        700: '#000000',
+        800: '#000000',
+        900: '#000000',
+        950: '#000000',
       },
       accent: {
-        DEFAULT: 'var(--color-accent)',
-        text: 'var(--color-accent-text)',
-        50: 'var(--color-accent-50)',
-        100: 'var(--color-accent-100)',
-        200: 'var(--color-accent-200)',
-        300: 'var(--color-accent-300)',
-        400: 'var(--color-accent-400)',
-        500: 'var(--color-accent-500)',
-        600: 'var(--color-accent-600)',
-        700: 'var(--color-accent-700)',
-        800: 'var(--color-accent-800)',
-        900: 'var(--color-accent-900)',
+        text: '#FFFFFF',
+        DEFAULT: '#E46A26',
+        50: '#F8DAC9',
+        100: '#F6CEB7',
+        200: '#F2B593',
+        300: '#ED9C6F',
+        400: '#E9834A',
+        500: '#E46A26',
+        600: '#BB5217',
+        700: '#893C11',
+        800: '#57260B',
+        900: '#251005',
+        950: '#0C0501',
       },
       gray: {
-        DEFAULT: 'var(--color-gray)',
-        50: 'var(--color-gray-50)',
-        100: 'var(--color-gray-100)',
-        200: 'var(--color-gray-200)',
-        300: 'var(--color-gray-300)',
-        400: 'var(--color-gray-400)',
-        500: 'var(--color-gray-500)',
-        600: 'var(--color-gray-600)',
-        700: 'var(--color-gray-700)',
-        800: 'var(--color-gray-800)',
-        900: 'var(--color-gray-900)',
+        DEFAULT: '#6C757D',
+        50: '#CDD1D4',
+        100: '#C2C6CA',
+        200: '#ACB2B7',
+        300: '#969EA4',
+        400: '#808992',
+        500: '#6C757D',
+        600: '#52595F',
+        700: '#383D41',
+        800: '#1E2023',
+        900: '#040405',
+        950: '#000000',
       },
-      info: 'var(--color-info)',
-      success: 'var(--color-success)',
-      warning: 'var(--color-warning)',
-      danger: 'var(--color-danger)',
+      info: '#0dcaf0',
+      success: '#198754',
+      warning: '#ffc107',
+      danger: '#dc3545',
     },
   },
   plugins: [
@@ -247,11 +256,11 @@ module.exports = {
           wordBreak: 'break-word',
         },
         a: {
-          color: theme('colors.primary.500'),
+          color: theme('colors.primary.600'),
           textDecoration: 'underline',
           transition: 'all .2s',
           '&:hover': {
-            color: theme('colors.primary.600'),
+            color: theme('colors.primary.700'),
             textDecoration: 'none',
           },
         },
@@ -270,20 +279,20 @@ module.exports = {
          */
       addUtilities({
         '.bg-color-default': {
-          backgroundColor: 'var(--bg-color-default)',
+          backgroundColor: theme('colors.white'),
         },
         '.text-color-default': {
-          color: 'var(--text-color-default)',
+          color: theme('colors.text'),
         },
         '.text-color-gradient': {
-          backgroundImage: 'var(--color-primary-gradient)',
-          color: '#000',
+          backgroundImage: theme('colors.primary-gradient'),
+          color: theme('colors.black'),
         },
         '.text-link-color': {
-          color: 'var(--text-link-color)',
+          color: theme('colors.primary.600'),
         },
         '.text-link-color-states': {
-          color: 'var(--text-link-color-states)',
+          color: theme('colors.primary.600'),
         },
         '.gap-base': {
           gap: 'var(--grid-row-gap) var(--grid-col-gap)',

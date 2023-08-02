@@ -19,4 +19,13 @@
   .content-for-layout {
     @apply flex-auto;
   }
+
+  // accessibility optimizations
+  @media (max-height: 480px) {
+    .cart__subtotal,
+    .cart-drawer__footer,
+    .header-sticky .shopify-section-group-header-group {
+      position: static !important;
+    }
+  }
 }

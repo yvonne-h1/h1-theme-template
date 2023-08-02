@@ -2,76 +2,76 @@
 
 @layer utilities {
   .color-scheme {
+    --color-scheme-text-color: theme('colors.text');
+    --color-scheme-text-link-color: var(--color-scheme-text-color);
+    --color-scheme-text-active-color: var(--color-scheme-text-color);
+    --swiper-theme-color: var(--color-scheme-text-color);
     background: var(--color-scheme-background-color);
-    color: var(--text-color-default);
-    --swiper-theme-color: var(--text-color-default);
-    --text-link-color: var(--text-color-default);
-    --text-link-color-states: var(--text-color-default);
-    --text-active-color: var(--text-color-default);
+    color: var(--color-scheme-text-color);
     button,
     a {
       &:not(.button) {
-        color: var(--text-link-color);
+        color: var(--color-scheme-text-link-color);
         @include states() {
           text-decoration: none;
-          color: var(--text-active-color);
+          color: var(--color-scheme-text-active-color);
         }
       }
       &.active {
-        color: var(--text-active-color);
+        color: var(--color-scheme-text-active-color);
       }
     }
     *::marker {
-      color: var(--text-active-color);
+      color: var(--color-scheme-text-active-color);
     }
     .button--outline {
       @include states() {
-        background-color: var(--text-active-color);
+        background-color: var(--color-scheme-text-active-color);
       }
     }
 
     // .color-scheme--black
     &--black {
-      --color-scheme-background-color: var(--color-black);
-      --text-color-default: var(--color-white);
-      --text-active-color: var(--color-primary);
+      --color-scheme-background-color: theme('colors.black');
+      --color-scheme-text-color: theme('colors.white');
+      --color-scheme-text-active-color: theme('colors.primary.DEFAULT');
     }
     // .color-scheme--white
     &--white {
-      --color-scheme-background-color: var(--color-white);
-      --text-color-default: var(--color-black);
-      --text-active-color: var(--color-primary);
+      --color-scheme-background-color: theme('colors.white');
+      --color-scheme-text-color: theme('colors.black');
+      --color-scheme-text-active-color: theme('colors.primary.DEFAULT');
     }
     // .color-scheme--primary
     &--primary {
-      --color-scheme-background-color: var(--color-primary);
-      --text-color-default: var(--color-primary-text);
-      --text-active-color: var(--color-secondary);
+      --color-scheme-background-color: theme('colors.primary.DEFAULT');
+      --color-scheme-text-color: theme('colors.primary.text');
+      --color-scheme-text-active-color: theme('colors.secondary.DEFAULT');
     }
     // .color-scheme--gradient
     &--gradient {
-      --color-scheme-background-color: var(--color-primary-gradient);
-      --text-color-default: var(--color-primary-text);
+      --color-scheme-background-color: theme('colors.primary-gradient');
+      --color-scheme-text-color: theme('colors.primary.text');
       background-image: var(--color-scheme-background-color);
-      --text-active-color: var(--color-secondary);
+      --color-scheme-text-active-color: theme('colors.secondary.DEFAULT');
     }
     // .color-scheme--secondary
     &--secondary {
-      --color-scheme-background-color: var(--color-secondary);
-      --text-color-default: var(--color-secondary-text);
-      --text-active-color: var(--color-primary);
+      --color-scheme-background-color: theme('colors.secondary.DEFAULT');
+      --color-scheme-text-color: theme('colors.secondary.text');
+      --color-scheme-text-active-color: theme('colors.primary.DEFAULT');
     }
     // .color-scheme--accent
     &--accent {
-      --color-scheme-background-color: var(--color-accent);
-      --text-color-default: var(--color-accent-text);
-      --text-active-color: var(--color-secondary);
+      --color-scheme-background-color: theme('colors.accent.DEFAULT');
+      --color-scheme-text-color: theme('colors.accent.text');
+      --color-scheme-text-active-color: theme('colors.secondary.DEFAULT');
     }
     // .color-scheme--gray
     &--gray {
-      --color-scheme-background-color: theme(colors.gray.200);
-      --text-color-default: var(--color-black);
-      --text-active-color: var(--color-primary);
+      --color-scheme-background-color: theme('colors.gray.100');
+      --color-scheme-text-color: theme('colors.black');
+      --color-scheme-text-active-color: theme('colors.primary.DEFAULT');
     }
 
     // .color-scheme--white
@@ -81,8 +81,8 @@
     &--white,
     &--black,
     &--secondary {
-      --button-text: var(--color-primary-text);
-      --button-hover-text: var(--color-primary-text);
+      --button-text: theme('colors.primary.text');
+      --button-hover-text: theme('colors.primary.text');
       --button-border-color: transparent;
       --button-hover-border-color: transparent;
       --button-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 0/200%;

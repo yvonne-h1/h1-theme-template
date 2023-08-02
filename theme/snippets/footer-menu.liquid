@@ -138,7 +138,7 @@
                 <li class="footer-menu__item level-2">
                   <a
                     href="{{ level_2_url }}"
-                    class="footer-menu__link level-2 {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
+                    class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
                     {% if level_2_link.current %}
                       aria-current="page"
                     {% endif %}>
@@ -163,7 +163,7 @@
                   {{ data_collapsible_group }}>
 
                   {%- capture level_2_link_markup -%}
-                    <{{ start_el }} class="footer-menu__link level-2 {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}">
+                    <{{ start_el }} class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}">
                       {{- level_2_link.title | escape -}}
                     </{{ end_el }}>
                   {%- endcapture -%}
@@ -207,7 +207,7 @@
                       <li class="footer-menu__item level-3">
                         <a
                           href="{{ level_3_link_url }}"
-                          class="footer-menu__link {{ link_class_with_hover }} {% if level_3_is_active -%}{{ link_active_class }}{%- endif %}"
+                          class="footer-menu__link {{ link_class_with_hover }} text-sm {% if level_3_is_active -%}{{ link_active_class }}{%- endif %}"
                           {% if level_3_link.current %}
                             aria-current="page"
                           {% endif %}>

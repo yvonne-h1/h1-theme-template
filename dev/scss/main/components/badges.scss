@@ -19,8 +19,8 @@
     }
   }
   .badge {
-    background-color: var(--product-badge-background, var(--bg-color-default));
-    color: var(--product-badge-text, var(--text-color-default));
+    background-color: var(--product-badge-background, theme('colors.black'));
+    color: var(--product-badge-text, theme('colors.text'));
     @include small;
     @apply pointer-events-none
     inline-block
@@ -33,20 +33,20 @@
 
     // Variants
     &--new {
-      --product-badge-background: var(--color-primary);
-      --product-badge-text: var(--color-primary-text);
+      --product-badge-background: theme('colors.primary.DEFAULT');
+      --product-badge-text: theme('colors.primary.text');
     }
     &--sold-out {
-      --product-badge-background: var(--color-danger);
-      --product-badge-text: var(--color-white);
+      --product-badge-background: theme('colors.danger');
+      --product-badge-text: theme('colors.white');
     }
     &--pre-order {
-      --product-badge-background: var(--color-accent);
-      --product-badge-text: var(--color-accent-text);
+      --product-badge-background: theme('colors.accent.DEFAULT');
+      --product-badge-text: theme('colors.accent.text');
     }
     &--sale {
-      --product-badge-background: var(--color-success);
-      --product-badge-text: var(--color-white);
+      --product-badge-background: theme('colors.success');
+      --product-badge-text: theme('colors.white');
     }
   }
 }

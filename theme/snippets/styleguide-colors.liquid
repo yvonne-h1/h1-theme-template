@@ -3,121 +3,59 @@
   assign circle_class = 'h-16 w-16 rounded-full p-1 text-center mb-1'
   assign circle_class_full = 'text-lg mb-0 w-[150px] rounded-full h-fit p-2 text-center'
 
-  assign global_colors = 'color-bg|background, text-color-default|text, text-link-color|link, text-link-color-states|link hover' | split: ', '
   assign palette_types = '50, 100, 200, 300, 400, 500, 600, 700, 800, 900' | split: ', '
   assign communication_colors = 'info, success, warning, danger' | split: ', '
+
+  assign color_names = 'primary, secondary, accent, gray' | split: ', '
 -%}
+
+{% comment %}
+  Classes added so Tailwind renders them:
+{% endcomment %}
+<div
+  class="
+    text-text-primary text-gray-text bg-accent bg-accent-100 bg-accent-200 bg-accent-300 bg-accent-400 bg-accent-50
+    bg-accent-500 bg-accent-600 bg-accent-700 bg-accent-800 bg-accent-900 bg-danger bg-gray bg-gray-100 bg-gray-200 bg-gray-300 bg-gray-400 bg-gray-50 bg-gray-500 bg-gray-600 bg-gray-700 bg-gray-800 bg-gray-900 bg-info bg-primary bg-primary-100
+    bg-primary-200 bg-primary-300 bg-primary-400 bg-primary-50 bg-primary-500 bg-primary-600 bg-primary-700 bg-primary-800 bg-primary-900 bg-secondary bg-secondary-100 bg-secondary-100 bg-secondary-200 bg-secondary-200 bg-secondary-300 bg-secondary-300 bg-secondary-400 bg-secondary-400 bg-secondary-50 bg-secondary-50
+    bg-secondary-500 bg-secondary-500 bg-secondary-600 bg-secondary-600 bg-secondary-700 bg-secondary-700 bg-secondary-800 bg-secondary-800 bg-secondary-900 bg-secondary-900 bg-success bg-warning text-accent-100 text-accent-200 text-accent-300 text-accent-400 text-accent-50 text-accent-500 text-accent-600 text-accent-700
+    text-accent-800 text-accent-900 text-accent-text text-gray-100 text-gray-200 text-gray-300 text-gray-400 text-gray-50 text-gray-500 text-gray-600 text-gray-700 text-gray-800 text-gray-900 text-primary-100 text-primary-200 text-primary-300 text-primary-400 text-primary-50 text-primary-500 text-primary-600
+    text-primary-700 text-primary-800 text-primary-900 text-secondary-100 text-secondary-100 text-secondary-200 text-secondary-200 text-secondary-300 text-secondary-300 text-secondary-400 text-secondary-400 text-secondary-50 text-secondary-50 text-secondary-500 text-secondary-500 text-secondary-600 text-secondary-600 text-secondary-700 text-secondary-700 text-secondary-800 text-secondary-800 text-secondary-900 text-secondary-900 text-secondary-text
+    bg-color-default text-color-default text-color-gradient text-link-color text-link-color-states
+  "></div>
 
 {% comment %} Base {% endcomment %}
 <div class="space-y-8">
-  <div class="{{ color_wrapper_class }}">
-    {%- for color in global_colors -%}
-      {%- liquid
-        assign color_class = color | split: '|' | first
-        assign color_capitalized = color | split: '|' | last | capitalize
-      -%}
-
-      <div class="{{ color_wrapper_class }} flex-col items-center justify-center">
-        <div
-          class="{{ circle_class }}"
-          style="background-color: var(--{{- color_class -}});"
-          title="{{- color_capitalized -}}"></div>
-        <p>{{- color_capitalized -}}</p>
-      </div>
-    {%- endfor -%}
-  </div>
-
   {% comment %} Communication colors {% endcomment %}
   <div class="{{ color_wrapper_class }}">
     {%- for color in communication_colors -%}
       {%- assign color_capitalized = color | capitalize -%}
 
       <div class="{{ color_wrapper_class }} flex-col items-center justify-center">
+        {%- assign class = 'bg-' | append: color -%}
         <div
-          class="{{ circle_class }}"
-          style="background-color: var(--color-{{- color -}});"
+          class="{{ circle_class }} {{ class }}"
           title="{{- color_capitalized -}}"></div>
         <p>{{- color_capitalized -}}</p>
       </div>
     {%- endfor -%}
   </div>
 
-  {% comment %} Primary {% endcomment %}
-  <div class="{{ color_wrapper_class }}">
-    <div
-      class="{{ circle_class_full }}"
-      style="background: var(--color-primary); color: var(--color-primary-text)"
-      title="Primary">
-      <p class="text-white">Primary</p>
-    </div>
-
-    {%- for type in palette_types -%}
-      <div class="{{ color_wrapper_class }} flex-col items-center justify-center ">
-        <div
-          class="{{ circle_class }}"
-          style="background-color: var(--color-primary-{{ type }});"
-          title="Primary {{ type }}"></div>
-        <p>{{ type }}</p>
+  {%- for color_option in color_names -%}
+    <div class="{{ color_wrapper_class }}">
+      <div
+        class="{{ circle_class_full }} bg-{{ color_option }} text-{{ color_option }}-text"
+        title="{{ color_option | capitalize}}">
+        <p>{{ color_option | capitalize }}</p>
       </div>
-    {%- endfor -%}
-  </div>
 
-  {% comment %} Secondary {% endcomment %}
-  <div class="{{ color_wrapper_class }}">
-    <div
-      class="{{ circle_class_full }}"
-      style="background-color: var(--color-secondary); color: var(--color-secondary-text)"
-      title="Secondary">
-      <p>Secondary</p>
+      {%- for type in palette_types -%}
+        <div class="{{ color_wrapper_class }} flex-col items-center justify-center ">
+          <div
+            class="{{ circle_class }} bg-{{ color_option }}-{{ type }}"
+            title="{{ color_option | capitalize}} {{ type }}"></div>
+          <p>{{ type }}</p>
+        </div>
+      {%- endfor -%}
     </div>
-
-    {%- for type in palette_types -%}
-      <div>
-        <div
-          class="{{ circle_class }}"
-          style="background-color: var(--color-secondary-{{ type }});"
-          title="Secondary {{ type }}"></div>
-        <p>{{ type }}</p>
-      </div>
-    {%- endfor -%}
-  </div>
-
-  {% comment %} Accent {% endcomment %}
-  <div class="{{ color_wrapper_class }}">
-    <div
-      class="{{ circle_class_full }}"
-      style="background-color: var(--color-accent); color: var(--color-accent-text);"
-      title="Accent">
-      <p>Accent</p>
-    </div>
-
-    {%- for type in palette_types -%}
-      <div>
-        <div
-          class="{{ circle_class }}"
-          style="background-color: var(--color-accent-{{ type }});"
-          title="Accent {{ type }}"></div>
-        <p>{{ type }}</p>
-      </div>
-    {%- endfor -%}
-  </div>
-
-  {% comment %} Gray {% endcomment %}
-  <div class="{{ color_wrapper_class }}">
-    <div
-      class="{{ circle_class_full }} bg-gray-400 text-white"
-      title="Gray">
-      <p>Gray</p>
-    </div>
-
-    {%- assign gray_palette_types = 'bg-gray-50, bg-gray-100, bg-gray-200, bg-gray-300, bg-gray-400, bg-gray-500, bg-gray-600, bg-gray-700, bg-gray-800, bg-gray-900' | split: ', ' -%}
-    {%- for type in gray_palette_types -%}
-      <div>
-        <div
-          class="{{ circle_class }} {{ type }}"
-          title="Gray {{ type }}"></div>
-        <p>{{ type | split: '-' | last }}</p>
-      </div>
-    {%- endfor -%}
-  </div>
+  {%- endfor -%}
 </div>

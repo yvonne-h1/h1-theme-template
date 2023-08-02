@@ -1,6 +1,6 @@
 {%- liquid
   assign button_wrapper_class = 'flex flex-wrap gap-2'
-  assign button_types = 'primary, secondary, tertiary, outline, gradient' | split: ', '
+  assign button_types = 'primary, secondary, outline, gradient' | split: ', '
   assign button_sizes = 'sm, md, lg, xl' | split: ', '
 -%}
 
@@ -18,7 +18,7 @@
 
   {% comment %}
     Button types
-    Will render buttons for button--primary, button--secondary, button--tertiary, button--outline
+    Will render buttons for button--primary, button--secondary, button--outline
   {% endcomment %}
   {%- for type in button_types -%}
     <div class="{{ button_wrapper_class }}">

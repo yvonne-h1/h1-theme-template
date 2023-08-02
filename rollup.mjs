@@ -37,9 +37,9 @@ const config = {
       './dev/scss/main/main-base.scss',
       './dev/scss/main/main-components.scss',
       './dev/scss/main/main-utilities.scss',
-      './dev/scss/dynamic/components/**/*.scss',
-      './dev/scss/dynamic/modules/**/*.scss',
-      './dev/scss/dynamic/sections/**/*.scss',
+      './dev/scss/custom/components/**/*.scss',
+      './dev/scss/custom/modules/**/*.scss',
+      './dev/scss/custom/sections/**/*.scss',
     ],
     main: [
       {

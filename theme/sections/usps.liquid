@@ -45,7 +45,7 @@
         {%- comment -%} Output in link or not {%- endcomment -%}
         {%- if usp_content -%}
           {%- if block.settings.url != blank and block.settings.button == blank -%}
-            <a class="usps__usp usp {{ col_class }} group break-words text-[var(--color-scheme-text)] no-underline" href="{{ block.settings.url }}">
+            <a class="usps__usp usp {{ col_class }} group break-words no-underline" href="{{ block.settings.url }}">
               {{- usp_content -}}
             </a>
           {%- else -%}

@@ -1,4 +1,4 @@
-# CBT Instructions
+# H1 Default Theme Instructions
 
 ---
 
@@ -6,42 +6,57 @@
 
 When you run `npm run start` the work files will be watched for change and an [Shopify development theme](https://shopify.dev/themes/tools/cli#development-themes) will be created. The theme/assets folder is not rebuilt from scratch. We configured the development themes with editor syncing. This means that all your changes made inside the customizer from your development theme will be synced to your local data JSON files.
 
-With `npm run start:dev` or `npm run start:stage` you can shortcut the prompt and directly use the dev or stage environment. We don't create this command for live environments.
+With `npm run start:dev` or `npm run start:stage` you can shortcut the prompt and directly use the dev or stage environment.
 
 ---
 
 ## Deploying
 
-Rollup.js is responsible for the build and watching the process of all CSS / JS and assets. On every production build the theme/assets folder will be cleaned up and rebuilt again with the files inside the dev/assets, dev/js, and dev/scss folders. We use the .env file to manage the different deploy environments.
+Rollup.js is tasked with handling the building and monitoring of all CSS, JS, and assets. During each production build, the theme/assets folder is cleared and then reconstructed using the files from the dev/assets, dev/js, and dev/scss folders. Our deployment environments are managed through the .env file.
 
 ### Managing environments
 
-The .env file holds all the stores/environments where the storefront is used. Think about the dev, stage, and live environments. Since we use [Shopify CLI 3](https://shopify.dev/docs/themes/tools/cli) it's needed to prompt each CLI command for the store you want to use. When you use one of the CLI commands from the package.json you will be asked which store you want to use from the .env file. The file shops.js in your root is responsible for the options available.
+The .env file serves as a repository for all the stores/environments where the storefront is utilized. These environments typically include the development (dev), staging (stage), and live environments. We rely on [Shopify CLI 3](https://shopify.dev/docs/themes/tools/cli) and it necessitates requesting the store information with each CLI command. Consequently, when running CLI commands specified in the package.json, you will be prompted to select the store from the options listed in the .env file. The file shops.js in the root directory is responsible for managing and providing these available store options.
 
-_Note that the .env file is pushed to Git. It's common to use the .env files also  for secret keys and to not push it to Git. We only use it to show the stores that are using this theme. That's why we push it to Git
+It's important to note that although the .env file is pushed to Git, it is commonly used for storing secret keys that should not be shared publicly. However, in our case, we only utilize it to display the stores that are currently using this theme. Hence, we deliberately push the .env file to Git for this specific purpose.
 
 ### Deploy commands
 
-For deploying themes we have a few commands. These are the most important.
+We have a set of essential commands for deploying themes, each serving a distinct purpose:
 
-- `npm run start:pull` Is used to pull a theme with all data saved inside the JSON files.
-- `npm run start:push` Is used to push your code changes to an existing theme without the data saved inside the JSON files.
-- `npm run start:upload` Is used to upload a new theme to a store with all your code changes including the data saved inside the JSON files.
+- `npm run start:pull`: This command allows you to pull a theme along with all the data saved inside the JSON files. It retrieves the theme and its associated data from a target store.
+- `npm run start:push`: When you run this command, your code changes are pushed to an existing theme. However, this process does not affect the data stored inside the JSON files, ensuring that no valuable data is overwritten during the update.
+- `npm run start:upload`: For uploading a completely new theme to a store, including all your code changes and the data saved inside the JSON files, you can use this command. It's particularly useful when deploying a fresh theme to a store.
 
-_All templates are JSON files, where each template has its own settings stored in this specific JSON file. All template JSON files are therefore ignored in the pull and push process to make sure no changes are overwritten on either side.
+Each template is represented by a JSON file, and each of these JSON files stores specific settings relevant to its corresponding template. To safeguard against unintended data loss or conflicts, the pull and push processes intentionally ignore the template JSON files, ensuring that no critical changes are accidentally overwritten on either side during deployment.
 
 ---
 
 ## Rules for writing code
 
-- Code is written to last. Use comments as much as possible and don't use hacks to fix issues.
-- Use sections and blocks to allow the client the freedom to adjust their theme.
-- Don't use third-party libraries, unless absolutely necessary.
-- DRY coding. Use snippets for repeating code.
+- `Sustainable Code`: Prioritize writing code that is durable and maintainable over time. To achieve this, extensively use comments to document the code's functionality, making it easier for others to understand and modify in the future. Avoid resorting to quick fixes or hacks to address issues.
+- `Modularity`: Design the code in a modular manner, using sections and blocks. This approach empowers the client to have greater flexibility in adjusting and customizing their theme according to their needs and preferences.
+- `Minimal Third-Party Dependencies`: Whenever possible, refrain from using third-party libraries unless they are absolutely necessary. Relying on fewer external dependencies reduces the risk of potential compatibility issues and security vulnerabilities.
+- `DRY Coding`: Emphasize the "Don't Repeat Yourself" (DRY) principle. Utilize code snippets for repetitive tasks to ensure a more efficient and maintainable codebase. By reusing code, you minimize duplication and potential inconsistencies.
 
-### Styles
+By adhering to these principles, the codebase will be more organized, comprehensible, and adaptable, benefiting both developers and clients in the long run.
 
-- We prefer to use mostly Tailwind classes and work **utility first**.
+## Javascript
+
+- JS is written in vanilla javascript. Don NOT use jQuery in your project.
+- Javascript should be only loaded inside the section where it's needed, except for the global.js javascript.
+- We prefer to write javascript in [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements).
+- JS is optimized by [TerserJS](https://github.com/terser/terser). Modern JS is the rule.
+- Eslint is used to check your javascript code for mistakes and typos.
+- Prettier formats your javascript code on safe.
+- Third-party javascript needed for the frontend in the project is added to the dependencies inside the package.json or inside the dev/assets/js/ext folder. Be careful with third-party apps that include jQuery.
+
+## Styles
+
+We use [tailwind](https://tailwindcss.com/docs/) for the theme styling.
+### Tailwind and Layers
+
+- We prefer to use Tailwind classes and work **utility first**.
 - To prevent CLS we write all our layout, spacing, sizing, and font classes directly on the Liquid. This can be done by using format container, site center, site spacing classes or one of the Tailwind classes.
 - We apply [BEM](https://getbem.com/) classes to every element for readability and to find things back. It can be that no style is applied on this class.
 - We work mobile-first. Use @screen md { ... your css } and md:[your-class] to define CSS on breakpoints. More info: [screen directive](https://Tailwindcss.com/docs/functions-and-directives) and [customize screens](https://Tailwindcss.com/docs/screens)
@@ -49,7 +64,7 @@ _All templates are JSON files, where each template has its own settings stored i
 - If you need to repeat your classes inside a section then consider:
   - Usage of a loop
   - Split bigger components into smaller components with liquid snippets. **Max snippet depth is 4 for performance.**
-  - Create a [BEM](https://getbem.com/) class with related SCSS that's loaded from the dynamic folder
+  - Create a [BEM](https://getbem.com/) class with related SCSS that's loaded from the custom folder
   - If it applies on (almost) every page then you can consider adding it to the main CSS. Be very strict with this.
 - If you need to apply classes based on an if statement then keep the if statement outside the `class=""` property.
 - Because Tailwind uses a regex expression to recognize the classes used in your project, all Tailwind classes must be fully written out. So don't use font-[{{- size -}}] but use font-xs so that the class can be recognized by Tailwind.
@@ -57,55 +72,39 @@ _All templates are JSON files, where each template has its own settings stored i
 - Classes inside the Shopify schema's will be recognized.
 - Prettier is used to optimize the CSS and to reorder the tailwind classes on file safe. Note that the automatic reordering of tailwind classes does not work inside liquid capture statements.
 
-### Javascript
-
-- JS is written in vanilla javascript. Don't use jQuery in your project.
-- Javascript should be only loaded inside the section where it's needed. Except for the global javascript.
-- We prefer to write javascript in [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements).
-- JS is optimized by [TerserJS](https://github.com/terser/terser). Modern JS is the rule.
-- Eslint is used to check your javascript code for mistakes and typos.
-- Prettier formats your javascript code on safe.
-- Third-party javascript needed for the frontend in the project is added to the dependencies inside the package.json or inside the dev/assets/js/ext folder. This will not be optimized by Terser. Try to don't use third-party libraries that are loading jQuery.
-- Always inform your client about performance issues.
-
----
-
-## Tailwind and Layers
-
-We use [tailwind](https://tailwindcss.com/docs/) for the theme styling.
-
 ### Tailwind config
 
-The Tailwind config can be extended to the project's needs.
-Components, Utilities, and variants added to the config are available inside intellisense. Be strict on your tailwind config extensions. But feel free to extend the fonts, text sizes, and colors for your project needs.
-
-[More info](https://Tailwindcss.com/docs/configuration)
+The Tailwind config can be extended to the project's needs. [More info](https://Tailwindcss.com/docs/configuration)
 
 ### Tailwind layers
 
-Tailwind uses the \``@layer`\` directive to tell Tailwind on which â€œbucketâ€ a set of custom styles belong to. Valid taiwlind layers are \``base`\`, \``components`\`, and \``utilities`\`.
+Tailwind uses the \``@layer`\` directive to define additional styles. Valid taiwlind layers are \``base`\`, \``components`\`, and \``utilities`\`.
 
-Tailwind will automatically move the used classes to the right @layer tailwind directive, so you donâ€™t have to worry about authoring your CSS in a specific order to avoid specificity issues.
+With Tailwind, you don't need to be concerned about the order in which you author your CSS classes to avoid specificity issues. Tailwind will handle this for you automatically by moving the used classes to the appropriate @layer Tailwind directive.
+
+This means that you can freely author your CSS classes without having to worry about the order in which they appear in your code. Tailwind will intelligently organize and manage the specificity of the classes to ensure proper styling without any conflicts.
+
+By leveraging @layer directives, Tailwind effectively deals with specificity concerns, making your development process smoother and more efficient. You can focus on building your interface and applying the desired styles, trusting Tailwind to handle the rest.
 
 [More info](https://Tailwindcss.com/docs/functions-and-directives)
 
 ### Code layers
 
-Tailwind uses its layer directives purely so that its processor knows where and in what order to print the styles added. In addition, Tailwind is a utility-first CSS framework. This means there is no very specific CSS (`.container.container--full`). Since the CBT has components that print slightly more specific code, we are forced to create and render the different CSS in cascade layers. So we can set the importance of the CSS. This prevents problems with utility classes being not specified again and CSS added by third-party libraries.
-
 The dev/scss folder is divided in three folders to give you to possibility to optimise your CSS easily
 
-- The `dynamic` folder adds CSS that will be added dynamically to your page.
+- The `custom` folder adds CSS that will be added dynamically to your page.
 - The `main` folder loads all critical CSS.
 - The `mixins` folder is used for SCSS mixins that can be used inside the other CSS files.
 
-Inside these folders you have different folders that correspond with the tailwind layers. In each file you should wrap your code inside the corresponding `@layer ... { }`. All the layers will be rendered in order inside the browser. So for the browser `code-base` is the most less important layer and `h1-styles-sections` the most important.
+Inside the designated folders, various subfolders correspond to different Tailwind layers. Each file in these subfolders should be wrapped within the appropriate @layer ... { } directive. The layers will be rendered in the browser in the following order: base, h1-styles-modules, h1-styles-components, h1-styles-utilities, and finally, h1-styles-sections.
 
-- The `code-base` layer injects base styling and resets added by the tailwind algorithm and the scss/main/base folder.
-- The `code-modules` is used to add third party CSS from the dynamic/modules folder like SwiperJs or Fancybox. The intention is that you only import files here and do not apply any custom styling. That's how we keep the hierarchy intact. To apply custom styling to a third-party library you can use the component layer.
-- The `h1-styles-components` layer injects components classes added by the tailwind algorithm, the scss/main/components folder, and the scss/dynamic/components folder. You can choose by loading your component dynamic or critical. Use critical only for styles that are used really often, for example, a button.
-- The `h1-styles-utilities` layer injects utility classes added by the tailwind algorithm and the scss/main/utilities folder. This layer utilizes the biggest Tailwind power. All utility classes from tailwind will be rendered in here. For example `text-md`, `bg-primary`, and `states:underline`.
-- The `h1-styles-sections` layer is used to add custom section styling that cannot be easily done with component or utilities classes. For example, add a color scheme update for a product card inside the h1-styles-sections directive. You should be very strict with this layer.
+- The `base` layer is responsible for injecting base styling and resets introduced by the Tailwind algorithm and the scss/main/base folder. It sets the foundation for the theme.
+- The `h1-styles-modules` layer is utilized for adding third-party CSS from the custom/modules folder, such as SwiperJs or Fancybox. Here, the intention is to only import files without applying any custom styling. This approach maintains the hierarchy and separation of concerns. To apply custom styling to a third-party library, you can use the component layer.
+- The `h1-styles-components` layer injects classes for components added by the Tailwind algorithm, the scss/main/components folder, and the scss/custom/components folder. You can choose to load your component dynamically or critically. The critical option should be reserved for styles that are used frequently, like styles for a commonly used button.
+- The `h1-styles-utilities` layer is responsible for injecting utility classes added by the Tailwind algorithm and the scss/main/utilities folder. This layer harnesses the full power of Tailwind's utility classes, including classes like text-md, bg-primary, and states:underline.
+- The `h1-styles-sections` layer is used to add custom section styling that cannot be easily achieved with component or utility classes. For instance, you can add a specific color scheme update for a product card inside the h1-styles-sections directive. It is crucial to be selective and strict with this layer, using it judiciously for specific section styling.
+
+By following this layer-based approach, you can effectively organize your styles and maintain a clean and manageable codebase in your Tailwind CSS project.
 
 ---
 
@@ -118,7 +117,7 @@ Prettier is used to format your liquid, SCSS, and javascript automatically. So w
 
 ## Theme check
 
-All code that we write should be written following the Shopify principles. These can be checked with the `npm run stcheck`. All liquid will be checked on syntax errors, missing templates, unused variables, deprecated code, and performance issues. The CBT is default theme check ready. Make sure your write clean code by doing a check inside a QA.
+All code that we write should be written following the Shopify principles. These can be checked with the `npm run stcheck`. All liquid will be checked on syntax errors, missing templates, unused variables, deprecated code, and performance issues.
 
 [More info](https://shopify.dev/themes/tools/theme-check)
 
@@ -126,15 +125,14 @@ All code that we write should be written following the Shopify principles. These
 
 ## Styleguide
 
-We strive to work for the smallest to the biggest elements. For this workflow, we need to adjust and create all style guide-related elements for the project first. After that, you will use the style guide classes and components inside the other store components. Your PM should arrange your style guide tickets first.
+We work using components. So, we need to adjust and create all components for the project first. After that, you will use the style guide classes and components inside the other store components.
 
 ### Colors
 
-- The branding colors for the project can be set inside html-head-colors.liquid
-- Inside Tailwind.config.js (theme.extend.colors) we transform the branding colors set inside html-head-colors.liquid to Tailwind classes.
+- The branding colors for the project can be set inside the tailwind.config.js
+- You can use a generator like https://www.tailwindshades.com/ to create and adjust all the variants of your colors
 - Inside Tailwind.config.js (plugins addUtilities) we add the base branding colors as utility classes so you can use these directly.
-- With the settings-schema.json (branding section) you can make the colors optional and customizable in the customizer.
-- The color schemes can be set inside the tailwind utility layer (scss/main/utilities/color-schemes.scss).
+- The color schemes should be updated in the tailwind utility layer (scss/main/utilities/color-schemes.scss).
 
 ### Typography
 

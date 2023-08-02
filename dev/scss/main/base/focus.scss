@@ -20,9 +20,9 @@
   }
 
   ::selection {
-    color: var(--color-white);
-    background: var(--color-primary-500);
-    -webkit-text-fill-color: var(--color-white);
+    color: theme('colors.white');
+    background: theme('colors.primary.600');
+    -webkit-text-fill-color: theme('colors.white');
   }
 
   /* Dangerous for a11y - Use with care */
