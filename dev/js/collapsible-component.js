@@ -275,7 +275,6 @@ if (!customElements.get('collapsible-component')) {
           trapFocus(group);
         }
       }
-      console.log('this.state', this.state);
 
       // Keep track of the state so we know where to add the focus when moving between the mobile menu items
       this.options.isMobileMenu && this.state.push(group);
@@ -286,8 +285,6 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     close(group) {
-      console.log('close', group);
-
       if (!group) return false;
 
       removeTrapFocus(group);
