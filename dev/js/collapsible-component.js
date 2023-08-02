@@ -141,7 +141,7 @@ if (!customElements.get('collapsible-component')) {
           trigger.removeEventListener('mouseenter', this.debouncedOnMouse);
         }
       });
-      this.groups.forEach((group) => {
+      this.groups.forEach(group => {
         if (this.options.onHover) {
           group.removeEventListener('mouseleave', this.debouncedOnMouse);
         }
@@ -184,7 +184,7 @@ if (!customElements.get('collapsible-component')) {
       });
 
       // Trigger events on [data-collapsible-group]
-      this.groups.forEach((group) => {
+      this.groups.forEach(group => {
         if (this.options.onHover) {
           group.addEventListener('mouseleave', this.debouncedOnMouse.bind(this, 'close'));
         }
@@ -266,11 +266,19 @@ if (!customElements.get('collapsible-component')) {
       group.classList.add(this.options.classToToggle);
 
       // Only use focus when item is not hovered
-      !this.options.onHover && trapFocus(group);
+      if (!this.options.onHover) {
+        // trapFocus(group);
+        if (this.options.isMobileMenu) {
+          trapFocus(group, group.querySelectorAll('.mobile-menu__submenu')[0].querySelectorAll('.mobile-menu__link')[0]);
+        }
+        else {
+          trapFocus(group);
+        }
+      }
+      console.log('this.state', this.state);
 
       // Keep track of the state so we know where to add the focus when moving between the mobile menu items
       this.options.isMobileMenu && this.state.push(group);
-
     }
 
     /*
@@ -278,6 +286,8 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     close(group) {
+      console.log('close', group);
+
       if (!group) return false;
 
       removeTrapFocus(group);
@@ -303,7 +313,7 @@ if (!customElements.get('collapsible-component')) {
       else {
         // Close child collapsibles
         if (this.options.closeChildren) {
-          group.querySelectorAll('[data-collapsible-group]').forEach((group) => {
+          group.querySelectorAll('[data-collapsible-group]').forEach(group => {
             this.close(group);
           });
         }
@@ -329,13 +339,7 @@ if (!customElements.get('collapsible-component')) {
     */
     closeSiblings(currentGroup = null) {
       this.groups.forEach(group => {
-        if (
-          group !== currentGroup &&
-          !group.contains(currentGroup) &&
-          !currentGroup.contains(group)
-        ) {
-          console.log('close', group);
-
+        if (group !== currentGroup && !group.contains(currentGroup) && !currentGroup.contains(group)) {
           this.close(group);
         }
       });
@@ -345,7 +349,7 @@ if (!customElements.get('collapsible-component')) {
       Open+ all collapsibles
     */
     openAll() {
-      this.groups.forEach((group) => {
+      this.groups.forEach(group => {
         group.classList.add(this.options.classToToggle);
       });
 
@@ -355,7 +359,7 @@ if (!customElements.get('collapsible-component')) {
       Close all collapsibles
     */
     closeAll() {
-      this.groups.forEach((group) => {
+      this.groups.forEach(group => {
         group.classList.remove(this.options.classToToggle);
       });
 

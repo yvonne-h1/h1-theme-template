@@ -256,7 +256,6 @@
     },
     "footer": {
       "social_platform": "{{ name }} on {{ platform }}",
-      "copyright_html": "© H1 Webdevelopment {{ year }}. All rights reserved.",
       "payment_methods": "Payment methods accepted"
     },
     "main_blog": {

@@ -14,7 +14,6 @@
 <div
   id="mobileMenu"
   class="mobile-menu lg:hidden {{ section.settings.color_scheme }}"
-  tabindex="-1"
   role="dialog">
   <collapsible-component
     class="
@@ -43,7 +42,6 @@
       group-[.mobile-menu-is-open]/body:opacity-100
       xs:max-w-sm
     "
-    tabindex="-1"
     data-options='
       {
         "closeSiblings": true,
@@ -51,7 +49,7 @@
       }
     '>
     {% comment %} Header with close button {% endcomment %}
-    <div class="mobile-menu__header px-4 py-3" tabindex="-1">
+    <div class="mobile-menu__header px-4 py-3">
       <class-toggle-component
         aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
         class="inline-flex h-full"
@@ -132,9 +130,8 @@
                 {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
               </button>
               <div
-                id="link-{{ level_1_title | handleize }}"
+                id="link-{{ level_1_title | handleize }}" tabindex="0"
                 class="{{ mobile_submenu_class }} level-1 group/submenu-2 group-[.collapsible-is-open]/submenu-1:visible group-[.collapsible-is-open]/submenu-1:translate-x-0 {{ section.settings.color_scheme }}"
-                tabindex="-1"
                 data-collapsible-target>
                 {%- comment -%} Link back to level 1 {%- endcomment -%}
                 <button
@@ -160,7 +157,7 @@
                 </{{ level_1_title_end_el }}>
 
                 {%- comment -%} Level 2 {%- endcomment -%}
-                <ul class="mobile-menu__list level-2 flex-1 pb-8" tabindex="-1">
+                <ul class="mobile-menu__list level-2 flex-1 pb-8">
                   {%- for level_2 in level_1.links -%}
                     {%- liquid
                       # Get link and fix deep link to native filters
@@ -211,7 +208,7 @@
                         </button>
 
                         <div
-                          id="childlink-{{ level_2.title | handleize }}"
+                          id="childlink-{{ level_2.title | handleize }}" tabindex="0"
                           class="{{ mobile_submenu_class }} level-2 group-[.collapsible-is-open]/submenu-2:visible group-[.collapsible-is-open]/submenu-2:translate-x-0 {{ section.settings.color_scheme }}"
                           data-collapsible-target>
                           {%- comment -%} Link back to level 2 {%- endcomment -%}
@@ -237,9 +234,7 @@
                           </{{ level_2_title_end_el }}>
 
                           {%- comment -%} Level 3 {%- endcomment -%}
-                          <ul
-                            class="mobile-menu__list level-3 pb-8"
-                            tabindex="-1">
+                          <ul class="mobile-menu__list level-3 pb-8">
                             {%- for level_3 in level_2.links -%}
                               {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
                               {% assign level_3_url = level_3.url %}
