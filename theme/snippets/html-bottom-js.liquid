@@ -11,14 +11,14 @@
   };
 
   window.cartStrings = {
-    error: `{% render "format-translation", namespace: "sections.cart.cart_error", fallback: "There was an error while updating your cart. Please try again." %}`,
-    quantityError: `{% render "format-translation", namespace: "sections.cart.cart_quantity_error_html", fallback: "You can only add [quantity] of this item to your cart." %}`
+    error: `{% render "render-translation", namespace: "sections.cart.cart_error", fallback: "There was an error while updating your cart. Please try again." %}`,
+    quantityError: `{% render "render-translation", namespace: "sections.cart.cart_quantity_error_html", fallback: "You can only add [quantity] of this item to your cart." %}`
   }
 
   window.variantStrings = {
-    addToCart: `{% render "format-translation", namespace: "products.product.add_to_cart", fallback: "Add to cart" %}`,
-    soldOut: `{% render "format-translation", namespace: "products.product.sold_out", fallback: "Sold out" %}`,
-    unavailable: `{% render "format-translation", namespace: "products.product.unavailable", fallback: "Unavailable" %}`,
+    addToCart: `{% render "render-translation", namespace: "products.product.add_to_cart", fallback: "Add to cart" %}`,
+    soldOut: `{% render "render-translation", namespace: "products.product.sold_out", fallback: "Sold out" %}`,
+    unavailable: `{% render "render-translation", namespace: "products.product.unavailable", fallback: "Unavailable" %}`,
   }
 
 </script>

@@ -163,12 +163,12 @@
             </div>
             <button
               class="swiper-button-prev left-2 z-10 hidden md:hidden"
-              aria-label="{% render "format-translation", namespace: "accessibility.previous_slide", fallback: "Previous slide" %}">
+              aria-label="{% render "render-translation", namespace: "accessibility.previous_slide", fallback: "Previous slide" %}">
               {%- render 'icons', icon: 'chevron-left', icon_class: 'w-6' -%}
             </button>
             <button
               class="swiper-button-next right-2 z-10 hidden md:hidden"
-              aria-label="{% render "format-translation", namespace: "accessibility.next_slide", fallback: "Next slide" %}">
+              aria-label="{% render "render-translation", namespace: "accessibility.next_slide", fallback: "Next slide" %}">
               {%- render 'icons', icon: 'chevron-right', icon_class: 'w-6' -%}
             </button>
           </div>
@@ -238,7 +238,7 @@
     {%- if show_vendor -%}
       <p class="product-card__vendor mb-0 text-sm">
         <span class="sr-only">
-          {%- render 'format-translation', namespace: 'accessibility', key: 'vendor', fallback: 'Vendor' -%}
+          {%- render 'render-translation', namespace: 'accessibility', key: 'vendor', fallback: 'Vendor' -%}
         </span>
         <span class="block opacity-70">
           {{- product_object.vendor -}}
@@ -263,7 +263,7 @@
   -%}
   <div class="product-card__price flex items-center text-sm {{ product_card_price_classes }}">
     {% comment %} Render formatted price {% endcomment %}
-    {% render 'format-price', product: product_object %}
+    {% render 'render-price', product: product_object %}
 
     {%- if show_quick_shop -%}
       {% comment %} Show quick_shop button {% endcomment %}
@@ -277,7 +277,7 @@
         type="button"
         class="button button--primary quick-shop__btn-add relative z-20 {{ quick_shop_button_classes }}"
         data-quick-shop-toggle>
-        {%- render 'format-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
+        {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
       </button>
     {% endif %}
   </div>

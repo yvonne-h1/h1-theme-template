@@ -24,10 +24,10 @@
   assign icon_class = 'w-3 group-hover:scale-110 pointer-events-none transition-transform duration-75 ease-linear'
 
   capture button_minus_accessibility_text
-    render 'format-translation', namespace: 'products.product.quantity', key: 'decrease', product_item: qty_product.title, fallback: 'Decrease'
+    render 'render-translation', namespace: 'products.product.quantity', key: 'decrease', product_item: qty_product.title, fallback: 'Decrease'
   endcapture
   capture button_plus_accessibility_text
-    render 'format-translation', namespace: 'products.product.quantity', key: 'increase', product_item: qty_product.title, fallback: 'Increase'
+    render 'render-translation', namespace: 'products.product.quantity', key: 'increase', product_item: qty_product.title, fallback: 'Increase'
   endcapture
 -%}
 
@@ -56,7 +56,7 @@
     pattern="[0-9]*"
     inputmode="numeric"
     aria-label="
-      {%- render 'format-translation',
+      {%- render 'render-translation',
         namespace: 'products.product.quantity',
         key: 'input_label',
         product_item: product.title,

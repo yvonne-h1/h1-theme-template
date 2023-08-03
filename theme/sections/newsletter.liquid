@@ -35,7 +35,7 @@
 
             <div class="field">
               <label class="field__label" for="newsletter-form-{{ section.id }}">
-                {%- render "format-translation", namespace: "newsletter", key: "label", fallback: "Your e-mail" -%}
+                {%- render "render-translation", namespace: "newsletter", key: "label", fallback: "Your e-mail" -%}
               </label>
               <input
                 id="newsletter-form-{{ section.id }}"
@@ -54,7 +54,7 @@
                 {% elsif form.posted_successfully? %}
                   aria-describedby="newsletter-success-{{ section.id }}"
                 {% endif %}
-                placeholder="{%- render "format-translation", namespace: "newsletter", key: "label", fallback: "Your e-mail" -%}"
+                placeholder="{%- render "render-translation", namespace: "newsletter", key: "label", fallback: "Your e-mail" -%}"
                 required
               >
             </div>
@@ -75,7 +75,7 @@
               name="commit"
               class="button {{ block.settings.button_color_scheme }}"
             >
-              {%- render "format-translation", namespace: "newsletter", key: "button_label", fallback: "Subscribe" -%}
+              {%- render "render-translation", namespace: "newsletter", key: "button_label", fallback: "Subscribe" -%}
             </button>
 
             {%- if form.posted_successfully? -%}
@@ -87,7 +87,7 @@
               >
                 {%- render 'icons', icon: 'success', icon_class: 'w-6 shrink-0 text-transparent' -%}
                 <p class="text-sm leading-6">
-                  {%- render "format-translation", namespace: "newsletter", key: "success", fallback: "Thanks for subscribing" -%}
+                  {%- render "render-translation", namespace: "newsletter", key: "success", fallback: "Thanks for subscribing" -%}
                 </p>
               </div>
             {%- endif -%}
@@ -112,7 +112,7 @@
   {%- endcapture -%}
 
   {%- comment -%} Render the content {%- endcomment -%}
-  {%- render 'format-container', content: container_content, class: container_classes -%}
+  {%- render 'render-container-content', content: container_content, class: container_classes -%}
 {%- endif -%}
 
 {% schema %}

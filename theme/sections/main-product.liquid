@@ -21,7 +21,7 @@
 
       {%- comment -%} Skiplink so users can go straight to the product info {%- endcomment -%}
       <a class="button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline" href="#ProductInfo">
-        {% render "format-translation",
+        {% render "render-translation",
           namespace: "accessibility",
           key: "skip_to_product_info",
           fallback: "Skip to product information"
@@ -76,7 +76,7 @@
           {%- comment -%} Product price {%- endcomment -%}
           {%- when 'price' -%}
             <div class="product__price my-2 text-base leading-7 first:mt-0 last:mb-0 no-js:hidden" id="price-{{ product.id }}" {{ block.shopify_attributes }}>
-              {%- render 'format-price',
+              {%- render 'render-price',
                 product: product,
                 use_variant: true,
                 show_badges: false,
@@ -149,7 +149,7 @@
                   endif
                 -%}
                 <label class="quantity__label mb-2 block text-sm font-medium {{ quantity_label_class }}" for="Quantity-{{ product.id }}">
-                  {%- render 'format-translation',
+                  {%- render 'render-translation',
                     namespace: "products.product.quantity",
                     key: "label",
                     fallback: "Quantity"
@@ -322,7 +322,7 @@
             <noscript>
               <div class="product-form__input field{% if product.has_only_default_variant %} hidden{% endif %}">
                 <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ product.id }}">
-                  {%- render 'format-translation',
+                  {%- render 'render-translation',
                     namespace: "products.product",
                     key: "product_variants",
                     fallback: "Variants"
@@ -337,7 +337,7 @@
                     >
                       {{ variant.title }}
                       {%- if variant.available == false %} -
-                        {%- render 'format-translation',
+                        {%- render 'render-translation',
                           namespace: "products.product",
                           key: "sold_out",
                           fallback: "Sold out"
@@ -369,7 +369,7 @@
                   {% if settings.enable_pre_order and
                     product.selected_or_first_available_variant.inventory_quantity <= 0 and
                     product.selected_or_first_available_variant.inventory_policy == 'continue'  %}
-                    <input type="hidden" name="properties[Pre-order]" value="{% render 'format-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+                    <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
                   {% endif %}
 
                   <div class="product-form__buttons mt-4 grid grid-cols-1 items-center gap-2">
@@ -386,13 +386,13 @@
                       {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
                       <span data-add-to-cart-button-text>
                         {%- if product.selected_or_first_available_variant.available -%}
-                          {%- render 'format-translation',
+                          {%- render 'render-translation',
                             namespace: "products.product",
                             key: "add_to_cart",
                             fallback: "Add to cart"
                           -%}
                         {%- else -%}
-                          {%- render 'format-translation',
+                          {%- render 'render-translation',
                             namespace: "products.product",
                             key: "sold_out",
                             fallback: "Sold out"
@@ -415,7 +415,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container', class: 'my-0', content: container_content, content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--content-wrapper-padding)]' -%}
+{%- render 'render-container-content', class: 'my-0', content: container_content, content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--content-wrapper-padding)]' -%}
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'main-product.js' | asset_url }}" defer></script>
 

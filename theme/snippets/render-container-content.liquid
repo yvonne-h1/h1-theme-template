@@ -28,7 +28,7 @@
       <p>This is some content</p>
     {%- endcapture -%}
 
-    {%- render 'format-container',
+    {%- render 'render-container-content',
       title: 'The title'
       content: content
     -%}
@@ -43,13 +43,11 @@
 <{{ tag | default: 'div' }}
   {{ id }}
   class="container{{ class | prepend: ' ' }}"
-  {{ data }}
->
+  {{ data }}>
   {% comment %} Header {% endcomment %}
   {%- if header_content != blank or title != blank -%}
     <header
-      class="container__header{{ header_class | prepend: ' ' }}"
-    >
+      class="container__header{{ header_class | prepend: ' ' }}">
       {%- if header_content != blank -%}
         {{- header_content -}}
       {%- elsif title != blank -%}
@@ -63,8 +61,7 @@
   {% comment %} Container content {% endcomment %}
   {%- if content != blank -%}
     <div
-      class="container__content{{ content_class | prepend: ' ' }}"
-    >
+      class="container__content{{ content_class | prepend: ' ' }}">
       {{ content }}
     </div>
   {%- endif -%}
@@ -72,8 +69,7 @@
   {%- comment %} Container footer {%- endcomment %}
   {%- if footer_content != blank -%}
     <footer
-      class="container__footer{{ footer_class | prepend: ' ' }}"
-    >
+      class="container__footer{{ footer_class | prepend: ' ' }}">
       {{ footer_content }}
     </footer>
   {%- endif -%}

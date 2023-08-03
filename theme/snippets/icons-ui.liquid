@@ -5,7 +5,7 @@
       </svg>
   {%- when 'account' -%}
     <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <title>{% render "format-translation", namespace: "customer.account.title", fallback: "Account" %}</title>
+      <title>{% render "render-translation", namespace: "customer.account.title", fallback: "Account" %}</title>
       <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" fill="none" />
     </svg>
   {%- when 'arrow' -%}
@@ -18,7 +18,7 @@
     </svg>
   {%- when 'cart' -%}
     <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <title>{% render "format-translation", namespace: "templates.cart.title", fallback: "Cart" %}</title>
+      <title>{% render "render-translation", namespace: "templates.cart.title", fallback: "Cart" %}</title>
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" fill="none" />
     </svg>
   {%- when 'chevron-right' -%}
@@ -68,7 +68,7 @@
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" stroke="currentColor">
-      <title>{% render "format-translation", namespace: "accessibility.close", fallback: "Close" %}</title>
+      <title>{% render "render-translation", namespace: "accessibility.close", fallback: "Close" %}</title>
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
     </svg>
   {%- when 'cross' -%}
@@ -91,7 +91,7 @@
     </svg>
   {%- when 'filter' -%}
     <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <title>{% render "format-translation", namespace: "sections.collection_template.filter_button", fallback: "Filter" %}</title>
+      <title>{% render "render-translation", namespace: "sections.collection_template.filter_button", fallback: "Filter" %}</title>
       <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" fill="none" />
     </svg>
   {%- when 'grid-single' -%}
@@ -108,7 +108,7 @@
     </svg>
   {%- when 'hamburger' -%}
     <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <title>{% render "format-translation", namespace: "accessibility.navigation", fallback: "Navigation" %}</title>
+      <title>{% render "render-translation", namespace: "accessibility.navigation", fallback: "Navigation" %}</title>
       <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
     </svg>
   {%- when 'heart' -%}
@@ -211,7 +211,7 @@
     </svg>
   {%- when 'trash' -%}
     <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <title>{% render "format-translation", namespace: "accessibility.delete", fallback: "Delete" %}</title>
+      <title>{% render "render-translation", namespace: "accessibility.delete", fallback: "Delete" %}</title>
       <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" fill="none" />
     </svg>
   {%- when 'truck' -%}
@@ -220,7 +220,7 @@
     </svg>
   {%- when 'user' -%}
     <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-      <title>{% render "format-translation", namespace: "customer.account.title", fallback: "Account" %}</title>
+      <title>{% render "render-translation", namespace: "customer.account.title", fallback: "Account" %}</title>
       <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" fill="none" />
     </svg>
   {%- when 'washing' -%}

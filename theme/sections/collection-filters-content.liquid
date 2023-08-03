@@ -44,11 +44,7 @@
     <div class="is-grid collection__empty-text">
       <div class="is-col-6 grid-col-start-4 center">
         <h3 class="h4">
-          {%- render 'format-translation',
-            namespace: 'sections.collection_template',
-            key: 'empty',
-            fallback: 'No products found.'
-          -%}
+          {%- render 'render-translation', namespace: 'sections.collection_template', key: 'empty', fallback: 'No products found.' -%}
         </h3>
         {%- if filtered_collection -%}
           <p>

@@ -16,7 +16,7 @@
     assign container_title = section.settings.title | escape
 
     # Render format container
-    render 'format-container', class: container_class, title_class: 'h4 text-center', title: container_title, content: content
+    render 'render-container-content', class: container_class, title_class: 'h4 text-center', title: container_title, content: content
 
   else
     # Render without format container

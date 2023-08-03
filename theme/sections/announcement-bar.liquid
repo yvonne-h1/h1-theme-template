@@ -51,7 +51,7 @@
   <div class="announcement-bar relative overflow-hidden lg:z-offcanvas-backdrop">
     <{{ wrapper_element | default: 'div' }}
       role="region"
-      aria-label="{% render "format-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}">
+      aria-label="{% render "render-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}">
       <div class="swiper" data-swiper {{ swiper_options }}>
         <div class="swiper-wrapper">
           {{ swiper_slides }}

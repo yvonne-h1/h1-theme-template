@@ -1,27 +1,27 @@
 {%- comment -%} Capture translations to use multiple times {%- endcomment -%}
 {%- liquid
   capture order_nr_str
-    render 'format-translation', namespace: 'customer.orders', key: 'order_number', fallback: 'Order number'
+    render 'render-translation', namespace: 'customer.orders', key: 'order_number', fallback: 'Order number'
   endcapture
 
   capture order_date_str
-    render 'format-translation', namespace: 'customer.orders', key: 'date', fallback: 'Order date'
+    render 'render-translation', namespace: 'customer.orders', key: 'date', fallback: 'Order date'
   endcapture
 
   capture payment_status_str
-    render 'format-translation', namespace: 'customer.orders', key: 'payment_status', fallback: 'Payment status'
+    render 'render-translation', namespace: 'customer.orders', key: 'payment_status', fallback: 'Payment status'
   endcapture
 
   capture fulfillment_status_str
-    render 'format-translation', namespace: 'customer.orders', key: 'fulfillment_status', fallback: 'Fulfillment status'
+    render 'render-translation', namespace: 'customer.orders', key: 'fulfillment_status', fallback: 'Fulfillment status'
   endcapture
 
   capture total_str
-    render 'format-translation', namespace: 'customer.orders', key: 'total', fallback: 'Total'
+    render 'render-translation', namespace: 'customer.orders', key: 'total', fallback: 'Total'
   endcapture
 
   capture page_title
-    render 'format-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details'
+    render 'render-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details'
   endcapture
 -%}
 
@@ -47,7 +47,7 @@
     {%- endif -%}
     <a href="{{ routes.account_addresses_url }}" class="button button--primary button--lg justify-self-start">
       {%-
-        render 'format-translation',
+        render 'render-translation',
         namespace: 'customer.account',
         key: 'edit_details',
         fallback: 'Edit details'
@@ -55,7 +55,7 @@
     </a>
     <a href="{{ routes.account_logout_url }}" class="button button--outline button--lg justify-self-start">
       {%-
-        render 'format-translation',
+        render 'render-translation',
         namespace: 'customer',
         key: 'log_out',
         fallback: 'Log out'
@@ -70,7 +70,7 @@
         <table role="table" class="account__order-history relative w-full table-auto border-collapse">
           <caption class="sr-only">
             {%-
-              render 'format-translation',
+              render 'render-translation',
               namespace: 'customer.orders',
               key: 'title',
               fallback: 'Orders'
@@ -128,7 +128,7 @@
       {%- else -%}
         <h2 class="h5">
           {%-
-            render 'format-translation',
+            render 'render-translation',
             namespace: 'customer.orders',
             key: 'title',
             fallback: 'Orders'
@@ -136,7 +136,7 @@
         </h2>
         <p>
           {%-
-            render 'format-translation',
+            render 'render-translation',
             namespace: 'customer.orders',
             key: 'none',
             fallback: 'No orders'
@@ -158,7 +158,7 @@
 {%- render 'account-header' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container', class: 'account', content: container_content, content_class: 'account__grid grid grid-cols-12' -%}
+{%- render 'render-container-content', class: 'account', content: container_content, content_class: 'account__grid grid grid-cols-12' -%}
 
 {% schema %}
   {

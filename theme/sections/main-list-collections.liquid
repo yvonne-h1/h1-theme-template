@@ -38,12 +38,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  title: container_title,
-  title_tag: 'h1',
-  title_class: 'h3',
-  content: container_content
--%}
+{%- render 'render-container-content', title: container_title, title_tag: 'h1', title_class: 'h3', content: container_content -%}
 
 {% schema %}
   {

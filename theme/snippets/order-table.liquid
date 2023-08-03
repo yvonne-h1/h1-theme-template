@@ -4,42 +4,42 @@
       {%- comment -%} Image heading {%- endcomment -%}
       <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
         <p class="sr-only">
-          {%- render 'format-translation', namespace: 'customer.order', key: 'image', fallback: 'Image' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'image', fallback: 'Image' -%}
         </p>
       </div>
 
       {%- comment -%} Product heading {%- endcomment -%}
       <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
         <p>
-          {%- render 'format-translation', namespace: 'customer.order', key: 'product', fallback: 'Product' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'product', fallback: 'Product' -%}
         </p>
       </div>
 
       {%- comment -%} SKU heading {%- endcomment -%}
       <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
         <p>
-          {%- render 'format-translation', namespace: 'customer.order', key: 'sku', fallback: 'SKU' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'sku', fallback: 'SKU' -%}
         </p>
       </div>
 
       {%- comment -%} Price heading {%- endcomment -%}
       <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
         <p>
-          {%- render 'format-translation', namespace: 'customer.order', key: 'price', fallback: 'Price' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'price', fallback: 'Price' -%}
         </p>
       </div>
 
       {%- comment -%} Quantity heading {%- endcomment -%}
       <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
         <p>
-          {%- render 'format-translation', namespace: 'customer.order', key: 'quantity', fallback: 'Quantity' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'quantity', fallback: 'Quantity' -%}
         </p>
       </div>
 
       {%- comment -%} Total heading {%- endcomment -%}
       <div class="col-span-12 font-medium text-gray-400 lg:col-span-2" scope="col">
         <p>
-          {%- render 'format-translation', namespace: 'customer.order', key: 'total', fallback: 'Total' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'total', fallback: 'Total' -%}
         </p>
       </div>
     </div>
@@ -56,7 +56,7 @@
           role="rowheader"
           scope="row"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "product",
               fallback: "Product"
@@ -80,7 +80,7 @@
           role="rowheader"
           scope="row"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "product",
               fallback: "Product"
@@ -121,7 +121,7 @@
           {%- if line_item.line_level_discount_allocations != blank -%}
             <ul
               aria-label="
-                {%- render "format-translation",
+                {%- render "render-translation",
                   namespace: "customer.order",
                   key: "discount",
                   fallback: "Discount"
@@ -144,7 +144,7 @@
           headers="Row{{ line_item.key }} ColumnSku"
           role="cell"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "sku",
               fallback: "SKU"
@@ -152,7 +152,7 @@
           ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
-              {%- render 'format-translation', namespace: 'customer.order', key: 'sku', fallback: 'SKU' -%}
+              {%- render 'render-translation', namespace: 'customer.order', key: 'sku', fallback: 'SKU' -%}
             </span>
             {{ line_item.sku }}
           </p>
@@ -164,7 +164,7 @@
           headers="Row{{ line_item.key }} ColumnPrice"
           role="cell"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "price",
               fallback: "Price"
@@ -172,7 +172,7 @@
           ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
-              {%- render 'format-translation', namespace: 'customer.order', key: 'price', fallback: 'Price' -%}
+              {%- render 'render-translation', namespace: 'customer.order', key: 'price', fallback: 'Price' -%}
             </span>
             {% comment %} class="lg:pt-6 lg:pb-6 lg:pl-0 lg:pr-14" {% endcomment %}
             {%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
@@ -180,7 +180,7 @@
                 {%- if line_item.original_price != line_item.final_price -%}
                   <dt>
                     <span class="sr-only">
-                      {%- render 'format-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
+                      {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
                     </span>
                   </dt>
                   <dd>
@@ -188,7 +188,7 @@
                   </dd>
                   <dt>
                     <span class="sr-only">
-                      {%- render 'format-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale price' -%}
+                      {%- render 'render-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale price' -%}
                     </span>
                   </dt>
                   <dd>
@@ -197,7 +197,7 @@
                 {%- else -%}
                   <dt>
                     <span class="sr-only">
-                      {%- render 'format-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
+                      {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
                     </span>
                   </dt>
                   <dd>
@@ -207,7 +207,7 @@
                 {%- if line_item.unit_price_measurement -%}
                   <dt>
                     <span class="sr-only">
-                      {%- render 'format-translation', namespace: 'products.product.price', key: 'unit_price', fallback: 'Unit price' -%}
+                      {%- render 'render-translation', namespace: 'products.product.price', key: 'unit_price', fallback: 'Unit price' -%}
                     </span>
                   </dt>
                   <dd>
@@ -216,7 +216,7 @@
                         <span aria-hidden="true">/</span>
                         <span class="sr-only">
                           {%-
-                            render "format-translation",
+                            render "render-translation",
                             namespace: "accessibility",
                             key: "unit_price_separator",
                             fallback: "per"
@@ -251,7 +251,7 @@
           headers="Row{{ line_item.key }} ColumnQuantity"
           role="cell"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "quantity",
               fallback: "Quantity"
@@ -259,7 +259,7 @@
           ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
-              {%- render 'format-translation', namespace: 'customer.order', key: 'quantity', fallback: 'Quantity' -%}
+              {%- render 'render-translation', namespace: 'customer.order', key: 'quantity', fallback: 'Quantity' -%}
             </span>
             {{- line_item.quantity -}}
           </p>
@@ -271,7 +271,7 @@
           headers="Row{{ line_item.key }} ColumnTotal"
           role="cell"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "total",
               fallback: "Total"
@@ -279,13 +279,13 @@
           ">
           <p class="flex gap-2">
             <span class="inline-block lg:hidden">
-              {%- render 'format-translation', namespace: 'customer.order', key: 'total', fallback: 'Total' -%}
+              {%- render 'render-translation', namespace: 'customer.order', key: 'total', fallback: 'Total' -%}
             </span>
             {%- if line_item.original_line_price != line_item.final_line_price -%}
               <dl>
                 <dt>
                   <span class="sr-only">
-                    {%- render 'format-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
+                    {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
                   </span>
                 </dt>
                 <dd>
@@ -293,7 +293,7 @@
                 </dd>
                 <dt>
                   <span class="sr-only">
-                    {%- render 'format-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale price' -%}
+                    {%- render 'render-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale price' -%}
                   </span>
                 </dt>
                 <dd>
@@ -313,7 +313,7 @@
             headers="Row{{ line_item.key }} ColumnFulfillment"
             role="cell"
             data-label="
-              {%- render "format-translation",
+              {%- render "render-translation",
                 namespace: "customer.order",
                 key: "fulfillment_status",
                 fallback: "Fulfillment status"
@@ -325,7 +325,7 @@
               <span>{{ 'customer.order.fulfilled_at_html' | t: date: created_at }}</span>
               {%- if line_item.fulfillment.tracking_url -%}
                 <a href="{{ line_item.fulfillment.tracking_url }}">
-                  {%- render 'format-translation', namespace: 'customer.order', key: 'track_shipment', fallback: 'Tracking' -%}
+                  {%- render 'render-translation', namespace: 'customer.order', key: 'track_shipment', fallback: 'Tracking' -%}
                 </a>
               {%- endif -%}
               <span>
@@ -348,7 +348,7 @@
       headers="RowSubtotal"
       role="cell"
       data-label="
-        {%- render "format-translation",
+        {%- render "render-translation",
           namespace: "customer.order",
           key: "subtotal",
           fallback: "Subtotal"
@@ -356,7 +356,7 @@
       ">
       <div class="col-span-6 lg:col-span-8 lg:col-start-3">
         <p class="text-gray-400">
-          {%- render 'format-translation', namespace: 'customer.order', key: 'subtotal', fallback: 'Subtotal' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'subtotal', fallback: 'Subtotal' -%}
         </p>
       </div>
       <div class="col-span-6 lg:col-span-2">
@@ -371,7 +371,7 @@
       {%- for discount_application in order.cart_level_discount_applications -%}
         <div class="col-span-6 lg:col-span-8 lg:col-start-3">
           <p class="text-gray-400">
-            {%- render 'format-translation',
+            {%- render 'render-translation',
               namespace: 'customer.order',
               key: 'discount',
               fallback: 'Discount'
@@ -383,7 +383,7 @@
           headers="RowDiscount"
           role="cell"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "discount",
               fallback: "Discount"
@@ -413,7 +413,7 @@
         class="grid grid-cols-12"
         data-label="
           {%-
-            render "format-translation",
+            render "render-translation",
             namespace: "customer.order",
             key: "shipping",
             fallback: "Shipping"
@@ -425,7 +425,7 @@
           role="rowheader"
           scope="row">
           <p class="text-gray-400">
-            {%- render 'format-translation', namespace: 'customer.order', key: 'shipping', fallback: 'Shipping' -%}
+            {%- render 'render-translation', namespace: 'customer.order', key: 'shipping', fallback: 'Shipping' -%}
             ({{ shipping_method.title }})
           </p>
         </div>
@@ -434,7 +434,7 @@
           headers="RowShipping"
           role="cell"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "shipping",
               fallback: "Shipping"
@@ -457,7 +457,7 @@
           role="rowheader"
           scope="row">
           <p class="text-gray-400">
-            {%- render 'format-translation', namespace: 'customer.order', key: 'tax', fallback: 'Tax' -%}
+            {%- render 'render-translation', namespace: 'customer.order', key: 'tax', fallback: 'Tax' -%}
             ({{ tax_line.title }}
             {{ tax_line.rate | times: 100 }}%)
           </p>
@@ -467,7 +467,7 @@
           headers="RowTax"
           role="cell"
           data-label="
-            {%- render "format-translation",
+            {%- render "render-translation",
               namespace: "customer.order",
               key: "tax",
               fallback: "Tax"
@@ -485,7 +485,7 @@
       class="grid grid-cols-12">
       <div class="col-span-6 lg:col-span-8 lg:col-start-3">
         <p class="font-bold">
-          {%- render 'format-translation', namespace: 'customer.order', key: 'total', fallback: 'Total' -%}
+          {%- render 'render-translation', namespace: 'customer.order', key: 'total', fallback: 'Total' -%}
         </p>
       </div>
       <div
@@ -493,7 +493,7 @@
         headers="RowTotal"
         role="cell"
         data-label="
-          {%- render "format-translation",
+          {%- render "render-translation",
             namespace: "customer.order",
             key: "total",
             fallback: "Total"

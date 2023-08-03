@@ -1,34 +1,34 @@
 {%- comment -%} Capture translations to use later {%- endcomment -%}
 {%- liquid
   capture first_name_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'first_name', fallback: 'First name'
+    render 'render-translation', namespace: 'customer.addresses', key: 'first_name', fallback: 'First name'
   endcapture
   capture last_name_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'last_name', fallback: 'Last name'
+    render 'render-translation', namespace: 'customer.addresses', key: 'last_name', fallback: 'Last name'
   endcapture
   capture company_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'company', fallback: 'Company'
+    render 'render-translation', namespace: 'customer.addresses', key: 'company', fallback: 'Company'
   endcapture
   capture address1_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'address1', fallback: 'Address 1'
+    render 'render-translation', namespace: 'customer.addresses', key: 'address1', fallback: 'Address 1'
   endcapture
   capture address2_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'address2', fallback: 'Address 2'
+    render 'render-translation', namespace: 'customer.addresses', key: 'address2', fallback: 'Address 2'
   endcapture
   capture city_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'city', fallback: 'City'
+    render 'render-translation', namespace: 'customer.addresses', key: 'city', fallback: 'City'
   endcapture
   capture country_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'country', fallback: 'Country'
+    render 'render-translation', namespace: 'customer.addresses', key: 'country', fallback: 'Country'
   endcapture
   capture province_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'province', fallback: 'Province'
+    render 'render-translation', namespace: 'customer.addresses', key: 'province', fallback: 'Province'
   endcapture
   capture zip_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'zip', fallback: 'ZIP'
+    render 'render-translation', namespace: 'customer.addresses', key: 'zip', fallback: 'ZIP'
   endcapture
   capture phone_str
-    render 'format-translation', namespace: 'customer.addresses', key: 'phone', fallback: 'Phone number'
+    render 'render-translation', namespace: 'customer.addresses', key: 'phone', fallback: 'Phone number'
   endcapture
 
   # Import styles for this section
@@ -48,7 +48,7 @@
             {%- if address == customer.default_address -%}
               <div class="address__default mb-2 inline-flex bg-accent px-3 py-1 text-xs font-medium text-white">
                 {%-
-                  render 'format-translation',
+                  render 'render-translation',
                   namespace: 'customer.addresses',
                   key: 'default',
                   fallback: 'Default'
@@ -65,28 +65,28 @@
                 class="button button--primary peer/edit"
                 type="button"
                 id="EditFormButton_{{ address.id }}"
-                aria-label="{%- render 'format-translation', namespace: 'customer.addresses', key: 'edit_address', fallback: 'Edit address' %} {{ forloop.index }}"
+                aria-label="{%- render 'render-translation', namespace: 'customer.addresses', key: 'edit_address', fallback: 'Edit address' %} {{ forloop.index }}"
                 aria-controls="EditAddress_{{ address.id }}"
                 aria-expanded="false"
                 data-address-id="{{ address.id }}"
               >
-                {%- render 'format-translation', namespace: 'customer.addresses', key: 'edit', fallback: 'Edit' %}
+                {%- render 'render-translation', namespace: 'customer.addresses', key: 'edit', fallback: 'Edit' %}
               </button>
               <button
                 class="button button--outline"
                 type="button"
-                aria-label="{%- render "format-translation", namespace: "customer.addresses", key: "delete", fallback: "Delete" %} {{ forloop.index }}"
+                aria-label="{%- render "render-translation", namespace: "customer.addresses", key: "delete", fallback: "Delete" %} {{ forloop.index }}"
                 data-target="{{ address.url }}"
-                data-confirm-message="{%- render 'format-translation', namespace: 'customer.addresses', key: 'delete_confirm', fallback: 'Are you sure?' %}"
+                data-confirm-message="{%- render 'render-translation', namespace: 'customer.addresses', key: 'delete_confirm', fallback: 'Are you sure?' %}"
               >
-                {%- render 'format-translation', namespace: 'customer.addresses', key: 'delete', fallback: 'Delete' %}
+                {%- render 'render-translation', namespace: 'customer.addresses', key: 'delete', fallback: 'Delete' %}
               </button>
               {%- comment -%} Edit address form. This should be a modal i.m.o. {%- endcomment -%}
               <div id="EditAddress_{{ address.id }}" class="addresses__edit mt-4 hidden rounded-md  border p-4 peer-aria-expanded/edit:block">
                 {%- form 'customer_address', address, class: 'form addresses__edit-form' -%}
                   <h2 class="text-lg font-medium">
                     {%-
-                      render 'format-translation',
+                      render 'render-translation',
                       namespace: 'customer.addresses',
                       key: 'edit_address',
                       fallback: 'Edit address'
@@ -243,7 +243,7 @@
                     {{ form.set_as_default_checkbox }}
                     <label for="address_default_address_{{ form.id }}">
                       {%-
-                        render 'format-translation',
+                        render 'render-translation',
                         namespace: 'customer.addresses',
                         key: 'set_default',
                         fallback: 'Make default'
@@ -255,7 +255,7 @@
                   <div class="buttons">
                     <button class="button button--primary">
                       {%-
-                        render 'format-translation',
+                        render 'render-translation',
                         namespace: 'customer.addresses',
                         key: 'update',
                         fallback: 'Update'
@@ -263,7 +263,7 @@
                     </button>
                     <button type="reset" class="button button--outline">
                       {%-
-                        render 'format-translation',
+                        render 'render-translation',
                         namespace: 'customer.addresses',
                         key: 'cancel',
                         fallback: 'Cancel'
@@ -284,7 +284,7 @@
     <div data-address class="addresses__add mt-6">
       <button class="button button--primary peer/add" type="button" aria-expanded="false" aria-controls="AddAddress">
         {%-
-          render 'format-translation',
+          render 'render-translation',
           namespace: 'customer.addresses',
           key: 'add_new',
           fallback: 'Add new address'
@@ -294,7 +294,7 @@
         {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading', class: 'form addresses__add-form' -%}
           <h2 class="text-lg font-medium" id="AddressNewHeading">
             {%-
-              render 'format-translation',
+              render 'render-translation',
               namespace: 'customer.addresses',
               key: 'add_new',
               fallback: 'Add new address'
@@ -448,7 +448,7 @@
               {{ form.set_as_default_checkbox }}
               <label for="address_default_address_new">
                 {%-
-                  render 'format-translation',
+                  render 'render-translation',
                   namespace: 'customer.addresses',
                   key: 'set_default',
                   fallback: 'Make this default'
@@ -461,7 +461,7 @@
           <div class="form__actions buttons mt-4">
             <button class="button button--primary">
               {%-
-                render 'format-translation',
+                render 'render-translation',
                 namespace: 'customer.addresses',
                 key: 'add',
                 fallback: 'Add'
@@ -469,7 +469,7 @@
             </button>
             <button type="reset" class="button button--outline">
               {%-
-                render 'format-translation',
+                render 'render-translation',
                 namespace: 'customer.addresses',
                 key: 'cancel',
                 fallback: 'Cancel'
@@ -493,7 +493,7 @@
 {%- render 'account-header' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container', class: 'form-fields address', content: container_content, content_class: 'addresses', data: 'data-customer-addresses' -%}
+{%- render 'render-container-content', class: 'form-fields address', content: container_content, content_class: 'addresses', data: 'data-customer-addresses' -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'customer.js' | asset_url }}" defer></script>

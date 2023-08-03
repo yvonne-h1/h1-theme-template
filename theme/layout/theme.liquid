@@ -27,7 +27,7 @@
     <a
       class="skip-to-content button button--secondary sr-only !absolute z-10 self-start focus:not-sr-only focus:px-4 focus:py-2 focus:text-secondary-text"
       href="#MainContent">
-      {% render 'format-translation', namespace: 'accessibility', key: 'skip_to_text', fallback: 'Skip to text' -%}
+      {% render 'render-translation', namespace: 'accessibility', key: 'skip_to_text', fallback: 'Skip to text' -%}
     </a>
 
     {%- sections 'header-group' %}
@@ -42,7 +42,7 @@
 
     <ul hidden>
       <li id="a11y-refresh-page-message">
-        {% render 'format-translation', namespace: 'accessibility', key: 'refresh_page', fallback: 'Refresh page' -%}
+        {% render 'render-translation', namespace: 'accessibility', key: 'refresh_page', fallback: 'Refresh page' -%}
       </li>
     </ul>
 

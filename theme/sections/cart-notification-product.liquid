@@ -17,7 +17,7 @@
         </p>
 
         {% comment %} Price {% endcomment %}
-        {% render 'format-price', product: item.variant %}
+        {% render 'render-price', product: item.variant %}
 
         <div class="mt-auto">
           {%- unless item.product.has_only_default_variant -%}

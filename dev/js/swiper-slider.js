@@ -45,13 +45,13 @@
 
     <button
       class="swiper-button-prev swiper-button-prev-{{ section.id }} "
-      aria-label="{% render "format-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
+      aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
     >
       {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
     </button>
     <button
       class="swiper-button-next swiper-button-next-{{ section.id }} "
-      aria-label="{% render "format-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
+      aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
     >
       {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
     </button>

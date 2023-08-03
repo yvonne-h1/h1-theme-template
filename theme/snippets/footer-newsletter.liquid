@@ -28,7 +28,7 @@
           autofocus>
           {%- render 'icons', icon: 'success', icon_class: 'w-6' -%}
           <span>
-            {% render 'format-translation', namespace: 'newsletter.success', fallback: 'You have successfully subscribed' %}
+            {% render 'render-translation', namespace: 'newsletter.success', fallback: 'You have successfully subscribed' %}
           </span>
         </p>
       </div>
@@ -44,7 +44,7 @@
       <div class="col-span-9 md:col-span-12 lg:col-span-9">
         <div class="field">
           <label class="field__label sr-only" for="newsletter-form-{{ section.id }}">
-            {%- render 'format-translation', namespace: 'templates.contact.form.email', fallback: 'E-mail' -%}
+            {%- render 'render-translation', namespace: 'templates.contact.form.email', fallback: 'E-mail' -%}
           </label>
           <input
             id="newsletter-form-{{ section.id }}"
@@ -63,7 +63,7 @@
             {% elsif form.posted_successfully? %}
               aria-describedby="footer-success"
             {% endif %}
-            placeholder="{% render "format-translation", namespace: "newsletter.label", fallback: "Your e-mail address" %}"
+            placeholder="{% render "render-translation", namespace: "newsletter.label", fallback: "Your e-mail address" %}"
             required>
         </div>
       </div>

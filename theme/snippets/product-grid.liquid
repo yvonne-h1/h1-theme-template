@@ -39,8 +39,8 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
       <div class="load-more load-more--prev  text-center mt-20 flex justify-center items-center" data-pagination-prev>
         {%- if paginate.current_page > 1 -%}
           <a href="{{ paginate.previous.url }}" class="button button--primary" data-load-trigger="prev">
-            <span data-load-text>{% render "format-translation", namespace: "sections.collection_template.load_more.previous", fallback: "Previous" %}</span>
-            <span class="hidden" data-loader>{% render "format-translation", namespace: "sections.collection_template.load_more.loading", fallback: "" %}</span>
+            <span data-load-text>{% render "render-translation", namespace: "sections.collection_template.load_more.previous", fallback: "Previous" %}</span>
+            <span class="hidden" data-loader>{% render "render-translation", namespace: "sections.collection_template.load_more.loading", fallback: "" %}</span>
           </a>
         {%- endif -%}
       </div>
@@ -92,8 +92,8 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
       <div class="load-more load-more--next flex items-center justify-center mb-4" data-pagination-next>
         {%- if paginate.current_page < paginate.pages -%}
           <a href="{{ paginate.next.url }}" class="button button--primary" data-load-trigger="next">
-            <span data-load-text>{% render "format-translation", namespace: "sections.collection_template.load_more.next", fallback: "Next" %}</span>
-            <span class="hidden" data-loader>{% render "format-translation", namespace: "sections.collection_template.load_more.loading", fallback: "" %}</span>
+            <span data-load-text>{% render "render-translation", namespace: "sections.collection_template.load_more.next", fallback: "Next" %}</span>
+            <span class="hidden" data-loader>{% render "render-translation", namespace: "sections.collection_template.load_more.loading", fallback: "" %}</span>
           </a>
         {%- endif -%}
       </div>

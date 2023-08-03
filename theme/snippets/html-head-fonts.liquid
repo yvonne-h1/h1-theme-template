@@ -1,5 +1,5 @@
 {%- comment -%}
-  Fonts
+  Fonts. Remove the vars if you have a fixed font and set that in tailwind.config.js
 {%- endcomment -%}
 {%- liquid
   assign font_body = settings.font_body | font_modify: 'weight', '400'
@@ -8,12 +8,15 @@
   assign font_heading = settings.font_heading
 -%}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"
-  rel="stylesheet"
->
+{% comment %}
+  Preconnect when using Google fonts
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"
+    rel="stylesheet"
+  >
+{% endcomment %}
 
 {%- unless settings.font_body.system? -%}
   <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>

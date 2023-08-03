@@ -12,16 +12,16 @@
       </p>
       <div class="badges badges--{{ type }} pointer-events-none z-10 flex flex-wrap gap-2">
         <span class="badge badge--new" aria-hidden="true">
-          {%- render 'format-translation', namespace: 'products.product', key: 'new', fallback: 'New' -%}
+          {%- render 'render-translation', namespace: 'products.product', key: 'new', fallback: 'New' -%}
         </span>
         <span class="badge badge--sale" aria-hidden="true">
-          {%- render 'format-translation', namespace: 'products.product', key: 'on_sale', fallback: 'Sale' -%}
+          {%- render 'render-translation', namespace: 'products.product', key: 'on_sale', fallback: 'Sale' -%}
         </span>
         <span class="badge badge--pre-order" aria-hidden="true">
-          {%- render 'format-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order' -%}
+          {%- render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order' -%}
         </span>
         <span class="badge badge--sold-out" aria-hidden="true">
-          {%- render 'format-translation', namespace: 'products.product', key: 'sold_out', fallback: 'Sold out' -%}
+          {%- render 'render-translation', namespace: 'products.product', key: 'sold_out', fallback: 'Sold out' -%}
         </span>
       </div>
     </div>

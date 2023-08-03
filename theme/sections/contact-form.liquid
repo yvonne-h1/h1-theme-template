@@ -7,19 +7,19 @@
   endcapture
 
   capture name_str
-    render 'format-translation', namespace: 'templates.contact.form', key: 'name', fallback: 'Name'
+    render 'render-translation', namespace: 'templates.contact.form', key: 'name', fallback: 'Name'
   endcapture
 
   capture email_str
-    render 'format-translation', namespace: 'templates.contact.form', key: 'email', fallback: 'Email address'
+    render 'render-translation', namespace: 'templates.contact.form', key: 'email', fallback: 'Email address'
   endcapture
 
   capture phone_str
-    render 'format-translation', namespace: 'templates.contact.form', key: 'phone', fallback: 'Phone number'
+    render 'render-translation', namespace: 'templates.contact.form', key: 'phone', fallback: 'Phone number'
   endcapture
 
   capture comment_str
-    render 'format-translation', namespace: 'templates.contact.form', key: 'comment', fallback: 'Comment'
+    render 'render-translation', namespace: 'templates.contact.form', key: 'comment', fallback: 'Comment'
   endcapture
 -%}
 
@@ -71,7 +71,7 @@
         <div class="field__message field__message--error" id="contact-form__email-error">
           <span class="sr-only">
             {%
-              render "format-translation",
+              render "render-translation",
               namespace: "accessibility",
               key: "error",
               fallback: "Error"
@@ -83,7 +83,7 @@
       {%- else -%}
         <div class="field__message field__message--error">
           {%-
-            render "format-translation",
+            render "render-translation",
             namespace: "customer.login_page",
             key: "email_message_error",
             fallback: "This email is not in the correct format."
@@ -129,7 +129,7 @@
     <div class="form__actions col-span-2">
       <button type="submit" class="button {{ section.settings.button_color_scheme }}">
         {%-
-          render "format-translation",
+          render "render-translation",
           namespace: "templates.contact.form",
           key: "send",
           fallback: "Send"
@@ -141,7 +141,7 @@
     {%- if form.posted_successfully? -%}
       <div class="field__message" tabindex="-1" autofocus>
         {%-
-          render "format-translation",
+          render "render-translation",
           namespace: "templates.contact.form",
           key: "post_success",
           fallback: "Thank you for subscribing to our newsletter"
@@ -153,7 +153,7 @@
       <div class="field__message field__message--error">
         <p aria-roledescription="alert" tabindex="-1" autofocus>
           {%
-            render "format-translation",
+            render "render-translation",
             namespace: "templates.contact.form",
             key: "error_heading",
             fallback: "Please adjust the following:"
@@ -191,7 +191,13 @@
 -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container', title_tag: section.settings.heading_element, title_class: section.settings.heading_size, title: container_title, content: container_content, class: container_class -%}
+{%- render 'render-container-content',
+  title_tag: section.settings.heading_element,
+  title_class: section.settings.heading_size,
+  title: container_title,
+  content: container_content,
+  class: container_class
+-%}
 
 {% schema %}
   {

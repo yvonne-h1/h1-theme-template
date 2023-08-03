@@ -24,7 +24,7 @@ module.exports = {
   /**
    * Containers and site center
    * Default Tailwind container is disabled
-   * Usage: format-container
+   * Usage: render-container-content
    */
   corePlugins: {
     container: false,

@@ -126,7 +126,14 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container', class: container_class, title_tag: section.settings.heading_element, title_class: title_class, title: title, content_class: content_class, content: container_content -%}
+{%- render 'render-container-content',
+  class: container_class,
+  title_tag: section.settings.heading_element,
+  title_class: title_class,
+  title: title,
+  content_class: content_class,
+  content: container_content
+-%}
 
 {% schema %}
   {

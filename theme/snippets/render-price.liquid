@@ -8,7 +8,7 @@
   - price_class: {String} Adds a price class to the price element (optional)
 
   Usage:
-  {% render 'format-price', product: product %}
+  {% render 'render-price', product: product %}
 {% endcomment %}
 
 {%- liquid
@@ -24,15 +24,15 @@
   assign money_price = price | money_with_currency
 
   capture sale_price_str
-    render 'format-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale'
+    render 'render-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale'
   endcapture
 
   capture regular_price_str
-    render 'format-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price'
+    render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price'
   endcapture
 
   capture from_price_str
-    render 'format-translation', namespace: 'products.product.price', key: 'from_price_html', price: money_price, fallback: 'From'
+    render 'render-translation', namespace: 'products.product.price', key: 'from_price_html', price: money_price, fallback: 'From'
   endcapture
 
   unless font_size
@@ -57,10 +57,7 @@
   ">
   <dl class="flex">
     {%- comment -%} Product or variant is on sale {%- endcomment -%}
-    {%- if target.compare_at_price > target.price
-      or target.price_varies
-      and target.compare_at_price_varies
-    %}
+    {%- if target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
       <div class="price__sale flex gap-2">
         <dt class="sr-only">
           {{ sale_price_str }}
@@ -102,32 +99,19 @@
     {%- endif -%}
   </dl>
   {%- if show_badges -%}
-    {%- if target.compare_at_price > target.price
-      or target.price_varies
-      and target.compare_at_price_varies
-      or product.available == false
-    %}
+    {%- if target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies or product.available == false %}
       <div class="badges flex flex-wrap gap-1">
-        {%- if target.compare_at_price > target.price
-          or target.price_varies
-          and target.compare_at_price_varies
-        %}
+        {%- if target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
           <span
             class="price__badge-sale badge badge--sale px-2 py-1 text-xs"
             aria-hidden="true">
-            {% render 'format-translation',
-              namespace: 'products.product.on_sale',
-              fallback: 'Sale'
-            %}
+            {% render 'render-translation', namespace: 'products.product.on_sale', fallback: 'Sale' %}
           </span>
         {%- elsif product.available == false -%}
           <span
             class="price__badge-sold-out badge badge--sold-out px-2 py-1 text-xs"
             aria-hidden="true">
-            {% render 'format-translation',
-              namespace: 'products.product.sold_out',
-              fallback: 'Sold out'
-            %}
+            {% render 'render-translation', namespace: 'products.product.sold_out', fallback: 'Sold out' %}
           </span>
         {%- endif -%}
       </div>

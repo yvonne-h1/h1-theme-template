@@ -15,7 +15,7 @@
   {%- if section.settings.enable_navigation and blog.all_tags.size > 0 -%}
     <nav class="blog-header__nav blog-nav" aria-labelledby="primary-navigation">
       <p class="blog-nav__title hidden">
-        {%- render "format-translation", namespace: "sections.main_blog", key: "categories", fallback: "Categories" -%}
+        {%- render "render-translation", namespace: "sections.main_blog", key: "categories", fallback: "Categories" -%}
       </p>
 
       <ul class="blog-header__nav-list article-tags list-menu flex flex-wrap justify-center gap-x-10 text-sm">
@@ -29,7 +29,7 @@
         {%- comment -%} General All blog link {%- endcomment -%}
         <li class="{{- nav_item_class -}}">
           <a class="{{- nav_link_class -}}" aria-current="{{- nav_link_active -}}" href="{{ blog.url }}" title="All">
-            {%- render 'format-translation', namespace: "blogs.general", key: "all_tags", fallback: "All" -%}
+            {%- render 'render-translation', namespace: "blogs.general", key: "all_tags", fallback: "All" -%}
           </a>
         </li>
 
@@ -107,7 +107,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the blog articles {%- endcomment -%}
-{%- render 'format-container',
+{%- render 'render-container-content',
   class: 'main-blog',
   header_class: 'main-blog__header blog-header mb-8 flex items-center justify-between gap-y-8 flex-col md:flex-row',
   header_content: container_header,

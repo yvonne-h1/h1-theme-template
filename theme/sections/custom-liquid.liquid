@@ -12,7 +12,7 @@
     assign title_class = 'text-center ' | append: section.settings.heading_size
 
     # Render format container
-    render 'format-container', class: container_class, title_class: title_class, title_tag: section.settings.heading_element, title: container_title, content: section.settings.custom_liquid
+    render 'render-container-content', class: container_class, title_class: title_class, title_tag: section.settings.heading_element, title: container_title, content: section.settings.custom_liquid
 
   else
     # Render without format container

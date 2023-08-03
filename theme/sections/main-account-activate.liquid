@@ -7,11 +7,11 @@
   endcapture
 
   capture password_str
-    render 'format-translation', namespace: 'customer.activate_account', key: 'password', fallback: 'Password'
+    render 'render-translation', namespace: 'customer.activate_account', key: 'password', fallback: 'Password'
   endcapture
 
   capture password_confirm_str
-    render 'format-translation', namespace: 'customer.activate_account', key: 'password_confirm', fallback: 'Confirm password'
+    render 'render-translation', namespace: 'customer.activate_account', key: 'password_confirm', fallback: 'Confirm password'
   endcapture
 
   # Import styles for this section
@@ -24,7 +24,7 @@
       {%- if form.errors -%}
         <p class="focus-none font-medium" tabindex="-1" autofocus>
           {%-
-            render "format-translation",
+            render "render-translation",
             namespace: "templates.contact.form",
             key: "error_heading",
             fallback: "Error"
@@ -86,7 +86,7 @@
       <div class="form__actions buttons">
         <button class="button button--primary">
           {%-
-            render "format-translation",
+            render "render-translation",
             namespace: "customer.activate_account",
             key: "submit",
             fallback: "Submit"
@@ -94,7 +94,7 @@
         </button>
         <button class="button button--link button--sm" name="decline">
           {%-
-            render "format-translation",
+            render "render-translation",
             namespace: "customer.activate_account",
             key: "cancel",
             fallback: "Cancel"
@@ -108,7 +108,7 @@
 {%- render 'account-header' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container', content: container_content -%}
+{%- render 'render-container-content', content: container_content -%}
 
 {% schema %}
   {

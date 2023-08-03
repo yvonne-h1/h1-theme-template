@@ -5,7 +5,7 @@
 
 {%- comment -%} Capture title {%- endcomment -%}
 {% capture title %}
-  {%- render 'format-translation',
+  {%- render 'render-translation',
     namespace: 'gift_cards.issued.subtext',
     fallback: 'Your gift card'
   -%}
@@ -37,7 +37,7 @@
   {%- endif -%}
 
   <h1 class="h3 break-words">
-    {% render 'format-translation',
+    {% render 'render-translation',
       namespace: 'gift_cards.issued.subtext',
       fallback: 'Your gift card'
     %}
@@ -49,7 +49,7 @@
 
   {%- if gift_card.enabled == false or gift_card.expired -%}
     <p class="badge badge--sold-out">
-      {% render 'format-translation',
+      {% render 'render-translation',
         namespace: 'gift_cards.issued.expired',
         fallback: 'Expired'
       %}
@@ -96,12 +96,12 @@
         type="text"
         class="gift-card__number min-w-[220px] bg-transparent text-center"
         value="{{ gift_card.code | format_code }}"
-        aria-label="{% render "format-translation", namespace: "gift_cards.issued.gift_card_code", fallback: "Gift card code" %}"
+        aria-label="{% render "render-translation", namespace: "gift_cards.issued.gift_card_code", fallback: "Gift card code" %}"
         readonly
         data-gift-card-number
       >
       <button class="link gift-card__copy-link" data-gift-card-copy-link>
-        {% render 'format-translation',
+        {% render 'render-translation',
           namespace: 'gift_cards.issued.copy_code',
           fallback: 'Copy code'
         %}
@@ -114,7 +114,7 @@
     <template>
       {%- render 'icons', icon: 'success', icon_class: 'text-success' -%}
       <p class="text-sm">
-        {%- render 'format-translation',
+        {%- render 'render-translation',
           namespace: 'gift_cards.issued.copy_code_success',
           fallback: 'Successfully copied code'
         -%}
@@ -129,7 +129,7 @@
           src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
           width="120"
           height="40"
-          alt="{% render "format-translation", namespace: "gift_cards.issued.add_to_apple_wallet", fallback: "Add to Apple Wallet" %}"
+          alt="{% render "render-translation", namespace: "gift_cards.issued.add_to_apple_wallet", fallback: "Add to Apple Wallet" %}"
           loading="lazy"
         >
       </a>
@@ -143,7 +143,7 @@
       rel="noopener"
       aria-describedby="a11y-new-window-message"
     >
-      {% render 'format-translation',
+      {% render 'render-translation',
         namespace: 'gift_cards.issued.shop_link',
         fallback: 'Go to shop'
       %}
@@ -152,7 +152,7 @@
       class="button {{ section.settings.button_color_scheme_2 }}"
       onclick="window.print();"
     >
-      {% render 'format-translation',
+      {% render 'render-translation',
         namespace: 'gift_cards.issued.print_gift_card',
         fallback: 'Print gift card'
       %}
@@ -160,7 +160,7 @@
   </div>
   <div hidden>
     <span id="a11y-new-window-message">
-      {% render 'format-translation',
+      {% render 'render-translation',
         namespace: 'accessibility.link_messages.new_window',
         fallback: 'New window'
       %}
@@ -169,7 +169,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
+{%- render 'render-container-content',
   header_class: header_class,
   title_tag: 'div',
   title: container_header,

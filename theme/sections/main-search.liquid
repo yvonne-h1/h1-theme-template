@@ -3,7 +3,7 @@
 
 {%- capture search_str -%}
   {%-
-    render 'format-translation',
+    render 'render-translation',
     namespace: "sections.main_search",
     key: "search",
     fallback: "Search"
@@ -82,7 +82,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container', class: 'mt-8', header_class: 'mb-8', title: container_title, title_tag: 'h1', title_class: 'h5 text-center', content: container_content -%}
+{%- render 'render-container-content', class: 'mt-8', header_class: 'mb-8', title: container_title, title_tag: 'h1', title_class: 'h5 text-center', content: container_content -%}
 
 {% schema %}
   {

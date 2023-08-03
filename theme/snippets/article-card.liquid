@@ -149,7 +149,7 @@
         <p
           class="article-card__link flex items-center gap-2 text-sm font-bold"
           aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title | escape }}">
-          {%- render 'format-translation', namespace: 'blog.articles.read_more', fallback: 'Read more' -%}
+          {%- render 'render-translation', namespace: 'blog.articles.read_more', fallback: 'Read more' -%}
           {%- render 'icons', icon: 'arrow' -%}
         </p>
       </div>

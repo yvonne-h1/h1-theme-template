@@ -11,8 +11,4 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'format-container',
-  tag: 'section',
-  content: container_content,
-  class: container_class
--%}
+{%- render 'render-container-content', tag: 'section', content: container_content, class: container_class -%}

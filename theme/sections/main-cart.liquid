@@ -4,14 +4,14 @@
     {%- comment -%} Empty cart {%- endcomment -%}
     <div class="cart__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex">
       <p class="h4 cart__empty-text mb-4">
-        {%- render "format-translation", namespace: "sections.cart", key: "empty", fallback: "Your cart is empty" -%}
+        {%- render "render-translation", namespace: "sections.cart", key: "empty", fallback: "Your cart is empty" -%}
       </p>
     </div>
 
     {%- comment -%} Header {%- endcomment -%}
     <div class="cart__header mb-6 group-[.cart-is-empty]/cart-items:hidden lg:mb-14">
       <h1 class="h4 text-center">
-        {%- render "format-translation", namespace: "sections.cart", key: "title", fallback: "Cart" -%}
+        {%- render "render-translation", namespace: "sections.cart", key: "title", fallback: "Cart" -%}
       </h1>
     </div>
 
@@ -44,7 +44,7 @@
             data-shopping-cart-line-item-status
           >
             {%-
-              render 'format-translation',
+              render 'render-translation',
               namespace: 'accessibility',
               key: 'loading',
               fallback: 'Loading'
@@ -66,11 +66,11 @@
               {%- if section.settings.show_cart_note -%}
                 <cart-note class="cart__note field mb-0 block">
                   <label for="Cart-note" class="field__label font-body text-xs">
-                    {%- render "format-translation", namespace: "sections.cart", key: "note", fallback: "Instructions about shipping, taxes and/or returns." -%}
+                    {%- render "render-translation", namespace: "sections.cart", key: "note", fallback: "Instructions about shipping, taxes and/or returns." -%}
                   </label>
                   <textarea
                     name="note"
-                    placeholder="{% render "format-translation", namespace: "sections.cart", key: "message", fallback: "Leave a comment here" -%}"
+                    placeholder="{% render "render-translation", namespace: "sections.cart", key: "message", fallback: "Leave a comment here" -%}"
                     class="field__input"
                     id="Cart-note"
                     data-cart-note
@@ -122,7 +122,7 @@
                 {%- comment -%} Totals {%- endcomment -%}
                 <div class="cart__totals relative flex flex-wrap items-center justify-between p-4 md:p-0">
                   <p class="cart__totals-subtotal mb-0 font-body text-base leading-7">
-                    {%- render 'format-translation', namespace: 'sections.cart', key: 'subtotal', fallback: 'Subtotal' -%}
+                    {%- render 'render-translation', namespace: 'sections.cart', key: 'subtotal', fallback: 'Subtotal' -%}
                   </p>
 
                   {%- comment -%} Loading animation {%- endcomment -%}
@@ -152,7 +152,7 @@
                     {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
                   {%- elsif cart.taxes_included -%}
                     {%-
-                      render 'format-translation',
+                      render 'render-translation',
                       namespace: 'sections.cart',
                       key: 'taxes_included_but_shipping_at_checkout',
                       fallback: 'Taxes are included'
@@ -161,7 +161,7 @@
                     {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
                   {%- else -%}
                     {%-
-                      render 'format-translation',
+                      render 'render-translation',
                       namespace: 'sections.cart',
                       key: 'taxes_and_shipping_at_checkout',
                       fallback: 'Taxes and shipping are calculated in checkout'
@@ -176,7 +176,7 @@
 
                 <noscript>
                   <button type="submit" class="button button--secondary button--lg">
-                    {%- render 'format-translation',
+                    {%- render 'render-translation',
                       namespace: 'sections.cart',
                       key: 'update',
                       fallback: 'Update'
@@ -192,7 +192,7 @@
                   {% endif %}
                 >
                   {%-
-                    render 'format-translation',
+                    render 'render-translation',
                     namespace: 'sections.cart',
                     key: 'checkout',
                     fallback: 'Checkout'
@@ -211,7 +211,7 @@
   {% comment %} 'Continue shopping' link {% endcomment %}
   <a href="{{ routes.all_products_collection_url }}" class="link py-10">
     {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
-    {%- render "format-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
+    {%- render "render-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
   </a>
 {%- endcapture -%}
 
@@ -223,7 +223,7 @@
   -%}
 
   {%- comment -%} Render the content {%- endcomment -%}
-  {%- render 'format-container', class: 'mb-0', content_class: 'content-wrapper', content: container_content -%}
+  {%- render 'render-container-content', class: 'mb-0', content_class: 'content-wrapper', content: container_content -%}
 
   {%- comment -%} Import javascript {%- endcomment -%}
   <script src="{{ 'cart.js' | asset_url }}" defer></script>

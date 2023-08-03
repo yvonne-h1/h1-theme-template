@@ -17,7 +17,7 @@
 {%- capture summary_content -%}
   {%- assign max_price_amount = filter.range_max  | money_with_currency | strip_html | escape -%}
   <p class="filter-options__info">
-    {%- render 'format-translation',
+    {%- render 'render-translation',
       namespace: "sections.collection_template",
       key: "max_price",
       price: max_price_amount,
@@ -26,7 +26,7 @@
   </p>
   <price-range class="filter-options__price">
     <label class="field__label -order-1 my-1" for="filter-{{ filter.label | handleize }}-{{ filter_index }}-min">
-      {%- render 'format-translation', namespace: "sections.collection_template.from", fallback: "From" -%}
+      {%- render 'render-translation', namespace: "sections.collection_template.from", fallback: "From" -%}
     </label>
     <div class="field flex items-center">
       <span class="field__currency w-5">{{ cart.currency.symbol }}</span>
@@ -48,7 +48,7 @@
         max="{{ filter.range_max | divided_by: 100 | ceil }}" />
     </div>
     <label class="field__label -order-1 my-1" for="filter-{{ filter.label | handleize }}-{{ index }}-max">
-      {%- render 'format-translation', namespace: "sections.collection_template.to", fallback: "To" -%}
+      {%- render 'render-translation', namespace: "sections.collection_template.to", fallback: "To" -%}
     </label>
     <div class="field flex items-center">
       <span class="field__currency w-5">{{ cart.currency.symbol }}</span>
@@ -72,8 +72,4 @@
   </price-range>
 {%- endcapture -%}
 
-{%- render 'format-filter-group',
-  summary_content: summary_content,
-  label: filter.label,
-  filter_index: filter_index
--%}
+{%- render 'render-filter-group', summary_content: summary_content, label: filter.label, filter_index: filter_index -%}

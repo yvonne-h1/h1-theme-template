@@ -5,7 +5,7 @@
   endif
 
   capture menu_name
-    render 'format-translation', namespace: 'sections.header', key: 'menu', fallback: 'Menu'
+    render 'render-translation', namespace: 'sections.header', key: 'menu', fallback: 'Menu'
   endcapture
   assign menu_name = menu_name | downcase
 -%}
@@ -51,7 +51,7 @@
     {% comment %} Header with close button {% endcomment %}
     <div class="mobile-menu__header px-4 py-3">
       <class-toggle-component
-        aria-label="{% render "format-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
+        aria-label="{% render "render-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
         class="inline-flex h-full"
         data-options='
           {
@@ -68,7 +68,7 @@
 
     <nav
       class="mobile-menu__content relative flex-1"
-      aria-label="{%- render 'format-translation', namespace: 'accessibility', key: 'mobile_menu', fallback: 'Mobile menu' -%}">
+      aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'mobile_menu', fallback: 'Mobile menu' -%}">
       {%- comment -%} Level 1 {%- endcomment -%}
       <ul class="mobile-menu__list level-1">
         {%- for level_1 in menu_list.links -%}
@@ -139,7 +139,7 @@
                   aria-expanded="true"
                   data-collapsible-trigger>
                   {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
-                  {%- render 'format-translation', namespace: 'sections.header', key: 'back_to_title', title: menu_name, fallback: 'Back' -%}
+                  {%- render 'render-translation', namespace: 'sections.header', key: 'back_to_title', title: menu_name, fallback: 'Back' -%}
                 </button>
 
                 {%- liquid
@@ -217,7 +217,7 @@
                             aria-expanded="true"
                             data-collapsible-trigger>
                             {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
-                            {%- render 'format-translation', namespace: 'sections.header', key: 'back_to_title', title: level_1_title, fallback: 'Back' -%}
+                            {%- render 'render-translation', namespace: 'sections.header', key: 'back_to_title', title: level_1_title, fallback: 'Back' -%}
                           </button>
 
                           {%- liquid
@@ -305,9 +305,9 @@
                 {%- liquid
                   render 'icons', icon: 'user', icon_class: 'w-4'
                   if customer
-                    render 'format-translation', namespace: 'customer', key: 'account_fallback', fallback: 'Account'
+                    render 'render-translation', namespace: 'customer', key: 'account_fallback', fallback: 'Account'
                   else
-                    render 'format-translation', namespace: 'customer', key: 'log_in', fallback: 'Log in'
+                    render 'render-translation', namespace: 'customer', key: 'log_in', fallback: 'Log in'
                   endif
                 -%}
               </a>
@@ -322,7 +322,7 @@
                 class="{{ link_class }} {% if request.page_type == 'cart' %}active{% endif %}">
                 {%- liquid
                   render 'icons', icon: 'cart', icon_class: 'w-4'
-                  render 'format-translation', namespace: 'templates.cart', key: 'title', fallback: 'Cart'
+                  render 'render-translation', namespace: 'templates.cart', key: 'title', fallback: 'Cart'
                 -%}
               </a>
             </li>
@@ -336,7 +336,7 @@
                 class="{{ link_class }} {% if template.name == 'search' %}active{% endif %}">
                 {%- liquid
                   render 'icons', icon: 'search', icon_class: 'w-4'
-                  render 'format-translation', namespace: 'general.search', key: 'search', fallback: 'Search'
+                  render 'render-translation', namespace: 'general.search', key: 'search', fallback: 'Search'
                 -%}
               </a>
             </li>
@@ -351,7 +351,7 @@
     role="button"
     class=" mobile-menu__backdrop backdrop group-[.mobile-menu-is-open]/body:backdrop--active z-offcanvas-backdrop lg:hidden"
     tabindex="-1"
-    aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
+    aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
     data-options='
       {
         "classToToggle": "mobile-menu-is-open"

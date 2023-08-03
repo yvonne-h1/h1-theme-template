@@ -14,6 +14,6 @@
   class="search-modal__content fixed bottom-0 left-0 right-0 top-0 z-modal hidden overflow-y-auto bg-white px-6 py-6 group-[.search-is-open]/body:block lg:absolute lg:bottom-[unset] lg:max-h-[72vh] lg:p-4"
   role="dialog"
   aria-modal="true"
-  aria-label="{% render "format-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
+  aria-label="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
   {%- render 'search-form', predictive_search_enabled: true, prefix: 'desktop', max_results: max_results -%}
 </div>

@@ -11,7 +11,7 @@
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase text-primary">
             {%-
-              render "format-translation",
+              render "render-translation",
               namespace: "sections.predictive_search",
               key: "products",
               fallback: "Products"
@@ -22,7 +22,7 @@
             class="button button--link button--sm px-0"
           >
             {%-
-              render "format-translation",
+              render "render-translation",
               namespace: "sections.predictive_search",
               key: "see_all",
               fallback: "See all"
@@ -46,7 +46,7 @@
                     {{- product.title | highlight: predictive_search.terms -}}
                   </p>
                   <div class="predictive-search__item__price text-sm">
-                    {% render 'format-price', product: product %}
+                    {% render 'render-price', product: product %}
                   </div>
                 </div>
               </a>
@@ -61,7 +61,7 @@
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase text-primary">
             {%-
-              render "format-translation",
+              render "render-translation",
               namespace: "sections.predictive_search",
               key: "collections",
               fallback: "Collections"
@@ -96,7 +96,7 @@
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase text-primary">
             {%-
-              render "format-translation",
+              render "render-translation",
               namespace: "sections.predictive_search",
               key: "blog",
               fallback: "Blog"
@@ -107,7 +107,7 @@
             class="button button--link button--sm px-0 py-1"
           >
             {%-
-              render "format-translation",
+              render "render-translation",
               namespace: "sections.predictive_search",
               key: "see_all",
               fallback: "See all"
@@ -131,7 +131,7 @@
                     {{- article.title | highlight: predictive_search.terms -}}
                   </p>
                   <div class="predictive-search__item__price text-sm">
-                    {% render 'format-price', product: product %}
+                    {% render 'render-price', product: product %}
                   </div>
                 </div>
               </a>
@@ -146,7 +146,7 @@
         <div class="predictive-search__group__header mb-4 flex items-center justify-between">
           <p class="text-sm font-bold uppercase text-primary">
             {%-
-              render "format-translation",
+              render "render-translation",
               namespace: "sections.predictive_search",
               key: "pages",
               fallback: "Pages"
@@ -157,7 +157,7 @@
             class="button button--link button--sm px-0 py-1"
           >
             {%-
-              render "format-translation",
+              render "render-translation",
               namespace: "sections.predictive_search",
               key: "see_all",
               fallback: "See all"
@@ -214,7 +214,7 @@
               class="button button--link button--sm px-0"
               tabindex="-1">
               {%-
-                render "format-translation",
+                render "render-translation",
                 namespace: "sections.predictive_search",
                 key: "button_submit_label",
                 fallback: 'Search for "{{ html }}".',
@@ -225,7 +225,7 @@
           </div>
         {%- endif -%}
       {%- else -%}
-        {%- render 'format-translation', namespace: 'sections.predictive_search', key: 'nothing_found_title', fallback: 'Nothing found' -%}
+        {%- render 'render-translation', namespace: 'sections.predictive_search', key: 'nothing_found_title', fallback: 'Nothing found' -%}
       {%- endif -%}
     </div>
   </div>

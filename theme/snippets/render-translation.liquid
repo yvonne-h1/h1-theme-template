@@ -1,14 +1,14 @@
 {%- comment -%}
   EXAMPLE: translate customer.login.title:
 
-  {%- render "format-translation",
+  {%- render "render-translation",
     namespace: "customer.login",    // first part of locale key
     key: "title",                   // last part of locale key
     fallback: "Login"               // OPTIONAL hardcoded fallback text
   -%}
 
   EXAMPLE: translate products.price.from_html:
-  {%- render "format-translation",
+  {%- render "render-translation",
     namespace: "products.price",    // first part of locale key
     key: "from_html",               // last part of locale key
     fallback: "from {{ html }}"     // hardcoded fallback text with translation parameter (must be typed exactly as "{{ html }}").

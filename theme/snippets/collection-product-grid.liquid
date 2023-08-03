@@ -36,7 +36,7 @@
         {% comment %} No products found {% endcomment %}
         <div class="title-wrapper text-center">
           <p class="title title--primary">
-            {%- render 'format-translation',
+            {%- render 'render-translation',
               namespace: 'sections.collection_template',
               key: 'empty',
               fallback: 'No products found.'
@@ -72,7 +72,7 @@
   </div>
 {%- endcapture -%}
 
-{%- render 'format-container', class: container_classes, title: container_title, content: container_content -%}
+{%- render 'render-container-content', class: container_classes, title: container_title, content: container_content -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if section.settings.pagination_view == 'load-more' -%}

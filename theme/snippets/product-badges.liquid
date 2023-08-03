@@ -6,21 +6,21 @@
   # Badge - Sold out
   capture sold_out_badge
     echo '<span class="badge badge--sold-out" aria-hidden="true">'
-    render 'format-translation', namespace: 'products.product', key: 'sold_out', fallback: 'Sold out'
+    render 'render-translation', namespace: 'products.product', key: 'sold_out', fallback: 'Sold out'
     echo '</span>'
   endcapture
 
   # Badge - Sale
   capture sale_badge
     echo '<span class="badge badge--sale" aria-hidden="true">'
-    render 'format-translation', namespace: 'products.product', key: 'on_sale', fallback: 'Sale'
+    render 'render-translation', namespace: 'products.product', key: 'on_sale', fallback: 'Sale'
     echo '</span>'
   endcapture
 
   # Badge - Pre order
   capture pre_order_badge
     echo '<span class="badge badge--pre-order" aria-hidden="true">'
-    render 'format-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'
+    render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'
     echo '</span>'
   endcapture
 

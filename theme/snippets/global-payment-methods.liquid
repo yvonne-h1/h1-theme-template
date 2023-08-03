@@ -12,7 +12,7 @@
 {%- assign payment_providers = 'apple_pay,bancontact,google_pay,ideal,klarna,mastercard,maestro,paypal,sofort,visa' | split: ',' -%}
 
 <p class="sr-only">
-  {%- render 'format-translation', namespace: 'sections.footer.payment_methods', fallback: 'Payment methods' -%}
+  {%- render 'render-translation', namespace: 'sections.footer.payment_methods', fallback: 'Payment methods' -%}
 </p>
 
 <ul class="payment-icons__list flex flex-wrap gap-2 {{ list_class }}">

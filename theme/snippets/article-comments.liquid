@@ -53,7 +53,7 @@
 
       {%- comment -%} Form title  {%- endcomment -%}
       <h2 class="h3 text-center">
-        {%- render 'format-translation',
+        {%- render 'render-translation',
           namespace: 'blogs.article',
           key: 'comment_form_title',
           fallback: 'Leave a comment'
@@ -63,11 +63,11 @@
       {%- comment -%} Capture post form message {%- endcomment -%}
       {%- liquid
         capture post_message
-          render 'format-translation', namespace: 'blogs.article', key: 'success', fallback: 'Your comment was posted successfully! Thank you!'
+          render 'render-translation', namespace: 'blogs.article', key: 'success', fallback: 'Your comment was posted successfully! Thank you!'
         endcapture
         if blog.moderated? and comment.status == 'unapproved'
           capture post_message
-            render 'format-translation', namespace: 'blogs.article', key: 'success_moderated', fallback: 'Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.'
+            render 'render-translation', namespace: 'blogs.article', key: 'success_moderated', fallback: 'Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.'
           endcapture
         endif
       -%}
@@ -85,7 +85,7 @@
       <div class="mt-4">
         <div class="field">
           <label class="field__label" for="CommentForm-author">
-            {% render 'format-translation',
+            {% render 'render-translation',
               namespace: 'blogs.article',
               key: 'name',
               fallback: 'Name'
@@ -96,7 +96,7 @@
             type="text"
             name="comment[author]"
             value="{{ customer.first_name | capitalize }}"
-            placeholder="{% render "format-translation", namespace: "blogs.article", key: "name", fallback: "Name" -%}"
+            placeholder="{% render "render-translation", namespace: "blogs.article", key: "name", fallback: "Name" -%}"
             id="CommentForm-author"
             class="field__input"
             autocomplete="name"
@@ -108,7 +108,7 @@
           >
           {%- if form.errors contains 'author' -%}
             <div class="field__message field__message--error" id="CommentForm-author-error">
-              {%- render 'format-translation',
+              {%- render 'render-translation',
                 namespace: 'blogs.article',
                 key: 'name',
                 fallback: 'Name'
@@ -121,7 +121,7 @@
         {%- comment -%} Field email {%- endcomment -%}
         <div class="field">
           <label class="field__label" for="CommentForm-email">
-            {%- render 'format-translation',
+            {%- render 'render-translation',
               namespace: 'blogs.article',
               key: 'email',
               fallback: 'E-mail'
@@ -132,7 +132,7 @@
             type="email"
             name="comment[email]"
             value="{{ customer.email }}"
-            placeholder="{% render "format-translation", namespace: "blogs.article", key: "email", fallback: "E-mail" -%}"
+            placeholder="{% render "render-translation", namespace: "blogs.article", key: "email", fallback: "E-mail" -%}"
             id="CommentForm-email"
             class="field__input"
             autocomplete="email"
@@ -145,7 +145,7 @@
           >
           {%- if form.errors contains 'email' -%}
             <div class="field__message field__message--error" id="CommentForm-email-error">
-              {%- render 'format-translation',
+              {%- render 'render-translation',
                 namespace: 'blogs.article',
                 key: 'email',
                 fallback: 'E-mail'
@@ -158,7 +158,7 @@
         {%- comment -%} Field comment {%- endcomment -%}
         <div class="field">
           <label class="field__label" for="CommentForm-body">
-            {%- render 'format-translation',
+            {%- render 'render-translation',
               namespace: 'blogs.article',
               key: 'message',
               fallback: 'Comment'
@@ -168,7 +168,7 @@
           <textarea
             rows="5"
             name="comment[body]"
-            placeholder="{% render "format-translation", namespace: "blogs.article", key: "message", fallback: "Comment" -%}"
+            placeholder="{% render "render-translation", namespace: "blogs.article", key: "message", fallback: "Comment" -%}"
             id="CommentForm-body"
             class="text-area field__input"
             aria-required="true"
@@ -181,7 +181,7 @@
             </textarea>
           {%- if form.errors contains 'body' -%}
             <div class="field__message field__message--error" id="CommentForm-body-error">
-              {%- render 'format-translation',
+              {%- render 'render-translation',
                 namespace: 'blogs.article',
                 key: 'message',
                 fallback: 'Comment'
@@ -196,7 +196,7 @@
       <div class="form__actions">
         {%- if blog.moderated? -%}
           <p class="article-comment-warning my-2 text-xs italic">
-            {% render 'format-translation',
+            {% render 'render-translation',
               namespace: 'blogs.article',
               key: 'moderated',
               fallback: 'Please note, comments need to be approved before they are published.'
@@ -206,7 +206,7 @@
         <input
           type="submit"
           class="button button--secondary"
-          value="{% render "format-translation", namespace: "blogs.article", key: "post", fallback: "Post comment" -%}"
+          value="{% render "render-translation", namespace: "blogs.article", key: "post", fallback: "Post comment" -%}"
         >
       </div>
     {% endform %}
@@ -226,7 +226,7 @@
   {%- assign container_title = 'blogs.article.comments' | t: count: article.comments_count -%}
 
   {%- comment -%} Render the content {%- endcomment -%}
-  {%- render 'format-container',
+  {%- render 'render-container-content',
     tag: 'section',
     content: container_content,
     class: container_class,

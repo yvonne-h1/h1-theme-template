@@ -1,11 +1,11 @@
 {% comment %} Button aria label {% endcomment %}
 {%- liquid
   capture open_cart_drawer_string
-    render 'format-translation', namespace: 'general.cart', key: 'open_drawer', fallback: 'Open cart drawer'
+    render 'render-translation', namespace: 'general.cart', key: 'open_drawer', fallback: 'Open cart drawer'
   endcapture
 
   capture cart_item_count
-    render "format-translation", namespace: "sections.header", key: "cart_count", count: cart.item_count, fallback: "{{ count }} item(s) in cart"
+    render "render-translation", namespace: "sections.header", key: "cart_count", count: cart.item_count, fallback: "{{ count }} item(s) in cart"
   endcapture
 
   assign aria_label = cart_item_count | append: '. ' | append: open_cart_drawer_string
@@ -69,7 +69,7 @@
 {%- comment -%} No-js cart link {%- endcomment -%}
 <a href="{{ routes.cart_url }}" class="no-js[visible] hidden">
   <span class="visually-hidden">
-    {% render 'format-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart' %}
+    {% render 'render-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart' %}
   </span>
   {%- render 'icons', icon: 'cart' -%}
 </a>

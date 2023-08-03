@@ -17,14 +17,14 @@
 
   <nav
     class="pagination {{ class | default: 'my-14 block lg:my-16' }}"
-    aria-label="{% render "format-translation", namespace: "general.pagination.label", fallback: "Label" %}">
+    aria-label="{% render "render-translation", namespace: "general.pagination.label", fallback: "Label" %}">
     <ul class="pagination__list flex flex-wrap items-center justify-center text-sm font-bold">
       {%- if paginate.previous -%}
         <li class="mr-3">
           <a
             href="{{ paginate.previous.url }}{{ anchor }}"
             class="pagination__item pagination__item--prev group/pagination-prev relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary"
-            aria-label="{% render "format-translation", namespace: "general.pagination.previous", fallback: "Previous" %}">
+            aria-label="{% render "render-translation", namespace: "general.pagination.previous", fallback: "Previous" %}">
             {%- render 'icons', icon: 'chevron-left', icon_class: 'w-3 group-hover/pagination-prev:scale-125 transition-all' -%}
           </a>
         </li>
@@ -61,7 +61,7 @@
           <a
             href="{{ paginate.next.url }}{{ anchor }}"
             class="pagination__item pagination__item--next group/pagination-next relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary"
-            aria-label="{% render "format-translation", namespace: "general.pagination.next", fallback: "Next" %}">
+            aria-label="{% render "render-translation", namespace: "general.pagination.next", fallback: "Next" %}">
             {%- render 'icons', icon: 'chevron-right', icon_class: 'w-3 group-hover/pagination-next:scale-125 transition-all' -%}
           </a>
         </li>

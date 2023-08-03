@@ -148,7 +148,7 @@ We work using components. So, we need to adjust and create all components for th
 
 - Screen sizes for breakpoints are defined inside Tailwind.config (theme.screens).
 - Common variables for the layout are set inside root-variables.scss.
-- We use the format-container.liquid snippet to align each section the same way.
+- We use the render-container-content.liquid snippet to align each section the same way.
 - Inside container.scss, content-wrapper.scss and site-spacing.scss the layout system classes are build.
 
 ### Logo, favicons & webmanifest

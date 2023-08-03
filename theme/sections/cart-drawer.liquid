@@ -10,7 +10,7 @@
     <class-toggle-component
       class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop"
       tabindex="-1"
-      aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
+      aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
       data-options='
         {
           "classToToggle": "cart-drawer-is-open"
@@ -23,12 +23,12 @@
       class="invisible fixed bottom-0 right-0 top-0 z-offcanvas flex h-full w-full translate-x-full flex-col overflow-x-hidden bg-white opacity-0 transition-all duration-300 text-color-default group-[.cart-drawer-is-open]/body:visible group-[.cart-drawer-is-open]/body:translate-x-0 group-[.cart-drawer-is-open]/body:opacity-100 xs:max-w-sm"
       role="dialog"
       tabindex="-1"
-      aria-label="{%- render 'format-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
+      aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
       <cart-items class="cart-items group/cart-items{% if cart == empty %} cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
         <div class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">
           <p class="h4 cart-drawer__empty-text">
-            {%- render 'format-translation', namespace: 'sections.cart', key: 'empty', fallback: 'Your cart is empty' -%}
+            {%- render 'render-translation', namespace: 'sections.cart', key: 'empty', fallback: 'Your cart is empty' -%}
           </p>
 
           <class-toggle-component
@@ -41,7 +41,7 @@
               type="button"
               class="button button--link flex px-0 py-0">
               {%- render 'icons', icon: 'chevron-left', icon_size: 'w-5' -%}
-              {%- render 'format-translation', namespace: 'general', key: 'continue_shopping', fallback: 'Continue shopping' -%}
+              {%- render 'render-translation', namespace: 'general', key: 'continue_shopping', fallback: 'Continue shopping' -%}
             </button>
           </class-toggle-component>
         </div>
@@ -65,7 +65,7 @@
                 class="button button--link flex px-0 py-0"
                 tabindex="0">
                 {%- render 'icons', icon: 'chevron-left', icon_size: 'w-5' -%}
-                {%- render 'format-translation', namespace: 'general', key: 'continue_shopping', fallback: 'Continue shopping' -%}
+                {%- render 'render-translation', namespace: 'general', key: 'continue_shopping', fallback: 'Continue shopping' -%}
               </button>
             </class-toggle-component>
           </header>
@@ -92,7 +92,7 @@
               aria-hidden="true"
               role="status"
               data-shopping-cart-line-item-status>
-              {%- render 'format-translation', namespace: 'accessibility', key: 'loading', fallback: 'Loading' -%}
+              {%- render 'render-translation', namespace: 'accessibility', key: 'loading', fallback: 'Loading' -%}
             </p>
             {%- for block in section.blocks -%}
               {%- case block.type -%}
@@ -115,7 +115,7 @@
               {%- comment -%} Totals {%- endcomment -%}
               <div class="cart-drawer__totals relative flex justify-between">
                 <span class="font-body">
-                  {%- render 'format-translation', namespace: 'sections.cart', key: 'subtotal', fallback: 'Subtotal' -%}
+                  {%- render 'render-translation', namespace: 'sections.cart', key: 'subtotal', fallback: 'Subtotal' -%}
                 </span>
                 {%- comment -%} Loading animation {%- endcomment -%}
                 <div
@@ -144,11 +144,11 @@
                   {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
                     {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
                   {%- elsif cart.taxes_included -%}
-                    {%- render 'format-translation', namespace: 'sections.cart', key: 'taxes_included_but_shipping_at_checkout', fallback: 'Taxes are included' -%}
+                    {%- render 'render-translation', namespace: 'sections.cart', key: 'taxes_included_but_shipping_at_checkout', fallback: 'Taxes are included' -%}
                   {%- elsif shop.shipping_policy.body != blank -%}
                     {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
                   {%- else -%}
-                    {%- render 'format-translation', namespace: 'sections.cart', key: 'taxes_and_shipping_at_checkout', fallback: 'Taxes and shipping are calculated in checkout' -%}
+                    {%- render 'render-translation', namespace: 'sections.cart', key: 'taxes_and_shipping_at_checkout', fallback: 'Taxes and shipping are calculated in checkout' -%}
                   {%- endif -%}
                 </p>
               {%- endif -%}
@@ -157,7 +157,7 @@
               <div class="mt-4 grid grid-cols-1 gap-2">
                 <noscript>
                   <button type="submit" class="button button--primary w-full">
-                    {%- render 'format-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}
+                    {%- render 'render-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}
                   </button>
                 </noscript>
                 <button
@@ -167,7 +167,7 @@
                   {% if cart == empty %}
                     disabled
                   {% endif %}>
-                  {%- render 'format-translation', namespace: 'sections.cart', key: 'checkout', fallback: 'Checkout' -%}
+                  {%- render 'render-translation', namespace: 'sections.cart', key: 'checkout', fallback: 'Checkout' -%}
                 </button>
 
                 {%- comment -%} Go to cart button {%- endcomment -%}

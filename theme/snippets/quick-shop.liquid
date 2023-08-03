@@ -56,7 +56,7 @@
   ">
   {%- comment -%} Title {%- endcomment -%}
   <p class="quick-shop__title mb-1 text-sm font-bold text-color-default">
-    {%- render 'format-translation', namespace: 'products.product', key: 'choose_your_option', option: option_name, fallback: 'Choose your {{ option }}' -%}
+    {%- render 'render-translation', namespace: 'products.product', key: 'choose_your_option', option: option_name, fallback: 'Choose your {{ option }}' -%}
   </p>
 
   {%- comment -%} Variant options {%- endcomment -%}
@@ -68,7 +68,7 @@
           assign option_label = variant.option2
         elsif product.has_only_default_variant == true
           capture option_label
-            render 'format-translation', namespace: 'products.product.add_to_cart', fallback: 'Add to cart'
+            render 'render-translation', namespace: 'products.product.add_to_cart', fallback: 'Add to cart'
           endcapture
         else
           assign option_label = variant.option1
@@ -152,7 +152,7 @@
           type="hidden"
           name="properties[Pre-order]"
           readonly
-          value="{% render 'format-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+          value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
       {%- endif -%}
 
       <button

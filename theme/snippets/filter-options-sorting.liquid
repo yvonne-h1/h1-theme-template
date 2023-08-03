@@ -31,7 +31,7 @@
   {%- endcapture -%}
 
   {%- capture label -%}
-    {%- render 'format-translation',
+    {%- render 'render-translation',
       namespace: 'sections.collection_template',
       key: 'sort_by_label',
       fallback: 'Sort by'
@@ -45,6 +45,6 @@
   {%- endcapture -%}
 
   {%- if sorting != blank -%}
-    {%- render 'format-filter-group', summary_content: summary_content, label: label -%}
+    {%- render 'render-filter-group', summary_content: summary_content, label: label -%}
   {%- endif -%}
 {%- endif -%}

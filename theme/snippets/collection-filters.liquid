@@ -58,13 +58,13 @@
               <button
                 type="button"
                 class="filter__close button button--link -mr-3 -mt-3 border-none p-3 {% if settings.filter_display == 'grid' -%}hidden{%- endif -%}"
-                aria-label="{% render "format-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
+                aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
                 {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
               </button>
             </class-toggle-component>
             <div class="flex items-center justify-between gap-2">
               <h2 class="filter-options__heading text-bold m-0 text-base">
-                {%- render 'format-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
+                {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
               </h2>
               {%- comment -%} Filter reset link {%- endcomment -%}
               <filter-remove class="block">
@@ -73,7 +73,7 @@
                   class="js-filter-remove button button--sm button--link pl-0 pr-0 font-body"
                   data-filter-remove
                   data-filter-reset>
-                  {%- render 'format-translation', namespace: 'sections.collection_template', key: 'clear_all', fallback: 'Clear all' -%}
+                  {%- render 'render-translation', namespace: 'sections.collection_template', key: 'clear_all', fallback: 'Clear all' -%}
                 </a>
               </filter-remove>
             </div>
@@ -103,7 +103,7 @@
           {%- comment -%} The collection drawer footer. {%- endcomment -%}
           <div class="filter__footer sticky bottom-0 z-10 border-t px-6 py-4 bg-color-default js:hidden no-js:block">
             <button class="button button--primary button--lg group-[.loading]/filter:button--loading flex w-full">
-              {%- render 'format-translation', namespace: 'sections.collection_template', key: 'apply', fallback: 'Apply' -%}
+              {%- render 'render-translation', namespace: 'sections.collection_template', key: 'apply', fallback: 'Apply' -%}
             </button>
           </div>
 
