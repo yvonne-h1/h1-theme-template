@@ -8,7 +8,10 @@
 
 {%- comment -%} Render the main collection. {%- endcomment -%}
 <div id="main-collection" data-main-collection data-id="{{ section.id }}">
+  {% comment %} The collection header {% endcomment %}
   {%- render 'collection-header', section: section -%}
+
+  {% comment %} The filters and the products {% endcomment %}
   {%- if settings.filter_display == 'drawer' -%}
     {%- render 'collection-filters', section: section -%}
     {%- render 'collection-product-grid', section: section -%}
