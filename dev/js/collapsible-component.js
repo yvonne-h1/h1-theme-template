@@ -166,7 +166,9 @@ if (!customElements.get('collapsible-component')) {
       // close the collapsibles because the breakpoint demands them to be collapsed
       else if (init && this.options.breakpointMax !== false) {
         this.groups.forEach(group => {
-          this.close(group);
+          if (group.classList.contains(this.options.classToToggle)) {
+            this.close(group);
+          }
         });
       }
 

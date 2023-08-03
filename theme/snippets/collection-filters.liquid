@@ -64,13 +64,7 @@
             </class-toggle-component>
             <div class="flex items-center justify-between gap-2">
               <h2 class="filter-options__heading text-bold m-0 text-base">
-                {%- liquid
-                  if section.settings.enable_sorting
-                    render 'format-translation', namespace: 'sections.collection_template', key: 'filter_and_sort', fallback: 'Filter and sort'
-                  else
-                    render 'format-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter'
-                  endif
-                -%}
+                {%- render 'format-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
               </h2>
               {%- comment -%} Filter reset link {%- endcomment -%}
               <filter-remove class="block">

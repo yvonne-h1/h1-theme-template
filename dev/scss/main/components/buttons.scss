@@ -12,7 +12,7 @@
     items-center
     justify-center
     gap-2
-    rounded-sm
+    rounded-md
     border-2
     px-4
     py-3
@@ -23,8 +23,8 @@
     transition-all;
     @include states(':not([disabled])') {
       @apply no-underline;
-      background: var(--button-hover-background, theme('colors.secondary.800'));
-      border-color: var(--button-hover-border-color, theme('colors.secondary.800'));
+      background: var(--button-hover-background, theme('colors.secondary.400'));
+      border-color: var(--button-hover-border-color, theme('colors.secondary.400'));
       color: var(--button-hover-text, theme('colors.secondary.text'));
     }
     @include disabled() {

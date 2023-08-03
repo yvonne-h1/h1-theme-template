@@ -114,27 +114,30 @@ class HeaderComponent extends HTMLElement {
       }
 
       // scroll event
-      this.raf = null; // Safe request animation frame
-      (this.timer = null), // Safe scroll timer
-      window.addEventListener('scroll', () => {
+      this.request = null; // Safe request animation frame
+      this.timer = null; // Safe scroll timer
+
+      window.addEventListener('scroll', debounce(() => {
+        console.trace('scroll');
+
         clearTimeout(this.timer);
-        if (!this.raf) {
+        if (!this.request) {
           // A request animation frame is used to animate on max 60fps.
-          this.raf = requestAnimationFrame(this.scrollAnimation.bind(this));
+          this.request = requestAnimationFrame(this.scrollAnimation.bind(this));
         }
         this.timer = setTimeout(() => {
           // Stop animation, cancel request animation frame
-          cancelAnimationFrame(this.raf);
-          this.raf = null;
+          cancelAnimationFrame(this.request);
+          this.request = null;
         }, 50);
-      },
-      false,
-      );
+      }, 25));
     }
   }
 
   scrollAnimation() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    // console.trace('scrollAnimation');
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
     // only animate if header is closed.
     if (!document.body.classList.contains('desktop-submenu-is-open')) {
       if (scrollTop + window.innerHeight > document.body.clientHeight) {
@@ -154,7 +157,7 @@ class HeaderComponent extends HTMLElement {
     this.currentScrollTop = scrollTop;
 
     // Recall request animation loop
-    this.raf = requestAnimationFrame(this.scrollAnimation.bind(this));
+    this.request = requestAnimationFrame(this.scrollAnimation.bind(this));
   }
 
   hide() {

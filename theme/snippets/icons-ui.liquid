@@ -22,42 +22,32 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" fill="none" />
     </svg>
   {%- when 'chevron-right' -%}
-    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" fill="none">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M8.29289 5.29289C7.90237 5.68342 7.90237 6.31658 8.29289 6.70711L13.5858 12L8.29289 17.2929C7.90237 17.6834 7.90237 18.3166 8.29289 18.7071C8.68342 19.0976 9.31658 19.0976 9.70711 18.7071L15.7071 12.7071C16.0976 12.3166 16.0976 11.6834 15.7071 11.2929L9.70711 5.29289C9.31658 4.90237 8.68342 4.90237 8.29289 5.29289Z" fill="currentColor"/>
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" fill="none" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
     </svg>
   {%- when 'chevron-left' -%}
-    <svg
-      class="{{ class }}"
-      {{ attributes }}
-      viewBox="0 0 24 24"
-      fill="none">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711L10.4142 12L15.7071 17.2929C16.0976 17.6834 16.0976 18.3166 15.7071 18.7071C15.3166 19.0976 14.6834 19.0976 14.2929 18.7071L8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L14.2929 5.29289C14.6834 4.90237 15.3166 4.90237 15.7071 5.29289Z" fill="currentColor"/>
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" fill="none" d="M15.75 19.5L8.25 12l7.5-7.5" />
     </svg>
   {%- when 'chevron-down' -%}
-    <svg
-      class="{{ class }}"
-      {{ attributes }}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z" fill="currentColor"/>
+    <svg class="{{ class }}" {{ attributes }} stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" fill="none" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+    </svg>
+  {%- when 'chevron-up' -%}
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" fill="none" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
     </svg>
   {%- when 'caret' -%}
-    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 10 18" fill="none">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M9.28033 8.46967C9.57322 8.76256 9.57322 9.23744 9.28033 9.53033L1.78033 17.0303C1.48744 17.3232 1.01256 17.3232 0.71967 17.0303C0.426777 16.7374 0.426777 16.2626 0.71967 15.9697L7.68934 9L0.719671 2.03033C0.426777 1.73744 0.426777 1.26256 0.719671 0.96967C1.01256 0.676777 1.48744 0.676777 1.78033 0.96967L9.28033 8.46967Z" fill="currentColor"/>
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" fill="none" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
     </svg>
-
   {%- when 'caret_h1' -%}
-    <svg
-      viewBox="0 0 7 16"
-      class="{{ class }}"
-      {{ attributes }}
-      fill="none">
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 7 16" fill="none">
       <path fill-rule="evenodd" clip-rule="evenodd" d="M1.712 16H0l3.595-8.095L0 0H2.712l3.69 7.905L2.712 16h-1Z" fill="currentColor"></path>
     </svg>
   {%- when 'collapsible' -%}
-    <svg class="{{ class }}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z" fill="currentColor"/>
+    <svg class="{{ class }}" {{ attributes }} stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" fill="none" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
     </svg>
   {%- when 'chat_bubble' -%}
     <svg class="{{ class }}" {{ attributes }} viewbox="0 0 16 16">
@@ -82,16 +72,8 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
     </svg>
   {%- when 'cross' -%}
-    <svg
-      class="{{ class }}"
-      {{ attributes }}
-      viewBox="0 0 20 20"
-      fill="none">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M5.28582 5.28595C5.61126 4.96052 6.1389 4.96052 6.46433 5.28595L9.99987 8.82149L13.5354 5.28595C13.8608 4.96052 14.3885 4.96052 14.7139 5.28595C15.0393 5.61139 15.0393 6.13903 14.7139 6.46447L11.1784 10L14.7139 13.5355C15.0393 13.861 15.0393 14.3886 14.7139 14.714C14.3885 15.0395 13.8608 15.0395 13.5354 14.714L9.99987 11.1785L6.46433 14.714C6.1389 15.0395 5.61126 15.0395 5.28582 14.714C4.96039 14.3886 4.96039 13.861 5.28582 13.5355L8.82136 10L5.28582 6.46447C4.96039 6.13903 4.96039 5.61139 5.28582 5.28595Z" fill="currentColor"/>
-    </svg>
-  {%- when 'discount' -%}
-    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 12 12">
-      <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z"/>
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
     </svg>
   {%- when 'dryer' -%}
     <svg class="{{ class }}" {{ attributes }} viewbox="0 0 16 16">
@@ -113,15 +95,16 @@
       <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" fill="none" />
     </svg>
   {%- when 'grid-single' -%}
-    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" fill="none">
-      <rect x="3.9" y="3.9" width="16.2" height="16.2" rx="2.1" stroke="currentColor" stroke-width="1.8"/>
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 15 15">
+      <rect x="0.5" y="8.5" width="14" height="6" rx="1" stroke="currentColor" fill="none"/>
+      <rect x="0.5" y="0.5" width="14" height="6" rx="1" stroke="currentColor" fill="none"/>
     </svg>
   {%- when 'grid-double' -%}
-    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 24 24" fill="none">
-      <rect x="3.9" y="3.9" width="6.2" height="6.2" rx="1.6" stroke="currentColor" stroke-width="1.8"/>
-      <rect x="3.9" y="13.9" width="6.2" height="6.2" rx="1.6" stroke="currentColor" stroke-width="1.8"/>
-      <rect x="13.9" y="3.9" width="6.2" height="6.2" rx="1.6" stroke="currentColor" stroke-width="1.8"/>
-      <rect x="13.9" y="13.9" width="6.2" height="6.2" rx="1.6" stroke="currentColor" stroke-width="1.8"/>
+    <svg class="{{ class }}" {{ attributes }} viewBox="0 0 15 15">
+      <rect x="0.5" y="8.5" width="6" height="6" rx="1" stroke="currentColor" fill="none" />
+      <rect x="0.5" y="0.5" width="6" height="6" rx="1" stroke="currentColor" fill="none" />
+      <rect x="8.5" y="8.5" width="6" height="6" rx="1" stroke="currentColor" fill="none" />
+      <rect x="8.5" y="0.5" width="6" height="6" rx="1" stroke="currentColor" fill="none" />
     </svg>
   {%- when 'hamburger' -%}
     <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

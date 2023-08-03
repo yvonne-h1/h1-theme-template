@@ -80,16 +80,8 @@
 
           {%- comment -%} Text label {%- endcomment -%}
           <span class="hidden md:block">
-            {%- liquid
-              if section.settings.enable_sorting
-                render 'format-translation', namespace: 'sections.collection_template', key: 'filter_and_sort', fallback: 'Filter and sort'
-              else
-                render 'format-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter'
-              endif
-            -%}
-            {%- comment -%}
-              Show active number of filters, loaded by js
-            {%- endcomment -%}
+            {%- render 'format-translation', namespace: 'sections.collection_template', key: 'filter_and_sort', fallback: 'Filter and sort' -%}
+            {%- comment -%} Show active number of filters, loaded by js {%- endcomment -%}
             <span class="" data-filter-total-active-options></span>
           </span>
         </button>
