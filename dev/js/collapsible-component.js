@@ -158,7 +158,7 @@ if (!customElements.get('collapsible-component')) {
 
         // hide all trigger icons
         this.triggers.forEach(trigger => {
-          trigger.querySelector('.icon').classList.add('hidden');
+          if (this.options.breakpointMax !== false) trigger.querySelector('.icon').classList.add('hidden');
         });
 
         return;
@@ -167,7 +167,7 @@ if (!customElements.get('collapsible-component')) {
       else if (init && this.options.breakpointMax !== false) {
         this.groups.forEach(group => {
           if (group.classList.contains(this.options.classToToggle)) {
-            this.close(group);
+            this.close(group, false);
           }
         });
       }
@@ -176,7 +176,7 @@ if (!customElements.get('collapsible-component')) {
       this.triggers.forEach(trigger => {
 
         // show all icons
-        trigger.querySelector('.icon').classList.remove('hidden');
+        if (this.options.breakpointMax !== false) trigger.querySelector('.icon').classList.remove('hidden');
 
         // add event listeners
         trigger.addEventListener('click', this.debounceClickEvent.bind(this));
@@ -286,13 +286,13 @@ if (!customElements.get('collapsible-component')) {
       close collapsible group,
       @param group {node}: group selector
     */
-    close(group) {
+    close(group, focus = true) {
       if (!group) return false;
 
       removeTrapFocus(group);
 
       // Set the focus to the trigger when closing a collapsible
-      !this.options.onHover && group.querySelector('[data-collapsible-trigger]').focus();
+      !this.options.onHover && focus && group.querySelector('[data-collapsible-trigger]').focus();
 
       // Close active group
       group.classList.remove(this.options.classToToggle);

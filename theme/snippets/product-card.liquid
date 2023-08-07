@@ -115,77 +115,27 @@
   </a>
 
   {%- comment -%} Upper part of the product card {%- endcomment -%}
-  <div class="product-card__inner relative">
-    {%- if view == 'alt' -%}
-      {%- comment -%} On mobile devices, render the images in a slider {%- endcomment -%}
-      {%- capture swiper_slides -%}
-        {%- for image in product_object.images -%}
-          {%- capture product_card_slide_classes -%}
-            {%- case forloop.index -%}
-              {%- when 1 -%}
-                md:group-hover/product-card:opacity-0
-              {%- when 2 -%}
-                md:opacity-0 md:group-hover/product-card:opacity-100 md:group-hover/product-card:ml-[-100%]
-              {%- else -%}
-                md:hidden
-            {%- endcase -%}
-          {%- endcapture -%}
-          <div class="product-card__slide swiper-slide {{ product_card_slide_classes }}">
-            <a
-              href="{{ product_link }}"
-              class="block"
-              title="{{ product_object.title | escape }}"
-            >
-            {%- render 'responsive-image',
-              image_object: image,
-              max_width: 767,
-              aspect_ratio: image_aspect_ratio,
-              crop: image_crop,
-              sizes: image_sizes,
-              lazy: image_lazy,
-              alt: image_alt,
-              title: title,
-              class: "object-contain w-full product-card__image--primary"
-            -%}
-            </a>
-          </div>
-        {%- endfor -%}
-      {%- endcapture -%}
-
-      {%- comment -%} Output slides {%- endcomment -%}
-      {%- if swiper_slides != blank -%}
-        <product-card-swiper>
-          <div
-            class="swiper swiper-container"
-            data-product-card-swiper>
-            <div class="swiper-wrapper">
-              {{- swiper_slides -}}
-            </div>
-            <button
-              class="swiper-button-prev left-2 z-10 hidden md:hidden"
-              aria-label="{% render "render-translation", namespace: "accessibility.previous_slide", fallback: "Previous slide" %}">
-              {%- render 'icons', icon: 'chevron-left', icon_class: 'w-6' -%}
-            </button>
-            <button
-              class="swiper-button-next right-2 z-10 hidden md:hidden"
-              aria-label="{% render "render-translation", namespace: "accessibility.next_slide", fallback: "Next slide" %}">
-              {%- render 'icons', icon: 'chevron-right', icon_class: 'w-6' -%}
-            </button>
-          </div>
-        </product-card-swiper>
-      {%- else -%}
-        <div class="product-card__image aspect-[{{ image_aspect_ratio }}] bg-gray-50"></div>
-      {%- endif -%}
-
-    {%- else -%}
-      {%- comment -%} Render image with hover {%- endcomment -%}
-      <a
-        class="product-card__image aspect-[ block{{ image_aspect_ratio }}] relative block  {% unless product_object.available -%}opacity-50 saturate-50{%- endunless -%}"
-        href="{{ product_link }}"
-        title="{{ product_object.title | escape }}"
-        tabindex="-1">
+  <div class="product-card__inner relative p-4">
+    {%- comment -%} Render image with hover {%- endcomment -%}
+    <a
+      class="product-card__image relative block {% unless product_object.available -%}opacity-50 saturate-50{%- endunless %} {% unless show_secondary_image %}transition-all states:scale-105{%- endunless -%}"
+      href="{{ product_link }}"
+      title="{{ product_object.title | escape }}"
+      tabindex="-1">
+      {%- render 'responsive-image',
+        image_object: product_link_image,
+        max_width: image_max_width,
+        aspect_ratio: image_aspect_ratio,
+        crop: image_crop,
+        sizes: image_sizes,
+        lazy: image_lazy,
+        alt: image_alt,
+        title: image_title,
+        class: 'product-card__image--primary block mb-0 mx-auto'
+      -%}
+      {%- if secondary_image != null and show_secondary_image -%}
         {%- render 'responsive-image',
-          image_object: product_link_image,
+          image_object: secondary_image,
           max_width: image_max_width,
           aspect_ratio: image_aspect_ratio,
           crop: image_crop,
@@ -193,23 +143,10 @@
           lazy: image_lazy,
           alt: image_alt,
           title: image_title,
-          class: 'product-card__image--primary block mb-0'
+          class: 'product-card__image--secondary absolute object-cover inset-0 mb-0 transition-opacity duration-300 block opacity-0 group-hover/product-card:opacity-100 group-focus/product-card:opacity-100 mx-auto'
         -%}
-        {%- if secondary_image != null and show_secondary_image -%}
-          {%- render 'responsive-image',
-            image_object: secondary_image,
-            max_width: image_max_width,
-            aspect_ratio: image_aspect_ratio,
-            crop: image_crop,
-            sizes: image_sizes,
-            lazy: image_lazy,
-            alt: image_alt,
-            title: image_title,
-            class: 'product-card__image--secondary absolute object-cover inset-0 mb-0 transition-opacity duration-300 block opacity-0 group-hover/product-card:opacity-100 group-focus/product-card:opacity-100'
-          -%}
-        {%- endif -%}
-      </a>
-    {%- endif -%}
+      {%- endif -%}
+    </a>
 
     {%- liquid
       # Render badges

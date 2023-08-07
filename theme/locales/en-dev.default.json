@@ -68,6 +68,7 @@
   "accessibility": {
     "skip_to_text": "Skip to content",
     "skip_to_product_info": "Skip to product information",
+    "skip_filters": "Skip filters",
     "close": "Close",
     "delete": "Delete",
     "navigation": "Menu",
@@ -85,7 +86,8 @@
     "loading": "Loading...",
     "mobile_menu": "Mobile menu",
     "desktop_menu": "Desktop menu",
-    "footer_menu": "Footer menu"
+    "footer_menu": "Footer menu",
+    "remove_filter": "Remove {{ title }}"
   },
   "blogs": {
     "article": {

@@ -5,27 +5,26 @@
 
     // swiper-button-prev
     // swiper-button-next
-    &-button-prev,
-    &-button-next {
+    .swiper-button-prev,
+    .swiper-button-next {
+      @apply flex
+      h-10
+      w-10
+      items-center
+      justify-center
+      rounded-full
+      bg-white
+      p-0
+      text-black;
       // Only style buttons if they are not locked
       &:not(.swiper-button-lock) {
-        @apply flex
-          h-10
-          w-10
-          items-center
-          justify-center
-          rounded-full
-          border
-          bg-white
-          p-0
-          text-black
-          transition-colors;
+        @apply transition-colors;
         &:after {
           @apply hidden scale-100;
         }
         &:hover:not([disabled]),
         &:focus:not([disabled]) {
-          @apply border-black text-black;
+          @apply border border-black text-black;
           .icon {
             @apply scale-110;
           }

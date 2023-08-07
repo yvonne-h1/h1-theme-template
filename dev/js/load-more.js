@@ -107,28 +107,39 @@ if (!customElements.get('load-more')) {
           const html = new DOMParser().parseFromString(responseText, 'text/html');
           let wrapperID = '#products';
 
-          if (!html.querySelector(`${wrapperID}`)) {
-            return;
-          }
+          if (!html.querySelector(`${wrapperID}`)) return;
 
           let elementsWrapper = document.querySelector('#CollectionProductGrid');
           let wrapperIDSelector = '[data-products-wrapper]';
           if (this.currentTemplate === 'search') {
             elementsWrapper = document.querySelector('#SearchProductGrid');
           }
+
           // update the wrapper with the new elements (products/articles)
-          const newContent = html.querySelector(`${wrapperID} ${wrapperIDSelector}`).innerHTML;
-          const newElement = document.createRange().createContextualFragment(newContent);
+          const newContent = html.querySelector(`${wrapperID} ${wrapperIDSelector}`).querySelectorAll('li');
 
           // depending on the direction of the click, append or prepend the products/articles and update the pagination
           if (direction == 'next') {
-            elementsWrapper.querySelector(`${wrapperIDSelector}`).append(newElement);
+            newContent.forEach((element, index) => {
+              // append the new items and focus the first added item
+              elementsWrapper.querySelector(`${wrapperIDSelector}`).append(element);
+              if (index === 0) {
+                element.querySelector('.product-card__sr-link').focus();
+              }
+            });
+
             // update the pagination
             const paginationNextHtml = html.querySelector('[data-pagination-next]').innerHTML;
             elementsWrapper.querySelector('[data-pagination-next]').innerHTML = paginationNextHtml;
           }
           else {
-            elementsWrapper.querySelector(`${wrapperIDSelector}`).prepend(newElement);
+            newContent.forEach((element, index) => {
+              // append the new items and focus the first added item
+              elementsWrapper.querySelector(`${wrapperIDSelector}`).prepend(element);
+              if (index === newContent.length - 1) {
+                element.querySelector('.product-card__sr-link').focus();
+              }
+            });
             // update the pagination
             const paginationPrevHtml = html.querySelector('[data-pagination-prev]').innerHTML;
             elementsWrapper.querySelector('[data-pagination-prev]').innerHTML = paginationPrevHtml;

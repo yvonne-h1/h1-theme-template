@@ -11,8 +11,22 @@
 <div
   id="main-collection-filters"
   data-id="{{ section.id }}">
-  <collapsible-component>
+  {%- comment -%} Create collapsible group for mobile {%- endcomment -%}
+  <collapsible-component
+    class="collapsible"
+    data-options='
+      {
+        "breakpointMax": 768,
+        "closeSiblings": true
+      }
+    '>
     <collection-filters-form>
+      {%- comment -%} Skiplink so users can go straight to the products {%- endcomment -%}
+      {%- if settings.filter_display == 'grid' -%}
+        <a class="button button--primary sr-only !p-2 focus:outline-dashed focus:outline-1 states:no-underline lg:hidden lg:focus:not-sr-only" href="#CollectionProductGrid">
+          {% render 'render-translation', namespace: 'accessibility', key: 'skip_filters', fallback: 'Skip to products' -%}
+        </a>
+      {%- endif -%}
       <form
         id="CollectionFiltersForm"
         class="group/filter filter {% if settings.filter_display == 'grid' -%}group/grid{%- endif -%}"
@@ -47,21 +61,7 @@
             group-[.filter]/grid:lg:opacity-100
           ">
           {%- comment -%} The collection drawer header. {%- endcomment -%}
-          <div class="filter__header sticky top-0 z-10 border-b bg-white pb-6 pl-6 pr-6 pt-6">
-            <class-toggle-component
-              class="flex justify-end"
-              data-options='
-                {
-                  "classToToggle": "filter-is-open"
-                }
-              '>
-              <button
-                type="button"
-                class="filter__close button button--link -mr-3 -mt-3 border-none p-3 {% if settings.filter_display == 'grid' -%}hidden{%- endif -%}"
-                aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
-                {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
-              </button>
-            </class-toggle-component>
+          <div class="filter__header sticky top-0 z-10 flex items-center justify-between border-b bg-white px-6 py-2 group-[.filter]/grid:md:hidden">
             <div class="flex items-center justify-between gap-2">
               <h2 class="filter-options__heading text-bold m-0 text-base">
                 {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
@@ -77,16 +77,32 @@
                 </a>
               </filter-remove>
             </div>
+            <class-toggle-component
+              class="flex justify-end"
+              data-options='
+                {
+                  "classToToggle": "filter-is-open"
+                }
+              '>
+              <button
+                type="button"
+                class="filter__close button button--link -mr-3 border-none p-3 {% if settings.filter_display == 'grid' -%}hidden{%- endif -%}"
+                aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
+                {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
+              </button>
+            </class-toggle-component>
           </div>
 
           {%- comment -%} The collection drawer main. {%- endcomment -%}
-          <div class="filter__main relative z-0 px-6 pb-10 pt-6">
+          <div class="filter__main relative z-0 px-6 {% if settings.filter_display == 'grid' -%}lg:px-0{%- else -%}py-6{%- endif -%}">
             {%- liquid
               render 'filter-options-active', section: section
-              # Find filter options.
+
+              # Loop through the filter options
               for filter in collection.filters
                 assign filter_index = forloop.index
-                # Loop and output filters.
+
+                # Loop and output filters
                 case filter.type
                   when 'list'
                     render 'filter-options-list', filter: filter, filter_index: filter_index
@@ -95,9 +111,6 @@
                 endcase
               endfor
             -%}
-
-            {%- comment -%} Filter sorting {%- endcomment -%}
-            {%- render 'filter-options-sorting', section: section -%}
           </div>
 
           {%- comment -%} The collection drawer footer. {%- endcomment -%}

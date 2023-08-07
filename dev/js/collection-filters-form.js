@@ -1,57 +1,163 @@
 if (!customElements.get('collection-filters-form')) {
   class CollectionFiltersForm extends HTMLElement {
+
     constructor() {
       super();
+      this.ww = window.innerWidth;
       this.filterData = [];
+      // this.clearAllButton = this.querySelector('[data-clear-all]');
+
+      // Get the template - Collection or Search
+      this.currentTemplate = 'collection';
+      this.productGrid = document.querySelector('[data-collection-product-grid]');
+      if ((document.body.classList.contains('template-search'))) {
+        this.currentTemplate = 'search';
+        this.productGrid = document.getElementById('SearchProductGrid');
+      }
+
       this.onActiveFilterClick = this.onActiveFilterClick.bind(this);
+
       this.debouncedOnSubmit = debounce((event) => {
         this.onSubmitHandler(event);
       }, 500);
       this.querySelector('form').addEventListener('input', this.debouncedOnSubmit.bind(this));
+
+      // remove the 'show filters' class from the body when we go from large to small screen
+      this.debouncedOnResize = debounce(() => {
+        const windowWidth = window.innerWidth;
+
+        // check if there's an actual change in window width, because the resize is triggered on mobile when the viewport changes with the header
+        if (windowWidth === this.ww) return;
+        this.ww = windowWidth;
+
+        if (this.ww < 768) {
+          document.body.classList.remove(window.drawerToggleClasses.filters);
+        }
+      }, 100);
+      window.addEventListener('resize', this.debouncedOnResize.bind(this));
+
       window.addEventListener('popstate', this.onHistoryChange.bind(this));
+
       this.displayFilters();
     }
 
     /**
-     * onSubmitHandler
-     * @param {Object} event
-     */
+   * onSubmitHandler
+   * @param {Object} event
+   */
     onSubmitHandler(event) {
       event.preventDefault();
-      const formData = new FormData(event.target.closest('form'));
-      let formFilterData = new URLSearchParams(formData);
-
-      // check the currentUrl params
-      const currentUrl = new URL(window.location.href);
-      const currentUrlParams = new URLSearchParams(currentUrl.search);
-
-      // Loop and watch for specific keys to add to the form filter data
-      for (const [key, value] of currentUrlParams.entries()) {
-        if (key == 'view') {
-          formFilterData.set(key, value);
-          break;
-        }
+      let type = 'filter';
+      if (event.target.id === 'sort-options') {
+        type = 'sort';
       }
 
-      // Get the complete search string
-      const searchParams = formFilterData.toString();
-      this.renderPage(searchParams, event);
+      const formData = new FormData(event.target.closest('form'));
+      let searchParams = new URLSearchParams(formData);
+
+      // Handle submit in the Collection page
+      if (this.currentTemplate == 'collection') {
+        const sortOption = new URLSearchParams(document.location.search).get('sort_by');
+        const sortOptionString = `sort_by=${sortOption}`;
+
+        if (type === 'sort') {
+          searchParams = searchParams.toString();
+          let filterOptions = document.location.search;
+
+          // If there's already a sort option available, remove it from the options
+          if (sortOption && filterOptions) {
+            filterOptions = filterOptions.split(sortOptionString)[1].replaceAll('?','');
+          }
+          else if (filterOptions !== '') {
+            filterOptions = filterOptions.replaceAll('?','');
+          }
+
+          // remove the first '&'
+          if (filterOptions.charAt(0) === '&') {
+            filterOptions = filterOptions.slice(1);
+          }
+          // if the filter options are not empty after we filtered out the sort option, then add it to the new sort option
+          searchParams = `${searchParams}${(filterOptions) ? `&${filterOptions}` : ''}`;
+        }
+        // type is 'filter'
+        else {
+        // Filter the form parameters for empty values
+          for (const [key, value] of new URLSearchParams(formData).entries()) {
+            if (value === '') {
+              searchParams.delete(key);
+            }
+          }
+          searchParams = searchParams.toString();
+
+          // if there is a sort option, add it to the filters
+          if (sortOption) {
+            searchParams = (searchParams !== '') ? `${sortOptionString}&${searchParams}` : sortOptionString;
+          }
+        }
+
+        // Render the page with the new params
+        this.renderPage(searchParams, event);
+      }
+      // Handle submit in the Search page
+      else {
+        const currentParams = new URLSearchParams(document.location.search);
+
+        // type is 'sort'
+        if (type === 'sort') {
+          if (currentParams.has('sort_by')) {
+            currentParams.delete('sort_by');
+          }
+          if (currentParams !== '') {
+            searchParams = (searchParams !== '') ? `${searchParams}&${currentParams}` : currentParams;
+          }
+        }
+        // type is 'filter'
+        else if (type === 'filter') {
+        // Filter the form parameters for empty values
+          for (const [key, value] of new URLSearchParams(formData).entries()) {
+            if (value === '') {
+              searchParams.delete(key);
+            }
+          }
+
+          // reset the sort by option
+          if (currentParams.has('sort_by') && type !== 'sort') {
+            searchParams.append('sort_by', currentParams.get('sort_by'));
+          }
+          // set back all the pre-existent parameters (searched query, searched type & options)
+          const preExistentSearchParams = ['q','type','options[prefix]'];
+          preExistentSearchParams.forEach(param => {
+            if (currentParams.has(param)) {
+              searchParams.append(param, currentParams.get(param));
+            }
+          });
+        }
+
+        // Render the page with the new params
+        this.renderPage(searchParams.toString(), event);
+      }
+
+      // Scroll to page top
+      window.scrollTo({ top: this.productGrid.offsetParent.offsetTop - 84,
+        behavior: 'smooth' });
     }
 
     /**
-     * onActiveFilterClick
-     * @param {Object} event
-     */
+   * onActiveFilterClick
+   * @param {Object} event
+   */
     onActiveFilterClick(event) {
       event.preventDefault();
       this.toggleActiveFilters();
-      this.renderPage(new URL(event.currentTarget.href).searchParams.toString());
+      console.log('new URL(event.currentTarget.href).searchParams.toString()', new URL(event.currentTarget.href).searchParams.toString());
+
+      this.renderPage(new URL(event.currentTarget.href).searchParams.toString(), null);
     }
 
     /**
-     * onHistoryChange
-     * @param {Object} event
-     */
+   * onHistoryChange
+   * @param {Object} event
+   */
     onHistoryChange(event) {
       const searchParams = event.state?.searchParams || '';
       this.renderPage(searchParams, null, false);
@@ -69,45 +175,45 @@ if (!customElements.get('collection-filters-form')) {
     }
 
     /**
-     * renderPage
-     * @param {String} searchParams
-     * @param {Object} event
-     * @param {Boolean} updateURLHash
-     */
+   * renderPage
+   * @param {String} searchParams
+   * @param {Object} event
+   * @param {Boolean} updateURLHash
+   */
     renderPage(searchParams, event, updateURLHash = true) {
-      const sections = this.getSections();
 
-      this.toggleLoadingState();
+      let sectionName = 'collection-filters-content';
+      if (this.currentTemplate === 'search') {
+        sectionName = 'search-filters-content';
+      }
 
-      sections.forEach((section) => {
-        const url = `${window.location.pathname}?section_id=${section.section}&${searchParams}`;
-        const filterDataUrl = (element) => element.url === url;
+      // do fetch
+      const url = `${window.location.pathname}?section_id=${sectionName}&${searchParams}`;
 
-        this.filterData.some(filterDataUrl)
-          ? this.renderSectionFromCache(filterDataUrl, event)
-          : this.renderSectionFromFetch(url, event);
-      });
+      const filterDataUrl = element => element.url === url;
+
+      this.filterData.some(filterDataUrl) ?
+        this.renderSectionFromCache(filterDataUrl, event, searchParams) :
+        this.renderSectionFromFetch(url, event, searchParams);
 
       if (updateURLHash) this.updateURLHash(searchParams);
     }
 
     /**
-     * renderSectionFromFetch
-     * @param {String} url
-     * @param {Object} event
-     */
-    renderSectionFromFetch(url, event) {
+   * renderSectionFromFetch
+   * @param {String} url
+   * @param {Object} event
+   * @param {String} searchParams
+   */
+    renderSectionFromFetch(url, event, searchParams) {
       fetch(url)
-        .then((response) => response.text())
+        .then(response => response.text())
         .then((responseText) => {
           const html = responseText;
-          this.filterData = [...this.filterData, {
-            html,
-            url,
-          } ];
+          this.filterData = [...this.filterData, { html,
+            url } ];
           this.renderFilters(html, event);
-          this.renderProductGrid(html);
-          this.toggleLoadingState();
+          this.renderProductGrid(html, event, searchParams);
         })
         .then(() => {
           this.loadMore = document.querySelector('load-more');
@@ -116,30 +222,39 @@ if (!customElements.get('collection-filters-form')) {
     }
 
     /**
-     * renderSectionFromCache
-     * @param {String} filterDataUrl
-     * @param {Object} event
-     */
-    renderSectionFromCache(filterDataUrl, event) {
+   * renderSectionFromCache
+   * @param {String} filterDataUrl
+   * @param {Object} event
+   * @param {String} searchParams
+   */
+    renderSectionFromCache(filterDataUrl, event, searchParams) {
       const html = this.filterData.find(filterDataUrl).html;
       this.renderFilters(html, event);
-      this.renderProductGrid(html);
-      this.toggleLoadingState();
+      this.renderProductGrid(html, event, searchParams);
     }
 
     /**
-     * renderProductGrid
-     * @param {Node} html
-     */
-    renderProductGrid(html) {
-      document.querySelector('[data-collection-product-grid]').innerHTML = new DOMParser()
-        .parseFromString(html, 'text/html')
-        .querySelector('[data-collection-product-grid]').innerHTML;
-    }
+   * renderProductGrid
+   * @param {Node} html
+   * @param {Object} event
+   * @param {String} searchParams
+   */
+    renderProductGrid(html, event) {
+      const parsedHTML = new DOMParser().parseFromString(html, 'text/html');
 
-    toggleLoadingState() {
-      document.querySelector('[data-collection-product-grid]').classList.toggle('loading');
-      document.querySelector('[data-collection-filters-form]').classList.toggle('loading');
+      this.productGrid.innerHTML = parsedHTML.getElementById('products').innerHTML;
+
+      // update result size, only on filter, not on sorting
+      if (event?.target.id !== 'sort-options') {
+        const results = parsedHTML.getElementById('products').dataset.resultsSize;
+        if (this.querySelector('[data-filter-results-count]')) {
+          this.querySelector('[data-filter-results-count]').textContent = results;
+        }
+      }
+
+      // update the text
+      const totalProducts = parsedHTML.querySelector('[data-collection-totals-text]')?.innerHTML;
+      if (totalProducts) document.querySelectorAll('[data-collection-totals-text]').forEach(elem => elem.innerHTML = totalProducts);
     }
 
     /**
@@ -173,12 +288,17 @@ if (!customElements.get('collection-filters-form')) {
      * @returns
      */
     renderActiveFilters(html) {
+      console.log('html', html);
+
       // Select filter active group
       const activeFilterOptions = html.querySelector('[data-filter-active-options]');
-      // Hide it
-      activeFilterOptions.parentNode.classList.add('hidden');
+      console.log('activeFilterOptions', activeFilterOptions);
+
       // Check if it here
       if (!activeFilterOptions) return;
+
+      // Hide it
+      activeFilterOptions.parentNode.classList.add('hidden');
       // Replace old with new active filters
       document.querySelector('[data-filter-active-options]').innerHTML =
         activeFilterOptions.innerHTML;
@@ -219,49 +339,30 @@ if (!customElements.get('collection-filters-form')) {
       const activeFiltersElement = document.querySelector('[data-filter-active-options]');
       const activeFilters = document.querySelector('[data-filter-active-options-list]').children;
       const filterTotalWrapper = document.querySelector('[data-filter-total-active-options]');
-      const filterResetButton = this.querySelector('[data-filter-reset]');
+      const filterResetButton = document.querySelector('[data-filter-reset]');
 
       // if there are active filters, remove the class so it displays and update the total in the filter button
       if (activeFilters.length > 0) {
-        activeFiltersElement.classList.remove('hidden');
-        filterTotalWrapper.innerHTML = '&nbsp;- ' + activeFilters.length;
+        activeFiltersElement?.classList.remove('hidden');
+        filterTotalWrapper.innerHTML = `&nbsp;(${activeFilters.length})`;
         // Update show / hide state clear all button
         filterResetButton.classList.remove('hidden');
       }
       // else add the class to hide and clear the button
       else {
         filterTotalWrapper.innerHTML = '';
-        activeFiltersElement.classList.add('hidden');
+        activeFiltersElement?.classList.add('hidden');
         // Update show / hide state clear all button
         filterResetButton.classList.add('hidden');
       }
     }
 
     /**
-     * updateURLHash
-     * @param {String} searchParams
-     */
+   * updateURLHash
+   * @param {String} searchParams
+   */
     updateURLHash(searchParams) {
-      history.pushState(
-        {
-          searchParams,
-        },
-        '',
-        `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`,
-      );
-    }
-
-    /**
-     * getSections
-     * @returns Array
-     */
-    getSections() {
-      return [
-        {
-          id: 'main-collection',
-          section: document.getElementById('main-collection').dataset.id,
-        },
-      ];
+      history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
     }
   }
   customElements.define('collection-filters-form', CollectionFiltersForm);
@@ -305,6 +406,7 @@ if (!customElements.get('price-range')) {
   customElements.define('price-range', PriceRange);
 }
 
+// Active Filter remove
 if (!customElements.get('filter-remove')) {
   class OptionRemove extends HTMLElement {
     constructor() {
@@ -312,9 +414,7 @@ if (!customElements.get('filter-remove')) {
 
       this.querySelector('a').addEventListener('click', (event) => {
         event.preventDefault();
-        const form =
-          this.closest('collection-filters-form') ||
-          document.querySelector('collection-filters-form');
+        const form = this.closest('collection-filters-form') || document.querySelector('collection-filters-form');
         form.onActiveFilterClick(event);
       });
     }

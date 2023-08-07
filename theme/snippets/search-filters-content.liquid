@@ -1,4 +1,4 @@
-{%- comment -%} 
+{%- comment -%}
   This template is used to retrieve the products and the filters. Those elements are then loaded in the search page.
   https://shopify.dev/api/section-rendering
 {%- endcomment -%}
@@ -23,8 +23,8 @@
     assign total_html = paginate.items | prepend: '<span data-progress-total>' | append: '</span>'
   endpaginate
 -%}
-<p id="total-text" class="text-black text-medium">
-  {{ 'general.load_more.info_html' | t: current: current_html, total: total_html  }}
+<p class="text-medium text-black" data-collection-totals-text>
+  {{ 'general.load_more.info_html' | t: current: current_html, total: total_html }}
 </p>
 
 <div id="filters">
@@ -44,14 +44,7 @@
   {%- else -%}
     {%- comment -%} Render collection products list {%- endcomment -%}
     {%- paginate search.results by settings.products_per_page -%}
-      {%- render 'product-grid', 
-        search: search,
-        paginate: paginate,
-        current_html: current_html,
-        total_html: total_html,
-        items_on_last_page: items_on_last_page,
-        product_card_extra_id: section.id
-      -%}
+      {%- render 'product-grid', search: search, paginate: paginate, current_html: current_html, total_html: total_html, items_on_last_page: items_on_last_page, product_card_extra_id: section.id -%}
     {%- endpaginate -%}
-  {%- endif -%} 
+  {%- endif -%}
 </div>

@@ -11,19 +11,41 @@
       render 'responsive-image', image_object: collection.image, sizes: '100vw', max_width: 1920
     endcapture
   endif
+
+  # check for filters
+  assign filtered_collection = false
+  for filter in collection.filters
+    if filter.active_values.size > 0 or filter.max_value.value > 0 or filter.min_value.value > 0
+      assign filtered_collection = true
+      break
+    endif
+  endfor
 -%}
 
 {%- capture collection_header_content -%}
+  {% comment %} Header is hidden when collection is filtered {% endcomment %}
+  <div class="collection-header {{ section.settings.header_color_scheme }} overflow-hidden rounded-md md:flex md:items-center {% if filtered_collection -%}!hidden{%- endif -%}">
 
-  <div class="">
+    {% comment %} Collection image {% endcomment %}
+    {%- if collection.image != blank and section.settings.show_collection_image -%}
+      <div class="collection-header__image hidden h-full max-h-40 w-full max-w-[240px] grow-0 md:block">
+        {%- render 'responsive-image',
+          image_object: collection.image,
+          sizes: '100vw',
+          max_width: 240,
+          aspect_ratio: '3/2',
+          class: 'object-cover h-full w-auto'
+        -%}
+      </div>
+    {%- endif -%}
 
-    {%- comment -%} Render collection title {%- endcomment -%}
-    <div class="basis-2/4 lg:basis-3/4">
+    {% comment %} Title and Description {% endcomment %}
+    <div class="flex flex-auto flex-col gap-4 py-4 {% if collection.image != blank or section.settings.header_color_scheme != '' -%}px-8{%- endif -%}">
 
-      <h1 class="collection-hero__title h4 text-center md:text-left">
+      {%- comment -%} Render collection title {%- endcomment -%}
+      <h1 class="collection-header__title h4 mb-0">
         <span class="sr-only">
-          {%-
-            render "render-translation",
+          {%- render "render-translation",
             namespace: "sections.collection_template",
             key: "title",
             fallback: "Collection:"
@@ -33,79 +55,128 @@
         {{- collection.title | escape -}}
       </h1>
 
+      {%- comment -%} Collection description {%- endcomment -%}
+      {%- if section.settings.show_collection_description and collection.description != blank -%}
+        <div class="collection-header__description rte ml-0 mr-auto md:w-full lg:w-3/4">
+          {{- collection.description -}}
+        </div>
+      {%- endif -%}
     </div>
+  </div>
 
-    {% comment %} Collection filter button {% endcomment %}
-    <div class="collection-hero__filters relative flex basis-1/4 justify-end md:basis-2/4 lg:basis-1/4 {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}">
-      <class-toggle-component
+  <div class="mt-10 flex flex-wrap items-center justify-center sm:justify-between gap-base">
+
+    {% comment %} Collection display total {% endcomment %}
+    {%- liquid
+      paginate collection.products by settings.products_per_page
+        assign total_for_first_pages = paginate.items | divided_by: settings.products_per_page | times: settings.products_per_page
+        assign items_on_last_page = paginate.items | minus: total_for_first_pages
+        if items_on_last_page == 0
+          assign items_on_last_page = settings.products_per_page
+        endif
+
+        assign progress_end = settings.products_per_page
+        if progress_end > paginate.items
+          assign progress_end = paginate.items
+        elsif paginate.pages == paginate.current_page
+          assign progress_end = items_on_last_page
+        endif
+
+        assign current_html = progress_end | prepend: '<span data-progress-current>' | append: '</span>'
+        assign total_html = paginate.items | prepend: '<span data-progress-total>' | append: '</span>'
+      endpaginate
+    -%}
+
+    <p class="sm:order-3 m-0 sm:basis-full text-center md:order-none md:basis-auto" data-collection-totals-text>
+      {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html  }}
+    </p>
+
+    {%- comment -%} Toggle collection layout - mobile only {%- endcomment -%}
+    <collection-view class="collection-layout -ml-3 flex md:hidden">
+      {%- if section.settings.show_collection_layout_buttons -%}
+        {%- liquid
+          assign collection_view_default_class = 'collection-layout__button--active opacity-100'
+          if template.suffix == 'alt'
+            assign collection_view_default_class = 'opacity-25'
+          endif
+        -%}
+        <a
+          href="{{ collection.url }}"
+          aria-label="Double"
+          class="collection-layout__button block p-3 text-inherit hover:opacity-100 md:p-0 {{ collection_view_default_class }}"
+          data-collection-view="">
+          {%- render 'icons', icon: 'grid-double', icon_class: 'w-6' -%}
+        </a>
+        {%- liquid
+          assign collection_view_alt_class = 'opacity-25'
+          if template.suffix == 'alt'
+            assign collection_view_alt_class = 'collection-layout__button--active opacity-100'
+          endif
+        -%}
+        <a
+          href="{{ collection.url }}?view=alt"
+          aria-label="Single"
+          class="collection-layout__button block p-3 text-inherit hover:opacity-100 md:p-0 {{ collection_view_alt_class }}"
+          data-collection-view="alt">
+          {%- render 'icons', icon: 'grid-single', icon_class: 'w-6' -%}
+        </a>
+      {%- endif -%}
+    </collection-view>
+
+    {% comment %} Sort sorting {% endcomment %}
+    {%- if section.settings.enable_sorting -%}
+      <div class="collection-header__sorting relative flex justify-end gap-4">
+        {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+
+        {% comment %} Sort options {% endcomment %}
+        <collection-filters-form class="collection-nav__sort sort-options">
+          <form>
+            <div class="field">
+              <label class="field__label sr-only" for="sort-options">
+                {%- render 'format-translation'
+                  namespace: "sections.collection_template",
+                  key: "sort_by_label",
+                  fallback: "Sort by"
+                -%}
+              </label>
+              <div class="select group">
+                <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer" name="sort_by" id="sort-options">
+                  {%- for option in collection.sort_options -%}
+                    <option value="{{ option.value | escape }}" {% if option.value == sort_by %}selected{% endif %}>{{- option.name | escape -}}</option>
+                  {%- endfor -%}
+                </select>
+                <span class="select__select-icon group-states:text-secondary-text">
+                  {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+                </span>
+              </div>
+            </div>
+          </form>
+        </collection-filters-form>
+      {%- endif -%}
+
+      {% comment %} Collection filter button {% endcomment %}
+      <class-toggle-component class="{% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
         data-options='{
           "classToToggle": "filter-is-open"
         }'
       >
         <button
           type="button"
-          class="md:button md:button--outline flex whitespace-nowrap border-none px-0 py-3 md:border md:border-solid md:px-5 md:py-3"
-          aria-label="{%- render 'render-translation', namespace: "sections.collection_template.filter_and_sort", fallback: "Filter & sort" -%}"
-        >
+          class="button button--outline flex whitespace-nowrap py-2.5 px-2 sm:px-4 leading-none"
+          aria-label="{%- render 'render-translation', namespace: "sections.collection_template.filter", fallback: "Filter" -%}">
           {%- render 'icons', icon: 'filter', icon_class: 'w-6' -%}
 
           {%- comment -%} Text label {%- endcomment -%}
-          <span class="hidden md:block">
-            {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter_and_sort', fallback: 'Filter and sort' -%}
+          <span>
+            {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
             {%- comment -%} Show active number of filters, loaded by js {%- endcomment -%}
-            <span class="" data-filter-total-active-options></span>
+            <span class="font-body font-normal text-xs" data-filter-total-active-options></span>
           </span>
         </button>
       </class-toggle-component>
     </div>
-
   </div>
-
-  {%- comment -%} Collection description {%- endcomment -%}
-  {%- if section.settings.show_collection_description and collection.description != blank -%}
-    <div class="collection-hero__description rte ml-0 mr-auto mt-4 md:w-full lg:w-3/4">
-      {{- collection.description -}}
-    </div>
-  {%- endif -%}
-
-{%- endcapture -%}
-
-{%- comment -%} Toggle collection layout - mobile only {%- endcomment -%}
-<collection-view class="collection-layout flex basis-1/4 md:hidden">
-  {%- if section.settings.show_collection_layout_buttons -%}
-    {%- liquid
-      assign collection_view_default_class = 'collection-layout__button--active opacity-100'
-      if template.suffix == 'alt'
-        assign collection_view_default_class = 'opacity-25'
-      endif
-    -%}
-    <a
-      href="{{ collection.url }}"
-      aria-label="Double"
-      class="collection-layout__button block py-3 text-inherit hover:opacity-100  md:py-0 {{ collection_view_default_class }}"
-      data-collection-view="">
-      {%- render 'icons', icon: 'grid-double', icon_class: 'w-6' -%}
-    </a>
-    {%- liquid
-      assign collection_view_alt_class = 'opacity-25'
-      if template.suffix == 'alt'
-        assign collection_view_alt_class = 'collection-layout__button--active opacity-100'
-      endif
-    -%}
-    <a
-      href="{{ collection.url }}?view=alt"
-      aria-label="Single"
-      class="collection-layout__button block py-3 text-inherit hover:opacity-100 md:py-0 {{ collection_view_alt_class }}"
-      data-collection-view="alt">
-      {%- render 'icons', icon: 'grid-single', icon_class: 'w-6' -%}
-    </a>
-  {%- endif -%}
-</collection-view>
-
-{%- comment -%} Collection header classes {%- endcomment -%}
-{%- capture collection_header_classes -%}
-  collection-header py-3 m-0 md:p-0 md:my-6
 {%- endcapture -%}
 
 {%- comment -%} Output collection header with buttons and filters. {%- endcomment -%}
-{%- render 'render-container-content', class: collection_header_classes, content: collection_header_content -%}
+{%- render 'render-container-content', content: collection_header_content -%}

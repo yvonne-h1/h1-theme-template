@@ -50,9 +50,9 @@
     transition
     duration-200
     group-[.quick-shop--is-open]/product-card:pointer-events-auto
-    md:group-hover/product-card:pointer-events-auto
-    md:group-hover/product-card:visible
-    md:group-hover/product-card:translate-y-0
+    no-touch:group-hover/product-card:pointer-events-auto
+    no-touch:group-hover/product-card:visible
+    no-touch:group-hover/product-card:translate-y-0
   ">
   {%- comment -%} Title {%- endcomment -%}
   <p class="quick-shop__title mb-1 text-sm font-bold text-color-default">
@@ -60,7 +60,7 @@
   </p>
 
   {%- comment -%} Variant options {%- endcomment -%}
-  <div class="quick-shop__options options justify-center">
+  <div class="quick-shop__options options justify-center gap-0">
     {% for variant in product.variants %}
       {%- liquid
         # Get value of the option

@@ -182,7 +182,7 @@
                     </label>
                     <div class="select">
                       <select
-                        class="field__select"
+                        class="select__select"
                         id="AddressCountry_{{ form.id }}"
                         name="address[country]"
                         data-address-country-select
@@ -201,7 +201,7 @@
                     </label>
                     <div class="select">
                       <select
-                        class="field__select"
+                        class="select__select"
                         id="AddressProvince_{{ form.id }}"
                         name="address[province]"
                         data-default="{{ form.province }}"
@@ -392,7 +392,7 @@
               <select
                 name="address[country]"
                 id="AddressCountryNew"
-                class="field__select"
+                class="select__select"
                 data-default="{{ form.country }}"
                 autocomplete="country"
                 required
@@ -407,7 +407,7 @@
                 {{- province_str -}}
               </label>
                 <select
-                  class="field__select"
+                  class="select__select"
                   id="AddressProvinceNew"
                   name="address[province]"
                   data-default="{{ form.province }}"

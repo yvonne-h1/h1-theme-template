@@ -13,13 +13,11 @@
     assign collapsible = settings.enable_filter_collapsibles
   endunless
 
-  if label == 'Size' or is_color
-    assign is_size_or_color_class = 'collapsible-is-open'
-  endif
+  assign label = label | escape
 -%}
 
 <div
-  class="filter__group filter__group--name-{{ label | handleize }} js-filter group/filter-group w-full overflow-y-auto border-b  bg-color-default {{ is_size_or_color_class }}"
+  class="filter__group filter__group--name-{{ label | handleize }} js-filter group/filter-group mb-6 w-full overflow-y-auto border-b pb-6 bg-color-default"
   data-filter-option
   data-index="{{ filter_index }}"
   {% if collapsible %}
@@ -32,7 +30,7 @@
       data-collapsible-trigger
     {% endif %}>
     <span class="text-sm font-bold">
-      {{- label | escape -}}
+      {{- label -}}
     </span>
     {%- if collapsible -%}
       {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block' -%}

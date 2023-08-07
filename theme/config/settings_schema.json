@@ -334,6 +334,14 @@
         "info": "Renders filter groups in collapsible panes."
       },
       {
+        "type": "textarea",
+        "id": "render_as_swatch",
+        "label": "Filters to be rendered as swatches",
+        "info": "Add the filter names you wish to render as swatches. By default, filters are rendered as checkboxes. One per line.",
+        "default": "Color\nSize",
+        "placeholder": "Color\nSize"
+      },
+      {
         "type": "range",
         "id": "products_per_page",
         "min": 4,

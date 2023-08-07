@@ -13,27 +13,88 @@
 
   {% comment %} The filters and the products {% endcomment %}
   {%- if settings.filter_display == 'drawer' -%}
-    {%- render 'collection-filters', section: section -%}
-    {%- render 'collection-product-grid', section: section -%}
+    {%- liquid
+      capture container_content
+        render 'collection-filters', section: section
+        render 'collection-product-grid', section: section
+      endcapture
+    -%}
   {%- else -%}
-    <div class="lg:grid lg:grid-cols-12">
-      <div class="lg:col-span-3">
-        {%- render 'collection-filters', section: section -%}
+    {%- capture container_content -%}
+      <div class="lg:grid lg:grid-cols-12">
+        <div class="lg:col-span-3">
+          {%- render 'collection-filters', section: section -%}
+        </div>
+        <div class="lg:col-span-9">
+          {%- render 'collection-product-grid', section: section -%}
+        </div>
       </div>
-      <div class="lg:col-span-9">
-        {%- render 'collection-product-grid', section: section -%}
-      </div>
-    </div>
+    {%- endcapture -%}
   {%- endif -%}
+
+  {%- render 'render-container-content', content: container_content -%}
 </div>
+
+<script src="{{ 'collection-filters-form.js' | asset_url }}" defer></script>
 
 {% schema %}
   {
     "name": "Collection",
     "settings": [
       {
+        "type": "header",
+        "content": "Collection header"
+      },
+      {
         "type": "paragraph",
         "content": "To change collection descriptions or collection images, [edit your collections.](/admin/collections)"
+      },
+      {
+        "type": "select",
+        "id": "header_color_scheme",
+        "default": "color-scheme color-scheme--secondary",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "color-scheme color-scheme--gradient",
+            "label": "Gradient",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
       },
       {
         "type": "checkbox",
@@ -54,13 +115,6 @@
         "label": "Show collection layout buttons on mobile",
         "info": "If enabled, buttons will appear on smaller devices to change the layout grid."
       },
-
-      {
-        "type": "checkbox",
-        "id": "show_back_to_top",
-        "default": true,
-        "label": "Show back to top button"
-      },
       {
         "type": "header",
         "content": "Collection sorting"
@@ -69,8 +123,7 @@
         "type": "checkbox",
         "id": "enable_sorting",
         "default": true,
-        "label": "Enable sorting",
-        "info": "If enabled, the sorting option will show in the filter drawer."
+        "label": "Enable sorting"
       },
       {
         "type": "header",
@@ -91,6 +144,12 @@
             "label": "Load more"
           }
         ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_back_to_top",
+        "default": true,
+        "label": "Show back to top button"
       }
     ]
   }

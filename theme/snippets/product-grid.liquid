@@ -36,7 +36,7 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
     <input type="hidden" value="{{ items_on_last_page }}" data-items-on-last-page>
     <input type="hidden" value="{{ paginate.current_page }}" data-current-page>
     {%- if paginate.pages > 1 -%}
-      <div class="load-more load-more--prev  text-center mt-20 flex justify-center items-center" data-pagination-prev>
+      <div class="load-more load-more--prev text-center my-8 flex justify-center items-center empty:my-0" data-pagination-prev>
         {%- if paginate.current_page > 1 -%}
           <a href="{{ paginate.previous.url }}" class="button button--primary" data-load-trigger="prev">
             <span data-load-text>{% render "render-translation", namespace: "sections.collection_template.load_more.previous", fallback: "Previous" %}</span>
@@ -98,7 +98,7 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
         {%- endif -%}
       </div>
 
-      <p class="text-black center" data-totals-text>
+      <p class="text-center" data-totals-text>
         {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html  }}
       </p>
     </div>

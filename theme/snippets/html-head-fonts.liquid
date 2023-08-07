@@ -38,9 +38,17 @@
     {%- comment -%}
       Fonts
     {%- endcomment -%}
-    --font-body-family: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
-    --font-medium-family: {{ settings.font_medium.family }}, {{ settings.font_medium.fallback_families }};
-    --font-bold-family: {{ settings.font_bold.family }}, {{ settings.font_bold.fallback_families }};
-    --font-heading-family: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+    {%- if settings.font_body.family != blank -%}
+      --font-body-family: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
+    {%- endif -%}
+    {%- if settings.font_medium.family != blank -%}
+      --font-medium-family: {{ settings.font_medium.family }}, {{ settings.font_medium.fallback_families }};
+    {%- endif -%}
+    {%- if settings.font_bold.family != blank -%}
+      --font-bold-family: {{ settings.font_bold.family }}, {{ settings.font_bold.fallback_families }};
+    {%- endif -%}
+    {%- if settings.font_heading.family != blank -%}
+      --font-heading-family: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
+    {%- endif -%}
   }
 {%- endstyle %}

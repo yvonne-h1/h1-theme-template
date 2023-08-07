@@ -118,8 +118,6 @@ class HeaderComponent extends HTMLElement {
       this.timer = null; // Safe scroll timer
 
       window.addEventListener('scroll', debounce(() => {
-        console.trace('scroll');
-
         clearTimeout(this.timer);
         if (!this.request) {
           // A request animation frame is used to animate on max 60fps.

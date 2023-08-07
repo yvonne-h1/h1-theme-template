@@ -4,11 +4,6 @@
   - section:         {Object} main-collection.liquid section object (required)
 {%- endcomment -%}
 
-{%- comment -%} container classes {%- endcomment -%}
-{%- capture container_classes -%}
-  collection-wrapper mt-6 md:mt-10
-{%- endcapture -%}
-
 {%- assign container_title = section.settings.title | escape -%}
 
 {% comment %} Loader animation {% endcomment %}
@@ -45,7 +40,7 @@
           <p>
             {{
               'sections.collection_template.use_fewer_filters_html'
-              | t: link: collection.url, class: 'link'
+              | t: link: collection.url, class: ''
             }}
           </p>
         </div>
@@ -72,7 +67,7 @@
   </div>
 {%- endcapture -%}
 
-{%- render 'render-container-content', class: container_classes, title: container_title, content: container_content -%}
+{%- render 'render-container-content', class: 'collection-wrapper mt-0', title: container_title, content: container_content -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if section.settings.pagination_view == 'load-more' -%}

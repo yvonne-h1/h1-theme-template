@@ -34,9 +34,11 @@ function getFocusableElements(container) {
  */
 function trapFocus(container, elementToFocus = container) {
   const elements = getFocusableElements(container);
+  console.log('container, elementToFocus', container, elementToFocus);
 
   const first = elements[0];
   const last = elements[elements.length - 1];
+  console.log('last, first', last, first);
 
   removeTrapFocus();
 

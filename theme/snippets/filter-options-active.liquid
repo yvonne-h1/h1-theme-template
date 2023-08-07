@@ -6,7 +6,7 @@
 {%- endcomment -%}
 
 <div
-  class="filter__option filter__option--active group/filter-group collapsible-is-open hidden w-full overflow-y-auto  bg-color-default"
+  class="filter__option filter__option--active group/filter-group collapsible-is-open hidden w-full overflow-y-auto bg-color-default"
   data-filter-active-options
   {% if settings.enable_filter_collapsibles %}
     data-collapsible-group
@@ -35,16 +35,20 @@
     {% if settings.enable_filter_collapsibles %}
       data-collapsible-target
     {% endif %}>
-    <div class="pb-4" data-filter-active-options-list>
+    <div class="mb-6 border-b pb-6" data-filter-active-options-list>
       {%- for filter in collection.filters -%}
         {%- for value in filter.active_values -%}
           <filter-remove class="block">
             <a
               href="{{ value.url_to_remove }}"
-              class="js-filter-remove flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
+              class="js-filter-remove flex items-center justify-between gap-2 text-inherit no-underline states:text-primary states:no-underline"
+              aria-label="{% render "render-translation", namespace: "accessibility", key: "remove_filter", title: value.label, fallback: "Remove filter" %}"
               data-filter-remove>
+              <span>
+                <span class="italic">{{ filter.label }}:</span>
+                {{ value.label | escape }}
+              </span>
               {%- render 'icons', icon: 'close', icon_class: 'w-4 shrink-0' -%}
-              {{ filter.label }}: {{ value.label | escape }}
             </a>
           </filter-remove>
         {%- endfor -%}

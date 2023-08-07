@@ -1,5 +1,5 @@
 {%- comment -%}
-  This template is used for the tag filters and will retrieve the products and the filters. Those elements are then loaded in the collection page.
+  This template is used for the filters and will retrieve the products and the filters. Those elements are then loaded in the collection page.
   https://shopify.dev/api/section-rendering
 {%- endcomment -%}
 {%- layout none -%}
@@ -33,11 +33,9 @@
   endfor
 -%}
 
-{% comment %}
-  <div id="filters">
-    {%- render 'filters-native', sort_by: collection.sort_by -%}
-  </div>
-{% endcomment %}
+<div id="filters">
+  {%- render 'collection-filters', sort_by: collection.sort_by -%}
+</div>
 
 <div id="products" data-results-size="{{ collection.products.size }}">
   {%- if collection.products.size == 0 -%}

@@ -7,25 +7,52 @@
 {%- endcomment -%}
 
 {%- liquid
-  comment
-    Check if this filter is a color filter
-  endcomment
+  # Check if this filter is a color filter
   assign is_color = false
-  assign color_variant_label = settings.color_filter_name | handleize
-  assign filter_label = filter.label | handleize
-  if color_variant_label == filter_label
+  assign color_variant_label_handleized = settings.color_filter_name | handleize
+  assign filter_label_handleized = filter.label | handleize
+
+  if color_variant_label_handleized == filter_label_handleized
     assign is_color = true
+  endif
+
+  # determine if a filter should be rendered as a swatch or as a regular list
+  assign render_as_swatch = false
+  if settings.render_as_swatch != blank
+    assign render_as_swatch_options = settings.render_as_swatch | newline_to_br | strip_newlines | split: '<br />'
+  endif
+
+  for option in render_as_swatch_options
+    assign option_handleized = option | handleize
+    if option_handleized == filter_label_handleized
+      assign render_as_swatch = true
+      break
+    endif
+  endfor
+
+  assign wrapper_classes = 'field field--checkbox mb-2'
+  assign input_classes = 'field__checkbox field__checkbox--' | append: filter_label_handleized
+  assign label_classes = 'field__checkbox-label'
+
+  if render_as_swatch
+    assign list_classes = 'options options--' | append: filter_label_handleized
+    assign wrapper_classes = 'option option--' | append: filter_label_handleized
+    assign input_classes = 'option__input option__input--' | append: filter_label_handleized
+    assign label_classes = 'option__label option__label--' | append: filter_label_handleized
+    if value.count == 0 and value.active == false
+      assign label_classes = label_classes | append: ' option__label--disabled'
+    endif
   endif
 -%}
 
 {%- capture summary_content -%}
-  <ul class="filter-options__list filter-options__list--{{ filter_label }} options options--{{ filter_label }}" data-filter-option-list>
+  <ul class="filter-options__list filter-options__list--{{ filter_label_handleized }} {{ list_classes }}" data-filter-option-list>
     {%- for value in filter.values -%}
-      {%- assign index = forloop.index -%}
       {%- comment -%} Only render if there are items {%- endcomment -%}
       {%- if value.count > 0 -%}
 
         {%- liquid
+          assign index = forloop.index
           assign option_label = value.label
           # for labels with only 3 letters, make them uppercase
           if option_label.size < 4
@@ -34,13 +61,13 @@
         -%}
 
         {%- capture label -%}
-          <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="option__label option__label--{{ filter_label }}{% if value.count == 0 and value.active == false %} filter-options__label--disabled{% endif %}">
+          <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}">
             {{ option_label | escape }}
           </label>
         {%- endcapture -%}
 
-        <li class="option option--{{ filter_label }} list-menu__item">
-          <input class="option__input option__input--{{ filter_label }} sr-only"
+        <li class=" list-menu__item {{ wrapper_classes }}">
+          <input class="{{ input_classes }} sr-only"
             type="checkbox"
             name="{{ value.param_name }}"
             value="{{ value.value }}"
@@ -68,7 +95,7 @@
 
                 {%- comment -%} Render with background-color {%- endcomment -%}
                 {%- assign color_is_mapped = true -%}
-                <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="option__label option__label--{{ filter_label }} {% if value.count == 0 and value.active == false %} option__label--disabled{% endif %}" style="background-color: {{ color_hex }};">
+                <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}" style="background-color: {{ color_hex }};">
                   <span class="sr-only">{{ option_label | escape }}</span>
                 </label>
               {%- endif -%}

@@ -55,15 +55,15 @@
   <div class="field">
     <label class="field__label" for="field-5">Selectbox</label>
     <div class="select relative">
-      <span class="field__select-icon">
-        {%- render 'icons', icon: 'chevron-down', icon_class: 'w-5' -%}
-      </span>
-      <select class="field__select" id="field-5" tabindex="0">
+      <select class="select__select" id="field-5" tabindex="0">
         <option value="">Default</option>
         <option value="1">One</option>
         <option value="2">Two</option>
         <option value="3">Three</option>
       </select>
+      <span class="select__select-icon">
+        {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+      </span>
     </div>
   </div>
 

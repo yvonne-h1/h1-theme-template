@@ -301,7 +301,7 @@
                         {{ option.name }}
                       </label>
                       <select id="Option-{{ product.id }}-{{ forloop.index0 }}"
-                        class="field__select"
+                        class="select__select"
                         name="options[{{ option.name | escape }}]"
                       >
                         {%- for value in option.values -%}
@@ -328,7 +328,7 @@
                     fallback: "Variants"
                   -%}
                 </label>
-                <select name="id" id="Variants-{{ product.id }}" class="field__select">
+                <select name="id" id="Variants-{{ product.id }}" class="select__select">
                   {%- for variant in product.variants -%}
                     <option
                       {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
