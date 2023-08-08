@@ -6,5 +6,18 @@
     @apply m-0
       font-body
       leading-normal;
+
+    &.prevent-scroll {
+      &,
+      .body {
+        @apply h-full
+        w-full
+        overflow-hidden;
+        /* CSS specific to iOS devices */
+        @supports (-webkit-touch-callout: none) {
+          @apply fixed;
+        }
+      }
+    }
   }
 }

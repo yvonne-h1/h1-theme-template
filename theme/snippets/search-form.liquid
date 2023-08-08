@@ -51,7 +51,7 @@
   '>
   <button
     type="button"
-    class="-mr-3 -mt-3 mb-8 ml-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:right-0 lg:top-3 lg:z-10 lg:mb-0 lg:ml-0 lg:mr-[var(--content-wrapper-padding)] lg:mt-0"
+    class="-mr-6 -mt-6 ml-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:right-0 lg:top-3 lg:z-10 lg:mb-0 lg:ml-0 lg:mr-[var(--content-wrapper-padding)] lg:mt-0"
     aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}">
     {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
   </button>
@@ -70,7 +70,7 @@
       </label>
       <input
         placeholder="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}"
-        class="search-field__input state:text-black block w-full appearance-none border border-x-transparent  border-t-transparent bg-transparent py-[5px] pl-0 pr-6 font-body text-sm leading-7 ring-transparent placeholder:text-black states:border-transparent states:border-b-secondary states:bg-transparent states:ring-transparent lg:border-b-transparent lg:pr-8 lg:text-base lg:states:border-b-transparent"
+        class="search-field__input state:text-black block w-full appearance-none border border-x-transparent  border-t-transparent bg-transparent py-[5px] pl-0 pr-6 font-body leading-7 ring-transparent placeholder:text-black states:border-transparent states:border-b-secondary states:bg-transparent states:ring-transparent lg:border-b-transparent lg:pr-8 lg:text-base lg:states:border-b-transparent"
         id="{{ prefix }}SearchInModal"
         type="search"
         name="q"

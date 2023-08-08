@@ -25,7 +25,8 @@
     @apply pointer-events-none
     inline-block
     select-none
-    break-words;
+    break-words
+    rounded-md;
 
     @screen md {
       @include medium;

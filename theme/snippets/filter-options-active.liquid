@@ -7,79 +7,70 @@
 
 <div
   class="filter__option filter__option--active group/filter-group collapsible-is-open hidden w-full overflow-y-auto bg-color-default"
-  data-filter-active-options
-  {% if settings.enable_filter_collapsibles %}
-    data-collapsible-group
-  {% endif %}>
-  {%- if settings.enable_filter_collapsibles -%}
-    <button
-      type="button"
-      class="filter__option-trigger flex w-full items-center justify-between py-3 transition-all group-[.collapsible-is-open]/filter-group:pb-2"
-      data-collapsible-trigger>
-      <span class="text-sm font-bold">
-        {%- render 'render-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
-      </span>
-      {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]/filter-group:block' -%}
-      {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]/filter-group:hidden' -%}
-    </button>
-  {%- else -%}
-    <div class="filter__option-trigger flex w-full items-center justify-between gap-4 pb-2 pt-4 font-bold">
-      <span class="font-bold">
-        {%- render 'render-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
-      </span>
-    </div>
-  {%- endif -%}
+  data-filter-active-options>
+  <p class="font-bold ">
+    {%- render 'render-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
+  </p>
+  <div class="mb-6 flex flex-wrap gap-2 border-b pb-6" data-filter-active-options-list>
+    {%- for filter in collection.filters -%}
+      {%- for value in filter.active_values -%}
+        <filter-remove class="block">
+          <a
+            href="{{ value.url_to_remove }}"
+            class="
+              group
+              inline-flex
+              items-center
+              gap-2
+              rounded-md
+              bg-gray-50
+              p-2
+              text-inherit
+              no-underline
+              focus-visible:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-primary-300
+              focus-visible:ring-offset-2
+              states:bg-primary
+              states:text-primary-text
+            "
+            aria-label="{% render "render-translation", namespace: "accessibility", key: "remove_filter", title: value.label, fallback: "Remove filter" %}"
+            data-filter-remove>
+            <span>
+              <span class="italic">{{ filter.label }}:</span>
+              {{ value.label | escape }}
+            </span>
+            {%- render 'icons', icon: 'close', icon_class: 'w-4 shrink-0 group-hover:scale-125' -%}
+          </a>
+        </filter-remove>
+      {%- endfor -%}
 
-  <div
-    class="filter-options__submenu w-full overflow-y-auto transition-all bg-color-default"
-    {% if settings.enable_filter_collapsibles %}
-      data-collapsible-target
-    {% endif %}>
-    <div class="mb-6 border-b pb-6" data-filter-active-options-list>
-      {%- for filter in collection.filters -%}
-        {%- for value in filter.active_values -%}
+      {% if filter.type == 'price_range' %}
+        {%- if filter.min_value.value != null or filter.max_value.value != null -%}
           <filter-remove class="block">
             <a
-              href="{{ value.url_to_remove }}"
-              class="js-filter-remove flex items-center justify-between gap-2 text-inherit no-underline states:text-primary states:no-underline"
-              aria-label="{% render "render-translation", namespace: "accessibility", key: "remove_filter", title: value.label, fallback: "Remove filter" %}"
+              href="{{ filter.url_to_remove }}"
+              class="flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
               data-filter-remove>
-              <span>
-                <span class="italic">{{ filter.label }}:</span>
-                {{ value.label | escape }}
-              </span>
               {%- render 'icons', icon: 'close', icon_class: 'w-4 shrink-0' -%}
+              {{ filter.label }}:
+              {%- liquid
+                if filter.min_value.value
+                  echo filter.min_value.value | money_with_currency
+                else
+                  echo 0 | money_with_currency
+                endif
+                echo ' - '
+                if filter.max_value.value
+                  echo filter.max_value.value | money_with_currency
+                else
+                  echo filter.range_max | money_with_currency
+                endif
+              -%}
             </a>
           </filter-remove>
-        {%- endfor -%}
-
-        {% if filter.type == 'price_range' %}
-          {%- if filter.min_value.value != null or filter.max_value.value != null -%}
-            <filter-remove class="block">
-              <a
-                href="{{ filter.url_to_remove }}"
-                class="js-filter-remove flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
-                data-filter-remove>
-                {%- render 'icons', icon: 'close', icon_class: 'w-4 shrink-0' -%}
-                {{ filter.label }}:
-                {%- liquid
-                  if filter.min_value.value
-                    echo filter.min_value.value | money_with_currency
-                  else
-                    echo 0 | money_with_currency
-                  endif
-                  echo ' - '
-                  if filter.max_value.value
-                    echo filter.max_value.value | money_with_currency
-                  else
-                    echo filter.range_max | money_with_currency
-                  endif
-                -%}
-              </a>
-            </filter-remove>
-          {%- endif -%}
-        {% endif %}
-      {%- endfor -%}
-    </div>
+        {%- endif -%}
+      {% endif %}
+    {%- endfor -%}
   </div>
 </div>

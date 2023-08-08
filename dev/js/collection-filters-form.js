@@ -322,17 +322,6 @@ if (!customElements.get('collection-filters-form')) {
           ? filterOption.closest('[data-filter-option]').classList.add('hidden')
           : filterOption.closest('[data-filter-option]').classList.remove('hidden'),
       );
-
-      // Re-init collapsibles
-      this.reInitCollapsibles();
-    }
-
-    /**
-     * reInitCollapsibles
-     */
-    reInitCollapsibles() {
-      const collapsibles = this.closest('collapsible-component');
-      collapsibles?.init();
     }
 
     updateTotalActiveFilterOptionsCount() {

@@ -26,7 +26,9 @@
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
       <cart-items class="cart-items group/cart-items{% if cart == empty %} cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
-        <div class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">
+        <div
+          class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen"
+          style="min-height: 100dvh;">
           <p class="h4 cart-drawer__empty-text">
             {%- render 'render-translation', namespace: 'sections.cart', key: 'empty', fallback: 'Your cart is empty' -%}
           </p>
@@ -49,7 +51,7 @@
         {%- comment -%} Form {%- endcomment -%}
         <form
           action="{{ routes.cart_url }}"
-          class="cart-drawer__form flex min-h-screen flex-col flex-wrap group-[.cart-is-empty]/cart-items:hidden"
+          class="cart-drawer__form flex min-h-full flex-col flex-wrap group-[.cart-is-empty]/cart-items:hidden"
           method="post"
           id="cart-drawer-form">
           {%- comment -%} Header {%- endcomment -%}

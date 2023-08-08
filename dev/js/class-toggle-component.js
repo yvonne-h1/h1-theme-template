@@ -30,6 +30,8 @@ if (!customElements.get('class-toggle-component')) {
         isDropdown: false,
       };
 
+      this.preventBackgroundScroll = false;
+
       // Get options from element data and combine with this.options
       if (this?.dataset?.options) {
         const dataOptions = JSON.parse(this.dataset.options);
@@ -58,6 +60,9 @@ if (!customElements.get('class-toggle-component')) {
         document.body.classList.remove('desktop-submenu-is-open');
         document.body.classList.remove(window.drawerToggleClasses.mobileMenu);
       }
+
+      // prevent scroll for any of the modals
+      if (this.targetID !== null) this.preventBackgroundScroll = true;
 
       // All toggle components should have a button for accessibility purposes
       this.button = document.querySelector(`[aria-controls="${this.targetID}"`) || this.querySelector('button') || null;
@@ -99,6 +104,7 @@ if (!customElements.get('class-toggle-component')) {
     */
     debounceClickEvent(e) {
       if (!e) return false;
+
       e.preventDefault(e);
       e.stopPropagation(e);
       this.toggle();
@@ -136,7 +142,6 @@ if (!customElements.get('class-toggle-component')) {
     }
 
     add() {
-      console.trace('add');
       // add the event listener to close the modal again
       document.addEventListener('keyup', this.keyUpCloseEvent.bind(this));
 
@@ -162,6 +167,11 @@ if (!customElements.get('class-toggle-component')) {
         this.button.setAttribute('aria-expanded', true);
       }
 
+      // Add class to the document
+      if (this.preventBackgroundScroll) {
+        addPreventScroll();
+      }
+
       // Switch aria-expanded
       if (this.isDropdown) {
 
@@ -179,7 +189,6 @@ if (!customElements.get('class-toggle-component')) {
     }
 
     remove() {
-      console.trace('remove');
       const { classToToggle } = this.options;
       if (this.target) {
         this.target.classList.remove(classToToggle);
@@ -206,6 +215,11 @@ if (!customElements.get('class-toggle-component')) {
 
         // return the focus to the trigger
         this.button?.focus();
+      }
+
+      // Remove class from the document
+      if (this.preventBackgroundScroll) {
+        removePreventScroll();
       }
 
       if (this.isDropdown) {

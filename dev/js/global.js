@@ -14,6 +14,8 @@ const debug = () => window.location.hostname === '127.0.0.1' || window.location.
 
 const windowWidth = () => window.innerWidth;
 
+let scrollY; // we'll store the scroll position here
+
 const trapFocusHandlers = {};
 /**
  * @param {Object} element the element to check
@@ -34,11 +36,9 @@ function getFocusableElements(container) {
  */
 function trapFocus(container, elementToFocus = container) {
   const elements = getFocusableElements(container);
-  console.log('container, elementToFocus', container, elementToFocus);
 
   const first = elements[0];
   const last = elements[elements.length - 1];
-  console.log('last, first', last, first);
 
   removeTrapFocus();
 
@@ -84,6 +84,29 @@ function removeTrapFocus(elementToFocus = null) {
   document.removeEventListener('keydown', trapFocusHandlers.keydown);
 
   if (elementToFocus) elementToFocus.focus();
+}
+
+/**
+ * add class to the body when a modal is opened
+ * Keep the document.style.top for iOS devices
+ */
+function addPreventScroll() {
+  // remember scroll position
+  scrollY = window.scrollY;
+
+  // prevent the body from jumping when the position fixed is added and wait to make sure it's been added
+  document.body.style.top = `${(scrollY < window.innerHeight) ? 0 - scrollY : 0}px`;
+  setTimeout(() => {
+    document.documentElement.classList.add('prevent-scroll');
+  }, 100);
+}
+
+function removePreventScroll() {
+  document.documentElement.classList.remove('prevent-scroll');
+  document.body.style.top = 0;
+
+  // restore scroll position
+  window.scrollTo(0, scrollY);
 }
 
 /**
