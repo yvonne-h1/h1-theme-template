@@ -21,6 +21,12 @@
     unavailable: `{% render "render-translation", namespace: "products.product.unavailable", fallback: "Unavailable" %}`,
   }
 
+  window.shop = {
+    locale: '{{ shop.locale }}',
+    moneyFormat: "{{ shop.money_format }}",
+    moneyWithCurrencyFormat: "{{ shop.money_with_currency_format }}"
+  }
+
 </script>
 
 <script src="{{ 'variants.js' | asset_url }}" defer></script>

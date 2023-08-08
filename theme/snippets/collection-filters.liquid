@@ -14,7 +14,7 @@
   <collection-filters-form>
     {%- comment -%} Skiplink so users can go straight to the products {%- endcomment -%}
     {%- if settings.filter_display == 'grid' -%}
-      <a class="button button--primary sr-only !p-2 focus:outline-dashed focus:outline-1 states:no-underline lg:hidden lg:focus:not-sr-only" href="#CollectionProductGrid">
+      <a class="button button--primary sr-only !p-2 focus:outline-dashed focus:outline-1 states:no-underline lg:focus:not-sr-only" href="#CollectionProductGrid">
         {% render 'render-translation', namespace: 'accessibility', key: 'skip_filters', fallback: 'Skip to products' -%}
       </a>
     {%- endif -%}

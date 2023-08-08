@@ -255,7 +255,6 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     open(group) {
-      console.trace('open');
       if (!group) return false;
 
       // Close siblings if option is on
@@ -288,8 +287,6 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     close(group, focus = true) {
-      console.trace('close');
-
       if (!group) return false;
 
       removeTrapFocus(group);
@@ -306,7 +303,6 @@ if (!customElements.get('collapsible-component')) {
       @param group {node}: group selector
     */
     toggle(group) {
-      console.trace('toggle');
       if (!group) return false;
 
       // Check if already open

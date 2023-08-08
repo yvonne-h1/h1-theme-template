@@ -90,7 +90,7 @@ if (!customElements.get('load-more')) {
       linkElement.querySelector('[data-loader]').classList.remove('hidden');
 
       const url = `${linkElement.href}&section_id=${this.ajaxSectionToLoad}`;
-      this.renderElementsFromFetch(url, linkElement.href, direction);
+      this.renderElementsFromFetch(url, linkElement.href, direction, event);
     }
 
     /**
@@ -100,7 +100,7 @@ if (!customElements.get('load-more')) {
      * @param {String} page
      * @param {String} direction
      */
-    renderElementsFromFetch(url, page, direction) {
+    renderElementsFromFetch(url, page, direction, event) {
       fetch(url)
         .then((response) => response.text())
         .then((responseText) => {
@@ -121,9 +121,10 @@ if (!customElements.get('load-more')) {
           // depending on the direction of the click, append or prepend the products/articles and update the pagination
           if (direction == 'next') {
             newContent.forEach((element, index) => {
-              // append the new items and focus the first added item
+              // append the new items and focus the first added item.
+              // sCheck for the event.pointerType. It's empty when keyboard was used, so then focus the element.
               elementsWrapper.querySelector(`${wrapperIDSelector}`).append(element);
-              if (index === 0) {
+              if (index === 0 && event.pointerType === '') {
                 element.querySelector('.product-card__sr-link').focus();
               }
             });
@@ -134,9 +135,10 @@ if (!customElements.get('load-more')) {
           }
           else {
             newContent.forEach((element, index) => {
-              // append the new items and focus the first added item
+              // append the new items and focus the first added item.
+              // Check for the event.pointerType. It's empty when keyboard was used, so then focus the element.
               elementsWrapper.querySelector(`${wrapperIDSelector}`).prepend(element);
-              if (index === newContent.length - 1) {
+              if (index === newContent.length - 1 && event.pointerType === '') {
                 element.querySelector('.product-card__sr-link').focus();
               }
             });

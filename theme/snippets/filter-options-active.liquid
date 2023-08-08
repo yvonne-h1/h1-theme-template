@@ -5,6 +5,8 @@
   - section:         {Object} main-collection.liquid section object (required)
 {%- endcomment -%}
 
+{%- assign active_label_class = 'group inline-flex items-center gap-2 rounded-md bg-gray-50 p-2 text-inherit no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 states:bg-primary states:text-primary-text' -%}
+
 <div
   class="filter__option filter__option--active group/filter-group collapsible-is-open hidden w-full overflow-y-auto bg-color-default"
   data-filter-active-options>
@@ -17,23 +19,7 @@
         <filter-remove class="block">
           <a
             href="{{ value.url_to_remove }}"
-            class="
-              group
-              inline-flex
-              items-center
-              gap-2
-              rounded-md
-              bg-gray-50
-              p-2
-              text-inherit
-              no-underline
-              focus-visible:outline-none
-              focus-visible:ring-2
-              focus-visible:ring-primary-300
-              focus-visible:ring-offset-2
-              states:bg-primary
-              states:text-primary-text
-            "
+            class="{{ active_label_class }}"
             aria-label="{% render "render-translation", namespace: "accessibility", key: "remove_filter", title: value.label, fallback: "Remove filter" %}"
             data-filter-remove>
             <span>
@@ -50,23 +36,26 @@
           <filter-remove class="block">
             <a
               href="{{ filter.url_to_remove }}"
-              class="flex items-center gap-2 text-inherit no-underline states:text-primary states:no-underline"
+              class="{{ active_label_class }}"
+              aria-label="{% render "render-translation", namespace: "accessibility", key: "remove_filter", title: value.label, fallback: "Remove filter" %}"
               data-filter-remove>
+              <span>
+                <span class="italic">{{ filter.label }}:</span>
+                {% liquid
+                  if filter.min_value.value
+                    echo filter.min_value.value | money_with_currency
+                  else
+                    echo 0 | money_with_currency
+                  endif
+                  echo ' - '
+                  if filter.max_value.value
+                    echo filter.max_value.value | money_with_currency
+                  else
+                    echo filter.range_max | money_with_currency
+                  endif
+                -%}
+              </span>
               {%- render 'icons', icon: 'close', icon_class: 'w-4 shrink-0' -%}
-              {{ filter.label }}:
-              {%- liquid
-                if filter.min_value.value
-                  echo filter.min_value.value | money_with_currency
-                else
-                  echo 0 | money_with_currency
-                endif
-                echo ' - '
-                if filter.max_value.value
-                  echo filter.max_value.value | money_with_currency
-                else
-                  echo filter.range_max | money_with_currency
-                endif
-              -%}
             </a>
           </filter-remove>
         {%- endif -%}

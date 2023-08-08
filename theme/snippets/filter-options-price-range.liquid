@@ -15,59 +15,29 @@
 -%}
 
 {%- capture summary_content -%}
-  {%- assign max_price_amount = filter.range_max  | money_with_currency | strip_html | escape -%}
-  <p class="filter-options__info">
-    {%- render 'render-translation',
-      namespace: "sections.collection_template",
-      key: "max_price",
-      price: max_price_amount,
-      fallback: "The highest price"
-    -%}
-  </p>
-  <price-range class="filter-options__price">
-    <label class="field__label -order-1 my-1" for="filter-{{ filter.label | handleize }}-{{ filter_index }}-min">
-      {%- render 'render-translation', namespace: "sections.collection_template.from", fallback: "From" -%}
-    </label>
-    <div class="field flex items-center">
-      <span class="field__currency w-5">{{ cart.currency.symbol }}</span>
-      <input class="field__input w-auto flex-auto"
+  <price-range class="filter-options__price flex flex-col">
+    <div class="range-slider relative mb-4 w-full">
+      <input id="filter-{{ filter.label | handleize }}-{{ filter_index }}-min"
+        type="range"
         name="{{ filter.min_value.param_name }}"
-        id="filter-{{ filter.label | handleize }}-{{ filter_index }}-min"
-        {% if filter.min_value.value %}
-          {%- if uses_comma_decimals -%}
-            value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
-          {%- else -%}
-            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-          {% endif %}
-        {% endif %}
-        type="number"
-        pattern="[0-9]*"
-        inputmode="numeric"
-        placeholder="0"
+        class="min-price"
+        value="{{ filter.min_value.value | divided_by: 100 | ceil }}"
         min="0"
-        max="{{ filter.range_max | divided_by: 100 | ceil }}" />
-    </div>
-    <label class="field__label -order-1 my-1" for="filter-{{ filter.label | handleize }}-{{ index }}-max">
-      {%- render 'render-translation', namespace: "sections.collection_template.to", fallback: "To" -%}
-    </label>
-    <div class="field flex items-center">
-      <span class="field__currency w-5">{{ cart.currency.symbol }}</span>
-      <input class="field__input w-auto flex-auto"
-        name="{{ filter.max_value.param_name }}"
+        max="{{ filter.range_max | divided_by: 100 | ceil }}"
+        step="1" data-price-range-min-input>
+      <input
         id="filter-{{ filter.label | handleize }}-{{ forloop.index }}-max"
-        {% if filter.max_value.value %}
-          {%- if uses_comma_decimals -%}
-            value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
-          {%- else -%}
-            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-          {% endif %}
-        {% endif %}
-        type="number"
-        pattern="[0-9]*"
-        inputmode="numeric"
-        placeholder="{{ filter.range_max | divided_by: 100 | ceil }}"
+        type="range"
+        name="{{ filter.max_value.param_name }}"
+        class="max-price"
+        value="{{ filter.range_max | divided_by: 100 | ceil }}"
         min="0"
-        max="{{ filter.range_max | divided_by: 100 | ceil }}" />
+        max="{{ filter.range_max | divided_by: 100 | ceil }}"
+        step="1" data-price-range-max-input>
+    </div>
+    <div class="range-index flex justify-between" data-price-range-values>
+      <span data-price-range-min>{{ filter.min_value.value | default: 0 | money_with_currency }}</span>
+      <span data-price-range-max>{{ filter.max_value.value | default: filter.range_max | money_with_currency }}</span>
     </div>
   </price-range>
 {%- endcapture -%}
