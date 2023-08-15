@@ -1,28 +1,32 @@
 {
   "sections": {
     "breadcrumbs": {
-      "type": "breadcrumbs"
+      "type": "breadcrumbs",
+      "settings": {
+        "menu": "",
+        "show_home_link": true,
+        "show_tagged_link": true,
+        "show_non_link": true,
+        "hide_on_mobile": false,
+        "alignment": "justify-start"
+      }
     },
     "main": {
       "type": "main-product",
       "blocks": {
-        "badges": {
-          "type": "badges",
-          "settings": {}
-        },
         "title": {
           "type": "title",
           "settings": {}
         },
-        "price": {
-          "type": "price",
-          "settings": {}
-        },
-        "quantity_selector": {
-          "type": "quantity_selector",
+        "badges": {
+          "type": "badges",
           "settings": {
-            "quantity_label": true
+            "badge_size": ""
           }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
         },
         "variant_picker": {
           "type": "variant_picker",
@@ -30,6 +34,16 @@
             "picker_label": true,
             "picker_type": "button"
           }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "quantity_label": true
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
         },
         "buy_buttons": {
           "type": "buy_buttons",
@@ -40,30 +54,26 @@
         "usp_1": {
           "type": "usp",
           "settings": {
-            "heading": "Free shipping on orders above €30",
-            "icon": "dryer"
+            "heading": "Free shipping on orders above €50",
+            "icon": "truck"
           }
         },
         "usp_2": {
           "type": "usp",
           "settings": {
-            "heading": "Free returns within 6 weeks",
+            "heading": "Free returns in 30 days",
             "icon": "return"
           }
         },
         "usp_3": {
           "type": "usp",
           "settings": {
-            "heading": "Secured payment",
+            "heading": "Secure payment",
             "icon": "star"
           }
-        },
-        "description": {
-          "type": "description",
-          "settings": {}
         }
       },
-      "block_order": ["badges", "title", "price", "quantity_selector", "variant_picker", "buy_buttons", "usp_1", "usp_2", "usp_3", "description"],
+      "block_order": ["title", "badges", "description", "variant_picker", "quantity_selector", "price", "buy_buttons", "usp_1", "usp_2", "usp_3"],
       "settings": {
         "enable_sticky_info": true,
         "enable_media_slider": false,
@@ -73,7 +83,13 @@
     "product-recommendations": {
       "type": "product-recommendations",
       "settings": {
-        "heading": "Recommendations"
+        "container_width": "",
+        "color_scheme": "",
+        "heading": "Recommendations",
+        "intent": "related",
+        "limit": 8,
+        "swiper_indication": "pagination",
+        "swiper_navigation": true
       }
     }
   },

@@ -47,7 +47,7 @@
 
   {% comment %} PDP {% endcomment %}
   <input
-    class="quantity__input h-10 w-7 appearance-none border-none bg-transparent p-0 text-center text-sm font-bold text-current opacity-80 {{ state_classes }}"
+    class="quantity__input h-10 w-7 appearance-none border-none bg-transparent p-0 text-center text-sm text-current opacity-80 {{ state_classes }}"
     type="number"
     name="{%- if type == 'cart' -%}updates[]{%- else -%}quantity{%- endif -%}"
     id="Quantity-{{ id }}"

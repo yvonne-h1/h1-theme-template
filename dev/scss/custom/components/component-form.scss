@@ -435,19 +435,17 @@ endcapture
     @apply m-0 appearance-none;
   }
 
-  input[type='range'] {
-    @apply pointer-events-none
-    absolute
-    left-0
-    w-full
-    appearance-none
-    bg-transparent;
+  @mixin thumb-focus() {
+    @apply ring-2
+    ring-primary-300
+    ring-offset-2;
   }
-
   @mixin thumb() {
     @apply pointer-events-auto
     relative
+    -top-1.5
     z-10
+    block
     h-4
     w-4
     cursor-pointer
@@ -463,17 +461,40 @@ endcapture
     border-none
     bg-none;
   }
-  input[type='range']::-moz-range-thumb {
-    @include thumb();
-  }
-  input[type='range']::-webkit-slider-thumb {
-    @include thumb();
-  }
 
-  input[type='range']::-moz-range-track {
-    @include track();
-  }
-  input[type='range']::-webkit-slider-runnable-track {
-    @include track();
+  input[type='range'] {
+    @apply pointer-events-none
+    absolute
+    left-0
+    w-full
+    appearance-none
+    bg-transparent;
+    @include states() {
+      @apply outline-none;
+    }
+    &:focus-visible {
+      @apply outline-none;
+    }
+    &::-moz-range-thumb {
+      @include thumb();
+    }
+    &::-webkit-slider-thumb {
+      @include thumb();
+    }
+    &::-moz-range-track {
+      @include track();
+    }
+    &::-webkit-slider-runnable-track {
+      @include track();
+    }
+    &:focus-visible,
+    &:focus {
+      &::-moz-range-thumb {
+        @include thumb-focus();
+      }
+      &::-webkit-slider-thumb {
+        @include thumb-focus();
+      }
+    }
   }
 }

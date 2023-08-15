@@ -22,7 +22,7 @@
               {%- if tag contains 'type:' or tag contains 'Type:' -%}
                 {%- assign article_type = tag | downcase | remove: 'type:' -%}
               {%- endif -%}
-              <p class="article-header__type text-sm font-medium uppercase text-primary">
+              <p class="article-header__type  text-sm font-semibold uppercase text-primary">
                 {{ article_type }}
               </p>
             {% endfor %}
@@ -36,7 +36,7 @@
           <div class="article-header__author-and-date flex items-center justify-between gap-4 md:justify-center">
             {% comment %} Author {% endcomment %}
             {%- if block.settings.blog_show_author -%}
-              <address class="article-header__author text-sm font-medium not-italic">
+              <address class="article-header__author  text-sm font-semibold not-italic">
                 {{ 'blogs.article.written_by' | t: author: article.author }}
               </address>
             {%- endif -%}

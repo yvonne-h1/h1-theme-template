@@ -46,7 +46,7 @@
 
             {% comment %} Default badge {% endcomment %}
             {%- if address == customer.default_address -%}
-              <div class="address__default mb-2 inline-flex bg-accent px-3 py-1 text-xs font-medium text-white">
+              <div class="address__default  mb-2 inline-flex bg-accent px-3 py-1 text-xs font-semibold text-white">
                 {%-
                   render 'render-translation',
                   namespace: 'customer.addresses',
@@ -84,7 +84,7 @@
               {%- comment -%} Edit address form. This should be a modal i.m.o. {%- endcomment -%}
               <div id="EditAddress_{{ address.id }}" class="addresses__edit mt-4 hidden rounded-md  border p-4 peer-aria-expanded/edit:block">
                 {%- form 'customer_address', address, class: 'form addresses__edit-form' -%}
-                  <h2 class="text-lg font-medium">
+                  <h2 class=" text-lg font-semibold">
                     {%-
                       render 'render-translation',
                       namespace: 'customer.addresses',
@@ -292,7 +292,7 @@
       </button>
       <div id="AddAddress" class="mt-4 hidden rounded-2xl border bg-white p-6 text-sm peer-aria-expanded/add:block">
         {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading', class: 'form addresses__add-form' -%}
-          <h2 class="text-lg font-medium" id="AddressNewHeading">
+          <h2 class=" text-lg font-semibold" id="AddressNewHeading">
             {%-
               render 'render-translation',
               namespace: 'customer.addresses',

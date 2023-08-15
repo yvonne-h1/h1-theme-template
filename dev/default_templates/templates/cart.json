@@ -7,21 +7,21 @@
           "type": "usp",
           "settings": {
             "icon": "Truck",
-            "text": "Free shipping on orders above €30"
+            "text": "Free shipping on orders above €50"
           }
         },
         "usp_2": {
           "type": "usp",
           "settings": {
             "icon": "Box",
-            "text": "Free returns within 6 weeks"
+            "text": "Free returns in 30 days"
           }
         },
         "usp_3": {
           "type": "usp",
           "settings": {
             "icon": "Lock",
-            "text": "Secured payment"
+            "text": "Secure payment"
           }
         }
       },

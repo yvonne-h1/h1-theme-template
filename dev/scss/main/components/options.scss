@@ -23,12 +23,13 @@
     &__label {
       @apply relative
         flex
-        min-h-[2.25rem]
-        min-w-[36px]
+        aspect-square
+        h-full
+        w-8
         cursor-pointer
         items-center
         justify-center
-        rounded-[1.125rem]
+        rounded-full
         border
         border-gray-100
         bg-white
@@ -41,7 +42,7 @@
         transition-colors
         text-color-default;
       @include states() {
-        @apply border-black bg-primary text-primary-text no-underline before:opacity-100;
+        @apply bg-primary text-primary-text;
       }
 
       // .option__label--disabled
@@ -73,7 +74,7 @@
     // .option__label--checked
     &__input:checked + &__label,
     &__label--checked {
-      @apply border-black bg-primary text-primary-text;
+      @apply bg-primary text-primary-text outline outline-1 outline-offset-4 outline-black;
       &:hover {
         @apply bg-primary-300;
       }

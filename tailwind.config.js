@@ -49,7 +49,7 @@ module.exports = {
     },
     /**
      * Font family's
-     * Usage: font-body
+     * Usage: font-body, font-heading
      */
     fontFamily: {
       body: 'var(--font-body-family)',

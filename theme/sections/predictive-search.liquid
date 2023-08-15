@@ -42,7 +42,7 @@
                   -%}
                 </div>
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title mb-2 text-sm font-medium">
+                  <p class="predictive-search__item__title  mb-2 text-sm font-semibold">
                     {{- product.title | highlight: predictive_search.terms -}}
                   </p>
                   <div class="predictive-search__item__price text-sm">
@@ -80,7 +80,7 @@
                   -%}
                 </div>
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title text-sm font-medium">
+                  <p class="predictive-search__item__title  text-sm font-semibold">
                     {{- collection.title | highlight: predictive_search.terms -}}
                   </p>
                 </div>
@@ -127,7 +127,7 @@
                   -%}
                 </div>
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title text-sm font-medium">
+                  <p class="predictive-search__item__title  text-sm font-semibold">
                     {{- article.title | highlight: predictive_search.terms -}}
                   </p>
                   <div class="predictive-search__item__price text-sm">
@@ -170,7 +170,7 @@
             <li class="predictive-search__list-item mb-4" role="option">
               <a href="{{ page.url }}" class="predictive-search__list__link flex gap-4 text-inherit hover:opacity-70 active:opacity-100 states:no-underline" tabindex="-1">
                 <div class="predictive-search__item__content flex-1">
-                  <p class="predictive-search__item__title text-sm font-medium">
+                  <p class="predictive-search__item__title  text-sm font-semibold">
                     {{- page.title | highlight: predictive_search.terms -}}
                   </p>
                 </div>

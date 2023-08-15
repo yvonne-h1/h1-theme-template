@@ -12,7 +12,13 @@
 
   <ul class="{{ icon_wrapper_class }}">
     {%- for icon in ui_icons -%}
-      <li title="{{ icon | downcase }}">{%- render 'icons', icon: icon, icon_class: 'w-6' -%}</li>
+      {%- liquid
+        assign class = 'w-6'
+        if icon == 'spinner'
+          assign class = class | append: ' animate-spin'
+        endif
+      -%}
+      <li title="{{ icon | downcase }}">{%- render 'icons', icon: icon, icon_class: class -%}</li>
     {%- endfor -%}
   </ul>
 </div>
