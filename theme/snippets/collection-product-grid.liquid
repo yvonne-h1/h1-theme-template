@@ -6,10 +6,21 @@
 
 {%- assign container_title = section.settings.title | escape -%}
 
+{%- liquid
+  # check for filters
+  assign filtered_collection = false
+  for filter in collection.filters
+    if filter.active_values.size > 0 or filter.max_value.value > 0 or filter.min_value.value > 0
+      assign filtered_collection = true
+      break
+    endif
+  endfor
+-%}
+
 {% comment %} Loader animation {% endcomment %}
 {%- capture loading_overlay -%}
-  <div class="loading-overlay fixed inset-0 z-50 hidden w-full items-center justify-center opacity-70 bg-color-default group-[.loading]/collection:flex" data-loader>
-    {%- render 'icons', icon: 'spinner', icon_class: 'w-12 animate-spin' -%}
+  <div class="loading-overlay absolute inset-0 z-50 flex hidden w-full items-center justify-center opacity-70 bg-color-default" data-loader>
+    {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
   </div>
 {%- endcapture -%}
 
@@ -17,32 +28,27 @@
 {%- capture container_content -%}
   <div
     id="CollectionProductGrid"
-    class="group/collection"
-    data-collection-product-grid
+    class="group/collection relative"
   >
     {{ loading_overlay }}
     <div
       class="collection relative"
       id="main-collection-product-grid"
+      data-collection-product-grid
       data-collection-handle="{{ collection.handle }}"
       data-id="{{ section.id }}"
     >
       {%- if collection.products.size == 0 -%}
         {% comment %} No products found {% endcomment %}
-        <div class="title-wrapper text-center">
-          <p class="title title--primary">
-            {%- render 'render-translation',
-              namespace: 'sections.collection_template',
-              key: 'empty',
-              fallback: 'No products found.'
-            -%}
-          </p>
-          <p>
-            {{
-              'sections.collection_template.use_fewer_filters_html'
-              | t: link: collection.url, class: ''
-            }}
-          </p>
+        <div class="text-center">
+          <h3 class="h4">
+            {%- render 'render-translation', namespace: 'sections.collection_template', key: 'empty', fallback: 'No products found.' -%}
+          </h3>
+          {%- if filtered_collection -%}
+            <p>
+              {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url }}
+            </p>
+          {%- endif -%}
         </div>
       {%- else -%}
         {%- paginate collection.products by settings.products_per_page -%}

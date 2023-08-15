@@ -63,7 +63,7 @@
                 href="{{ collection.url }}?sort_by={{ sort_by }}"
                 class="button button--sm button--link pl-0 pr-0 font-body"
                 data-filter-remove
-                data-filter-reset>
+                data-filter-clear-all>
                 {%- render 'render-translation', namespace: 'sections.collection_template', key: 'clear_all', fallback: 'Clear all' -%}
               </a>
             </filter-remove>
@@ -105,10 +105,17 @@
         </div>
 
         {%- comment -%} The collection drawer footer. {%- endcomment -%}
-        <div class="filter__footer sticky bottom-0 z-10 border-t px-6 py-4 bg-color-default group-[.filter]/grid:lg:hidden">
-          <button class="button button--primary button--lg group-[.loading]/filter:button--loading flex w-full">
-            {%- render 'render-translation', namespace: 'sections.collection_template', key: 'apply', fallback: 'Apply' -%}
-          </button>
+        <div class="filter__footer sticky bottom-0 z-10 px-6 py-4 bg-color-default group-[.filter]/grid:lg:hidden">
+          <class-toggle-component
+            data-options='
+              {
+                "classToToggle": "filter-is-open"
+              }
+            '>
+            <button type="button" class="button button--primary button--lg group-[.loading]/filter:button--loading flex w-full">
+              {%- render 'render-translation', namespace: 'sections.collection_template', key: 'apply', fallback: 'Apply' -%}
+            </button>
+          </class-toggle-component>
         </div>
 
         {%- comment -%} Collection type and filters {%- endcomment -%}

@@ -23,9 +23,10 @@
     assign total_html = paginate.items | prepend: '<span data-progress-total>' | append: '</span>'
   endpaginate
 -%}
-<p class="text-medium text-black" data-collection-totals-text>
-  {{ 'general.load_more.info_html' | t: current: current_html, total: total_html }}
-</p>
+
+<div data-collection-totals-text>
+  {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html }}
+</div>
 
 <div id="filters">
   {%- render 'filters-native', sort_by: search.sort_by, main_element: search -%}

@@ -160,7 +160,7 @@ if (!customElements.get('cart-items')) {
         .querySelector(selector).innerHTML;
     }
 
-    enableLoading(line) {
+    enableLoading() {
       document.querySelector('cart-items').classList.add('cart-items-is-loading');
       document.querySelector('[data-cart-loader-active="show"]')?.classList.remove('hidden');
       document.querySelector('[data-cart-loader-active="hidden"]')?.classList.add('hidden');

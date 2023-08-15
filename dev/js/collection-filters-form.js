@@ -5,7 +5,8 @@ if (!customElements.get('collection-filters-form')) {
       super();
       this.ww = window.innerWidth;
       this.filterData = [];
-      // this.clearAllButton = this.querySelector('[data-clear-all]');
+
+      this.loader = document.querySelector('.collection-wrapper [data-loader]');
 
       // Get the template - Collection or Search
       this.currentTemplate = 'collection';
@@ -47,9 +48,30 @@ if (!customElements.get('collection-filters-form')) {
    */
     onSubmitHandler(event) {
       event.preventDefault();
-      let type = 'filter';
-      if (event.target.id === 'sort-options') {
-        type = 'sort';
+
+      // show the loader
+      this.loader.classList.remove('hidden');
+
+      const type = event.target.id === 'sort-options' ? 'sort' : 'filter';
+      const isPriceRange = (event.target.type === 'range') ? true : false;
+      const hasPriceRange = new URLSearchParams(document.location.search).get('filter.v.price.lte');
+
+      // when the price was changed, check that the inputs have correct min-max values, because you can drag the max input over the min one and vice versa
+      if (isPriceRange) {
+        const priceRange = document.querySelector('price-range');
+        const minVal = +priceRange.minInput.value;
+        const maxVal = +priceRange.maxInput.value;
+
+        if (minVal && maxVal) {
+          if (+priceRange.minInput.value > +priceRange.maxInput.value || +priceRange.maxInput.value < +priceRange.minInput.value) {
+            priceRange.maxInput.value = minVal;
+            priceRange.minInput.value = maxVal;
+
+            // update the legend
+            priceRange.minLabel.innerHTML = Shopify.formatMoney(+priceRange.minInput.value * 100);
+            priceRange.maxLabel.innerHTML = Shopify.formatMoney(+priceRange.maxInput.value * 100);
+          }
+        }
       }
 
       const formData = new FormData(event.target.closest('form'));
@@ -87,6 +109,13 @@ if (!customElements.get('collection-filters-form')) {
               searchParams.delete(key);
             }
           }
+          // remove the price range from the params if the filter wasn't active yet and the price range wasn't changed
+          if (!isPriceRange && !hasPriceRange) {
+            searchParams.delete('filter.v.price.lte');
+            searchParams.delete('filter.v.price.gte');
+          }
+
+          // stringify the params
           searchParams = searchParams.toString();
 
           // if there is a sort option, add it to the filters
@@ -148,7 +177,6 @@ if (!customElements.get('collection-filters-form')) {
    */
     onActiveFilterClick(event) {
       event.preventDefault();
-      this.toggleActiveFilters();
 
       this.renderPage(new URL(event.currentTarget.href).searchParams.toString(), null);
     }
@@ -167,9 +195,11 @@ if (!customElements.get('collection-filters-form')) {
      * @param {Boolean} disable
      */
     toggleActiveFilters(disable = true) {
+
       document.querySelectorAll('[data-filter-remove]').forEach((element) => {
         element.classList.toggle('disabled', disable);
       });
+
       this.displayFilters();
     }
 
@@ -209,10 +239,14 @@ if (!customElements.get('collection-filters-form')) {
         .then(response => response.text())
         .then((responseText) => {
           const html = responseText;
-          this.filterData = [...this.filterData, { html,
-            url } ];
-          this.renderFilters(html, event);
-          this.renderProductGrid(html, event, searchParams);
+          this.filterData = [...this.filterData, {
+            html,
+            url,
+          } ];
+          setTimeout(() => {
+            this.renderProductGrid(html, event, searchParams);
+            this.renderFilters(html, event);
+          }, 50);
         })
         .then(() => {
           this.loadMore = document.querySelector('load-more');
@@ -228,8 +262,9 @@ if (!customElements.get('collection-filters-form')) {
    */
     renderSectionFromCache(filterDataUrl, event, searchParams) {
       const html = this.filterData.find(filterDataUrl).html;
-      this.renderFilters(html, event);
+
       this.renderProductGrid(html, event, searchParams);
+      this.renderFilters(html, event);
     }
 
     /**
@@ -254,6 +289,9 @@ if (!customElements.get('collection-filters-form')) {
       // update the text
       const totalProducts = parsedHTML.querySelector('[data-collection-totals-text]')?.innerHTML;
       if (totalProducts) document.querySelectorAll('[data-collection-totals-text]').forEach(elem => elem.innerHTML = totalProducts);
+
+      // hide the loader
+      this.loader.classList.add('hidden');
     }
 
     /**
@@ -324,7 +362,7 @@ if (!customElements.get('collection-filters-form')) {
       const activeFiltersElement = document.querySelector('[data-filter-active-options]');
       const activeFilters = document.querySelector('[data-filter-active-options-list]').children;
       const filterTotalWrapper = document.querySelector('[data-filter-total-active-options]');
-      const filterResetButton = document.querySelector('[data-filter-reset]');
+      const filterResetButton = document.querySelector('[data-filter-clear-all]');
 
       // if there are active filters, remove the class so it displays and update the total in the filter button
       if (activeFilters.length > 0) {
@@ -357,14 +395,22 @@ if (!customElements.get('price-range')) {
   class PriceRange extends HTMLElement {
     constructor() {
       super();
-      this.querySelectorAll('input').forEach(element => {
+
+      this.minInput = this.querySelector('[data-price-range-min-input]');
+      this.maxInput = this.querySelector('[data-price-range-max-input]');
+
+      this.minLabel = this.querySelector('[data-price-range-values] [data-price-range-min]');
+      this.maxLabel = this.querySelector('[data-price-range-values] [data-price-range-max]');
+
+      [this.minInput,this.maxInput].forEach(element => {
         element.addEventListener('input', event => {
+
           // update the spans
-          if ('priceRangeMinInput' in event.target.dataset) {
-            this.querySelector('[data-price-range-values] [data-price-range-min]').innerHTML = Shopify.formatMoney(event.target.value * 100);
+          if (element === this.minInput) {
+            this.minLabel.innerHTML = Shopify.formatMoney(event.target.value * 100);
           }
           else {
-            this.querySelector('[data-price-range-values] [data-price-range-max]').innerHTML = Shopify.formatMoney(event.target.value * 100);
+            this.maxLabel.innerHTML = Shopify.formatMoney(event.target.value * 100);
           }
           setTimeout(() => {
             this.onRangeChange.bind(this);
@@ -380,23 +426,20 @@ if (!customElements.get('price-range')) {
       this.getValidRange(event.currentTarget);
     }
 
+    setMinAndMaxValues() {
+      if (this.maxInput.value) this.minInput.setAttribute('max', this.maxInput.value);
+      if (this.minInput.value) this.maxInput.setAttribute('min', this.minInput.value);
+      if (this.minInput.value === '') this.maxInput.setAttribute('min', 0);
+      if (this.maxInput.value === '') this.minInput.setAttribute('max', this.maxInput.getAttribute('max'));
+    }
+
     getValidRange(input) {
-      const value = Number(input.value);
-      const min = Number(input.getAttribute('min'));
-      const max = Number(input.getAttribute('max'));
+      const value = +input.value;
+      const min = +input.getAttribute('min');
+      const max = +input.getAttribute('max');
 
       if (value < min) input.value = min;
       if (value > max) input.value = max;
-    }
-
-    setMinAndMaxValues() {
-      const inputs = this.querySelectorAll('input');
-      const minInput = inputs[0];
-      const maxInput = inputs[1];
-      if (maxInput.value) minInput.setAttribute('max', maxInput.value);
-      if (minInput.value) maxInput.setAttribute('min', minInput.value);
-      if (minInput.value === '') maxInput.setAttribute('min', 0);
-      if (maxInput.value === '') minInput.setAttribute('max', maxInput.getAttribute('max'));
     }
   }
   customElements.define('price-range', PriceRange);

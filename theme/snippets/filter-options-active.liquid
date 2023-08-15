@@ -8,12 +8,12 @@
 {%- assign active_label_class = 'group inline-flex items-center gap-2 rounded-md bg-gray-50 p-2 text-inherit no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 states:bg-primary states:text-primary-text' -%}
 
 <div
-  class="filter__option filter__option--active group/filter-group collapsible-is-open hidden w-full overflow-y-auto bg-color-default"
+  class="filter__option filter__option--active group/filter-group collapsible-is-open hidden w-full overflow-y-auto py-4 bg-color-default"
   data-filter-active-options>
   <p class="font-bold ">
     {%- render 'render-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
   </p>
-  <div class="mb-6 flex flex-wrap gap-2 border-b pb-6" data-filter-active-options-list>
+  <div class="flex flex-wrap gap-2 border-b pb-4" data-filter-active-options-list>
     {%- for filter in collection.filters -%}
       {%- for value in filter.active_values -%}
         <filter-remove class="block">

@@ -436,29 +436,44 @@ endcapture
   }
 
   input[type='range'] {
-    @apply absolute
+    @apply pointer-events-none
+    absolute
     left-0
     w-full
     appearance-none
     bg-transparent;
   }
 
-  input[type='range']::-webkit-slider-thumb {
-    @apply relative
+  @mixin thumb() {
+    @apply pointer-events-auto
+    relative
     z-10
-    -mt-1.5 h-4
+    h-4
     w-4
     cursor-pointer
     appearance-none
     rounded-[50%]
     bg-primary;
   }
-
-  input[type='range']::-webkit-slider-runnable-track {
-    @apply h-1.5
+  @mixin track() {
+    @apply pointer-events-none
+    h-1.5
     w-full
     rounded-sm
     border-none
-    bg-gray-100;
+    bg-none;
+  }
+  input[type='range']::-moz-range-thumb {
+    @include thumb();
+  }
+  input[type='range']::-webkit-slider-thumb {
+    @include thumb();
+  }
+
+  input[type='range']::-moz-range-track {
+    @include track();
+  }
+  input[type='range']::-webkit-slider-runnable-track {
+    @include track();
   }
 }

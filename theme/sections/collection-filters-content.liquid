@@ -33,23 +33,25 @@
   endfor
 -%}
 
+<div data-collection-totals-text>
+  {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html }}
+</div>
+
 <div id="filters">
   {%- render 'collection-filters', sort_by: collection.sort_by -%}
 </div>
 
 <div id="products" data-results-size="{{ collection.products.size }}">
   {%- if collection.products.size == 0 -%}
-    <div class="is-grid collection__empty-text">
-      <div class="is-col-6 grid-col-start-4 center">
-        <h3 class="h4">
-          {%- render 'render-translation', namespace: 'sections.collection_template', key: 'empty', fallback: 'No products found.' -%}
-        </h3>
-        {%- if filtered_collection -%}
-          <p>
-            {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url }}
-          </p>
-        {%- endif -%}
-      </div>
+    <div class="text-center">
+      <h3 class="h4">
+        {%- render 'render-translation', namespace: 'sections.collection_template', key: 'empty', fallback: 'No products found.' -%}
+      </h3>
+      {%- if filtered_collection -%}
+        <p>
+          {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url }}
+        </p>
+      {%- endif -%}
     </div>
   {%- else -%}
     {%- comment -%} Render collection products list {%- endcomment -%}
