@@ -5,10 +5,8 @@ if (!customElements.get('cart-items')) {
       super();
 
       this.lineItemStatusElement = document.getElementById('shopping-cart-line-item-status');
-      this.currentItemCount = Array.from(this.querySelectorAll('[name="updates[]"]')).reduce(
-        (total, quantityInput) => total + parseInt(quantityInput.value),
-        0,
-      );
+
+      this.setGlobals();
 
       this.debouncedOnChange = debounce((event) => {
         if (event.target != document.getElementById('Cart-note')) {
@@ -17,6 +15,20 @@ if (!customElements.get('cart-items')) {
       }, 300);
 
       this.addEventListener('change', this.debouncedOnChange.bind(this));
+    }
+
+    setGlobals() {
+      this.currentItems = Array.from(this.querySelectorAll('[name="updates[]"]'));
+      this.currentItemCount = this.currentItems.reduce(
+        (total, quantityInput) => total + parseInt(quantityInput.value),
+        0,
+      );
+
+      // create an object with the current values per line so we can revert this if there's an error
+      this.currentItemsObj = {};
+      this.currentItems.forEach(item => {
+        this.currentItemsObj[item.dataset.index] = item.value;
+      });
     }
 
     onChange(event) {
@@ -70,7 +82,14 @@ if (!customElements.get('cart-items')) {
 
         this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
 
-        this.updateLiveRegions(line, parsedState.item_count);
+        // get the new globals
+        if (quantity === 0) {
+          this.setGlobals();
+        }
+        else {
+          this.currentItemsObj[line] = quantity;
+        }
+        console.log('this.currentItemsObj', this.currentItemsObj);
 
         this.getSectionsToRender().forEach((section) => {
           const elementToReplace =
@@ -82,69 +101,33 @@ if (!customElements.get('cart-items')) {
             section.selector,
           );
         } );
+
         document.getElementById(`CartItem-${line}`)
           ?.querySelector(`[name="${name}"]`)
           ?.focus();
         this.disableLoading();
-
       }
       catch (error) {
         debug() && console.log('Error updating the item.', error);
+
+        this.updateLiveRegions(line, quantity);
 
         document.querySelector('[data-cart-loader-active="show"]')?.classList.add('hidden');
         document.querySelector('[data-cart-loader-active="hidden"]')?.classList.remove('hidden');
         document.getElementById('cart-errors').textContent = window.cartStrings.error;
         this.disableLoading();
       }
-
-      // fetch(`${routes.cart_change_url}`, {
-      //   ...fetchConfig(),
-      //   ...{
-      //     body,
-      //   },
-      // })
-      //   .then((response) => {
-      //     return response.text();
-      //   })
-      //   .then((state) => {
-      //     const parsedState = JSON.parse(state);
-      //     console.log('parsedState', parsedState);
-
-      //     this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
-
-      //     this.updateLiveRegions(line, parsedState.item_count);
-
-      //     this.getSectionsToRender().forEach((section) => {
-      //       const elementToReplace =
-      //       document.getElementById(section.id).querySelector(section.selector) ||
-      //       document.getElementById(section.id);
-
-      //       elementToReplace.innerHTML = this.getSectionInnerHTML(
-      //         parsedState.sections[section.section],
-      //         section.selector,
-      //       );
-      //     });
-      //     document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)
-      //       ?.focus();
-      //     this.disableLoading();
-      //   })
-      //   .catch((error) => {
-      //     document.querySelector('[data-cart-loader-active="show"]')?.classList.add('hidden');
-      //     document.querySelector('[data-cart-loader-active="hidden"]')?.classList.remove('hidden');
-      //     document.getElementById('cart-errors').textContent = window.cartStrings.error;
-      //     this.disableLoading();
-      //   });
     }
 
     // show error texts, should not be deleted.
-    updateLiveRegions(line, itemCount) {
-      console.log('updateLiveRegions', line, itemCount);
+    updateLiveRegions(line, quantity) {
+      console.log('updateLiveRegions', line, quantity);
 
-      if (this.currentItemCount === itemCount) {
-        document.getElementById(`Line-item-error-${line}`).querySelector('.cart-item__error-text').innerHTML = window.cartStrings.quantityError.replace('[quantity]',document.getElementById(`Quantity-${line}`).value);
-      }
+      document.getElementById(`Line-item-error-${line}`).querySelector('.cart-item__error-text').innerHTML = window.cartStrings.quantityError.replace('[quantity]',this.currentItemsObj[line]);
+      document.getElementById(`Quantity-${line}`).value = this.currentItemsObj[line];
 
-      this.currentItemCount = itemCount;
+      console.log('this.currentItemsObj', this.currentItemsObj);
+
       this.lineItemStatusElement.setAttribute('aria-hidden', true);
 
       const cartStatus = document.getElementById('cart-live-region-text');

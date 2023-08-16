@@ -34,12 +34,12 @@ const config = {
   },
   scss: {
     files: [
+      './dev/scss/custom/modules/**/*.scss',
+      './dev/scss/custom/components/**/*.scss',
+      './dev/scss/custom/sections/**/*.scss',
       './dev/scss/main/main-base.scss',
       './dev/scss/main/main-components.scss',
       './dev/scss/main/main-utilities.scss',
-      './dev/scss/custom/components/**/*.scss',
-      './dev/scss/custom/modules/**/*.scss',
-      './dev/scss/custom/sections/**/*.scss',
     ],
     main: [
       {
@@ -227,7 +227,7 @@ async function bundle(type, inputOptions, outputOptions) {
     // Notify when a new file is added to the assets folder
     outputOptions.plugins = [...outputOptions.plugins, notifyUpdates(type)];
   } else {
-    // Notify when build startsnpm r
+    // Notify when build
     notify(`Bundling ${type} assets...`);
   }
 

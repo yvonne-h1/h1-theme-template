@@ -12,8 +12,13 @@
 
   <div class="product grid grid-cols-12 gap-x-0 gap-y-base">
 
+    {%- comment -%} Product title {%- endcomment -%}
+    <h1 class="product__title h5 content-wrapper-padding col-span-12 md:hidden">
+      {{ product.title | escape }}
+    </h1>
+
     {% comment %} Left column: Product media {% endcomment %}
-    <div class="product-media relative col-span-12 md:col-span-7 lg:col-span-6">
+    <div class="product-media relative col-span-12 md:col-span-7 lg:col-span-6 2xl:col-span-7">
 
       {%- comment -%} Skiplink so users can go straight to the product info {%- endcomment -%}
       <a class="button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline" href="#ProductInfo">
@@ -24,23 +29,23 @@
         -%}
       </a>
 
-      {%- liquid
+      {%- render 'product-media-slider' -%}
+      {% comment %} {%- liquid
         if section.settings.enable_media_slider == true
-          render 'product-media-slider'
         else
           render 'product-media'
         endif
-      -%}
+      -%} {% endcomment %}
     </div>
 
     {%- comment -%} Right col: Product info {%- endcomment -%}
-    <div id="ProductInfo" class="product__info col-span-12 md:col-span-5 lg:col-span-6">
+    <div id="ProductInfo" class="product__info col-span-12 md:col-span-5 lg:col-span-6 2xl:col-span-5">
       <product-info
-        class="product-info-col flex flex-col gap-y-5 {% if section.settings.enable_sticky_info == true %} product-info-col--sticky sticky top-0 transition-all duration-300{% endif %} px-[var(--content-wrapper-padding)] pt-6"
+        class="product-info-col content-wrapper-padding flex flex-col gap-y-5 bg-gray-50 py-6 md:rounded-md {% if section.settings.enable_sticky_info == true -%}product-info-col--sticky sticky top-4 transition-all duration-300 group-[.header-sticky:not(.header-hidden)]/body:top-20{%- endif -%}"
         data-product-info
       >
         {%- comment -%} Product title {%- endcomment -%}
-        <h1 class="product__title h5" {{ block.shopify_attributes }}>
+        <h1 class="product__title h5 hidden md:block">
           {{ product.title | escape }}
         </h1>
 
@@ -119,6 +124,10 @@
               </p>
             {%- endif -%}
 
+          {%- comment -%} Line break {%- endcomment -%}
+          {%- when 'linebreak' -%}
+            <hr class="my-0 bg-gray-100">
+
           {%- comment -%} Collapsible content {%- endcomment -%}
           {%- when 'collapsible_tab' -%}
 
@@ -182,7 +191,7 @@
                   data-section="{{ product.id }}"
                   data-url="{{ product.url }}"
                   {{ block.shopify_attributes }}>
-                  <div class="flex divide-x">
+                  <div class="flex divide-x-2 divide-gray-100">
                     {%- for option in product.options_with_values -%}
                       {%- liquid
                         # Check if this is a color filter
@@ -414,8 +423,8 @@
               endif
             -%}
 
-            <div class="" {{ block.shopify_attributes }}>
-              <product-form-component class="product-form block">
+            <div class="" {{ block.shopify_attributes }} data-product-form>
+              <product-form-component class="product-form inset-0 top-auto z-fixed block">
                 {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
                   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
                   <input type="hidden" name="quantity" min="1" value="1" readonly>
@@ -426,7 +435,7 @@
                     <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
                   {% endif %}
 
-                  <div class="product-form__buttons mt-4 grid grid-cols-1 items-center gap-2">
+                  <div class="product-form__buttons grid grid-cols-1 items-center gap-2">
                     <button
                       type="submit"
                       name="add"
@@ -465,27 +474,34 @@
         {%- endfor -%}
       </product-info>
     </div>
-
-    {%- comment -%} Product description {%- endcomment -%}
-    {%- if product.description != blank -%}
-      <div class="product__description col-span-12 my-4">
-        <h2 class="h4">
-          {%- render 'render-translation',
-            namespace: 'products.product',
-            key: 'description',
-            fallback: 'Product description'
-          -%}
-        </h2>
-        <div class="rte">
-          {{ product.description }}
-        </div>
-      </div>
-    {%- endif -%}
   </div>
 {%- endcapture -%}
 
+{%- capture product_description -%}
+  {%- comment -%} Product description {%- endcomment -%}
+  {%- if product.description != blank -%}
+    <div class="product__description col-span-12 my-4">
+      <h2 class="h4">
+        {%- render 'render-translation',
+          namespace: 'products.product',
+          key: 'description',
+          fallback: 'Product description'
+        -%}
+      </h2>
+      <div class="rte">
+        {{ product.description }}
+      </div>
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'my-0', content: container_content, content_class: 'px-0 mb-[var(--container-spacing)] md:px-[var(--content-wrapper-padding)]' -%}
+{%- render 'render-container-content', class: 'my-0 z-50 relative', content: container_content, content_class: 'px-0 md:px-8' -%}
+
+{%- if product_description != '' -%}
+  {%- render 'render-container-content', content: product_description -%}
+{%- endif -%}
+
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'main-product.js' | asset_url }}" defer></script>
 
@@ -605,6 +621,10 @@
             "label": "Show badges"
           }
         ]
+      },
+      {
+        "type": "linebreak",
+        "name": "Line break"
       },
       {
         "type": "quantity_selector",

@@ -2,21 +2,14 @@
 {%- liquid
   # Container styles
   render 'import-styles', file_name: 'component-swiper.css'
-  render 'import-styles', file_name: 'module-swiper.css'
-  render 'import-styles', file_name: 'module-swiper-a11y.css'
   render 'import-styles', file_name: 'section-product-recommendations.css'
-  if section.settings.swiper_navigation
-    render 'import-styles', file_name: 'module-swiper-navigation.css'
-  endif
 
   # Styles based on swiper_indication setting
   case section.settings.swiper_indication
     when 'pagination'
       assign swiper_indication_class = ' swiper-pagination-active'
-      render 'import-styles', file_name: 'module-swiper-pagination.css'
     when 'scrollbar'
       assign swiper_indication_class = ' swiper-scrollbar-active'
-      render 'import-styles', file_name: 'module-swiper-scrollbar.css'
     else
       assign swiper_indication_class = ''
   endcase

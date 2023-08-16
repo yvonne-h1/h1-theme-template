@@ -2,16 +2,16 @@
   if (!customElements.get('product-media-slider')) {
     const {
       default: Swiper,
+      A11y,
       Navigation,
       Pagination,
-      Scrollbar,
       Autoplay,
       Thumbs,
     } = await import('swiper');
 
     const { Fancybox } = await import('@fancyapps/ui');
 
-    Swiper.use([Navigation, Pagination, Scrollbar, Autoplay, Thumbs]);
+    Swiper.use([Navigation, A11y, Pagination, Autoplay, Thumbs]);
 
     class ProductMediaSlider extends HTMLElement {
       constructor() {
@@ -44,13 +44,29 @@
         this.swiperThumbs = this.querySelector('[data-product-media-thumbnails-slider]');
         this.swiperThumbsOptions = {
           threshold: 10,
+          a11y: true,
+          observer: true,
           spaceBetween: 8,
           direction: 'horizontal',
-          slidesPerView: 'auto',
+          slidesPerView: 3,
           watchSlidesProgress: true,
           navigation: {
             nextEl: '.swiper-button-thumbnails-next',
             prevEl: '.swiper-button-thumbnails-prev',
+          },
+          breakpoints: {
+            375: {
+              slidesPerView: 3.2,
+            },
+            600: {
+              slidesPerView: 4.2,
+            },
+            768: {
+              slidesPerView: 5.2,
+            },
+            1441: {
+              slidesPerView: 6.2,
+            },
           },
         };
 
@@ -85,23 +101,25 @@
           thumbOptions = {
             thumbs: {
               swiper: this.swiperThumbsInstance,
-              slideThumbActiveClass: 'swiper-slide-thumb-active border-primary',
+              slideThumbActiveClass: 'swiper-slide-thumb-active border-secondary',
             },
           };
         }
 
         // Get initial slide and swiper index
         let initialSlideIndex = 0;
-        const initalVariant = parseInt(this.swiperMain.dataset.productMediaSlider);
+        const initialVariant = parseInt(this.swiperMain.dataset.productMediaSlider);
 
-        if (initalVariant) {
-          const initialSlide = this.matchVariantIdWithSlide(initalVariant);
+        if (initialVariant) {
+          const initialSlide = this.matchVariantIdWithSlide(initialVariant);
           initialSlideIndex = initialSlide ? initialSlide : initialSlideIndex;
         }
 
         // Swiper options
         this.swiperMainOptions = {
           threshold: 10,
+          a11y: true,
+          observer: true,
           direction: 'horizontal',
           initialSlide: initialSlideIndex,
           navigation: {

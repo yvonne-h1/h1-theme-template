@@ -109,7 +109,7 @@
   {%- comment -%} Accesibility text {%- endcomment -%}
   <a
     href="{{ product_link }}"
-    class="product-card__sr-link button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline"
+    class="product-card__sr-link button button--primary sr-only !absolute inset-[3px] bottom-auto z-10 !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline"
     title="{{ product_object.title | escape }}">
     {{- product_object.title | escape -}}
   </a>

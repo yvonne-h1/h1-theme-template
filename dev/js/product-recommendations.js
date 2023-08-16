@@ -66,8 +66,8 @@
                 this.swiperInstance.scrollbar.updateSize();
               }
             })
-            .catch((error) => {
-              console.error(error);
+            .catch((e) => {
+              debug() && console.error(e);
             });
         }
       }

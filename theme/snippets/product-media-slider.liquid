@@ -1,9 +1,5 @@
 {%- comment -%} Import styles for this section {%- endcomment -%}
-{%- liquid
-  render 'import-styles', file_name: 'module-swiper.css', force: true
-  render 'import-styles', file_name: 'module-swiper-navigation.css'
-  render 'import-styles', file_name: 'component-swiper.css'
--%}
+{%- render 'import-styles', file_name: 'component-swiper.css' -%}
 
 {%- liquid
   assign media_content_slider = ''
@@ -134,7 +130,7 @@
 
 {%- comment -%} Out put Media slider {%- endcomment -%}
 {%- if product.media != blank -%}
-  <product-media-slider class="product-media-slider relative block w-full overflow-hidden md:-ml-[var(--content-wrapper-padding)]">
+  <product-media-slider class="product-media-slider relative block w-full overflow-hidden">
     {%- comment -%} Main Slider {%- endcomment -%}
     <div class="product-media-slider__slider relative col-span-12 mb-4 ">
       {%- comment -%} Main slider {%- endcomment -%}
@@ -146,12 +142,12 @@
         </div>
 
         <button
-          class="swiper-button-next right-3 md:right-6"
+          class="product-media-slider__button-next swiper-button-next right-3 md:right-6"
           aria-label="{{ 'accessibility.previous_slide' | t }}">
           {% render 'icons', icon: 'chevron-right', icon_class: 'w-4' %}
         </button>
         <button
-          class="swiper-button-prev left-3 md:left-6"
+          class="product-media-slider__button-prev swiper-button-prev left-3 md:left-6"
           aria-label="{{ 'accessibility.next_slide' | t }}">
           {% render 'icons', icon: 'chevron-left', icon_class: 'w-4' %}
         </button>
@@ -160,8 +156,8 @@
 
     {%- comment -%} Thumbnails slider {%- endcomment -%}
     <div class="relative col-span-12">
-      <div class="product-media-slider__thumbnails relative mx-auto w-auto max-w-xs md:max-w-sm">
-        <div class="swiper mx-14 overflow-hidden md:mx-16" data-product-media-thumbnails-slider>
+      <div class="product-media-slider__thumbnails swiper relative">
+        <div class=" mx-14 overflow-hidden md:mx-16" data-product-media-thumbnails-slider>
           <div class="swiper-wrapper items-center">
             {{- media_content_thumbnails_slider -}}
           </div>

@@ -1,9 +1,5 @@
 {%- comment -%} Import styles for this section {%- endcomment -%}
-{%- liquid
-  render 'import-styles', file_name: 'module-swiper.css', force: true
-  render 'import-styles', file_name: 'module-swiper-navigation.css'
-  render 'import-styles', file_name: 'component-swiper.css'
--%}
+{%- render 'import-styles', file_name: 'component-swiper.css' -%}
 
 {%- comment -%} Divide the media over 2 columns {%- endcomment -%}
 {%- liquid

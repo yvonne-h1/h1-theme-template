@@ -1,10 +1,16 @@
 @layer h1-styles-components {
+  @import '~swiper/modules/a11y/a11y.scss';
+  @import '~swiper/modules/autoplay/autoplay.scss';
+  @import '~swiper/modules/navigation/navigation.scss';
+  @import '~swiper/modules/pagination/pagination.scss';
+  @import '~swiper/modules/scrollbar/scrollbar.scss';
+  @import '~swiper/modules/thumbs/thumbs.scss';
+  @import '~swiper/swiper.scss';
+
   .swiper {
     --swiper-theme-color: theme('colors.text');
     @apply select-none;
 
-    // swiper-button-prev
-    // swiper-button-next
     .swiper-button-prev,
     .swiper-button-next {
       @apply flex
@@ -29,6 +35,9 @@
             @apply scale-110;
           }
         }
+      }
+      &.swiper-button-disabled {
+        @apply pointer-events-auto;
       }
     }
     &-button-prev {

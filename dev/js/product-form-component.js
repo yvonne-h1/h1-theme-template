@@ -33,6 +33,7 @@ if (!customElements.get('product-form-component')) {
       fetch(`${routes.cart_add_url}`, config)
         .then((response) => response.json())
         .then((parsedState) => {
+
           if (parsedState.status == 422) {
           // When quantity error
             this.cartNotification.setActiveElement(document.activeElement);
@@ -56,7 +57,7 @@ if (!customElements.get('product-form-component')) {
           }
         } )
         .catch((e) => {
-          console.error(e);
+          debug() && console.error(e);
         } )
         .finally(() => {
           submitButton.classList.remove('button--loading');

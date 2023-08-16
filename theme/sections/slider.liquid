@@ -10,14 +10,6 @@
 {%- liquid
   if is_slider
     render 'import-styles', file_name: 'component-swiper.css'
-    render 'import-styles', file_name: 'module-swiper.css'
-    render 'import-styles', file_name: 'module-swiper-a11y.css'
-    if section.settings.swiper_navigation
-      render 'import-styles', file_name: 'module-swiper-navigation.css'
-    endif
-    if section.settings.swiper_pagination
-      render 'import-styles', file_name: 'module-swiper-pagination.css'
-    endif
   endif
 -%}
 
