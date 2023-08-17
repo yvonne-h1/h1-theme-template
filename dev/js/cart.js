@@ -29,6 +29,7 @@ if (!customElements.get('cart-items')) {
       this.currentItems.forEach(item => {
         this.currentItemsObj[item.dataset.index] = item.value;
       });
+      console.log('this.currentItemsObj', this.currentItemsObj);
     }
 
     onChange(event) {
@@ -60,6 +61,8 @@ if (!customElements.get('cart-items')) {
     }
 
     async updateQuantity(line, quantity, name) {
+      console.log('line, quantity, name', line, quantity, name);
+
       this.enableLoading(line);
 
       const body = JSON.stringify( {
@@ -88,8 +91,8 @@ if (!customElements.get('cart-items')) {
         }
         else {
           this.currentItemsObj[line] = quantity;
+          console.log('this.currentItemsObj', this.currentItemsObj);
         }
-        console.log('this.currentItemsObj', this.currentItemsObj);
 
         this.getSectionsToRender().forEach((section) => {
           const elementToReplace =
