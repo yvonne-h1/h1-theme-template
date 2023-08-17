@@ -1,38 +1,43 @@
+@use '../../mixins' as *;
+
 @layer h1-styles-components {
-  @import '~swiper/modules/a11y/a11y.scss';
-  @import '~swiper/modules/autoplay/autoplay.scss';
-  @import '~swiper/modules/navigation/navigation.scss';
-  @import '~swiper/modules/pagination/pagination.scss';
-  @import '~swiper/modules/scrollbar/scrollbar.scss';
-  @import '~swiper/modules/thumbs/thumbs.scss';
   @import '~swiper/swiper.scss';
+  @import '~swiper/modules/a11y.scss';
+  @import '~swiper/modules/autoplay.scss';
+  @import '~swiper/modules/navigation.scss';
+  @import '~swiper/modules/pagination.scss';
+  // @import '~swiper/modules/scrollbar.scss';
 
   .swiper {
-    --swiper-theme-color: theme('colors.text');
+    --swiper-theme-color: theme('colors.secondary.DEFAULT');
     @apply select-none;
 
     .swiper-button-prev,
     .swiper-button-next {
-      @apply flex
-      h-10
-      w-10
-      items-center
-      justify-center
-      rounded-full
-      bg-white
-      p-0
-      text-black;
       // Only style buttons if they are not locked
       &:not(.swiper-button-lock) {
-        @apply transition-colors;
+        @apply flex
+        h-10
+        w-10
+        items-center
+        justify-center
+        rounded-full
+        bg-white
+        p-0
+        text-black
+        transition-colors;
         &:after {
           @apply hidden scale-100;
         }
-        &:hover:not([disabled]),
-        &:focus:not([disabled]) {
-          @apply border border-black text-black;
-          .icon {
-            @apply scale-110;
+        &:not([disabled]) {
+          @include states() {
+            @apply border border-black text-black;
+            .icon {
+              @apply scale-110;
+            }
+          }
+          &:focus-visible:not([disabled]) {
+            @apply border-primary-100 bg-primary-100 text-black ring-2 ring-primary-300 ring-offset-2;
           }
         }
       }
@@ -77,7 +82,7 @@
           w-[0.625rem]
           rounded-lg
           bg-[var(--swiper-theme-color)]
-          opacity-50
+          opacity-30
           transition-all;
         // swiper-pagination-bullet-active
         &-active {

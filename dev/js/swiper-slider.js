@@ -61,108 +61,95 @@
   </div>
 </swiper-slider>
  */
+import Swiper from 'swiper';
+import { A11y, Navigation, Pagination, Scrollbar, Autoplay } from 'swiper/modules';
 
-(async () => {
-  if (!customElements.get('swiper-slider')) {
-    const {
-      default: Swiper,
-      A11y,
-      Navigation,
-      Pagination,
-      Scrollbar,
-      Autoplay,
-    } = await import('swiper');
+class SwiperSlider extends HTMLElement {
+  constructor() {
+    super();
 
-    Swiper.use([A11y, Navigation, Pagination, Scrollbar, Autoplay]);
+    this.swiper = this.querySelector('[data-swiper]');
 
-    class SwiperSlider extends HTMLElement {
-      constructor() {
-        super();
-        this.swiper = this.querySelector('[data-swiper]');
+    // Stop when the swiper is not found
+    if (!this.swiper) return;
 
-        // Stop when the swiper is not found
-        if (!this.swiper) {
-          return;
-        }
+    // Default to improve user experience
+    this.swiperOptions = {
+      observer: true,
+      modules: [A11y, Navigation, Pagination, Scrollbar, Autoplay],
+    };
 
-        // Default to improve user experience
+    // Check if we have extra options on the HTML
+    if (this.swiper.dataset.options) {
+      const options = JSON.parse(this.swiper.dataset.options);
+      if (options) {
         this.swiperOptions = {
-          threshold: 10,
+          ...this.swiperOptions,
+          ...options,
         };
-
-        // Check if we have extra options on the HTML
-        if (this.swiper.dataset.options) {
-          const options = JSON.parse(this.swiper.dataset.options);
-          if (options) {
-            this.swiperOptions = {
-              ...this.swiperOptions,
-              ...options,
-            };
-          }
-        }
-
-        // Call swiper with selected swiper element and options
-        this.swiperInstance = new Swiper(this.swiper, this.swiperOptions);
-
-        /**
-         * Listen to extra events when in Shopify editor
-         */
-        if (Shopify.designMode) {
-          // Update the swiper when the section event is triggerd
-          window.addEventListener('shopify:section:load', (event) => {
-            this.swiperInstance.update();
-            if (this.swiperOptions.navigation) {
-              this.swiperInstance.navigation.init();
-              this.swiperInstance.navigation.update();
-            }
-          });
-
-          // When on block select go to the slide in front-end
-          window.addEventListener('shopify:block:select', (event) => {
-            this.swiperInstance.update();
-            if (this.swiperOptions.navigation) {
-              this.swiperInstance.navigation.init();
-              this.swiperInstance.navigation.update();
-            }
-            this.handleBlockSelect(event);
-          });
-
-          // When on block deselect go to the slide in front-end
-          window.addEventListener('shopify:block:deselect', (event) => {
-            this.swiperInstance.update();
-            if (this.swiperOptions.navigation) {
-              this.swiperInstance.navigation.init();
-              this.swiperInstance.navigation.update();
-            }
-            this.handleBlockSelect(event);
-          });
-        }
-      }
-
-      /**
-       * Handles the theme editor block change/edit event
-       * @param {Object} event
-       */
-      handleBlockSelect(event) {
-        // Check if the slide index is set
-        if (!('swiperSlideIndex' in event.target.dataset)) {
-          return;
-        }
-
-        // Set the slide index based on loop settings or not
-        let swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) - 1;
-        if (this.swiperOptions.loop) {
-          swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) + 1;
-        }
-
-        // Slide to slide based on the data attribute from the target
-        const sliderToUpdate = event.target.closest('[data-swiper]');
-        sliderToUpdate.swiper.slideTo(swipeToSlideIndex, 1000);
       }
     }
 
-    window.SwiperSlider = SwiperSlider;
+    // Call swiper with selected swiper element and options
+    this.swiperInstance = new Swiper(this.swiper, this.swiperOptions);
 
-    customElements.define('swiper-slider', SwiperSlider);
+    /**
+         * Listen to extra events when in Shopify editor
+         */
+    if (Shopify.designMode) {
+      // Update the swiper when the section event is triggered
+      window.addEventListener('shopify:section:load', () => {
+        this.swiperInstance.update();
+        if (this.swiperOptions.navigation) {
+          this.swiperInstance.navigation.init();
+          this.swiperInstance.navigation.update();
+        }
+      });
+
+      // When on block select go to the slide in front-end
+      window.addEventListener('shopify:block:select', (event) => {
+        this.swiperInstance.update();
+        if (this.swiperOptions.navigation) {
+          this.swiperInstance.navigation.init();
+          this.swiperInstance.navigation.update();
+        }
+        this.handleBlockSelect(event);
+      });
+
+      // When on block deselect go to the slide in front-end
+      window.addEventListener('shopify:block:deselect', (event) => {
+        this.swiperInstance.update();
+        if (this.swiperOptions.navigation) {
+          this.swiperInstance.navigation.init();
+          this.swiperInstance.navigation.update();
+        }
+        this.handleBlockSelect(event);
+      });
+    }
   }
-})();
+
+  /**
+       * Handles the theme editor block change/edit event
+       * @param {Object} event
+       */
+  handleBlockSelect(event) {
+    // Check if the slide index is set
+    if (!('swiperSlideIndex' in event.target.dataset)) {
+      return;
+    }
+
+    // Set the slide index based on loop settings or not
+    let swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) - 1;
+    if (this.swiperOptions.loop) {
+      swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) + 1;
+    }
+
+    // Slide to slide based on the data attribute from the target
+    const sliderToUpdate = event.target.closest('[data-swiper]');
+    sliderToUpdate.swiper.slideTo(swipeToSlideIndex, 1000);
+  }
+}
+
+if (!customElements.get('swiper-slider')) {
+  customElements.define('swiper-slider', SwiperSlider);
+}

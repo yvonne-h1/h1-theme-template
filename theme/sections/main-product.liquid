@@ -2,7 +2,6 @@
 {%- liquid
   render 'import-styles', file_name: 'component-quantity-input.css', force: true
   render 'import-styles', file_name: 'section-main-product.css'
-  render 'import-styles', file_name: 'module-fancybox.css'
   render 'import-styles', file_name: 'component-fancybox.css'
 -%}
 
@@ -29,13 +28,7 @@
         -%}
       </a>
 
-      {%- render 'product-media-slider' -%}
-      {% comment %} {%- liquid
-        if section.settings.enable_media_slider == true
-        else
-          render 'product-media'
-        endif
-      -%} {% endcomment %}
+      {%- render 'product-media-swiper' -%}
     </div>
 
     {%- comment -%} Right col: Product info {%- endcomment -%}
@@ -357,28 +350,10 @@
                 {%- render 'import-styles', file_name: 'component-form.css' -%}
 
                 {%- comment -%} Show variants in dropdowns {%- endcomment -%}
-                <variant-selects class="product__variant-selector product__variant-selector--select block no-js:hidden" data-section="{{ product.id }}" data-url="{{ product.url }}" {{ block.shopify_attributes }}>
-                  {%- for option in product.options_with_values -%}
-                    <div class="field">
-                      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Option-{{ product.id }}-{{ forloop.index0 }}">
-                        {{ option.name }}
-                      </label>
-                      <select id="Option-{{ product.id }}-{{ forloop.index0 }}"
-                        class="select__select"
-                        name="options[{{ option.name | escape }}]"
-                      >
-                        {%- for value in option.values -%}
-                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
-                            {{ value }}
-                          </option>
-                        {%- endfor -%}
-                      </select>
-                    </div>
-                  {%- endfor -%}
-                  <script type="application/json">
-                    {{ product.variants | json }}
-                  </script>
-                </variant-selects>
+                {%- render 'product-variant-select',
+                  product: product,
+                  block: block
+                -%}
               {%- endif -%}
             {%- endif -%}
 
@@ -423,52 +398,67 @@
               endif
             -%}
 
-            <div class="" {{ block.shopify_attributes }} data-product-form>
-              <product-form-component class="product-form inset-0 top-auto z-fixed block">
-                {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
-                  <input type="hidden" name="quantity" min="1" value="1" readonly>
-                  <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}" readonly>
-                  {% if settings.enable_pre_order and
-                    product.selected_or_first_available_variant.inventory_quantity <= 0 and
-                    product.selected_or_first_available_variant.inventory_policy == 'continue'  %}
-                    <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
-                  {% endif %}
+            <div class="group/add-to-cart" {{ block.shopify_attributes }} data-product-form>
+              <div class="
+                group-[.is-fixed]/add-to-cart:fixed
+                group-[.is-fixed]/add-to-cart:inset-0
+                group-[.is-fixed]/add-to-cart:top-auto
+                group-[.is-fixed]/add-to-cart:z-fixed group-[.is-fixed]/add-to-cart:bg-white group-[.is-fixed]/add-to-cart:p-4 group-[.is-fixed]/add-to-cart:drop-shadow-[0_1px_15px_rgba(0,0,0,0.15)]" data-product-form-inner>
+                <product-form-component class="product-form block">
+                  {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
+                    <input type="hidden" name="quantity" min="1" value="1" readonly>
+                    <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}" readonly>
+                    {% if settings.enable_pre_order and
+                      product.selected_or_first_available_variant.inventory_quantity <= 0 and
+                      product.selected_or_first_available_variant.inventory_policy == 'continue'  %}
+                      <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+                    {% endif %}
 
-                  <div class="product-form__buttons grid grid-cols-1 items-center gap-2">
-                    <button
-                      type="submit"
-                      name="add"
-                      aria-label="Add"
-                      class="button button--lg button--primary w-full"
-                      data-track-add-to-cart
-                      {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
-                      data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"
-                      {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}
-                    >
-                      {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
-                      <span data-add-to-cart-button-text>
-                        {%- if product.selected_or_first_available_variant.available -%}
-                          {%- render 'render-translation',
-                            namespace: "products.product",
-                            key: "add_to_cart",
-                            fallback: "Add to cart"
-                          -%}
-                        {%- else -%}
-                          {%- render 'render-translation',
-                            namespace: "products.product",
-                            key: "sold_out",
-                            fallback: "Sold out"
-                          -%}
-                        {%- endif -%}
-                      </span>
-                    </button>
-                    {%- if block.settings.show_dynamic_checkout -%}
-                      {{ form | payment_button }}
-                    {%- endif -%}
-                  </div>
-                {%- endform -%}
-              </product-form-component>
+                    {%- comment -%} Show variants in dropdowns for the fixed 'add to cart'{%- endcomment -%}
+                    <div class="hidden group-[.is-fixed]/add-to-cart:block">
+                      {%- render 'product-variant-select',
+                        product: product,
+                        block: block,
+                        class: 'flex gap-base'
+                        -%}
+                    </div>
+
+                    <div class="product-form__buttons grid grid-cols-1 items-center gap-2">
+                      <button
+                        type="submit"
+                        name="add"
+                        aria-label="Add"
+                        class="button button--lg button--primary w-full"
+                        data-track-add-to-cart
+                        {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
+                        data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"
+                        {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}
+                      >
+                        {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
+                        <span data-add-to-cart-button-text>
+                          {%- if product.selected_or_first_available_variant.available -%}
+                            {%- render 'render-translation',
+                              namespace: "products.product",
+                              key: "add_to_cart",
+                              fallback: "Add to cart"
+                            -%}
+                          {%- else -%}
+                            {%- render 'render-translation',
+                              namespace: "products.product",
+                              key: "sold_out",
+                              fallback: "Sold out"
+                            -%}
+                          {%- endif -%}
+                        </span>
+                      </button>
+                      {%- if block.settings.show_dynamic_checkout -%}
+                        {{ form | payment_button }}
+                      {%- endif -%}
+                    </div>
+                  {%- endform -%}
+                </product-form-component>
+              </div>
             </div>
           {%- endcase -%}
         {%- endfor -%}

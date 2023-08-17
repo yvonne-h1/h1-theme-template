@@ -30,9 +30,9 @@
     {% case media.media_type %}
       {%- when 'image' -%}
         <a
-          class="product-media-slider__item relative block w-full"
+          class="product-media-swiper__item relative block w-full"
           href="{{ media | image_url }}"
-          data-fancybox="product-media-slider"
+          data-fancybox="product-media-swiper"
           data-animated="false"
         >
           {%- render 'responsive-image',
@@ -48,13 +48,13 @@
           {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute right-4 bottom-4 md:hidden pointer-events-none' -%}
         </a>
       {%- when 'model' -%}
-        <div class="product-media-slider__item product-media-slider__item--model relative mx-auto block aspect-square w-full max-w-lg">
+        <div class="product-media-swiper__item product-media-swiper__item--model relative mx-auto block aspect-square w-full max-w-lg">
           {{ media | media_tag: image_size: "2048x", toggleable: true, class: 'absolute inset-0 w-full h-full' }}
         </div>
       {%- when 'video' -%}
         <div
-          class="product-media-slider__item product-media-slider__item--video relative mx-auto block aspect-square w-full max-w-lg"
-          data-fancybox="product-media-slider"
+          class="product-media-swiper__item product-media-swiper__item--video relative mx-auto block aspect-square w-full max-w-lg"
+          data-fancybox="product-media-swiper"
           data-src="{{ media.sources.last.url }}"
         >
           {{ media | media_tag: image_size: "2048x", autoplay: false, loop: section.settings.enable_video_looping, controls: true, preload: "none", loading: "lazy", class: "absolute inset-0 w-full h-full" }}
@@ -73,7 +73,7 @@
           {% endif %}
         {%- endcapture -%}
         <div
-          class="product-media-slider__item product-media-slider__item--external-video relative mx-auto block aspect-square w-full max-w-lg"
+          class="product-media-swiper__item product-media-swiper__item--external-video relative mx-auto block aspect-square w-full max-w-lg"
           {{ host_attributes }}
         >
           {%- if media.host == 'youtube' -%}
@@ -99,7 +99,7 @@
 
   {%- comment -%} Get media for the thumbnails slider {%- endcomment -%}
   {%- capture media_content_thumbnails -%}
-    <div class="product-media-slider__item">
+    <div class="product-media-swiper__item">
       {%- liquid
         assign image_object = media
         if media.media_type != 'image'
@@ -122,7 +122,8 @@
 
   {%- capture media_content_thumbnails_slider -%}
     {{ media_content_thumbnails_slider }}
-    <div class="swiper-slide relative w-16 cursor-pointer border border-transparent states:border-primary-200 lg:w-20">
+    <div class="swiper-slide relative w-16 cursor-pointer rounded-md border-2 border-transparent
+      states:border-gray-200 lg:w-20">
       {{ media_content_thumbnails }}
     </div>
   {%- endcapture -%}
@@ -130,55 +131,44 @@
 
 {%- comment -%} Out put Media slider {%- endcomment -%}
 {%- if product.media != blank -%}
-  <product-media-slider class="product-media-slider relative block w-full overflow-hidden">
+  <product-media-swiper class="product-media-swiper relative flex h-full flex-col justify-between">
     {%- comment -%} Main Slider {%- endcomment -%}
-    <div class="product-media-slider__slider relative col-span-12 mb-4 ">
+    <div class="product-media-swiper__slider relative col-span-12 mb-4">
       {%- comment -%} Main slider {%- endcomment -%}
       <div
-        class="swiper min-h-0 min-w-0 overflow-hidden"
-        data-product-media-slider="{{ product.selected_or_first_available_variant.id }}">
+        class="swiper"
+        data-product-media-swiper="{{ product.selected_or_first_available_variant.id }}">
         <div class="swiper-wrapper items-center">
           {{- media_content_slider -}}
         </div>
 
+        {% comment %} Navigation buttons {% endcomment %}
         <button
-          class="product-media-slider__button-next swiper-button-next right-3 md:right-6"
+          class="product-media-swiper__button-prev swiper-button-prev left-3 md:left-6"
           aria-label="{{ 'accessibility.previous_slide' | t }}">
-          {% render 'icons', icon: 'chevron-right', icon_class: 'w-4' %}
+          {% render 'icons', icon: 'chevron-left', icon_class: 'w-4' %}
         </button>
         <button
-          class="product-media-slider__button-prev swiper-button-prev left-3 md:left-6"
+          class="product-media-swiper__button-next swiper-button-next right-3 md:right-6"
           aria-label="{{ 'accessibility.next_slide' | t }}">
-          {% render 'icons', icon: 'chevron-left', icon_class: 'w-4' %}
+          {% render 'icons', icon: 'chevron-right', icon_class: 'w-4' %}
         </button>
       </div>
     </div>
 
     {%- comment -%} Thumbnails slider {%- endcomment -%}
-    <div class="relative col-span-12">
-      <div class="product-media-slider__thumbnails swiper relative">
-        <div class=" mx-14 overflow-hidden md:mx-16" data-product-media-thumbnails-slider>
-          <div class="swiper-wrapper items-center">
-            {{- media_content_thumbnails_slider -}}
-          </div>
+    <div class="product-media-swiper__thumbnails relative col-span-12 md:pr-[var(--content-wrapper-padding)]">
+      <div class="swiper" data-product-media-thumbnails-slider>
+        <div class="swiper-wrapper items-center">
+          {{- media_content_thumbnails_slider -}}
         </div>
-        <button
-          class="swiper-button-next swiper-button-thumbnails-next right-0 md:right-2"
-          aria-label="{{ 'accessibility.previous_slide' | t }}">
-          {%- render 'icons', icon: 'chevron-right', icon_class: 'w-3' -%}
-        </button>
-        <button
-          class="swiper-button-prev swiper-button-thumbnails-prev left-0 md:left-2"
-          aria-label="{{ 'accessibility.next_slide' | t }}">
-          {%- render 'icons', icon: 'chevron-left', icon_class: 'w-3' -%}
-        </button>
       </div>
     </div>
-  </product-media-slider>
+  </product-media-swiper>
 {%- endif -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
-<script src="{{ 'product-media-slider.js' | asset_url }}" type="module"></script>
+<script src="{{ 'product-media-swiper.js' | asset_url }}" type="module"></script>
 
 {%- comment -%} Import product media in design mode {%- endcomment -%}
 {%- if request.design_mode -%}

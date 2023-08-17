@@ -1,0 +1,42 @@
+{% comment %}
+  {%- render 'product-variant-select',
+    product: product,
+    block: block
+  -%}
+{% endcomment %}
+
+<variant-selects
+  class="product__variant-selector product__variant-selector--select block {{ class }}"
+  data-section="{{ product.id }}"
+  data-url="{{ product.url }}"
+  {{ block.shopify_attributes }}>
+  {%- for option in product.options_with_values -%}
+    <div class="field">
+      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Option-{{ product.id }}-{{ forloop.index0 }}">
+        {{ option.name }}
+      </label>
+      <div class="select relative">
+        <select
+          id="Option-{{ product.id }}-{{ forloop.index0 }}"
+          class="select__select"
+          name="options[{{ option.name | escape }}]">
+          {%- for value in option.values -%}
+            <option
+              value="{{ value | escape }}"
+              {% if option.selected_value == value %}
+                selected="selected"
+              {% endif %}>
+              {{ value }}
+            </option>
+          {%- endfor -%}
+        </select>
+        <span class="select__select-icon">
+          {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+        </span>
+      </div>
+    </div>
+  {%- endfor -%}
+  <script type="application/json">
+    {{ product.variants | json }}
+  </script>
+</variant-selects>

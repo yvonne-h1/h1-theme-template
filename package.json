@@ -33,7 +33,7 @@
     "js-cookie": "^3.0.1",
     "luxon": "^3.2.1",
     "shopify-cli": "^1.0.11",
-    "swiper": "^8.4.5"
+    "swiper": "^10.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-eslint": "^9.0.3",

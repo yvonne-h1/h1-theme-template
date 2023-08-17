@@ -1,5 +1,9 @@
+@use '../../mixins' as *;
+
 @layer h1-styles-components {
-  .fancybox__container.image-zoom {
+  @import '~@fancyapps/ui/src/Fancybox/Fancybox.scss';
+
+  .fancybox__container {
     @apply text-inherit;
     .fancybox__backdrop {
       @apply bg-white;
@@ -8,7 +12,7 @@
       @apply static;
     }
     .fancybox__toolbar {
-      @apply bg-transparent text-inherit;
+      @apply bg-none text-inherit;
       &__items {
         .fancybox__button--thumbs,
         .fancybox__button--zoom,
@@ -18,29 +22,63 @@
         }
       }
     }
-    .fancybox__counter,
-    .fancybox__thumbs {
+    .fancybox__counter {
       @apply hidden;
+    }
+    .fancybox__thumbs .carousel__slide {
+      @apply transition-all;
+      &:not(.is-nav-selected) {
+        @apply opacity-50;
+        @include states() {
+          @apply scale-110 opacity-100;
+        }
+      }
+      .fancybox__thumb {
+        @apply pt-[100%];
+        &:after {
+          @apply content-none;
+        }
+      }
     }
     .carousel__button {
       @apply shadow-none;
       svg {
-        @apply filter-none;
+        @apply w-4 filter-none;
       }
-    }
-    .carousel__button.is-close,
-    .fancybox__button--close {
-      @apply fixed right-4 top-4 h-12 w-12 rounded-full border border-gray-200 bg-gray-200 shadow-none transition-all;
-      svg {
-        @apply h-4 w-4 text-inherit filter-none transition-all;
-      }
-      &:hover {
-        @apply border border-gray-700 bg-gray-700 text-white;
-        svg {
-          @apply scale-125;
+      &.is-next,
+      &.is-prev,
+      &.fancybox__button--close {
+        @apply h-12
+        w-12
+        rounded-full
+        border
+        border-solid
+        border-black
+        shadow-none
+        transition-all;
+        &:focus-visible {
+          @apply border-primary-100 bg-primary-100 text-black ring-2 ring-primary-300 ring-offset-2;
+        }
+        @include states() {
+          @apply border bg-primary text-white;
+          svg {
+            @apply scale-110;
+          }
         }
       }
+      &.fancybox__button--close {
+        @apply fixed
+        right-4
+        top-4;
+      }
+      &.is-next {
+        @apply right-4;
+      }
+      &.is-prev {
+        @apply left-4;
+      }
     }
+
     .fancybox__carousel {
       .fancybox__slide {
         @apply p-0;
@@ -67,28 +105,6 @@
             }
           }
         }
-      }
-    }
-    .fancybox__nav {
-      @apply fixed top-2/4 w-full;
-      .carousel__button.is-next,
-      .carousel__button.is-prev {
-        @apply bottom-0 top-0 h-12 w-12 rounded-full border border-gray-200 bg-gray-200 shadow-none transition-all;
-        svg {
-          @apply h-4 w-4 text-inherit filter-none transition-all;
-        }
-        &:hover {
-          @apply border border-gray-700 bg-gray-700 text-white;
-          svg {
-            @apply scale-125;
-          }
-        }
-      }
-      .carousel__button.is-next {
-        @apply right-4;
-      }
-      .carousel__button.is-prev {
-        @apply left-4;
       }
     }
   }
