@@ -67,7 +67,7 @@ if (!customElements.get('quick-shop')) {
       const submitButton = productForm.querySelector('[type="submit"]');
 
       hiddenId.value = variantId;
-      hiddenInventoryQty.value = inventoryQuantity;
+      if (hiddenInventoryQty) hiddenInventoryQty.value = inventoryQuantity;
       submitButton.click();
     }
   }

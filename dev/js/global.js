@@ -133,7 +133,7 @@ if (!customElements.get('quantity-input')) {
   class QuantityInput extends HTMLElement {
     constructor() {
       super();
-      this.input = this.querySelector('input');
+      this.input = this.querySelector('[data-qty-input]');
       this.changeEvent = new Event('change', {
         bubbles: true,
       } );

@@ -128,12 +128,8 @@
                   {%- comment -%} Loading animation {%- endcomment -%}
                   <div
                     class="cart__loader absolute right-4 top-1/2 z-10 hidden w-6 -translate-y-1/2 md:right-0"
-                    data-cart-loader-active="show"
-                  >
-                    {%- render 'icons',
-                      icon: 'spinner',
-                      icon_class: 'w-6 animate-spin'
-                    -%}
+                    data-cart-loader-active="show">
+                    {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
                   </div>
 
                   <p class="cart__totals-subtotal-value font-body text-base leading-7" data-cart-loader-active="hidden">

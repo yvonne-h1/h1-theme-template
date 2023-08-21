@@ -2,6 +2,9 @@ class VariantSelects extends HTMLElement {
   constructor() {
     super();
     this.addEventListener('change', this.onVariantChange);
+
+    this.productFormId = `#product-form-${this.dataset.productId}`;
+    this.priceId = `price-${this.dataset.productId}`;
   }
 
   onVariantChange() {
@@ -54,7 +57,7 @@ class VariantSelects extends HTMLElement {
   updateMedia() {
     if (!this.currentVariant || !this.currentVariant?.featured_media) return;
     const newMedia = document.querySelector(
-      `[data-media-id="${this.dataset.section}-${this.currentVariant.featured_media.id}"]`,
+      `[data-media-id="${this.dataset.productId}-${this.currentVariant.featured_media.id}"]`,
     );
     if (!newMedia) return;
     const parent = newMedia.parentElement;
@@ -71,9 +74,7 @@ class VariantSelects extends HTMLElement {
   }
 
   updateVariantInput() {
-    const productForms = document.querySelectorAll(
-      `#product-form-${this.dataset.section}, #product-form-installment`,
-    );
+    const productForms = document.querySelectorAll(this.productFormId, '#product-form-installment');
     productForms.forEach((productForm) => {
       const input = productForm.querySelector('input[name="id"]');
       input.value = this.currentVariant.id;
@@ -84,31 +85,27 @@ class VariantSelects extends HTMLElement {
   }
 
   renderProductInfo() {
-    fetch(
-      `${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`,
-    )
+    const url = `${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`;
+
+    fetch(url)
       .then((response) => response.text())
       .then((responseText) => {
-        const id = `price-${this.dataset.section}`;
+
         const html = new DOMParser().parseFromString(responseText, 'text/html');
-        const destination = document.getElementById(id);
-        const source = html.getElementById(id);
+        const destination = document.getElementById(this.priceId);
+        const source = html.getElementById(this.priceId);
 
         if (source && destination) destination.innerHTML = source.innerHTML;
 
-        document.getElementById(`price-${this.dataset.section}`)?.classList.remove('hidden');
+        document.getElementById(this.priceId)?.classList.remove('hidden');
         if (this.currentVariant) {
           this.toggleAddButton(!this.currentVariant.available, window.variantStrings.soldOut);
         }
-
         // Update the inventory quantity hidden input
-        const inventoryQtyDestination = document
-          .querySelector(`#product-form-${this.dataset.section}`)
-          .querySelector('input[name="inventory_quantity"]');
-        const inventoryQtySource = html
-          .querySelector(`#product-form-${this.dataset.section}`)
-          .querySelector('input[name="inventory_quantity"]');
-        inventoryQtyDestination.value = inventoryQtySource.value;
+        const inventoryQtyDestination = document.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
+        const inventoryQtySource = html.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
+        if (inventoryQtyDestination) inventoryQtyDestination.value = inventoryQtySource.value;
+
       });
   }
 
@@ -120,10 +117,8 @@ class VariantSelects extends HTMLElement {
    * @returns {void}
    */
   toggleAddButton(disable = true, text, modifyClass = true) {
-    const addButton = document
-      .getElementById(`product-form-${this.dataset.section}`)
-      ?.querySelector('[name="add"]');
-    const addButtonText = addButton.querySelector('[data-add-to-cart-button-text]');
+    const addButton = document.getElementById(this.productFormId)?.querySelector('[name="add"]');
+    const addButtonText = addButton?.querySelector('[data-add-to-cart-button-text]');
 
     if (!addButton || !addButtonText) return;
 
@@ -140,17 +135,15 @@ class VariantSelects extends HTMLElement {
   }
 
   setUnavailable() {
-    const addButton = document
-      .getElementById(`product-form-${this.dataset.section}`)
-      ?.querySelector('[name="add"]');
+    const addButton = document.getElementById(this.productFormId)?.querySelector('[name="add"]');
     if (!addButton) return;
+
     addButton.textContent = window.variantStrings.unavailable;
-    document.getElementById(`price-${this.dataset.section}`)?.classList.add('hidden');
+    document.getElementById(this.priceId)?.classList.add('hidden');
   }
 
   getVariantData() {
-    this.variantData =
-      this.variantData || JSON.parse(this.querySelector('[type="application/json"]').textContent);
+    this.variantData = this.variantData || JSON.parse(this.querySelector('[type="application/json"]').textContent);
     return this.variantData;
   }
 }
@@ -173,8 +166,8 @@ class VariantRadios extends VariantSelects {
   }
 
   updateOptions() {
-    const fieldsets = Array.from(this.querySelectorAll('fieldset'));
-    this.options = fieldsets.map((fieldset) => {
+    const fieldsetArray = Array.from(this.querySelectorAll('fieldset'));
+    this.options = fieldsetArray.map((fieldset) => {
       return Array.from(fieldset.querySelectorAll('input')).find((radio) => radio.checked).value;
     });
   }

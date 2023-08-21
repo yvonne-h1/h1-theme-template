@@ -24,7 +24,7 @@
       role="dialog"
       tabindex="-1"
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
-      <cart-items class="cart-items group/cart-items{% if cart == empty %} cart-is-empty{% endif %}">
+      <cart-items class="cart-items group/cart-items h-full {% if cart == empty %}cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
         <div
           class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen"
@@ -109,7 +109,7 @@
 
           {%- comment -%} Cart footer {%- endcomment -%}
           <footer
-            class="cart-drawer__footer sticky bottom-0 left-0 right-0 z-20 mt-auto border-t bg-white p-4"
+            class="cart-drawer__footer sticky bottom-0 left-0 right-0 z-20 mt-auto justify-self-end border-t bg-white p-4"
             id="main-cart-footer"
             data-id="{{ section.id }}">
             {%- comment -%} Cart subtotal {%- endcomment -%}

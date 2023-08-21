@@ -7,6 +7,7 @@ if (!customElements.get('product-form-component')) {
       this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
       this.cartNotification = document.querySelector('cart-notification');
       this.cartDrawer = document.querySelector('cart-drawer');
+      this.cartItems = document.querySelector('cart-items');
     }
 
     onSubmitHandler(evt) {
@@ -33,11 +34,12 @@ if (!customElements.get('product-form-component')) {
       fetch(`${routes.cart_add_url}`, config)
         .then((response) => response.json())
         .then((parsedState) => {
-
           if (parsedState.status == 422) {
-          // When quantity error
-            this.cartNotification.setActiveElement(document.activeElement);
-            this.cartNotification.renderQuantityError(formData.get('inventory_quantity'));
+            // When quantity error
+            this.cartNotification?.setActiveElement(document.activeElement);
+            this.cartNotification?.renderQuantityError(formData.get('inventory_quantity'));
+
+            this.cartItems?.updateAfterError();
             return;
           }
 
@@ -45,7 +47,7 @@ if (!customElements.get('product-form-component')) {
 
           switch (submitButton.dataset.addToCartBehavior) {
           case 'open_cart_drawer':
-          // Set timeout to force animation. Because content is just updated with renderContents
+            // Set timeout to force animation. Because content is just updated with renderContents
             setTimeout(() => {
               this.cartDrawer.open();
             } );

@@ -180,7 +180,8 @@
                 {%- comment -%} Show variants as radio buttons {%- endcomment -%}
                 <variant-radios
                   class="product__variant-selector product__variant-selector--buttons block no-js:hidden"
-                  data-section="{{ product.id }}"
+                  data-section="{{ section.id }}"
+                  data-product-id="{{ product.id }}"
                   data-url="{{ product.url }}"
                   {{ block.shopify_attributes }}>
                   <div class="flex divide-x-2 divide-gray-100">
@@ -408,10 +409,12 @@
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
                     <input type="hidden" name="quantity" min="1" value="1" readonly>
                     <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}" readonly>
+
+                    {% comment %} Pre-orders {% endcomment %}
                     {% if settings.enable_pre_order and
                       product.selected_or_first_available_variant.inventory_quantity <= 0 and
                       product.selected_or_first_available_variant.inventory_policy == 'continue'  %}
-                      <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+                      <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}" readonly>
                     {% endif %}
 
                     {%- comment -%} Show variants in dropdowns for the fixed 'add to cart'{%- endcomment -%}

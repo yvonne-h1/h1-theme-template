@@ -6,8 +6,6 @@ if (!customElements.get('cart-items')) {
 
       this.lineItemStatusElement = document.getElementById('shopping-cart-line-item-status');
 
-      this.setGlobals();
-
       this.debouncedOnChange = debounce((event) => {
         if (event.target != document.getElementById('Cart-note')) {
           this.onChange(event);
@@ -15,21 +13,6 @@ if (!customElements.get('cart-items')) {
       }, 300);
 
       this.addEventListener('change', this.debouncedOnChange.bind(this));
-    }
-
-    setGlobals() {
-      this.currentItems = Array.from(this.querySelectorAll('[name="updates[]"]'));
-      this.currentItemCount = this.currentItems.reduce(
-        (total, quantityInput) => total + parseInt(quantityInput.value),
-        0,
-      );
-
-      // create an object with the current values per line so we can revert this if there's an error
-      this.currentItemsObj = {};
-      this.currentItems.forEach(item => {
-        this.currentItemsObj[item.dataset.index] = item.value;
-      });
-      console.log('this.currentItemsObj', this.currentItemsObj);
     }
 
     onChange(event) {
@@ -78,58 +61,77 @@ if (!customElements.get('cart-items')) {
           ...{ body },
         } );
 
-        if (!response.ok) throw new Error(response.status);
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+
+        this.parsedState = await response.json();
 
         // On success:
-        const parsedState = await response.json();
+        this.classList.toggle('cart-is-empty', this.parsedState.item_count === 0);
 
-        this.classList.toggle('cart-is-empty', parsedState.item_count === 0);
-
-        // get the new globals
-        if (quantity === 0) {
-          this.setGlobals();
-        }
-        else {
-          this.currentItemsObj[line] = quantity;
-          console.log('this.currentItemsObj', this.currentItemsObj);
-        }
-
-        this.getSectionsToRender().forEach((section) => {
-          const elementToReplace =
-          document.getElementById(section.id).querySelector(section.selector) ||
-          document.getElementById(section.id);
-
-          elementToReplace.innerHTML = this.getSectionInnerHTML(
-            parsedState.sections[section.section],
-            section.selector,
-          );
-        } );
-
-        document.getElementById(`CartItem-${line}`)
-          ?.querySelector(`[name="${name}"]`)
-          ?.focus();
-        this.disableLoading();
+        // render the sections
+        this.updateContent(this.parsedState, line, name);
       }
       catch (error) {
         debug() && console.log('Error updating the item.', error);
 
-        this.updateLiveRegions(line, quantity);
-
         document.querySelector('[data-cart-loader-active="show"]')?.classList.add('hidden');
         document.querySelector('[data-cart-loader-active="hidden"]')?.classList.remove('hidden');
-        document.getElementById('cart-errors').textContent = window.cartStrings.error;
+        // document.getElementById('cart-errors').textContent = window.cartStrings.error;
+
+        // Do a new fetch to the cart so you get the correct values of the item that had errors
+        if (error.toString().includes('422')) {
+          this.updateAfterError(line, name);
+        }
+      }
+      finally {
         this.disableLoading();
       }
     }
 
-    // show error texts, should not be deleted.
-    updateLiveRegions(line, quantity) {
-      console.log('updateLiveRegions', line, quantity);
+    async updateAfterError(line, name) {
+      // Do a new fetch to the cart so you get the correct values of the item that had errors
+      const body = JSON.stringify( {
+        sections: this.getSectionsToRender().map((section) => section.section),
+        sections_url: window.location.pathname,
+      } );
+      const response = await fetch(routes.cart_update_url, {
+        ...fetchConfig('javascript'),
+        ...{ body },
+      } );
 
-      document.getElementById(`Line-item-error-${line}`).querySelector('.cart-item__error-text').innerHTML = window.cartStrings.quantityError.replace('[quantity]',this.currentItemsObj[line]);
-      document.getElementById(`Quantity-${line}`).value = this.currentItemsObj[line];
+      const parsedState = await response.json();
+      const lineItemWithError = parsedState.items[line -1];
 
-      console.log('this.currentItemsObj', this.currentItemsObj);
+      // update the sections
+      this.updateContent(parsedState, line, name);
+
+      // show the error
+      this.showLineItemError(line, lineItemWithError.quantity);
+    }
+
+    updateContent(parsedState, line, name) {
+      this.getSectionsToRender().forEach((section) => {
+        const elementToReplace =
+        document.getElementById(section.id).querySelector(section.selector) ||
+        document.getElementById(section.id);
+
+        elementToReplace.innerHTML = this.getSectionInnerHTML(
+          parsedState.sections[section.section],
+          section.selector,
+        );
+      } );
+
+      document.getElementById(`CartItem-${line}`)
+        ?.querySelector(`[name="${name}"]`)
+        ?.focus();
+    }
+
+    // show error text for the line item
+    showLineItemError(line, quantity) {
+      document.getElementById(`Line-item-error-${line}`).querySelector('.cart-item__error-text').innerHTML = window.cartStrings.quantityError.replace('[quantity]',quantity);
+      document.getElementById(`Quantity-${line}`).value = quantity;
 
       this.lineItemStatusElement.setAttribute('aria-hidden', true);
 

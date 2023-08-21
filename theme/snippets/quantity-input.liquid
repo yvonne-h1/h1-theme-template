@@ -45,7 +45,6 @@
     {%- endif -%}
   </button>
 
-  {% comment %} PDP {% endcomment %}
   <input
     class="quantity__input h-10 w-7 appearance-none border-none bg-transparent p-0 text-center text-sm text-current opacity-80 {{ state_classes }}"
     type="number"
@@ -64,6 +63,7 @@
       -%}
     "
     data-index="{{ id }}"
+    data-qty-input
     style="-moz-appearance: textfield;">
 
   <button class="quantity__button {{ button_classes }} " name="plus" type="button">
