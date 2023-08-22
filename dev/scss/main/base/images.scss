@@ -5,4 +5,8 @@
   .svg svg {
     @apply m-auto max-h-full max-w-full fill-current;
   }
+  img {
+    max-inline-size: 100%;
+    block-size: auto;
+  }
 }

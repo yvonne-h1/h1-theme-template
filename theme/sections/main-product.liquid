@@ -108,7 +108,7 @@
 
           {%- comment -%} Line break {%- endcomment -%}
           {%- when 'linebreak' -%}
-            <hr class="my-0 bg-gray-100">
+            <hr class="block-line-break my-0 bg-gray-100">
 
           {%- comment -%} Collapsible content {%- endcomment -%}
           {%- when 'collapsible_tab' -%}
@@ -348,37 +348,6 @@
               {%- endif -%}
             {%- endif -%}
 
-            <noscript>
-              <div class="product-form__input field{% if product.has_only_default_variant %} hidden{% endif %}">
-                <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ product.id }}">
-                  {%- render 'render-translation',
-                    namespace: "products.product",
-                    key: "product_variants",
-                    fallback: "Variants"
-                  -%}
-                </label>
-                <select name="id" id="Variants-{{ product.id }}" class="select__select">
-                  {%- for variant in product.variants -%}
-                    <option
-                      {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
-                      {% if variant.available == false %}disabled{% endif %}
-                      value="{{ variant.id }}"
-                    >
-                      {{ variant.title }}
-                      {%- if variant.available == false %} -
-                        {%- render 'render-translation',
-                          namespace: "products.product",
-                          key: "sold_out",
-                          fallback: "Sold out"
-                        -%}
-                      {% endif %}
-                      - {{ variant.price  | money_with_currency | strip_html }}
-                    </option>
-                  {%- endfor -%}
-                </select>
-              </div>
-            </noscript>
-
           {%- comment -%} Buy buttons {%- endcomment -%}
           {%- when 'buy_buttons' -%}
 
@@ -455,6 +424,37 @@
             </div>
           {%- endcase -%}
         {%- endfor -%}
+
+        <noscript>
+          <div class="product-form__input field{% if product.has_only_default_variant %} hidden{% endif %}">
+            <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ product.id }}">
+              {%- render 'render-translation',
+                namespace: "products.product",
+                key: "product_variants",
+                fallback: "Variants"
+              -%}
+            </label>
+            <select name="id" id="Variants-{{ product.id }}" class="select__select">
+              {%- for variant in product.variants -%}
+                <option
+                  {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                  {% if variant.available == false %}disabled{% endif %}
+                  value="{{ variant.id }}"
+                >
+                  {{ variant.title }}
+                  {%- if variant.available == false %} -
+                    {%- render 'render-translation',
+                      namespace: "products.product",
+                      key: "sold_out",
+                      fallback: "Sold out"
+                    -%}
+                  {% endif %}
+                  - {{ variant.price  | money_with_currency | strip_html }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        </noscript>
       </product-info>
     </div>
   </div>

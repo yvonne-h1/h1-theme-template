@@ -6,4 +6,7 @@
       @apply border-secondary;
     }
   }
+  .block-line-break + .block-line-break {
+    @apply hidden;
+  }
 }

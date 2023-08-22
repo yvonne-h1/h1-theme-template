@@ -49,6 +49,12 @@
     assign style = 'aspect-ratio: ' | append: aspect_ratio | append: ';'
     assign custom_aspect_ratio = true
   endunless
+
+  if class
+    assign class = class | append: ' object-contain'
+  else
+    assign class = 'object-contain'
+  endif
 -%}
 
 {% capture fallback_image %}
