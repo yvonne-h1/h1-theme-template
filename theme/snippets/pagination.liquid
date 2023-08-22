@@ -20,7 +20,7 @@
     aria-label="{% render "render-translation", namespace: "general.pagination.label", fallback: "Label" %}">
     <ul class="pagination__list flex flex-wrap items-center justify-center text-sm font-bold">
       {%- if paginate.previous -%}
-        <li class="mr-3">
+        <li class="me-3">
           <a
             href="{{ paginate.previous.url }}{{ anchor }}"
             class="pagination__item pagination__item--prev group/pagination-prev relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary"
@@ -57,7 +57,7 @@
       {%- endfor -%}
 
       {%- if paginate.next -%}
-        <li class="ml-3">
+        <li class="ms-3">
           <a
             href="{{ paginate.next.url }}{{ anchor }}"
             class="pagination__item pagination__item--next group/pagination-next relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary"

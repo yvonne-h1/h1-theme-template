@@ -84,7 +84,7 @@
             assign level_1_title = level_1.title
             if level_1_title contains '[HIGHLIGHT]'
               assign level_1_title = level_1.title | remove: '[HIGHLIGHT]' | strip
-              assign link_classes = 'button button--lg lg:button--md border-transparent mr-8 ml-[calc(2rem-10px)] pl-2.5'
+              assign link_classes = 'button button--lg lg:button--md border-transparent me-8 ms-[calc(2rem-10px)] ps-2.5'
             endif
 
             # if link is active
@@ -138,7 +138,7 @@
                   class="{{ mobile_return_link_class }} level-2"
                   aria-expanded="true"
                   data-collapsible-trigger>
-                  {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
+                  {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ms-2' -%}
                   {%- render 'render-translation', namespace: 'sections.header', key: 'back_to_title', title: menu_name, fallback: 'Back' -%}
                 </button>
 
@@ -216,7 +216,7 @@
                             class="{{ mobile_return_link_class }} level-3"
                             aria-expanded="true"
                             data-collapsible-trigger>
-                            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ml-2' -%}
+                            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ms-2' -%}
                             {%- render 'render-translation', namespace: 'sections.header', key: 'back_to_title', title: level_1_title, fallback: 'Back' -%}
                           </button>
 

@@ -109,7 +109,7 @@ endcapture
       }
       &:valid[required],
       &:invalid:not(:placeholder-shown) {
-        @apply pr-14; // preserve space for icons
+        @apply pe-14; // preserve space for icons
       }
       &:valid[required] {
         ~ .field__icons .icon-checkmark {
@@ -194,7 +194,7 @@ endcapture
         content-[''];
       }
       &:before {
-        @apply mr-2
+        @apply me-2
         rounded-sm
         border-none
         bg-gray-100
@@ -411,7 +411,7 @@ endcapture
       background-image: none;
       @apply cursor-pointer;
       &:has(+ .select__select-icon) {
-        @apply pr-12;
+        @apply pe-12;
       }
     }
 

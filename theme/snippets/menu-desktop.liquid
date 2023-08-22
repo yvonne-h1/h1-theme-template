@@ -51,7 +51,7 @@
               assign level_1_active = true
             endif
 
-            assign header_menu_link_classes = 'header__menu-link relative flex items-center whitespace-nowrap text-left text-sm font-bold no-underline states:no-underline'
+            assign header_menu_link_classes = 'header__menu-link relative flex items-center whitespace-nowrap text-start text-sm font-bold no-underline states:no-underline'
           -%}
 
           {%- if level_1.links == blank -%}
@@ -173,7 +173,7 @@
                 {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]/menu-item:rotate-180' -%}
               </a>
               <div
-                class="header__inner-container {% if submenu_layout == 'multi' and images != '' %}left-0 right-0 w-full pl-10{% endif %} absolute top-full hidden group-[.collapsible-is-open]/menu-item:block {{ section.settings.color_scheme }}"
+                class="header__inner-container {% if submenu_layout == 'multi' and images != '' %}left-0 right-0 w-full ps-10{% endif %} absolute top-full hidden group-[.collapsible-is-open]/menu-item:block {{ section.settings.color_scheme }}"
                 data-collapsible-target
                 tabindex="-1">
                 <div class="header__navigation-container content-wrapper grid grid-cols-12 gap-x-4 gap-y-0 p-4">

@@ -104,7 +104,18 @@ class VariantSelects extends HTMLElement {
         // Update the inventory quantity hidden input
         const inventoryQtyDestination = document.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
         const inventoryQtySource = html.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
+        const qtyInputDestination = this.closest('product-info').querySelector('quantity-input input[name="quantity"]');
+
         if (inventoryQtyDestination) inventoryQtyDestination.value = inventoryQtySource.value;
+
+        // update the max attribute of the quantity input
+        if (qtyInputDestination) {
+          qtyInputDestination.max = inventoryQtySource.value;
+          // check if the current value of the input is higher than the max. If so, set it to the max.
+          if (+qtyInputDestination.value > +inventoryQtySource.value) {
+            qtyInputDestination.value = inventoryQtySource.value;
+          }
+        }
 
       });
   }

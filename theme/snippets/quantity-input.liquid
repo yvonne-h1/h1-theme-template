@@ -6,7 +6,8 @@
     input_classes: ''
     value: 1
     qty_product: item.product
-    type: 'cart', 'pdp'
+    type: 'cart', 'pdp',
+    max: 1000 - max available options
   -%}
 {% endcomment %}
 
@@ -54,6 +55,9 @@
     value="{{ value }}"
     pattern="[0-9]*"
     inputmode="numeric"
+    {% if max -%}
+      max="{{ max }}"
+    {%- endif %}
     aria-label="
       {%- render 'render-translation',
         namespace: 'products.product.quantity',

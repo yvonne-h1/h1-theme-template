@@ -76,8 +76,8 @@
               fallback: 'Orders'
             -%}
           </caption>
-          <thead role="rowgroup" class="hidden text-left text-sm md:table-header-group">
-            {%- assign th_class = 'pt-0 pl-0 pr-4 pb-6 align-top md:w-52 last:w-24' -%}
+          <thead role="rowgroup" class="hidden text-start text-sm md:table-header-group">
+            {%- assign th_class = 'pt-0 ps-0 pe-4 pb-6 align-top md:w-52 last:w-24' -%}
             <tr role="row">
               <th id="ColumnOrder" scope="col" role="columnheader" class="{{ th_class }}">
                 {{- order_nr_str -}}
@@ -98,7 +98,7 @@
           </thead>
           <tbody role="rowgroup" class="">
             {%- for order in customer.orders -%}
-              {%- assign td_class = 'text-sm py-1 md:py-4 md:pl-0 md:pr-4 text-left align-top md:w-52 last:w-24' -%}
+              {%- assign td_class = 'text-sm py-1 md:py-4 md:ps-0 md:pe-4 text-start align-top md:w-52 last:w-24' -%}
               <tr role="row" class="flex flex-col justify-start border-b  py-3 md:table-row md:py-0">
                 <td id="RowOrder" role="cell" headers="ColumnOrder" data-label="{{ order_nr_str }}" class="{{ td_class }}">
                   <a

@@ -43,10 +43,10 @@
         # Align buttons with flex as parent based on text align block.
         assign button_align = ''
         case block.settings.text_align
-          when 'text-left'
+          when 'text-start'
           when 'text-center'
             assign button_align = 'justify-center'
-          when 'text-right'
+          when 'text-end'
             assign button_align = 'justify-end'
         endcase
       -%}
@@ -292,7 +292,7 @@
         "default": "text-center",
         "options": [
           {
-            "value": "text-left",
+            "value": "text-start",
             "label": "Left"
           },
           {
@@ -300,7 +300,7 @@
             "label": "Center"
           },
           {
-            "value": "text-right",
+            "value": "text-end",
             "label": "Right"
           }
         ]
@@ -369,10 +369,10 @@
             "type": "select",
             "id": "text_align",
             "label": "Text align",
-            "default": "text-left",
+            "default": "text-start",
             "options": [
               {
-                "value": "text-left",
+                "value": "text-start",
                 "label": "Left"
               },
               {
@@ -380,7 +380,7 @@
                 "label": "Center"
               },
               {
-                "value": "text-right",
+                "value": "text-end",
                 "label": "Right"
               }
             ]

@@ -57,7 +57,7 @@
 
       {%- comment -%} Collection description {%- endcomment -%}
       {%- if section.settings.show_collection_description and collection.description != blank -%}
-        <div class="collection-header__description rte ml-0 mr-auto md:w-full lg:w-3/4">
+        <div class="collection-header__description rte ms-0 me-auto md:w-full lg:w-3/4">
           {{- collection.description -}}
         </div>
       {%- endif -%}
@@ -92,7 +92,7 @@
     </p>
 
     {%- comment -%} Toggle collection layout - mobile only {%- endcomment -%}
-    <collection-view class="collection-layout -ml-3 flex md:hidden">
+    <collection-view class="collection-layout -ms-3 flex md:hidden">
       {%- if section.settings.show_collection_layout_buttons -%}
         {%- liquid
           assign collection_view_default_class = 'collection-layout__button--active opacity-100'

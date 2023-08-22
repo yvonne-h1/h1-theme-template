@@ -59,6 +59,21 @@
       endif
     -%}
   ">
+  {% comment %} Badges {% endcomment %}
+  {%- if show_badges -%}
+    {%- if target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies or product.available == false %}
+      {%- assign badges_classes = 'relative ' | append: block.settings.badge_size -%}
+      {% capture badges %}
+        {%- render 'product-badges', product: product, class: badges_classes -%}
+      {% endcapture %}
+      {% if badges != blank %}
+        <div>
+          {{- badges -}}
+        </div>
+      {% endif %}
+    {%- endif -%}
+  {%- endif -%}
+
   <dl class="flex">
     {%- comment -%} Different compare at prices, so display 'from' label (on collection pages) {%- endcomment -%}
     {%- if use_variant == false and target.price_varies or target.compare_at_price_varies %}
@@ -102,23 +117,4 @@
       </div>
     {%- endif -%}
   </dl>
-  {%- if show_badges -%}
-    {%- if target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies or product.available == false %}
-      <div class="badges flex flex-wrap gap-1">
-        {%- if target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
-          <span
-            class="price__badge-sale badge badge--sale px-2 py-1 text-xs"
-            aria-hidden="true">
-            {% render 'render-translation', namespace: 'products.product.on_sale', fallback: 'Sale' %}
-          </span>
-        {%- elsif product.available == false -%}
-          <span
-            class="price__badge-sold-out badge badge--sold-out px-2 py-1 text-xs"
-            aria-hidden="true">
-            {% render 'render-translation', namespace: 'products.product.sold_out', fallback: 'Sold out' %}
-          </span>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
-  {%- endif -%}
 </div>

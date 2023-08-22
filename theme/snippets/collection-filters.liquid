@@ -61,7 +61,7 @@
             <filter-remove class="block">
               <a
                 href="{{ collection.url }}?sort_by={{ sort_by }}"
-                class="button button--sm button--link pl-0 pr-0 font-body"
+                class="button button--sm button--link pe-0 ps-0 font-body"
                 data-filter-remove
                 data-filter-clear-all>
                 {%- render 'render-translation', namespace: 'sections.collection_template', key: 'clear_all', fallback: 'Clear all' -%}
@@ -77,7 +77,7 @@
             '>
             <button
               type="button"
-              class="filter__close button button--link -mr-3 border-none p-3 {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
+              class="filter__close button button--link -me-3 border-none p-3 {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
               aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
               {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
             </button>

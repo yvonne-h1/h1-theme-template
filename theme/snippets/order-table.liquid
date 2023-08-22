@@ -1,4 +1,4 @@
-<div class="order__table text-left text-sm">
+<div class="order__table text-start text-sm">
   <div class="order__header hidden pb-6 lg:block">
     <div class="relative grid w-full grid-cols-12 gap-x-6 gap-y-0">
       {%- comment -%} Image heading {%- endcomment -%}
@@ -174,7 +174,7 @@
             <span class="inline-block lg:hidden">
               {%- render 'render-translation', namespace: 'customer.order', key: 'price', fallback: 'Price' -%}
             </span>
-            {% comment %} class="lg:pt-6 lg:pb-6 lg:pl-0 lg:pr-14" {% endcomment %}
+            {% comment %} class="lg:pt-6 lg:pb-6 lg:ps-0 lg:pe-14" {% endcomment %}
             {%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
               <dl>
                 {%- if line_item.original_price != line_item.final_price -%}
@@ -319,7 +319,7 @@
                 fallback: "Fulfillment status"
               -%}
             ">
-            {% comment %} class="pt-6 pb-6 pl-0 pr-4 lg:pr-14" {% endcomment %}
+            {% comment %} class="pt-6 pb-6 ps-0 pe-4 lg:pe-14" {% endcomment %}
             {%- assign created_at = line_item.fulfillment.created_at | time_tag: format: 'date' -%}
             <p class="flex flex-wrap gap-x-2 text-xs">
               <span>{{ 'customer.order.fulfilled_at_html' | t: date: created_at }}</span>

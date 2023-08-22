@@ -163,7 +163,7 @@
   {%- liquid
     assign product_card_information_classes = 'text-center'
     if view == 'alt'
-      assign product_card_information_classes = 'pt-3 text-left md:text-center'
+      assign product_card_information_classes = 'pt-3 text-start md:text-center'
     endif
   -%}
   <a
@@ -195,7 +195,7 @@
   {%- liquid
     assign product_card_price_classes = 'justify-center text-center'
     if view == 'alt'
-      assign product_card_price_classes = 'product-card__price--alt mt-2 text-left md:text-center justify-between md:justify-center'
+      assign product_card_price_classes = 'product-card__price--alt mt-2 text-start md:text-center justify-between md:justify-center'
     endif
   -%}
   <div class="product-card__price flex items-center text-sm {{ product_card_price_classes }}">

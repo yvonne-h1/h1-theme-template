@@ -133,11 +133,11 @@
 
                 # Button alligment
                 case block.settings.text_align
-                  when 'text-left'
+                  when 'text-start'
                     assign buttons_alignment = 'justify-start'
                   when 'text-center'
                     assign buttons_alignment = 'justify-center'
-                  when 'text-right'
+                  when 'text-end'
                     assign buttons_alignment = 'justify-end'
                 endcase
               -%}
@@ -478,7 +478,7 @@
             "default": "text-center",
             "options": [
               {
-                "value": "text-left",
+                "value": "text-start",
                 "label": "Left"
               },
               {
@@ -486,7 +486,7 @@
                 "label": "Center"
               },
               {
-                "value": "text-right",
+                "value": "text-end",
                 "label": "Right"
               }
             ]

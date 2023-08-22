@@ -9,7 +9,7 @@
         <p
           class="newsletter-form__message newsletter-form__message--error text-danger"
           id="footer-error">
-          {%- render 'icons', icon: 'error', icon_class: 'w-6 mr-1' -%}
+          {%- render 'icons', icon: 'error', icon_class: 'w-6 me-1' -%}
           <span>
             {{- form.errors.translated_fields.email | capitalize }}
             {{ form.errors.messages.email -}}
@@ -69,7 +69,7 @@
       </div>
       <button
         type="submit"
-        class="newsletter-form__submit button col-span-3 ml-1 md:col-span-12 md:ml-0 md:mt-1 lg:col-span-3 lg:ml-1 lg:mt-0"
+        class="newsletter-form__submit button col-span-3 ms-1 md:col-span-12 md:ms-0 md:mt-1 lg:col-span-3 lg:ms-1 lg:mt-0"
         name="commit"
         id="Subscribe">
         {{- 'sections.newsletter_form.submit' | t -}}

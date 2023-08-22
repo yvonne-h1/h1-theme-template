@@ -21,7 +21,7 @@
     role="dialog"
     tabindex="-1">
     <div class="cart-notification__valid" data-cart-notification-valid>
-      <div class="cart-notification__header relative flex items-start pr-6">
+      <div class="cart-notification__header relative flex items-start pe-6">
         <p class="cart-notification__heading h6 my-0 flex grow items-center leading-6">
           {%- render 'render-translation', namespace: 'general.cart.item_added', fallback: 'Item added' -%}
         </p>
@@ -56,9 +56,9 @@
 
     {%- comment -%} When there is an error. {%- endcomment -%}
     <div class="cart-notification__invalid hidden" data-cart-notification-invalid>
-      <div class="cart-notification__header relative flex items-start pr-6">
+      <div class="cart-notification__header relative flex items-start pe-6">
         <p class="cart-notification__heading h6 my-0 flex grow items-center text-danger">
-          <span class="mr-3 block">
+          <span class="me-3 block">
             {%- render 'icons', icon: 'error', icon_class: 'w-6' -%}
           </span>
           {%- render 'render-translation', namespace: 'general.cart.add_error', fallback: 'Error' -%}
@@ -66,7 +66,7 @@
         {{- close_notification_button -}}
       </div>
       <p
-        class="cart-notification__error-message pb-4 pl-0 pr-0 pt-6 text-sm"
+        class="cart-notification__error-message pb-4 pe-0 ps-0 pt-6 text-sm"
         data-cart-notification-error-message></p>
     </div>
   </div>

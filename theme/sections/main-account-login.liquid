@@ -143,7 +143,7 @@
             >
             {{- icons -}}
             {%- if form.errors contains 'form' -%}
-              <div class="field__message field__message--error text-left" id="LoginForm-form-error">
+              <div class="field__message field__message--error text-start" id="LoginForm-form-error">
                 {{- form.errors | default_errors -}}
               </div>
             {%- endif -%}

@@ -1,9 +1,9 @@
 @layer components {
   .content-wrapper-padding-left {
-    @apply pl-[var(--content-wrapper-padding)];
+    @apply ps-[var(--content-wrapper-padding)];
   }
   .content-wrapper-padding-right {
-    @apply pr-[var(--content-wrapper-padding)];
+    @apply pe-[var(--content-wrapper-padding)];
   }
   .content-wrapper-padding {
     @apply px-[var(--content-wrapper-padding)];
