@@ -51,7 +51,9 @@
   endunless
 
   if class
-    assign class = class | append: ' object-contain'
+    unless class contains 'object-cover'
+      assign class = class | append: ' object-contain'
+    endunless
   else
     assign class = 'object-contain'
   endif
