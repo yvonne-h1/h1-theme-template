@@ -51,7 +51,7 @@
   '>
   <button
     type="button"
-    class="-me-6 -mt-6 ms-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:right-0 lg:top-3 lg:z-10 lg:mb-0 lg:me-[var(--content-wrapper-padding)] lg:ms-0 lg:mt-0"
+    class="-me-6 -mt-6 ms-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:end-0 lg:top-3 lg:z-10 lg:mb-0 lg:me-[var(--content-wrapper-padding)] lg:ms-0 lg:mt-0"
     aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}">
     {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
   </button>
@@ -87,7 +87,7 @@
     {%- comment -%} Button for clear input field. {%- endcomment -%}
     <button
       type="button"
-      class="absolute right-14 top-2/4 -translate-y-2/4 states:text-primary"
+      class="absolute end-14 top-2/4 -translate-y-2/4 states:text-primary"
       data-predicative-search="reset"
       aria-label="{% render "render-translation", namespace: "general.search", key: "reset", fallback: "Reset" %}">
       {%- render 'icons', icon: 'cross', icon_class: 'w-4' -%}
@@ -96,7 +96,7 @@
     {%- comment -%} Submit button. {%- endcomment -%}
     <button
       type="submit"
-      class="search-modal__button absolute right-0 top-2/4 block -translate-y-2/4 cursor-pointer p-3 states:text-primary"
+      class="search-modal__button absolute end-0 top-2/4 block -translate-y-2/4 cursor-pointer p-3 states:text-primary"
       aria-label="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
       {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
     </button>

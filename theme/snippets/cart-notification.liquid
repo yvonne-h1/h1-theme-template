@@ -2,7 +2,7 @@
 {%- capture close_notification_button -%}
   <button
     type="button"
-    class="cart-notification__close button--link absolute right-0 top-0 appearance-none border-none bg-transparent"
+    class="cart-notification__close button--link absolute end-0 top-0 appearance-none border-none bg-transparent"
     aria-label="{%- render 'render-translation', namespace: "accessibility.close", fallback: "Close" -%}"
     data-cart-notification-close
   >
@@ -14,7 +14,7 @@
 <cart-notification
   class="cart-notification group/cart-notification">
   <div
-    class="invisible fixed right-0 top-0 z-modal block w-full max-w-sm -translate-y-full bg-white px-4 pb-2 pt-5 shadow-2xl transition-all focus:shadow-2xl group-[.cart-notification--open]/cart-notification:visible group-[.cart-notification--open]/cart-notification:translate-y-0 md:px-6 md:pb-3 lg:right-8"
+    class="invisible fixed end-0 top-0 z-modal block w-full max-w-sm -translate-y-full bg-white px-4 pb-2 pt-5 shadow-2xl transition-all focus:shadow-2xl group-[.cart-notification--open]/cart-notification:visible group-[.cart-notification--open]/cart-notification:translate-y-0 md:px-6 md:pb-3 lg:end-8"
     data-cart-notification
     aria-modal="true"
     aria-label="{%- render 'render-translation', namespace: "general.cart.item_added", fallback: "Item added" -%}"

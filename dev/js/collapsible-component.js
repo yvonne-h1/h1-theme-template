@@ -9,7 +9,7 @@ HTML Usage with single group
       The trigger
       {%- render 'icons',
         icon: 'chevron-down',
-        icon_class: 'w-3 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
+        icon_class: 'w-3 absolute end-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
       -%}
     </button>
     <div
@@ -39,7 +39,7 @@ HTML Usage with multiple & nested groups
       The trigger
       {%- render 'icons',
         icon: 'chevron-down',
-        icon_class: 'w-3 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
+        icon_class: 'w-3 absolute end-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
       -%}
     </button>
     <div
@@ -57,7 +57,7 @@ HTML Usage with multiple & nested groups
       The trigger
       {%- render 'icons',
         icon: 'chevron-down',
-        icon_class: 'w-3 absolute right-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
+        icon_class: 'w-3 absolute end-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
       -%}
     </button>
     <div

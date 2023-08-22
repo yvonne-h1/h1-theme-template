@@ -53,7 +53,7 @@
 {% liquid
   assign sticky_header_classes = 'relative'
   if is_transparent
-    assign sticky_header_classes = 'header--transparent absolute top-0 right-0 left-0 bg-transparent group-[.header-sticky]/body:bg-color-default group-[.header-sticky]/body:text-color-default ' | append: section.settings.is_transparent_text_color
+    assign sticky_header_classes = 'header--transparent absolute top-0 inset-x-0 bg-transparent group-[.header-sticky]/body:bg-color-default group-[.header-sticky]/body:text-color-default ' | append: section.settings.is_transparent_text_color
   endif
 %}
 
@@ -104,7 +104,7 @@
   {
     "name": "Header",
     "limit": 1,
-    "class": "sticky z-sticky top-0 left-0 right-0",
+    "class": "sticky z-sticky top-0 inset-x-0",
     "settings": [
       {
         "type": "header",

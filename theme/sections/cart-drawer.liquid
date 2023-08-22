@@ -20,7 +20,7 @@
     {%- comment -%} Cart drawer {%- endcomment -%}
     <div
       id="cartDrawer"
-      class="invisible fixed bottom-0 right-0 top-0 z-offcanvas flex h-full w-full translate-x-full flex-col overflow-x-hidden bg-white opacity-0 transition-all duration-300 text-color-default group-[.cart-drawer-is-open]/body:visible group-[.cart-drawer-is-open]/body:translate-x-0 group-[.cart-drawer-is-open]/body:opacity-100 xs:max-w-sm"
+      class="invisible fixed bottom-0 end-0 top-0 z-offcanvas flex h-full w-full translate-x-full flex-col overflow-x-hidden bg-white opacity-0 transition-all duration-300 text-color-default group-[.cart-drawer-is-open]/body:visible group-[.cart-drawer-is-open]/body:translate-x-0 group-[.cart-drawer-is-open]/body:opacity-100 xs:max-w-sm"
       role="dialog"
       tabindex="-1"
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
@@ -55,7 +55,7 @@
           method="post"
           id="cart-drawer-form">
           {%- comment -%} Header {%- endcomment -%}
-          <header class="cart-drawer__header sticky left-0 right-0 top-0 z-20 border-b bg-white p-4">
+          <header class="cart-drawer__header insex-x-0 sticky top-0 z-20 border-b bg-white p-4">
             <class-toggle-component
               data-options='
                 {
@@ -109,7 +109,7 @@
 
           {%- comment -%} Cart footer {%- endcomment -%}
           <footer
-            class="cart-drawer__footer sticky bottom-0 left-0 right-0 z-20 mt-auto justify-self-end border-t bg-white p-4"
+            class="cart-drawer__footer sticky inset-x-0 bottom-0 z-20 mt-auto justify-self-end border-t bg-white p-4"
             id="main-cart-footer"
             data-id="{{ section.id }}">
             {%- comment -%} Cart subtotal {%- endcomment -%}
@@ -121,7 +121,7 @@
                 </span>
                 {%- comment -%} Loading animation {%- endcomment -%}
                 <div
-                  class="cart__loader absolute right-0 top-1/2 z-10 hidden w-6 -translate-y-1/2"
+                  class="cart__loader absolute end-0 top-1/2 z-10 hidden w-6 -translate-y-1/2"
                   data-cart-loader-active="show">
                   {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
                 </div>

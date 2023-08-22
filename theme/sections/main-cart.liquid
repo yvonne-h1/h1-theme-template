@@ -115,7 +115,7 @@
             </div>
 
             {%- comment -%} Cart subtotal {%- endcomment -%}
-            <div class="cart__subtotal fixed bottom-0 left-0 right-0 z-20 col-span-8 bg-white md:relative md:col-span-3 md:col-start-6 lg:col-span-1 lg:bg-transparent">
+            <div class="cart__subtotal fixed inset-x-0 bottom-0 z-20 col-span-8 bg-white md:relative md:col-span-3 md:col-start-6 lg:col-span-1 lg:bg-transparent">
 
               <div class="js-cart-footer-contents" {{ block.shopify_attributes }}>
 
@@ -127,7 +127,7 @@
 
                   {%- comment -%} Loading animation {%- endcomment -%}
                   <div
-                    class="cart__loader absolute right-4 top-1/2 z-10 hidden w-6 -translate-y-1/2 md:right-0"
+                    class="cart__loader absolute end-4 top-1/2 z-10 hidden w-6 -translate-y-1/2 md:end-0"
                     data-cart-loader-active="show">
                     {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
                   </div>

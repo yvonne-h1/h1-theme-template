@@ -68,14 +68,14 @@
       }
       &.fancybox__button--close {
         @apply fixed
-        right-4
+        end-4
         top-4;
       }
       &.is-next {
-        @apply right-4;
+        @apply end-4;
       }
       &.is-prev {
-        @apply left-4;
+        @apply start-4;
       }
     }
 

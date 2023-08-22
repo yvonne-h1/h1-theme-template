@@ -35,7 +35,7 @@
 
       &:before {
         @apply absolute
-          left-0
+          start-0
           top-1/2
           block
           h-[18px]
@@ -48,7 +48,7 @@
 
       &:after {
         @apply absolute
-          left-[5px]
+          start-[5px]
           top-1/2
           h-2
           w-2
@@ -92,7 +92,7 @@
     input:checked + &__label--checkmark,
     &__label--checkmark:hover {
       &:after {
-        @apply left-0 h-5 w-5 content-[''];
+        @apply start-0 h-5 w-5 content-[''];
         background: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='presentation' viewBox='0 0 20 20'%3E%3Cpath fill='currentColor' d='M16.136 6.979h0l.003-.004a1.499 1.499 0 00-2.275-1.954l-5.945 6.777-1.858-1.859A1.499 1.499 0 103.94 12.06l2.999 3s0 0 0 0c.289.29.675.44 1.1.439h.019a1.5 1.5 0 001.08-.522l6.998-7.998z'/%3E%3C/svg%3E")
           no-repeat;
       }

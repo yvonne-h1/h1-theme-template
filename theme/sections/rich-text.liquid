@@ -1,5 +1,5 @@
 {%- capture container_content -%}
-  <div class="rich-text space-y-4 text-center">
+  <div class="rich-text space-y-4 {{ section.settings.text_alignment }}">
     {%- for block in section.blocks -%}
       {%- case block.type -%}
         {%- when 'heading' -%}
@@ -75,6 +75,26 @@
           {
             "value": "container--wide",
             "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
           }
         ]
       },

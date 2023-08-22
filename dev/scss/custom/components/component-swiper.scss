@@ -46,10 +46,16 @@
       }
     }
     &-button-prev {
-      @apply left-[var(--content-wrapper-padding)];
+      @apply start-[var(--content-wrapper-padding)];
+      @screen 2xl {
+        @apply start-0;
+      }
     }
     &-button-next {
-      @apply right-[var(--content-wrapper-padding)];
+      @apply end-[var(--content-wrapper-padding)];
+      @screen 2xl {
+        @apply end-0;
+      }
     }
 
     // swiper-scrollbar

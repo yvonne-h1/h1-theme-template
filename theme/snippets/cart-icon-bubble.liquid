@@ -49,7 +49,7 @@
     {%- endif -%}
 
     {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
-    <span class="cart-icon-bubble__count button active absolute right-2 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full p-0 text-2xs leading-none empty:hidden{% if cart == empty %} hidden{% endif -%}">
+    <span class="cart-icon-bubble__count button active absolute end-2 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full p-0 text-2xs leading-none empty:hidden{% if cart == empty %} hidden{% endif -%}">
       <span class="cart-count">
         {{- cart.item_count -}}
       </span>

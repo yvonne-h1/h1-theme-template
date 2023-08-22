@@ -21,7 +21,7 @@
       invisible
       fixed
       bottom-0
-      left-0
+      start-0
       top-0
       z-offcanvas
       flex
@@ -103,7 +103,7 @@
 
             assign mobile_menu_link_class = 'mobile-menu__link block no-underline py-3 px-8'
             assign mobile_return_link_class = 'mobile-menu__return flex w-full items-center gap-2 px-4 py-5 text-sm no-underline'
-            assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 left-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 flex flex-col'
+            assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 start-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 flex flex-col'
           -%}
 
           {%- if level_1.links == blank -%}

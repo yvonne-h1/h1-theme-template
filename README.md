@@ -61,10 +61,11 @@ We use [tailwind](https://tailwindcss.com/docs/) for the theme styling.
 - We apply [BEM](https://getbem.com/) classes to every element for readability and to find things back. It can be that no style is applied on this class.
 - We work mobile-first. Use @screen md { ... your css } and md:[your-class] to define CSS on breakpoints. More info: [screen directive](https://Tailwindcss.com/docs/functions-and-directives) and [customize screens](https://Tailwindcss.com/docs/screens)
 - We write modern css based on the [postcss-preset-env](https://github.com/csstools/postcss-preset-env). All features in stage 2 are supported.
+- Use [logical spacing](https://web.dev/learn/design/internationalization/#logical-properties), so don't use margin-left or left-px or text-right, but instead use margin-inline-start, start-px and text-end. Right now, Tailwind supports inline logical operators.
 - If you need to repeat your classes inside a section then consider:
   - Usage of a loop
-  - Split bigger components into smaller components with liquid snippets. **Max snippet depth is 4 for performance.**
-  - Create a [BEM](https://getbem.com/) class with related SCSS that's loaded from the custom folder
+  - Split bigger components into smaller components with liquid snippets. **For performance, max snippet depth is 4.**
+  - Create a BEM class with related SCSS that's loaded from the custom folder
   - If it applies on (almost) every page then you can consider adding it to the main CSS. Be very strict with this.
 - If you need to apply classes based on an if statement then keep the if statement outside the `class=""` property.
 - Because Tailwind uses a regex expression to recognize the classes used in your project, all Tailwind classes must be fully written out. So don't use font-[{{- size -}}] but use font-xs so that the class can be recognized by Tailwind.

@@ -45,7 +45,7 @@
             class: 'w-full md:max-w-lg mx-auto object-contain',
             lazy: lazy
             -%}
-          {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute right-4 bottom-4 md:hidden pointer-events-none' -%}
+          {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute end-4 bottom-4 md:hidden pointer-events-none' -%}
         </a>
       {%- when 'model' -%}
         <div class="product-media-swiper__item product-media-swiper__item--model relative mx-auto block aspect-square w-full max-w-lg">
@@ -144,12 +144,12 @@
 
         {% comment %} Navigation buttons {% endcomment %}
         <button
-          class="product-media-swiper__button-prev swiper-button-prev left-3 md:left-6"
+          class="product-media-swiper__button-prev swiper-button-prev start-3 md:start-6"
           aria-label="{{ 'accessibility.previous_slide' | t }}">
           {% render 'icons', icon: 'chevron-left', icon_class: 'w-4' %}
         </button>
         <button
-          class="product-media-swiper__button-next swiper-button-next right-3 md:right-6"
+          class="product-media-swiper__button-next swiper-button-next end-3 md:end-6"
           aria-label="{{ 'accessibility.next_slide' | t }}">
           {% render 'icons', icon: 'chevron-right', icon_class: 'w-4' %}
         </button>
