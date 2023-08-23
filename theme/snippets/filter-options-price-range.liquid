@@ -6,13 +6,15 @@
     - filter_index: forloop.index from the collection.filters loop. (required)
 {%- endcomment -%}
 
-{%- liquid
+{% comment %}
+  Unused but maybe handy in the future
   assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND' | split: ','
   assign uses_comma_decimals = false
   if currencies_using_comma_decimals contains cart.currency.iso_code
     assign uses_comma_decimals = true
   endif
-
+{% endcomment %}
+{%- liquid
   assign range_max = filter.max_value.value | default: filter.range_max
   assign value_min = filter.min_value.value | default: 0
   assign value_max = filter.max_value.value | default: filter.range_max

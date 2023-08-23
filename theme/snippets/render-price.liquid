@@ -62,20 +62,20 @@
       endif
     -%}
   ">
-  {% comment %} Badges {% endcomment %}
-  {%- if show_badges -%}
-    {%- if product.available == false or is_preorder or target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
-      {%- assign badges_classes = 'relative ' | append: block.settings.badge_size -%}
-      {% capture badges %}
-        {%- render 'product-badges', product: product, class: badges_classes -%}
-      {% endcapture %}
-      {% if badges != blank %}
-        <div>
-          {{- badges -}}
-        </div>
-      {% endif %}
-    {%- endif -%}
-  {%- endif -%}
+  {%- liquid
+    # Badges
+    if show_badges
+      if product.available == false or is_preorder or target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies
+        assign badges_classes = 'relative ' | append: block.settings.badge_size
+        capture badges
+          render 'product-badges', product: product, class: badges_classes
+        endcapture
+        if badges != blank
+          echo '<div>' | append: badges | append: '</div>'
+        endif
+      endif
+    endif
+  -%}
 
   <dl class="flex">
     {%- comment -%} Different compare at prices, so display 'from' label (on collection pages) {%- endcomment -%}

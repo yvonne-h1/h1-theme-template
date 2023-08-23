@@ -60,28 +60,17 @@
         {%- comment -%} Column inner width and text align {%- endcomment -%}
         <div class="max-w-[var(--max-width)] space-y-5 {{ block.settings.text_align }}">
 
-          {%- comment -%} Desktop image {%- endcomment -%}
-          {%- if block.settings.image != blank %}
-            {%- render 'responsive-image',
-              image_object: block.settings.image,
-              lazy: block.settings.lazy,
-              aspect_ratio: block.settings.image_ratio,
-              class: 'multi-columns__image hidden md:block object-cover',
-              max_width: '680px',
-              sizes: sizes
-            -%}
-          {%- endif -%}
+        {%- liquid
+          # Desktop image
+          if block.settings.image != blank
+            render 'responsive-image', image_object: block.settings.image, lazy: block.settings.lazy, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover', max_width: '680px', sizes: sizes
+          endif
 
-          {%- comment -%} Mobile Image {%- endcomment -%}
-          {%- if image_mobile != blank -%}
-            {%- render 'responsive-image',
-              image_object: image_mobile,
-              lazy: block.settings.lazy,
-              aspect_ratio: block.settings.image_ratio_mobile,
-              class: 'multi-columns__image md:hidden w-full object-cover',
-              max_width: '735px'
-            -%}
-          {%- endif -%}
+          # Mobile Image
+          if image_mobile != blank
+            render 'responsive-image', image_object: image_mobile, lazy: block.settings.lazy, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden w-full object-cover', max_width: '735px'
+          endif
+        -%}
 
           {%- comment -%} Heading {%- endcomment -%}
           {%- if block.settings.heading != blank -%}
@@ -119,7 +108,6 @@
             </div>
           {%- endif -%}
         </div>
-
       </div>
     {%- endif -%}
   {%- endfor -%}

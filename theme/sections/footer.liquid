@@ -40,9 +40,11 @@
                 <div
                   class="footer-block--menu__target p-0 js:md:!max-h-min"
                   {{ target }}>
-                  {%- if block.settings.menu != blank -%}
-                    {%- render 'footer-menu', linklist: block.settings.menu, collapsible: block.settings.enable_collapsible -%}
-                  {%- endif -%}
+                  {%- liquid
+                    if block.settings.menu != blank
+                      render 'footer-menu', linklist: block.settings.menu, collapsible: block.settings.enable_collapsible
+                    endif
+                  -%}
 
                   {%- comment -%} Output menu image {%- endcomment -%}
                   {%- if block.settings.image_src != blank -%}
@@ -84,11 +86,11 @@
             {% comment %} Newsletter {% endcomment %}
           {%- when 'newsletter' -%}
             <div
-              class="footer-block footer-block--{{ block_type }} {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}"
+              class="footer-block footer-block--{{ block.type | handleize }} {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}"
               {{ block.shopify_attributes }}>
               {% comment %} Check for Klaviyo first {% endcomment %}
               {%- if block.settings.klaviyo_newsletter != blank -%}
-                {{- klaviyo_newsletter -}}
+                {{- block.settings.klaviyo_newsletter -}}
                 {% comment %} Render the default newsletter {% endcomment %}
               {%- else -%}
                 {%- if block.settings.title != blank -%}
@@ -204,7 +206,6 @@
     {%- comment -%} Copyright {%- endcomment -%}
     {%- if section.settings.copyright and section.settings.copyright_text != blank -%}
       <div class="mt-4 text-center">
-        {{ copyright_text }}
         <p class="text-sm">
           {{- section.settings.copyright_text | replace: '[[ year ]]', year -}}
         </p>

@@ -61,9 +61,7 @@
         </div>
       {%- when 'external_video' -%}
         {%- assign video_class = 'absolute inset-0 w-full h-full js-' | append: media.host -%}
-        {%- comment -%}
-          if it's a vimeo video, make the link into vimeo.com/ID - Fancybox doesn't recognize player.vimeo.com/video/ID
-        {%- endcomment -%}
+        {%- comment -%} For vimeo video, make the link into vimeo.com/ID - Fancybox doesn't recognize player.vimeo.com/video/ID {%- endcomment -%}
         {%- capture host_attributes -%}
           {%- assign media_external_video_url = media | external_video_url: autoplay: false, loop: false -%}
           {% if media.host == 'vimeo' and media_external_video_url contains 'player.' -%}

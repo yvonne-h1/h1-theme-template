@@ -236,14 +236,14 @@
                           {%- comment -%} Level 3 {%- endcomment -%}
                           <ul class="mobile-menu__list level-3 pb-8">
                             {%- for level_3 in level_2.links -%}
-                              {%- comment -%} Get link and fix deep link to native filters {%- endcomment -%}
-                              {% assign level_3_url = level_3.url %}
-                              {%- if level_3_url contains 'collections' and level_3_url contains 'filter' -%}
-                                {% assign level_3_url = level_3_url | replace: '%3F', '?' %}
-                              {%- endif -%}
-
-                              {%- comment -%} If link is active {%- endcomment -%}
                               {%- liquid
+                                # Get link and fix deep link to native filters
+                                assign level_3_url = level_3.url
+                                if level_3_url contains 'collections' and level_3_url contains 'filter'
+                                  assign level_3_url = level_3_url | replace: '%3F', '?'
+                                endif
+
+                                # If link is active
                                 assign level_3_is_active = false
                                 if level_3.current
                                   assign level_3_is_active = true

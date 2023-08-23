@@ -88,14 +88,11 @@
 
 {%- endcapture -%}
 
-{%- capture page_title -%}
-  {%-
-    render "render-translation",
-    namespace: "customer.orders",
-    key: "details",
-    fallback: "Order details"
-  -%}
-{%- endcapture -%}
+{%- liquid
+  capture page_title
+    render 'render-translation', namespace: 'customer.orders', key: 'details', fallback: 'Order details'
+  endcapture
+-%}
 
 {%- comment -%} Render the account header {%- endcomment -%}
 {%- render 'account-header', title: page_title -%}

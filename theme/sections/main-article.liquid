@@ -1,15 +1,17 @@
 {%- comment -%} Use grid to position elements. Mobile order is set in theme editor, desktop is based on design. {%- endcomment -%}
 <article class="main-article">
-  {% comment %} Article header {% endcomment %}
-  {%- render 'article-header', class: 'main-article__header' -%}
+  {%- liquid
+    # Article header
+    render 'article-header', class: 'main-article__header'
 
-  {% comment %} Article content {% endcomment %}
-  {%- render 'article-content', class: 'main-article__content' -%}
+    # Article content
+    render 'article-content', class: 'main-article__content'
 
-  {% if section.settings.show_comments %}
-    {% comment %} Article comments {% endcomment %}
-    {%- render 'article-comments', class: 'main-article__comments' -%}
-  {% endif %}
+    # Article comments
+    if section.settings.show_comments
+      render 'article-comments', class: 'main-article__comments'
+    endif
+  -%}
 </article>
 
 {% schema %}

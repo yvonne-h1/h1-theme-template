@@ -96,26 +96,26 @@
                   {%- for option in variant_options -%}
                     {%- assign option_downcase = option | downcase -%}
                     {%- if option_downcase == color_variant_label -%}
-                      {%- assign option_name = 'option' | append: forloop.index -%}
-                      {%- assign product_variant_color = product_variant.variants[0][option_name] | handleize -%}
+                      {%- liquid
+                        assign option_name = 'option' | append: forloop.index
+                        assign product_variant_color = product_variant.variants[0][option_name] | handleize
 
-                      {% comment %} Skip if this is the current color {% endcomment %}
-                      {%- if product_variant_color == variant_color -%}
-                        {%- continue -%}
-                      {%- endif -%}
+                        # Skip if this is the current color
+                        if product_variant_color == variant_color
+                          continue
+                        endif
 
-                      {%- comment -%} Loop through color mapping {%- endcomment -%}
-                      {%- for color in color_mappings -%}
-                        {%- assign color_name = color | split: '|' | first | handleize -%}
+                        # Loop through color mapping
+                        for color in color_mappings
+                          assign color_name = color | split: '|' | first | handleize
 
-                        {%- if color_name == product_variant_color  -%}
-                          {%- liquid
+                          if color_name == product_variant_color
                             # Render with background-color
                             assign color_hex = color | split: '|' | last
                             assign color_is_mapped = true
-                          -%}
-                        {%- endif -%}
-                      {%- endfor -%}
+                          endif
+                        endfor
+                      -%}
 
                       {%- capture variants -%}
                         {{- variants -}}

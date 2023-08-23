@@ -16,17 +16,19 @@
           class="article-header__information {{ show_type }} mx-auto grid max-w-screen-lg items-center gap-y-6 gap-x-base md:text-center"
           {{ block.shopify_attributes }}
         >
-          {% comment %} Tag {% endcomment %}
-          {%- if block.settings.blog_show_type -%}
-            {% for tag in article.tags %}
-              {%- if tag contains 'type:' or tag contains 'Type:' -%}
-                {%- assign article_type = tag | downcase | remove: 'type:' -%}
-              {%- endif -%}
-              <p class="article-header__type  text-sm font-semibold uppercase text-primary">
-                {{ article_type }}
-              </p>
-            {% endfor %}
-          {%- endif -%}
+          {%- liquid
+            # Tag
+            if block.settings.blog_show_type
+              for tag in article.tags
+                if tag contains 'type:' or tag contains 'Type:'
+                  assign article_type = tag | downcase | remove: 'type:'
+                endif
+                echo '<p class="article-header__type  text-sm font-semibold uppercase text-primary">'
+                echo article_type
+                echo '</p>'
+              endfor
+            endif
+          -%}
 
           {% comment %} Title {% endcomment %}
           <h1 class="article-header__title">

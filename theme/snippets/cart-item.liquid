@@ -16,12 +16,6 @@
   unless aspect_ratio
     assign aspect_ratio = '3/4'
   endunless
-
-  # Pre-orders
-  assign is_preorder = false
-  if settings.enable_pre_order and item.product.tags contains 'preorder' and item.variant.inventory_quantity <= 0 and item.variant.inventory_policy == 'continue'
-    assign is_preorder = true
-  endif
 -%}
 
 <div
@@ -83,9 +77,11 @@
             {%- endif -%}
 
             {%- for property in item.properties -%}
-              {%- capture preorder_label -%}
-                {%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}
-              {%- endcapture -%}
+              {%- liquid
+                capture preorder_label
+                  render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'
+                endcapture
+              -%}
 
               {%- assign property_first_char = property.first | slice: 0 -%}
               {%- if property.last != blank and property_first_char != '_' and preorder_label != property.first -%}

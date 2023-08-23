@@ -51,24 +51,20 @@
           {%- endif -%}
         </div>
       {%- else -%}
-        {%- paginate collection.products by settings.products_per_page -%}
-          {%- render 'product-grid',
-            collection: collection,
-            paginate: paginate,
-            view: section.settings.pagination_view,
-            product_card_extra_id: section.id
-          -%}
+        {%- liquid
+          paginate collection.products by settings.products_per_page
+            render 'product-grid', collection: collection, paginate: paginate, view: section.settings.pagination_view, product_card_extra_id: section.id
 
-          {%- if paginate.pages > 1 and section.settings.pagination_view == '' -%}
-            {%- render 'pagination', paginate: paginate, anchor: '', class: '' -%}
-          {%- endif -%}
-        {%- endpaginate -%}
+            if paginate.pages > 1 and section.settings.pagination_view == ''
+              render 'pagination', paginate: paginate, anchor: '', class: ''
+            endif
+          endpaginate
 
-        {%- if section.settings.show_back_to_top == true -%}
-          {%- render 'back-to-top' -%}
-        {%- endif -%}
+          if section.settings.show_back_to_top == true
+            render 'back-to-top'
+          endif
+        -%}
       {%- endif -%}
-
     </div>
   </div>
 {%- endcapture -%}

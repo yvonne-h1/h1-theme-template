@@ -59,10 +59,12 @@
 
           {%- comment -%} Product badges {%- endcomment -%}
           {%- when 'badges' -%}
-            {%- assign badges_classes = 'relative ' | append: block.settings.badge_size -%}
-            {% capture badges %}
-              {%- render 'product-badges', product: product, class: badges_classes -%}
-            {% endcapture %}
+            {%- liquid
+              assign badges_classes = 'relative ' | append: block.settings.badge_size
+              capture badges
+                render 'product-badges', product: product, class: badges_classes
+              endcapture
+            -%}
             {% if badges != blank %}
               <div class="" {{ block.shopify_attributes }}>
                 {{- badges -}}
@@ -174,29 +176,17 @@
 
           {%- comment -%} Variants {%- endcomment -%}
           {%- when 'variant_picker' -%}
-            {%- if product.has_only_default_variant != true and product.available -%}
-              {%- if block.settings.picker_type == 'radio' -%}
-
-                {%- comment -%} Show variants as radio buttons {%- endcomment -%}
-                {%- render 'product-variant-radio',
-                  product: product,
-                  section: section,
-                  block: block,
-                  is_preorder: is_preorder
-                -%}
-
-              {%- else -%}
-                {%- render 'import-styles', file_name: 'component-form.css' -%}
-
-                {%- comment -%} Show variants in dropdowns {%- endcomment -%}
-                {%- render 'product-variant-select',
-                  product: product,
-                  section: section,
-                  block: block,
-                  is_preorder: is_preorder
-                -%}
-              {%- endif -%}
-            {%- endif -%}
+            {%- liquid
+              if product.has_only_default_variant != true and product.available
+                if block.settings.picker_type == 'radio'
+                  # Show variants as radio buttons
+                  render 'product-variant-radio', product: product, section: section, block: block, is_preorder: is_preorder
+                else
+                  # Show variants in dropdowns
+                  render 'product-variant-select', product: product, section: section, block: block, is_preorder: is_preorder
+                endif
+              endif
+            -%}
 
           {%- comment -%} Buy buttons {%- endcomment -%}
           {%- when 'buy_buttons' -%}

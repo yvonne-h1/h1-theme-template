@@ -99,12 +99,14 @@
   {%- endpaginate -%}
 {%- endcapture -%}
 
-{% comment %} Container footer {% endcomment %}
-{%- capture container_footer -%}
-  {%- if section.settings.show_back_to_top == true -%}
-    {% render 'back-to-top' %}
-  {%- endif -%}
-{%- endcapture -%}
+{%- liquid
+  # Container footer
+  capture container_footer
+    if section.settings.show_back_to_top == true
+      render 'back-to-top'
+    endif
+  endcapture
+-%}
 
 {%- comment -%} Render the blog articles {%- endcomment -%}
 {%- render 'render-container-content',
