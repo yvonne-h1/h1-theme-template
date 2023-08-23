@@ -287,7 +287,7 @@
         "content": "Filter colors"
       },
       {
-        "type": "text",
+        "type": "textarea",
         "id": "color_filter_name",
         "label": "Color filter name",
         "default": "Color",
@@ -337,9 +337,9 @@
         "type": "textarea",
         "id": "render_as_swatch",
         "label": "Filters to be rendered as swatches",
-        "info": "Add the filter names you wish to render as swatches. By default, filters are rendered as checkboxes. One per line.",
-        "default": "Color\nSize",
-        "placeholder": "Color\nSize"
+        "info": "Add the filter names you wish to render as swatches. By default, filters are rendered as checkboxes. Be sure to add all possible translations for the languages your site uses. One per line.",
+        "default": "Color\nKleur\nSize\nMaat",
+        "placeholder": "Color\nKleur\nSize\nMaat"
       },
       {
         "type": "range",

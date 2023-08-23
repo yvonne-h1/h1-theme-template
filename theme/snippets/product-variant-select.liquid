@@ -19,12 +19,12 @@
   {{ block.shopify_attributes }}>
   {%- for option in product.options_with_values -%}
     <div class="field">
-      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}">
+      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option.name | handleize }}-{{ forloop.index0 }}-select">
         {{ option.name }}
       </label>
       <div class="select relative">
         <select
-          id="{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
+          id="{{ product.id }}-{{ option.name | handleize }}-{{ forloop.index0 }}-select"
           class="select__select"
           name="options[{{ option.name | escape }}]"
           data-option-name="{{ option.name | handleize }}">

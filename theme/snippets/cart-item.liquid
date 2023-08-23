@@ -48,8 +48,8 @@
       </a>
 
       <div class="flex items-center gap-4">
-        <div class="cart-item__badges relative">
-          {% render 'product-badges', product: item.product, class: 'relative badges--sm' %}
+        <div class="cart-item__badges relative empty:hidden">
+          {%- render 'product-badges', product: item.product, class: 'relative badges--sm' -%}
         </div>
         <div class="cart-item__prices">
           {% render 'render-price', product: item.variant %}

@@ -41,9 +41,13 @@ class ProductMediaSlider extends HTMLElement {
       breakpoints: {
         375: {
           slidesPerView: 3.2,
+          slidesOffsetBefore: 16,
+          slidesOffsetAfter: 16,
         },
         600: {
           slidesPerView: 4.2,
+          slidesOffsetBefore: 16,
+          slidesOffsetAfter: 16,
         },
         768: {
           slidesPerView: 5.2,

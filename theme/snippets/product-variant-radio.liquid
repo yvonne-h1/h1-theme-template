@@ -20,12 +20,16 @@
         # Check if this is a color filter
         assign is_color = false
         assign option_size = product.options.size
-        assign color_variant_label = settings.color_filter_name | handleize
         assign color_label = option.name | handleize
+        assign color_variant_labels = settings.color_filter_name | newline_to_br | strip_newlines | split: '<br />'
 
-        if color_variant_label == color_label
-          assign is_color = true
-        endif
+        for color_variant_label in color_variant_labels
+          assign color_variant_label_handleized = color_variant_label | handleize
+          if color_variant_label_handleized == color_label
+            assign is_color = true
+            break
+          endif
+        endfor
       -%}
       <div class="{% if block.settings.picker_layout == 'inline' %}flex-1 basis-1/2 first:pe-6 last:ps-6{%- endif- %}">
         <fieldset class="options options--{{ color_label }} js product-form__input flex items-center" data-option-name="{{ option.name | handleize }}" data-option-group="{{ forloop.index | minus: 1 }}">
@@ -60,7 +64,7 @@
             -%}
 
             {%- capture label -%}
-              <label class="option__label option__label--{{ color_label }} {{ option_available_class }}" for="{{ product.id }}-{{ option.name }}-{{ index }}" data-option-label>
+              <label class="option__label option__label--{{ color_label }} {{ option_available_class }}" for="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio" data-option-label>
                 {{ value_text }}
               </label>
             {%- endcapture -%}
@@ -69,10 +73,10 @@
               <input
                 class="option__input option__input--{{ color_label }} sr-only"
                 type="radio"
-                id="{{ product.id }}-{{ option.name }}-{{ index }}"
+                id="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio"
                 name="{{ option.name }}"
                 value="{{ value | escape }}"
-                data-variant-option-id="{{ product.id }}-{{ option.name }}-{{ index }}"
+                data-variant-option-id="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio"
                 {% if option.selected_value == value %}checked{% endif %}
               >
 
@@ -143,7 +147,7 @@
 
                     <label
                       class="option__label option__label--{{ color_label }}"
-                      for="{{ product.id }}-{{ option.name }}-{{ index }}"
+                      for="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio"
                       style="background-color: {{ color_hex }};"
                       title="{{ value | escape }}"
                       data-option-label

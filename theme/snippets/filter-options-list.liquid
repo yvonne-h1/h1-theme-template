@@ -9,12 +9,16 @@
 {%- liquid
   # Check if this filter is a color filter
   assign is_color = false
-  assign color_variant_label_handleized = settings.color_filter_name | handleize
   assign filter_label_handleized = filter.label | handleize
+  assign color_variant_labels = settings.color_filter_name | newline_to_br | strip_newlines | split: '<br />'
 
-  if color_variant_label_handleized == filter_label_handleized
-    assign is_color = true
-  endif
+  for color_label in color_variant_labels
+    assign color_variant_label_handleized = color_label | handleize
+    if color_variant_label_handleized == filter_label_handleized
+      assign is_color = true
+      break
+    endif
+  endfor
 
   # determine if a filter should be rendered as a swatch or as a regular list
   assign render_as_swatch = false

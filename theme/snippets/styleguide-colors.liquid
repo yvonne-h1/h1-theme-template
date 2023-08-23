@@ -9,18 +9,6 @@
   assign color_names = 'primary, secondary, accent, gray' | split: ', '
 -%}
 
-{% comment %} Classes added so Tailwind renders them: {% endcomment %}
-<div
-  class="
-    text-text-primary text-gray-text bg-accent  bg-accent-200 bg-accent-300 bg-accent-400 bg-accent-50
-    bg-accent-500 bg-accent-600 bg-accent-700 bg-accent-800 bg-accent-900 bg-danger bg-gray bg-gray-100 bg-gray-200 bg-gray-300 bg-gray-400 bg-gray-50 bg-gray-500 bg-gray-600 bg-gray-700 bg-gray-800 bg-gray-900 bg-info bg-primary bg-primary-100
-    bg-primary-200 bg-primary-300 bg-primary-400 bg-primary-50 bg-primary-500 bg-primary-600 bg-primary-700 bg-primary-800 bg-primary-900 bg-secondary bg-secondary-100 bg-secondary-100 bg-secondary-200 bg-secondary-200 bg-secondary-300 bg-secondary-300 bg-secondary-400 bg-secondary-400 bg-secondary-50 bg-secondary-50
-    bg-secondary-500 bg-secondary-500 bg-secondary-600 bg-secondary-600 bg-secondary-700 bg-secondary-700 bg-secondary-800 bg-secondary-800 bg-secondary-900 bg-secondary-900 bg-success bg-warning text-accent-100 text-accent-200 text-accent-300 text-accent-400 text-accent-50 text-accent-500 text-accent-600 text-accent-700
-    text-accent-800 text-accent-900 text-accent-text text-gray-100 text-gray-200 text-gray-300 text-gray-400 text-gray-50 text-gray-500 text-gray-600 text-gray-700 text-gray-800 text-gray-900 text-primary-100 text-primary-200 text-primary-300 text-primary-400 text-primary-50 text-primary-500 text-primary-600
-    text-primary-700 text-primary-800 text-primary-900 text-secondary-100 text-secondary-100 text-secondary-200 text-secondary-200 text-secondary-300 text-secondary-300 text-secondary-400 text-secondary-400 text-secondary-50 text-secondary-50 text-secondary-500 text-secondary-500 text-secondary-600 text-secondary-600 text-secondary-700 text-secondary-700 text-secondary-800 text-secondary-800 text-secondary-900 text-secondary-900 text-secondary-text
-    bg-color-default text-color-default text-color-gradient text-link-color text-link-color-states
-  "></div>
-
 {% comment %} Base {% endcomment %}
 <div class="space-y-8">
   {% comment %} Communication colors {% endcomment %}
@@ -39,21 +27,27 @@
   </div>
 
   {%- for color_option in color_names -%}
+    {% comment %} For the colors to render, we need to render the class name without using liquid {% endcomment %}
+    {%- case color_option -%}
+      {%- when 'primary' -%}
+        {%- assign bg_color = 'bg-primary' -%}
+        {%- assign text_color = 'text-primary-text' -%}
+      {%- when 'secondary' -%}
+        {%- assign bg_color = 'bg-secondary' -%}
+        {%- assign text_color = 'text-secondary-text' -%}
+      {%- when 'accent' -%}
+        {%- assign bg_color = 'bg-accent' -%}
+        {%- assign text_color = 'text-accent-text' -%}
+      {%- when 'gray' -%}
+        {%- assign bg_color = 'bg-gray' -%}
+        {%- assign text_color = 'text-gray-text' -%}
+    {%- endcase -%}
     <div class="{{ color_wrapper_class }}">
       <div
-        class="{{ circle_class_full }} bg-{{ color_option }} text-{{ color_option }}-text"
+        class="{{ circle_class_full }} {{ bg_color }} {{ text_color }}"
         title="{{ color_option | capitalize}}">
         <p>{{ color_option | capitalize }}</p>
       </div>
-
-      {%- for type in palette_types -%}
-        <div class="{{ color_wrapper_class }} flex-col items-center justify-center ">
-          <div
-            class="{{ circle_class }} bg-{{ color_option }}-{{ type }}"
-            title="{{ color_option | capitalize}} {{ type }}"></div>
-          <p>{{ type }}</p>
-        </div>
-      {%- endfor -%}
     </div>
   {%- endfor -%}
 </div>

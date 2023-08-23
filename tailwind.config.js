@@ -194,6 +194,7 @@ module.exports = {
         950: '#0C0501',
       },
       gray: {
+        text: '#FFFFFF',
         DEFAULT: '#1D1C1D',
         50: '#F5F5F5',
         100: '#E9E8E9',

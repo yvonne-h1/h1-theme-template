@@ -59,12 +59,10 @@ class VariantSelects extends HTMLElement {
   }
 
   updateMasterId() {
-    this.currentVariant = this.getVariantData().find((variant) => {
+    this.currentVariant = this.getVariantData().find(variant => {
       return !variant.options
         .map((option, index) => {
-          if (!this.variantOptions[index]) {
-            return true;
-          }
+          if (!this.variantOptions[index]) return true;
           return this.variantOptions[index] === option;
         })
         .includes(false);
@@ -101,8 +99,7 @@ class VariantSelects extends HTMLElement {
   updateURL() {
     if (!this.currentVariant) return;
 
-    window.history.replaceState({
-    }, '', `${this.options.url}?variant=${this.currentVariant.id}`);
+    window.history.replaceState({}, '', `${this.options.url}?variant=${this.currentVariant.id}`);
   }
 
   updateVariantInput() {
@@ -257,7 +254,7 @@ class VariantRadios extends VariantSelects {
       const optionIndex = parseInt(option.dataset.optionGroup);
 
       // Create compare options from group, remove selected option based on index
-      const compareOptions = [...this.options].filter((option, index) => index != optionIndex);
+      const compareOptions = [...this.variantOptions].filter((option, index) => index != optionIndex);
 
       // Loop over possible values for option group
       option.querySelectorAll('[data-option]').forEach((optionEl) => {

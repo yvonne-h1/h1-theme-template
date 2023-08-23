@@ -23,6 +23,7 @@
     <div class="range-slider relative mb-4 h-4 w-full before:absolute before:top-1.5
       before:block before:h-1.5 before:w-full before:bg-gray-100 before:content-['']
       ">
+      <label class="sr-only" for="filter-{{ filter.label | handleize }}-{{ filter_index }}-min">{{ filter.label }} min</label>
       <input id="filter-{{ filter.label | handleize }}-{{ filter_index }}-min"
         type="range"
         name="{{ filter.min_value.param_name }}"
@@ -31,8 +32,9 @@
         min="0"
         max="{{ range_max | divided_by: 100 | ceil }}"
         step="1" data-price-range-min-input>
+      <label class="sr-only" for="filter-{{ filter.label | handleize }}-{{ filter_index }}-max">{{ filter.label }} max</label>
       <input
-        id="filter-{{ filter.label | handleize }}-{{ forloop.index }}-max"
+        id="filter-{{ filter.label | handleize }}-{{ filter_index }}-max"
         type="range"
         name="{{ filter.max_value.param_name }}"
         class="max-price top-1.5"
