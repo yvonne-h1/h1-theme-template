@@ -33,21 +33,21 @@
           </a>
         </li>
 
-        {%- comment -%} Blog tags and current (if it's the case) {%- endcomment -%}
-        {%- for tag in blog.all_tags -%}
-          {%- if tag contains 'type:' -%}
-            {%- assign article_type = tag | downcase | remove: 'type:' -%}
-            {%- if current_tags contains tag -%}
-              <li class="{{- nav_item_class -}}">
-                {{ article_type | link_to_remove_tag: tag | replace: '<a ', nav_link_replace_active }}
-              </li>
-            {%- else -%}
-              <li class="{{- nav_item_class -}}">
-                {{ article_type | link_to_tag: tag | replace: '<a ', nav_link_replace }}
-              </li>
-            {%- endif -%}
-          {%- endif -%}
-        {%- endfor -%}
+        {%- liquid
+          # Blog tags and current (if it's the case)  echo
+          for tag in blog.all_tags
+            if tag contains 'type:'
+              assign article_type = tag | downcase | remove: 'type:'
+              echo '<li class="' | append: nav_item_class | append: '">'
+              if current_tags contains tag
+                echo article_type | link_to_remove_tag: tag | replace: '<a ', nav_link_replace_active
+              else
+                echo article_type | link_to_tag: tag | replace: '<a ', nav_link_replace
+              endif
+              echo '</li>'
+            endif
+          endfor
+        -%}
       </ul>
     </nav>
   {%- endif -%}
