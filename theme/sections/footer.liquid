@@ -47,14 +47,14 @@
                   {%- comment -%} Output menu image {%- endcomment -%}
                   {%- if block.settings.image_src != blank -%}
                     {%- capture menu_image -%}
-                          {%- render 'responsive-image',
-                            image_object: block.settings.image_src,
-                            lazy: block.settings.lazy,
-                            alt: block.settings.image_src.alt,
-                            max_width: block.settings.image_max_width,
-                            class: "object-cover"
-                          -%}
-                        {%- endcapture -%}
+                      {%- render 'responsive-image',
+                        image_object: block.settings.image_src,
+                        lazy: block.settings.lazy,
+                        alt: block.settings.image_src.alt,
+                        max_width: block.settings.image_max_width,
+                        class: "object-cover"
+                      -%}
+                    {%- endcapture -%}
                     <div
                       class="flexible-holder"
                       style="--max-width: {{ block.settings.image_max_width }}px;">
@@ -212,11 +212,6 @@
     {%- endif -%}
   </div>
 </footer>
-
-{%- comment -%} Spacer for the sticky mobile cart cta. {%- endcomment -%}
-{%- if request.page_type == 'cart' -%}
-  <div class="block h-[7.75rem] md:hidden"></div>
-{%- endif -%}
 
 {%- if enable_country_selector or enable_language_selector -%}
   <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>

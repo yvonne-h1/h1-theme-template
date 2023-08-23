@@ -39,7 +39,7 @@
 
   # Check if the product can be pre-ordered
   assign product_can_be_preordered = false
-  if settings.enable_pre_order and product.selected_or_first_available_variant.inventory_quantity <= 0 and product.selected_or_first_available_variant.inventory_policy == 'continue'
+  if settings.enable_pre_order and product.tags contains 'preorder' and product.selected_or_first_available_variant.inventory_quantity <= 0 and product.selected_or_first_available_variant.inventory_policy == 'continue'
     assign product_can_be_preordered = true
   endif
 

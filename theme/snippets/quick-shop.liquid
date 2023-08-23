@@ -142,8 +142,16 @@
       <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}" readonly>
 
       {%- comment -%} If preorder is enabled for this product add a line proprety when adding to the cart {%- endcomment -%}
-      {%- if settings.enable_pre_order and product.selected_or_first_available_variant.inventory_quantity <= 0 and product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
-        <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}" readonly>
+      {%- if settings.enable_pre_order
+        and product.tags contains 'preorder'
+        and product.selected_or_first_available_variant.inventory_quantity <= 0
+        and product.selected_or_first_available_variant.inventory_policy == 'continue'
+      -%}
+        <input
+          type="hidden"
+          name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
+          value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}"
+          readonly>
       {%- endif -%}
 
       <button type="submit" name="add" aria-label="Add" class="sr-only" data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"></button>

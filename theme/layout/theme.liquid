@@ -21,7 +21,7 @@
     {{ content_for_header }}
   </head>
 
-  <body class="group/body {% render 'html-template-class' %}">
+  <body class="group/body {% render 'html-template-class' %} {% if template.name == 'cart' %}pb-[157px] md:pb-0{%- endif -%}">
     {%- render 'html-head-gtm', container: 'body' -%}
 
     <a

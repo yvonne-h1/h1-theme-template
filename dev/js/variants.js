@@ -1,13 +1,29 @@
 class VariantSelects extends HTMLElement {
   constructor() {
     super();
-    this.addEventListener('change', this.onVariantChange);
 
-    this.productFormId = `#product-form-${this.dataset.productId}`;
-    this.priceId = `price-${this.dataset.productId}`;
+    this.options = {
+      isPreorder: false,
+    };
+    // Get options from element data and combine with this.options
+    if (this?.dataset?.options) {
+      const dataOptions = JSON.parse(this.dataset.options);
+      this.options = {
+        ...this.options,
+        ...dataOptions,
+      };
+    }
+
+    this.optionName;
+    this.optionValue;
+
+    this.querySelectorAll('select').forEach(select => select.addEventListener('change', this.onVariantChange.bind(this)));
+
+    this.productFormId = `#product-form-${this.options.productId}`;
+    this.priceId = `price-${this.options.productId}`;
   }
 
-  onVariantChange() {
+  onVariantChange(event) {
     this.updateOptions();
     this.updateMasterId();
     this.toggleAddButton(true, '', false);
@@ -23,20 +39,33 @@ class VariantSelects extends HTMLElement {
       this.renderProductInfo();
       this.dispatchVariantChange();
     }
+
+    this.optionName = event.target.dataset.optionName || event.target.closest('fieldset').dataset.optionName;
+    this.optionValue = event.target.value;
+
+    // change the other possible variant inputs to the same value
+    document.querySelectorAll(`[data-option-name=${this.optionName}]`).forEach(variantOption => {
+      if (variantOption.nodeName === 'FIELDSET') {
+        variantOption.querySelector(`input[value="${this.optionValue}"]`).checked = true;
+      }
+      if (variantOption.nodeName === 'SELECT') {
+        variantOption.querySelector(`option[value="${this.optionValue}"]`).selected = true;
+      }
+    });
   }
 
   updateOptions() {
-    this.options = Array.from(this.querySelectorAll('select'), (select) => select.value);
+    this.variantOptions = Array.from(this.querySelectorAll('select'), (select) => select.value);
   }
 
   updateMasterId() {
     this.currentVariant = this.getVariantData().find((variant) => {
       return !variant.options
         .map((option, index) => {
-          if (!this.options[index]) {
+          if (!this.variantOptions[index]) {
             return true;
           }
-          return this.options[index] === option;
+          return this.variantOptions[index] === option;
         })
         .includes(false);
     });
@@ -57,9 +86,11 @@ class VariantSelects extends HTMLElement {
   updateMedia() {
     if (!this.currentVariant || !this.currentVariant?.featured_media) return;
     const newMedia = document.querySelector(
-      `[data-media-id="${this.dataset.productId}-${this.currentVariant.featured_media.id}"]`,
+      `[data-media-id="${this.options.productId}-${this.currentVariant.featured_media.id}"]`,
     );
+
     if (!newMedia) return;
+
     const parent = newMedia.parentElement;
     parent.prepend(newMedia);
     window.setTimeout(() => {
@@ -69,12 +100,14 @@ class VariantSelects extends HTMLElement {
 
   updateURL() {
     if (!this.currentVariant) return;
+
     window.history.replaceState({
-    }, '', `${this.dataset.url}?variant=${this.currentVariant.id}`);
+    }, '', `${this.options.url}?variant=${this.currentVariant.id}`);
   }
 
   updateVariantInput() {
     const productForms = document.querySelectorAll(this.productFormId, '#product-form-installment');
+
     productForms.forEach((productForm) => {
       const input = productForm.querySelector('input[name="id"]');
       input.value = this.currentVariant.id;
@@ -85,8 +118,7 @@ class VariantSelects extends HTMLElement {
   }
 
   renderProductInfo() {
-    const url = `${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`;
-
+    const url = `${this.options.url}?variant=${this.currentVariant.id}&section_id=${this.options.section}`;
     fetch(url)
       .then((response) => response.text())
       .then((responseText) => {
@@ -101,19 +133,22 @@ class VariantSelects extends HTMLElement {
         if (this.currentVariant) {
           this.toggleAddButton(!this.currentVariant.available, window.variantStrings.soldOut);
         }
+
         // Update the inventory quantity hidden input
-        const inventoryQtyDestination = document.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
-        const inventoryQtySource = html.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
-        const qtyInputDestination = this.closest('product-info').querySelector('quantity-input input[name="quantity"]');
+        if (!this.options.isPreorder) {
+          const inventoryQtyDestination = document.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
+          const inventoryQtySource = html.querySelector(this.productFormId).querySelector('input[name="inventory_quantity"]');
+          const qtyInputDestination = this.closest('product-info').querySelector('quantity-input input[name="quantity"]');
 
-        if (inventoryQtyDestination) inventoryQtyDestination.value = inventoryQtySource.value;
+          if (inventoryQtyDestination) inventoryQtyDestination.value = inventoryQtySource.value;
 
-        // update the max attribute of the quantity input
-        if (qtyInputDestination) {
-          qtyInputDestination.max = inventoryQtySource.value;
-          // check if the current value of the input is higher than the max. If so, set it to the max.
-          if (+qtyInputDestination.value > +inventoryQtySource.value) {
-            qtyInputDestination.value = inventoryQtySource.value;
+          // update the max attribute of the quantity input
+          if (qtyInputDestination) {
+            qtyInputDestination.max = inventoryQtySource.value;
+            // check if the current value of the input is higher than the max. If so, set it to the max.
+            if (+qtyInputDestination.value > +inventoryQtySource.value) {
+              qtyInputDestination.value = inventoryQtySource.value;
+            }
           }
         }
 
@@ -166,19 +201,34 @@ if (!customElements.get('variant-selects')) {
 class VariantRadios extends VariantSelects {
   constructor() {
     super();
+
+    this.options = {
+      isPreorder: false,
+    };
+    // Get options from element data and combine with this.options
+    if (this?.dataset?.options) {
+      const dataOptions = JSON.parse(this.dataset.options);
+      this.options = {
+        ...this.options,
+        ...dataOptions,
+      };
+    }
+
+    this.querySelectorAll('input').forEach(input => input.addEventListener('input', this.onVariantChange.bind(this)));
+
     this.updateOptions();
     this.updateMasterId();
     this.highlightOptions();
   }
 
-  onVariantChange() {
-    super.onVariantChange();
+  onVariantChange(event) {
+    super.onVariantChange(event);
     this.highlightOptions();
   }
 
   updateOptions() {
     const fieldsetArray = Array.from(this.querySelectorAll('fieldset'));
-    this.options = fieldsetArray.map((fieldset) => {
+    this.variantOptions = fieldsetArray.map((fieldset) => {
       return Array.from(fieldset.querySelectorAll('input')).find((radio) => radio.checked).value;
     });
   }
@@ -212,7 +262,7 @@ class VariantRadios extends VariantSelects {
       // Loop over possible values for option group
       option.querySelectorAll('[data-option]').forEach((optionEl) => {
         let label = optionEl.querySelector('[data-option-label]'),
-          input = optionEl.querySelector('[data-option-input]'),
+          input = optionEl.querySelector('[data-variant-option-id]'),
           value = input.value;
 
         // Match option availability and check if the two current options are available for value

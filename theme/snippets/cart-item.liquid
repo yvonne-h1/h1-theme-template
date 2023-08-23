@@ -16,6 +16,12 @@
   unless aspect_ratio
     assign aspect_ratio = '3/4'
   endunless
+
+  # Pre-orders
+  assign is_preorder = false
+  if settings.enable_pre_order and item.product.tags contains 'preorder' and item.variant.inventory_quantity <= 0 and item.variant.inventory_policy == 'continue'
+    assign is_preorder = true
+  endif
 -%}
 
 <div
@@ -37,12 +43,17 @@
       {%- comment -%} Title {%- endcomment -%}
       <a
         href="{{ item.product.url }}"
-        class="break-words text-sm font-bold text-inherit">
+        class="mb-2 block break-words text-sm font-bold text-inherit">
         {{- item.product.title | escape -}}
       </a>
 
-      <div class="cart-item__prices">
-        {% render 'render-price', product: item.variant %}
+      <div class="flex items-center gap-4">
+        <div class="cart-item__badges relative">
+          {% render 'product-badges', product: item.product, class: 'relative badges--sm' %}
+        </div>
+        <div class="cart-item__prices">
+          {% render 'render-price', product: item.variant %}
+        </div>
       </div>
 
       {%- comment -%} Cart errors {%- endcomment -%}
@@ -72,8 +83,12 @@
             {%- endif -%}
 
             {%- for property in item.properties -%}
+              {%- capture preorder_label -%}
+                {%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}
+              {%- endcapture -%}
+
               {%- assign property_first_char = property.first | slice: 0 -%}
-              {%- if property.last != blank and property_first_char != '_' -%}
+              {%- if property.last != blank and property_first_char != '_' and preorder_label != property.first -%}
                 <div class="product-option mt-0.5 flex gap-1 text-xs">
                   <dt>{{ property.first }}:</dt>
                   <dd>
@@ -99,7 +114,7 @@
       </div>
 
       {%- comment -%} Quantity. When only one item is in the cart, add trash icon for minus {%- endcomment -%}
-      <div class="cart-item__quantity flex max-w-[7.5rem] justify-self-end">
+      <div class="cart-item__quantity flex max-w-[7.5rem] items-end justify-self-end">
         {%- comment %} Quantity input {%- endcomment %}
         {%- assign qty_id = item.index | plus: 1 -%}
         {%- render 'quantity-input', id: qty_id, value: item.quantity, qty_product: item.product, type: 'cart' -%}

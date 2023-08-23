@@ -44,8 +44,6 @@ if (!customElements.get('cart-items')) {
     }
 
     async updateQuantity(line, quantity, name) {
-      console.log('line, quantity, name', line, quantity, name);
-
       this.enableLoading(line);
 
       const body = JSON.stringify( {

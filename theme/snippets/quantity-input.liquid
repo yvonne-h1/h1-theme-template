@@ -8,12 +8,17 @@
     qty_product: item.product
     type: 'cart', 'pdp',
     max: 1000 - max available options
+    is_preorder: is_preorder
   -%}
 {% endcomment %}
 
 {%- liquid
   unless value
     assign value = 1
+  endunless
+
+  unless is_preorder
+    assign is_preorder = false
   endunless
 
   unless type
@@ -32,7 +37,7 @@
   endcapture
 -%}
 
-<quantity-input class="quantity relative inline-flex rounded-full border border-gray-100 bg-gray-50 p-1">
+<quantity-input class="quantity relative inline-flex h-max rounded-full border border-gray-100 bg-gray-50 p-1">
   <button class="quantity__button {{ button_classes }}" name="minus" type="button">
     <span class="sr-only">
       {{- button_minus_accessibility_text -}}
@@ -55,7 +60,7 @@
     value="{{ value }}"
     pattern="[0-9]*"
     inputmode="numeric"
-    {% if max -%}
+    {% if max and is_preorder == false -%}
       max="{{ max }}"
     {%- endif %}
     aria-label="

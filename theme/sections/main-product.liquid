@@ -5,7 +5,15 @@
   render 'import-styles', file_name: 'component-fancybox.css'
 -%}
 
-{%- assign product_form_id = 'product-form-' | append: product.id -%}
+{%- liquid
+  # Pre-orders
+  assign is_preorder = false
+  if settings.enable_pre_order and product.tags contains 'preorder' and product.selected_or_first_available_variant.inventory_quantity <= 0 and product.selected_or_first_available_variant.inventory_policy == 'continue'
+    assign is_preorder = true
+  endif
+
+  assign product_form_id = 'product-form-' | append: product.id
+-%}
 
 {%- capture container_content -%}
   <div class="product grid grid-cols-12 gap-x-0 gap-y-base">
@@ -79,7 +87,8 @@
                   use_variant: true,
                   show_badges: block.settings.show_badges,
                   font_size: 'text-lg',
-                  block: block
+                  block: block,
+                  is_preorder: is_preorder
                 -%}
               </div>
             </div>
@@ -125,7 +134,7 @@
                   {%- render 'icons', icon: 'plus', icon_class: 'w-4 shrink-0 no-js:hidden group-[.collapsible-is-open]:hidden' -%}
                   {%- render 'icons', icon: 'minus', icon_class: 'w-4 shrink-0 hidden no-js:hidden group-[.collapsible-is-open]:block' -%}
                 </button>
-                <div class="collapsible__target w-full overflow-y-auto bg-color-default" data-collapsible-target>
+                <div class="collapsible__target w-full overflow-y-auto" data-collapsible-target>
                   <div class="rte pb-4 text-sm">
                     {{- block.settings.content -}}
                     {{- block.settings.page.content -}}
@@ -158,7 +167,8 @@
                   value: 1,
                   qty_product: product,
                   type: 'pdp',
-                  max: product.selected_or_first_available_variant.inventory_quantity
+                  max: product.selected_or_first_available_variant.inventory_quantity,
+                  is_preorder: is_preorder
                 -%}
               </div>
             {%- endif -%}
@@ -166,184 +176,25 @@
           {%- comment -%} Variants {%- endcomment -%}
           {%- when 'variant_picker' -%}
             {%- if product.has_only_default_variant != true and product.available -%}
-              {%- if block.settings.picker_type == 'button' -%}
+              {%- if block.settings.picker_type == 'radio' -%}
 
                 {%- comment -%} Show variants as radio buttons {%- endcomment -%}
-                <variant-radios
-                  class="product__variant-selector product__variant-selector--buttons block no-js:hidden"
-                  data-section="{{ section.id }}"
-                  data-product-id="{{ product.id }}"
-                  data-url="{{ product.url }}"
-                  {{ block.shopify_attributes }}>
-                  <div class="flex divide-x-2 divide-gray-100">
-                    {%- for option in product.options_with_values -%}
-                      {%- liquid
-                        # Check if this is a color filter
-                        assign is_color = false
-                        assign option_size = product.options.size
-                        assign color_variant_label = settings.color_filter_name | handleize
-                        assign color_label = option.name | handleize
-
-                        if color_variant_label == color_label
-                          assign is_color = true
-                        endif
-                      -%}
-                      <div class="flex-1 basis-1/2 first:pe-6 last:ps-6">
-                        <fieldset class="options options--{{ color_label }} js product-form__input flex items-center" data-option-group="{{ forloop.index | minus: 1 }}">
-
-                          <legend class=" mb-2 text-sm font-semibold {% if block.settings.picker_label == false %} sr-only{% endif %}">
-                            {{- option.name -}}
-                          </legend>
-
-                          {%- for value in option.values -%}
-                            {%- liquid
-                              assign index = forloop.index
-
-                              # Check if it is available if we only have 1 option
-                              assign index = forloop.index
-                              assign option_available_class = ''
-
-                              if option_size == 1
-                                for loop_variant in product.variants
-                                  if loop_variant.option1 == value
-                                    if loop_variant.available == false
-                                      assign option_available_class = 'option__label--disabled'
-                                    endif
-                                  endif
-                                endfor
-                              endif
-
-                              # for labels with only 3 letters, make them uppercase
-                              assign value_text = value
-                              if value.size < 4
-                                assign value_text = value | upcase
-                              endif
-                            -%}
-
-                            {%- capture label -%}
-                              <label class="option__label option__label--{{ color_label }} {{ option_available_class }}" for="{{ product.id }}-{{ option.name }}-{{ index }}" data-option-label>
-                                {{ value_text }}
-                              </label>
-                            {%- endcapture -%}
-
-                            <div class="option option--{{ color_label }}" data-option>
-                              <input
-                                class="option__input option__input--{{ color_label }} sr-only"
-                                type="radio"
-                                id="{{ product.id }}-{{ option.name }}-{{ index }}"
-                                name="{{ option.name }}"
-                                value="{{ value | escape }}"
-                                data-option-input
-                                {% if option.selected_value == value %}checked{% endif %}
-                              >
-
-                              {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
-                              {%- if is_color -%}
-                                {%- liquid
-                                assign variant_color = value | handleize
-                                assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
-                                assign color_is_mapped = false
-                                assign color_hex = ''
-
-                                assign color_options_metafield = product.metafields.product.color_variants.value
-                              -%}
-
-                              {%- for product_variant in color_options_metafield -%}
-                                {%- assign variant_options = product_variant.options -%}
-                                {%- for option in variant_options -%}
-                                  {%- assign option_downcase = option | downcase -%}
-                                  {%- if option_downcase == color_variant_label -%}
-                                    {%- assign option_name = 'option' | append: forloop.index -%}
-                                    {%- assign product_variant_color = product_variant.variants[0][option_name] | handleize -%}
-
-                                    {% comment %} Skip if this is the current color {% endcomment %}
-                                    {%- if product_variant_color == variant_color -%}
-                                      {%- continue -%}
-                                    {%- endif -%}
-
-                                    {%- comment -%} Loop through color mapping {%- endcomment -%}
-                                    {%- for color in color_mappings -%}
-                                      {%- assign color_name = color | split: '|' | first | handleize -%}
-
-                                      {%- if color_name == product_variant_color  -%}
-                                        {%- liquid
-                                          # Render with background-color
-                                          assign color_hex = color | split: '|' | last
-                                          assign color_is_mapped = true
-                                        -%}
-                                      {%- endif -%}
-                                    {%- endfor -%}
-
-                                    {%- capture variants -%}
-                                      {{- variants -}}
-                                      <div class="option">
-                                        <a href="{{ product_variant.url }}"
-                                          class="option__label option__label--{{ color_label }} focus-visible:ring-offset transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 states:scale-110"
-                                          style="background-color: {{ color_hex }};"
-                                          title="{{ product_variant_color | escape }}"
-                                          data-option-label
-                                        >
-                                          <span class="sr-only">{{ product_variant_color }}</span>
-                                        </a>
-                                      </div>
-                                    {%- endcapture -%}
-                                  {%- endif -%}
-                                {%- endfor -%}
-                              {%- endfor -%}
-
-
-                                {%- comment -%} Loop through color mapping {%- endcomment -%}
-                                {%- for color in color_mappings -%}
-                                  {%- assign color_name = color | split: '|' | first | handleize -%}
-
-                                  {%- if color_name == variant_color -%}
-                                    {%- liquid
-                                      # Render with background-color
-                                      assign color_hex = color | split: '|' | last
-                                      assign color_is_mapped = true
-                                    -%}
-
-                                    <label
-                                      class="option__label option__label--{{ color_label }}"
-                                      for="{{ product.id }}-{{ option.name }}-{{ index }}"
-                                      style="background-color: {{ color_hex }};"
-                                      title="{{ value | escape }}"
-                                      data-option-label
-                                    >
-                                      <span class="sr-only">{{ value_text }}</span>
-                                    </label>
-                                  {%- endif -%}
-                                {%- endfor -%}
-
-                                {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
-                                {%- unless color_is_mapped -%}
-                                  {{ label }}
-                                {%- endunless -%}
-
-                              {%- comment -%} Else render default filter option {%- endcomment -%}
-                              {%- else -%}
-                                {{ label }}
-                              {%- endif -%}
-                            </div>
-                            {{ variants }}
-                          {%- endfor -%}
-                        </fieldset>
-                      </div>
-                    {%- endfor -%}
-                  </div>
-                  <script type="application/json">
-                    {{ product.variants | json }}
-                  </script>
-                </variant-radios>
+                {%- render 'product-variant-radio',
+                  product: product,
+                  section: section,
+                  block: block,
+                  is_preorder: is_preorder
+                -%}
 
               {%- else -%}
-
                 {%- render 'import-styles', file_name: 'component-form.css' -%}
 
                 {%- comment -%} Show variants in dropdowns {%- endcomment -%}
                 {%- render 'product-variant-select',
                   product: product,
-                  block: block
+                  section: section,
+                  block: block,
+                  is_preorder: is_preorder
                 -%}
               {%- endif -%}
             {%- endif -%}
@@ -368,13 +219,11 @@
                   {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
                     <input type="hidden" name="quantity" min="1" value="1" readonly>
-                    <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}" readonly>
+                    <input type="hidden" name="inventory_quantity" value="{%- unless is_preorder -%}{{ product.selected_or_first_available_variant.inventory_quantity }}{%- endunless -%}" readonly>
 
                     {% comment %} Pre-orders {% endcomment %}
-                    {% if settings.enable_pre_order and
-                      product.selected_or_first_available_variant.inventory_quantity <= 0 and
-                      product.selected_or_first_available_variant.inventory_policy == 'continue'  %}
-                      <input type="hidden" name="properties[Pre-order]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}" readonly>
+                    {%- if is_preorder -%}
+                      <input type="hidden" name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}" readonly>
                     {% endif %}
 
                     {%- comment -%} Show variants in dropdowns for the fixed 'add to cart'{%- endcomment -%}
@@ -382,8 +231,9 @@
                       {%- render 'product-variant-select',
                         product: product,
                         block: block,
-                        class: 'flex gap-base'
-                        -%}
+                        class: 'flex gap-base',
+                        is_preorder: is_preorder
+                      -%}
                     </div>
 
                     <div class="product-form__buttons grid grid-cols-1 items-center gap-2">
@@ -636,18 +486,34 @@
           {
             "type": "select",
             "id": "picker_type",
+            "default": "radio",
+            "label": "Type",
             "options": [
               {
                 "value": "dropdown",
                 "label": "Dropdown"
               },
               {
-                "value": "button",
-                "label": "Button"
+                "value": "radio",
+                "label": "Radio inputs"
               }
-            ],
-            "default": "button",
-            "label": "Button"
+            ]
+          },
+          {
+            "type": "select",
+            "id": "picker_layout",
+            "default": "inline",
+            "label": "Option alignment",
+            "options": [
+              {
+                "value": "inline",
+                "label": "Inline"
+              },
+              {
+                "value": "block",
+                "label": "Block"
+              }
+            ]
           },
           {
             "type": "paragraph",

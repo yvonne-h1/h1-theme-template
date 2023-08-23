@@ -10,7 +10,7 @@
 
     {%- comment -%} Header {%- endcomment -%}
     <div class="cart__header mb-6 group-[.cart-is-empty]/cart-items:hidden lg:mb-14">
-      <h1 class="h4 text-center">
+      <h1 class="h4 {{ section.settings.heading_alignment }}">
         {%- render "render-translation", namespace: "sections.cart", key: "title", fallback: "Cart" -%}
       </h1>
     </div>
@@ -21,7 +21,7 @@
 
         {% comment %} Left column {% endcomment %}
         <div class="col-span-8">
-          <div class="cart__items relative" id="main-cart-items" data-id="{{ section.id }}">
+          <div class="cart__items relative lg:mb-8" id="main-cart-items" data-id="{{ section.id }}">
             <div class="js-cart-item-contents group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
               {%- if cart != empty -%}
                 <div class="cart-items">
@@ -58,64 +58,63 @@
           id="main-cart-footer"
           data-id="{{ section.id }}"
           class="col-span-4">
-          <div class="cart__footer grid grid-cols-8 md:mt-14 lg:mt-0 lg:grid-cols-1 lg:gap-base">
+          <div class="cart__footer mb-8 grid grid-cols-8 md:mt-14 lg:my-0 lg:grid-cols-1 lg:gap-base">
 
             <div class="col-span-8 grid grid-cols-1 gap-y-6 md:col-span-3 lg:col-span-1">
 
-              {%- comment -%} Cart note {%- endcomment -%}
-              {%- if section.settings.show_cart_note -%}
-                <cart-note class="cart__note field mb-0 block">
-                  <label for="Cart-note" class="field__label font-body text-xs">
-                    {%- render "render-translation", namespace: "sections.cart", key: "note", fallback: "Instructions about shipping, taxes and/or returns." -%}
-                  </label>
-                  <textarea
-                    name="note"
-                    placeholder="{% render "render-translation", namespace: "sections.cart", key: "message", fallback: "Leave a comment here" -%}"
-                    class="field__input"
-                    id="Cart-note"
-                    data-cart-note
-                  >
-                    {{- cart.note -}}
-                  </textarea>
-                </cart-note>
-              {%- endif -%}
-
               {%- comment -%} USPs & @app blocks {%- endcomment -%}
-              {%- capture usps -%}
+              {%- capture sidebar_content -%}
                 {%- for block in section.blocks -%}
                   {%- case block.type -%}
+
                     {%- when '@app' -%}
-                      <div class="cart__app-block relative mb-4 border-b  py-4 first:pt-0 last:mb-0">
+                      <div class="cart__app-block relative border-b py-4">
                         {%- render block -%}
                       </div>
+
+                    {%- when 'cart-note' -%}
+                      <cart-note class="cart__note field block">
+                        <label for="Cart-note" class="field__label font-body text-xs">
+                          {%- render "render-translation", namespace: "sections.cart", key: "note", fallback: "Instructions about shipping, taxes and/or returns." -%}
+                        </label>
+                        <textarea
+                          name="note"
+                          placeholder="{% render "render-translation", namespace: "sections.cart", key: "message", fallback: "Leave a comment here" -%}"
+                          class="field__input"
+                          id="Cart-note"
+                          data-cart-note
+                        >
+                          {{- cart.note -}}
+                        </textarea>
+                      </cart-note>
+
                     {%- when 'usp' -%}
                       {%- if block.settings.text != blank -%}
-                        <li class="cart-usps__item relative flex items-center gap-2">
-                          <div class="cart-usps__icon block w-6 shrink-0 rounded-full bg-primary-100 p-1">
-                            {%- liquid
-                              assign icon = block.settings.icon | downcase
-                              render 'icons', icon: icon, icon_class: 'w-4 p-0.5'
-                            -%}
-                          </div>
-                          <p class="cart-usps__text text-xs leading-4">
+                        <p class="usp peer flex w-full items-center justify-items-start gap-4 text-start text-xs peer-[.usp]:-mt-5" {{ block.shopify_attributes }}>
+                          {%- if block.settings.icon != 'none' -%}
+                            <span class="usp__icon rounded-full bg-primary-200 p-2">
+                              {%- render 'icons', icon: block.settings.icon, icon_class: 'w-4 shrink-0 grow-0' -%}
+                            </span>
+                          {%- endif -%}
+                          <span class="usp__text">
                             {{- block.settings.text -}}
-                          </p>
-                        </li>
+                          </span>
+                        </p>
                       {%- endif -%}
                   {%- endcase -%}
                 {% endfor %}
               {%- endcapture -%}
 
-              {%- if usps != blank -%}
-                <ul class="cart-usps flex flex-col gap-2">
-                  {{- usps -}}
-                </ul>
+              {%- if sidebar_content != blank -%}
+                <div class="flex flex-col gap-y-5">
+                  {{- sidebar_content -}}
+                </div>
               {%- endif -%}
 
             </div>
 
             {%- comment -%} Cart subtotal {%- endcomment -%}
-            <div class="cart__subtotal fixed inset-x-0 bottom-0 z-20 col-span-8 bg-white md:relative md:col-span-3 md:col-start-6 lg:col-span-1 lg:bg-transparent">
+            <div class="cart__subtotal fixed inset-x-0 bottom-0 z-20 col-span-8 bg-white px-[var(--content-wrapper-padding)] drop-shadow-[0_1px_15px_rgba(0,0,0,0.15)] md:relative md:col-span-3 md:col-start-6 md:px-0 md:drop-shadow-none lg:col-span-1  lg:bg-transparent">
 
               <div class="js-cart-footer-contents" {{ block.shopify_attributes }}>
 
@@ -169,7 +168,6 @@
 
               {%- comment -%} Checkout button {%- endcomment -%}
               <div class="cart__ctas grid grid-cols-1 gap-y-2" {{ block.shopify_attributes }}>
-
                 <noscript>
                   <button type="submit" class="button button--secondary button--lg">
                     {%- render 'render-translation',
@@ -196,19 +194,17 @@
                 </button>
               </div>
 
+              {% comment %} 'Continue shopping' link {% endcomment %}
+              <a href="{{ routes.all_products_collection_url }}" class="link flex gap-2 py-4 text-center">
+                {%- render "render-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
+                {%- render 'icons', icon: 'chevron-right', icon_class: 'w-3' -%}
+              </a>
             </div>
-
           </div>
         </div>
       </div>
     </form>
   </cart-items>
-
-  {% comment %} 'Continue shopping' link {% endcomment %}
-  <a href="{{ routes.all_products_collection_url }}" class="link py-10">
-    {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
-    {%- render "render-translation", namespace: "general", key: "continue_shopping", fallback: "Continue shopping" -%}
-  </a>
 {%- endcapture -%}
 
 {%- comment -%} Output cart content {%- endcomment -%}
@@ -235,11 +231,36 @@
         "default": false,
         "label": "Enable cart note",
         "info": "When selected, a text field will be displayed on the cart page for customers to add a note to their order."
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
       }
     ],
     "blocks": [
       {
         "type": "@app"
+      },
+      {
+        "type": "cart-note",
+        "name": "Cart note",
+        "limit": 1
       },
       {
         "type": "usp",

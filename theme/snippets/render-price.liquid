@@ -16,6 +16,10 @@
     assign use_variant = false
   endunless
 
+  unless is_preorder
+    assign is_preorder = false
+  endunless
+
   if use_variant
     assign target = product.selected_or_first_available_variant
   else
@@ -43,7 +47,6 @@
     assign font_size = 'text-sm'
   endunless
 -%}
-
 <div
   class="
     price {{ font_size }} flex flex-wrap items-center justify-items-center gap-2
@@ -61,7 +64,7 @@
   ">
   {% comment %} Badges {% endcomment %}
   {%- if show_badges -%}
-    {%- if product.available == false or target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
+    {%- if product.available == false or is_preorder or target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
       {%- assign badges_classes = 'relative ' | append: block.settings.badge_size -%}
       {% capture badges %}
         {%- render 'product-badges', product: product, class: badges_classes -%}

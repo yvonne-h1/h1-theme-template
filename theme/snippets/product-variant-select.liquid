@@ -1,28 +1,37 @@
 {% comment %}
   {%- render 'product-variant-select',
     product: product,
+    section: section,
     block: block
   -%}
 {% endcomment %}
 
 <variant-selects
+  data-options='
+    {
+      "section": "{{ section.id }}",
+      "productId": "{{ product.id }}",
+      "url": "{{ product.url }}",
+      "isPreorder": {{ is_preorder | default: false }}
+    }
+  '
   class="product__variant-selector product__variant-selector--select block {{ class }}"
-  data-section="{{ product.id }}"
-  data-url="{{ product.url }}"
   {{ block.shopify_attributes }}>
   {%- for option in product.options_with_values -%}
     <div class="field">
-      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Option-{{ product.id }}-{{ forloop.index0 }}">
+      <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}">
         {{ option.name }}
       </label>
       <div class="select relative">
         <select
-          id="Option-{{ product.id }}-{{ forloop.index0 }}"
+          id="{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
           class="select__select"
-          name="options[{{ option.name | escape }}]">
+          name="options[{{ option.name | escape }}]"
+          data-option-name="{{ option.name | handleize }}">
           {%- for value in option.values -%}
             <option
               value="{{ value | escape }}"
+              data-variant-option-id="{{ product.id }}-{{ option.name }}-{{ forloop.index }}"
               {% if option.selected_value == value %}
                 selected="selected"
               {% endif %}>
