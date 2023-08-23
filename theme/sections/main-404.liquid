@@ -14,19 +14,15 @@
             {{- block.settings.text -}}
           </div>
         {%- when 'button' -%}
-          <p class="rich-text__button">
-            <a
-              {% if block.settings.button_link == blank %}
-                aria-disabled="true"
-              {% else %}
-                href="{{ block.settings.button_link }}"
-              {% endif %}
-              class="button button--lg {{ block.settings.button_color_scheme }}"
-              {{ block.shopify_attributes }}
-            >
+          {% if block.settings.button_link != blank and block.settings.button_label != blank %}
+            <a href="{{ block.settings.button_link }}" class="rich-text__button button button--lg {{ block.settings.button_color_scheme }}" {{ block.shopify_attributes }}>
               {{ block.settings.button_label | escape }}
             </a>
-          </p>
+          {% elsif request.design_mode %}
+            <button class="button" aria-disabled="true">
+              {{ block.settings.button_label | escape }}
+            </button>
+          {% endif %}
       {%- endcase -%}
     {%- endfor -%}
   </div>

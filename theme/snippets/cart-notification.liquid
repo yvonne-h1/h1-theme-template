@@ -10,7 +10,7 @@
   </button>
 {%- endcapture -%}
 
-{% comment %} Output notification. {% endcomment %}
+{% comment %} Output notification {% endcomment %}
 <cart-notification
   class="cart-notification group/cart-notification">
   <div
@@ -33,12 +33,6 @@
         {% comment %} Will be filled with cart-notification-product.liquid. {% endcomment %}
       </div>
       <div class="cart-notification__links grid grid-cols-1 gap-2 text-center">
-        <a
-          href="{{ routes.cart_url }}"
-          id="cart-notification-button"
-          class="button button--md button--secondary w-full">
-          {% comment %} Will be filled with cart-notification-button.liquid. {% endcomment %}
-        </a>
         <form action="{{ routes.cart_url }}" method="post" id="cart" class="my-0">
           <button
             type="submit"
@@ -47,10 +41,12 @@
             {%- render 'render-translation', namespace: 'sections.cart.checkout', fallback: 'Check out' -%}
           </button>
         </form>
-        <button type="button" class="button button--md button--link" data-cart-notification-close>
-          {%- render 'icons', icon: 'chevron-left', icon_class: 'w-3' -%}
-          {%- render 'render-translation', namespace: 'general.continue_shopping', fallback: 'Continue shopping' -%}
-        </button>
+        <a
+          href="{{ routes.cart_url }}"
+          id="cart-notification-button"
+          class="button button--md button--secondary w-full font-normal">
+          {% comment %} Will be filled with cart-notification-button.liquid. {% endcomment %}
+        </a>
       </div>
     </div>
 
