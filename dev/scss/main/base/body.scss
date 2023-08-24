@@ -1,10 +1,6 @@
-@use '../../mixins' as *;
-
 @layer base {
   * {
-    @include states() {
-      @apply transition-colors;
-    }
+    @apply states:transition-colors;
   }
   body {
     @apply m-0

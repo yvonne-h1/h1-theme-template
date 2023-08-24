@@ -1,10 +1,13 @@
-@use '../../mixins' as *;
-
 @layer components {
   .button {
-    background: var(--button-background, theme('colors.secondary.DEFAULT'));
-    border-color: var(--button-border-color, theme('colors.secondary.DEFAULT'));
-    color: var(--button-text, theme('colors.secondary.text'));
+    --button-background: theme('colors.secondary.DEFAULT');
+    --button-border-color: theme('colors.secondary.DEFAULT');
+    --button-text: theme('colors.secondary.text');
+
+    --button-hover-background: theme('colors.secondary.400');
+    --button-hover-border-color: theme('colors.secondary.400');
+    --button-hover-text: theme('colors.secondary.text');
+
     @apply relative
     inline-flex
     cursor-pointer
@@ -14,21 +17,26 @@
     gap-2
     rounded-md
     border-2
+    border-[var(--button-border-color)]
+    bg-[var(--button-background)]
     px-4
     py-3
     text-sm
     font-bold
     leading-none
+    text-[var(--button-text)]
     no-underline
-    transition-all;
-    @include states(':not([disabled])') {
-      @apply no-underline;
-      background: var(--button-hover-background, theme('colors.secondary.400'));
-      border-color: var(--button-hover-border-color, theme('colors.secondary.400'));
-      color: var(--button-hover-text, theme('colors.secondary.text'));
-    }
-    @include disabled() {
-      @apply pointer-events-none cursor-not-allowed opacity-50;
+    transition-all
+
+    states:no-underline
+
+    disabled:pointer-events-none
+    disabled:cursor-not-allowed
+    disabled:opacity-50;
+    &:not([disabled]) {
+      @apply border-[var(--button-hover-border-color)]
+      bg-[var(--button-hover-background)]
+      text-[var(--button-hover-text)];
     }
 
     // .button--link
@@ -49,11 +57,11 @@
       @apply fill-current;
     }
 
-    // for a links with a button class
+    // for 'a' elements with a button class
     &:link {
-      color: var(--button-text, inherit);
-      @include states(':not([disabled])') {
-        color: var(--button-hover-text, inherit);
+      @apply text-[var(--button-text)];
+      &:not([disabled]) {
+        @apply states:text-[var(--button-hover-text)];
       }
     }
   }
@@ -107,7 +115,7 @@
   .button--link {
     --button-background: transparent;
     --button-border-color: transparent;
-    --button-text: theme('colors.text');
+    --button-text: theme('colors.text-default');
     --button-hover-background: transparent;
     --button-hover-border-color: transparent;
     --button-hover-text: theme('colors.primary.DEFAULT');
@@ -159,21 +167,19 @@
         font-bold
         leading-normal
         no-underline
-        transition-colors #{!important};
-      @include states(':not([disabled])') {
-        @apply border-[--button-hover-border-color,inherit]
-        bg-[--button-hover-background,inherit]
-        text-[--button-hover-text,inherit]
-        no-underline #{!important};
+        transition-colors
+        disabled:hidden #{!important};
+      &:not([disabled]) {
+        @apply states:border-[--button-hover-border-color,inherit]
+          states:bg-[--button-hover-background,inherit]
+          states:text-[--button-hover-text,inherit]
+          states:no-underline #{!important};
       }
       + button {
         @apply mb-2;
       }
       &.shopify-payment-button__button--hidden {
-        display: none !important;
-      }
-      @include disabled() {
-        display: none !important;
+        @apply hidden #{!important};
       }
     }
   }
@@ -182,11 +188,7 @@
   .shopify-payment-button__more-options,
   .shopify-payment-button__button--unbranded {
     all: unset;
-    background: theme('colors.secondary.DEFAULT') !important;
-    border-radius: 0 !important;
-    @include states() {
-      background: theme('colors.secondary.400') !important;
-    }
+    @apply rounded-none bg-secondary states:bg-secondary-400 #{!important};
   }
 
   /**
@@ -201,18 +203,15 @@
       gap-2
       text-sm
       font-bold
+      text-primary-600
       underline
       transition-colors
-      text-link-color
-      states:text-link-color-states;
-    @include states() {
-      @apply no-underline;
-      color: var(--text-link-color-states);
-    }
+
+      states:text-[var(--text-text-default)]
+      states:no-underline;
     // link in text color
     &.link--text {
-      --text-link-color: theme('colors.text');
-      --text-link-color-states: theme('colors.text');
+      @apply text-text-default;
     }
   }
 }

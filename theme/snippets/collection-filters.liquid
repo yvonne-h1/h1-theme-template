@@ -35,7 +35,7 @@
       {%- comment -%} The collection filter drawer. {%- endcomment -%}
       <div
         class="
-          filter__drawer invisible fixed bottom-0 end-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto text-sm opacity-0 transition-all bg-color-default
+          filter__drawer invisible fixed bottom-0 end-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto bg-bg-default text-sm opacity-0 transition-all
 
           {% comment %} If the body group has class filter-is-open, add these styles {% endcomment %}
           group-[.filter-is-open]/body:visible
@@ -105,7 +105,7 @@
         </div>
 
         {%- comment -%} The collection drawer footer. {%- endcomment -%}
-        <div class="filter__footer sticky bottom-0 z-10 px-6 py-4 bg-color-default group-[.filter]/grid:lg:hidden">
+        <div class="filter__footer sticky bottom-0 z-10 bg-bg-default px-6 py-4 group-[.filter]/grid:lg:hidden">
           <class-toggle-component
             data-options='
               {

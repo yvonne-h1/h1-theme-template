@@ -20,7 +20,7 @@
   }
   .badge {
     background-color: var(--product-badge-background, theme('colors.black'));
-    color: var(--product-badge-text, theme('colors.text'));
+    color: var(--product-badge-text, theme('colors.text-default'));
     @include small;
     @apply pointer-events-none
     inline-block

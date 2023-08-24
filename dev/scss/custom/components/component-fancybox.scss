@@ -1,4 +1,10 @@
-@use '../../mixins' as *;
+@mixin states() {
+  &:hover,
+  &:focus,
+  &:active {
+    @content;
+  }
+}
 
 @layer h1-styles-components {
   @import '~@fancyapps/ui/src/Fancybox/Fancybox.scss';
@@ -28,10 +34,7 @@
     .fancybox__thumbs .carousel__slide {
       @apply transition-all;
       &:not(.is-nav-selected) {
-        @apply opacity-50;
-        @include states() {
-          @apply scale-110 opacity-100;
-        }
+        @apply opacity-50 states:scale-110 states:opacity-100;
       }
       .fancybox__thumb {
         @apply pt-[100%];
@@ -55,12 +58,20 @@
         border-solid
         border-black
         shadow-none
-        transition-all;
+        transition-all
+
+        states:border
+        states:bg-primary
+        states:text-white;
         &:focus-visible {
-          @apply border-primary-100 bg-primary-100 text-black ring-2 ring-primary-300 ring-offset-2;
+          @apply border-primary-100
+          bg-primary-100
+          text-black
+          ring-2
+          ring-primary-300
+          ring-offset-2;
         }
         @include states() {
-          @apply border bg-primary text-white;
           svg {
             @apply scale-110;
           }

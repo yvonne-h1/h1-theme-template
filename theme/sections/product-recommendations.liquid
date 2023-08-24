@@ -2,7 +2,6 @@
 {%- liquid
   # Container styles
   render 'import-styles', file_name: 'component-swiper.css'
-  render 'import-styles', file_name: 'section-product-recommendations.css'
 
   # Styles based on swiper_indication setting
   case section.settings.swiper_indication
@@ -19,11 +18,10 @@
 {%- capture swiper_options -%}
   data-options='
   {
-    "loop": false,
-    "autoplay": false,
-    "direction": "horizontal",
-    "slidesPerView": 2,
+    "slidesPerView": 1.2,
     "spaceBetween": 16,
+    "slidesOffsetBefore": 16,
+    "slidesOffsetAfter": 16,
     {% case section.settings.swiper_indication %}
       {% when 'pagination' %}
         "pagination": {
@@ -44,60 +42,89 @@
       },
     {% endif %}
     "breakpoints": {
-      "768": { "slidesPerView": 3, "spaceBetween": 32 },
-      "1024": { "slidesPerView": 4, "spaceBetween": 32 }
+      "480": {
+        "slidesPerView": 2,
+        "spaceBetween": 16,
+        "slidesOffsetBefore": 16,
+        "slidesOffsetAfter": 16
+      },
+      "768": {
+        "slidesPerView": 3,
+        "spaceBetween": 32,
+        "slidesOffsetBefore": 32,
+        "slidesOffsetAfter": 32
+      },
+      "1024": {
+        "slidesPerView": 4,
+        "spaceBetween": 32,
+        "slidesOffsetBefore": 32,
+        "slidesOffsetAfter": 32
+      },
+      "1441": {
+        "slidesPerView": 4,
+        "spaceBetween": 32,
+        "slidesOffsetBefore": 0,
+        "slidesOffsetAfter": 0
+      }
     }
   }'
 {%- endcapture -%}
 
 {%- capture container_content -%}
-  <div
-    class="swiper overflow-visible {{ swiper_indication_class }}"
-    data-swiper
-    {{ swiper_options }}
-  >
-    <div class="swiper-wrapper" data-recommended-products>
-      {%- if recommendations.performed? and recommendations.products_count > 0 -%}
-        {%- for recommendation in recommendations.products -%}
-          <div class="swiper-slide">
-            {%- render 'product-card', product_object: recommendation -%}
-          </div>
-        {%- endfor -%}
-      {%- else -%}
-        {%- comment -%} Prefill collection slider to prevent CLS scores {%- endcomment -%}
-        {%- assign coll = product.collections.first -%}
-        {%- for col_product in coll.products limit: 6 -%}
-          <div class="swiper-slide">
-            {%- render 'product-card', product_object: col_product -%}
-          </div>
-        {%- endfor -%}
+  <swiper-slider>
+    <div class="swiper overflow-visible">
+
+      {%- comment -%} Render swiper navigation {%- endcomment -%}
+      {%- if section.settings.swiper_navigation -%}
+        <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-8">
+          <button
+            class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
+            aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
+          >
+            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
+          </button>
+          <button
+            class="swiper-button-next swiper-button-next-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
+            aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
+          >
+            {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
+          </button>
+        </div>
       {%- endif -%}
+
+      <div
+        class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]"
+        data-swiper
+        {{ swiper_options }}>
+        <div class="swiper-wrapper" data-recommended-products>
+          {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+            {%- for recommendation in recommendations.products -%}
+              <div class="swiper-slide">
+                {%- render 'product-card', product_object: recommendation -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- comment -%} Prefill collection slider to prevent CLS scores {%- endcomment -%}
+            {%- assign coll = product.collections.first -%}
+            {%- for col_product in coll.products limit: 6 -%}
+              <div class="swiper-slide">
+                {%- render 'product-card', product_object: col_product -%}
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Import swiper indication {%- endcomment -%}
+        {%- case section.settings.swiper_indication -%}
+          {%- when 'pagination' -%}
+            <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
+          {%- when 'scrollbar' -%}
+            <div class="swiper-scrollbar swiper-scrollbar-{{ section.id }}"></div>
+        {%- endcase -%}
+      </div>
+
     </div>
-
-    {%- comment -%} Import swiper navigation {%- endcomment -%}
-    {%- if section.settings.swiper_navigation -%}
-      <button
-        class="swiper-button-prev swiper-button-prev-{{ section.id }} start-0"
-        aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
-      >
-        {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
-      </button>
-      <button
-        class="swiper-button-next swiper-button-next-{{ section.id }} end-0"
-        aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
-      >
-        {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
-      </button>
-    {%- endif -%}
-
-    {%- comment -%} Import swiper indication {%- endcomment -%}
-    {%- case section.settings.swiper_indication -%}
-      {%- when 'pagination' -%}
-        <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
-      {%- when 'scrollbar' -%}
-        <div class="swiper-scrollbar swiper-scrollbar-{{ section.id }}"></div>
-    {%- endcase -%}
-  </div>
+  </swiper-slider>
 {%- endcapture -%}
 
 {%- comment -%} Capture container data {%- endcomment -%}
@@ -110,9 +137,9 @@
 {%- comment -%} Set container classses and title {%- endcomment -%}
 {%- liquid
   # Container class
-  assign container_class = 'block overflow-hidden product-recommendations' | append: ' ' | append: section.settings.container_width
+  assign container_class = 'product-recommendations block overflow-hidden ' | append: section.settings.container_width
   if section.settings.color_scheme != blank
-    assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+    assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.color_scheme
   endif
 
   # Container title
@@ -123,9 +150,10 @@
 {%- render 'render-container-content',
   class: container_class,
   tag: 'product-recommendations',
-  content: container_content,
   title: container_title,
   title_class: 'h4 product-recommendations__heading',
+  content: container_content,
+  content_class: 'p-0',
   data: container_data
 -%}
 
@@ -170,34 +198,8 @@
             "label": "Default"
           },
           {
-            "value": "color-scheme color-scheme--primary",
-            "label": "Primary",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--secondary",
-            "label": "Secondary",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--accent",
-            "label": "Accent",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--white",
-            "label": "White",
-            "group": "Standard"
-          },
-          {
             "value": "color-scheme color-scheme--gray",
-            "label": "Gray",
-            "group": "Standard"
-          },
-          {
-            "value": "color-scheme color-scheme--black",
-            "label": "Black",
-            "group": "Standard"
+            "label": "Gray"
           }
         ]
       },

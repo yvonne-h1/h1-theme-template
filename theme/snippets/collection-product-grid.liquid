@@ -19,7 +19,7 @@
 
 {% comment %} Loader animation {% endcomment %}
 {%- capture loading_overlay -%}
-  <div class="loading-overlay absolute inset-0 z-50 flex hidden w-full items-center justify-center opacity-70 bg-color-default" data-loader>
+  <div class="loading-overlay absolute inset-0 z-50 flex hidden w-full items-center justify-center bg-bg-default opacity-70" data-loader>
     {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
   </div>
 {%- endcapture -%}

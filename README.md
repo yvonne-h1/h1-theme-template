@@ -95,7 +95,7 @@ The dev/scss folder is divided in three folders to give you to possibility to op
 
 - The `custom` folder adds CSS that will be added dynamically to your page.
 - The `main` folder loads all critical CSS.
-- The `mixins` folder is used for SCSS mixins that can be used inside the other CSS files.
+- The `mixins` folder is used for SCSS mixins that can be used inside the other CSS files. Right now, these are not used.
 
 Inside the designated folders, various subfolders correspond to different Tailwind layers. Each file in these subfolders should be wrapped within the appropriate @layer ... { } directive. The layers will be rendered in the browser in the following order: base, h1-styles-modules, h1-styles-components, h1-styles-utilities, and finally, h1-styles-sections.
 

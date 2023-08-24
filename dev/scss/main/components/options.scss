@@ -1,9 +1,3 @@
-@use '../../mixins' as *;
-
-/**
-  * button style options
-*/
-
 @layer components {
   .options {
     @apply flex flex-wrap gap-1;
@@ -38,12 +32,12 @@
         text-center
         text-xs
         leading-4
+        text-text-default
         no-underline
         transition-colors
-        text-color-default;
-      @include states() {
-        @apply bg-primary text-primary-text;
-      }
+
+        states:bg-primary
+        states:text-primary-text;
 
       // .option__label--disabled
       &--disabled {

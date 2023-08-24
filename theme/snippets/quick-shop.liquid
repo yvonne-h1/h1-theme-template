@@ -40,11 +40,11 @@
     pointer-events-none
     invisible
     absolute
-    inset-x-2
-    bottom-2
+    inset-x-0
+    top-0
     z-30
     max-h-full
-    translate-y-[300%]
+    translate-y-[-300%]
     overflow-auto
     bg-gray-50
     p-2
@@ -53,12 +53,14 @@
     delay-500
     duration-200
     group-[.quick-shop--is-open]/product-card:pointer-events-auto
+    group-[.color-scheme--gray]/color-scheme:bg-gray-100
     no-touch:group-hover/product-card:pointer-events-auto
     no-touch:group-hover/product-card:visible
+
     no-touch:group-hover/product-card:translate-y-0
   ">
   {%- comment -%} Title {%- endcomment -%}
-  <p class="quick-shop__title mb-1 text-sm font-bold text-color-default">
+  <p class="quick-shop__title mb-1 text-sm font-bold text-text-default">
     {%- render 'render-translation', namespace: 'products.product', key: 'choose_your_option', option: option_name, fallback: 'Choose your {{ option }}' -%}
   </p>
 

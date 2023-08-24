@@ -23,6 +23,7 @@ class ProductRecommendations extends HTMLElement {
         };
       }
     }
+    console.log('this.swiperOptions', this.swiperOptions);
 
     this.swiperInstance = new Swiper(this.swiperElement, this.swiperOptions);
 

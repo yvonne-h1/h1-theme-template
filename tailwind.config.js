@@ -120,7 +120,7 @@ module.exports = {
             '--tw-prose-counters': theme('colors.primary.600'),
             '--tw-prose-bullets': theme('colors.primary.600'),
             '--tw-prose-quote-borders': theme('colors.primary.600'),
-            color: theme('colors.text'),
+            color: theme('colors.text-default'),
             a: {
               color: theme('colors.primary.600'),
               textDecoration: 'underline',
@@ -145,8 +145,9 @@ module.exports = {
       current: colors.current,
       transparent: colors.transparent,
       white: '#FFFFFF',
+      'bg-default': '#FFFFFF',
       black: '#111',
-      text: '#262626',
+      'text-default': '#262626',
       'primary-gradient': 'linear-gradient(90deg,#e42f26 0,#e46a26)',
       primary: {
         text: '#FFFFFF',
@@ -276,24 +277,12 @@ module.exports = {
       /**
          * Utilities
          * Add base color classes that can be reused for certain specific css selectors
-         * Usage: bg-color-default, text-link-color, states:text-link-color-states
+         * Usage: bg-bg-default
          */
       addUtilities({
-        '.bg-color-default': {
-          backgroundColor: theme('colors.white'),
-        },
-        '.text-color-default': {
-          color: theme('colors.text'),
-        },
         '.text-color-gradient': {
           backgroundImage: theme('colors.primary-gradient'),
           color: theme('colors.black'),
-        },
-        '.text-link-color': {
-          color: theme('colors.primary.600'),
-        },
-        '.text-link-color-states': {
-          color: theme('colors.primary.600'),
         },
         '.gap-base': {
           gap: 'var(--grid-row-gap) var(--grid-col-gap)',

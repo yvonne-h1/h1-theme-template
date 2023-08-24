@@ -35,8 +35,6 @@ endcapture
 
 */
 
-@use '../../mixins' as *;
-
 @layer h1-styles-components {
   .field {
     @apply relative
@@ -231,9 +229,9 @@ endcapture
     input:disabled ~ &__checkbox-label {
       @apply pointer-events-none
       cursor-default
+      text-text-default
       line-through
-      opacity-50
-      text-color-default;
+      opacity-50;
     }
 
     // .field--radio
@@ -269,8 +267,8 @@ endcapture
       gap-2
       text-sm
 
-      transition-colors
-      text-color-default;
+      text-text-default
+      transition-colors;
       &:before {
         @apply h-5
         w-5
@@ -298,9 +296,9 @@ endcapture
     input:disabled ~ .field__radio-label {
       @apply pointer-events-none
       cursor-default
+      text-text-default
       line-through
-      opacity-50
-      text-color-default;
+      opacity-50;
     }
 
     // .field__dropdown
@@ -379,8 +377,8 @@ endcapture
       cursor-pointer
       text-sm
 
-      transition-colors
-      text-color-default;
+      text-text-default
+      transition-colors;
     }
     input:focus-visible + .field__switch {
       @apply ring-2 ring-primary-300 ring-offset-2;
@@ -399,9 +397,9 @@ endcapture
     input:disabled ~ .field__switch-label {
       @apply pointer-events-none
       cursor-default
+      text-text-default
       line-through
-      opacity-50
-      text-color-default;
+      opacity-50;
     }
   }
   .select {
@@ -468,10 +466,8 @@ endcapture
     start-0
     w-full
     appearance-none
-    bg-transparent;
-    @include states() {
-      @apply outline-none;
-    }
+    bg-transparent
+    states:outline-none;
     &:focus-visible {
       @apply outline-none;
     }

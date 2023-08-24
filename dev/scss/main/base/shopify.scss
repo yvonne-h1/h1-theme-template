@@ -1,14 +1,12 @@
-@use '../../mixins' as *;
-
 @layer base {
   // shopify fixes, should be important
   .shopify-challenge__container {
-    margin: rem(96) auto !important;
+    @apply mx-auto my-[96px] #{!important};
   }
   .g-recaptcha {
-    margin: rem(16) auto !important;
+    @apply mx-auto my-[16px] #{!important};
   }
   #shopify-privacy-banner {
-    box-sizing: border-box;
+    @apply box-border;
   }
 }

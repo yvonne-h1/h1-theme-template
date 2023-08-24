@@ -1,33 +1,29 @@
-@use '../../mixins' as *;
-
 @layer utilities {
   .color-scheme {
-    --color-scheme-text-color: theme('colors.text');
-    --color-scheme-text-link-color: var(--color-scheme-text-color);
+    --color-scheme-text-color: theme('colors.text-default');
     --color-scheme-text-active-color: var(--color-scheme-text-color);
     --swiper-theme-color: var(--color-scheme-text-color);
-    background: var(--color-scheme-background-color);
-    color: var(--color-scheme-text-color);
+
+    @apply bg-[var(--color-scheme-background-color)] text-[var(--color-scheme-text-color)];
+
     button,
     a {
-      &:not(.button) {
-        color: var(--color-scheme-text-link-color);
-        @include states() {
-          text-decoration: none;
-          color: var(--color-scheme-text-active-color);
+      &:not([disabled]) {
+        &:not(.button) {
+          @apply text-[var(--color-scheme-text-color)]
+          states:text-[var(--color-scheme-text-active-color)]
+          states:no-underline;
         }
-      }
-      &.active {
-        color: var(--color-scheme-text-active-color);
+        &.active {
+          @apply text-[var(--color-scheme-text-active-color)];
+        }
       }
     }
     *::marker {
-      color: var(--color-scheme-text-active-color);
+      @apply text-[var(--color-scheme-text-active-color)];
     }
     .button--outline {
-      @include states() {
-        background-color: var(--color-scheme-text-active-color);
-      }
+      @apply states:bg-[var(--color-scheme-text-active-color)];
     }
 
     // .color-scheme--black
