@@ -106,90 +106,19 @@
             <div
               class="footer-block footer-block--{{ block.type }} isolate flex flex-wrap gap-10 {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }} {{ block.settings.alignment }}"
               {{ block.shopify_attributes }}>
-              {%- if block.settings.enable_country_selector and localization.available_countries.size > 1 -%}
-                {%- assign enable_country_selector = true -%}
-                <noscript>
-                  {%- form 'localization', id: 'FooterCountryFormNoScript', class: 'localization-form' -%}
-                    <div class="localization-form__select">
-                      <h2 class="visually-hidden" id="FooterCountryLabelNoScript">
-                        {{ 'localization.country_label' | t }}
-                      </h2>
-                      <select
-                        class="localization-selector link"
-                        name="country_code"
-                        aria-labelledby="FooterCountryLabelNoScript">
-                        {%- for country in localization.available_countries -%}
-                          <option
-                            value="{{ country.iso_code }}"
-                            {%- if country.iso_code == localization.country.iso_code %}
-                              selected
-                            {% endif %}>
-                            {{ country.name }} ({{ country.currency.iso_code }}
-                            {{ country.currency.symbol }})
-                          </option>
-                        {%- endfor -%}
-                      </select>
-                      {% render 'icons', icon: 'caret' %}
-                    </div>
-                    <button class="button button--outline">
-                      {{ 'localization.update_country' | t }}
-                    </button>
-                  {%- endform -%}
-                </noscript>
-                <localization-form>
-                  {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
-                    <div class="no-js-hidden flex flex-col gap-4">
-                      <p class="m-0" id="FooterCountryLabel">
-                        {{ 'localization.country_label' | t }}
-                      </p>
-                      {%- render 'country-localization', localPosition: 'FooterCountry', color_scheme: section.settings.color_scheme -%}
-                    </div>
-                  {%- endform -%}
-                </localization-form>
-              {%- endif -%}
+              {%- liquid
+                # Currency switcher
+                if block.settings.enable_country_selector and localization.available_countries.size > 1
+                  assign enable_country_selector = true
+                  render 'localization-options', type: 'country', localPosition: 'FooterCountry', color_scheme: section.settings.color_scheme
+                endif
 
-              {%- if block.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-                {%- assign enable_language_selector = true -%}
-                <noscript>
-                  {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form' -%}
-                    <div class="localization-form__select">
-                      <h2 class="visually-hidden" id="FooterLanguageLabelNoScript">
-                        {{ 'localization.language_label' | t }}
-                      </h2>
-                      <select
-                        class="localization-selector link"
-                        name="locale_code"
-                        aria-labelledby="FooterLanguageLabelNoScript">
-                        {%- for language in localization.available_languages -%}
-                          <option
-                            value="{{ language.iso_code }}"
-                            lang="{{ language.iso_code }}"
-                            {%- if language.iso_code == localization.language.iso_code %}
-                              selected
-                            {% endif %}>
-                            {{ language.endonym_name | capitalize }}
-                          </option>
-                        {%- endfor -%}
-                      </select>
-                      {% render 'icons', icon: 'caret' %}
-                    </div>
-                    <button class="button button--outline">
-                      {{ 'localization.update_language' | t }}
-                    </button>
-                  {%- endform -%}
-                </noscript>
-
-                <localization-form>
-                  {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
-                    <div class="no-js-hidden flex flex-col gap-4">
-                      <p class="m-0" id="FooterLanguageLabel">
-                        {{ 'localization.language_label' | t }}
-                      </p>
-                      {%- render 'language-localization', localPosition: 'FooterLanguage', color_scheme: section.settings.color_scheme -%}
-                    </div>
-                  {%- endform -%}
-                </localization-form>
-              {%- endif -%}
+                # Language switcher
+                if block.settings.enable_language_selector and localization.available_languages.size > 1
+                  assign enable_language_selector = true
+                  render 'localization-options', type: 'language', localPosition: 'FooterLanguage', color_scheme: section.settings.color_scheme
+                endif
+              -%}
             </div>
 
           {%- when 'payment_icons' -%}

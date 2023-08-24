@@ -37,7 +37,7 @@
   endcapture
 -%}
 
-<quantity-input class="quantity relative inline-flex h-max rounded-full border border-gray-100 bg-gray-50 p-1">
+<quantity-input class="quantity relative inline-flex h-max rounded-full border border-gray-100 p-1 js:bg-gray-50">
   <button class="quantity__button {{ button_classes }}" name="minus" type="button">
     <span class="sr-only">
       {{- button_minus_accessibility_text -}}
@@ -52,7 +52,7 @@
   </button>
 
   <input
-    class="quantity__input h-10 w-7 appearance-none border-none bg-transparent p-0 text-center text-sm text-current opacity-80 touch:h-12 {{ state_classes }}"
+    class="quantity__input h-10 appearance-none border-none bg-transparent p-0 text-center text-sm text-current opacity-80 js:w-7 no-js:w-full touch:h-12 {{ state_classes }}"
     type="number"
     name="{%- if type == 'cart' -%}updates[]{%- else -%}quantity{%- endif -%}"
     id="Quantity-{{ id }}"

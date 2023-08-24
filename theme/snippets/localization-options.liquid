@@ -1,0 +1,140 @@
+{%- comment -%}
+  Renders the country picker for the localization form
+
+  Accepts:
+    - localPosition: pass in the position in which the form is coming up to create specific IDs
+    - type: String: 'country' or 'language'
+{%- endcomment -%}
+
+{%- liquid
+  unless color_scheme
+    assign color_scheme = 'color-scheme--white'
+  endunless
+
+  if type == 'country'
+    assign object = localization.available_countries
+    capture label
+      render 'render-translation', namespace: 'localization', key: 'country_label', fallback: 'Country/region'
+    endcapture
+    capture update_text
+      render 'render-translation', namespace: 'localization', key: 'update_country', fallback: 'Update country'
+    endcapture
+  else
+    assign object = localization.available_languages
+    capture label
+      render 'render-translation', namespace: 'localization', key: 'language_label', fallback: 'Language'
+    endcapture
+    capture update_text
+      render 'render-translation', namespace: 'localization', key: 'update_language', fallback: 'Update language'
+    endcapture
+  endif
+
+  assign form_id = localPosition | append: 'Form'
+-%}
+
+<localization-form>
+  {%- form 'localization', id: form_id, class: 'localization-form' -%}
+    <noscript>
+      <div class="localization-form__select select">
+        <label class="field__label" for="{{ localPosition }}NoScript">
+          {{ label }}
+        </label>
+        <select
+          id="{{ localPosition }}NoScript"
+          class="localization-selector select__select text-color-default"
+          name="{%- if type == 'country' -%}country_code{%- else -%}locale_code{%- endif -%}">
+          {%- for item in object -%}
+            <option
+              value="{{ item.iso_code }}"
+              {% if type == 'language' -%}
+                lang="{{ item.iso_code }}"
+              {%- endif %}
+              {%- if item.iso_code == localization.item.iso_code -%}
+                selected
+              {%- endif %}>
+              {%- if type == 'country' -%}
+                {{ item.name }} ({{ item.currency.iso_code }}
+                {{ item.currency.symbol }})
+              {%- else -%}
+                {{ item.endonym_name | capitalize }}
+              {%- endif -%}
+            </option>
+          {%- endfor -%}
+        </select>
+        <span class="select__select-icon">
+          {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+        </span>
+      </div>
+      <button class="button button--outline">
+        {{ update_text }}
+      </button>
+    </noscript>
+
+    <div class="flex flex-col gap-4 no-js:hidden">
+      <p class="m-0" id="{{ localPosition }}Label">
+        {{ label }}
+      </p>
+      <div class="localization-form relative">
+        <button
+          type="button"
+          class="localization-form__button button button--outline flex items-center gap-4 whitespace-nowrap border-inherit p-2 text-inherit"
+          aria-expanded="false"
+          aria-controls="{{ localPosition }}List"
+          aria-describedby="{{ localPosition }}Label">
+          <span>
+            {%- if type == 'country' -%}
+              {{- localization.country.currency.iso_code }}
+              {{ localization.country.currency.symbol }} | {{ localization.country.name -}}
+            {%- else -%}
+              {{ localization.language.endonym_name | capitalize }}
+            {%- endif -%}
+          </span>
+          {% render 'icons', icon: 'chevron-down' %}
+        </button>
+        <div
+          class="localization-form__list-wrapper color-scheme absolute top-10 w-full rounded-md border-2 border-inherit p-2 {{ color_scheme }}"
+          hidden
+          data-localization-list>
+          <ul id="{{ localPosition }}List" role="list" class="localization-form__list list-unstyled">
+            {%- for item in object -%}
+              {%- liquid
+                # Skip current language/currency
+                if type == 'country' and localization.country.currency.iso_code == item.currency.iso_code
+                  continue
+                elsif type == 'language' and localization.language.endonym_name == item.endonym_name
+                  continue
+                endif
+              -%}
+
+              <li class="localization-form__item" tabindex="-1">
+                <a
+                  class="localization-form__link focus-inset no-underline {% if item.iso_code == localization[item].iso_code %}localization-form__link--active{% endif %}"
+                  href="#"
+                  {% if item.iso_code == localization.item.iso_code %}
+                    aria-current="true"
+                  {% endif %}
+                  data-value="{{ item.iso_code }}">
+                  {%- if type == 'country' -%}
+                    <span class="localization-form__currency">
+                      {{- item.currency.iso_code }}
+                      {{ item.currency.symbol }} |
+                    </span>
+                    {{ item.name }}
+                  {%- else -%}
+                    {{ item.endonym_name | capitalize }}
+                  {%- endif -%}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+
+      {%- if type == 'country' -%}
+        <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+      {%- else -%}
+        <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+      {%- endif -%}
+    </div>
+  {%- endform -%}
+</localization-form>

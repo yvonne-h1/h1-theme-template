@@ -143,25 +143,18 @@
                 <div id="cart-errors" class="cart__cart-error my-2 text-sm text-danger empty:hidden"></div>
 
                 <p class="cart__tax-note rte mb-6 mt-2 hidden text-sm text-gray-500 md:block">
-                  {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
-                    {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                  {%- elsif cart.taxes_included -%}
-                    {%-
-                      render 'render-translation',
-                      namespace: 'sections.cart',
-                      key: 'taxes_included_but_shipping_at_checkout',
-                      fallback: 'Taxes are included'
-                    -%}
-                  {%- elsif shop.shipping_policy.body != blank -%}
-                    {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
-                  {%- else -%}
-                    {%-
-                      render 'render-translation',
-                      namespace: 'sections.cart',
-                      key: 'taxes_and_shipping_at_checkout',
-                      fallback: 'Taxes and shipping are calculated in checkout'
-                    -%}
-                  {%- endif -%}
+                  {%- liquid
+                    if cart.taxes_included and shop.shipping_policy.body != blank
+                      echo 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url
+                    elsif cart.taxes_included
+                      render 'render-translation', namespace: 'sections.cart', key: 'taxes_included_but_shipping_at_checkout', fallback: 'Taxes are included'
+
+                    elsif shop.shipping_policy.body != blank
+                      echo 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url
+                    else
+                      render 'render-translation', namespace: 'sections.cart', key: 'taxes_and_shipping_at_checkout', fallback: 'Taxes and shipping are calculated in checkout'
+                    endif
+                  -%}
                 </p>
 
               </div>
@@ -169,7 +162,7 @@
               {%- comment -%} Checkout button {%- endcomment -%}
               <div class="cart__ctas grid grid-cols-1 gap-y-2" {{ block.shopify_attributes }}>
                 <noscript>
-                  <button type="submit" class="button button--secondary button--lg">
+                  <button type="submit" class="button button--secondary button--lg w-full">
                     {%- render 'render-translation',
                       namespace: 'sections.cart',
                       key: 'update',
@@ -209,13 +202,13 @@
 
 {%- comment -%} Output cart content {%- endcomment -%}
 {%- if container_content -%}
-  {%- comment -%} Import styles for this section {%- endcomment -%}
   {%- liquid
+    # Import styles for this section  echo
     render 'import-styles', file_name: 'component-form.css'
-  -%}
 
-  {%- comment -%} Render the content {%- endcomment -%}
-  {%- render 'render-container-content', class: 'mb-0', content_class: 'content-wrapper', content: container_content -%}
+    # Render the content  echo
+    render 'render-container-content', class: 'mb-0', content_class: 'content-wrapper', content: container_content
+  -%}
 
   {%- comment -%} Import javascript {%- endcomment -%}
   <script src="{{ 'cart.js' | asset_url }}" defer></script>

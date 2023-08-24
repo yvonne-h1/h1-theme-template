@@ -118,14 +118,14 @@
 
           {%- comment -%} Line break {%- endcomment -%}
           {%- when 'linebreak' -%}
-            <hr class="block-line-break my-0 bg-gray-100">
+            <hr class="block-line-break my-0 bg-gray-100 no-js:hidden">
 
           {%- comment -%} Collapsible content {%- endcomment -%}
           {%- when 'collapsible_tab' -%}
 
             {%- if block.settings.content != blank or block.settings.page.content != nil -%}
               <collapsible-component class="product__collapsible collapsible group peer block border-t last:border-b peer-[.collapsible]:-mt-5" data-collapsible-group {{ block.shopify_attributes }}>
-                <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-start text-sm font-bold" data-collapsible-trigger>
+                <button type="button" class="collapsible__trigger flex w-full items-center gap-2 py-4 text-start text-sm font-bold no-js:pointer-events-none" data-collapsible-trigger>
                   <span class="flex w-full justify-items-start gap-2">
                     {%- if block.settings.icon != blank -%}
                       {%- render 'icons', icon: block.settings.icon, icon_class: 'w-5 shrink-0 grow-0' -%}
@@ -225,6 +225,63 @@
                       -%}
                     </div>
 
+                    {% comment %} No script variant select {% endcomment %}
+                    <noscript>
+                      <div class="product-form__input field mb-4 {% if product.has_only_default_variant %} hidden{% endif %}">
+                        <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ product.id }}">
+                          {%- render 'render-translation',
+                            namespace: "products.product",
+                            key: "product_variants",
+                            fallback: "Variants"
+                          -%}
+                        </label>
+                        <div class="select text-color-default">
+                          <select name="id" id="Variants-{{ product.id }}" class="select__select">
+                            {%- for variant in product.variants -%}
+                              <option
+                                {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                                {% if variant.available == false %}disabled{% endif %}
+                                value="{{ variant.id }}"
+                              >
+                                {{ variant.title }}
+                                {%- if variant.available == false %} -
+                                  {%- render 'render-translation',
+                                    namespace: "products.product",
+                                    key: "sold_out",
+                                    fallback: "Sold out"
+                                  -%}
+                                {% endif %}
+                                - {{ variant.price  | money_with_currency | strip_html }}
+                              </option>
+                            {%- endfor -%}
+                          </select>
+                          <span class="select__select-icon">
+                            {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+                          </span>
+                        </div>
+                        <div class="field">
+                          <label for="QuantityNoScript-{{ product.id }}" class="field__label">
+                            {%- render 'render-translation',
+                              namespace: 'products.product.quantity',
+                              key: 'input_label',
+                              product_item: product.title,
+                              fallback: 'Quantity for product'
+                            -%}
+                          </label>
+                          <input
+                            class="field__input"
+                            type="number"
+                            name="quantity"
+                            product.id="QuantityNoScript-{{ product.id }}"
+                            min="1"
+                            max="{{ product.selected_or_first_available_variant.inventory_quantity }}"
+                            value="1"
+                            pattern="[0-9]*"
+                            inputmode="numeric">
+                        </div>
+                      </div>
+                    </noscript>
+
                     <div class="product-form__buttons grid grid-cols-1 items-center gap-2">
                       <button
                         type="submit"
@@ -263,37 +320,6 @@
             </div>
           {%- endcase -%}
         {%- endfor -%}
-
-        <noscript>
-          <div class="product-form__input field{% if product.has_only_default_variant %} hidden{% endif %}">
-            <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ product.id }}">
-              {%- render 'render-translation',
-                namespace: "products.product",
-                key: "product_variants",
-                fallback: "Variants"
-              -%}
-            </label>
-            <select name="id" id="Variants-{{ product.id }}" class="select__select">
-              {%- for variant in product.variants -%}
-                <option
-                  {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
-                  {% if variant.available == false %}disabled{% endif %}
-                  value="{{ variant.id }}"
-                >
-                  {{ variant.title }}
-                  {%- if variant.available == false %} -
-                    {%- render 'render-translation',
-                      namespace: "products.product",
-                      key: "sold_out",
-                      fallback: "Sold out"
-                    -%}
-                  {% endif %}
-                  - {{ variant.price  | money_with_currency | strip_html }}
-                </option>
-              {%- endfor -%}
-            </select>
-          </div>
-        </noscript>
       </product-info>
     </div>
   </div>
