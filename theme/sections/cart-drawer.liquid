@@ -4,6 +4,12 @@
   {%- liquid
     render 'import-styles', file_name: 'component-form.css'
   -%}
+  <style>
+    .cart-is-empty .cart-drawer__warnings {
+      min-height: 100dvh;
+      min-height: 100vh;
+    }
+  </style>
 
   <cart-drawer class="cart-drawer" data-cart-drawer>
     {%- comment -%} Backdrop {%- endcomment -%}
@@ -27,8 +33,7 @@
       <cart-items class="cart-items group/cart-items h-full {% if cart == empty %}cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
         <div
-          class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen"
-          style="min-height: 100dvh;">
+          class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">
           <p class="h4 cart-drawer__empty-text">
             {%- render 'render-translation', namespace: 'sections.cart', key: 'empty', fallback: 'Your cart is empty' -%}
           </p>

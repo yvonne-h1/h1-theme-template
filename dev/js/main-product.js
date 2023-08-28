@@ -37,11 +37,7 @@ class ProductInfo extends HTMLElement {
     // Register IntersectionObserver
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        // const infoColBottom = this.previousElementSibling.getBoundingClientRect().bottom - 20;
-        // const formHeight = this.querySelector('[data-product-form]').clientHeight;
         const isBottomVisible = entry.boundingClientRect.bottom + 50 < window.innerHeight;
-        // console.log(infoColBottom,formHeight,isBottomVisible);
-
         if (isBottomVisible) {
           this.quickAddWrapper.classList.add(this.fixedClass);
           // set the height of the element to the same height as the wrapper so there's no jump when the sticky (fixed) class is applied. Also wait a bit because the dynamic checkout might be loaded later

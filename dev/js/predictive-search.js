@@ -8,20 +8,6 @@ if (!customElements.get('predictive-search')) {
     constructor() {
       super();
 
-      // Options
-      this.options = {
-        hiddenClass: 'hidden',
-      };
-
-      // Get options from element data and combine with this.options
-      if (this?.dataset?.options) {
-        const dataOptions = JSON.parse(this.dataset.options);
-        this.options = {
-          ...this.options,
-          ...dataOptions,
-        };
-      }
-
       this.init();
     }
 
@@ -107,6 +93,8 @@ if (!customElements.get('predictive-search')) {
      */
     open() {
       this.predictiveSearchResults.style.display = 'block';
+      trapFocus(this);
+
     }
 
     /**
@@ -115,6 +103,7 @@ if (!customElements.get('predictive-search')) {
      */
     close() {
       this.predictiveSearchResults.style.display = 'none';
+      removeTrapFocus();
     }
 
     /**
@@ -124,10 +113,10 @@ if (!customElements.get('predictive-search')) {
     handleInputState() {
       const state = this.input.value.length > 0 ? true : false;
       if (state) {
-        this.reset.classList.remove(this.options.hiddenClass);
+        this.reset.classList.remove('hidden');
       }
       else {
-        this.reset.classList.add(this.options.hiddenClass);
+        this.reset.classList.add('hidden');
         this.close();
       }
       return state;

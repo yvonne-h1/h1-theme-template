@@ -222,7 +222,7 @@
       "collections": "Collections",
       "nothing_found_title": "Nothing found",
       "nothing_found_subtitle": "Try it again with a different term.",
-      "button_submit_label": "Search for “{{ html }}”.",
+      "button_submit_label": "Search for '{{ html }}'",
       "see_all": "See all"
     },
     "cart": {
