@@ -12,7 +12,6 @@
   @import '~swiper/modules/autoplay.scss';
   @import '~swiper/modules/navigation.scss';
   @import '~swiper/modules/pagination.scss';
-  // @import '~swiper/modules/scrollbar.scss';
 
   .swiper {
     --swiper-theme-color: theme('colors.secondary.DEFAULT');
@@ -70,16 +69,27 @@
         @apply pointer-events-auto opacity-50;
       }
     }
-    &-button-prev {
-      @apply -start-3;
-      @screen md {
-        @apply -start-5;
+
+    .container:not(.container--full) & {
+      &-button-prev {
+        @apply -start-3;
+        @screen md {
+          @apply -start-5;
+        }
+      }
+      &-button-next {
+        @apply -end-3;
+        @screen md {
+          @apply -end-5;
+        }
       }
     }
-    &-button-next {
-      @apply -end-3;
-      @screen md {
-        @apply -end-5;
+    .container--full & {
+      &-button-prev {
+        @apply left-[var(--content-wrapper-padding)];
+      }
+      &-button-next {
+        @apply right-[var(--content-wrapper-padding)];
       }
     }
 
@@ -95,7 +105,7 @@
       }
       // swiper-scrollbar-drag
       &-drag {
-        @apply h-1 bg-[var(--swiper-theme-color)];
+        @apply h-1 cursor-grab bg-[var(--swiper-theme-color)];
       }
     }
 

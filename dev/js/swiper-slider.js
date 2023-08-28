@@ -3,36 +3,32 @@
  * @description Web component used to create sliders, configurable with data-options attribute.
  * @documentation https://swiperjs.com/swiper-api
  * @example
-<swiper-slider>
-  <div
-    class="swiper"
-    data-swiper
-    data-options='{
-      "threshold": 10,
-      "loop": false,
-      "scrollbar": true,
-      "navigation": {
-        "nextEl": ".swiper-button-next-{{ section.id }}",
-        "prevEl": ".swiper-button-prev-{{ section.id }}"
+<swiper-slider data-options='{
+    "threshold": 10,
+    "loop": false,
+    "scrollbar": true,
+    "navigation": {
+      "nextEl": ".swiper-button-next-{{ section.id }}",
+      "prevEl": ".swiper-button-prev-{{ section.id }}"
+    },
+    "pagination": {
+      "el": ".swiper-pagination-{{ section.id }}",
+      "type": "bullets"
+    },
+    "slidesPerView": 1,
+    "spaceBetween": 16,
+    "breakpoints": {
+      "768": {
+        "slidesPerView": 2,
+        "spaceBetween": 24
       },
-      "pagination": {
-        "el": ".swiper-pagination-{{ section.id }}",
-        "type": "bullets"
-      },
-      "slidesPerView": 1,
-      "spaceBetween": 16,
-      "breakpoints": {
-        "768": {
-          "slidesPerView": 2,
-          "spaceBetween": 24
-        },
-        "1024": {
-          "slidesPerView": 3,
-          "spaceBetween": 32
-        }
+      "1024": {
+        "slidesPerView": 3,
+        "spaceBetween": 32
       }
-    }'
-  >
+    }
+  }'>
+  <div class="swiper" data-swiper>
     <div class="swiper-wrapper">
       {%- for item in (1..8) -%}
         <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
@@ -57,7 +53,7 @@
     </button>
 
     <div class="swiper-pagination swiper-pagination-{{ section.id }} flex justify-center"></div>
-    <div class="swiper-scrollbar"></div>
+    <div class="swiper-scrollbar  swiper-scrollbar-{{ section.id }}"></div>
   </div>
 </swiper-slider>
  */
@@ -80,8 +76,8 @@ class SwiperSlider extends HTMLElement {
     };
 
     // Check if we have extra options on the HTML
-    if (this.swiper.dataset.options) {
-      const options = JSON.parse(this.swiper.dataset.options);
+    if (this.dataset.options) {
+      const options = JSON.parse(this.dataset.options);
       if (options) {
         this.swiperOptions = {
           ...this.swiperOptions,
@@ -90,53 +86,75 @@ class SwiperSlider extends HTMLElement {
       }
     }
 
-    // Call swiper with selected swiper element and options
-    this.swiperInstance = new Swiper(this.swiper, this.swiperOptions);
+    // render the options and init the swiper
+    this.initOptions();
 
-    /**
-         * Listen to extra events when in Shopify editor
-         */
+    // Listen to extra events when in Shopify editor
     if (Shopify.designMode) {
       // Update the swiper when the section event is triggered
-      window.addEventListener('shopify:section:load', () => {
-        this.swiperInstance.update();
-        if (this.swiperOptions.navigation) {
-          this.swiperInstance.navigation.init();
-          this.swiperInstance.navigation.update();
-        }
+      window.addEventListener('shopify:section:load', (event) => {
+        this.initOptions(event, true);
       });
 
       // When on block select go to the slide in front-end
       window.addEventListener('shopify:block:select', (event) => {
-        this.swiperInstance.update();
-        if (this.swiperOptions.navigation) {
-          this.swiperInstance.navigation.init();
-          this.swiperInstance.navigation.update();
-        }
         this.handleBlockSelect(event);
       });
 
       // When on block deselect go to the slide in front-end
       window.addEventListener('shopify:block:deselect', (event) => {
-        this.swiperInstance.update();
-        if (this.swiperOptions.navigation) {
-          this.swiperInstance.navigation.init();
-          this.swiperInstance.navigation.update();
-        }
         this.handleBlockSelect(event);
       });
     }
   }
 
-  /**
-       * Handles the theme editor block change/edit event
-       * @param {Object} event
-       */
-  handleBlockSelect(event) {
-    // Check if the slide index is set
-    if (!('swiperSlideIndex' in event.target.dataset)) {
-      return;
+  initOptions(event = null, updateSwiper = false) {
+    if (updateSwiper && event.detail.sectionId !== this.swiperOptions.sectionID) return;
+
+    // Check if we have extra options on the HTML
+    if (this.dataset.options) {
+      const options = JSON.parse(this.dataset.options);
+      if (options) {
+        this.swiperOptions = {
+          ...this.swiperOptions,
+          ...options,
+        };
+      }
     }
+
+    if (updateSwiper) {
+      this.swiperInstance.update();
+
+      if (this.swiperOptions.navigation.nextEl) {
+        this.swiperInstance.navigation.init();
+        this.swiperInstance.navigation.update();
+      }
+      if (this.swiperOptions.pagination.el) {
+        this.swiperInstance.pagination.init();
+        this.swiperInstance.pagination.render();
+      }
+      // SCROLLBAR doesn't update in the theme editor. This seems to be a bug in swiper.
+      if (this.swiperOptions.scrollbar.el) {
+        this.swiperInstance.scrollbar.init();
+        this.swiperInstance.scrollbar.updateSize();
+        this.swiperInstance.scrollbar.setTranslate();
+      }
+    }
+    else {
+      // Call swiper with selected swiper element and options
+      this.swiperInstance = new Swiper(this.swiper, this.swiperOptions);
+    }
+  }
+
+  /**
+   * Handles the theme editor block change/edit event
+   * @param {Object} event
+   */
+  handleBlockSelect(event) {
+    if (event.detail.sectionId !== this.swiperOptions.sectionID) return;
+
+    // Check if the slide index is set
+    if (!('swiperSlideIndex' in event.target.dataset)) return;
 
     // Set the slide index based on loop settings or not
     let swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) - 1;
@@ -153,3 +171,50 @@ class SwiperSlider extends HTMLElement {
 if (!customElements.get('swiper-slider')) {
   customElements.define('swiper-slider', SwiperSlider);
 }
+
+class ProductRecommendations extends SwiperSlider {
+  constructor() {
+    super();
+
+    // Only do it once, not on every web component render.
+    window.onload = () => {
+      this.init();
+    };
+  }
+
+  init() {
+    if (this.dataset && this.dataset.url) {
+      fetch(this.dataset.url)
+        .then((response) => response.text())
+        .then((text) => {
+          const html = new DOMParser()
+            .parseFromString(text, 'text/html')
+            .querySelector('[data-recommended-products]').innerHTML;
+
+          this.querySelector('[data-recommended-products]').innerHTML = html;
+
+          this.swiperInstance.update();
+          if (this.swiperOptions.navigation) {
+            this.swiperInstance.navigation.init();
+            this.swiperInstance.navigation.update();
+          }
+          if (this.swiperOptions.pagination) {
+            this.swiperInstance.pagination.init();
+            this.swiperInstance.pagination.update();
+          }
+          if (this.swiperOptions.scrollbar) {
+            this.swiperInstance.scrollbar.init();
+            this.swiperInstance.scrollbar.updateSize();
+          }
+        })
+        .catch((e) => {
+          debug() && console.error(e);
+        });
+    }
+  }
+}
+
+if (!customElements.get('product-recommendations')) {
+  customElements.define('product-recommendations', ProductRecommendations);
+}
+

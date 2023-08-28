@@ -39,29 +39,31 @@
 {%- capture swiper_options -%}
   data-options='
   {
+    "sectionID": "{{ section.id }}",
     "slidesPerView": 1.2,
     "spaceBetween": 16,
     "slidesOffsetBefore": 16,
     "slidesOffsetAfter": 16,
-    {% case section.settings.swiper_indication %}
-      {% when 'pagination' %}
-        "pagination": {
-          "el": ".swiper-pagination-{{ section.id }}",
-          "type": "bullets",
-          "clickable": true
-        },
-      {% when 'scrollbar' %}
-        "scrollbar": {
-          "el": ".swiper-scrollbar-{{ section.id }}",
-          "draggable": true
-        },
-    {% endcase %}
+    {%- if section.settings.swiper_indication == 'pagination' %}
+      "pagination": {
+        "el": ".swiper-pagination-{{ section.id }}",
+        "type": "bullets",
+        "clickable": true
+      },
+    {%- elsif section.settings.swiper_indication == 'scrollbar' %}
+      "scrollbar": {
+        "el": ".swiper-scrollbar-{{ section.id }}",
+        "snapOnRelease": true,
+        "snapOnRelease": true,
+        "draggable": true
+      },
+    {% endif -%}
     {% if section.settings.swiper_navigation %}
       "navigation": {
         "nextEl": ".swiper-button-next-{{ section.id }}",
         "prevEl": ".swiper-button-prev-{{ section.id }}"
       },
-    {% endif %}
+    {% endif -%}
     "breakpoints": {
       "480": {
         "slidesPerView": 2,
@@ -81,7 +83,7 @@
         "slidesOffsetBefore": 32,
         "slidesOffsetAfter": 32
       },
-      "1441": {
+      "1440": {
         "slidesPerView": 4,
         "spaceBetween": 32,
         "slidesOffsetBefore": 0,
@@ -93,7 +95,7 @@
 
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
-  <swiper-slider>
+  <swiper-slider {{ swiper_options }}>
     <div class="swiper overflow-visible">
 
       {%- comment -%} Render swiper navigation {%- endcomment -%}
@@ -114,10 +116,7 @@
         </div>
       {%- endif -%}
 
-      <div
-        class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]"
-        data-swiper
-        {{ swiper_options }}>
+      <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
         <div class="swiper-wrapper">
           {%- for product_object in products_arr -%}
             {%- liquid
@@ -160,12 +159,22 @@
           {%- endfor -%}
         </div>
 
+        {%- comment -%} Render swiper indication wrapper {%- endcomment -%}
+        {%- if section.settings.swiper_indication != '' -%}
+          <div class="content-wrapper content-wrapper-padding 2xl:px-0">
+        {%- endif -%}
+
+        {% comment %} Check the indication options {% endcomment %}
         {%- case section.settings.swiper_indication -%}
           {%- when 'pagination' -%}
             <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
           {%- when 'scrollbar' -%}
             <div class="swiper-scrollbar swiper-scrollbar-{{ section.id }}"></div>
         {%- endcase -%}
+
+        {%- if section.settings.swiper_indication != '' -%}
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </swiper-slider>

@@ -6,8 +6,8 @@
   endif
 -%}
 
-{% comment %} Import styles and set indicator class {% endcomment %}
 {%- liquid
+  # Import styles and set indicator class
   if is_slider
     render 'import-styles', file_name: 'component-swiper.css'
   endif
@@ -15,6 +15,7 @@
 
 {%- capture swiper_options -%}
   data-options='{
+    "sectionID": "{{ section.id }}",
     "loop": true,
     "speed": 1000,
     {%- if section.settings.swiper_autoplay %}
@@ -34,7 +35,6 @@
         "type": "bullets", "clickable": true
       },
     {%- endif %}
-    {% comment %} This one should be last since it's complaining about the trailing comma... {% endcomment %}
     "slidesPerView": 1
   }'
 {%- endcapture -%}
@@ -49,8 +49,8 @@
 
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
-  <swiper-slider>
-    <div class="swiper" data-swiper {% if is_slider %}{{ swiper_options }}{% endif %}>
+  <swiper-slider {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
+    <div class="swiper" data-swiper>
       <div class="swiper-wrapper">
         {%- for block in section.blocks -%}
 
@@ -197,7 +197,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
-{%- if is_slider or request.design_mode -%}
+{%- if is_slider -%}
   <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
 {%- endif -%}
 

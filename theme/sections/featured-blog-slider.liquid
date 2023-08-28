@@ -40,6 +40,7 @@
 {%- capture swiper_options -%}
   data-options='
   {
+    "sectionID": {{ section.id }},
     "slidesPerView": 1,
     "spaceBetween": 16,
     {% case section.settings.swiper_indication %}
@@ -71,12 +72,8 @@
 
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
-  <swiper-slider>
-    <div
-      class="swiper overflow-visible {{ swiper_indication_class }}"
-      data-swiper
-      {{ swiper_options }}
-    >
+  <swiper-slider {{ swiper_options }}>
+    <div class="swiper overflow-visible {{ swiper_indication_class }}" data-swiper>
       <div class="swiper-wrapper">
         {%- for article_object in articles_array -%}
 

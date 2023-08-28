@@ -38,20 +38,25 @@
 {% comment %} Render the content if there are slides {% endcomment %}
 {%- if swiper_slides != blank -%}
   {%- capture swiper_options -%}
-    data-options='{ "speed": {{ section.settings.swiper_speed }},
-    {%- if section.settings.swiper_autoplay %}
-      "autoplay": {
-        "delay": {{ section.settings.swiper_autoplay_speed }}
-      },
-    {%- endif %}
-    "loop": {{ section.settings.swiper_loop }}, "slidesPerView": 1, "direction": "horizontal" }'
+    data-options='{
+      "sectionID": "{{ section.id }}",
+      "speed": {{ section.settings.swiper_speed }},
+      {%- if section.settings.swiper_autoplay %}
+        "autoplay": {
+          "delay": {{ section.settings.swiper_autoplay_speed }}
+        },
+      {%- endif %}
+      "loop": {{ section.settings.swiper_loop }},
+      "slidesPerView": 1
+    }'
   {%- endcapture -%}
 
   <div class="announcement-bar relative overflow-hidden lg:z-offcanvas-backdrop">
     <{{ wrapper_element | default: 'div' }}
+      {{ swiper_options }}
       role="region"
       aria-label="{% render "render-translation", namespace: "sections.header", key: "announcement", fallback: "Announcement" -%}">
-      <div class="swiper" data-swiper {{ swiper_options }}>
+      <div class="swiper" data-swiper>
         <div class="swiper-wrapper">
           {{ swiper_slides }}
         </div>
