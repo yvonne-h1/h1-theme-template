@@ -203,30 +203,9 @@
         {{- results -}}
         {%- comment -%} Only show the go to /search with params when products, articles or pages is enabled. The normal /search page is not supporting collections. {%- endcomment -%}
         {%- if settings.predictive_search_products or settings.predictive_search_articles or settings.predictive_search_pages -%}
-          {%- comment -%} Create types for show all link {%- endcomment -%}
-          {% liquid
-            if settings.predictive_search_products and settings.predictive_search_articles and settings.predictive_search_pages
-              assign type_query = ''
-            else
-              assign types = ''
-              if settings.predictive_search_products
-                assign types = types | append: 'product'
-              endif
-              if settings.predictive_search_articles
-                assign types = types | append: 'article,'
-              endif
-              if settings.predictive_search_pages
-                assign types = types | append: 'page,'
-              endif
-
-              assign types = types | replace_last: ',', ''
-              assign type_query = '&type=' | append: types
-            endif
-          %}
-
           {% comment %} 'All results' link {% endcomment %}
           <div class="predictive-search__group predictive-search__group--footer mb-4 mt-4 text-center">
-            <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}{{ type_query }}&options[prefix]=last" class="button button--primary no-touch:button--sm touch:button-lg">
+            <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&options[prefix]=last" class="button button--primary no-touch:button--sm touch:button-lg">
               {%-
                 render "render-translation",
                 namespace: "sections.predictive_search",

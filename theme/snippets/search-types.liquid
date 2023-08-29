@@ -1,0 +1,26 @@
+{%- comment -%}
+  {%- render 'search-types', search: search -%}
+
+  Renders links to select a search type. Types can be Articles, Pages or Products.
+{%- endcomment -%}
+
+{%- liquid
+  assign link_classes = 'link link--text'
+  assign sort_by = search.sort_by
+-%}
+
+{%- if search.types.size > 1 -%}
+  <div class="flex justify-center gap-4">
+    {%- assign params = 'q=' | append: search.terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by -%}
+    <a href="#" class="button button--primary" data-search-type-link="all" data-search-params="{{ params }}">
+      {%- render 'render-translation', namespace: 'sections.main_search.types', key: 'all', fallback: 'All' -%}
+    </a>
+    {%- for type in search.types -%}
+      {%- assign type_params = params | append: '&type=' | append: type -%}
+      <a href="#" class="button button--outline" data-search-type-link="{{ type }}" data-search-params="{{ type_params }}">
+        {%- render 'render-translation', namespace: 'sections.main_search.types', key: type -%}
+      </a>
+    {%- endfor -%}
+  </div>
+  <hr class="bg-gray-100">
+{%- endif -%}

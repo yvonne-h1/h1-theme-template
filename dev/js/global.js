@@ -40,7 +40,6 @@ function trapFocus(container, elementToFocus = container) {
 
   const first = elements[0];
   const last = elements[elements.length - 1];
-  console.log('container, elementToFocus', container, elementToFocus, first, last);
 
   removeTrapFocus();
 

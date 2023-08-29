@@ -1,0 +1,27 @@
+{%- comment -%}
+  This template is used for the filters and will retrieve the products and the filters. Those elements are then loaded in the collection page.
+  https://shopify.dev/api/section-rendering
+{%- endcomment -%}
+{%- layout none -%}
+
+{% comment %} Results count {% endcomment %}
+<div id="result-count">
+  <p class="text-center">
+    {%- liquid
+      if search.performed
+        if search.results_count == 0
+          echo 'sections.main_search.no_results' | t: terms: search.terms
+        else
+          echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
+        endif
+      else
+        echo search_str
+      endif
+    -%}
+  </p>
+</div>
+
+{% comment %} Results {% endcomment %}
+<div id="results">
+  {%- render 'search-results', search: search -%}
+</div>

@@ -1,0 +1,98 @@
+{% comment %}
+  {%- render 'search-results', search: search -%}
+{% endcomment %}
+
+{%- liquid
+  assign grid_classes = 'search-results gap-base'
+  assign grid_item_classes = 'col-span-6 md:col-span-4 lg:col-span-3'
+
+  assign sort_by = search.sort_by | default: search.default_sort_by
+-%}
+
+{%- if search.performed and search.results.size > 0 -%}
+  {%- paginate search.results by 4 -%}
+    {%- for item in search.results -%}
+      {%- case item.object_type -%}
+        {%- when 'product' -%}
+          {%- capture results_products -%}
+            {{ results_products }}
+            <li class="{{ grid_item_classes }}">
+              {%- render 'product-card', product_object: item -%}
+            </li>
+          {%- endcapture -%}
+        {%- when 'article' -%}
+          {%- capture results_articles -%}
+            {{ results_articles }}
+          <li class="{{ grid_item_classes }}">
+            {%- render 'article-card', article: item -%}
+          </li>
+          {%- endcapture -%}
+        {%- when 'page' -%}
+          {%- capture results_pages -%}
+            {{ results_pages }}
+          <li class="">
+            {%- render 'page-card', page: item -%}
+          </li>
+          {%- endcapture -%}
+      {%- endcase -%}
+    {%- endfor -%}
+
+    {% comment %} Product results {% endcomment %}
+    {%- if results_products -%}
+      <div class="mb-8 flex justify-between">
+        <h2 class="h4 mb-0">{%- render 'render-translation', namespace: 'sections.predictive_search', key: 'products', fallback: 'products' -%}</h2>
+
+        {% comment %} Sort options {% endcomment %}
+        <div class="field w-auto">
+          <label class="field__label sr-only" for="sort-options">
+            {%- render 'render-translation', namespace: 'sections.collection_template', key: 'sort_by_label', fallback: 'Sort by' -%}
+          </label>
+          <div class="select">
+            <select id="sort-options" class="select__select" data-search-sorting>
+              {%- for option in search.sort_options %}
+                <option
+                  value="{{ option.value }}"
+                  {%- if option.value == sort_by %}
+                    selected="selected"
+                  {%- endif %}>
+                  {{ option.name }}
+                </option>
+              {% endfor -%}
+            </select>
+            <span class="select__select-icon group-states:text-secondary-text">
+              {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <ul class="{{ grid_classes }} grid grid-cols-12">
+        {{ results_products }}
+      </ul>
+      <hr class="bg-gray-100">
+    {%- endif -%}
+
+    {% comment %} Blog article results {% endcomment %}
+    {%- if results_articles -%}
+      <h2 class="h4">{%- render 'render-translation', namespace: 'sections.predictive_search', key: 'blog', fallback: 'Articles' -%}</h2>
+      <ul class="{{ grid_classes }} grid grid-cols-12">
+        {{ results_articles }}
+      </ul>
+      <hr class="bg-gray-100">
+    {%- endif -%}
+
+    {% comment %} Page results {% endcomment %}
+    {%- if results_pages -%}
+      <h2 class="h4">{%- render 'render-translation', namespace: 'sections.predictive_search', key: 'pages', fallback: 'Pages' -%}</h2>
+      <ul class="{{ grid_classes }} flex flex-col">
+        {{ results_pages }}
+      </ul>
+    {%- endif -%}
+
+    {%- liquid
+      if paginate.pages > 1
+        render 'pagination', paginate: paginate, class: 'mt-8'
+      endif
+    -%}
+  {%- endpaginate -%}
+{%- endif -%}

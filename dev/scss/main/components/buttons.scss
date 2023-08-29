@@ -34,9 +34,9 @@
     disabled:cursor-not-allowed
     disabled:opacity-50;
     &:not([disabled]) {
-      @apply border-[var(--button-hover-border-color)]
-      bg-[var(--button-hover-background)]
-      text-[var(--button-hover-text)];
+      @apply states:border-[var(--button-hover-border-color)]
+      states:bg-[var(--button-hover-background)]
+      states:text-[var(--button-hover-text)];
     }
 
     // .button--link

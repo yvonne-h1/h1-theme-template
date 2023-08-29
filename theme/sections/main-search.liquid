@@ -5,28 +5,9 @@
   capture search_str
     render 'render-translation', namespace: 'sections.main_search', key: 'search', fallback: 'Search'
   endcapture
-
-  assign grid_classes = 'search-results gap-base'
-  assign grid_item_classes = 'col-span-6 md:col-span-4 lg:col-span-3'
 -%}
 
 {%- capture container_content -%}
-
-  {% comment %} Results count {% endcomment %}
-  <p class="text-center">
-    {%- liquid
-      if search.performed
-        if search.results_count == 0
-          echo 'sections.main_search.no_results' | t: terms: search.terms
-        else
-          echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
-        endif
-      else
-        echo search_str
-      endif
-    -%}
-  </p>
-
   {% comment %} Search form {% endcomment %}
   <form action="{{ routes.search_url }}" method="get" role="search" class="mb-10 grid grid-cols-12">
     <div class="relative col-span-12  md:col-span-6 md:col-start-4 lg:col-span-4 lg:col-start-5">
@@ -50,69 +31,39 @@
     </div>
   </form>
 
-    {% comment %} Search results {% endcomment %}
-    {%- if search.performed and search.results.size > 0 -%}
-      {%- paginate search.results by 16 -%}
+  {% comment %} Search type navigation {% endcomment %}
+  <search-types class="mb-10">
+    {%- render 'search-types', search: search -%}
+  </search-types>
 
-        {%- for item in search.results -%}
-          {%- case item.object_type -%}
-            {%- when 'product' -%}
-              {%- capture results_products -%}
-                {{ results_products }}
-                <li class="{{ grid_item_classes }}">
-                  {%- render 'product-card', product_object: item -%}
-                </li>
-              {%- endcapture -%}
-            {%- when 'article' -%}
-              {%- capture results_articles -%}
-                {{ results_articles }}
-              <li class="{{ grid_item_classes }}">
-                {%- render 'article-card', article: item -%}
-              </li>
-              {%- endcapture -%}
-            {%- when 'page' -%}
-              {%- capture results_pages -%}
-                {{ results_pages }}
-              <li class="">
-                {%- render 'page-card', page: item -%}
-              </li>
-              {%- endcapture -%}
-            {%- endcase -%}
-        {%- endfor -%}
-
-      {% comment %} Product results {% endcomment %}
-      {%- if results_products -%}
-        <h2 class="h4">{%- render 'render-translation', namespace: 'sections.predictive_search', key: 'products', fallback: 'products' -%}</h2>
-        <ul class="{{ grid_classes }} grid grid-cols-12">
-          {{ results_products }}
-        </ul>
-        <hr class="bg-gray-100">
-      {%- endif -%}
-
-      {% comment %} Blog article results {% endcomment %}
-      {%- if results_articles -%}
-        <h2 class="h4">{%- render 'render-translation', namespace: 'sections.predictive_search', key: 'blog', fallback: 'Articles' -%}</h2>
-        <ul class="{{ grid_classes }} grid grid-cols-12">
-          {{ results_articles }}
-        </ul>
-        <hr class="bg-gray-100">
-      {%- endif -%}
-
-      {% comment %} Page results {% endcomment %}
-      {%- if results_pages -%}
-        <h2 class="h4">{%- render 'render-translation', namespace: 'sections.predictive_search', key: 'pages', fallback: 'Pages' -%}</h2>
-        <ul class="{{ grid_classes }} flex flex-col">
-          {{ results_pages }}
-        </ul>
-      {%- endif -%}
-
+  {% comment %} Results count {% endcomment %}
+  <div id="result-count" class="mb-4">
+    <p class="text-center">
       {%- liquid
-        if paginate.pages > 1
-          render 'pagination', paginate: paginate, class: 'pagination-wrapper-small mt-8'
+        if search.performed
+          if search.results_count == 0
+            echo 'sections.main_search.no_results' | t: terms: search.terms
+          else
+            echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
+          endif
+        else
+          echo search_str
         endif
       -%}
-      {%- endpaginate -%}
-    {%- endif -%}
+    </p>
+  </div>
+
+  <search-results>
+    {% comment %} Loader animation {% endcomment %}
+    <div class="loading-overlay absolute inset-0 z-50 flex hidden w-full items-center justify-center bg-bg-default opacity-70" data-loader>
+      {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
+    </div>
+
+    {% comment %} Results wrapper {% endcomment %}
+    <div class="search-results" data-search-results-wrapper>
+      {%- render 'search-results', search: search -%}
+    </div>
+  </search-results>
 {%- endcapture -%}
 
 {%- capture container_title -%}
@@ -120,7 +71,18 @@
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'mt-8', header_class: 'mb-8', title: container_title, title_tag: 'h1', title_class: 'h2 text-center', content: container_content -%}
+{%-
+  render 'render-container-content',
+  content: container_content,
+  class: 'mt-8',
+  header_class: 'mb-8',
+  title: container_title,
+  title_tag: 'h1',
+  title_class: 'h2 text-center',
+-%}
+
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'search-results.js' | asset_url }}" defer></script>
 
 {% schema %}
   {
