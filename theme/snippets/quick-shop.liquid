@@ -21,16 +21,20 @@
     assign option_to_render = product.options_with_values | first
   endif
 
-  # Get the option name
-  assign option_name = option_to_render.name | downcase
-
   # Check if option is of type color
   assign is_color = false
-  assign color_option_name = settings.color_filter_name | handleize
+  assign option_size = product.options.size
 
-  if option_name == color_option_name
-    assign is_color = true
-  endif
+  assign color_label = option_to_render.name | handleize
+  assign color_variant_labels = settings.color_filter_name | newline_to_br | strip_newlines | split: '<br />'
+
+  for color_variant_label in color_variant_labels
+    assign color_variant_label_handleized = color_variant_label | handleize
+    if color_variant_label_handleized == color_label
+      assign is_color = true
+      break
+    endif
+  endfor
 -%}
 
 {%- comment -%} Output quick shop {%- endcomment -%}
@@ -83,6 +87,7 @@
         if is_color == true
           assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
           assign color_option_name = option_label | handleize
+          assign color_is_mapped = false
           assign color_hex = ''
 
           # Loop through color mappings
@@ -91,6 +96,7 @@
 
             if color_name == color_option_name
               assign color_hex = color | split: '|' | last
+              assign color_is_mapped = true
             endif
           endfor
         endif
@@ -127,9 +133,10 @@
             if option_label.size < 4
               assign option_label = option_label | upcase
             endif
-            if is_color == false or color_hex == blank
+
+            unless color_is_mapped
               echo option_label | escape
-            endif
+            endunless
           -%}
         </label>
       </div>

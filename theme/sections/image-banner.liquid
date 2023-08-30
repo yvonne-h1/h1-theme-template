@@ -15,7 +15,7 @@
   {%- endcapture -%}
 
   {% comment %} Banner wrapper {% endcomment %}
-  <div class="image-banner__wrapper relative flex h-auto {{ content_position }} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_desktop }}" {{ section.shopify_attributes }}>
+  <div class="image-banner__wrapper relative {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_desktop }}">
 
     {% comment %} Banner image {% endcomment %}
     {%- liquid
@@ -51,69 +51,71 @@
     </div>
 
     {% comment %} Banner content {% endcomment %}
-    <div class="image-banner__content relative mx-element-spacing my-12 inline-flex max-w-[80%] flex-col gap-y-4 p-8 md:my-20 md:max-w-screen-md md:px-12 {{ section.settings.content_color_scheme -}}">
-      {% comment %} Heading {% endcomment %}
-      {%- if section.settings.heading != blank -%}
-        <{{ section.settings.heading_element }} class="{{- section.settings.heading_size }} {{ section.settings.heading_color -}}">
-          {{- section.settings.heading | escape -}}
-        </{{ section.settings.heading_element }}>
-      {%- endif -%}
+    <div class="image-banner__content-wrapper content-wrapper flex h-auto {{ content_position }}">
+      <div class="image-banner__content relative mx-element-spacing my-12 inline-flex max-w-[80%] flex-col gap-y-4 p-8 md:my-20 md:max-w-screen-md md:px-12 {{ section.settings.content_color_scheme -}}">
+        {% comment %} Heading {% endcomment %}
+        {%- if section.settings.heading != blank -%}
+          <{{ section.settings.heading_element }} class="{{- section.settings.heading_size }} {{ section.settings.heading_color -}}">
+            {{- section.settings.heading | escape -}}
+          </{{ section.settings.heading_element }}>
+        {%- endif -%}
 
-      {% comment %} Text {% endcomment %}
-      {%- if section.settings.text != blank -%}
-        <p class="{{- section.settings.text_color -}}">
-          {{- section.settings.text | escape -}}
-        </p>
-      {%- endif -%}
+        {% comment %} Text {% endcomment %}
+        {%- if section.settings.text != blank -%}
+          <p class="{{- section.settings.text_color -}}">
+            {{- section.settings.text | escape -}}
+          </p>
+        {%- endif -%}
 
-      {% comment %} Buttons {% endcomment %}
-      {%- liquid
-        # First button
-        assign button_1 = true
-        if section.settings.button_label_1 == blank or section.settings.button_url_1 == blank
-          assign button_1 = false
-        endif
+        {% comment %} Buttons {% endcomment %}
+        {%- liquid
+          # First button
+          assign button_1 = true
+          if section.settings.button_label_1 == blank or section.settings.button_url_1 == blank
+            assign button_1 = false
+          endif
 
-        # Second button
-        assign button_2 = true
-        if section.settings.button_label_2 == blank or section.settings.button_url_2 == blank
-          assign button_2 = false
-        endif
+          # Second button
+          assign button_2 = true
+          if section.settings.button_label_2 == blank or section.settings.button_url_2 == blank
+            assign button_2 = false
+          endif
 
-        # Button alligment
-        case section.settings.text_align
-          when 'text-start'
-            assign buttons_alignment = 'justify-start'
-          when 'text-center'
-            assign buttons_alignment = 'justify-center'
-          when 'text-end'
-            assign buttons_alignment = 'justify-end'
-        endcase
-      -%}
+          # Button alligment
+          case section.settings.text_align
+            when 'text-start'
+              assign buttons_alignment = 'justify-start'
+            when 'text-center'
+              assign buttons_alignment = 'justify-center'
+            when 'text-end'
+              assign buttons_alignment = 'justify-end'
+          endcase
+        -%}
 
-      {%- if button_1 or button_2 -%}
-        <div class="image-banner__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
-          {% comment %} Button 1 {% endcomment %}
-          {%- if button_1 -%}
-            <a
-              href="{{ section.settings.button_url_1 | default: '#' }}"
-              class="button {{ section.settings.button_type_1 }}{% if section.settings.button_url_1 == blank %} disabled{% endif %}"
-            >
-              {{- section.settings.button_label_1 | escape -}}
-            </a>
-          {%- endif -%}
+        {%- if button_1 or button_2 -%}
+          <div class="image-banner__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
+            {% comment %} Button 1 {% endcomment %}
+            {%- if button_1 -%}
+              <a
+                href="{{ section.settings.button_url_1 | default: '#' }}"
+                class="button {{ section.settings.button_type_1 }}{% if section.settings.button_url_1 == blank %} disabled{% endif %}"
+              >
+                {{- section.settings.button_label_1 | escape -}}
+              </a>
+            {%- endif -%}
 
-          {% comment %} Button 2 {% endcomment %}
-          {%- if button_2 -%}
-            <a
-              href="{{ section.settings.button_url_2 | default: '#' }}"
-              class="button {{ section.settings.button_type_2 }}{% if section.settings.button_url_2 == blank %} disabled{% endif %}"
-            >
-              {{- section.settings.button_label_2 | escape -}}
-            </a>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
+            {% comment %} Button 2 {% endcomment %}
+            {%- if button_2 -%}
+              <a
+                href="{{ section.settings.button_url_2 | default: '#' }}"
+                class="button {{ section.settings.button_type_2 }}{% if section.settings.button_url_2 == blank %} disabled{% endif %}"
+              >
+                {{- section.settings.button_label_2 | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 {%- endcapture -%}

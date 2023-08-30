@@ -8,11 +8,7 @@
     // .option__input
     &__input {
       @apply sr-only;
-      &:focus-visible + .option__label {
-        @apply ring-2 ring-primary-300 ring-offset-2;
-      }
     }
-
     // .option__label
     &__label {
       @apply relative
@@ -62,15 +58,23 @@
         }
       }
     }
-
     // .option__input
     // .option__label
     // .option__label--checked
     &__input:checked + &__label,
     &__label--checked {
       @apply bg-primary text-primary-text outline outline-1 outline-offset-4 outline-black;
-      &:hover {
-        @apply bg-primary-300;
+      &:hover,
+      &:focus-visible {
+        @apply bg-primary-300 outline-none;
+      }
+    }
+    &__input {
+      &:hover,
+      &:focus-visible {
+        + .option__label {
+          @apply outline-none ring-2 ring-primary-300 ring-offset-2;
+        }
       }
     }
   }
