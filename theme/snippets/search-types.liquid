@@ -16,10 +16,12 @@
     <a href="#" class="button button--md button--primary" data-search-type-link="all" data-search-params="{{ params }}">
       {%- render 'render-translation', namespace: 'sections.main_search.types', key: 'all', fallback: 'All' -%}
     </a>
-    {% comment %} Links per result type {% endcomment %}
-    {%- for type in search.types -%}
-      {%- assign type_params = params | append: '&type=' | append: type -%}
-      {%- assign locale_key = 'sections.main_search.types.' | append: type -%}
+    {% comment %} Links per result type. Reverse the array so it starts with products {% endcomment %}
+    {%- for type in search.types reversed -%}
+      {%- liquid
+        assign type_params = params | append: '&type=' | append: type
+        assign locale_key = 'sections.main_search.types.' | append: type
+      -%}
       <a href="#" class="button button--md button--outline capitalize" data-search-type-link="{{ type }}" data-search-params="{{ type_params }}">
         {%- render 'render-translation', namespace: locale_key, key: 'other', fallback: type -%}
       </a>

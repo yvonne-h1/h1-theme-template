@@ -9,9 +9,21 @@
   <p>
     {%- liquid
       if search.performed
+        # Multiple results for type
+        assign locale_key = 'sections.main_search.types.' | append: search.types[0]
+        capture multiple_results_for_type_str
+          render 'render-translation', namespace: locale_key, key: 'other', fallback: search.types[0]
+        endcapture
+
         # No results
         if search.results_count == 0
-          echo 'sections.main_search.no_results' | t: terms: search.terms
+          if search.types.size > 1
+            # No results for all types
+            echo 'sections.main_search.no_results' | t: terms: search.terms
+          else
+            # No results for single type
+            echo 'sections.main_search.no_results_with_type' | t: terms: search.terms, type: multiple_results_for_type_str
+          endif
           # All results
         elsif search.types.size > 1
           echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
@@ -19,10 +31,6 @@
         elsif search.results_count == 1
           echo 'sections.main_search.results_with_type_and_count' | t: terms: search.terms, count: search.results_count, type: search.types[0]
         else
-          assign locale_key = 'sections.main_search.types.' | append: search.types[0]
-          capture multiple_results_for_type_str
-            render 'render-translation', namespace: locale_key, key: 'other', fallback: search.types[0]
-          endcapture
           echo 'sections.main_search.results_with_type_and_count' | t: terms: search.terms, count: search.results_count, type: multiple_results_for_type_str
         endif
       else
