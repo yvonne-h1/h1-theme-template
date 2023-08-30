@@ -178,7 +178,7 @@
                   <a
                     href="{{ routes.cart_url }}"
                     class="button button--secondary button--lg w-full font-normal">
-                    {{- 'general.cart.view' | t: count: cart.item_count -}}
+                    {%- render 'render-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart ({{ count }})' -%}
                   </a>
                 {%- endif -%}
               </div>

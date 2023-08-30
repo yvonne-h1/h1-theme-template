@@ -1,1 +1,1 @@
-{{- 'general.cart.view' | t: count: cart.item_count -}}
+{%- render 'render-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart ({{ count }})' -%}
