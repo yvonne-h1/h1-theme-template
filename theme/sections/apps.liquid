@@ -7,7 +7,7 @@
 
   if section.settings.format_container
     # Container class
-    assign container_class = 'featured-blog-grid' | append: ' ' | append: section.settings.container_width
+    assign container_class = section.settings.container_width
     if section.settings.color_scheme != blank
       assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
     endif

@@ -1,7 +1,4 @@
 @layer base {
-  /*
-    Focus ring - default (with offset)
-  */
   *:focus-visible {
     @apply outline-dashed outline-offset-0 outline-primary-300;
   }

@@ -1,7 +1,0 @@
-// Use w-[x] classes to size the icons
-
-@layer components {
-  .icon {
-    @apply block aspect-square h-auto w-4 fill-current;
-  }
-}

@@ -57,9 +57,7 @@
                         class: "object-cover"
                       -%}
                     {%- endcapture -%}
-                    <div
-                      class="flexible-holder"
-                      style="--max-width: {{ block.settings.image_max_width }}px;">
+                    <div style="--max-width: {{ block.settings.image_max_width }}px;">
                       {%- if block.settings.image_url != blank -%}
                         <a
                           href="{{ block.settings.image_url }}"
@@ -158,13 +156,9 @@
       {
         "type": "select",
         "id": "color_scheme",
-        "default": "",
+        "default": "color-scheme color-scheme--secondary",
         "label": "Color scheme",
         "options": [
-          {
-            "value": "",
-            "label": "Default"
-          },
           {
             "value": "color-scheme color-scheme--primary",
             "label": "Primary",

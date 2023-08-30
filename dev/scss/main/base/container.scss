@@ -1,4 +1,4 @@
-@layer components {
+@layer base {
   .container {
     @apply my-[var(--container-spacing)];
     &--background {

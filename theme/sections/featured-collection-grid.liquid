@@ -18,9 +18,6 @@
       assign image_max_width = 360
       assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
   endcase
-
-  # Import styles
-  render 'import-styles', file_name: 'section-featured-collection-grid.css'
 -%}
 
 {%- comment -%} Capture content {%- endcomment -%}

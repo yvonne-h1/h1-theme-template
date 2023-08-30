@@ -168,11 +168,6 @@
   {%- endform -%}
 {%- endcapture -%}
 
-{%- comment -%} Import styles {%- endcomment -%}
-{%- liquid
-  render 'import-styles', file_name: 'component-form.css', force: true
--%}
-
 {%- liquid
   # Container class
   assign container_class = 'contact-form'

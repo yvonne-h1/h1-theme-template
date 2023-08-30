@@ -203,9 +203,6 @@
 {%- comment -%} Output cart content {%- endcomment -%}
 {%- if container_content -%}
   {%- liquid
-    # Import styles for this section  echo
-    render 'import-styles', file_name: 'component-form.css'
-
     # Render the content  echo
     render 'render-container-content', class: 'mb-0', content_class: 'content-wrapper', content: container_content
   -%}

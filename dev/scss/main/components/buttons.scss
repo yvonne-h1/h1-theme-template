@@ -7,6 +7,7 @@
     --button-hover-background: theme('colors.secondary.400');
     --button-hover-border-color: theme('colors.secondary.400');
     --button-hover-text: theme('colors.secondary.text');
+    background: var(--button-background); // hack is needed because tailwind only outputs background-image and that doesn't work with gradients
 
     @apply relative
     inline-flex
@@ -18,7 +19,6 @@
     rounded-md
     border-2
     border-[var(--button-border-color)]
-    bg-[var(--button-background)]
     px-4
     py-3
     text-sm
@@ -37,6 +37,9 @@
       @apply states:border-[var(--button-hover-border-color)]
       states:bg-[var(--button-hover-background)]
       states:text-[var(--button-hover-text)];
+    }
+    &:hover {
+      background: var(--button-hover-background);
     }
 
     // .button--link
@@ -69,20 +72,23 @@
   /* Button styles */
   .button--primary,
   .button--gradient {
+    --button-text: theme('colors.primary.text');
+    --button-hover-text: theme('colors.primary.text');
+  }
+
+  .button--primary {
     --button-background: theme('colors.primary.500');
     --button-border-color: theme('colors.primary.500');
-    --button-text: theme('colors.primary.text');
-    --button-hover-background: theme('colors.primary.600');
     --button-hover-border-color: theme('colors.primary.600');
-    --button-hover-text: theme('colors.primary.text');
+    --button-hover-background: theme('colors.primary.600');
   }
 
   .button--gradient {
     @apply duration-500 ease-in;
     --button-border-color: transparent;
     --button-hover-border-color: transparent;
-    --button-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 0/200%;
-    --button-hover-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 100%/200%;
+    --button-background: theme('colors.primary-gradient.bg');
+    --button-hover-background: theme('colors.primary-gradient.bg-hover');
   }
 
   .button--secondary {

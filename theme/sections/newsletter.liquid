@@ -97,23 +97,20 @@
   {%- endfor -%}
 {%- endcapture -%}
 
-{%- comment -%}
-  Output HTML when we found blocks in the section.
-{%- endcomment -%}
-{%- if blocks != blank -%}
-  {%- comment -%} Import styles for this section {%- endcomment -%}
-  {%- render 'import-styles', file_name: 'component-form.css' -%}
+{%- liquid
+  # O utput HTML when we found blocks in the section.
+  if blocks != blank
+    # Capture content  echo
+    capture container_content
+      echo '<div class="newsletter grid grid-cols-1 content-center gap-4 text-center ">'
+      echo blocks
+      echo '</div>'
+    endcapture
 
-  {%- comment -%} Capture content {%- endcomment -%}
-  {%- capture container_content -%}
-    <div class="newsletter grid grid-cols-1 content-center gap-4 text-center ">
-      {{- blocks -}}
-    </div>
-  {%- endcapture -%}
-
-  {%- comment -%} Render the content {%- endcomment -%}
-  {%- render 'render-container-content', content: container_content, class: container_classes -%}
-{%- endif -%}
+    # Render the content  echo
+    render 'render-container-content', content: container_content, class: container_classes
+  endif
+-%}
 
 {% schema %}
   {

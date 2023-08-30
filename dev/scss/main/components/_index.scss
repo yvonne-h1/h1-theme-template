@@ -2,21 +2,9 @@
   * https://tailwindcss.com/docs/functions-and-directives#layer
 */
 
-/* Layout */
-@import 'container';
-@import 'content-wrapper';
-@import 'content-wrapper-padding';
-@import 'flexible-holder';
-
-/* Text */
-@import 'headings';
-@import 'rte';
-@import 'label';
-
 /* Elements */
-@import 'icons';
+@import 'form';
 @import 'buttons';
 @import 'collapsible';
 @import 'badges';
 @import 'options';
-@import 'backdrop';

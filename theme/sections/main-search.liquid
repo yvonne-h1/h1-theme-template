@@ -1,7 +1,4 @@
 {%- liquid
-  # Import styles for this section
-  render 'import-styles', file_name: 'component-form.css', force: true
-
   capture search_str
     render 'render-translation', namespace: 'sections.main_search', key: 'search', fallback: 'Search'
   endcapture

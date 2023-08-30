@@ -46,7 +46,7 @@
     }
     // .color-scheme--gradient
     &--gradient {
-      --color-scheme-background-color: theme('colors.primary-gradient');
+      --color-scheme-background-color: theme('colors.primary-gradient.DEFAULT');
       --color-scheme-text-color: theme('colors.primary.text');
       background-image: var(--color-scheme-background-color);
       --color-scheme-text-active-color: theme('colors.secondary.DEFAULT');
@@ -77,12 +77,14 @@
     &--white,
     &--black,
     &--secondary {
-      --button-text: theme('colors.primary.text');
-      --button-hover-text: theme('colors.primary.text');
-      --button-border-color: transparent;
-      --button-hover-border-color: transparent;
-      --button-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 0/200%;
-      --button-hover-background: linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 100%/200%;
+      .button {
+        --button-text: theme('colors.primary.text');
+        --button-hover-text: theme('colors.primary.text');
+        --button-border-color: transparent;
+        --button-hover-border-color: transparent;
+        --button-background: theme('colors.primary-gradient.bg');
+        --button-hover-background: theme('colors.primary-gradient.bg-hover');
+      }
     }
   }
 }

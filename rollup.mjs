@@ -47,7 +47,7 @@ const config = {
         inputFull: './dev/scss/main/main-base.scss',
         dest: './theme/snippets',
         rename: 'main-base-css.liquid',
-        wrapper: '@layer h1-styles-base { [[ stylesheet_content ]] }',
+        wrapper: '@layer h1-styles-base { [[ styles ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/base/**/*.scss'],
         watchLiquid: false,
         watchJs: false,
@@ -57,7 +57,7 @@ const config = {
         inputFull: './dev/scss/main/main-components.scss',
         dest: './theme/snippets',
         rename: 'main-components-css.liquid',
-        wrapper: '@layer h1-styles-components { [[ stylesheet_content ]] }',
+        wrapper: '@layer h1-styles-components { [[ styles ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/components/**/*.scss'],
         watchLiquid: true,
         watchJs: true,
@@ -67,7 +67,7 @@ const config = {
         inputFull: './dev/scss/main/main-utilities.scss',
         dest: './theme/snippets',
         rename: 'main-utilities-css.liquid',
-        wrapper: '@layer h1-styles-utilities { [[ stylesheet_content ]] }',
+        wrapper: '@layer h1-styles-utilities { [[ styles ]] }',
         watch: ['./tailwind.config.js', './dev/scss/main/utilities/**/*.scss'],
         watchLiquid: true,
         watchJs: true,
@@ -178,15 +178,7 @@ function usedInMainCss(file) {
 function notifyUpdates(type) {
   return {
     name: 'notify-updates',
-    writeBundle(bundle) {
-      // Show updated file notifications
-      // for (let filename in bundle) {
-      //   let file = `${config.dest}/${filename}`;
-      //   if (!filename.includes('.old.js')) {
-      //     notify(`Updated: ${file}`);
-      //   }
-      // }
-
+    writeBundle() {
       // JS file will trigger a full reload
       if (type == 'JS') {
         notify('Trigger reload...');
@@ -304,7 +296,7 @@ async function processCss(input) {
             dest: config.dest,
             rename: () => `${mainItem.input}-prod.css`,
             transform: (contents) => {
-              return mainItem.wrapper.replace('[[ stylesheet_content ]]', contents.toString());
+              return mainItem.wrapper.replace('[[ styles ]]', contents.toString());
             },
           },
         ],
@@ -317,7 +309,7 @@ async function processCss(input) {
             dest: mainItem.dest,
             rename: () => mainItem.rename,
             transform: (contents) => {
-              return `{% style %}${mainItem.wrapper.replace('[[ stylesheet_content ]]', contents.toString())}{% endstyle %}`;
+              return `{% style %}${mainItem.wrapper.replace('[[ styles ]]', contents.toString())}{% endstyle %}`;
             },
           },
         ],

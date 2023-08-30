@@ -20,9 +20,6 @@
       assign image_max_width = 456
       assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 480px) 50vw, 100vw'
   endcase
-
-  # Import styles
-  render 'import-styles', file_name: 'section-featured-blog-grid.css'
 -%}
 
 {%- comment -%} Capture content {%- endcomment -%}

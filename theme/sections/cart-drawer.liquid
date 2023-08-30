@@ -1,9 +1,5 @@
 {%- comment -%} Output cart drawer {%- endcomment -%}
 {%- if request.page_type != 'cart' -%}
-  {%- comment -%} Import styles for this section {%- endcomment -%}
-  {%- liquid
-    render 'import-styles', file_name: 'component-form.css'
-  -%}
   <style>
     .cart-is-empty .cart-drawer__warnings {
       min-height: 100dvh;

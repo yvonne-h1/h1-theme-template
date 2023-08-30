@@ -21,9 +21,6 @@
   capture password_str
     render 'render-translation', namespace: 'customer.register', key: 'password', fallback: 'Password'
   endcapture
-
-  # Import styles for this section
-  render 'import-styles', file_name: 'component-form.css', force: true
 -%}
 
 {%- capture container_content -%}

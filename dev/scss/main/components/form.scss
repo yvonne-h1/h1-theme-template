@@ -1,5 +1,4 @@
 /**
-
 Normal form elements should be marked up as follows:
 
 <div class="field">
@@ -35,7 +34,7 @@ endcapture
 
 */
 
-@layer h1-styles-components {
+@layer components {
   .field {
     @apply relative
     mb-element-spacing

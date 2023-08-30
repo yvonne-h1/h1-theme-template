@@ -148,7 +148,11 @@ module.exports = {
       'bg-default': '#FFFFFF',
       black: '#111',
       'text-default': '#262626',
-      'primary-gradient': 'linear-gradient(90deg,#e42f26 0,#e46a26)',
+      'primary-gradient': {
+        DEFAULT: 'linear-gradient(90deg,#e42f26 0,#e46a26)',
+        bg: 'linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 0/200%',
+        'bg-hover': 'linear-gradient(90deg, #e42f26, #e46a26 50%, #e42f26) 100%/200%',
+      },
       primary: {
         text: '#FFFFFF',
         DEFAULT: '#E42F26',

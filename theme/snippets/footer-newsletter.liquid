@@ -50,7 +50,7 @@
             id="newsletter-form-{{ section.id }}"
             type="email"
             name="contact[email]"
-            class="field__input bg-white"
+            class="field__input"
             value="{%- if form.email -%}{{ form.email }}{%- elsif customer -%}{{ customer.email }}{%- endif -%}"
             aria-required="true"
             spellcheck="false"

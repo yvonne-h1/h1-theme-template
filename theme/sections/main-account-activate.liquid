@@ -13,9 +13,6 @@
   capture password_confirm_str
     render 'render-translation', namespace: 'customer.activate_account', key: 'password_confirm', fallback: 'Confirm password'
   endcapture
-
-  # Import styles for this section
-  render 'import-styles', file_name: 'component-form.css', force: true
 -%}
 
 {%- capture container_content -%}

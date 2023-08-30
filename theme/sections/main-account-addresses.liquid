@@ -30,9 +30,6 @@
   capture phone_str
     render 'render-translation', namespace: 'customer.addresses', key: 'phone', fallback: 'Phone number'
   endcapture
-
-  # Import styles for this section
-  render 'import-styles', file_name: 'component-form.css', force: true
 -%}
 
 {%- capture container_content -%}
