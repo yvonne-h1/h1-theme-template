@@ -67,26 +67,30 @@ endcapture
       px-4
       py-2.5
       font-body
-      text-sm
 
+      text-sm
       text-black
       shadow-none
       ring-transparent
       transition-all
       duration-75
       ease-linear
-      placeholder:text-black;
-      &:focus {
-        @apply border-primary-200
-        bg-primary-100
-        text-black
-        shadow-none
-        shadow-transparent
-        ring-transparent;
-      }
-      &:focus-visible {
-        @apply border-primary-100 bg-primary-100 text-black ring-2 ring-primary-300 ring-offset-2;
-      }
+
+      placeholder:text-black
+
+      hover:border-primary-200
+      focus:text-black
+      focus:shadow-none
+      focus:shadow-transparent
+      focus:ring-transparent
+      focus-visible:border-primary-100
+
+      focus-visible:border-transparent
+      focus-visible:text-black
+      focus-visible:ring-2
+      focus-visible:ring-primary-300
+      focus-visible:ring-offset-2;
+
       &:invalid:not(:placeholder-shown),
       &[aria-invalid='true']:invalid {
         @apply border-danger;
@@ -99,11 +103,6 @@ endcapture
         ~ .field__message--error {
           @apply block;
         }
-      }
-      &:active(:not(:disabled)),
-      &:focus(:not(:disabled)),
-      &:focus-visible(:not(:disabled)) {
-        @apply bg-primary-50;
       }
       &:valid[required],
       &:invalid:not(:placeholder-shown) {

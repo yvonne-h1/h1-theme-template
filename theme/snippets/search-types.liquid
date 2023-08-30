@@ -10,17 +10,19 @@
 -%}
 
 {%- if search.types.size > 1 -%}
-  <div class="flex justify-center gap-4">
+  <div class="flex flex-wrap justify-center gap-2 md:gap-4">
+    {% comment %} Link to 'all' results {% endcomment %}
     {%- assign params = 'q=' | append: search.terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by -%}
-    <a href="#" class="button button--primary" data-search-type-link="all" data-search-params="{{ params }}">
+    <a href="#" class="button button--md button--primary" data-search-type-link="all" data-search-params="{{ params }}">
       {%- render 'render-translation', namespace: 'sections.main_search.types', key: 'all', fallback: 'All' -%}
     </a>
+    {% comment %} Links per result type {% endcomment %}
     {%- for type in search.types -%}
       {%- assign type_params = params | append: '&type=' | append: type -%}
-      <a href="#" class="button button--outline" data-search-type-link="{{ type }}" data-search-params="{{ type_params }}">
-        {%- render 'render-translation', namespace: 'sections.main_search.types', key: type -%}
+      {%- assign locale_key = 'sections.main_search.types.' | append: type -%}
+      <a href="#" class="button button--md button--outline capitalize" data-search-type-link="{{ type }}" data-search-params="{{ type_params }}">
+        {%- render 'render-translation', namespace: locale_key, key: 'other', fallback: type -%}
       </a>
     {%- endfor -%}
   </div>
-  <hr class="bg-gray-100">
 {%- endif -%}

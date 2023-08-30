@@ -13,7 +13,10 @@
 {% endcomment %}
 
 {%- if paginate.parts.size > 0 -%}
-  {%- assign pagination_item_class = 'block p-3 text-sm' -%}
+  {%- liquid
+    assign pagination_item_class = 'block p-3 text-sm'
+    assign pagination_nav_item_classes = 'relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary touch:h-12 touch:w-12'
+  -%}
 
   <nav
     class="pagination {{ class | default: 'my-14 block lg:my-16' }}"
@@ -23,8 +26,9 @@
         <li class="me-3">
           <a
             href="{{ paginate.previous.url }}{{ anchor }}"
-            class="pagination__item pagination__item--prev group/pagination-prev relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary touch:h-12 touch:w-12"
-            aria-label="{% render "render-translation", namespace: "general.pagination.previous", fallback: "Previous" %}">
+            class="pagination__item pagination__item--prev group/pagination-prev {{ pagination_nav_item_classes }}"
+            aria-label="{% render "render-translation", namespace: "general.pagination.previous", fallback: "Previous" %}"
+            data-pagination-trigger>
             {%- render 'icons', icon: 'chevron-left', icon_class: 'w-3 group-hover/pagination-prev:scale-125 transition-all' -%}
           </a>
         </li>
@@ -36,7 +40,8 @@
             <a
               href="{{ part.url }}{{ anchor }}"
               class="pagination__item {{ pagination_item_class }} text-inherit no-underline hover:text-primary states:no-underline"
-              aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+              aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+              data-pagination-trigger>
               {{- part.title -}}
             </a>
           {%- else -%}
@@ -44,7 +49,8 @@
               <span
                 class="pagination__item pagination__item--current {{ pagination_item_class }} text-primary"
                 aria-current="page"
-                aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                data-pagination-trigger>
                 {{- part.title -}}
               </span>
             {%- else -%}
@@ -60,8 +66,9 @@
         <li class="ms-3">
           <a
             href="{{ paginate.next.url }}{{ anchor }}"
-            class="pagination__item pagination__item--next group/pagination-next relative flex h-10 w-10 items-center justify-center rounded-full border p-0 transition-colors hover:border-primary touch:h-12 touch:w-12"
-            aria-label="{% render "render-translation", namespace: "general.pagination.next", fallback: "Next" %}">
+            class="pagination__item pagination__item--next group/pagination-next {{ pagination_nav_item_classes }}"
+            aria-label="{% render "render-translation", namespace: "general.pagination.next", fallback: "Next" %}"
+            data-pagination-trigger>
             {%- render 'icons', icon: 'chevron-right', icon_class: 'w-3 group-hover/pagination-next:scale-125 transition-all' -%}
           </a>
         </li>

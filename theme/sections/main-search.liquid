@@ -8,6 +8,31 @@
 -%}
 
 {%- capture container_content -%}
+
+  {% comment %} Search type navigation {% endcomment %}
+  <search-types class="mb-10">
+    <div id="search-types">
+      {%- render 'search-types', search: search -%}
+    </div>
+
+    {% comment %} Results count {% endcomment %}
+    <div id="result-count" class="my-4 text-center italic">
+      <p>
+        {%- liquid
+          if search.performed
+            if search.results_count == 0
+              echo 'sections.main_search.no_results' | t: terms: search.terms
+            else
+              echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
+            endif
+          else
+            echo search_str
+          endif
+        -%}
+      </p>
+    </div>
+  </search-types>
+
   {% comment %} Search form {% endcomment %}
   <form action="{{ routes.search_url }}" method="get" role="search" class="mb-10 grid grid-cols-12">
     <div class="relative col-span-12  md:col-span-6 md:col-start-4 lg:col-span-4 lg:col-start-5">
@@ -31,27 +56,7 @@
     </div>
   </form>
 
-  {% comment %} Search type navigation {% endcomment %}
-  <search-types class="mb-10">
-    {%- render 'search-types', search: search -%}
-  </search-types>
-
-  {% comment %} Results count {% endcomment %}
-  <div id="result-count" class="mb-4">
-    <p class="text-center">
-      {%- liquid
-        if search.performed
-          if search.results_count == 0
-            echo 'sections.main_search.no_results' | t: terms: search.terms
-          else
-            echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
-          endif
-        else
-          echo search_str
-        endif
-      -%}
-    </p>
-  </div>
+  <hr class="bg-gray-100">
 
   <search-results>
     {% comment %} Loader animation {% endcomment %}
@@ -60,7 +65,7 @@
     </div>
 
     {% comment %} Results wrapper {% endcomment %}
-    <div class="search-results" data-search-results-wrapper>
+    <div id="search-results" class="search-results">
       {%- render 'search-results', search: search -%}
     </div>
   </search-results>

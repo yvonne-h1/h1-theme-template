@@ -200,12 +200,22 @@
         "one": "{{ count }} result found for “{{ terms }}”",
         "other": "{{ count }} results found for “{{ terms }}”"
       },
+      "results_with_type_and_count": "{{ count }} {{ type }} found for “{{ terms }}”",
       "search": "search",
       "types": {
         "all": "All",
-        "page": "Pages",
-        "article": "Articles",
-        "product": "Products"
+        "page": {
+          "one": "page",
+          "other": "pages"
+        },
+        "article": {
+          "one": "article",
+          "other": "articles"
+        },
+        "product": {
+          "one": "product",
+          "other": "products"
+        }
       }
     },
     "main_password": {

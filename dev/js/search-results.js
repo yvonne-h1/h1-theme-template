@@ -3,17 +3,22 @@ class SearchResults extends HTMLElement {
     super();
 
     this.filterData = [];
-    this.grid = this.querySelector('[data-search-results-wrapper]');
+    this.grid = this.querySelector('#search-results');
     this.loader = this.querySelector('[data-loader]');
 
-    this.searchTypes = document.querySelector('search-types');
+    this.searchTypes = document.getElementById('search-types');
 
     // if the page is loaded with queries, the search type is likely empty, so render them
     if (this.searchTypes.innerHTML === '') {
       this.renderSearchTypes(document.location.search, null, true);
     }
+    else {
+      this.initSearchTypes();
+    }
 
     this.initSort();
+
+    window.addEventListener('popstate', this.onHistoryChange.bind(this));
   }
 
   /**
@@ -35,8 +40,6 @@ class SearchResults extends HTMLElement {
    * Bind the event listener
    */
   initSearchTypes(type = null, init = true) {
-    console.trace('initSearchTypes', type, init);
-
     this.searchTypeLinks = this.searchTypes.querySelectorAll('[data-search-type-link]');
     const activeButtonClasses = ['button--primary', 'pointer-events-none'];
     const defaultButtonClass = 'button--outline';
@@ -102,30 +105,39 @@ class SearchResults extends HTMLElement {
       searchParams.delete('sort_by');
     }
 
+    // Delete the type so we can update all other type links as well
+    if (type) {
+      searchParams.delete('type');
+    }
+
     // Stringify the queries and replace the question marks
     searchString = searchParams.toString();
     searchString = searchString.replaceAll('?','');
-
-    // make sure to only render products when the sort is used
-    if (!type) {
-      searchString = `${searchString}&type=product`;
-    }
 
     // remove the first '&'
     if (searchString.charAt(0) === '&') {
       searchString = searchString.slice(1);
     }
 
+    // Append the sort option string without the type so we can add the type dynamically for all the other links
+    searchString = `${searchString}&${sortOptionString}`;
+
     // if the filter options are not empty after we filter out the sort option, then add it to the new sort option
-    searchParams = `${(searchString) ? `${searchString}&${sortOptionString}` : `${sortOptionString}`}`;
+    searchParams = `${searchString}&type=product`;
 
     // Render the page with the new params
     this.renderPage(searchParams, true);
+
+    // update the other links so they use the correct sorting
+    this.searchTypeLinks.forEach(link => {
+      const type = link.dataset.searchTypeLink;
+      link.dataset.searchParams = `${searchString}&type=${type}`;
+    });
   }
 
   loadResultsForType(event) {
     const params = event.target.dataset.searchParams;
-    this.renderPage(params, false);
+    this.renderPage(params, true);
   }
 
   /**
@@ -142,8 +154,6 @@ class SearchResults extends HTMLElement {
    * @param {String} searchParams
    */
   renderSearchTypes(searchParams, type, init = false) {
-    console.log('renderSearchTypes', searchParams, init);
-
     if (init) {
       searchParams = new URLSearchParams(searchParams);
       type = searchParams.get('type');
@@ -160,21 +170,18 @@ class SearchResults extends HTMLElement {
       .then((responseText) => {
         const html = responseText;
         const parsedHTML = new DOMParser().parseFromString(html, 'text/html');
-        this.searchTypes.innerHTML = parsedHTML.querySelector('.shopify-section').innerHTML;
+        this.searchTypes.innerHTML = parsedHTML.querySelector('#search-types').innerHTML;
 
         this.initSearchTypes(type, init);
       });
   }
 
   /**
-   * renderPage
+   * renderPage: check if the page was already rendered and either do a new fetch or load from cache
    * @param {String} searchParams
    * @param {Boolean} updateURLHash
    */
   renderPage(searchParams, updateURLHash = true, type = null) {
-    console.log('renderPage', searchParams, updateURLHash, type);
-
-    // do fetch
     const url = `${window.location.pathname}?${searchParams}&section_id=search-results`;
 
     const filterDataUrl = element => element.url === url;
@@ -194,7 +201,7 @@ class SearchResults extends HTMLElement {
   }
 
   /**
-   * renderSectionFromFetch
+   * renderSectionFromFetch - new fetch of the results
    * @param {String} url
    * @param {String} searchParams
    */
@@ -214,7 +221,7 @@ class SearchResults extends HTMLElement {
   }
 
   /**
-   * renderSectionFromCache
+   * renderSectionFromCache - render from cache
    * @param {String} filterDataUrl
    * @param {Object} event
    * @param {String} searchParams

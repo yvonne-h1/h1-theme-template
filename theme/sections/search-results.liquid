@@ -6,13 +6,24 @@
 
 {% comment %} Results count {% endcomment %}
 <div id="result-count">
-  <p class="text-center">
+  <p>
     {%- liquid
       if search.performed
+        # No results
         if search.results_count == 0
           echo 'sections.main_search.no_results' | t: terms: search.terms
-        else
+          # All results
+        elsif search.types.size > 1
           echo 'sections.main_search.results_with_count' | t: terms: search.terms, count: search.results_count
+          # Single type result
+        elsif search.results_count == 1
+          echo 'sections.main_search.results_with_type_and_count' | t: terms: search.terms, count: search.results_count, type: search.types[0]
+        else
+          assign locale_key = 'sections.main_search.types.' | append: search.types[0]
+          capture multiple_results_for_type_str
+            render 'render-translation', namespace: locale_key, key: 'other', fallback: search.types[0]
+          endcapture
+          echo 'sections.main_search.results_with_type_and_count' | t: terms: search.terms, count: search.results_count, type: multiple_results_for_type_str
         endif
       else
         echo search_str

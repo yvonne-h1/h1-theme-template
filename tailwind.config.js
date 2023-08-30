@@ -37,8 +37,8 @@ module.exports = {
      * It's recommended to not change these
      */
     screens: {
-      xs: '360px',
-      sm: '480px',
+      xs: '420px',
+      sm: '580px',
       md: '768px',
       lg: '1024px',
       xl: '1280px',
