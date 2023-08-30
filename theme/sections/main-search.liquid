@@ -33,28 +33,12 @@
     </div>
   </search-types>
 
-  {% comment %} Search form {% endcomment %}
-  <form action="{{ routes.search_url }}" method="get" role="search" class="mb-10 grid grid-cols-12">
-    <div class="relative col-span-12  md:col-span-6 md:col-start-4 lg:col-span-4 lg:col-start-5">
-      <div class="field relative mb-0">
-        <label class="field__label sr-only" for="search-in-template" aria-hidden="true">
-          {{ search_str }}
-        </label>
-        <input
-          class="field__input"
-          id="search-in-template"
-          type="search"
-          name="q"
-          value="{{ search.terms | escape }}"
-          placeholder="{{ search_str }}"
-        >
-        <button type="submit" class="search__button absolute end-4 top-2/4 block -translate-y-2/4 states:text-primary" aria-label="{{ search_str }}">
-          {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
-        </button>
-      </div>
-      <input name="options[prefix]" type="hidden" value="last">
-    </div>
-  </form>
+  {%- render 'search-form',
+    predictive_search_enabled: false,
+    prefix: 'search-page',
+    max_results: settings.predictive_search_max_results_per_type,
+    show_shadow: false
+  -%}
 
   <hr class="bg-gray-100">
 
@@ -79,7 +63,7 @@
 {%-
   render 'render-container-content',
   content: container_content,
-  class: 'mt-8',
+  class: 'group/search-page mt-8',
   header_class: 'mb-8',
   title: container_title,
   title_tag: 'h1',

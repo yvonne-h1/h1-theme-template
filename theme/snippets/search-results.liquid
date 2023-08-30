@@ -10,7 +10,7 @@
 -%}
 
 {%- if search.performed and search.results.size > 0 -%}
-  {%- paginate search.results by 4 -%}
+  {%- paginate search.results by settings.results_per_page -%}
     {%- for item in search.results -%}
       {%- case item.object_type -%}
         {%- when 'product' -%}

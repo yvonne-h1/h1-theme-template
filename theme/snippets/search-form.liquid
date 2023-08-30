@@ -3,6 +3,7 @@
   - prefix
   - predictive_search_enabled
   - max_results
+  - show_shadow
 
   Example
   {%- render 'search-form', predictive_search_enabled: settings.predictive_search_enabled, prefix: 'mobile' -%}
@@ -13,16 +14,17 @@
   unless prefix
     assign prefix = ''
   endunless
+
+  unless show_shadow == false
+    assign show_shadow = true
+  endunless
+
   assign search_form_element = 'div'
   if predictive_search_enabled == true
-    comment
-      Form element
-    endcomment
+    # Form element
     assign search_form_element = 'predictive-search'
 
-    comment
-      Types of results to show
-    endcomment
+    # Types of results to show
     capture resourceTypes
       if settings.predictive_search_articles
         echo 'article' | prepend: ','
@@ -41,21 +43,23 @@
   endif
 -%}
 
-{% comment %} Close trigger {% endcomment %}
-<class-toggle-component
-  data-options='
-    {
-      "classToToggle": "search-is-open",
-      "ariaExpanded": true
-    }
-  '>
-  <button
-    type="button"
-    class="-me-6 -mt-6 ms-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:end-0 lg:top-3 lg:z-10 lg:mb-0 lg:me-[var(--content-wrapper-padding)] lg:ms-0 lg:mt-0"
-    aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}">
-    {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
-  </button>
-</class-toggle-component>
+{%- if show_shadow -%}
+  {% comment %} Close trigger {% endcomment %}
+  <class-toggle-component
+    data-options='
+      {
+        "classToToggle": "search-is-open",
+        "ariaExpanded": true
+      }
+    '>
+    <button
+      type="button"
+      class="-me-6 -mt-6 ms-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:end-0 lg:top-3 lg:z-10 lg:mb-0 lg:me-[var(--content-wrapper-padding)] lg:ms-0 lg:mt-0"
+      aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}">
+      {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
+    </button>
+  </class-toggle-component>
+{%- endif -%}
 
 {%- comment -%} Render search form {%- endcomment -%}
 <{{ search_form_element }} class="relative block">
@@ -63,14 +67,32 @@
     action="{{ routes.search_url }}"
     method="get"
     role="search"
-    class="search-modal__form relative mx-auto w-full lg:max-w-2xl">
-    <div class="search-field relative mb-0 w-full">
-      <label class="search-field__label hidden" for="{{ prefix }}SearchInModal">
+    class="search-form relative mx-auto w-full lg:max-w-2xl">
+    <div class="search-form__field field relative mb-0 w-full">
+      <label class="search-form__label field__label sr-only" for="{{ prefix }}SearchInModal">
         {%- render 'render-translation', namespace: 'general.search', key: 'search', fallback: 'Search' -%}
       </label>
       <input
         placeholder="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}"
-        class="search-field__input state:text-black block w-full appearance-none border border-x-transparent  border-t-transparent bg-transparent py-[5px] pe-6 ps-0 font-body leading-7 ring-transparent placeholder:text-black states:border-transparent states:border-b-secondary states:bg-transparent states:ring-transparent lg:border-b-transparent lg:pe-8 lg:text-base lg:states:border-b-transparent"
+        class="
+          field__input
+          search-form__input
+          block
+          w-full
+          appearance-none
+          font-body
+          placeholder:text-gray-700
+          group-[.search-modal]:border-none
+          group-[.search-modal]:bg-transparent
+          group-[.search-modal]:py-[5px]
+          group-[.search-modal]:pe-6
+          group-[.search-modal]:ps-2
+          group-[.search-modal]:leading-7
+          states:text-black
+          group-[.search-modal]:states:bg-transparent
+          group-[.search-modal]:states:ring-primary-300
+          group-[.search-modal]:states:lg:text-base
+        "
         id="{{ prefix }}SearchInModal"
         type="search"
         name="q"
@@ -96,7 +118,7 @@
     {%- comment -%} Submit button. {%- endcomment -%}
     <button
       type="submit"
-      class="search-modal__button absolute end-0 top-2/4 block -translate-y-2/4 cursor-pointer p-3 states:text-primary"
+      class="search-form__button absolute end-0 top-2/4 block -translate-y-2/4 cursor-pointer p-3 states:text-primary"
       aria-label="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
       {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
     </button>
