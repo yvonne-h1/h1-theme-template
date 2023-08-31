@@ -128,6 +128,36 @@ function pauseAllMedia() {
 }
 
 /**
+ * A custom element that wraps a search-form
+*/
+if (!customElements.get('search-form')) {
+  class SearchForm extends HTMLElement {
+    constructor() {
+      super();
+      this.input = this.querySelector('form input');
+      this.submit = this.querySelector('form [type="submit"]');
+
+      this.input.addEventListener('input', this.onInput.bind(this));
+
+      this.input.addEventListener( 'input', debounce(() => {
+        this.onInput.bind(this);
+      }, 100));
+    }
+
+    onInput() {
+      const searchLength = this.input.value.trim();
+      if (!searchLength.length) {
+        this.submit.disabled = 'disabled';
+      }
+      else {
+        if(this.submit.disabled) this.submit.removeAttribute('disabled');
+      }
+    }
+  }
+
+  customElements.define('search-form', SearchForm);
+}
+/**
  * A custom element that wraps a quantity input
 */
 if (!customElements.get('quantity-input')) {

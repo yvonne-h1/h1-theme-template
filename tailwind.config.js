@@ -285,7 +285,7 @@ module.exports = {
          */
       addUtilities({
         '.text-color-gradient': {
-          backgroundImage: theme('colors.primary-gradient'),
+          backgroundImage: theme('colors.primary-gradient.DEFAULT'),
           color: theme('colors.black'),
         },
         '.gap-base': {

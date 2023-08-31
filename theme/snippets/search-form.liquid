@@ -19,8 +19,13 @@
     assign show_shadow = true
   endunless
 
+  unless predictive_search_enabled == false
+    assign predictive_search_enabled = true
+  endunless
+
   assign search_form_element = 'div'
-  if predictive_search_enabled == true
+
+  if predictive_search_enabled
     # Form element
     assign search_form_element = 'predictive-search'
 
@@ -62,76 +67,84 @@
 {%- endif -%}
 
 {%- comment -%} Render search form {%- endcomment -%}
-<{{ search_form_element }} class="relative block">
-  <form
-    action="{{ routes.search_url }}"
-    method="get"
-    role="search"
-    class="search-form relative mx-auto w-full lg:max-w-2xl">
-    <div class="search-form__field field relative mb-0 w-full">
-      <label class="search-form__label field__label sr-only" for="{{ prefix }}SearchInModal">
-        {%- render 'render-translation', namespace: 'general.search', key: 'search', fallback: 'Search' -%}
-      </label>
-      <input
-        placeholder="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}"
-        class="
-          field__input
-          search-form__input
-          block
-          w-full
-          appearance-none
-          font-body
-          placeholder:text-gray-700
-          group-[.search-modal]:border-none
-          group-[.search-modal]:bg-transparent
-          group-[.search-modal]:py-[5px]
-          group-[.search-modal]:pe-6
-          group-[.search-modal]:ps-2
-          group-[.search-modal]:leading-7
-          states:text-black
-          group-[.search-modal]:states:bg-transparent
-          group-[.search-modal]:states:ring-primary-300
-          group-[.search-modal]:states:lg:text-base
-        "
-        id="{{ prefix }}SearchInModal"
-        type="search"
-        name="q"
-        autofocus
-        value="{{ search.terms | escape }}"
-        {% if predictive_search_enabled %}
-          data-predicative-search="input"
-          autocomplete="off"
-        {% endif %}>
-      {%- comment -%} Extra options for search. {%- endcomment -%}
-      <input type="hidden" name="options[prefix]" value="last">
-    </div>
+<search-form>
+  <{{ search_form_element }} class="relative block">
+    <form
+      action="{{ routes.search_url }}"
+      method="get"
+      role="search"
+      class="search-form relative mx-auto w-full lg:max-w-2xl"
+      data-search-form>
+      <div class="search-form__field field relative mb-0 w-full">
+        <label class="search-form__label field__label sr-only" for="{{ prefix }}SearchInModal">
+          {%- render 'render-translation', namespace: 'general.search', key: 'search', fallback: 'Search' -%}
+        </label>
+        <input
+          placeholder="{% render "render-translation", namespace: "sections.main_search", key: "search_label", fallback: "Search" %}"
+          class="
+            field__input
+            search-form__input
+            block
+            w-full
+            appearance-none
+            font-body
+            placeholder:text-gray-700
+            group-[.search-modal]:border-none
+            group-[.search-modal]:bg-transparent
+            group-[.search-modal]:py-[5px]
+            group-[.search-modal]:pe-6
+            group-[.search-modal]:ps-2
+            group-[.search-modal]:leading-7
+            states:text-black
+            group-[.search-modal]:states:bg-transparent
+            group-[.search-modal]:states:ring-primary-300
+            group-[.search-modal]:states:lg:text-base
+          "
+          id="{{ prefix }}SearchInModal"
+          type="search"
+          name="q"
+          autofocus
+          value="{{ search.terms | escape }}"
+          {% if predictive_search_enabled %}
+            data-predicative-search="input"
+            autocomplete="off"
+          {% endif %}>
+        {%- comment -%} Extra options for search {%- endcomment -%}
+        <input type="hidden" name="options[prefix]" value="last">
+      </div>
 
-    {%- comment -%} Button for clear input field. {%- endcomment -%}
-    <button
-      type="button"
-      class="absolute end-14 top-2/4 -translate-y-2/4 states:text-primary"
-      data-predicative-search="reset"
-      aria-label="{% render "render-translation", namespace: "general.search", key: "reset", fallback: "Reset" %}">
-      {%- render 'icons', icon: 'cross', icon_class: 'w-4' -%}
-    </button>
+      {%- comment -%} Button for clear input field {%- endcomment -%}
+      {%- if predictive_search_enabled -%}
+        <button
+          type="button"
+          class="absolute end-14 top-2/4 -translate-y-2/4 states:text-primary"
+          data-predicative-search="reset"
+          aria-label="{%- render "render-translation", namespace: "general.search", key: "reset", fallback: "Reset" -%}">
+          {%- render 'icons', icon: 'cross', icon_class: 'w-4' -%}
+        </button>
+      {%- endif -%}
 
-    {%- comment -%} Submit button. {%- endcomment -%}
-    <button
-      type="submit"
-      class="search-form__button absolute end-0 top-2/4 block -translate-y-2/4 cursor-pointer p-3 states:text-primary"
-      aria-label="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
-      {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
-    </button>
-  </form>
-  {%- if predictive_search_enabled == true -%}
-    <div
-      class="predictive-search"
-      data-predicative-search="results"
-      tabindex="-1"
-      data-resources-types="{{- resourceTypes -}}"
-      data-max-results="{{- max_results | default: 4 -}}"></div>
-  {%- endif -%}
-</{{ search_form_element }}>
+      {%- comment -%} Submit button {%- endcomment -%}
+      <button
+        type="submit"
+        class="search-form__button absolute end-0 top-2/4 block -translate-y-2/4 p-3 states:text-primary"
+        disabled
+        aria-label="{% render "render-translation", namespace: "general.search", key: "search", fallback: "Search" %}">
+        {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
+      </button>
+    </form>
+
+    {% comment %} Predictive search wrapper {% endcomment %}
+    {%- if predictive_search_enabled -%}
+      <div
+        class="predictive-search"
+        data-predicative-search="results"
+        tabindex="-1"
+        data-resources-types="{{- resourceTypes -}}"
+        data-max-results="{{- max_results | default: 4 -}}"></div>
+    {%- endif -%}
+  </{{ search_form_element }}>
+</search-form>
 
 {%- comment -%} Import predictive styles & Javascript when the section is enabled. {%- endcomment -%}
 {%- if predictive_search_enabled -%}

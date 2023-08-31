@@ -1,4 +1,14 @@
 @layer components {
+  button,
+  .button {
+    @apply disabled:pointer-events-none
+    disabled:cursor-not-allowed
+    disabled:opacity-50;
+
+    svg {
+      @apply fill-current;
+    }
+  }
   .button {
     --button-background: theme('colors.secondary.DEFAULT');
     --button-border-color: theme('colors.secondary.DEFAULT');
@@ -28,11 +38,8 @@
     no-underline
     transition-all
 
-    states:no-underline
+    states:no-underline;
 
-    disabled:pointer-events-none
-    disabled:cursor-not-allowed
-    disabled:opacity-50;
     &:not([disabled]) {
       @apply states:border-[var(--button-hover-border-color)]
       states:bg-[var(--button-hover-background)]
@@ -54,10 +61,6 @@
       &:after {
         @apply absolute block aspect-square h-[1.5em] animate-spin rounded-full border-[.2em] border-[--button-text] border-l-transparent content-empty;
       }
-    }
-
-    svg {
-      @apply fill-current;
     }
 
     // for 'a' elements with a button class

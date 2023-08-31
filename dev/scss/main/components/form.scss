@@ -42,6 +42,7 @@ endcapture
     last:mb-0;
 
     // .field__label
+    // .field__header
     &__label,
     &__header {
       @apply mb-2
@@ -54,7 +55,9 @@ endcapture
       }
     }
 
-    // .field__input, .select__select, .field__text-area
+    // .field__input
+    // .field__textarea
+    // .select__select
     &__input,
     &__textarea,
     .select__select {
@@ -62,12 +65,10 @@ endcapture
       w-full
       rounded-md
       border-transparent
-      bg-gray-100
       px-4
       py-2.5
       font-body
 
-      text-sm
       text-black
       shadow-none
       ring-transparent
@@ -75,29 +76,38 @@ endcapture
       duration-75
       ease-linear
 
-      placeholder:text-black
-
+      placeholder:text-gray-600
       hover:border-primary-200
-      focus:text-black
+
       focus:shadow-none
       focus:shadow-transparent
       focus:ring-transparent
       focus-visible:border-primary-100
 
       focus-visible:border-transparent
-      focus-visible:text-black
       focus-visible:ring-2
       focus-visible:ring-primary-300
       focus-visible:ring-offset-2;
 
+      &:focus {
+        &::placeholder {
+          @apply text-gray-200;
+        }
+      }
       &:invalid:not(:placeholder-shown),
       &[aria-invalid='true']:invalid {
         @apply border-danger;
-        ~ .field__icons .icon-cross {
-          @apply block;
-          [fill='currentColor'] {
-            @apply fill-danger;
-          }
+      }
+      &::-webkit-search-cancel-button {
+        @apply hidden;
+      }
+    }
+    &__input,
+    .select__select {
+      &:invalid:not(:placeholder-shown),
+      &[aria-invalid='true']:invalid {
+        ~ .field__icons .icon--cross {
+          @apply block fill-danger stroke-danger;
         }
         ~ .field__message--error {
           @apply block;
@@ -108,7 +118,7 @@ endcapture
         @apply pe-14; // preserve space for icons
       }
       &:valid[required] {
-        ~ .field__icons .icon-checkmark {
+        ~ .field__icons .icon--checkmark {
           @apply block;
         }
         ~ .field__message {
@@ -127,16 +137,14 @@ endcapture
         end-3
         top-1/2
         hidden
-        -translate-y-1/2;
-      }
-      &::-webkit-search-cancel-button {
-        @apply hidden;
+        -translate-y-1/2
+        text-[initial];
       }
     }
 
     // .field__textarea
     &__textarea {
-      @apply h-20 resize-none;
+      @apply h-20 p-4;
     }
 
     // .field__message
@@ -168,7 +176,6 @@ endcapture
       justify-center
       gap-2
       border-none
-      bg-gray-100
       text-black;
     }
     // .field__checkbox-label
@@ -193,7 +200,6 @@ endcapture
         @apply me-2
         rounded-sm
         border-none
-        bg-gray-100
         content-[''];
       }
     }
@@ -273,7 +279,6 @@ endcapture
         cursor-pointer
         rounded-full
         border-none
-        bg-gray-100
         content-[''];
       }
       &:after {
@@ -353,15 +358,16 @@ endcapture
      h-5
      w-9
      rounded-full
+     border
+     border-transparent
      bg-gray-100;
       &:after {
         @apply absolute
-        start-0.5
-        top-0.5
+        start-[1px]
+        top-[1px]
         h-4
         w-4
         rounded-full
-        border
         bg-white
         transition-all
         content-[''];
@@ -374,17 +380,18 @@ endcapture
       block
       cursor-pointer
       text-sm
-
       text-text-default
       transition-colors;
     }
     input:focus-visible + .field__switch {
       @apply ring-2 ring-primary-300 ring-offset-2;
     }
-    input:checked + .field__switch:after {
-      @apply translate-x-full
-      border-black
-      bg-black;
+    input:checked + .field__switch {
+      @apply border-black;
+      &:after {
+        @apply translate-x-full
+        bg-black;
+      }
     }
     input:disabled + .field__switch {
       @apply pointer-events-none;
@@ -418,7 +425,8 @@ endcapture
       end-4
       top-1/2
       origin-center
-      -translate-y-1/2;
+      -translate-y-1/2
+      text-[initial];
     }
   }
 
@@ -488,6 +496,31 @@ endcapture
       }
       &::-webkit-slider-thumb {
         @include thumb-focus();
+      }
+    }
+  }
+  input,
+  select,
+  textarea {
+    &:disabled {
+      &,
+      + .field__radio-label:before,
+      + .field__checkbox-label:before {
+        @apply bg-gray-50;
+      }
+    }
+    &:not(:disabled) {
+      &,
+      + .field__radio-label:before,
+      + .field__checkbox-label:before {
+        @apply bg-gray-100;
+      }
+      .color-scheme:not(.color-scheme--white) & {
+        &,
+        + .field__radio-label:before,
+        + .field__checkbox-label:before {
+          @apply bg-white;
+        }
       }
     }
   }

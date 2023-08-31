@@ -6,67 +6,62 @@
     echo '</div>'
   endcapture
 
-  capture name_str
-    render 'render-translation', namespace: 'templates.contact.form', key: 'name', fallback: 'Name'
-  endcapture
-
-  capture email_str
-    render 'render-translation', namespace: 'templates.contact.form', key: 'email', fallback: 'Email address'
-  endcapture
-
-  capture phone_str
-    render 'render-translation', namespace: 'templates.contact.form', key: 'phone', fallback: 'Phone number'
-  endcapture
-
-  capture comment_str
-    render 'render-translation', namespace: 'templates.contact.form', key: 'comment', fallback: 'Comment'
-  endcapture
+  assign name_str = section.settings.name_label
+  assign email_str = section.settings.email_label
+  assign message_str = section.settings.message_label
 -%}
 
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
   {%- form 'contact', id: 'contact-form', class: 'form grid grid-cols-2 gap-x-element-spacing' -%}
 
-    {% comment %} Name {% endcomment %}
+    {% comment %} Required name input {% endcomment %}
     <div class="field col-span-2 md:col-span-1">
       <label class="field__label" for="contact-form__name">
         {{- name_str -}}
       </label>
-      <input
-        type="text"
-        name="contact[{{ name_str }}]"
-        id="contact-form__name"
-        class="field__input"
-        autocomplete="name"
-        value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
-        placeholder="{{ name_str }}"
-      >
-      {{- icons -}}
+      <div class="relative">
+        <input
+          type="text"
+          name="contact[{{ name_str }}]"
+          id="contact-form__name"
+          class="field__input"
+          autocomplete="name"
+          aria-required="true"
+          minlength="2"
+          required
+          value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+          placeholder="{{ name_str }}"
+        >
+        {{- icons -}}
+      </div>
     </div>
 
-    {% comment %} Email {% endcomment %}
+    {% comment %} Required email input {% endcomment %}
     <div class="field col-span-2 md:col-span-1">
       <label class="field__label" for="contact-form__email">
         {{- email_str -}}
       </label>
-      <input
-        type="email"
-        name="contact[email]"
-        autocomplete="email"
-        id="contact-form__email"
-        class="field__input"
-        spellcheck="false"
-        autocapitalize="off"
-        value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
-        aria-required="true"
-        required
-        {% if form.errors contains 'email' %}
-          aria-invalid="true"
-          aria-describedby="contact-form__email-error"
-        {% endif %}
-        placeholder="{{ email_str }}"
-      >
-      {{- icons -}}
+      <div class="relative">
+        <input
+          type="email"
+          name="contact[email]"
+          autocomplete="email"
+          id="contact-form__email"
+          class="field__input"
+          spellcheck="false"
+          autocapitalize="off"
+          value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+          aria-required="true"
+          required
+          {% if form.errors contains 'email' %}
+            aria-invalid="true"
+            aria-describedby="contact-form__email-error"
+          {% endif %}
+          placeholder="{{ email_str }}"
+        >
+        {{- icons -}}
+      </div>
       {%- if form.errors contains 'email' -%}
         <div class="field__message field__message--error" id="contact-form__email-error">
           <span class="sr-only">
@@ -82,82 +77,124 @@
         </div>
       {%- else -%}
         <div class="field__message field__message--error">
-          {%-
-            render "render-translation",
-            namespace: "customer.login_page",
-            key: "email_message_error",
-            fallback: "This email is not in the correct format."
-          -%}
+          {{ section.settings.email_error }}
         </div>
       {%- endif -%}
     </div>
 
-    {% comment %} Phone number {% endcomment %}
-    <div class="field col-span-2">
-      <label class="field__label" for="contact-form__phone">
-        {{- phone_str -}}
-      </label>
-      <input
-        type="tel"
-        name="contact[{{ phone_str }}]"
-        id="contact-form__phone"
-        class="field__input"
-        autocomplete="tel"
-        pattern="[0-9\-]*"
-        value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
-        placeholder="{{ phone_str }}"
-      >
-      {{- icons -}}
-    </div>
+    {%- comment -%} Custom inputs {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
 
-    {% comment %} Comment {% endcomment %}
+        {%- comment -%} Dropdown with options {%- endcomment -%}
+        {%- if block.type == 'select' -%}
+          {%- if block.settings.title != blank and block.settings.id != blank -%}
+            <div class="field col-span-2">
+              <label class="field__label" for="ContactForm-{{ block.settings.title | handleize }}">
+                {{- block.settings.title -}}
+              </label>
+              <div class="select">
+                <select class="select__select" id="ContactForm-{{ block.settings.title | handleize }}"
+                  name="contact[{{ block.settings.title }}]"
+                  {% if block.settings.required %}aria-required="true" required{% endif -%}>
+                  {%- comment -%} Empty first option to show the label instead {%- endcomment -%}
+                  {% unless block.settings.required %}<option value="" disabled selected hidden>-</option>{%- endunless -%}
+                  {%- assign options_arr = block.settings.dropdown_options | newline_to_br | strip_newlines | split: '<br />' -%}
+                  {%- for option in options_arr -%}
+                    <option value="{{ option }}">{{ option }}</option>
+                  {%- endfor -%}
+                </select>
+                <span class="select__select-icon">
+                  {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+                </span>
+              </div>
+            </div>
+          {%- endif -%}
+
+        {%- comment -%} Text or number input {%- endcomment -%}
+        {%- elsif block.type == 'text' or block.type == 'number' -%}
+          {%- if block.settings.title != blank and block.settings.id != blank -%}
+            <div class="field col-span-2">
+              <label class="field__label" for="ContactForm-{{ block.settings.title | handleize }}">
+                {{- block.settings.title -}}
+              </label>
+              <input
+              {% if block.type == 'number' and block.settings.phone_number %}
+                type="tel"
+                autocomplete="tel"
+                value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+              {% else %}
+                type="{{ block.type }}"
+              {% endif %}
+                name="contact[{{ block.settings.title }}]"
+                id="ContactForm-{{ block.settings.title | handleize }}"
+                class="field__input"
+                placeholder="{{ block.settings.title }}"
+                {% if block.settings.required %}aria-required="true" required{% endif -%}
+              >
+              {% if block.settings.required %}{{- icons -}}{% endif -%}
+            </div>
+          {%- endif -%}
+
+        {% comment %} Textarea {% endcomment %}
+        {%- elsif block.type == 'textarea' -%}
+          {%- if block.settings.title != blank and block.settings.id != blank -%}
+            <div class="field col-span-2">
+              <label class="field__label" for="ContactForm-{{ block.settings.title | handleize }}">
+                {{ block.settings.title }}
+              </label>
+              <textarea
+                rows="[{{ block.settings.rows }}]"
+                id="ContactForm-{{ block.settings.title | handleize }}"
+                class="field__textarea"
+                name="contact[{{ block.settings.title }}]"
+                placeholder="{{ block.settings.title }}"
+                {% if block.settings.required %}aria-required="true" required{% endif -%}
+              ></textarea>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {% comment %} Required message input {% endcomment %}
     <div class="field col-span-2">
-      <label class="field__label" for="contact-form__body">{{ comment_str }}</label>
+      <label class="field__label" for="ContactForm-message-required">
+        {{ message_str }}
+      </label>
       <textarea
-        id="contact-form__body"
+        rows="4"
+        id="ContactForm-message-required"
         class="field__textarea"
-        rows="10"
-        name="contact[{{ comment_str }}]"
-        placeholder="{{ comment_str }}"
-      >
-        {{- form.body -}}
-      </textarea>
-      {{- icons -}}
+        name="contact[message-required]"
+        placeholder="{{ message_str }}"
+        aria-required="true"
+        required
+      ></textarea>
+
+      <div class="field__message field__message--error">
+        {{ section.settings.message_error }}
+      </div>
     </div>
 
     {% comment %} Actions {% endcomment %}
     <div class="form__actions col-span-2">
       <button type="submit" class="button {{ section.settings.button_color_scheme }}">
-        {%-
-          render "render-translation",
-          namespace: "templates.contact.form",
-          key: "send",
-          fallback: "Send"
-        -%}
+        {{ section.settings.submit }}
       </button>
     </div>
 
     {%- comment -%} Succes message {%- endcomment -%}
     {%- if form.posted_successfully? -%}
       <div class="field__message" tabindex="-1" autofocus>
-        {%-
-          render "render-translation",
-          namespace: "templates.contact.form",
-          key: "post_success",
-          fallback: "Thank you for subscribing to our newsletter"
-        -%}
+        {{ section.settings.success_message }}
       </div>
 
     {% comment %} Error message {% endcomment %}
     {%- elsif form.errors -%}
       <div class="field__message field__message--error">
         <p aria-roledescription="alert" tabindex="-1" autofocus>
-          {%
-            render "render-translation",
-            namespace: "templates.contact.form",
-            key: "error_heading",
-            fallback: "Please adjust the following:"
-          -%}
+          {{ section.settings.error_message }}
         </p>
       </div>
       <a href="#contact-form__email" class="link">
@@ -211,7 +248,7 @@
         "id": "heading_element",
         "label": "Heading element",
         "default": "h2",
-        "info": "Change the element of the heading for SEO.",
+        "info": "Change the element of the heading for SEO purposes. Use only one H1 per page.",
         "options": [
           {
             "value": "h1",
@@ -244,7 +281,7 @@
         "id": "heading_size",
         "label": "Heading size",
         "default": "h4",
-        "info": "Change the style of the heading to only influence the look and feel.",
+        "info": "This is applied only for visual reasons.",
         "options": [
           {
             "value": "h1",
@@ -339,10 +376,66 @@
         ]
       },
       {
+        "type": "header",
+        "content": "Text strings"
+      },
+      {
+        "type": "text",
+        "id": "name_label",
+        "label": "Name label",
+        "default": "Name"
+      },
+      {
+        "type": "text",
+        "id": "email_label",
+        "label": "Email label",
+        "default": "Email"
+      },
+      {
+        "type": "text",
+        "id": "message_label",
+        "label": "Message label",
+        "default": "Your message"
+      },
+      {
+        "type": "text",
+        "id": "submit",
+        "label": "Send label",
+        "default": "Send"
+      },
+      {
+        "type": "header",
+        "content": "Info messages"
+      },
+      {
+        "type": "textarea",
+        "id": "post_success",
+        "label": "Success message",
+        "default": "Thanks for contacting us. We'll get back to you as soon as possible."
+      },
+      {
+        "type": "textarea",
+        "id": "error_heading",
+        "label": "Error message",
+        "default": "Please adjust the following:"
+      },
+      {
+        "type": "textarea",
+        "id": "email_error",
+        "label": "Email error message",
+        "default": "This email is not in the correct format."
+      },
+      {
+        "type": "textarea",
+        "id": "message_error",
+        "label": "Message error message",
+        "default": "A message is required."
+      },
+      {
         "type": "select",
         "id": "button_color_scheme",
         "default": "button--primary",
-        "label": "Button type",
+        "label": "Submit button type",
         "options": [
           {
             "value": "",
@@ -367,6 +460,118 @@
           {
             "value": "button--link",
             "label": "Link"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "type": "select",
+        "name": "Select dropdown",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "required",
+            "label": "Required",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "id",
+            "label": "Input ID",
+            "info": "Keep this short, lowercase and without any spaces."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Select label"
+          },
+          {
+            "type": "textarea",
+            "id": "dropdown_options",
+            "label": "Options",
+            "info": "One per line"
+          }
+        ]
+      },
+      {
+        "type": "textarea",
+        "name": "Textarea",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "required",
+            "label": "Required",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "id",
+            "label": "Input ID",
+            "info": "Keep this short, lowercase and without any spaces."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Textarea label"
+          },
+          {
+            "type": "number",
+            "id": "rows",
+            "label": "Textarea rows",
+            "default": 10
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "name": "Text input",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "required",
+            "label": "Required",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "id",
+            "label": "Input ID",
+            "info": "Keep this short, lowercase and without any spaces."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Input label"
+          }
+        ]
+      },
+      {
+        "type": "number",
+        "name": "Number input",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "required",
+            "label": "Required",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "phone_number",
+            "label": "Is this input for a phone number?",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "id",
+            "label": "Input ID",
+            "info": "Keep this short, lowercase and without any spaces."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Input label"
           }
         ]
       }

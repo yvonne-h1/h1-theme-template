@@ -55,7 +55,7 @@
     &--secondary {
       --color-scheme-background-color: theme('colors.secondary.DEFAULT');
       --color-scheme-text-color: theme('colors.secondary.text');
-      --color-scheme-text-active-color: theme('colors.primary.DEFAULT');
+      --color-scheme-text-active-color: theme('colors.accent.DEFAULT');
     }
     // .color-scheme--accent
     &--accent {
@@ -84,6 +84,9 @@
         --button-hover-border-color: transparent;
         --button-background: theme('colors.primary-gradient.bg');
         --button-hover-background: theme('colors.primary-gradient.bg-hover');
+        &.mobile-menu__toggle-button {
+          --button-background: transparent;
+        }
       }
     }
   }

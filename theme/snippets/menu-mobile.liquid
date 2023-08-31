@@ -60,7 +60,7 @@
         '>
         <button
           type="button"
-          class="mobile-menu__toggle-button button button--outline button--rounded relative cursor-pointer rounded-full border-0 p-3 text-inherit">
+          class="mobile-menu__toggle-button button relative cursor-pointer rounded-full border-0 p-3 text-inherit bg-transparent">
           {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
         </button>
       </class-toggle-component>
@@ -293,7 +293,7 @@
 
       {%- comment -%} Links to account, cart and search {%- endcomment -%}
       {%- if section.settings.show_mobile_cart_link or section.settings.show_mobile_search_link or customer_accounts and section.settings.show_mobile_customer_link -%}
-        {%- assign link_class = 'mobile-menu__link relative flex w-full items-center gap-2 py-3 px-8 text-inherit no-underline' -%}
+        {%- assign link_class = 'mobile-menu__link relative flex w-full items-center gap-2 py-3 px-8 text-inherit no-underline capitalize' -%}
 
         <ul class="mt-4">
           {%- comment -%} Render account link for mobile if it should be hidden in the icon nav {%- endcomment -%}

@@ -23,7 +23,7 @@
     -%}
 
     <li
-      class="icon-list__item {{ search_item_class }} {{ search_item_class_md }} {% if template.name == 'search' %}active{%- endif -%}"
+      class="icon-list__item {{ search_item_class }} {{ search_item_class_md }}"
       data-header-search>
       <class-toggle-component
         data-options='
@@ -38,7 +38,7 @@
           aria-controls="SearchModal"
           aria-haspopup="dialog"
           aria-label="{%- render "render-translation", namespace: "general.search", key: "search", fallback: "Search" -%}"
-          class="{{ icon_classes }}">
+          class="{{ icon_classes }} {% if template.name == 'search' %}active{%- endif -%}">
           {%- render 'icons', icon: 'search', icon_class: 'w-6' -%}
         </button>
       </class-toggle-component>

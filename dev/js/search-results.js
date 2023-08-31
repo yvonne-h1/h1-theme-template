@@ -9,11 +9,13 @@ class SearchResults extends HTMLElement {
     this.searchTypes = document.getElementById('search-types');
 
     // if the page is loaded with queries, the search type is likely empty, so render them
-    if (this.searchTypes.innerHTML === '') {
-      this.renderSearchTypes(document.location.search, null, true);
-    }
-    else {
-      this.initSearchTypes();
+    if (this.searchTypes) {
+      if (this.searchTypes.innerHTML === '') {
+        this.renderSearchTypes(document.location.search, null, true);
+      }
+      else {
+        this.initSearchTypes();
+      }
     }
 
     this.initSort();

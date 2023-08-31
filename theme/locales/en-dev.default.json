@@ -163,17 +163,6 @@
     "cart": {
       "title": "Cart"
     },
-    "contact": {
-      "form": {
-        "name": "Name",
-        "email": "Email",
-        "phone": "Phone number",
-        "comment": "Comment",
-        "send": "Send",
-        "post_success": "Thanks for contacting us. We'll get back to you as soon as possible.",
-        "error_heading": "Please adjust the following:"
-      }
-    },
     "404": {
       "title": "Page not found",
       "subtext": "404"
@@ -194,7 +183,8 @@
       "collections": "Collections"
     },
     "main_search": {
-      "title": "Search results",
+      "title": "Search",
+      "title_search_performed": "Search results",
       "no_results": "No results found for “{{ terms }}”. Check the spelling or use a different word or phrase.",
       "results_with_count": {
         "one": "{{ count }} result found for “{{ terms }}”.",
@@ -202,7 +192,7 @@
       },
       "no_results_with_type": "No {{ type }} found for “{{ terms }}”.",
       "results_with_type_and_count": "{{ count }} {{ type }} found for “{{ terms }}”.",
-      "search": "search",
+      "search_label": "Search",
       "types": {
         "all": "All",
         "page": {
