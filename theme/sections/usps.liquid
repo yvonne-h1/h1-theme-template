@@ -6,40 +6,51 @@
       assign col_class = 'col-span-6'
     when 3
       assign col_class = 'col-span-12 sm:col-span-4'
-    when 4
+    else
       assign col_class = 'col-span-6 md:col-span-3'
   endcase
+
+  if section.settings.layout == 'vertical'
+    assign col_class = 'flex gap-base items-center'
+  endif
 -%}
 
-{% comment %} create content {% endcomment %}
+{%- comment %} create content {%- endcomment %}
 {%- capture container_content -%}
-  {% if section.blocks.size > 0 %}
-    <div class="grid grid-cols-12 text-center gap-base">
-      {% for block in section.blocks %}
-        {% comment %}
-            Capture usp content
-        {% endcomment %}
+  {%- if section.blocks.size > 0 -%}
+    <div class="{%- if section.settings.layout == 'vertical' -%}mx-auto flex w-fit flex-col{%- else -%}grid grid-cols-12 text-center{%- endif %} gap-base">
+      {%- for block in section.blocks -%}
+
+        {%- comment %} Capture usp content {%- endcomment -%}
         {%- capture usp_content -%}
-          {% comment %} Icon {% endcomment %}
-          {% if block.settings.icon != blank %}
-            <div class="usp__icon mb-element-spacing inline-block rounded-full bg-primary-300 p-6 transition-transform group-hover:scale-110">
-              {%- render 'icons', icon: block.settings.icon, icon_class: 'w-8' -%}
+          {%- comment %} Icon {%- endcomment -%}
+          {%- if block.settings.icon != blank -%}
+            <div class="usp__icon inline-block rounded-full {{ section.settings.icon_bg }} p-4 transition-all group-hover:scale-110 group-hover:text-[initial]">
+              {%- render 'icons', icon: block.settings.icon, icon_class: section.settings.icon_size -%}
             </div>
-          {% endif %}
+          {%- endif -%}
 
-          {% comment %} Heading {% endcomment %}
-          {% if block.settings.heading != blank %}
-            <p class="usp__heading text-sm font-bold md:text-lg">
-              {{ block.settings.heading }}
-            </p>
-          {% endif %}
+          {%- if section.settings.layout == 'vertical' -%}
+            <div>
+          {%- endif -%}
 
-          {% comment %} Content {% endcomment %}
-          {% if block.settings.content != blank %}
-            <p class="usp__content text-xs md:text-base">
-              {{ block.settings.content }}
-            </p>
-          {% endif %}
+            {%- comment %} Heading {%- endcomment -%}
+            {%- if block.settings.heading != blank -%}
+              <p class="usp__heading mb-0 text-sm font-bold md:text-lg">
+                {{ block.settings.heading }}
+              </p>
+            {%- endif -%}
+
+            {%- comment %} Content {%- endcomment -%}
+            {%- if block.settings.content != blank -%}
+              <p class="usp__content text-xs md:text-base">
+                {{ block.settings.content }}
+              </p>
+            {%- endif -%}
+
+          {%- if section.settings.layout == 'vertical' -%}
+            </div>
+          {%- endif -%}
         {%- endcapture -%}
 
         {%- comment -%} Output in link or not {%- endcomment -%}
@@ -49,14 +60,14 @@
               {{- usp_content -}}
             </a>
           {%- else -%}
-            <div class="usps__usp usp  break-words {{ col_class -}}" {{ block.shopify_attributes }}>
+            <div class="usps__usp usp break-words {{ col_class -}}" {{ block.shopify_attributes }}>
               {{- usp_content -}}
             </div>
           {%- endif -%}
         {%- endif -%}
-      {% endfor %}
+      {%- endfor -%}
     </div>
-  {% endif %}
+  {%- endif -%}
 {%- endcapture -%}
 
 {%- if container_content != blank -%}
@@ -72,12 +83,16 @@
   {%- render 'render-container-content', content: container_content, class: container_class -%}
 {%- endif -%}
 
-{% schema %}
+{%- schema -%}
   {
     "name": "USPs",
     "tag": "section",
     "class": "usps-section",
     "settings": [
+      {
+        "type": "header",
+        "content": "Layout settings"
+      },
       {
         "type": "select",
         "id": "container_width",
@@ -97,13 +112,9 @@
       {
         "type": "select",
         "id": "color_scheme",
-        "default": "color-scheme color-scheme--accent",
+        "default": "color-scheme color-scheme--gray",
         "label": "Color scheme",
         "options": [
-          {
-            "value": "",
-            "label": "Default"
-          },
           {
             "value": "color-scheme color-scheme--primary",
             "label": "Primary",
@@ -120,13 +131,13 @@
             "group": "Theme"
           },
           {
-            "value": "color-scheme color-scheme--white",
-            "label": "White",
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
             "group": "Standard"
           },
           {
-            "value": "color-scheme color-scheme--gray",
-            "label": "Gray",
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
             "group": "Standard"
           },
           {
@@ -135,14 +146,114 @@
             "group": "Standard"
           }
         ]
+      },
+      {
+        "type": "header",
+        "content": "Icon settings"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "Icon layout",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Horizontal"
+          },
+          {
+            "value": "vertical",
+            "label": "Vertical"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "icon_size",
+        "label": "Icon size",
+        "default": "w-6",
+        "options": [
+          {
+            "value": "w-4",
+            "label": "Small"
+          },
+          {
+            "value": "w-6",
+            "label": "Medium"
+          },
+          {
+            "value": "w-8",
+            "label": "Large"
+          },
+          {
+            "value": "w-12",
+            "label": "Extra large"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "icon_bg",
+        "default": "bg-primary-300",
+        "label": "Icon background",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "bg-primary-300",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "bg-secondary-300",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "bg-accent-300",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "bg-gray-300",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "bg-white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "bg-black text-white",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
       }
     ],
-    "max_blocks": 4,
     "blocks": [
       {
         "type": "usp",
-        "name": "usp",
+        "name": "USP",
         "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "content",
+            "label": "Body text"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Link"
+          },
           {
             "type": "select",
             "id": "icon",
@@ -270,21 +381,6 @@
               }
             ],
             "default": "plus"
-          },
-          {
-            "type": "text",
-            "id": "heading",
-            "label": "Heading"
-          },
-          {
-            "type": "text",
-            "id": "content",
-            "label": "Body text"
-          },
-          {
-            "type": "url",
-            "id": "url",
-            "label": "Link to"
           }
         ]
       }
@@ -298,25 +394,25 @@
           {
             "type": "usp",
             "settings": {
+              "icon": "heart",
+              "heading": "We love the planet",
+              "content": "We ship everything with respect for the climate."
+            }
+          },
+          {
+            "type": "usp",
+            "settings": {
               "icon": "truck",
               "heading": "Free delivery",
-              "content": "If you buy two products or more."
+              "content": "From orders above €50."
             }
           },
           {
             "type": "usp",
             "settings": {
-              "icon": "heart",
-              "heading": "We love products",
-              "content": "We give back that love to you."
-            }
-          },
-          {
-            "type": "usp",
-            "settings": {
-              "icon": "box",
-              "heading": "Buying a gift?",
-              "content": "We wrap it to make the best gift ever."
+              "icon": "service",
+              "heading": "Our customer service",
+              "content": "We are available 24/7."
             }
           }
         ]
@@ -326,4 +422,4 @@
       "groups": ["header"]
     }
   }
-{% endschema %}
+{%- endschema -%}

@@ -84,8 +84,10 @@
         --button-hover-border-color: transparent;
         --button-background: theme('colors.primary-gradient.bg');
         --button-hover-background: theme('colors.primary-gradient.bg-hover');
-        &.mobile-menu__toggle-button {
+        &.mobile-menu__toggle-button,
+        &.button--outline {
           --button-background: transparent;
+          --button-hover-background: var(--color-scheme-text-active-color);
         }
       }
     }

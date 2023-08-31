@@ -1,9 +1,24 @@
 @layer base {
   .container {
-    @apply my-[var(--container-spacing)];
+    @apply mx-auto my-[var(--container-spacing)];
     &--background {
       @apply my-0 py-[var(--container-spacing)];
     }
+
+    // Container sizes
+    &.container--sm {
+      @apply max-w-[var(--content-wrapper-sm)];
+    }
+    &.container--md {
+      @apply max-w-[var(--content-wrapper-md)];
+    }
+    &.container--wide {
+      @apply max-w-full;
+    }
+    &.container--full {
+      @apply max-w-full px-0;
+    }
+
     &__header,
     &__content,
     &__footer {
@@ -13,20 +28,6 @@
       max-w-screen-2xl
       px-[var(--content-wrapper-padding)]
       last:mb-0;
-
-      // Container sizes
-      .container--sm & {
-        @apply max-w-[var(--content-wrapper-sm)];
-      }
-      .container--md & {
-        @apply max-w-[var(--content-wrapper-md)];
-      }
-      .container--wide & {
-        @apply max-w-full;
-      }
-      .container--full & {
-        @apply max-w-full px-0;
-      }
     }
   }
 }

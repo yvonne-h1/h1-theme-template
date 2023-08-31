@@ -1,8 +1,9 @@
 /*
- * Please use custom font sizes for the rte. So when you change the default font sizes in the tailwind config these are not effected.
+ * Please use custom font sizes for the rte. So when you change the default font sizes in the tailwind config these are not affected.
+ * This file needs to be a component to overwrite tailwind component rte.
 */
 
-@layer base {
+@layer components {
   .rte {
     @apply max-w-none
     text-inherit

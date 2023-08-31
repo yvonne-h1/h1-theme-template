@@ -208,7 +208,7 @@
     "settings": [
       {
         "type": "header",
-        "content": "Appearance settings"
+        "content": "Layout settings"
       },
       {
         "type": "select",
@@ -252,11 +252,6 @@
             "group": "Theme"
           },
           {
-            "value": "color-scheme color-scheme--white",
-            "label": "White",
-            "group": "Standard"
-          },
-          {
             "value": "color-scheme color-scheme--gray",
             "label": "Gray",
             "group": "Standard"
@@ -269,6 +264,15 @@
         ]
       },
       {
+        "type": "header",
+        "content": "Content settings"
+      },
+      {
+        "type": "blog",
+        "id": "blog",
+        "label": "Blog"
+      },
+      {
         "type": "range",
         "id": "articles_count",
         "min": 4,
@@ -277,15 +281,6 @@
         "default": 8,
         "label": "Maximum products to show",
         "info": "When this higher than 4 it will be shown as a slider on desktop and mobile."
-      },
-      {
-        "type": "header",
-        "content": "Content settings"
-      },
-      {
-        "type": "blog",
-        "id": "blog",
-        "label": "Blog"
       },
       {
         "type": "checkbox",
