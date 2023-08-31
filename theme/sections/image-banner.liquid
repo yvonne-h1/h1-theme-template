@@ -15,7 +15,7 @@
   {%- endcapture -%}
 
   {% comment %} Banner wrapper {% endcomment %}
-  <div class="image-banner__wrapper relative {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_desktop }}">
+  <div class="image-banner__wrapper relative {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }}">
 
     {% comment %} Banner image {% endcomment %}
     {%- liquid
@@ -169,7 +169,7 @@
       {
         "type": "select",
         "id": "min_ratio_mobile",
-        "label": "Section minimum ratio mobile",
+        "label": "Minimum mobile aspect ratio",
         "default": "aspect-[9/16]",
         "options": [
           {
@@ -208,9 +208,9 @@
       },
       {
         "type": "select",
-        "id": "min_ratio_desktop",
-        "label": "Section minimum ratio desktop",
-        "info": "Bigger then 768 pixels",
+        "id": "min_ratio_tablet",
+        "label": "Minimum tablet aspect ratio",
+        "info": "Only applies to devices larger than 768 pixels.",
         "default": "md:aspect-[16/9]",
         "options": [
           {
@@ -419,7 +419,7 @@
         "id": "heading_size",
         "label": "Heading size",
         "default": "h2",
-        "info": "Change the style of the heading to only influence the look and feel.",
+        "info": "This is applied only for visual reasons.",
         "options": [
           {
             "value": "h1",
