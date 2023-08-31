@@ -126,7 +126,7 @@ class SearchResults extends HTMLElement {
     searchParams = `${searchString}&type=product`;
 
     // Render the page with the new params
-    this.renderPage(searchParams, true);
+    this.renderPage(searchParams, true, 'product');
 
     // update the other links so they use the correct sorting
     this.searchTypeLinks.forEach(link => {
