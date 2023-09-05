@@ -183,6 +183,7 @@
                   endfor
                 endcapture
 
+                echo ' '
                 echo 'general.meta.tags' | t: tags: current_tags_list
                 echo '<meta content="' | append: forloop.index | append: '" />'
               endif

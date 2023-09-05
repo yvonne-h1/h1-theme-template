@@ -11,20 +11,11 @@
       render 'responsive-image', image_object: collection.image, sizes: '100vw', max_width: 1920
     endcapture
   endif
-
-  # check for filters
-  assign filtered_collection = false
-  for filter in collection.filters
-    if filter.active_values.size > 0 or filter.max_value.value > 0 or filter.min_value.value > 0
-      assign filtered_collection = true
-      break
-    endif
-  endfor
 -%}
 
 {%- capture collection_header_content -%}
   {% comment %} Header is hidden when collection is filtered {% endcomment %}
-  <div class="collection-header {{ section.settings.header_color_scheme }} overflow-hidden rounded-md md:flex md:items-center {% if filtered_collection -%}!hidden{%- endif -%}">
+  <div class="collection-header {{ section.settings.header_color_scheme }} overflow-hidden rounded-md md:flex md:items-center {% if is_filtered -%}!hidden{%- endif -%}">
 
     {% comment %} Collection image {% endcomment %}
     {%- if collection.image != blank and section.settings.show_collection_image -%}
@@ -65,7 +56,7 @@
     </div>
   </div>
 
-  <div class="mt-10 flex flex-wrap items-center justify-center sm:justify-between gap-base">
+  <div class="mt-10 flex flex-wrap items-center justify-center sm:justify-between gap-base {% if collection.products.size == 0 and is_filtered == false -%}!hidden{%- endif -%}">
 
     {% comment %} Collection display total {% endcomment %}
     {%- liquid

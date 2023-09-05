@@ -44,7 +44,7 @@
       "success_message": "Link copied to clipboard!"
     },
     "meta": {
-      "tags": "tagged \"{{ tags }}\"",
+      "tags": "tagged with: \"{{ tags }}\"",
       "page": "Page {{ page }}"
     },
     "klaviyo": {

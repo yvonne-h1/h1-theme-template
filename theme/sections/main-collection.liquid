@@ -2,33 +2,51 @@
 {%- liquid
   render 'import-styles', file_name: 'component-list-options.css'
   render 'import-styles', file_name: 'component-swiper.css'
+
+  # check for filters
+  assign filtered_collection = false
+  for filter in collection.filters
+    if filter.active_values.size > 0 or filter.max_value.value > 0 or filter.min_value.value > 0
+      assign filtered_collection = true
+      break
+    endif
+  endfor
 -%}
 
-{%- comment -%} Render the main collection. {%- endcomment -%}
 <div id="main-collection" data-main-collection data-id="{{ section.id }}">
   {% comment %} The collection header {% endcomment %}
-  {%- render 'collection-header', section: section -%}
+  {%- render 'collection-header', section: section, is_filtered: filtered_collection -%}
 
   {% comment %} The filters and the products {% endcomment %}
-  {%- if settings.filter_display == 'drawer' -%}
-    {%- liquid
-      capture container_content
-        render 'collection-filters', section: section
-        render 'collection-product-grid', section: section
-      endcapture
-    -%}
-  {%- else -%}
-    {%- capture container_content -%}
-      <div class="lg:grid lg:grid-cols-12">
-        <div class="lg:col-span-3">
-          {%- render 'collection-filters', section: section -%}
-        </div>
-        <div class="lg:col-span-9">
-          {%- render 'collection-product-grid', section: section -%}
-        </div>
+  {%- capture container_content -%}
+    {%- if collection.products.size == 0 -%}
+      {% comment %} No products found {% endcomment %}
+      <div class="text-center">
+        <h3 class="h4">
+          {%- render 'render-translation', namespace: 'sections.collection_template', key: 'empty', fallback: 'No products found.' -%}
+        </h3>
+        {%- if filtered_collection -%}
+          <p>{{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url }}</p>
+        {%- endif -%}
       </div>
-    {%- endcapture -%}
-  {%- endif -%}
+    {%- else -%}
+      {%- if settings.filter_display == 'drawer' -%}
+        {%- liquid
+            render 'collection-filters', section: section
+            render 'collection-product-grid', section: section
+        -%}
+      {%- else -%}
+        <div class="lg:grid lg:grid-cols-12">
+          <div class="lg:col-span-3">
+            {%- render 'collection-filters', section: section -%}
+          </div>
+          <div class="lg:col-span-9">
+            {%- render 'collection-product-grid', section: section -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endcapture -%}
 
   {%- render 'render-container-content', content: container_content -%}
 </div>

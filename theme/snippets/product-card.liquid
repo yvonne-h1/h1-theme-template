@@ -104,7 +104,7 @@
   endif
 -%}
 <div
-  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-8"
+  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4"
   data-product-card>
   {%- comment -%} Accesibility text {%- endcomment -%}
   <a
@@ -115,7 +115,7 @@
   </a>
 
   {%- comment -%} Product images {%- endcomment -%}
-  <div class="product-card__images relative px-4">
+  <div class="product-card__images relative px-4 group-[.color-scheme]/color-scheme:pt-4">
     {%- liquid
       # Render quick shop
       if show_quick_shop

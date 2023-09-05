@@ -84,7 +84,7 @@
           </class-toggle-component>
         </div>
 
-        {%- comment -%} The collection drawer main. {%- endcomment -%}
+        {%- comment -%} Main content {%- endcomment -%}
         <div class="filter__main relative z-0 px-6 {% if settings.filter_display == 'grid' -%}lg:px-0{%- else -%}py-6{%- endif -%}">
           {%- liquid
             render 'filter-options-active', section: section
@@ -104,7 +104,7 @@
           -%}
         </div>
 
-        {%- comment -%} The collection drawer footer. {%- endcomment -%}
+        {%- comment -%} Footer {%- endcomment -%}
         <div class="filter__footer sticky bottom-0 z-10 bg-bg-default px-6 py-4 group-[.filter]/grid:lg:hidden">
           <class-toggle-component
             data-options='
