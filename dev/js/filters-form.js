@@ -179,9 +179,6 @@ class FiltersForm extends HTMLElement {
   renderPage(searchParams, event, updateURLHash = true) {
 
     let sectionName = 'collection-filters-content';
-    if (this.currentTemplate === 'search') {
-      sectionName = 'search-filters-content';
-    }
 
     // show the loader and add opacity to element based on view
     this.loader.classList.remove('hidden');

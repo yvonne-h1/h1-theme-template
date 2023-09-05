@@ -23,8 +23,6 @@
 
   # Check if option is of type color
   assign is_color = false
-  assign option_size = product.options.size
-
   assign color_label = option_to_render.name | handleize
   assign color_variant_labels = settings.color_filter_name | newline_to_br | strip_newlines | split: '<br />'
 

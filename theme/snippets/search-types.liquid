@@ -4,10 +4,7 @@
   Renders links to select a search type. Types can be Articles, Pages or Products.
 {%- endcomment -%}
 
-{%- liquid
-  assign link_classes = 'link link--text'
-  assign sort_by = search.sort_by
--%}
+{%- assign sort_by = search.sort_by -%}
 
 {%- if search.types.size > 1 -%}
   <div class="flex flex-wrap justify-center gap-2 md:gap-4">

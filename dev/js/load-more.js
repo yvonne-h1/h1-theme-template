@@ -10,12 +10,6 @@ if (!customElements.get('load-more')) {
       this.ajaxSectionToLoad = 'collection-filters-content';
       this.updateContent = true;
 
-      if (document.body.classList.contains('template-search')) {
-        this.currentTemplate = 'search';
-        this.windowTemplate = window.search;
-        this.ajaxSectionToLoad = 'search-filters-content';
-      }
-
       this.currentPageValue = +this.querySelector('[data-current-page]').value;
       this.totalPagesValue = +this.querySelector('[data-total-pages]').value;
       this.totalItemsValue = +this.querySelector('[data-total-items]').value;

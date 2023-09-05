@@ -34,7 +34,7 @@
           echo 'sections.main_search.results_with_type_and_count' | t: terms: search.terms, count: search.results_count, type: multiple_results_for_type_str
         endif
       else
-        echo search_str
+        render 'render-translation', namespace: 'sections.main_search', key: 'title', fallback: 'Search'
       endif
     -%}
   </p>
