@@ -45,32 +45,6 @@
                       render 'footer-menu', linklist: block.settings.menu, collapsible: block.settings.enable_collapsible
                     endif
                   -%}
-
-                  {%- comment -%} Output menu image {%- endcomment -%}
-                  {%- if block.settings.image_src != blank -%}
-                    {%- capture menu_image -%}
-                      {%- render 'responsive-image',
-                        image_object: block.settings.image_src,
-                        lazy: block.settings.lazy,
-                        alt: block.settings.image_src.alt,
-                        max_width: block.settings.image_max_width,
-                        class: "object-cover"
-                      -%}
-                    {%- endcapture -%}
-                    <div style="--max-width: {{ block.settings.image_max_width }}px;">
-                      {%- if block.settings.image_url != blank -%}
-                        <a
-                          href="{{ block.settings.image_url }}"
-                          {% if block.settings.image_new_tab %}
-                            target="_blank" rel="noopener"
-                          {% endif %}>
-                          {{ menu_image }}
-                        </a>
-                      {%- else -%}
-                        {{ menu_image }}
-                      {%- endif -%}
-                    </div>
-                  {%- endif -%}
                 </div>
               </collapsible-component>
             </div>

@@ -121,13 +121,13 @@
               {%- liquid
                 # First button
                 assign button_1 = false
-                if block.settings.button_label_1 != blank
+                if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
                   assign button_1 = true
                 endif
 
                 # Second button
                 assign button_2 = false
-                if block.settings.button_label_2 != blank
+                if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
                   assign button_2 = true
                 endif
 
@@ -145,21 +145,17 @@
               {%- if button_1 or button_2 -%}
                 <div class="slider__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
                   {% comment %} Button 1 {% endcomment %}
-                  {%- if button_1 -%}
-                    <a
-                      href="{{ block.settings.button_url_1 | default: '#' }}"
-                      class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}"
-                    >
+                  {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
+                    <a href="{{ block.settings.button_url_1 | default: '#' }}"
+                      class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
                       {{- block.settings.button_label_1 | escape -}}
                     </a>
                   {%- endif -%}
 
                   {% comment %} Button 2 {% endcomment %}
-                  {%- if button_2 -%}
-                    <a
-                      href="{{ block.settings.button_url_2 | default: '#' }}"
-                      class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}"
-                    >
+                  {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
+                    <a href="{{ block.settings.button_url_2 | default: '#' }}"
+                      class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
                       {{- block.settings.button_label_2 | escape -}}
                     </a>
                   {%- endif -%}
@@ -383,7 +379,7 @@
             "id": "image_lazy",
             "label": "Lazyload image",
             "default": true,
-            "info": "For page speed, disable if the image is directly visible on mobile and desktop"
+            "info": "Disable this only if the image is part of the [Largest Contentful Paint](https://web.dev/lcp/)"
           },
           {
             "type": "header",
@@ -501,7 +497,7 @@
             "id": "heading_element",
             "label": "Heading element",
             "default": "h2",
-            "info": "Change the element of the heading for SEO.",
+            "info": "Change the element of the heading for SEO purposes. Every page should only have one H1.",
             "options": [
               {
                 "value": "h1",

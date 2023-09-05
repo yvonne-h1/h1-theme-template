@@ -29,7 +29,9 @@
     show_shadow: false
   -%}
 
-  <hr class="bg-gray-100">
+  {%-if search.performed -%}
+    <hr class="bg-gray-100">
+  {%- endif -%}
 
   <search-results>
     {% comment %} Loader animation {% endcomment %}

@@ -95,21 +95,17 @@
         {%- if button_1 or button_2 -%}
           <div class="image-banner__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
             {% comment %} Button 1 {% endcomment %}
-            {%- if button_1 -%}
-              <a
-                href="{{ section.settings.button_url_1 | default: '#' }}"
-                class="button {{ section.settings.button_type_1 }}{% if section.settings.button_url_1 == blank %} disabled{% endif %}"
-              >
+            {%- if section.settings.button_label_1 != blank and section.settings.button_url_1 != blank or request.design_mode and section.settings.button_label_1 != blank -%}
+              <a href="{{ section.settings.button_url_1 | default: '#' }}"
+                class="button {{ section.settings.button_type_1 }}{% if section.settings.button_url_1 == blank %} disabled{% endif %}">
                 {{- section.settings.button_label_1 | escape -}}
               </a>
             {%- endif -%}
 
             {% comment %} Button 2 {% endcomment %}
-            {%- if button_2 -%}
-              <a
-                href="{{ section.settings.button_url_2 | default: '#' }}"
-                class="button {{ section.settings.button_type_2 }}{% if section.settings.button_url_2 == blank %} disabled{% endif %}"
-              >
+            {%- if section.settings.button_label_2 != blank and section.settings.button_url_2 != blank or request.design_mode and section.settings.button_label_2 != blank -%}
+              <a href="{{ section.settings.button_url_2 | default: '#' }}"
+                class="button {{ section.settings.button_type_2 }}{% if section.settings.button_url_2 == blank %} disabled{% endif %}">
                 {{- section.settings.button_label_2 | escape -}}
               </a>
             {%- endif -%}
@@ -268,7 +264,7 @@
         "id": "image_lazy",
         "label": "Lazyload image",
         "default": true,
-        "info": "For page speed, disable if the image is directly visible on mobile and desktop"
+        "info": "Disable this only if the image is part of the [Largest Contentful Paint](https://web.dev/lcp/)"
       },
       {
         "type": "header",
@@ -386,7 +382,7 @@
         "id": "heading_element",
         "label": "Heading element",
         "default": "h2",
-        "info": "Change the element of the heading for SEO.",
+        "info": "Change the element of the heading for SEO purposes. Every page should only have one H1.",
         "options": [
           {
             "value": "h1",

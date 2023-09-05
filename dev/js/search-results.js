@@ -41,41 +41,39 @@ class SearchResults extends HTMLElement {
   /**
    * Bind the event listener
    */
-  initSearchTypes(type = null, init = true) {
+  initSearchTypes(type = null) {
     this.searchTypeLinks = this.searchTypes.querySelectorAll('[data-search-type-link]');
-    const activeButtonClasses = ['button--primary', 'pointer-events-none'];
-    const defaultButtonClass = 'button--outline';
 
-    if (init) {
-      this.searchTypeLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-          event.preventDefault();
+    this.searchTypeLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
 
-          // remove the active class
-          const activeLink = Array.from(this.searchTypeLinks).filter(link => link.classList.contains('button--primary'))[0];
+        this.toggleActiveTypeClass(event.target);
 
-          activeLink?.classList.remove(...activeButtonClasses);
-          activeLink?.classList.add(defaultButtonClass);
-
-          // add the active class
-          event.target.classList.add(...activeButtonClasses);
-          event.target.classList.remove(defaultButtonClass);
-
-          // load the content
-          this.loadResultsForType(event);
-        });
+        // load the content
+        this.loadResultsForType(event);
       });
-    }
+    });
 
     if (type) {
       // toggle the class to highlight the product link
-      const activeLink = Array.from(this.searchTypeLinks).filter(link => link.classList.contains('button--primary'))[0];
-      activeLink?.classList.remove(...activeButtonClasses);
-      activeLink?.classList.add(defaultButtonClass);
-
-      document.querySelector(`[data-search-type-link="${type}"]`).classList.add(...activeButtonClasses);
-      document.querySelector(`[data-search-type-link="${type}"]`).classList.remove(defaultButtonClass);
+      this.toggleActiveTypeClass(document.querySelector(`[data-search-type-link="${type}"]`));
     }
+  }
+
+  toggleActiveTypeClass(element) {
+    const activeButtonClasses = ['button--primary', 'pointer-events-none'];
+    const defaultButtonClass = 'button--outline';
+
+    this.activeLink = Array.from(this.searchTypeLinks).filter(link => link.classList.contains('button--primary'))[0];
+
+    // remove the active class
+    this.activeLink?.classList.remove(...activeButtonClasses);
+    this.activeLink?.classList.add(defaultButtonClass);
+
+    // toggle the class to highlight the product link
+    element.classList.add(...activeButtonClasses);
+    element.classList.remove(defaultButtonClass);
   }
 
   /**
@@ -137,25 +135,13 @@ class SearchResults extends HTMLElement {
     });
   }
 
-  loadResultsForType(event) {
-    const params = event.target.dataset.searchParams;
-    this.renderPage(params, true);
-  }
-
-  /**
-   * onHistoryChange
-   * @param {Object} event
-   */
-  onHistoryChange(event) {
-    const searchParams = event.state?.searchParams || '';
-    this.renderPage(searchParams);
-  }
-
   /**
    * renderSearchTypes
+   * Will execute on page load when there are search params available
    * @param {String} searchParams
    */
   renderSearchTypes(searchParams, type, init = false) {
+    // when this this the initialization of the search types, make sure to remove the type
     if (init) {
       searchParams = new URLSearchParams(searchParams);
       type = searchParams.get('type');
@@ -174,7 +160,7 @@ class SearchResults extends HTMLElement {
         const parsedHTML = new DOMParser().parseFromString(html, 'text/html');
         this.searchTypes.innerHTML = parsedHTML.querySelector('#search-types').innerHTML;
 
-        this.initSearchTypes(type, init);
+        this.initSearchTypes(type);
       });
   }
 
@@ -250,6 +236,20 @@ class SearchResults extends HTMLElement {
 
     // hide the loader
     this.loader.classList.add('hidden');
+  }
+
+  loadResultsForType(event) {
+    const params = event.target.dataset.searchParams;
+    this.renderPage(params, true);
+  }
+
+  /**
+   * onHistoryChange
+   * @param {Object} event
+   */
+  onHistoryChange(event) {
+    const searchParams = event.state?.searchParams || '';
+    this.renderPage(searchParams);
   }
 
   /**

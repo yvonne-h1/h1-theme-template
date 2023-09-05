@@ -54,29 +54,40 @@
       {%- comment -%} Render column {%- endcomment -%}
       <div
         class="multi-columns__column flex flex-col {{ block.settings.position_vertical }} {{ block.settings.position_horizontal }} {{ block.settings.mobile_order }} md:order-none"
-        style="--max-width: {{ block.settings.max_width }}px;"
         {{ block.shopify_attributes }}
       >
         {%- comment -%} Column inner width and text align {%- endcomment -%}
-        <div class="max-w-[var(--max-width)] space-y-5 {{ block.settings.text_align }}">
+        <div class="space-y-5 {{ block.settings.text_align }}">
 
-        {%- liquid
-          # Desktop image
-          if block.settings.image != blank
-            render 'responsive-image', image_object: block.settings.image, lazy: block.settings.lazy, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover', max_width: '680px', sizes: sizes
-          endif
+          {%- liquid
+            # First button
+            assign button_1 = false
+            if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
+              assign button_1 = true
+            endif
 
-          # Mobile Image
-          if image_mobile != blank
-            render 'responsive-image', image_object: image_mobile, lazy: block.settings.lazy, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden w-full object-cover', max_width: '735px'
-          endif
-        -%}
+            # Second button
+            assign button_2 = false
+            if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
+              assign button_2 = true
+            endif
+
+            # Desktop image
+            if block.settings.image != blank
+              render 'responsive-image', image_object: block.settings.image, lazy: block.settings.lazy, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover', max_width: '680px', sizes: sizes
+            endif
+
+            # Mobile Image
+            if image_mobile != blank
+              render 'responsive-image', image_object: image_mobile, lazy: block.settings.lazy, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden w-full object-cover', max_width: '735px'
+            endif
+          -%}
 
           {%- comment -%} Heading {%- endcomment -%}
           {%- if block.settings.heading != blank -%}
-            <p class="{{ block.settings.heading_size }}">
+            <{{ block.settings.heading_element }} class="{{ block.settings.heading_size }}">
               {{- block.settings.heading -}}
-            </p>
+            </{{ block.settings.heading_element }}>
           {%- endif -%}
 
           {%- comment -%} Text {%- endcomment -%}
@@ -87,21 +98,17 @@
           {%- endif -%}
 
           {%- comment -%} Buttons {%- endcomment -%}
-          {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+          {%- if button_1 or button_2 -%}
             <div class="flex gap-4 {{ button_align }}">
-              {%- if block.settings.button_label_1 != blank -%}
-                <a
-                  href="{{ block.settings.button_url_1 | default: '#' }}"
-                  class="button {{ block.settings.button_color_scheme_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}"
-                >
+              {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
+                <a href="{{ block.settings.button_url_1 | default: '#' }}"
+                  class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
                   {{- block.settings.button_label_1 | escape -}}
                 </a>
               {%- endif -%}
-              {%- if block.settings.button_label_2 != blank -%}
-                <a
-                  href="{{ block.settings.button_url_2 | default: '#' }}"
-                  class="button {{ block.settings.button_color_scheme_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}"
-                >
+              {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
+                <a href="{{ block.settings.button_url_2 | default: '#' }}"
+                  class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
                   {{- block.settings.button_label_2 | escape -}}
                 </a>
               {%- endif -%}
@@ -212,7 +219,7 @@
         "id": "heading_element",
         "default": "h2",
         "label": "Heading element",
-        "info": "Change the element of the heading for SEO.",
+        "info": "Change the element of the heading for SEO purposes. Every page should only have one H1.",
         "options": [
           {
             "value": "h1",
@@ -311,15 +318,15 @@
             "options": [
               {
                 "value": "justify-start",
-                "label": "top"
+                "label": "Top"
               },
               {
                 "value": "justify-center",
-                "label": "center"
+                "label": "Center"
               },
               {
                 "value": "justify-end",
-                "label": "bottom"
+                "label": "Bottom"
               }
             ]
           },
@@ -331,27 +338,17 @@
             "options": [
               {
                 "value": "items-start",
-                "label": "left"
+                "label": "Left"
               },
               {
                 "value": "items-center",
-                "label": "center"
+                "label": "Center"
               },
               {
                 "value": "items-end",
-                "label": "right"
+                "label": "Right"
               }
             ]
-          },
-          {
-            "type": "range",
-            "id": "max_width",
-            "min": 216,
-            "max": 1440,
-            "unit": "px",
-            "step": 24,
-            "label": "Max width",
-            "default": 1440
           },
           {
             "type": "select",
@@ -526,12 +523,8 @@
             "id": "heading_element",
             "default": "h3",
             "label": "Heading element",
-            "info": "Change the element of the heading for SEO.",
+            "info": "Change the element of the heading for SEO purposes. If the section heading is H2, this should be H3, etc.",
             "options": [
-              {
-                "value": "h1",
-                "label": "H1"
-              },
               {
                 "value": "h2",
                 "label": "H2"
@@ -596,7 +589,7 @@
           {
             "type": "header",
             "content": "First button",
-            "info": "Remove label to hide button."
+            "info": "Leave empty to hide the button."
           },
           {
             "type": "text",
@@ -610,8 +603,8 @@
           },
           {
             "type": "select",
-            "id": "button_color_scheme_1",
-            "label": "Color scheme",
+            "id": "button_type_1",
+            "label": "Type",
             "default": "",
             "options": [
               {
@@ -639,7 +632,7 @@
           {
             "type": "header",
             "content": "Second button",
-            "info": "Remove label to hide button."
+            "info": "Leave empty to hide the button."
           },
           {
             "type": "text",
@@ -653,8 +646,8 @@
           },
           {
             "type": "select",
-            "id": "button_color_scheme_2",
-            "label": "Color scheme",
+            "id": "button_type_2",
+            "label": "Type",
             "default": "",
             "options": [
               {
