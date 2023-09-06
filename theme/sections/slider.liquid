@@ -51,7 +51,7 @@
 {%- capture container_content -%}
   <swiper-slider {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
     <div class="swiper" data-swiper>
-      <div class="swiper-wrapper">
+      <div class="swiper-wrapper flex">
         {%- for block in section.blocks -%}
 
           {% comment %} Create content position class {% endcomment %}

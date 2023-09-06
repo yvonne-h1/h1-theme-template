@@ -19,31 +19,31 @@
   }
   h1,
   .h1 {
-    @apply text-[2.5rem] md:text-[4rem];
+    @apply text-[2rem] md:text-[2.75rem];
   }
 
   h2,
   .h2 {
-    @apply text-[2.15rem] md:text-[3rem];
+    @apply text-[1.75rem] md:text-[2.25rem];
   }
 
   h3,
   .h3 {
-    @apply text-[1.75rem] md:text-[2.25rem];
+    @apply text-[1.5rem] md:text-[2rem];
   }
 
   h4,
   .h4 {
-    @apply text-[1.75rem];
+    @apply text-[1.4rem];
   }
 
   h5,
   .h5 {
-    @apply text-[1.5rem];
+    @apply text-[1.3rem];
   }
 
   h6,
   .h6 {
-    @apply text-[1.25rem];
+    @apply text-[1.2rem];
   }
 }

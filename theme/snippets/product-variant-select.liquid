@@ -15,9 +15,11 @@
       "isPreorder": {{ is_preorder | default: false }}
     }
   '
-  class="product__variant-selector product__variant-selector--select block {{ class }}"
+  class="product__variant-selector product__variant-selector--select block {{ class }} group-[.is-fixed]/add-to-cart:block"
   {{ block.shopify_attributes }}>
-  <div class="{% if block.settings.picker_layout == 'inline' %}flex gap-base{%- endif- %}">
+  <div class="{% if block.settings.picker_layout == 'inline' %}flex gap-base{%- endif %}
+    group-[.is-fixed]/add-to-cart:flex
+    group-[.is-fixed]/add-to-cart:gap-base">
     {%- for option in product.options_with_values -%}
       <div class="field {% if block.settings.picker_layout == 'inline' %}mb-0{%- endif- %}">
         <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option.name | handleize }}-{{ forloop.index0 }}-select">

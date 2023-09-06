@@ -2,10 +2,19 @@
   Handles all the account pages: customers/account, customers/activate_account, customers/addresses, customers/login, customers/order, customers/register, customers/reset_password.
 {% endcomment %}
 
-{%- assign h1_classes = 'block text-center text-sm uppercase tracking-widest mb-0' -%}
-{%- assign h1_classes_bold = h1_classes | append: ' font-bold' -%}
+{%- liquid
+  assign h1_classes = 'block text-center mb-0'
+  assign h1_classes_bold = h1_classes | append: ' font-bold'
+-%}
 
-<header class="account-header content-wrapper content-wrapper-padding my-14">
+{%- capture return_link -%}
+  <a href="{{ routes.account_url }}" class="button button--link px-0">
+    {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4' -%}
+    {%- render 'render-translation', namespace: 'customer.account', key: 'return', fallback: 'Return' %}
+  </a>
+{%- endcapture -%}
+
+<header class="account-header content-wrapper content-wrapper-padding my-10">
   {%- case request.page_type -%}
     {%- when 'customers/account' -%}
       <h1 class="{{ h1_classes_bold }}">
@@ -16,12 +25,9 @@
         {%- render 'render-translation', namespace: 'customer.activate_account', key: 'title', fallback: 'Activate account' -%}
       </h1>
     {%- when 'customers/addresses' -%}
-      <div class="grid items-center">
+      <div class="-mt-4 grid items-center">
         <div class="col-span-12 md:col-span-4">
-          <a href="{{ routes.account_url }}" class="button button--link px-0">
-            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4' -%}
-            {%- render 'render-translation', namespace: 'customer.account', key: 'return', fallback: 'Return' %}
-          </a>
+          {{ return_link }}
         </div>
         <div class="col-span-12 md:col-span-4">
           <h1 class="{{ h1_classes_bold }}">
@@ -41,12 +47,9 @@
         </a>
       </div>
     {%- when 'customers/order' -%}
-      <div class="grid items-center">
+      <div class="-mt-4 grid items-center">
         <div class="col-span-12 md:col-span-4">
-          <a href="{{ routes.account_url }}" class="button button--link px-0">
-            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4' -%}
-            {%- render 'render-translation', namespace: 'customer.account', key: 'return', fallback: 'Return' %}
-          </a>
+          {{ return_link }}
         </div>
         <div class="col-span-12 md:col-span-4">
           <h1 class="{{ h1_classes_bold }}">

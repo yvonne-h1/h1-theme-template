@@ -94,7 +94,7 @@
       {%- endif -%}
 
       <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
-        <div class="swiper-wrapper" data-recommended-products>
+        <div class="swiper-wrapper flex" data-recommended-products>
           {%- if recommendations.performed? and recommendations.products_count > 0 -%}
             {%- for recommendation in recommendations.products -%}
               <div class="swiper-slide">

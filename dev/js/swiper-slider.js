@@ -29,7 +29,7 @@
     }
   }'>
   <div class="swiper" data-swiper>
-    <div class="swiper-wrapper">
+    <div class="swiper-wrapper flex">
       {%- for item in (1..8) -%}
         <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
           <h2>

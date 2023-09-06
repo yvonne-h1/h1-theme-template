@@ -40,7 +40,7 @@
     {% comment %} Product results {% endcomment %}
     {%- if results_products -%}
       <div class="mb-8 flex justify-between">
-        <h2 class="h4 mb-0 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search', key: 'products.other', fallback: 'products' -%}</h2>
+        <h2 class="h3 mb-0 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search', key: 'products.other', fallback: 'products' -%}</h2>
 
         {% comment %} Sort options {% endcomment %}
         <div class="field w-auto">
@@ -76,7 +76,7 @@
 
     {% comment %} Blog article results {% endcomment %}
     {%- if results_articles -%}
-      <h2 class="h4 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search.types', key: 'article.other', fallback: 'Articles' -%}</h2>
+      <h2 class="h3 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search.types', key: 'article.other', fallback: 'Articles' -%}</h2>
       <ul class="{{ grid_classes }} grid grid-cols-12">
         {{ results_articles }}
       </ul>
@@ -87,7 +87,7 @@
 
     {% comment %} Page results {% endcomment %}
     {%- if results_pages -%}
-      <h2 class="h4 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search.types', key: 'pages.other', fallback: 'Pages' -%}</h2>
+      <h2 class="h3 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search.types', key: 'pages.other', fallback: 'Pages' -%}</h2>
       <ul class="{{ grid_classes }} flex flex-col">
         {{ results_pages }}
       </ul>

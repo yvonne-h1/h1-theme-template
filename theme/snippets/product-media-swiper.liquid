@@ -138,7 +138,7 @@
       <div
         class="swiper"
         data-product-media-swiper="{{ product.selected_or_first_available_variant.id }}">
-        <div class="swiper-wrapper items-center">
+        <div class="swiper-wrapper flex items-center">
           {{- media_content_slider -}}
         </div>
 
@@ -159,7 +159,7 @@
     {%- comment -%} Thumbnails slider {%- endcomment -%}
     <div class="product-media-swiper__thumbnails relative col-span-12 md:pe-[var(--content-wrapper-padding)]">
       <div class="swiper" data-product-media-thumbnails-slider>
-        <div class="swiper-wrapper items-center">
+        <div class="swiper-wrapper flex items-center">
           {{- media_content_thumbnails_slider -}}
         </div>
       </div>

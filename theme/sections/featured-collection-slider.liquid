@@ -116,7 +116,7 @@
       {%- endif -%}
 
       <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
-        <div class="swiper-wrapper">
+        <div class="swiper-wrapper flex">
           {%- for product_object in products_arr -%}
             {%- liquid
               # Skip current product
