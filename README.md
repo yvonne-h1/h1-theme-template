@@ -159,7 +159,7 @@ We work using components. So, we need to adjust and create all components for th
 
 ### Icons
 
-- We have divided the SVG icons in three section: UI, Payment and socials. The icons can be changed inside the icons-[type].liquid file.
+- We have divided the SVG icons in three sections: UI, Payment and Socials. The icons can be changed inside the icons-[type].liquid file.
 - The icons sizes are defined inside icons.scss
 - The size can be given to each icon with icon_class property. For example `icon_class: 'w-3 md:w-3'`
 
