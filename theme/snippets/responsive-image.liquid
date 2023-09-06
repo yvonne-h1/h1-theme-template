@@ -189,8 +189,7 @@
     Disabled theme check because it does not recognize the lazy loading options the way we use it
   {%- endcomment -%}
   {% comment %}theme-check-disable AssetUrlFilters{% endcomment %}
-  {{
-    image_url | image_tag:
+  {{ image_url | image_tag:
       alt: alt,
       class: class,
       crop: crop,

@@ -18,9 +18,7 @@
   endunless
 -%}
 
-<div
-  class="cart-item relative mb-6 flex gap-x-4 gap-y-0 border-b pb-6 last:mb-0 last:border-none"
-  id="CartItem-{{ item.index | plus: 1 }}">
+<div id="CartItem-{{ item.index | plus: 1 }}" class="cart-item relative mb-6 flex gap-x-4 gap-y-0 border-b pb-6 last:mb-0 last:border-none">
   {%- comment -%} Product image {%- endcomment -%}
   <a
     href="{{ item.product.url }}"
@@ -51,7 +49,7 @@
       </div>
 
       {%- comment -%} Cart errors {%- endcomment -%}
-      <p class="cart-item__error" id="Line-item-error-{{ item.index | plus: 1 }}">
+      <p class="cart-item__error py-2 leading-none" id="Line-item-error-{{ item.index | plus: 1 }}">
         <span class="cart-item__error-text mt-2 text-xs leading-3 text-danger empty:hidden"></span>
       </p>
     </div>

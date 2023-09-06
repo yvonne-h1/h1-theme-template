@@ -18,9 +18,8 @@
     data-cart-notification
     aria-modal="true"
     aria-label="{%- render 'render-translation', namespace: "general.cart.item_added", fallback: "Item added" -%}"
-    role="dialog"
-    tabindex="-1">
-    <div class="cart-notification__valid" data-cart-notification-valid>
+    role="dialog">
+    <div class="cart-notification__valid" data-cart-notification-valid tabindex="-1">
       <div class="cart-notification__header relative flex items-start pe-6">
         <p class="cart-notification__heading h6 my-0 flex grow items-center leading-6">
           {%- render 'render-translation', namespace: 'general.cart.item_added', fallback: 'Item added' -%}
@@ -51,7 +50,7 @@
     </div>
 
     {%- comment -%} When there is an error. {%- endcomment -%}
-    <div class="cart-notification__invalid hidden" data-cart-notification-invalid>
+    <div class="cart-notification__invalid hidden" data-cart-notification-invalid tabindex="-1">
       <div class="cart-notification__header relative flex items-start pe-6">
         <p class="cart-notification__heading h6 my-0 flex grow items-center text-danger">
           <span class="me-3 block">

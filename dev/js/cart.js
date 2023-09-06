@@ -102,11 +102,13 @@ if (!customElements.get('cart-items')) {
       const parsedState = await response.json();
       const lineItemWithError = parsedState.items[line -1];
 
-      // update the sections
-      this.updateContent(parsedState, line, name);
+      if (line) {
+        // update the sections
+        this.updateContent(parsedState, line, name);
 
-      // show the error
-      this.showLineItemError(line, lineItemWithError.quantity);
+        // show the error
+        this.showLineItemError(line, lineItemWithError.quantity);
+      }
     }
 
     updateContent(parsedState, line, name) {
@@ -121,9 +123,7 @@ if (!customElements.get('cart-items')) {
         );
       } );
 
-      document.getElementById(`CartItem-${line}`)
-        ?.querySelector(`[name="${name}"]`)
-        ?.focus();
+      document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)?.focus();
     }
 
     // show error text for the line item

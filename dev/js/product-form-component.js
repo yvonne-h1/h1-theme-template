@@ -36,9 +36,10 @@ if (!customElements.get('product-form-component')) {
         .then((parsedState) => {
           if (parsedState.status == 422) {
             // When quantity error
-            this.cartNotification?.setActiveElement(document.activeElement);
-            this.cartNotification?.renderQuantityError(formData.get('inventory_quantity'));
+            this.cartNotification?.renderQuantityError(formData.get('inventory_quantity'), submitButton);
 
+            // Render the cart drawer items again because even if there was a quantity error, items could still have been added
+            this.cartDrawer.renderCartDrawer();
             this.cartItems?.updateAfterError();
             return;
           }
@@ -50,12 +51,11 @@ if (!customElements.get('product-form-component')) {
             // Set timeout to force animation. Because content is just updated with renderContents
             setTimeout(() => {
               this.cartDrawer.open();
-            } );
+            },100 );
             break;
           case 'show_cart_notification':
           default:
-            this.cartNotification.setActiveElement(document.activeElement);
-            this.cartNotification.renderContents(parsedState);
+            this.cartNotification?.renderContents(parsedState, submitButton);
           }
         } )
         .catch((e) => {

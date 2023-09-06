@@ -94,7 +94,7 @@
                   {%- assign variant_options = product_variant.options -%}
                   {%- for option in variant_options -%}
                     {%- assign option_downcase = option | downcase -%}
-                    {%- if option_downcase == color_variant_label -%}
+                    {%- if option_downcase == color_label -%}
                       {%- liquid
                         assign option_name = 'option' | append: forloop.index
                         assign product_variant_color = product_variant.variants[0][option_name] | handleize

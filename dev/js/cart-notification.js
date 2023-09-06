@@ -13,6 +13,8 @@ class CartNotification extends HTMLElement {
     this.querySelectorAll('[data-cart-notification-close]').forEach((closeButton) => {
       closeButton.addEventListener('click', () => this.close());
     });
+
+    this.trigger;
   }
 
   /**
@@ -40,8 +42,7 @@ class CartNotification extends HTMLElement {
     this.toggleOpenState();
 
     this.notification.addEventListener('transitionend', () => {
-      this.notification.focus();
-      trapFocus(this.notification);
+      (hasError) ? trapFocus(this.invalidContent) : trapFocus(this.validContent);
     }, {
       once: true,
     });
@@ -55,21 +56,24 @@ class CartNotification extends HTMLElement {
   close() {
     this.toggleOpenState();
     document.body.removeEventListener('click', this.onBodyClick);
-    removeTrapFocus(this.activeElement);
+    removeTrapFocus(this.trigger);
   }
 
   /**
    * renderContents
    * @param {Object} parsedState
    */
-  renderContents(parsedState) {
+  renderContents(parsedState, trigger) {
+    this.trigger = trigger || null;
     this.productId = parsedState.id;
+
     this.getSectionsToRender().forEach((section) => {
       document.getElementById(section.id).innerHTML = this.getSectionInnerHTML(
         parsedState.sections[section.section],
         section.selector,
       );
     });
+
     this.open();
   }
 
@@ -77,7 +81,8 @@ class CartNotification extends HTMLElement {
    * renderQuantityError
    * @param {String} inventoryQuantity
    */
-  renderQuantityError(inventoryQuantity) {
+  renderQuantityError(inventoryQuantity, trigger) {
+    this.trigger = trigger || null;
     const errorMessageElem = this.notification.querySelector(
       '[data-cart-notification-error-message]',
     );
@@ -134,14 +139,6 @@ class CartNotification extends HTMLElement {
     if (target !== this.notification && !target.closest('cart-notification')) {
       this.close();
     }
-  }
-
-  /**
-   * setActiveElement
-   * @param {Node} element
-   */
-  setActiveElement(element) {
-    this.activeElement = element;
   }
 }
 
