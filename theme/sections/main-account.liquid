@@ -28,38 +28,28 @@
 {%- capture container_content -%}
 
   {%- comment -%} Customer info {%- endcomment -%}
-  <div class="account__customer-info is-order-2-md col-span-12 mb-8 grid grid-cols-1 gap-4 text-base leading-7 lg:order-2 lg:col-span-3 lg:col-start-10 lg:mb-0 xl:col-span-2 xl:col-start-11">
+  <div class="account__customer-info is-order-2-md col-span-12 mb-8 grid grid-cols-1 gap-4 text-base leading-7 lg:order-2 lg:col-span-3 lg:col-start-10 lg:mb-0">
     {%- if customer.name != blank -%}
-      <h2 class="h5">
+      <h2 class="h5 mb-0">
         {{- customer.name -}}
       </h2>
     {%- endif -%}
     {%- if customer.email != blank -%}
-      <p>
+      <p class="mb-0">
         {{- customer.email -}}
       </p>
     {%- endif -%}
     {{ customer.default_address | format_address }}
     {% if customer.phone != blank -%}
-      <p>
+      <p class="mb-0">
         {{- customer.phone | strip -}}
       </p>
     {%- endif -%}
     <a href="{{ routes.account_addresses_url }}" class="button button--primary button--lg justify-self-start">
-      {%-
-        render 'render-translation',
-        namespace: 'customer.account',
-        key: 'edit_details',
-        fallback: 'Edit details'
-      -%}
+      {%- render 'render-translation', namespace: 'customer.account', key: 'edit_details', fallback: 'Edit details' -%}
     </a>
     <a href="{{ routes.account_logout_url }}" class="button button--outline button--lg justify-self-start">
-      {%-
-        render 'render-translation',
-        namespace: 'customer',
-        key: 'log_out',
-        fallback: 'Log out'
-      -%}
+      {%- render 'render-translation', namespace: 'customer', key: 'log_out', fallback: 'Log out' -%}
     </a>
   </div>
 
@@ -127,20 +117,10 @@
         </table>
       {%- else -%}
         <h2 class="h5">
-          {%-
-            render 'render-translation',
-            namespace: 'customer.orders',
-            key: 'title',
-            fallback: 'Orders'
-          -%}
+          {%- render 'render-translation', namespace: 'customer.orders', key: 'title', fallback: 'Orders' -%}
         </h2>
         <p>
-          {%-
-            render 'render-translation',
-            namespace: 'customer.orders',
-            key: 'none',
-            fallback: 'No orders'
-          -%}
+          {%- render 'render-translation', namespace: 'customer.orders', key: 'none', fallback: 'No orders' -%}
         </p>
       {%- endif -%}
 

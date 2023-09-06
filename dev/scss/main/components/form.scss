@@ -160,23 +160,31 @@ endcapture
       }
     }
 
+    // .field__shopify-checkbox
     // .field--checkbox
+    &__shopify-checkbox,
     &--checkbox {
       @apply flex gap-2;
     }
 
-    // input .field__checkbox
+    // .field__shopify-checkbox
+    &__shopify-checkbox input[type='checkbox'] {
+      @apply sr-only;
+    }
+
+    // input .field__checkbox, .field__shopify-checkbox
+    &__shopify-checkbox input[type='checkbox'],
     &__checkbox {
       @apply flex
-      h-5
-      w-5
-      shrink-0
-      cursor-pointer
-      items-center
-      justify-center
-      gap-2
-      border-none
-      text-black;
+        h-5
+        w-5
+        shrink-0
+        cursor-pointer
+        items-center
+        justify-center
+        gap-2
+        border-none
+        text-black;
     }
     // .field__checkbox-label
     &__checkbox-label {
@@ -200,6 +208,7 @@ endcapture
         @apply me-2
         rounded-sm
         border-none
+        bg-gray-100
         content-[''];
       }
     }
@@ -502,6 +511,7 @@ endcapture
   input,
   select,
   textarea {
+    @apply font-normal;
     &:disabled {
       &,
       + .field__radio-label:before,

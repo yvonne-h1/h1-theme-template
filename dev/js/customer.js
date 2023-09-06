@@ -1,3 +1,5 @@
+import { Fancybox } from '@fancyapps/ui';
+
 const selectors = {
   customerAddresses: '[data-customer-addresses]',
   addressCountrySelect: '[data-address-country-select]',
@@ -16,6 +18,7 @@ class CustomerAddresses {
   constructor() {
     this.elements = this._getElements();
     if (Object.keys(this.elements).length === 0) return;
+
     this._setupCountries();
     this._setupEventListeners();
   }
@@ -44,13 +47,9 @@ class CustomerAddresses {
       this.elements.countrySelects.forEach((select) => {
         const formId = select.dataset.formId;
         // eslint-disable-next-line no-new
-        new Shopify.CountryProvinceSelector(
-          `AddressCountry_${formId}`,
-          `AddressProvince_${formId}`,
-          {
-            hideElement: `AddressProvinceContainer_${formId}`,
-          },
-        );
+        new Shopify.CountryProvinceSelector(`AddressCountry_${formId}`, `AddressProvince_${formId}`, {
+          hideElement: `AddressProvinceContainer_${formId}`,
+        });
       });
     }
   }
@@ -74,10 +73,26 @@ class CustomerAddresses {
   }
 
   _toggleExpanded(target) {
-    target.setAttribute(
-      attributes.expanded,
-      (target.getAttribute(attributes.expanded) === 'false').toString(),
-    );
+    target.setAttribute(attributes.expanded,(target.getAttribute(attributes.expanded) === 'false').toString());
+    document.querySelector(target.dataset.fancyboxSrc).classList.remove('hidden');
+
+    this.fancybox = Fancybox.show([ {
+      src: target.dataset.fancyboxSrc,
+      type: 'inline',
+      trapFocus: false,
+      placeFocusBack: false,
+      closeButton: true,
+      autoFocus: false,
+      animated: true,
+    } ]);
+
+    // set/remove the focus for accessibility
+    this.fancybox.on('done', (fancybox) => {
+      trapFocus(fancybox.$container);
+      fancybox.$container.querySelector(selectors.cancelAddressButton).addEventListener('click', () => this.fancybox.close());
+    });
+    this.fancybox.on('destroy', () => removeTrapFocus(target));
+    this.fancybox.on('backdropClick', () => this.fancybox.close());
   }
 
   _handleAddEditButtonClick({ currentTarget }) {
@@ -101,3 +116,7 @@ class CustomerAddresses {
     }
   }
 }
+
+window.onload = () => {
+  new CustomerAddresses();
+};

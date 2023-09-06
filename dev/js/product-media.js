@@ -34,8 +34,8 @@ class ProductMedia extends HTMLElement {
   }
 
   /*
-       * Create fancybox
-       */
+  * Create fancybox
+  */
   fancybox() {
     // Check if Fancybox exists
     if (typeof Fancybox == 'undefined') return false;
