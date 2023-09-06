@@ -207,13 +207,13 @@
                 group-[.is-fixed]/add-to-cart:z-fixed group-[.is-fixed]/add-to-cart:bg-white group-[.is-fixed]/add-to-cart:p-4 group-[.is-fixed]/add-to-cart:drop-shadow-[0_1px_15px_rgba(0,0,0,0.15)]" data-product-form-inner>
                 <product-form-component class="product-form block">
                   {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" readonly>
-                    <input type="hidden" name="quantity" min="1" value="1" readonly>
-                    <input type="hidden" name="inventory_quantity" value="{%- unless is_preorder -%}{{ product.selected_or_first_available_variant.inventory_quantity }}{%- endunless -%}" readonly>
+                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                    <input type="hidden" name="quantity" min="1" value="1">
+                    <input type="hidden" name="inventory_quantity" value="{%- unless is_preorder -%}{{ product.selected_or_first_available_variant.inventory_quantity }}{%- endunless -%}">
 
                     {% comment %} Pre-orders {% endcomment %}
                     {%- if is_preorder -%}
-                      <input type="hidden" name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}" readonly>
+                      <input type="hidden" name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
                     {% endif %}
 
                     {%- comment -%} Show variants in dropdowns for the fixed 'add to cart'{%- endcomment -%}

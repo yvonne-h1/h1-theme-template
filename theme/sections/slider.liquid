@@ -4,6 +4,12 @@
   if section.blocks.size > 1
     assign is_slider = true
   endif
+
+  # Image assigns
+  assign max_width = null
+  if section.settings.container_width == ''
+    assign max_width = 1360
+  endif
 -%}
 
 {%- liquid
@@ -39,14 +45,6 @@
   }'
 {%- endcapture -%}
 
-{% comment %} Image assigns {% endcomment %}
-{%- liquid
-  assign max_width = null
-  if section.settings.container_width == ''
-    assign max_width = 1360
-  endif
--%}
-
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
   <swiper-slider {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
@@ -60,7 +58,7 @@
           {%- endcapture -%}
 
           {% comment %} Swiper slide {% endcomment %}
-          <div class="swiper-slide relative flex h-auto {{ content_position -}} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }}" data-swiper-slide-index="{{ forloop.index }}" {{ block.shopify_attributes }}>
+          <div class="swiper-slide relative">
 
             {% comment %} Slider image {% endcomment %}
             {%- liquid
@@ -102,65 +100,67 @@
             </div>
 
             {% comment %} Slider content {% endcomment %}
-            <div class="slider__content relative mx-element-spacing my-12 inline-flex max-w-[80%] flex-col gap-y-4 p-8 md:my-20 md:max-w-screen-md md:p-12 {{ block.settings.content_color_scheme -}}">
-              {% comment %} Heading {% endcomment %}
-              {%- if block.settings.heading != blank -%}
-                <{{ block.settings.heading_element }} class="{{- block.settings.heading_size }} {{ block.settings.heading_color -}}">
-                  {{- block.settings.heading | escape -}}
-                </{{ block.settings.heading_element }}>
-              {%- endif -%}
+            <div class="content-wrapper flex h-full {{ content_position -}} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }}" data-swiper-slide-index="{{ forloop.index }}" {{ block.shopify_attributes }}>
+              <div class="slider__content relative mx-element-spacing my-12 inline-flex max-w-[80%] flex-col gap-y-4 p-8 md:my-20 md:max-w-screen-md md:p-12 {{ block.settings.content_color_scheme -}}">
+                {% comment %} Heading {% endcomment %}
+                {%- if block.settings.heading != blank -%}
+                  <{{ block.settings.heading_element }} class="{{- block.settings.heading_size }} {{ block.settings.heading_color -}}">
+                    {{- block.settings.heading | escape -}}
+                  </{{ block.settings.heading_element }}>
+                {%- endif -%}
 
-              {% comment %} Text {% endcomment %}
-              {%- if block.settings.text != blank -%}
-                <p class="{{- block.settings.text_color -}}">
-                  {{- block.settings.text | escape -}}
-                </p>
-              {%- endif -%}
+                {% comment %} Text {% endcomment %}
+                {%- if block.settings.text != blank -%}
+                  <p class="{{- block.settings.text_color -}}">
+                    {{- block.settings.text | escape -}}
+                  </p>
+                {%- endif -%}
 
-              {% comment %} Buttons {% endcomment %}
-              {%- liquid
-                # First button
-                assign button_1 = false
-                if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
-                  assign button_1 = true
-                endif
+                {% comment %} Buttons {% endcomment %}
+                {%- liquid
+                  # First button
+                  assign button_1 = false
+                  if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
+                    assign button_1 = true
+                  endif
 
-                # Second button
-                assign button_2 = false
-                if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
-                  assign button_2 = true
-                endif
+                  # Second button
+                  assign button_2 = false
+                  if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
+                    assign button_2 = true
+                  endif
 
-                # Button alligment
-                case block.settings.text_align
-                  when 'text-start'
-                    assign buttons_alignment = 'justify-start'
-                  when 'text-center'
-                    assign buttons_alignment = 'justify-center'
-                  when 'text-end'
-                    assign buttons_alignment = 'justify-end'
-                endcase
-              -%}
+                  # Button alligment
+                  case block.settings.text_align
+                    when 'text-start'
+                      assign buttons_alignment = 'justify-start'
+                    when 'text-center'
+                      assign buttons_alignment = 'justify-center'
+                    when 'text-end'
+                      assign buttons_alignment = 'justify-end'
+                  endcase
+                -%}
 
-              {%- if button_1 or button_2 -%}
-                <div class="slider__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
-                  {% comment %} Button 1 {% endcomment %}
-                  {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
-                    <a href="{{ block.settings.button_url_1 | default: '#' }}"
-                      class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
-                      {{- block.settings.button_label_1 | escape -}}
-                    </a>
-                  {%- endif -%}
+                {%- if button_1 or button_2 -%}
+                  <div class="slider__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
+                    {% comment %} Button 1 {% endcomment %}
+                    {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
+                      <a href="{{ block.settings.button_url_1 | default: '#' }}"
+                        class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
+                        {{- block.settings.button_label_1 | escape -}}
+                      </a>
+                    {%- endif -%}
 
-                  {% comment %} Button 2 {% endcomment %}
-                  {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
-                    <a href="{{ block.settings.button_url_2 | default: '#' }}"
-                      class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
-                      {{- block.settings.button_label_2 | escape -}}
-                    </a>
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
+                    {% comment %} Button 2 {% endcomment %}
+                    {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
+                      <a href="{{ block.settings.button_url_2 | default: '#' }}"
+                        class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
+                        {{- block.settings.button_label_2 | escape -}}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </div>
             </div>
           </div>
         {%- endfor -%}

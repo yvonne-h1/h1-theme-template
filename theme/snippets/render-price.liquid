@@ -77,21 +77,21 @@
     endif
   -%}
 
-  <dl class="flex">
+  <div class="flex">
     {%- comment -%} Different compare at prices, so display 'from' label (on collection pages) {%- endcomment -%}
     {%- if use_variant == false and target.price_varies or target.compare_at_price_varies %}
-      <div class="price__regular">
+      <dl class="price__regular">
         <dt class="sr-only ">
           {{ regular_price_str }}
         </dt>
         <dd class="price__item price__item--regular">
           {{ from_price_str }}
         </dd>
-      </div>
+      </dl>
 
       {%- comment -%} Product or variant is on sale {%- endcomment -%}
     {%- elsif target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
-      <div class="price__sale flex gap-2">
+      <dl class="price__sale flex gap-2">
         <dt class="sr-only">
           {{ sale_price_str }}
         </dt>
@@ -106,18 +106,18 @@
             {{ compare_at_price | money_with_currency }}
           </s>
         </dd>
-      </div>
+      </dl>
 
       {%- comment -%} Regular price {%- endcomment -%}
     {%- else -%}
-      <div class="price__regular">
+      <dl class="price__regular">
         <dt class="sr-only ">
           {{ regular_price_str }}
         </dt>
         <dd class="price__item price__item--regular">
           {{ money_price }}
         </dd>
-      </div>
+      </dl>
     {%- endif -%}
-  </dl>
+  </div>
 </div>

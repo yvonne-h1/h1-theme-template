@@ -76,6 +76,12 @@
           {{ data_collapsible_group }}>
 
           {%- liquid
+            # Show button as active when child link is available
+            if level_1_link.current
+              assign level_1_is_active = true
+            endif
+
+            # create the element
             assign start_el = 'span'
             assign end_el = 'span'
             assign has_link = false
@@ -87,31 +93,31 @@
           -%}
 
           {%- capture level_1_link_markup -%}
-            <{{ start_el }} class="footer-menu__link level-1 {% if has_link -%}{{ link_class_with_hover }}{%- else -%}{{ link_class }}{%- endif %} {% if level_1_is_active -%}{{ link_active_class }}{%- endif %}"
-              {%- if level_1_link.current %}
+            <{{ start_el }} class="footer-menu__link level-1 {{ collapsible_button_class }} {% if has_link -%}level-1 font-bold {{ link_class_with_hover }}{%- else -%}{{ link_class }}{%- endif %} {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
+
+              {%- if level_1_link.current -%}
                 aria-current="page"
-              {% endif %}>
+              {%- endif %}
+
+              {% if has_link -%}
+                {{- data_collapsible_trigger -}}
+              {%- endif -%}>
+
               {{- level_1_link.title | escape -}}
+              {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-1]:rotate-180 md:hidden' -%}
             </{{ end_el }}>
           {%- endcapture -%}
 
-          {%- liquid
-            # Show button as active when child link is available
-            if level_1_link.child_active or level_1_link.current
-              assign level_1_is_active = true
-            endif
-          -%}
-
-          <button
-            type="button"
-            class="footer-menu__link {{ collapsible_button_class }} md:hidden level-1 font-bold {% if level_1_is_active -%}{{ link_active_class }}{%- endif %}"
-            {{ data_collapsible_trigger }}>
+          {%- unless has_link -%}
+            <button
+              type="button"
+              class="footer-menu__link {{ collapsible_button_class }} level-1 font-bold md:pointer-events-none {% if level_1_is_active -%}{{ link_active_class }}{%- endif %}"
+              {{ data_collapsible_trigger }}>
+          {%- endunless -%}
             {{ level_1_link_markup }}
-            {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-1]:rotate-180' -%}
-          </button>
-          <div class="footer-menu__link hidden md:block level-1 font-bold">
-            {{ level_1_link_markup }}
-          </div>
+          {%- unless has_link -%}
+            </button>
+          {%- endunless -%}
 
           {%- comment -%} Level 2 {%- endcomment -%}
           <ul
@@ -148,6 +154,11 @@
               {%- else -%}
 
                 {%- liquid
+                  # Show button as active when child link is available
+                  if level_2_link.child_active or level_2_link.current
+                    assign level_2_is_active = true
+                  endif
+
                   assign start_el = 'span'
                   assign end_el = 'span'
                   assign has_link = false
@@ -163,27 +174,28 @@
                   {{ data_collapsible_group }}>
 
                   {%- capture level_2_link_markup -%}
-                    <{{ start_el }} class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}">
+                    <{{ start_el }} class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if has_link -%}{{ collapsible_button_class }}{%- endif %} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
+
+                      {% if has_link -%}
+                        {{- data_collapsible_trigger -}}
+                      {%- endif -%}>
+
                       {{- level_2_link.title | escape -}}
+                      {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-2]:rotate-180' -%}
+
                     </{{ end_el }}>
                   {%- endcapture -%}
 
-                  {%- liquid
-                    # Show button as active when child link is available
-                    if level_2_link.child_active or level_2_link.current
-                      assign level_2_is_active = true
-                    endif
-                  -%}
-                  <button
-                    type="button"
-                    class="footer-menu__link md:hidden {{ collapsible_button_class }} level-2"
-                    {{ data_collapsible_trigger }}>
+                  {%- unless has_link -%}
+                    <button
+                      type="button"
+                      class="footer-menu__link {{ collapsible_button_class }} level-2 font-bold {% if level_1_is_active -%}{{ link_active_class }}{%- endif %}"
+                      {{ data_collapsible_trigger }}>
+                  {%- endunless -%}
                     {{ level_2_link_markup }}
-                    {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-2]:rotate-180' -%}
-                  </button>
-                  <div class="footer-menu__link hidden md:block level-2">
-                    {{ level_2_link_markup }}
-                  </div>
+                  {%- unless has_link -%}
+                    </button>
+                  {%- endunless -%}
 
                   {%- comment -%} Level 3 {%- endcomment -%}
                   <ul
