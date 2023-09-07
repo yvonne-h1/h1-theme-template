@@ -91,5 +91,21 @@
         }
       }
     }
+    // .header-transparent - used for the header
+    &.header-transparent {
+      .template-index:not(.header-sticky):not(.desktop-submenu-is-open) & {
+        --color-scheme-background-color: transparent;
+      }
+      &.header-transparent-text--text-black {
+        .template-index:not(.header-sticky):not(.desktop-submenu-is-open) & {
+          --color-scheme-text-color: theme('colors.black');
+        }
+      }
+      &.header-transparent-text--text-white {
+        .template-index:not(.header-sticky):not(.desktop-submenu-is-open) & {
+          --color-scheme-text-color: theme('colors.white');
+        }
+      }
+    }
   }
 }

@@ -13,7 +13,7 @@
         if block.settings.url != blank
           echo '<a href="' | append: block.settings.url | append: '">'
         endif
-        render 'responsive-image', image_object: block.settings.image, alt: image_alt, sizes: '(min-width: 1440px) 448px, (min-width: 1024px) 31vw, 288px, (min-width: 400px) 400px, (min-width: 320px) 320px', max_width: 448, class: 'lg:object-cover lg:h-full'
+        render 'responsive-image', image_object: block.settings.image, alt: image_alt, sizes: '(min-width: 1440px) 448px, (min-width: 1024px) 31vw, (min-width: 400px) 400px, (min-width: 320px) 320px', max_width: 448, class: 'lg:object-cover lg:h-full'
         if block.settings.url != blank
           echo '</a>'
         endif

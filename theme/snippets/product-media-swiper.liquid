@@ -89,7 +89,7 @@
   {%- capture media_content_slider -%}
     {{ media_content_slider }}
     <div class="swiper-slide"
-      {%- if media.media_type == 'image' -%}
+      {% if media.media_type == 'image' -%}
         data-product-variant-image="[{{ variant_images }}]"
       {%- endif -%}
     >

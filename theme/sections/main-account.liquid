@@ -28,7 +28,7 @@
 {%- capture container_content -%}
 
   {%- comment -%} Customer info {%- endcomment -%}
-  <div class="account__customer-info is-order-2-md col-span-12 mb-8 grid grid-cols-1 gap-4 text-base leading-7 lg:order-2 lg:col-span-3 lg:col-start-10 lg:mb-0">
+  <div class="account__customer-info is-order-2-md col-span-12 mb-8 grid grid-cols-1 gap-4 lg:order-2 lg:col-span-3 lg:col-start-10 lg:mb-0">
     {%- if customer.name != blank -%}
       <h2 class="h5 mb-0">
         {{- customer.name -}}
@@ -57,17 +57,10 @@
   <div class="account__orders col-span-12 col-start-1 lg:order-1 lg:col-span-8 xl:col-span-9">
     {% paginate customer.orders by 20 %}
       {%- if customer.orders.size > 0 -%}
+        <h2>{%- render 'render-translation', namespace: 'customer.orders', key: 'title', fallback: 'Orders' -%}</h2>
         <table role="table" class="account__order-history relative w-full table-auto border-collapse">
-          <caption class="sr-only">
-            {%-
-              render 'render-translation',
-              namespace: 'customer.orders',
-              key: 'title',
-              fallback: 'Orders'
-            -%}
-          </caption>
           <thead role="rowgroup" class="hidden text-start text-sm md:table-header-group">
-            {%- assign th_class = 'pt-0 ps-0 pe-4 pb-6 align-top md:w-52 last:w-24' -%}
+            {%- assign th_class = 'pt-0 ps-0 pe-4 pb-6 align-top italic font-normal md:w-52 last:w-24' -%}
             <tr role="row">
               <th id="ColumnOrder" scope="col" role="columnheader" class="{{ th_class }}">
                 {{- order_nr_str -}}
@@ -88,7 +81,7 @@
           </thead>
           <tbody role="rowgroup" class="">
             {%- for order in customer.orders -%}
-              {%- assign td_class = 'text-sm py-1 md:py-4 md:ps-0 md:pe-4 text-start align-top md:w-52 last:w-24' -%}
+              {%- assign td_class = 'md:text-sm py-1 md:py-4 md:ps-0 md:pe-4 text-start align-top md:w-52 last:w-24' -%}
               <tr role="row" class="flex flex-col justify-start border-b  py-3 md:table-row md:py-0">
                 <td id="RowOrder" role="cell" headers="ColumnOrder" data-label="{{ order_nr_str }}" class="{{ td_class }}">
                   <a
@@ -138,4 +131,4 @@
 {%- render 'account-header' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'account', content: container_content, content_class: 'account__grid grid grid-cols-12' -%}
+{%- render 'render-container-content', class: 'account', content: container_content, content_class: 'account__grid grid grid-cols-12 gap-base' -%}

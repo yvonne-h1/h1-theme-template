@@ -53,13 +53,13 @@
 {% liquid
   assign sticky_header_classes = 'relative'
   if is_transparent
-    assign sticky_header_classes = 'header--transparent absolute top-0 inset-x-0 bg-transparent group-[.header-sticky]/body:bg-bg-default group-[.header-sticky]/body:text-text-default ' | append: section.settings.is_transparent_text_color
+    assign sticky_header_classes = 'absolute top-0 inset-x-0 bg-transparent group-[.header-sticky]/body:text-text-default'
   endif
 %}
 
 <header-component
   id="header"
-  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.desktop-submenu-is-open]/body:duration-0 {{ sticky_header_classes }} {{ section.settings.color_scheme }}"
+  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.desktop-submenu-is-open]/body:duration-0 {{ sticky_header_classes }} {{ section.settings.color_scheme }} {% if is_transparent and template.name == 'index' %}header-transparent header-transparent-text--{{ section.settings.is_transparent_text_color}}{%- endif -%}"
   data-header>
   <div class="header-nav content-wrapper content-wrapper-padding grid grid-cols-12 items-center gap-base">
     {%- comment -%} Toggle for mobile navigation {%- endcomment -%}

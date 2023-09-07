@@ -1,9 +1,3 @@
-<style>
-  .fancybox__backdrop {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-</style>
-
 {%- comment -%} Capture translations to use later {%- endcomment -%}
 {%- liquid
   capture first_name_str
@@ -77,7 +71,9 @@
                   aria-controls="EditAddress_{{ address.id }}"
                   aria-expanded="false"
                   data-address-id="{{ address.id }}"
-                  data-fancybox-src="#EditAddress_{{ address.id }}"
+                  data-fancybox
+                  data-type="inline"
+                  data-src="#EditAddress_{{ address.id }}"
                 >
                   {%- render 'icons', icon: 'edit', icon_class: 'w-4' -%}
                 </button>
@@ -90,8 +86,10 @@
                 >
                   {%- render 'icons', icon: 'trash', icon_class: 'w-4' -%}
                 </button>
-                {%- comment -%} Edit address form. {%- endcomment -%}
-                <div id="EditAddress_{{ address.id }}" class="addresses__edit mt-4 hidden rounded-md  border p-4 peer-aria-expanded/edit:block" data-selectable>
+
+                {%- comment -%} Edit address form {%- endcomment -%}
+                <div id="EditAddress_{{ address.id }}" class="addresses__edit mt-4 hidden rounded-md border p-4 peer-aria-expanded/edit:block" data-selectable
+                  aria-modal="true">
                   {%- form 'customer_address', address, class: 'form addresses__edit-form' -%}
                     <h2 class=" text-lg font-semibold">
                       {%-
@@ -131,7 +129,7 @@
                         >
                       </div>
 
-                      <div class="field">
+                      <div class="field col-span-2 md:col-span-1">
                         <label class="field__label" for="AddressCompany_{{ form.id }}">
                           {{- company_str -}}
                         </label>
@@ -145,22 +143,22 @@
                           placeholder="{{- company_str -}}"
                         >
                       </div>
-                      <div class="field">
+                      <div class="field col-span-2 md:col-span-1">
                         <label class="field__label" for="AddressPhone_{{ form.id }}">
                           {{- phone_str -}}
-                          <input
-                            class="field__input"
-                            type="tel"
-                            id="AddressPhone_{{ form.id }}"
-                            name="address[phone]"
-                            value="{{ form.phone }}"
-                            autocomplete="tel"
-                            placeholder="{{- phone_str -}}"
-                          >
                         </label>
+                        <input
+                          class="field__input"
+                          type="tel"
+                          id="AddressPhone_{{ form.id }}"
+                          name="address[phone]"
+                          value="{{ form.phone }}"
+                          autocomplete="tel"
+                          placeholder="{{- phone_str -}}"
+                        >
                       </div>
 
-                      <div class="field">
+                      <div class="field col-span-2 md:col-span-1">
                         <label class="field__label" for="AddressAddress1_{{ form.id }}">
                           {{- address1_str -}}
                         </label>
@@ -174,7 +172,7 @@
                           placeholder="{{- address1_str -}}"
                         >
                       </div>
-                      <div class="field">
+                      <div class="field col-span-2 md:col-span-1">
                         <label class="field__label" for="AddressAddress2_{{ form.id }}">
                           {{- address2_str -}}
                         </label>
@@ -189,7 +187,7 @@
                         >
                       </div>
 
-                      <div class="field">
+                      <div class="field col-span-2 md:col-span-1">
                         <label class="field__label" for="AddressCity_{{ form.id }}">
                           {{- city_str -}}
                         </label>
@@ -203,7 +201,7 @@
                           placeholder="{{- city_str -}}"
                         >
                       </div>
-                      <div class="field">
+                      <div class="field col-span-2 md:col-span-1">
                         <label class="field__label" for="AddressZip_{{ form.id }}">
                           {{- zip_str -}}
                         </label>
@@ -219,7 +217,7 @@
                         >
                       </div>
 
-                      <div class="field">
+                      <div class="field col-span-2 md:col-span-1">
                         <label class="field__label" for="AddressCountry_{{ form.id }}">
                           {{- country_str -}}
                         </label>
@@ -240,7 +238,7 @@
                           </span>
                         </div>
                       </div>
-                      <div class="field" id="AddressProvinceContainer_{{ form.id }}" style="display:none;">
+                      <div class="field col-span-2 md:col-span-1" id="AddressProvinceContainer_{{ form.id }}" style="display:none;">
                         <label class="field__label" for="AddressProvince_{{ form.id }}">
                           {{- province_str -}}
                         </label>
@@ -260,7 +258,7 @@
                     </div>
 
                     {% comment %} Checkbox for default {% endcomment %}
-                    <div class="field">
+                    <div class="field col-span-2 md:col-span-1">
                       <div class="field__shopify-checkbox">
                         {{ form.set_as_default_checkbox }}
                         <label class="field__checkbox-label" for="address_default_address_{{ form.id }}">
@@ -303,7 +301,9 @@
         type="button"
         aria-expanded="false"
         aria-controls="AddAddress"
-        data-fancybox-src="#AddAddress">
+        data-fancybox
+        data-type="inline"
+        data-src="#AddAddress">
         {%-
           render 'render-translation',
           namespace: 'customer.addresses',
@@ -351,7 +351,7 @@
               >
             </div>
 
-            <div class="field">
+            <div class="field col-span-2 md:col-span-1">
               <label class="field__label" for="AddressCompanyNew">
                 {{- company_str -}}
               </label>
@@ -365,7 +365,7 @@
                 placeholder="{{- company_str -}}"
               >
             </div>
-            <div class="field">
+            <div class="field col-span-2 md:col-span-1">
               <label class="field__label" for="AddressPhoneNew">
                 {{- phone_str -}}
               </label>
@@ -380,7 +380,7 @@
               >
             </div>
 
-            <div class="field">
+            <div class="field col-span-2 md:col-span-1">
               <label class="field__label" for="AddressAddress1New">
                 {{- address1_str -}}
               </label>
@@ -394,7 +394,7 @@
                 placeholder="{{- address1_str -}}"
               >
             </div>
-            <div class="field">
+            <div class="field col-span-2 md:col-span-1">
               <label class="field__label" for="AddressAddress2New">
                 {{- address2_str -}}
               </label>
@@ -409,7 +409,7 @@
               >
             </div>
 
-            <div class="field">
+            <div class="field col-span-2 md:col-span-1">
               <label class="field__label" for="AddressCityNew">
                 {{- city_str -}}
               </label>
@@ -423,7 +423,7 @@
                 placeholder="{{- city_str -}}"
               >
             </div>
-            <div class="field">
+            <div class="field col-span-2 md:col-span-1">
               <label class="field__label" for="AddressZipNew">
                 {{- zip_str -}}
               </label>
@@ -439,7 +439,7 @@
               >
             </div>
 
-            <div class="field">
+            <div class="field col-span-2 md:col-span-1">
               <label class="field__label" for="AddressCountryNew">
                 {{- country_str -}}
               </label>
@@ -460,7 +460,7 @@
               </div>
             </div>
 
-            <div id="AddressProvinceContainerNew" class="field" style="display: none">
+            <div id="AddressProvinceContainerNew" class="field col-span-2 md:col-span-1" style="display: none">
               <label class="field__label" for="AddressProvinceNew">
                 {{- province_str -}}
               </label>
@@ -480,7 +480,7 @@
           </div>
 
           {% comment %} Checkbox for default {% endcomment %}
-          <div class="field">
+          <div class="field col-span-2 md:col-span-1">
             <div class="field__shopify-checkbox">
               {{ form.set_as_default_checkbox }}
               <label class="field__checkbox-label" for="address_default_address_{{ form.id }}">
@@ -525,9 +525,9 @@
 {%- render 'account-header' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'form-fields address', content: container_content, content_class: 'addresses', data: 'data-customer-addresses' -%}
+{%- render 'render-container-content', class: 'form-fields address block', content: container_content, content_class: 'addresses', data: 'data-customer-addresses', tag: 'customer-addresses' -%}
 
-{%- render 'import-styles', file_name: 'component-fancybox.css' -%}
+{%- render 'import-styles', file_name: 'component-fancybox.css', force: true -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
-<script src="{{ 'customer.js' | asset_url }}" defer></script>
+<script src="{{ 'customer.js' | asset_url }}" type="module"></script>

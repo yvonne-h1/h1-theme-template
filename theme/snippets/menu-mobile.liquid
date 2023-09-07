@@ -84,7 +84,7 @@
             assign level_1_title = level_1.title
             if level_1_title contains '[HIGHLIGHT]'
               assign level_1_title = level_1.title | remove: '[HIGHLIGHT]' | strip
-              assign link_classes = 'button button--lg lg:button--md border-transparent me-8 ms-[calc(2rem-10px)] ps-2.5'
+              assign link_classes = 'button button--lg lg:button--md border-transparent me-8 ms-[calc(2rem-10px)] inline-block ps-2.5 pe-3'
             endif
 
             # if link is active

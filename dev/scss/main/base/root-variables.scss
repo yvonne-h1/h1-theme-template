@@ -40,5 +40,11 @@
     @screen md {
       --grid-row-gap: theme(gap.8);
     }
+
+    // Fancybox
+    .fancybox__backdrop {
+      --fancybox-bg: theme(colors.black);
+      --fancybox-opacity: 0.5;
+    }
   }
 }

@@ -1,11 +1,11 @@
 {%- comment -%} Output cart drawer {%- endcomment -%}
 {%- if request.page_type != 'cart' -%}
-  <style>
+  {% style %}
     .cart-is-empty .cart-drawer__warnings {
       min-height: 100dvh;
       min-height: 100vh;
     }
-  </style>
+  {% endstyle %}
 
   <cart-drawer class="cart-drawer" data-cart-drawer>
     {%- comment -%} Backdrop {%- endcomment -%}

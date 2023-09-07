@@ -1,44 +1,29 @@
 import { Fancybox } from '@fancyapps/ui';
 
-const selectors = {
-  customerAddresses: '[data-customer-addresses]',
-  addressCountrySelect: '[data-address-country-select]',
-  addressContainer: '[data-address]',
-  toggleAddressButton: 'button[aria-expanded]',
-  cancelAddressButton: 'button[type="reset"]',
-  deleteAddressButton: 'button[data-confirm-message]',
-};
-
-const attributes = {
-  expanded: 'aria-expanded',
-  confirmMessage: 'data-confirm-message',
-};
-
-class CustomerAddresses {
+class CustomerAddresses extends HTMLElement {
   constructor() {
-    this.elements = this._getElements();
+    super();
+    this.elements = this.getElements();
     if (Object.keys(this.elements).length === 0) return;
 
-    this._setupCountries();
-    this._setupEventListeners();
+    this.setupCountries();
+    this.setupEventListeners();
+    this.fancybox();
   }
 
-  _getElements() {
-    const container = document.querySelector(selectors.customerAddresses);
-    return container
-      ? {
-        container,
-        addressContainer: container.querySelector(selectors.addressContainer),
-        toggleButtons: document.querySelectorAll(selectors.toggleAddressButton),
-        cancelButtons: container.querySelectorAll(selectors.cancelAddressButton),
-        deleteButtons: container.querySelectorAll(selectors.deleteAddressButton),
-        countrySelects: container.querySelectorAll(selectors.addressCountrySelect),
-      }
-      : {
-      };
+  getElements() {
+    const container = document.querySelector('[data-customer-addresses]');
+    return container ? {
+      container,
+      addressContainer: container.querySelector('[data-address]'),
+      toggleButtons: document.querySelectorAll('button[aria-expanded]'),
+      cancelButtons: container.querySelectorAll('button[type="reset"]'),
+      deleteButtons: container.querySelectorAll('button[data-confirm-message]'),
+      countrySelects: container.querySelectorAll('[data-address-country-select]'),
+    } : {};
   }
 
-  _setupCountries() {
+  setupCountries() {
     if (Shopify && Shopify.CountryProvinceSelector) {
       // eslint-disable-next-line no-new
       new Shopify.CountryProvinceSelector('AddressCountryNew', 'AddressProvinceNew', {
@@ -54,60 +39,43 @@ class CustomerAddresses {
     }
   }
 
-  _setupEventListeners() {
+  setupEventListeners() {
     this.elements.toggleButtons.forEach((element) => {
       element.addEventListener('click', (event) => {
-        this._handleAddEditButtonClick(event);
+        this.handleAddEditButtonClick(event);
       });
     });
     this.elements.cancelButtons.forEach((element) => {
       element.addEventListener('click', (event) => {
-        this._handleCancelButtonClick(event);
+        this.handleCancelButtonClick(event);
       });
     });
     this.elements.deleteButtons.forEach((element) => {
       element.addEventListener('click', (event) => {
-        this._handleDeleteButtonClick(event);
+        this.handleDeleteButtonClick(event);
       });
     });
   }
 
-  _toggleExpanded(target) {
-    target.setAttribute(attributes.expanded,(target.getAttribute(attributes.expanded) === 'false').toString());
-    document.querySelector(target.dataset.fancyboxSrc).classList.remove('hidden');
-
-    this.fancybox = Fancybox.show([ {
-      src: target.dataset.fancyboxSrc,
-      type: 'inline',
-      trapFocus: false,
-      placeFocusBack: false,
-      closeButton: true,
-      autoFocus: false,
-      animated: true,
-    } ]);
-
-    // set/remove the focus for accessibility
-    this.fancybox.on('done', (fancybox) => {
-      trapFocus(fancybox.$container);
-      fancybox.$container.querySelector(selectors.cancelAddressButton).addEventListener('click', () => this.fancybox.close());
-    });
-    this.fancybox.on('destroy', () => removeTrapFocus(target));
-    this.fancybox.on('backdropClick', () => this.fancybox.close());
+  toggleExpanded(target) {
+    target.setAttribute('aria-expanded',(target.getAttribute('aria-expanded') === 'false').toString());
+    document.querySelector(target.dataset.src).classList.remove('hidden');
   }
 
-  _handleAddEditButtonClick({ currentTarget }) {
-    this._toggleExpanded(currentTarget);
+  handleAddEditButtonClick({ currentTarget }) {
+    this.toggleExpanded(currentTarget);
+    this.trigger = currentTarget;
   }
 
-  _handleCancelButtonClick({ currentTarget }) {
-    this._toggleExpanded(
-      currentTarget.closest(selectors.addressContainer).querySelector(`[${attributes.expanded}]`),
-    );
+  handleCancelButtonClick({ currentTarget }) {
+    if (currentTarget.closest('[data-address]')) {
+      this.toggleExpanded(currentTarget.closest('[data-address]')?.querySelector('[aria-expanded]'));
+    }
   }
 
-  _handleDeleteButtonClick({ currentTarget }) {
+  handleDeleteButtonClick({ currentTarget }) {
     // eslint-disable-next-line no-alert
-    if (confirm(currentTarget.getAttribute(attributes.confirmMessage))) {
+    if (confirm(currentTarget.getAttribute('data-confirm-message'))) {
       Shopify.postLink(currentTarget.dataset.target, {
         parameters: {
           _method: 'delete',
@@ -115,8 +83,30 @@ class CustomerAddresses {
       });
     }
   }
+
+  fancybox() {
+    if (!Fancybox) return false;
+
+    Fancybox.bind('[data-fancybox]', {
+      trapFocus: false,
+      placeFocusBack: false,
+      autoFocus: false,
+      dragToClose: false,
+      animated: false,
+      on: {
+        done: (fancybox) => {
+          trapFocus(fancybox.$container);
+          // add the event listener for the 'cancel' button
+          fancybox.$container.querySelector('button[type="reset"]').addEventListener('click', () => fancybox.close());
+        },
+        destroy: () => {
+          removeTrapFocus(this.trigger);
+        },
+      },
+    });
+  }
 }
 
-window.onload = () => {
-  new CustomerAddresses();
-};
+if (!customElements.get('customer-addresses')) {
+  customElements.define('customer-addresses', CustomerAddresses);
+}

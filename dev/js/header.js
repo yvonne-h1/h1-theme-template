@@ -128,7 +128,7 @@ class HeaderComponent extends HTMLElement {
           cancelAnimationFrame(this.request);
           this.request = null;
         }, 50);
-      }, 25));
+      }, 10));
     }
   }
 

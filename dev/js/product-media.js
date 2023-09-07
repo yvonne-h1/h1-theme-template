@@ -43,7 +43,8 @@ class ProductMedia extends HTMLElement {
     Fancybox.bind('[data-fancybox]', {
       animated: false,
       showClass: false,
-      mainClass: 'image-zoom',
+      dragToClose: false,
+      mainClass: 'fancybox-products',
     });
   }
 }

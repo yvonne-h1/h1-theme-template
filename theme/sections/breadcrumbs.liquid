@@ -185,7 +185,6 @@
 
                 echo ' '
                 echo 'general.meta.tags' | t: tags: current_tags_list
-                echo '<meta content="' | append: forloop.index | append: '" />'
               endif
 
               echo '</li>'
@@ -197,17 +196,15 @@
                 echo '">'
                 echo path_name_item
                 echo '</a>'
-                echo '<meta content="' | append: forloop.index | append: '" />'
                 echo '</li>'
               else
                 if section.settings.show_non_link
                   echo '<li class="breadcrumbs__item">'
                   echo path_name_item
-                  echo '<meta content="' | append: forloop.index | append: '" />'
                   echo '</li>'
                 endif
               endif
-              echo '<li class="breadcrumbs__divider before:content-empty before:block border-l border-gray border- h-4 w-0 mt-0.5"></span>'
+              echo '<li class="breadcrumbs__divider before:content-empty before:block border-l border-gray border- h-4 w-0 mt-0.5"></li>'
             endif
           -%}
         {%- endfor -%}

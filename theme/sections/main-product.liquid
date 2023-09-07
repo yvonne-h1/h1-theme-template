@@ -208,7 +208,7 @@
                 <product-form-component class="product-form block">
                   {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                    <input type="hidden" name="quantity" min="1" value="1">
+                    <input type="hidden" name="quantity" value="1">
                     <input type="hidden" name="inventory_quantity" value="{%- unless is_preorder -%}{{ product.selected_or_first_available_variant.inventory_quantity }}{%- endunless -%}">
 
                     {% comment %} Pre-orders {% endcomment %}
@@ -273,11 +273,10 @@
                             class="field__input"
                             type="number"
                             name="quantity"
-                            product.id="QuantityNoScript-{{ product.id }}"
+                            id="QuantityNoScript-{{ product.id }}"
                             min="1"
                             max="{{ product.selected_or_first_available_variant.inventory_quantity }}"
                             value="1"
-                            pattern="[0-9]*"
                             inputmode="numeric">
                         </div>
                       </div>
@@ -289,7 +288,6 @@
                         name="add"
                         aria-label="Add"
                         class="button button--lg button--primary w-full"
-                        data-track-add-to-cart
                         {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
                         data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"
                         {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}

@@ -508,7 +508,7 @@ endcapture
       }
     }
   }
-  input,
+  input:not(.shopify-challenge__button),
   select,
   textarea {
     @apply font-normal;

@@ -11,14 +11,15 @@
 
   .fancybox__container {
     @apply text-inherit;
-    .fancybox__backdrop {
-      @apply bg-white;
-    }
     .fancybox__content {
-      @apply static;
+      @apply relative;
+      & :focus:not(.carousel__button.is-close) {
+        @apply outline-none outline-primary-300;
+      }
     }
     .fancybox__toolbar {
       @apply bg-none text-inherit;
+      // .fancybox__toolbar__items
       &__items {
         .fancybox__button--thumbs,
         .fancybox__button--zoom,
@@ -45,24 +46,24 @@
     }
     .carousel__button {
       @apply shadow-none;
-      svg {
-        @apply w-4 filter-none;
-      }
       &.is-next,
       &.is-prev,
+      &.is-close,
       &.fancybox__button--close {
-        @apply h-12
-        w-12
-        rounded-full
+        @apply rounded-full
         border
         border-solid
         border-black
+        text-inherit
         shadow-none
         transition-all
-
         states:border
         states:bg-primary
-        states:text-white;
+        states:text-white
+        touch:h-12
+        touch:w-12
+        no-touch:h-8
+        no-touch:w-8;
         &:focus-visible {
           @apply border-primary-100
           bg-primary-100
@@ -71,8 +72,9 @@
           ring-primary-300
           ring-offset-2;
         }
-        @include states() {
-          svg {
+        svg {
+          @apply w-4 filter-none;
+          @include states() {
             @apply scale-110;
           }
         }
@@ -80,6 +82,10 @@
       &.fancybox__button--close {
         @apply fixed
         end-4
+        top-4;
+      }
+      &.is-close {
+        @apply end-4
         top-4;
       }
       &.is-next {
@@ -95,26 +101,26 @@
         @apply p-0;
         &.has-image {
           @apply relative bg-white;
-          .fancybox__content {
-            @apply static;
-          }
         }
-        &.can-zoom_in {
-          .fancybox__content {
-            cursor: url('./zoom-in.svg') 20 20, zoom-in;
-            img {
-              cursor: url('./zoom-in.svg') 20 20, zoom-in;
-            }
-          }
+        &.has-inline {
+          cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xml:space='preserve' width='40' height='40' viewBox='0 0 512 512'%3E%3Cpath fill='transparent' d='M256 7C118.467 7 7 118.468 7 256.002 7 393.533 118.467 505 256 505s249-111.467 249-248.998C505 118.468 393.533 7 256 7zm0 478.08c-126.31 0-229.08-102.771-229.08-229.078C26.92 129.692 129.69 26.92 256 26.92c126.309 0 229.08 102.771 229.08 229.082 0 126.307-102.771 229.078-229.08 229.078z'/%3E%3Cpath fill='%23fff' d='m368.545 157.073-14.084-14.085-98.598 98.599-98.13-98.131-14.085 14.084 98.132 98.132-98.132 98.137 14.085 14.084 98.13-98.143 98.598 98.611 14.084-14.086-98.598-98.603z'/%3E%3C/svg%3E"),
+            pointer;
         }
-        &.is-draggable {
-          @apply p-0;
-          .fancybox__content {
-            cursor: url('./zoom-out.svg') 20 20, zoom-out;
-            img {
-              cursor: url('./zoom-out.svg') 20 20, zoom-out;
-            }
-          }
+      }
+    }
+
+    // for product images carousel
+    &.fancybox-products {
+      .fancybox__backdrop {
+        @apply bg-white opacity-100;
+      }
+      .carousel__button {
+        &.is-next,
+        &.is-prev,
+        &.is-close,
+        &.fancybox__button--close {
+          @apply no-touch:h-12
+          no-touch:w-12;
         }
       }
     }

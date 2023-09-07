@@ -142,8 +142,17 @@ class ProductMediaSlider extends HTMLElement {
     Fancybox.bind('[data-fancybox]', {
       animated: false,
       showClass: false,
+      dragToClose: false,
+      trapFocus: false,
+      placeFocusBack: false,
+      autoFocus: false,
+      mainClass: 'fancybox-products',
       Thumbs: {
         type: 'modern',
+      },
+      Images: {
+        // Disable animation from/to thumbnail on start/close
+        zoom: true,
       },
       on: {
         ready: (fancybox) => {

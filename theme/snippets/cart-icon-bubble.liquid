@@ -5,10 +5,14 @@
   endcapture
 
   capture cart_item_count
-    render "render-translation", namespace: "sections.header", key: "cart_count", count: cart.item_count, fallback: "{{ count }} item(s) in cart"
+    if cart.item_count == 1
+      render 'render-translation', namespace: 'sections.header', key: 'cart_count.one', fallback: 'item(s) in cart'
+    else
+      render 'render-translation', namespace: 'sections.header', key: 'cart_count.other', fallback: 'item(s) in cart'
+    endif
   endcapture
 
-  assign aria_label = cart_item_count | append: '. ' | append: open_cart_drawer_string
+  assign aria_label = cart.item_count | append: ' ' | append: cart_item_count | append: '. ' | append: open_cart_drawer_string
 
   assign classes = 'header__icon relative'
   if request.page_type == 'cart'
@@ -17,7 +21,7 @@
 -%}
 
 {% comment %} The actual cart icon {% endcomment %}
-<cart-icon-bubble class="cart-icon-bubble -me-3 flex no-js:hidden">
+<cart-icon-bubble class="cart-icon-bubble -me-3 flex">
   <class-toggle-component
     data-options='
       {
@@ -30,20 +34,22 @@
         type="button"
         id="cart-icon-bubble"
         class="{{ icon_classes }} {{ classes }}"
-        aria-controls="cartDrawer"
-        aria-label="{{- aria_label -}}"
-        aria-haspopup="dialog"
-        aria-expanded="false"
+        {% unless template.name == 'cart' -%}
+          aria-controls="cartDrawer"
+          aria-label="{{- aria_label -}}"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+        {%- endunless %}
         data-cart-icon-bubble>
     {%- else -%}
       <a
         id="cart-icon-bubble"
         class="{{ classes }}"
         href="{{- routes.cart_url -}}"
-        {%- if template.name != 'cart' -%}
+        {% unless template.name == 'cart' -%}
           aria-controls="cartDrawer"
           aria-haspopup="dialog"
-        {%- endif -%}
+        {%- endunless %}
         aria-label="{{- aria_label -}}"
         data-cart-icon-bubble>
     {%- endif -%}
@@ -54,7 +60,7 @@
         {{- cart.item_count -}}
       </span>
       <span class="sr-only">
-        {{- 'sections.header.cart_count' | t: count: cart.item_count -}}
+        {{- cart_item_count -}}
       </span>
     </span>
 
@@ -64,14 +70,12 @@
       </a>
     {%- endif -%}
   </class-toggle-component>
+
+  {%- comment -%} No-js cart link {%- endcomment -%}
+  <a href="{{ routes.cart_url }}" class="js:hidden">
+    <span class="sr-only">
+      {% render 'render-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart' %}
+    </span>
+    {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
+  </a>
 </cart-icon-bubble>
-
-{%- comment -%} No-js cart link {%- endcomment -%}
-<a href="{{ routes.cart_url }}" class="no-js[visible] hidden">
-  <span class="visually-hidden">
-    {% render 'render-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart' %}
-  </span>
-  {%- render 'icons', icon: 'cart' -%}
-</a>
-
-{% comment %} <script src="{{ 'cart-icon-bubble.js' | asset_url }}" type="module"></script> {% endcomment %}
