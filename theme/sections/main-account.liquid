@@ -31,7 +31,7 @@
 
 {%- capture container_content -%}
   {%- comment -%} Orders {%- endcomment -%}
-  <div class="account__orders col-span-12 mb-8 xl:order-1 xl:col-span-8 xl:mb-0 ">
+  <div class="account__orders col-span-12 mb-8 xl:order-1 xl:col-span-8 xl:col-start-5 xl:mb-0 ">
     <h2>{%- render 'render-translation', namespace: 'customer.orders', key: 'title', fallback: 'Orders' -%}</h2>
     {% paginate customer.orders by 20 %}
       {%- if customer.orders.size > 0 -%}
@@ -140,13 +140,15 @@
         {{- customer.phone | strip -}}
       </p>
     {%- endif -%}
-    <a href="{{ routes.account_addresses_url }}" class="button button--primary">
-      {%- render 'render-translation', namespace: 'customer.account', key: 'edit_details', fallback: 'Edit details' -%}
-    </a>
-    <a href="{{ routes.account_logout_url }}" class="button button--link py-0">
-      {%- render 'icons', icon: 'arrow', icon_class: 'w-6 rotate-180' -%}
-      {%- render 'render-translation', namespace: 'customer', key: 'log_out', fallback: 'Log out' -%}
-    </a>
+    <div class="flex max-w-fit flex-col gap-4">
+      <a href="{{ routes.account_addresses_url }}" class="button button--primary">
+        {%- render 'render-translation', namespace: 'customer.account', key: 'edit_details', fallback: 'Edit details' -%}
+      </a>
+      <a href="{{ routes.account_logout_url }}" class="button button--link py-0">
+        {%- render 'icons', icon: 'arrow', icon_class: 'w-6 rotate-180' -%}
+        {%- render 'render-translation', namespace: 'customer', key: 'log_out', fallback: 'Log out' -%}
+      </a>
+    </div>
   </div>
 {%- endcapture -%}
 
