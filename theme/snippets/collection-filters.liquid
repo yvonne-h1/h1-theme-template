@@ -35,96 +35,91 @@
       {%- comment -%} The collection filter drawer. {%- endcomment -%}
       <div
         class="
-          filter__drawer invisible fixed bottom-0 end-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto bg-bg-default text-sm opacity-0 transition-all
+          filter__drawer fixed bottom-0 end-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto bg-bg-default text-sm opacity-0 transition-all
 
           {% comment %} If the body group has class filter-is-open, add these styles {% endcomment %}
-          group-[.filter-is-open]/body:visible
           group-[.filter-is-open]/body:translate-x-0
           group-[.filter-is-open]/body:opacity-100
 
           {% comment %} On LG screens, if the group has group/grid, add these styles {% endcomment %}
           group-[.filter]/grid:lg:inset-unset
           group-[.filter]/grid:lg:max-w-unset
-          group-[.filter]/grid:lg:visible
           group-[.filter]/grid:lg:relative
           group-[.filter]/grid:lg:z-10
           group-[.filter]/grid:lg:translate-x-0
           group-[.filter]/grid:lg:opacity-100
         ">
-        {%- comment -%} The collection drawer header. {%- endcomment -%}
-        <div class="filter__header sticky top-0 z-10 flex items-center justify-between border-b bg-white px-6 py-2 group-[.filter]/grid:lg:hidden">
-          <div class="flex items-center justify-between gap-2">
-            <h2 class="filter-options__heading text-bold m-0 text-base">
-              {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
-            </h2>
-            {%- comment -%} Filter reset link {%- endcomment -%}
-            <filter-remove class="block">
-              <a
-                href="{{ collection.url }}?sort_by={{ sort_by }}"
-                class="button button--sm button--link pe-0 ps-0 font-body"
-                data-filter-remove
-                data-filter-clear-all>
-                {%- render 'render-translation', namespace: 'sections.collection_template', key: 'clear_all', fallback: 'Clear all' -%}
-              </a>
-            </filter-remove>
+        <div class="invisible group-[.filter-is-open]/body:visible group-[.filter]/grid:lg:visible">
+          {%- comment -%} The collection drawer header. {%- endcomment -%}
+          <div class="filter__header sticky top-0 z-10 flex items-center justify-between border-b bg-white px-6 py-2 group-[.filter]/grid:lg:hidden">
+            <div class="flex items-center justify-between gap-2">
+              <h2 class="filter-options__heading text-bold m-0 text-base">
+                {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
+              </h2>
+              {%- comment -%} Filter reset link {%- endcomment -%}
+              <filter-remove class="block">
+                <a
+                  href="{{ collection.url }}?sort_by={{ sort_by }}"
+                  class="button button--sm button--link pe-0 ps-0 font-body"
+                  data-filter-remove
+                  data-filter-clear-all>
+                  {%- render 'render-translation', namespace: 'sections.collection_template', key: 'clear_all', fallback: 'Clear all' -%}
+                </a>
+              </filter-remove>
+            </div>
+            <class-toggle-component
+              class="flex justify-end"
+              data-options='
+                {
+                  "classToToggle": "filter-is-open"
+                }
+              '>
+              <button
+                type="button"
+                class="filter__close button button--link -me-3 border-none p-3 {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
+                aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
+                {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
+              </button>
+            </class-toggle-component>
           </div>
-          <class-toggle-component
-            class="flex justify-end"
-            data-options='
-              {
-                "classToToggle": "filter-is-open"
-              }
-            '>
-            <button
-              type="button"
-              class="filter__close button button--link -me-3 border-none p-3 {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
-              aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close filter" %}">
-              {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
-            </button>
-          </class-toggle-component>
+          {%- comment -%} Main content {%- endcomment -%}
+          <div class="filter__main relative z-0 px-6 {% if settings.filter_display == 'grid' -%}lg:px-0{%- else -%}py-6{%- endif -%}">
+            {%- liquid
+              render 'filter-options-active', section: section
+              # Loop through the filter options
+              for filter in collection.filters
+                assign filter_index = forloop.index
+                # Loop and output filters
+                case filter.type
+                  when 'list'
+                    render 'filter-options-list', filter: filter, filter_index: filter_index
+                  when 'price_range'
+                    render 'filter-options-price-range', filter: filter, filter_index: filter_index
+                endcase
+              endfor
+            -%}
+          </div>
+          {%- comment -%} Footer {%- endcomment -%}
+          <div class="filter__footer sticky bottom-0 z-10 bg-bg-default px-6 py-4 group-[.filter]/grid:lg:hidden">
+            <class-toggle-component
+              data-options='
+                {
+                  "classToToggle": "filter-is-open"
+                }
+              '>
+              <button type="button" class="button button--primary button--lg group-[.loading]/filter:button--loading flex w-full">
+                {%- render 'render-translation', namespace: 'sections.collection_template', key: 'apply', fallback: 'Apply' -%}
+              </button>
+            </class-toggle-component>
+          </div>
+          {%- comment -%} Collection type and filters {%- endcomment -%}
+          {%- if collection.current_vendor or collection.current_type -%}
+            <input
+              type="hidden"
+              name="q"
+              value="{{ collection.current_vendor }}{{ collection.current_type }}">
+          {%- endif -%}
         </div>
-
-        {%- comment -%} Main content {%- endcomment -%}
-        <div class="filter__main relative z-0 px-6 {% if settings.filter_display == 'grid' -%}lg:px-0{%- else -%}py-6{%- endif -%}">
-          {%- liquid
-            render 'filter-options-active', section: section
-
-            # Loop through the filter options
-            for filter in collection.filters
-              assign filter_index = forloop.index
-
-              # Loop and output filters
-              case filter.type
-                when 'list'
-                  render 'filter-options-list', filter: filter, filter_index: filter_index
-                when 'price_range'
-                  render 'filter-options-price-range', filter: filter, filter_index: filter_index
-              endcase
-            endfor
-          -%}
-        </div>
-
-        {%- comment -%} Footer {%- endcomment -%}
-        <div class="filter__footer sticky bottom-0 z-10 bg-bg-default px-6 py-4 group-[.filter]/grid:lg:hidden">
-          <class-toggle-component
-            data-options='
-              {
-                "classToToggle": "filter-is-open"
-              }
-            '>
-            <button type="button" class="button button--primary button--lg group-[.loading]/filter:button--loading flex w-full">
-              {%- render 'render-translation', namespace: 'sections.collection_template', key: 'apply', fallback: 'Apply' -%}
-            </button>
-          </class-toggle-component>
-        </div>
-
-        {%- comment -%} Collection type and filters {%- endcomment -%}
-        {%- if collection.current_vendor or collection.current_type -%}
-          <input
-            type="hidden"
-            name="q"
-            value="{{ collection.current_vendor }}{{ collection.current_type }}">
-        {%- endif -%}
       </div>
     </form>
   </collection-filters-form>

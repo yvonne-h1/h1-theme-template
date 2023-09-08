@@ -37,14 +37,9 @@
       </div>
     {%- when 'customers/login' -%}
       <div class="flex justify-center gap-4 px-6 md:gap-10">
-        <h1 class="{{ h1_classes_bold }} text-primary">
+        <h1 class="{{ h1_classes_bold }}">
           {%- render 'render-translation', namespace: 'customer.login_page', key: 'title', fallback: 'Login' -%}
         </h1>
-        <a
-          href="{{ routes.account_register_url }}"
-          class="{{ h1_classes }} text-inherit">
-          {%- render 'render-translation', namespace: 'customer.register', key: 'title', fallback: 'Register' -%}
-        </a>
       </div>
     {%- when 'customers/order' -%}
       <div class="-mt-4 grid items-center">
@@ -59,12 +54,7 @@
       </div>
     {%- when 'customers/register' -%}
       <div class="flex items-center justify-center gap-4 px-6 md:gap-10">
-        <a
-          href="{{ routes.account_login_url }}"
-          class="{{ h1_classes }} text-inherit">
-          {%- render 'render-translation', namespace: 'customer.login_page', key: 'title', fallback: 'Login' -%}
-        </a>
-        <h1 class="{{ h1_classes_bold }} text-primary">
+        <h1 class="{{ h1_classes_bold }}">
           {%- render 'render-translation', namespace: 'customer.register', key: 'title', fallback: 'Register' -%}
         </h1>
       </div>

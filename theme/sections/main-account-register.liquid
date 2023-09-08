@@ -26,6 +26,11 @@
 {%- capture container_content -%}
   <div class="mx-auto max-w-sm md:mb-28">
 
+    {% comment %} Login link {% endcomment %}
+    <p class="mb-8 text-center">
+      {%- render 'render-translation', namespace: 'customer.register', key: 'login_html', fallback: 'Login here' -%}
+    </p>
+
     {%- form 'create_customer', novalidate: 'novalidate', class: 'form' -%}
 
       {%- comment -%} Show account feedback, also email is send {%- endcomment -%}
@@ -100,12 +105,7 @@
           </span>
         {%- else -%}
           <span class="field__message field__message--error">
-            {%-
-              render "render-translation",
-              namespace: "customer.register",
-              key: "email_message_error",
-              fallback: "This email is not in the correct format."
-            -%}
+            {%- render "render-translation", namespace: "customer.register", key: "email_message_error", fallback: "This email is not in the correct format." -%}
           </span>
         {%- endif -%}
       </div>
@@ -135,14 +135,9 @@
         {%- endif -%}
       </div>
 
-      <div class="mt-8 flex items-center gap-4">
+      <div class="mt-8 flex items-center justify-center gap-4">
         <button class="button button--primary">
-          {%-
-            render "render-translation",
-            namespace: "customer.register",
-            key: "submit",
-            fallback: "Create"
-          -%}
+          {%- render "render-translation", namespace: "customer.register", key: "submit", fallback: "Create" -%}
         </button>
       </div>
     {%- endform -%}

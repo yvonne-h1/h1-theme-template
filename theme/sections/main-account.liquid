@@ -140,10 +140,11 @@
         {{- customer.phone | strip -}}
       </p>
     {%- endif -%}
-    <a href="{{ routes.account_addresses_url }}" class="button button--primary button--lg justify-self-start">
+    <a href="{{ routes.account_addresses_url }}" class="button button--primary">
       {%- render 'render-translation', namespace: 'customer.account', key: 'edit_details', fallback: 'Edit details' -%}
     </a>
-    <a href="{{ routes.account_logout_url }}" class="button button--outline button--lg justify-self-start">
+    <a href="{{ routes.account_logout_url }}" class="button button--link py-0">
+      {%- render 'icons', icon: 'arrow', icon_class: 'w-6 rotate-180' -%}
       {%- render 'render-translation', namespace: 'customer', key: 'log_out', fallback: 'Log out' -%}
     </a>
   </div>

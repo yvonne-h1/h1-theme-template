@@ -22,11 +22,11 @@
     {%- comment -%} Cart drawer {%- endcomment -%}
     <div
       id="cartDrawer"
-      class="invisible fixed bottom-0 end-0 top-0 z-offcanvas flex h-full w-full translate-x-full flex-col overflow-x-hidden bg-white text-text-default opacity-0 transition-all duration-300 group-[.cart-drawer-is-open]/body:visible group-[.cart-drawer-is-open]/body:translate-x-0 group-[.cart-drawer-is-open]/body:opacity-100 xs:max-w-sm"
+      class="fixed bottom-0 end-0 top-0 z-offcanvas flex h-full w-full translate-x-full flex-col overflow-x-hidden bg-white text-text-default opacity-0 transition-all duration-300 group-[.cart-drawer-is-open]/body:translate-x-0 group-[.cart-drawer-is-open]/body:opacity-100 xs:max-w-sm"
       role="dialog"
       tabindex="-1"
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
-      <cart-items class="cart-items group/cart-items h-full {% if cart == empty %}cart-is-empty{% endif %}">
+      <cart-items class="cart-items group/cart-items invisible h-full group-[.cart-drawer-is-open]/body:visible {% if cart == empty %}cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
         <div
           class="cart-drawer__warnings hidden flex-col items-center justify-center px-6 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">

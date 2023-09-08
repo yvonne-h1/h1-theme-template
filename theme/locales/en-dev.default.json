@@ -237,15 +237,15 @@
       "remove_title": "Remove {{ title }}",
       "subtotal": "Subtotal",
       "new_subtotal": "New subtotal",
-      "note": "Instructions about shipping, taxes and/or returns.",
+      "note": "Instructions about shipping, taxes and\/or returns.",
       "message": "Leave a comment here",
       "checkout": "Check out",
       "empty": "Your cart is empty",
       "cart_error": "There was an error while updating your cart. Please try again.",
       "cart_quantity_error_html": "You can only add [quantity] of this item to your cart.",
-      "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"{{ link }}\">shipping</a> calculated at checkout",
+      "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"{{ link }}\">shipping<\/a> calculated at checkout",
       "taxes_included_but_shipping_at_checkout": "Tax included and shipping calculated at checkout",
-      "taxes_included_and_shipping_policy_html": "Tax included. <a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
+      "taxes_included_and_shipping_policy_html": "Tax included. <a href=\"{{ link }}\">Shipping<\/a> calculated at checkout.",
       "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout",
       "headings": {
         "product": "Product",
@@ -310,7 +310,7 @@
       "sort_by_label": "Sort by",
       "title": "Collection",
       "to": "To",
-      "use_fewer_filters_html": "Use fewer filters or <a href=\"{{ link }}\">clear all</a>",
+      "use_fewer_filters_html": "Use fewer filters or <a href=\"{{ link }}\">clear all<\/a>",
       "load_more": {
         "next": "Load more",
         "previous": "Load previous items",
@@ -320,10 +320,10 @@
     }
   },
   "localization": {
-    "country_label": "Country/region",
+    "country_label": "Country\/region",
     "language_label": "Language",
     "update_language": "Update language",
-    "update_country": "Update country/region"
+    "update_country": "Update country\/region"
   },
   "customer": {
     "account": {
@@ -353,9 +353,9 @@
       "address1": "Address 1",
       "address2": "Address 2",
       "city": "City",
-      "country": "Country/region",
+      "country": "Country\/region",
       "province": "Province",
-      "zip": "Postal/ZIP code",
+      "zip": "Postal\/ZIP code",
       "phone": "Phone",
       "set_default": "Set as default address",
       "add": "Add address",
@@ -378,7 +378,8 @@
       "password": "Password",
       "title": "Log in",
       "sign_in": "Sign in",
-      "submit": "Submit"
+      "submit": "Submit",
+      "register_html": "Don't have an account yet? <a href=\"\/account\/register\">Register here.<\/a>"
     },
     "order": {
       "image": "Image",
@@ -433,7 +434,8 @@
       "email": "Email",
       "email_message_error": "This email is not in the correct format.",
       "password": "Password",
-      "submit": "Create"
+      "submit": "Create",
+      "login_html": "Already have an account? <a href=\"\/account\/login\">Log in here.<\/a>"
     },
     "reset_password": {
       "title": "Reset account password",

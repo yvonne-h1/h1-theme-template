@@ -24,7 +24,7 @@
 
         {%- assign recover_success = form.posted_successfully? -%}
 
-        <p class="mb-4 text-center text-sm">
+        <p class="text-center">
           {%- render "render-translation", namespace: "customer.recover_password.subtext", fallback: "We will send you an email to reset your password" -%}
         </p>
 
@@ -50,31 +50,16 @@
           >
           {{- icons -}}
           <div class="field__message field__message--error" id="RecoverEmail-email-error">
-            {%-
-              render "render-translation",
-              namespace: "customer.login_page",
-              key: "email_message_error",
-              fallback: "This email is not in the correct format."
-            -%}
+            {%- render "render-translation", namespace: "customer.login_page", key: "email_message_error", fallback: "This email is not in the correct format." -%}
           </div>
         </div>
 
-        <div class="mt-8 flex items-center gap-4">
+        <div class="mt-8 flex items-center justify-center gap-4">
           <button class="button button--primary">
-            {%-
-              render "render-translation",
-              namespace: "customer.login_page",
-              key: "submit",
-              fallback: "Submit"
-            -%}
+            {%- render "render-translation", namespace: "customer.login_page", key: "submit", fallback: "Submit" -%}
           </button>
-          <a href="#login" class="button button--link button--sm prevent-hashjump px-0">
-            {%-
-              render "render-translation",
-              namespace: "customer.login_page",
-              key: "cancel",
-              fallback: "Cancel"
-            -%}
+          <a href="#login" class="button button--link prevent-hashjump px-0">
+            {%- render "render-translation", namespace: "customer.login_page", key: "cancel", fallback: "Cancel" -%}
           </a>
         </div>
       {%- endform -%}
@@ -83,13 +68,13 @@
     {%- comment -%} Login form {%- endcomment -%}
     <div id="login" class="peer-target/recover:hidden" tabindex="-1">
       {%- if recover_success == true -%}
-        <p class="mb-4 text-sm font-bold" tabindex="-1" autofocus>
-          {%-
-            render "render-translation",
-          namespace: "customer.recover_password",
-            key: "success",
-            fallback: "We've sent you an email with a link to update your password."
-          -%}
+        <p class="font-bold" tabindex="-1" autofocus>
+          {%- render "render-translation", namespace: "customer.recover_password", key: "success", fallback: "We've sent you an email with a link to update your password." -%}
+        </p>
+      {%- else -%}
+        {% comment %} Register link {% endcomment %}
+        <p class="mb-8 text-center">
+          {%- render 'render-translation', namespace: 'customer.login_page', key: 'register_html', fallback: 'Register here' -%}
         </p>
       {%- endif -%}
 
@@ -110,12 +95,7 @@
           >
           {{- icons -}}
           <div class="field__message field__message--error">
-            {%-
-              render "render-translation",
-              namespace: "customer.login_page",
-              key: "email_message_error",
-              fallback: "This email is not in the correct format."
-            -%}
+            {%- render "render-translation", namespace: "customer.login_page", key: "email_message_error", fallback: "This email is not in the correct format." -%}
           </div>
         </div>
 
@@ -147,25 +127,15 @@
           </div>
         {%- endif -%}
 
-        <div class="mt-8 flex items-center gap-4">
+        <div class="mt-8 flex items-center justify-center gap-4">
           <button type="submit" class="button button--primary">
-            {%-
-              render "render-translation",
-              namespace: "customer.login_page",
-              key: "sign_in",
-              fallback: "Log in"
-            -%}
+            {%- render "render-translation", namespace: "customer.login_page", key: "sign_in", fallback: "Log in" -%}
           </button>
 
           {%- if form.password_needed -%}
-            <a href="#recover" class="button button--link button--sm prevent-hashjump px-0">
-              {%-
-                render "render-translation",
-                namespace: "customer.login_page",
-                key: "forgot_password",
-                fallback: "Forgot your password?"
-              -%}
-              {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
+            <a href="#recover" class="button button--link prevent-hashjump px-0">
+              {%- render "render-translation", namespace: "customer.login_page", key: "forgot_password", fallback: "Forgot your password?" -%}
+              {%- render 'icons', icon: 'arrow', icon_class: 'w-4' -%}
             </a>
           {%- endif -%}
         </div>
@@ -177,22 +147,12 @@
       <div id="guest-login">
         <hr>
         <p class="text-sm font-bold">
-          {%-
-            render "render-translation",
-            namespace: "customer.login_page",
-            key: "guest_title",
-            fallback: "Continue as guest"
-          -%}
+          {%- render "render-translation", namespace: "customer.login_page", key: "guest_title", fallback: "Continue as guest" -%}
         </p>
 
         {%- form 'guest_login', class: 'form' -%}
           <button class="button button--primary">
-            {%-
-              render "render-translation",
-              namespace: "customer.login_page",
-              key: "guest_continue",
-              fallback: "Continue"
-            -%}
+            {%- render "render-translation", namespace: "customer.login_page", key: "guest_continue", fallback: "Continue" -%}
           </button>
         {%- endform -%}
       </div>
