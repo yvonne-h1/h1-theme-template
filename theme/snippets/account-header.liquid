@@ -18,7 +18,7 @@
   {%- case request.page_type -%}
     {%- when 'customers/account' -%}
       <h1 class="{{ h1_classes_bold }}">
-        {%- render 'render-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details' -%}
+        {%- render 'render-translation', namespace: 'customer.account', key: 'title', fallback: 'Account' -%}
       </h1>
     {%- when 'customers/activate_account' -%}
       <h1 class="{{ h1_classes_bold }}">

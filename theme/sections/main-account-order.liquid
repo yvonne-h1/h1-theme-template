@@ -4,7 +4,7 @@
   <div class="grid grid-cols-12 items-start gap-x-4 md:gap-x-8">
 
     {%- comment -%} Order info {%- endcomment -%}
-    <div class="order col-span-12 grid grid-cols-1 items-start gap-14 md:col-span-8">
+    <div class="col-span-12 grid grid-cols-1 items-start gap-6 md:col-span-8 lg:gap-14">
 
       <div>
         <h2 class="h4 mb-4">
@@ -15,7 +15,7 @@
         </p>
         {%- if order.cancelled -%}
           {%- assign cancelled_at = order.cancelled_at | time_tag: format: "date_at_time" -%}
-          <p class="mb-2">
+          <p class="mb-2 text-danger">
             {{- 'customer.order.cancelled_html' | t: date: cancelled_at -}}
           </p>
           <p>
@@ -24,12 +24,13 @@
         {%- endif -%}
       </div>
 
+      {% comment %} Render the order details {% endcomment %}
       {%- render 'order-table', order: order -%}
 
     </div>
 
+    {% comment %} Billing and shipping info {% endcomment %}
     <div class="order__shipping-info col-span-12 mt-14 grid grid-cols-1 gap-14 md:col-span-4 md:mt-0 lg:col-span-3 lg:col-start-10">
-      {%- comment -%} Shipping info {%- endcomment -%}
       {%- comment -%} Billing {%- endcomment -%}
       <div class="order__billing-address">
 
@@ -51,8 +52,8 @@
           -%}:
           {{ order.financial_status_label }}
         </p>
-        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic">
-          {{- order.billing_address | format_address | replace: '<br>', '</p><p>' -}}
+        <address class="flex flex-col gap-2 font-body text-sm">
+          {{- order.billing_address | format_address -}}
         </address>
       </div>
 
@@ -75,17 +76,12 @@
           -%}: {{ order.fulfillment_status_label }}
         </p>
 
-
-        <address class="grid grid-cols-1 gap-2 font-body text-sm not-italic">
-          {{- order.shipping_address | format_address | replace: '<br>', '</p><p>' -}}
+        <address class="flex flex-col gap-2 font-body text-sm">
+          {{- order.shipping_address | format_address -}}
         </address>
-
       </div>
-
     </div>
-
   </div>
-
 {%- endcapture -%}
 
 {%- liquid

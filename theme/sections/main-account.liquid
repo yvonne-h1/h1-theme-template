@@ -20,19 +20,114 @@
     render 'render-translation', namespace: 'customer.orders', key: 'total', fallback: 'Total'
   endcapture
 
+  capture view_order_str
+    render 'render-translation', namespace: 'customer.orders', key: 'view_order', fallback: 'View order'
+  endcapture
+
   capture page_title
     render 'render-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details'
   endcapture
 -%}
 
 {%- capture container_content -%}
+  {%- comment -%} Orders {%- endcomment -%}
+  <div class="account__orders col-span-12 mb-8 xl:order-1 xl:col-span-8 xl:mb-0 ">
+    <h2>{%- render 'render-translation', namespace: 'customer.orders', key: 'title', fallback: 'Orders' -%}</h2>
+    {% paginate customer.orders by 20 %}
+      {%- if customer.orders.size > 0 -%}
+        <div class="flex flex-col divide-y">
+          {%- for order in customer.orders -%}
+            {%- liquid
+              capture order_items_total
+                if order.item_count == 1
+                  render 'render-translation', namespace: 'customer.order', key: 'total_items.one', count: order.item_count, fallback: '1 item'
+                else
+                  render 'render-translation', namespace: 'customer.order', key: 'total_items.other', count: order.item_count, fallback: '{{ order.item_count }} items'
+                endif
+              endcapture
+            -%}
+            <div class="grid w-full grid-cols-2 py-4 gap-base sm:grid-cols-4 md:grid-cols-12">
+              <div class="col-span-2 sm:col-span-1 md:col-span-3">
+                {% comment %} Order number {% endcomment %}
+                {{- order_nr_str -}}:
+                <a
+                  href="{{ order.customer_url }}"
+                  aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
+                  class="font-bold no-underline states:no-underline"
+                  tabindex="-1"
+                >
+                  {{ order.name }}
+                </a>
+                {% comment %} Order date {% endcomment %}
+                <p class="text-sm italic">
+                  <span class="sr-only">{{- order_date_str -}}:</span> {{ order.created_at | time_tag: '%b %d, %Y' }}
+                </p>
+              </div>
+              <div class="col-span-2 sm:col-span-2 md:col-span-5">
+                {%- if order.cancelled -%}
+                  {%- assign cancelled_date = order.cancelled_at | time_tag: '%b %d, %Y' -%}
+                  <p class="mb-0">
+                    {%- render 'render-translation', namespace: 'customer.order', key: 'cancelled_html', date: cancelled_date, fallback: 'Order cancelled' -%}
+                  </p>
+                  <p class="mb-0">
+                    {{ 'customer.order.cancelled_reason' | t: reason: order.cancel_reason_label }}
+                  </p>
+                {%- else -%}
+
+                  {% comment %} Payment status {% endcomment %}
+                  <p class="mb-0">
+                    {{- payment_status_str -}}: {{ order.financial_status_label }}
+                  </p>
+                  {% comment %} Fulfillment status {% endcomment %}
+                  <p class="mb-0">
+                    {{- fulfillment_status_str -}}: {{ order.fulfillment_status_label }}
+                  </p>
+                {%- endif -%}
+              </div>
+              <div class="col-span-1 justify-end self-center sm:col-span-1 sm:text-right md:col-span-2">
+                {% comment %} Total items {% endcomment %}
+                <p class="mb-0">{{- order_items_total -}}</p>
+
+                {% comment %} Total price {% endcomment %}
+                <p class="font-bold">
+                  <span class="sr-only">{{- total_str -}}:</span> {{ order.total_price | money_with_currency }}
+                </p>
+              </div>
+              <div class="col-span-1 justify-end self-center text-right sm:col-span-4 md:col-span-2">
+                {% comment %} 'View order' link {% endcomment %}
+                <a
+                  href="{{ order.customer_url }}"
+                  aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
+                  class="button button--primary whitespace-nowrap"
+                >
+                  {{- view_order_str -}}
+                </a>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p>
+          {%- render 'render-translation', namespace: 'customer.orders', key: 'none', fallback: 'No orders' -%}
+        </p>
+      {%- endif -%}
+
+      {%- comment -%} Pagination {%- endcomment -%}
+      {%- liquid
+        if paginate.pages > 1
+          render 'pagination', paginate: paginate
+        endif
+      -%}
+    {% endpaginate %}
+  </div>
 
   {%- comment -%} Customer info {%- endcomment -%}
-  <div class="account__customer-info is-order-2-md col-span-12 mb-8 grid grid-cols-1 gap-4 lg:order-2 lg:col-span-3 lg:col-start-10 lg:mb-0">
+  <div class="account__customer-info col-span-12 grid grid-cols-1 gap-4 xl:col-span-3 xl:rounded-md xl:bg-gray-50 xl:p-4 xl:drop-shadow-lg">
+    <h2 class="xl:sr-only">{%- render 'render-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details' -%}</h2>
     {%- if customer.name != blank -%}
-      <h2 class="h5 mb-0">
+      <p class="h5 mb-0">
         {{- customer.name -}}
-      </h2>
+      </p>
     {%- endif -%}
     {%- if customer.email != blank -%}
       <p class="mb-0">
@@ -51,79 +146,6 @@
     <a href="{{ routes.account_logout_url }}" class="button button--outline button--lg justify-self-start">
       {%- render 'render-translation', namespace: 'customer', key: 'log_out', fallback: 'Log out' -%}
     </a>
-  </div>
-
-  {%- comment -%} Orders {%- endcomment -%}
-  <div class="account__orders col-span-12 col-start-1 lg:order-1 lg:col-span-8 xl:col-span-9">
-    {% paginate customer.orders by 20 %}
-      {%- if customer.orders.size > 0 -%}
-        <h2>{%- render 'render-translation', namespace: 'customer.orders', key: 'title', fallback: 'Orders' -%}</h2>
-        <table role="table" class="account__order-history relative w-full table-auto border-collapse">
-          <thead role="rowgroup" class="hidden text-start text-sm md:table-header-group">
-            {%- assign th_class = 'pt-0 ps-0 pe-4 pb-6 align-top italic font-normal md:w-52 last:w-24' -%}
-            <tr role="row">
-              <th id="ColumnOrder" scope="col" role="columnheader" class="{{ th_class }}">
-                {{- order_nr_str -}}
-              </th>
-              <th id="ColumnDate" scope="col" role="columnheader" class="{{ th_class }}">
-                {{- order_date_str -}}
-              </th>
-              <th id="ColumnPayment" scope="col" role="columnheader" class="{{ th_class }}">
-                {{- payment_status_str -}}
-              </th>
-              <th id="ColumnFulfillment" scope="col" role="columnheader" class="{{ th_class }}">
-                {{- fulfillment_status_str -}}
-              </th>
-              <th id="ColumnTotal" scope="col" role="columnheader" class="{{ th_class }}">
-                {{- total_str -}}
-              </th>
-            </tr>
-          </thead>
-          <tbody role="rowgroup" class="">
-            {%- for order in customer.orders -%}
-              {%- assign td_class = 'md:text-sm py-1 md:py-4 md:ps-0 md:pe-4 text-start align-top md:w-52 last:w-24' -%}
-              <tr role="row" class="flex flex-col justify-start border-b  py-3 md:table-row md:py-0">
-                <td id="RowOrder" role="cell" headers="ColumnOrder" data-label="{{ order_nr_str }}" class="{{ td_class }}">
-                  <a
-                    href="{{ order.customer_url }}"
-                    aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
-                    class="font-bold no-underline states:no-underline"
-                  >
-                    {{ order.name }}
-                  </a>
-                </td>
-                <td headers="RowOrder ColumnDate" role="cell" data-label="{{- order_date_str -}}" class="{{ td_class }}">
-                  {{ order.created_at | time_tag: '%b %d, %Y' }}
-                </td>
-                <td headers="RowOrder ColumnPayment" role="cell" data-label="{{- payment_status_str -}}" class="{{ td_class }}">
-                  {{ order.financial_status_label }}
-                </td>
-                <td headers="RowOrder ColumnFulfillment" role="cell" data-label="{{- fulfillment_status_str -}}" class="{{ td_class }}">
-                  {{ order.fulfillment_status_label }}
-                </td>
-                <td headers="RowOrder ColumnTotal" role="cell" data-label="{{- total_str -}}" class="{{ td_class }}">
-                  {{ order.total_price | money_with_currency }}
-                </td>
-              </tr>
-            {%- endfor -%}
-          </tbody>
-        </table>
-      {%- else -%}
-        <h2 class="h5">
-          {%- render 'render-translation', namespace: 'customer.orders', key: 'title', fallback: 'Orders' -%}
-        </h2>
-        <p>
-          {%- render 'render-translation', namespace: 'customer.orders', key: 'none', fallback: 'No orders' -%}
-        </p>
-      {%- endif -%}
-
-      {%- comment -%} Pagination {%- endcomment -%}
-      {%- liquid
-        if paginate.pages > 1
-          render 'pagination', paginate: paginate
-        endif
-      -%}
-    {% endpaginate %}
   </div>
 {%- endcapture -%}
 

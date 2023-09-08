@@ -384,8 +384,12 @@
       "image": "Image",
       "title": "Order {{ name }}",
       "date_html": "Placed on {{ date }}.",
-      "cancelled_html": "Order Cancelled on {{ date }}",
+      "cancelled_html": "Order cancelled on {{ date }}",
       "cancelled_reason": "Reason: {{ reason }}",
+      "total_items": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      },
       "billing_address": "Billing Address",
       "payment_status": "Payment Status",
       "shipping_address": "Shipping Address",
@@ -407,6 +411,7 @@
     },
     "orders": {
       "details": "Order details",
+      "view_order": "View order",
       "title": "Order history",
       "order_number": "Order",
       "order_number_link": "Order number {{ number }}",
