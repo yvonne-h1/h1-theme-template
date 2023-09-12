@@ -27,11 +27,7 @@
 
       {%- comment -%} Skiplink so users can go straight to the product info {%- endcomment -%}
       <a class="button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline" href="#ProductInfo">
-        {% render "render-translation",
-          namespace: "accessibility",
-          key: "skip_to_product_info",
-          fallback: "Skip to product information"
-        -%}
+        {% render "render-translation", namespace: "accessibility", key: "skip_to_product_info", fallback: "Skip to product information" -%}
       </a>
 
       {%- render 'product-media-swiper' -%}
@@ -155,11 +151,7 @@
                   endif
                 -%}
                 <label class="quantity__label  mb-2 block text-sm font-semibold {{ quantity_label_class }}" for="Quantity-{{ product.id }}">
-                  {%- render 'render-translation',
-                    namespace: "products.product.quantity",
-                    key: "label",
-                    fallback: "Quantity"
-                  -%}
+                  {%- render 'render-translation', namespace: "products.product.quantity", key: "label", fallback: "Quantity" -%}
                 </label>
 
                 {% comment %} Quantity input {% endcomment %}
@@ -230,11 +222,7 @@
                     <noscript>
                       <div class="product-form__input field mb-4 {% if product.has_only_default_variant %} hidden{% endif %}">
                         <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="Variants-{{ product.id }}">
-                          {%- render 'render-translation',
-                            namespace: "products.product",
-                            key: "product_variants",
-                            fallback: "Variants"
-                          -%}
+                          {%- render 'render-translation', namespace: "products.product", key: "product_variants", fallback: "Variants" -%}
                         </label>
                         <div class="select text-text-default">
                           <select name="id" id="Variants-{{ product.id }}" class="select__select">
@@ -246,11 +234,7 @@
                               >
                                 {{ variant.title }}
                                 {%- if variant.available == false %} -
-                                  {%- render 'render-translation',
-                                    namespace: "products.product",
-                                    key: "sold_out",
-                                    fallback: "Sold out"
-                                  -%}
+                                  {%- render 'render-translation', namespace: "products.product", key: "sold_out", fallback: "Sold out" -%}
                                 {% endif %}
                                 - {{ variant.price  | money_with_currency | strip_html }}
                               </option>
@@ -262,12 +246,7 @@
                         </div>
                         <div class="field">
                           <label for="QuantityNoScript-{{ product.id }}" class="field__label">
-                            {%- render 'render-translation',
-                              namespace: 'products.product.quantity',
-                              key: 'input_label',
-                              product_item: product.title,
-                              fallback: 'Quantity for product'
-                            -%}
+                            {%- render 'render-translation', namespace: 'products.product.quantity', key: 'input_label', product_item: product.title, fallback: 'Quantity for product' -%}
                           </label>
                           <input
                             class="field__input"
@@ -295,17 +274,9 @@
                         {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
                         <span data-add-to-cart-button-text>
                           {%- if product.selected_or_first_available_variant.available -%}
-                            {%- render 'render-translation',
-                              namespace: "products.product",
-                              key: "add_to_cart",
-                              fallback: "Add to cart"
-                            -%}
+                            {%- render 'render-translation', namespace: "products.product", key: "add_to_cart", fallback: "Add to cart" -%}
                           {%- else -%}
-                            {%- render 'render-translation',
-                              namespace: "products.product",
-                              key: "sold_out",
-                              fallback: "Sold out"
-                            -%}
+                            {%- render 'render-translation', namespace: "products.product", key: "sold_out", fallback: "Sold out" -%}
                           {%- endif -%}
                         </span>
                       </button>
@@ -329,11 +300,7 @@
   {%- if product.description != blank -%}
     <div class="product__description col-span-12 my-4">
       <h2 class="h4">
-        {%- render 'render-translation',
-          namespace: 'products.product',
-          key: 'description',
-          fallback: 'Product description'
-        -%}
+        {%- render 'render-translation', namespace: 'products.product', key: 'description', fallback: 'Product description' -%}
       </h2>
       <div class="rte">
         {{ product.description }}

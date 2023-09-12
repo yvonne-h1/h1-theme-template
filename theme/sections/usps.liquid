@@ -43,7 +43,7 @@
 
             {%- comment %} Content {%- endcomment -%}
             {%- if block.settings.content != blank -%}
-              <p class="usp__content text-xs md:text-base">
+              <p class="usp__content text-xs md:text-sm">
                 {{ block.settings.content }}
               </p>
             {%- endif -%}
@@ -83,7 +83,7 @@
   {%- render 'render-container-content', content: container_content, class: container_class -%}
 {%- endif -%}
 
-{%- schema -%}
+{% schema %}
   {
     "name": "USPs",
     "tag": "section",
@@ -258,6 +258,7 @@
             "type": "select",
             "id": "icon",
             "label": "Icon name",
+            "default": "plus",
             "options": [
               {
                 "value": "account",
@@ -379,8 +380,7 @@
                 "value": "zoom",
                 "label": "Zoom"
               }
-            ],
-            "default": "plus"
+            ]
           }
         ]
       }
@@ -422,4 +422,4 @@
       "groups": ["header"]
     }
   }
-{%- endschema -%}
+{% endschema %}

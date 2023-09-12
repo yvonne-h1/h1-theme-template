@@ -27,12 +27,7 @@
           <div class="predictive-search__group mb-4">
             <div class="predictive-search__group__header {{ header_classes }}">
               <p class="{{ result_type_title }}">
-                {%-
-                  render "render-translation",
-                  namespace: "sections.predictive_search",
-                  key: "collections",
-                  fallback: "Collections"
-                -%}
+                {%- render "render-translation", namespace: "general.predictive_search", key: "collections", fallback: "Collections" -%}
               </p>
             </div>
             <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
@@ -65,20 +60,10 @@
           <div class="predictive-search__group mb-4">
             <div class="predictive-search__group__header {{ header_classes }}">
               <p class="{{ result_type_title }}">
-                {%-
-                  render "render-translation",
-                  namespace: "sections.predictive_search",
-                  key: "products",
-                  fallback: "Products"
-                -%}
+                {%- render "render-translation", namespace: "general.predictive_search", key: "products", fallback: "Products" -%}
               </p>
               <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=product&options[prefix]=last" class="button button--link button--sm px-0">
-                {%-
-                  render "render-translation",
-                  namespace: "sections.predictive_search",
-                  key: "see_all",
-                  fallback: "See all"
-                -%}
+                {%- render "render-translation", namespace: "general.predictive_search", key: "see_all", fallback: "See all" -%}
                 {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
               </a>
             </div>
@@ -88,11 +73,7 @@
                 <li class="predictive-search__list-item mb-4" role="option">
                   <a href="{{ product.url }}" class="predictive-search__link no-underline {{ link_classes }}">
                     <div class="predictive-search__item__image w-16">
-                      {%- render 'responsive-image',
-                        image_object: product.featured_media,
-                        max_width: 64,
-                        aspect_ratio: "1/1"
-                      -%}
+                      {%- render 'responsive-image', image_object: product.featured_media, max_width: 64, aspect_ratio: "1/1" -%}
                     </div>
                     <div class="predictive-search__item__content flex-1">
                       <p class="predictive-search__item__title mb-2 {{ title_classes }}">
@@ -116,20 +97,10 @@
           <div class="predictive-search__group mb-4">
             <div class="predictive-search__group__header {{ header_classes }}">
               <p class="{{ result_type_title }}">
-                {%-
-                  render "render-translation",
-                  namespace: "sections.predictive_search",
-                  key: "blog",
-                  fallback: "Blog"
-                -%}
+                {%- render "render-translation", namespace: "general.predictive_search", key: "blog", fallback: "Blog" -%}
               </p>
               <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=article&options[prefix]=last" class="button button--link button--sm px-0 py-1">
-                {%-
-                  render "render-translation",
-                  namespace: "sections.predictive_search",
-                  key: "see_all",
-                  fallback: "See all"
-                -%}
+                {%- render "render-translation", namespace: "general.predictive_search", key: "see_all", fallback: "See all" -%}
                 {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
               </a>
             </div>
@@ -161,20 +132,10 @@
           <div class="predictive-search__group mb-4">
             <div class="predictive-search__group__header {{ header_classes }}">
               <p class="{{ result_type_title }}">
-                {%-
-                  render "render-translation",
-                  namespace: "sections.predictive_search",
-                  key: "pages",
-                  fallback: "Pages"
-                -%}
+                {%- render "render-translation", namespace: "general.predictive_search", key: "pages", fallback: "Pages" -%}
               </p>
               <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=page&options[prefix]=last" class="button button--link button--sm px-0 py-1">
-                {%-
-                  render "render-translation",
-                  namespace: "sections.predictive_search",
-                  key: "see_all",
-                  fallback: "See all"
-                -%}
+                {%- render "render-translation", namespace: "general.predictive_search", key: "see_all", fallback: "See all" -%}
                 {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
               </a>
             </div>
@@ -206,19 +167,13 @@
           {% comment %} 'All results' link {% endcomment %}
           <div class="predictive-search__group predictive-search__group--footer mb-4 mt-4 text-center">
             <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&options[prefix]=last" class="button button--primary no-touch:button--sm touch:button-lg">
-              {%-
-                render "render-translation",
-                namespace: "sections.predictive_search",
-                key: "button_submit_label",
-                fallback: 'Search for "{{ html }}".',
-                html: predictive_search.terms
-              -%}
+              {%- render "render-translation", namespace: "general.predictive_search", key: "button_submit_label", fallback: 'Search for "{{ html }}".', html: predictive_search.terms -%}
               {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
             </a>
           </div>
         {%- endif -%}
       {%- else -%}
-        {%- render 'render-translation', namespace: 'sections.predictive_search', key: 'nothing_found_title', fallback: 'Nothing found' -%}
+        {%- render 'render-translation', namespace: 'general.predictive_search', key: 'nothing_found_title', fallback: 'Nothing found' -%}
       {%- endif -%}
     </div>
   </div>

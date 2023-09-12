@@ -1,7 +1,10 @@
+{% comment %}
+  For now, the translation app doesn't translate the navigation labels in the code, even though they are translated in the frontend. So be sure to not translate the link_1_title in the translation app.
+{% endcomment %}
+
 {%- liquid
   # Add the optional menu image for 3 level menu's
   for block in section.blocks
-    echo block.settings.image.url
     if block.settings.image != blank and block.settings.text != blank
       # Handleize the item to match to make sure it's case-insensitive.
       assign image_alt = link_1_title | escape

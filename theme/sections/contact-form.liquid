@@ -65,12 +65,7 @@
       {%- if form.errors contains 'email' -%}
         <div class="field__message field__message--error" id="contact-form__email-error">
           <span class="sr-only">
-            {%
-              render "render-translation",
-              namespace: "accessibility",
-              key: "error",
-              fallback: "Error"
-            -%}
+            {% render "render-translation", namespace: "accessibility", key: "error", fallback: "Error" -%}
           </span>
           {{- form.errors.translated_fields['email'] | capitalize }}
           {{ form.errors.messages['email'] -}}

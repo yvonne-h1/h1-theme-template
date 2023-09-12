@@ -3,21 +3,35 @@
   assign nav_link_class = 'blog-header__nav-link whitespace-nowrap font-bold uppercase text-black no-underline aria-[current=true]:text-primary states:text-primary'
   assign nav_link_replace = '<a class="' | append: nav_link_class | append: '" aria-current="false"'
   assign nav_link_replace_active = '<a class="' | append: nav_link_class | append: '" aria-current="true"'
+
+  assign tag_nav = ''
+
+  # Blog tags and current (if it's the case). Tags should have prefix of 'category:'. Won't render if capture is empty.
+  for tag in blog.all_tags
+    if tag contains 'category:'
+      assign article_type = tag | downcase | remove: 'category:'
+      capture tag_nav
+        echo tag_nav
+        echo '<li class="' | append: nav_item_class | append: '">'
+        if current_tags contains tag
+          echo article_type | link_to_remove_tag: tag | replace: '<a ', nav_link_replace_active
+        else
+          echo article_type | link_to_tag: tag | replace: '<a ', nav_link_replace
+        endif
+        echo '</li>'
+      endcapture
+    endif
+  endfor
 -%}
 
 {%- comment -%} Container header {%- endcomment -%}
 {%- capture container_header -%}
-
-  <h1 class="h2">
+  <h1 class="h2 mb-0">
     {{- blog.title | escape -}}
   </h1>
 
-  {%- if section.settings.enable_navigation and blog.all_tags.size > 0 -%}
-    <nav class="blog-header__nav blog-nav" aria-labelledby="primary-navigation">
-      <p class="blog-nav__title hidden">
-        {%- render "render-translation", namespace: "sections.main_blog", key: "categories", fallback: "Categories" -%}
-      </p>
-
+  {%- if section.settings.enable_navigation and tag_nav != '' -%}
+    <nav class="blog-header__nav blog-nav" aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'blog_tag_menu', fallback: 'Blog categories' -%}">
       <ul class="blog-header__nav-list article-tags list-menu flex flex-wrap justify-center gap-x-10 text-sm">
         {%- liquid
           assign nav_link_active = false
@@ -33,21 +47,7 @@
           </a>
         </li>
 
-        {%- liquid
-          # Blog tags and current (if it's the case)  echo
-          for tag in blog.all_tags
-            if tag contains 'type:'
-              assign article_type = tag | downcase | remove: 'type:'
-              echo '<li class="' | append: nav_item_class | append: '">'
-              if current_tags contains tag
-                echo article_type | link_to_remove_tag: tag | replace: '<a ', nav_link_replace_active
-              else
-                echo article_type | link_to_tag: tag | replace: '<a ', nav_link_replace
-              endif
-              echo '</li>'
-            endif
-          endfor
-        -%}
+        {{- tag_nav -}}
       </ul>
     </nav>
   {%- endif -%}
@@ -81,7 +81,7 @@
             highlight: highlight,
             image_lazy: lazy,
             show_image: true,
-            show_type: true,
+            show_category: true,
             show_excerpt: true,
             show_date: true,
             show_author: true
@@ -111,7 +111,7 @@
 {%- comment -%} Render the blog articles {%- endcomment -%}
 {%- render 'render-container-content',
   class: 'main-blog',
-  header_class: 'main-blog__header blog-header mb-8 flex items-center justify-between gap-y-8 flex-col md:flex-row',
+  header_class: 'main-blog__header blog-header mb-8 flex items-center justify-between gap-y-8 flex-col',
   header_content: container_header,
   content: container_content,
   footer_content: container_footer
@@ -147,7 +147,7 @@
       {
         "type": "header",
         "content": "Blog navigation",
-        "info": "The navigation is generated based on the article tags with the prefix 'type:'"
+        "info": "The navigation is generated based on the article tags with the prefix 'category:'"
       },
       {
         "type": "checkbox",

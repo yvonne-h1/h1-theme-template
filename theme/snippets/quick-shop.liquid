@@ -24,7 +24,7 @@
   # Check if option is of type color
   assign is_color = false
   assign color_label = option_to_render.name | handleize
-  assign color_variant_labels = settings.color_filter_name | handleize
+  assign color_variant_label_handleized = settings.color_filter_name | handleize
 
   if color_variant_label_handleized == color_label
     assign is_color = true

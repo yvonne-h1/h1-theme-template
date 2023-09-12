@@ -14,18 +14,18 @@
   if type == 'country'
     assign object = localization.available_countries
     capture label
-      render 'render-translation', namespace: 'localization', key: 'country_label', fallback: 'Country/region'
+      render 'render-translation', namespace: 'general.localization', key: 'country_label', fallback: 'Country/region'
     endcapture
     capture update_text
-      render 'render-translation', namespace: 'localization', key: 'update_country', fallback: 'Update country'
+      render 'render-translation', namespace: 'general.localization', key: 'update_country', fallback: 'Update country'
     endcapture
   else
     assign object = localization.available_languages
     capture label
-      render 'render-translation', namespace: 'localization', key: 'language_label', fallback: 'Language'
+      render 'render-translation', namespace: 'general.localization', key: 'language_label', fallback: 'Language'
     endcapture
     capture update_text
-      render 'render-translation', namespace: 'localization', key: 'update_language', fallback: 'Update language'
+      render 'render-translation', namespace: 'general.localization', key: 'update_language', fallback: 'Update language'
     endcapture
   endif
 
@@ -108,7 +108,7 @@
 
               <li class="localization-form__item" tabindex="-1">
                 <a
-                  class="localization-form__link focus-inset no-underline {% if item.iso_code == localization[item].iso_code %}localization-form__link--active{% endif %}"
+                  class="localization-form__link focus-inset block text-sm no-underline {% if item.iso_code == localization[item].iso_code %}localization-form__link--active{% endif %}"
                   href="#"
                   {% if item.iso_code == localization.item.iso_code %}
                     aria-current="true"

@@ -43,12 +43,7 @@
             role="status"
             data-shopping-cart-line-item-status
           >
-            {%-
-              render 'render-translation',
-              namespace: 'accessibility',
-              key: 'loading',
-              fallback: 'Loading'
-            -%}
+            {%- render 'render-translation', namespace: 'accessibility', key: 'loading', fallback: 'Loading' -%}
           </p>
         </div>
 
@@ -163,11 +158,7 @@
               <div class="cart__ctas grid grid-cols-1 gap-y-2" {{ block.shopify_attributes }}>
                 <noscript>
                   <button type="submit" class="button button--secondary button--lg w-full">
-                    {%- render 'render-translation',
-                      namespace: 'sections.cart',
-                      key: 'update',
-                      fallback: 'Update'
-                    -%}
+                    {%- render 'render-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}
                   </button>
                 </noscript>
                 <button
@@ -178,12 +169,7 @@
                     disabled
                   {% endif %}
                 >
-                  {%-
-                    render 'render-translation',
-                    namespace: 'sections.cart',
-                    key: 'checkout',
-                    fallback: 'Checkout'
-                  -%}
+                  {%- render 'render-translation', namespace: 'sections.cart', key: 'checkout', fallback: 'Checkout' -%}
                 </button>
               </div>
 

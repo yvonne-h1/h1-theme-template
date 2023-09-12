@@ -62,14 +62,7 @@
     {% if max and is_preorder == false -%}
       max="{{ max }}"
     {%- endif %}
-    aria-label="
-      {%- render 'render-translation',
-        namespace: 'products.product.quantity',
-        key: 'input_label',
-        product_item: product.title,
-        fallback: 'Quantity for product'
-      -%}
-    "
+    aria-label="{%- render 'render-translation', namespace: 'products.product.quantity', key: 'input_label', product_item: product.title, fallback: 'Quantity for product' -%}"
     data-index="{{ id }}"
     data-qty-input
     style="-moz-appearance: textfield;">

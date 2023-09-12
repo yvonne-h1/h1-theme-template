@@ -4,33 +4,25 @@
 {% endcomment %}
 {%- assign template_arr = 'collection,list-collections,product,blog,article,page,cart,login,register,account,addresses,order,reset_password' | split: ',' -%}
 {%- if template_arr contains template.name -%}
-  {%- comment -%} hide on mobile {%- endcomment -%}
   {%- liquid
+    # Hide on mobile
     assign hide_on_mobile_class = ''
     if section.settings.hide_on_mobile == true
       assign hide_on_mobile_class = ' hidden md:block'
     endif
-  -%}
 
-  {%- comment -%}
-    BREADCRUMB ARRAY
-    Creates an array from the main navigation and appends crumbs based on the current template.
-    Duplicate entries will be filtered out.
-    Use of items linking to "#" is not allowed by google, so these will not show up as a link in the breadcrumbs.
-  {%- endcomment -%}
-  {%- liquid
+    # BREADCRUMB ARRAY
+    # Creates an array from the main navigation and appends crumbs based on the current template.
+    # Duplicate entries will be filtered out.
+    # Use of items linking to "#" is not allowed by google, so these will not show up as a link in the breadcrumbs.
     capture breadcrumb_str
-      comment
-        Prepend the homepage link
-      endcomment
-      assign home_text = 'templates.index.navigation_title' | t
-      if section.settings.show_home_link and home_text != blank
-        echo '||' | append: home_text | append: '::' | append: routes.root_url
+      # Prepend the homepage link
+      assign home_label = 'sections.breadcrumbs.home' | t
+      if section.settings.show_home_link and home_label != blank
+        echo '||' | append: home_label | append: '::' | append: routes.root_url
       endif
 
-      comment
-        Collect all active links from linklist
-      endcomment
+      # Collect all active links from linklist
       if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0
         for link in linklists[section.settings.menu].links
           if link.active or link.child_active
@@ -58,9 +50,7 @@
         endfor
       endif
 
-      comment
-        Check if there are extra parent collection metafields defined
-      endcomment
+      # Check if there are extra parent collection metafields defined
       if collection.metafields.breadcrumbs.parent_collection.value != blank
         assign parent_collection = collection.metafields.breadcrumbs.parent_collection.value
       endif
@@ -68,7 +58,7 @@
       case template.name
         when 'list-collections'
           echo '||'
-          echo 'sections.breadcrumbs.collections' | t
+          echo section.settings.collections_label
           echo '::' | append: routes.collections_url
         when 'collection'
           if parent_collection != blank
@@ -101,11 +91,11 @@
           echo '::' | append: page.url
         when 'cart'
           echo '||'
-          echo 'templates.cart.title' | t
+          echo section.settings.cart_label
           echo '::' | append: routes.cart_url
         when '404'
           echo '||'
-          echo 'templates.404.title' | t
+          echo section.settings.label_404
         when 'search'
           echo '||'
           echo 'sections.main_search.title' | t
@@ -267,6 +257,28 @@
             "label": "Right"
           }
         ]
+      },
+      {
+        "type": "header",
+        "content": "Labels"
+      },
+      {
+        "type": "text",
+        "id": "collections_label",
+        "label": "'Collections' label",
+        "default": "Collections"
+      },
+      {
+        "type": "text",
+        "id": "cart_label",
+        "label": "'Cart' label",
+        "default": "Cart"
+      },
+      {
+        "type": "text",
+        "id": "label_404",
+        "label": "'404' label",
+        "default": "404"
       }
     ],
     "presets": [

@@ -92,12 +92,7 @@
                   aria-modal="true">
                   {%- form 'customer_address', address, class: 'form addresses__edit-form' -%}
                     <h2 class=" text-lg font-semibold">
-                      {%-
-                        render 'render-translation',
-                        namespace: 'customer.addresses',
-                        key: 'edit_address',
-                        fallback: 'Edit address'
-                      -%}
+                      {%- render 'render-translation', namespace: 'customer.addresses', key: 'edit_address', fallback: 'Edit address' -%}
                     </h2>
                     <div class="grid grid-cols-2 gap-x-4 gap-y-0">
                       <div class="field col-span-2 md:col-span-1">
@@ -270,20 +265,10 @@
                     {%- comment -%} Submit {%- endcomment -%}
                     <div class="buttons text-center">
                       <button class="button button--primary">
-                        {%-
-                          render 'render-translation',
-                          namespace: 'customer.addresses',
-                          key: 'update',
-                          fallback: 'Update'
-                        -%}
+                        {%- render 'render-translation', namespace: 'customer.addresses', key: 'button_update', fallback: 'Update' -%}
                       </button>
                       <button type="reset" class="button button--outline">
-                        {%-
-                          render 'render-translation',
-                          namespace: 'customer.addresses',
-                          key: 'cancel',
-                          fallback: 'Cancel'
-                        -%}
+                        {%- render 'render-translation', namespace: 'customer.addresses', key: 'button_cancel', fallback: 'Cancel' -%}
                       </button>
                     </div>
                   {%- endform -%}
@@ -304,22 +289,12 @@
         data-fancybox
         data-type="inline"
         data-src="#AddAddress">
-        {%-
-          render 'render-translation',
-          namespace: 'customer.addresses',
-          key: 'add_new',
-          fallback: 'Add new address'
-        -%}
+        {%- render 'render-translation', namespace: 'customer.addresses', key: 'add_new', fallback: 'Add new address' -%}
       </button>
       <div id="AddAddress" class="mt-4 hidden rounded-2xl border bg-white p-6 text-sm peer-aria-expanded/add:block" data-selectable>
         {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading', class: 'form addresses__add-form' -%}
           <h2 class=" text-lg font-semibold" id="AddressNewHeading">
-            {%-
-              render 'render-translation',
-              namespace: 'customer.addresses',
-              key: 'add_new',
-              fallback: 'Add new address'
-            -%}
+            {%- render 'render-translation', namespace: 'customer.addresses', key: 'add_new', fallback: 'Add new address' -%}
           </h2>
           <div class="grid grid-cols-2 gap-x-4 gap-y-0">
             <div class="field col-span-2 md:col-span-1">
@@ -492,20 +467,10 @@
           {%- comment -%} Submit {%- endcomment -%}
           <div class="form__actions buttons text-center">
             <button class="button button--primary">
-              {%-
-                render 'render-translation',
-                namespace: 'customer.addresses',
-                key: 'add',
-                fallback: 'Add'
-              -%}
+              {%- render 'render-translation', namespace: 'customer.addresses', key: 'button_add', fallback: 'Add' -%}
             </button>
             <button type="reset" class="button button--outline">
-              {%-
-                render 'render-translation',
-                namespace: 'customer.addresses',
-                key: 'cancel',
-                fallback: 'Cancel'
-              -%}
+              {%- render 'render-translation', namespace: 'customer.addresses', key: 'button_cancel', fallback: 'Cancel' -%}
             </button>
           </div>
         {%- endform -%}

@@ -4,9 +4,7 @@
   - section:         {Object} main-collection.liquid section object (required)
 {%- endcomment -%}
 
-{%- liquid
-  assign sort_by = collection.sort_by | default: collection.default_sort_by
--%}
+{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
 
 <div
   id="main-collection-filters"

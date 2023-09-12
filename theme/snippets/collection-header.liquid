@@ -37,11 +37,7 @@
       {%- comment -%} Render collection title {%- endcomment -%}
       <h1 class="collection-header__title h4 mb-0">
         <span class="sr-only">
-          {%- render "render-translation",
-            namespace: "sections.collection_template",
-            key: "title",
-            fallback: "Collection:"
-          -%}
+          {%- render "render-translation", namespace: "sections.collection_template", key: "title", fallback: "Collection:" -%}
           :
         </span>
         {{- collection.title | escape -}}
@@ -125,11 +121,7 @@
           <form>
             <div class="field">
               <label class="field__label sr-only" for="sort-options">
-                {%- render 'render-translation'
-                  namespace: "sections.collection_template",
-                  key: "sort_by_label",
-                  fallback: "Sort by"
-                -%}
+                {%- render 'render-translation', namespace: "sections.collection_template", key: "sort_by_label", fallback: "Sort by" -%}
               </label>
               <div class="select group">
                 <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer" name="sort_by" id="sort-options">
@@ -155,7 +147,7 @@
         <button
           type="button"
           class="button button--outline flex whitespace-nowrap py-2.5 px-2 sm:px-4 leading-none"
-          aria-label="{%- render 'render-translation', namespace: "sections.collection_template.filter", fallback: "Filter" -%}">
+          aria-label="{%- render 'render-translation', namespace: "sections.collection_template", key: "filter", fallback: "Filter" -%}">
           {%- render 'icons', icon: 'filter', icon_class: 'w-6' -%}
 
           {%- comment -%} Text label {%- endcomment -%}

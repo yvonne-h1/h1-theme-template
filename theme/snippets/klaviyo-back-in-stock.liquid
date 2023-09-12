@@ -15,7 +15,7 @@
 
     klaviyo.enable("backinstock",{
       trigger: {
-        product_page_text: "{{ 'general.klaviyo.product_page_text' | t }}",
+        product_page_text: "{{ 'apps.klaviyo.product_page_text' | t }}",
         product_page_class: "button button--lg button--secondary w-full",
         product_page_text_align: "text-center",
         product_page_margin: "0px",
@@ -23,12 +23,12 @@
       },
       modal: {
         headline: "{product_name}",
-        body_content: "{{ 'general.klaviyo.body_content' | t }}",
-        email_field_label: "{{ 'general.klaviyo.email_field_label' | t }}",
-        button_label: "{{ 'general.klaviyo.button_label' | t }}",
+        body_content: "{{ 'apps.klaviyo.body_content' | t }}",
+        email_field_label: "{{ 'apps.klaviyo.email_field_label' | t }}",
+        button_label: "{{ 'apps.klaviyo.button_label' | t }}",
         subscribe_checked: {{ settings.klaviyo_bis_subscribe_checked }},
-        newsletter_subscribe_label: "{{ 'general.klaviyo.newsletter_subscribe_label' | t }}",
-        subscription_success_label: "{{ 'general.klaviyo.subscription_success_label' | t }}",
+        newsletter_subscribe_label: "{{ 'apps.klaviyo.newsletter_subscribe_label' | t }}",
+        subscription_success_label: "{{ 'apps.klaviyo.subscription_success_label' | t }}",
         footer_content: '',
         additional_styles: "",
         drop_background_color: "#000",

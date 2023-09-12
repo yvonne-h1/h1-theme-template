@@ -464,8 +464,8 @@
       },
       {
         "type": "checkbox",
-        "id": "show_article_type",
-        "label": "Show type",
+        "id": "show_article_category",
+        "label": "Show category",
         "default": true
       },
       {

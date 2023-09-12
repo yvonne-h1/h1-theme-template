@@ -20,12 +20,7 @@
     {%- form 'activate_customer_password', class: 'form' -%}
       {%- if form.errors -%}
         <p class="focus-none  font-semibold" tabindex="-1" autofocus>
-          {%-
-            render "render-translation",
-            namespace: "templates.contact.form",
-            key: "error_heading",
-            fallback: "Error"
-          -%}
+          {%- render "render-translation", namespace: "templates.contact.form", key: "error_heading", fallback: "Error" -%}
         </p>
       {%- endif -%}
 
@@ -82,20 +77,10 @@
       {%- comment -%} Submit buttons {%- endcomment -%}
       <div class="form__actions buttons">
         <button class="button button--primary">
-          {%-
-            render "render-translation",
-            namespace: "customer.activate_account",
-            key: "submit",
-            fallback: "Submit"
-          -%}
+          {%- render "render-translation", namespace: "customer.activate_account", key: "submit", fallback: "Submit" -%}
         </button>
         <button class="button button--link button--sm" name="decline">
-          {%-
-            render "render-translation",
-            namespace: "customer.activate_account",
-            key: "cancel",
-            fallback: "Cancel"
-          -%}
+          {%- render "render-translation", namespace: "customer.activate_account", key: "cancel", fallback: "Cancel" -%}
         </button>
       </div>
     {%- endform -%}

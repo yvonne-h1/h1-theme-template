@@ -19,9 +19,7 @@
     endif
   -%}
   <div class="product-card__information {{ product_card_information_class }} block pt-2 text-sm">
-    <p class="product-card__title block text-sm font-bold">
-      {%- render 'render-translation', namespace: 'onboarding.product_title', fallback: 'Example product title' -%}
-    </p>
+    <p class="product-card__title block text-sm font-bold">Product title</p>
   </div>
   {%- liquid
     assign product_card_price_class = 'justify-center text-center'

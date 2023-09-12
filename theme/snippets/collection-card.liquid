@@ -15,9 +15,9 @@
 {%- liquid
   assign featured_image = collection.featured_image
 
-  unless image_lazy != null
+  if image_lazy == null
     assign image_lazy = true
-  endunless
+  endif
 
   unless image_alt
     assign image_alt = featured_image.alt

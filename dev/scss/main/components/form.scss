@@ -423,7 +423,7 @@ endcapture
       background-image: none;
       @apply cursor-pointer;
       &:has(+ .select__select-icon) {
-        @apply pe-12;
+        @apply pe-8;
       }
     }
 
@@ -431,7 +431,7 @@ endcapture
     &__select-icon {
       @apply pointer-events-none
       absolute
-      end-4
+      end-3
       top-1/2
       origin-center
       -translate-y-1/2

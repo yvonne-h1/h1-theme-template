@@ -6,9 +6,9 @@
 
   capture cart_item_count
     if cart.item_count == 1
-      render 'render-translation', namespace: 'sections.header', key: 'cart_count.one', fallback: 'item(s) in cart'
+      render 'render-translation', namespace: 'general.cart', key: 'cart_count.one', fallback: 'item(s) in cart'
     else
-      render 'render-translation', namespace: 'sections.header', key: 'cart_count.other', fallback: 'item(s) in cart'
+      render 'render-translation', namespace: 'general.cart', key: 'cart_count.other', fallback: 'item(s) in cart'
     endif
   endcapture
 

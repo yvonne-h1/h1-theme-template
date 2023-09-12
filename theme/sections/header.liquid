@@ -20,17 +20,14 @@
 
   # Load interface snippets
   render 'search-modal', max_results: settings.predictive_search_max_results_per_type
--%}
 
-{%- comment -%}
-  Capture the logo with the root url, so we can reuse it in the header.
-{%- endcomment -%}
-{%- liquid
+  # Capture the logo with the root url, so we can reuse it in the header.
   assign logo_el = 'div'
   if request.page_type == 'index'
     assign logo_el = 'h1'
   endif
 -%}
+
 {%- capture logo_link -%}
   <{{ logo_el }} class="header__heading col-span-4 mb-0 pb-3 pt-3 text-2xl leading-8 lg:-order-1 lg:col-span-2">
     <a href="{{ routes.root_url }}"
@@ -77,7 +74,7 @@
             aria-expanded="false"
             aria-controls="mobileMenu"
             aria-haspopup="dialog"
-            aria-label="{% render "render-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
+            aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'toggle_menu_drawer', fallback: 'Toggle menu drawer' -%}"
             class="-ms-3 p-3 states:text-primary">
             {%- render 'icons', icon: 'hamburger', icon_class: 'w-6' -%}
           </button>
@@ -242,6 +239,13 @@
       {
         "type": "header",
         "content": "Mobile menu options"
+      },
+      {
+        "type": "text",
+        "id": "back_link",
+        "label": "Label for 'back to' link",
+        "info": "The text '[[ title ]]' will be replaced with the previous menu item label.'",
+        "default": "Back to [[ title ]]"
       },
       {
         "type": "paragraph",

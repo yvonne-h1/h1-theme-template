@@ -53,11 +53,7 @@
 
       {%- comment -%} Form title  {%- endcomment -%}
       <h2 class="text-center">
-        {%- render 'render-translation',
-          namespace: 'blogs.article',
-          key: 'comment_form_title',
-          fallback: 'Leave a comment'
-        -%}
+        {%- render 'render-translation', namespace: 'blogs.article', key: 'comment_form_title', fallback: 'Leave a comment' -%}
       </h2>
 
       {%- comment -%} Capture post form message {%- endcomment -%}
@@ -85,11 +81,7 @@
       <div class="mt-4">
         <div class="field">
           <label class="field__label" for="CommentForm-author">
-            {% render 'render-translation',
-              namespace: 'blogs.article',
-              key: 'name',
-              fallback: 'Name'
-            -%}
+            {% render 'render-translation', namespace: 'blogs.article', key: 'name', fallback: 'Name' -%}
             <span aria-hidden="true">*</span>
           </label>
           <input
@@ -108,11 +100,7 @@
           >
           {%- if form.errors contains 'author' -%}
             <div class="field__message field__message--error" id="CommentForm-author-error">
-              {%- render 'render-translation',
-                namespace: 'blogs.article',
-                key: 'name',
-                fallback: 'Name'
-              -%}
+              {%- render 'render-translation', namespace: 'blogs.article', key: 'name', fallback: 'Name' -%}
               {{ form.errors.messages.author -}}
             </div>
           {%- endif -%}
@@ -121,11 +109,7 @@
         {%- comment -%} Field email {%- endcomment -%}
         <div class="field">
           <label class="field__label" for="CommentForm-email">
-            {%- render 'render-translation',
-              namespace: 'blogs.article',
-              key: 'email',
-              fallback: 'E-mail'
-            -%}
+            {%- render 'render-translation', namespace: 'blogs.article', key: 'email', fallback: 'E-mail' -%}
             <span aria-hidden="true">*</span>
           </label>
           <input
@@ -145,11 +129,7 @@
           >
           {%- if form.errors contains 'email' -%}
             <div class="field__message field__message--error" id="CommentForm-email-error">
-              {%- render 'render-translation',
-                namespace: 'blogs.article',
-                key: 'email',
-                fallback: 'E-mail'
-              %}
+              {%- render 'render-translation', namespace: 'blogs.article', key: 'email', fallback: 'E-mail' %}
               {{ form.errors.messages.email -}}
             </div>
           {%- endif -%}
@@ -158,11 +138,7 @@
         {%- comment -%} Field comment {%- endcomment -%}
         <div class="field">
           <label class="field__label" for="CommentForm-body">
-            {%- render 'render-translation',
-              namespace: 'blogs.article',
-              key: 'message',
-              fallback: 'Comment'
-            -%}
+            {%- render 'render-translation', namespace: 'blogs.article', key: 'message', fallback: 'Comment' -%}
             <span aria-hidden="true">*</span>
           </label>
           <textarea
@@ -181,11 +157,7 @@
             </textarea>
           {%- if form.errors contains 'body' -%}
             <div class="field__message field__message--error" id="CommentForm-body-error">
-              {%- render 'render-translation',
-                namespace: 'blogs.article',
-                key: 'message',
-                fallback: 'Comment'
-              %}
+              {%- render 'render-translation', namespace: 'blogs.article', key: 'message', fallback: 'Comment' %}
               {{ form.errors.messages.body -}}
             </div>
           {%- endif -%}
@@ -196,11 +168,7 @@
       <div class="form__actions">
         {%- if blog.moderated? -%}
           <p class="article-comment-warning my-2 text-xs italic">
-            {% render 'render-translation',
-              namespace: 'blogs.article',
-              key: 'moderated',
-              fallback: 'Please note, comments need to be approved before they are published.'
-            -%}
+            {%- render 'render-translation', namespace: 'blogs.article', key: 'moderated', fallback: 'Please note, comments need to be approved before they are published.' -%}
           </p>
         {%- endif -%}
         <input

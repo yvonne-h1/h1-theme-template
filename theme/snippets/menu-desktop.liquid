@@ -22,7 +22,7 @@
     '>
     {%- comment -%} Level 1 {%- endcomment -%}
     <nav aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'desktop_menu', fallback: 'Desktop menu' -%}">
-      <ul class="header__menu-list header__menu-list--level-1 flex flex-wrap items-center justify-center">
+      <ul class="header__menu-list header__menu-list--level-1 flex items-center justify-center">
         {%- for level_1 in menu_list.links -%}
           {%- liquid
             # Get link and fix deep link to native filters

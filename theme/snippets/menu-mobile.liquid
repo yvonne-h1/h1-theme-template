@@ -5,7 +5,7 @@
   endif
 
   capture menu_name
-    render 'render-translation', namespace: 'sections.header', key: 'menu', fallback: 'Menu'
+    render 'render-translation', namespace: 'accessibility', key: 'navigation', fallback: 'Menu'
   endcapture
   assign menu_name = menu_name | downcase
 -%}
@@ -50,7 +50,7 @@
       {% comment %} Header with close button {% endcomment %}
       <div class="mobile-menu__header px-4 py-3">
         <class-toggle-component
-          aria-label="{% render "render-translation", namespace: "sections.header", key: "menu", fallback: "Menu" %}"
+          aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'toggle_menu_drawer', fallback: 'Toggle menu drawer' -%}"
           class="inline-flex h-full"
           data-options='
             {
@@ -130,7 +130,7 @@
                     aria-expanded="true"
                     data-collapsible-trigger>
                     {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ms-2' -%}
-                    {%- render 'render-translation', namespace: 'sections.header', key: 'back_to_title', title: menu_name, fallback: 'Back' -%}
+                    {{ section.settings.back_link | replace: '[[ title ]]', menu_name }}
                   </button>
                   {%- liquid
                     # Level 1 title
@@ -199,7 +199,7 @@
                               aria-expanded="true"
                               data-collapsible-trigger>
                               {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ms-2' -%}
-                              {%- render 'render-translation', namespace: 'sections.header', key: 'back_to_title', title: level_1_title, fallback: 'Back' -%}
+                              {{ section.settings.back_link | replace: '[[ title ]]', level_1_title }}
                             </button>
                             {%- liquid
                               # Level 2 title
@@ -295,7 +295,7 @@
                   class="{{ link_class }} {% if request.page_type == 'cart' %}active{% endif %}">
                   {%- liquid
                     render 'icons', icon: 'cart', icon_class: 'w-4'
-                    render 'render-translation', namespace: 'templates.cart', key: 'title', fallback: 'Cart'
+                    render 'render-translation', namespace: 'sections.cart', key: 'title', fallback: 'Cart'
                   -%}
                 </a>
               </li>
