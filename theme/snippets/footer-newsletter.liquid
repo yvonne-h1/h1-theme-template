@@ -28,23 +28,23 @@
           autofocus>
           {%- render 'icons', icon: 'success', icon_class: 'w-6' -%}
           <span>
-            {% render 'render-translation', namespace: 'newsletter.success', fallback: 'You have successfully subscribed' %}
+            {{ block.settings.success_message }}
           </span>
         </p>
       </div>
 
       {% comment %} Show form {% endcomment %}
     {%- else -%}
-      {%- if description != blank -%}
+      {%- if block.settings.description != blank -%}
         <div class="newsletter-form__description col-span-9 mb-2 text-xs">
-          {{- description -}}
+          {{- block.settings.description -}}
         </div>
       {%- endif -%}
 
       <div class="col-span-9 md:col-span-12 lg:col-span-9">
         <div class="field">
           <label class="field__label sr-only" for="newsletter-form-{{ section.id }}">
-            {%- render 'render-translation', namespace: 'templates.contact.form.email', fallback: 'E-mail' -%}
+            {%- render 'render-translation', namespace: 'customer.register', key: 'email', fallback: 'E-mail' -%}
           </label>
           <input
             id="newsletter-form-{{ section.id }}"
@@ -63,7 +63,7 @@
             {% elsif form.posted_successfully? %}
               aria-describedby="footer-success"
             {% endif %}
-            placeholder="{% render "render-translation", namespace: "newsletter.label", fallback: "Your e-mail address" %}"
+            placeholder="{{ block.settings.input_placeholder }}"
             required>
         </div>
       </div>
@@ -72,7 +72,7 @@
         class="newsletter-form__submit button col-span-3 ms-1 md:col-span-12 md:ms-0 md:mt-1 lg:col-span-3 lg:ms-1 lg:mt-0"
         name="commit"
         id="Subscribe">
-        {{- 'sections.newsletter_form.submit' | t -}}
+        {{ block.settings.submit }}
       </button>
     {%- endif -%}
   {%- endform -%}

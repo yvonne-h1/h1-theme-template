@@ -24,15 +24,11 @@
   # Check if option is of type color
   assign is_color = false
   assign color_label = option_to_render.name | handleize
-  assign color_variant_labels = settings.color_filter_name | newline_to_br | strip_newlines | split: '<br />'
+  assign color_variant_labels = settings.color_filter_name | handleize
 
-  for color_variant_label in color_variant_labels
-    assign color_variant_label_handleized = color_variant_label | handleize
-    if color_variant_label_handleized == color_label
-      assign is_color = true
-      break
-    endif
-  endfor
+  if color_variant_label_handleized == color_label
+    assign is_color = true
+  endif
 -%}
 
 {%- comment -%} Output quick shop {%- endcomment -%}
@@ -128,7 +124,7 @@
           {% endif %}>
           {%- liquid
             # for labels with only 3 letters, make them uppercase
-            if option_label.size < 4
+            if option_label.size < 4 and is_color == false
               assign option_label = option_label | upcase
             endif
 

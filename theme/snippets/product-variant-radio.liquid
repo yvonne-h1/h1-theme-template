@@ -13,37 +13,54 @@
   "isPreorder": {{ is_preorder | default: false }}
 }' class="product__variant-selector product__variant-selector--buttons block no-js:hidden"
   {{ block.shopify_attributes }}>
+
   <div class="flex {% if block.settings.picker_layout == 'inline' %}divide-x-2 divide-gray-100{%- else - %}flex-col gap-base{%- endif- %}">
     {%- for option in product.options_with_values -%}
       {%- liquid
         # Check if this is a color filter
         assign is_color = false
         assign option_size = product.options.size
-        assign color_label = option.name | handleize
-        assign color_variant_labels = settings.color_filter_name | newline_to_br | strip_newlines | split: '<br />'
+        assign option_name = option.name | handleize
+        assign color_variant_label_handleized = settings.color_filter_name | handleize
 
-        for color_variant_label in color_variant_labels
-          assign color_variant_label_handleized = color_variant_label | handleize
-          if color_variant_label_handleized == color_label
-            assign is_color = true
+        if color_variant_label_handleized == option_name
+          assign is_color = true
+        endif
+
+        # check if this option should be rendered as a swatch
+        assign options_as_swatches = settings.render_as_swatch | newline_to_br | strip_newlines | split: '<br />'
+        assign render_as_swatch = false
+        for swatch_option in options_as_swatches
+          assign swatch_option_handleized = swatch_option | handleize
+          if swatch_option_handleized == option_name
+            assign render_as_swatch = true
             break
           endif
         endfor
+
+        # Check if there is only one option for this variant option
+        assign has_single_option = false
+        if option.values.size == 1
+          assign has_single_option = true
+          assign value = option.values[0]
+        endif
       -%}
+
       <div class="{% if block.settings.picker_layout == 'inline' %}flex-1 basis-1/2 first:pe-6 last:ps-6{%- endif- %}">
-        <fieldset class="options options--{{ color_label }} js product-form__input flex items-center" data-option-name="{{ option.name | handleize }}" data-option-group="{{ forloop.index | minus: 1 }}">
+        <fieldset class="options options--{{ option_name }} js product-form__input flex items-center" data-option-name="{{ option.name | handleize }}" data-option-group="{{ forloop.index | minus: 1 }}">
 
           <legend class=" mb-2 text-sm font-semibold {% if block.settings.picker_label == false %} sr-only{% endif %}">
             {{- option.name -}}
           </legend>
 
+          {% comment %} Render options {% endcomment %}
           {%- for value in option.values -%}
             {%- liquid
               assign index = forloop.index
 
               # Check if it is available if we only have 1 option
               assign index = forloop.index
-              assign option_available_class = ''
+              assign option_available_class = 'transition-all'
 
               if option_size == 1
                 for loop_variant in product.variants
@@ -56,30 +73,29 @@
               endif
 
               # for labels with only 3 letters, make them uppercase
-              assign value_text = value
-              if value.size < 4
+              assign value_text = value | capitalize
+              if value.size < 4 and is_color == false
                 assign value_text = value | upcase
               endif
             -%}
 
-            {%- capture label -%}
-              <label class="option__label option__label--{{ color_label }} {{ option_available_class }}" for="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio" data-option-label>
-                {{ value_text }}
-              </label>
-            {%- endcapture -%}
-
-            <div class="option option--{{ color_label }}" data-option>
+            <div class="option option--{{ option_name }}" data-option>
               <input
-                class="option__input option__input--{{ color_label }} sr-only"
+                class="option__input option__input--{{ option_name }} sr-only peer"
                 type="radio"
-                id="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio"
+                id="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
                 name="{{ option.name }}"
                 value="{{ value | escape }}"
-                data-variant-option-id="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio"
-                {% if option.selected_value == value %}checked{% endif %}
+                data-variant-option-id="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
+                {% if option.selected_value == value -%}checked{%- endif %}
+                {% if has_single_option -%}disabled{%- endif %}
               >
 
-              {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
+              {%- comment -%}
+                If this is a color filter, check for color variants.
+                When it comes to translations, be sure that all variant names have been translated as well.
+              {%- endcomment -%}
+
               {%- if is_color -%}
                 {%- liquid
                   assign variant_color = value | handleize
@@ -90,17 +106,19 @@
                   assign color_options_metafield = product.metafields.product.color_variants.value
                 -%}
 
+                {% comment %} Get all linked colors {% endcomment %}
                 {%- for product_variant in color_options_metafield -%}
                   {%- assign variant_options = product_variant.options -%}
                   {%- for option in variant_options -%}
                     {%- assign option_downcase = option | downcase -%}
-                    {%- if option_downcase == color_label -%}
+                    {%- if option_downcase == option_name -%}
                       {%- liquid
-                        assign option_name = 'option' | append: forloop.index
-                        assign product_variant_color = product_variant.variants[0][option_name] | handleize
+                        assign option_index = 'option' | append: forloop.index
+                        assign product_variant_color = product_variant.variants[0][option_index] | handleize
+                        assign product_variant_color_handleized = product_variant_color | handleize
 
                         # Skip if this is the current color
-                        if product_variant_color == variant_color
+                        if product_variant_color_handleized == variant_color
                           continue
                         endif
 
@@ -108,24 +126,30 @@
                         for color in color_mappings
                           assign color_name = color | split: '|' | first | handleize
 
-                          if color_name == product_variant_color
+                          if color_name == product_variant_color_handleized
                             # Render with background-color
                             assign color_hex = color | split: '|' | last
                             assign color_is_mapped = true
                           endif
                         endfor
+
+                        assign option_type = 'label'
+                        if color_is_mapped and render_as_swatch
+                          assign option_type = 'swatch'
+                        endif
                       -%}
 
+                      {% comment %} Capture the color variants {% endcomment %}
                       {%- capture variants -%}
                         {{- variants -}}
-                        <div class="option">
+                        <div class="option option--{{ option_name }}">
                           <a href="{{ product_variant.url }}"
-                            class="option__label option__label--{{ color_label }} focus-visible:ring-offset transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 states:scale-110"
+                            class="option__{{ option_type }} option__{{ option_type }}--{{ option_name }} {% if color_is_mapped -%}states:scale-110{%- endif -%}"
                             style="background-color: {{ color_hex }};"
                             title="{{ product_variant_color | escape }}"
                             data-option-label
                           >
-                            <span class="sr-only">{{ product_variant_color }}</span>
+                            <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ product_variant_color | capitalize }}</span>
                           </a>
                         </div>
                       {%- endcapture -%}
@@ -133,7 +157,7 @@
                   {%- endfor -%}
                 {%- endfor -%}
 
-                {%- comment -%} Loop through color mapping {%- endcomment -%}
+                {%- comment -%} Loop through the color mapping {%- endcomment -%}
                 {%- for color in color_mappings -%}
                   {%- assign color_name = color | split: '|' | first | handleize -%}
 
@@ -143,29 +167,33 @@
                       assign color_hex = color | split: '|' | last
                       assign color_is_mapped = true
                     -%}
-
                     <label
-                      class="option__label option__label--{{ color_label }}"
-                      for="{{ product.id }}-{{ option.name | handleize }}-{{ index }}-radio"
+                      class="option__swatch option__swatch--{{ option_name }} transition-all"
+                      for="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
                       style="background-color: {{ color_hex }};"
                       title="{{ value | escape }}"
                       data-option-label
                     >
-                      <span class="sr-only">{{ value_text }}</span>
+                      <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ value_text }}</span>
                     </label>
                   {%- endif -%}
                 {%- endfor -%}
 
                 {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
                 {%- unless color_is_mapped -%}
-                  {{ label }}
+                  <label class="option__label option__label--{{ option_name }} {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
+                    {{ value_text }}
+                  </label>
                 {%- endunless -%}
 
               {%- comment -%} Else render default filter option {%- endcomment -%}
               {%- else -%}
-                {{ label }}
+                <label class="option__label option__label--{{ option_name }} {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
+                  {{ value_text }}
+                </label>
               {%- endif -%}
             </div>
+            {% comment %} Render the color variants {% endcomment %}
             {{ variants }}
           {%- endfor -%}
         </fieldset>

@@ -70,7 +70,7 @@
                     {{- block.settings.title -}}
                   </p>
                 {%- endif -%}
-                {%- render 'footer-newsletter', title: block.settings.title, description: block.settings.description -%}
+                {%- render 'footer-newsletter', block: block -%}
               {%- endif -%}
             </div>
 
@@ -445,6 +445,24 @@
             "id": "description",
             "label": "Description",
             "default": "<p>Subscribe to our newsletter to stay updated on sales and special events.</p>"
+          },
+          {
+            "type": "text",
+            "id": "input_placeholder",
+            "label": "Input field placeholder",
+            "default": "Your email address"
+          },
+          {
+            "type": "text",
+            "id": "submit",
+            "label": "'Submit' button label",
+            "default": "Join"
+          },
+          {
+            "type": "richtext",
+            "id": "success_message",
+            "label": "Success message",
+            "default": "<p>You have successfully subscribed.</p>"
           },
           {
             "type": "header",

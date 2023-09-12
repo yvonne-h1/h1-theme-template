@@ -364,18 +364,18 @@ endcapture
     // .field__switch
     &__switch {
       @apply relative
-     h-5
-     w-9
+     h-[26px]
+     w-12
      rounded-full
      border
      border-transparent
      bg-gray-100;
       &:after {
         @apply absolute
-        start-[1px]
-        top-[1px]
-        h-4
-        w-4
+        start-[2px]
+        top-[2px]
+        h-5
+        w-5
         rounded-full
         bg-white
         transition-all
@@ -396,10 +396,10 @@ endcapture
       @apply ring-2 ring-primary-300 ring-offset-2;
     }
     input:checked + .field__switch {
-      @apply border-black;
+      @apply border-primary;
       &:after {
         @apply translate-x-full
-        bg-black;
+        bg-primary;
       }
     }
     input:disabled + .field__switch {

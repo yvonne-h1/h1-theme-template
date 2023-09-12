@@ -10,12 +10,13 @@
       @apply sr-only;
     }
     // .option__label
-    &__label {
+    // .option__swatch
+    &__label,
+    &__swatch {
       @apply relative
         flex
-        aspect-square
-        h-full
-        w-8
+        min-h-[32px]
+        min-w-[32px]
         cursor-pointer
         items-center
         justify-center
@@ -32,10 +33,11 @@
         no-underline
         transition-colors
 
-        states:bg-primary
+         states:bg-primary
         states:text-primary-text;
 
       // .option__label--disabled
+      // .option__swatch--disabled
       &--disabled {
         @apply pointer-events-none
           cursor-not-allowed
@@ -58,26 +60,50 @@
         }
       }
     }
+    &__swatch {
+      @apply aspect-square
+      h-full
+      w-8;
+      &:link {
+        @apply focus-visible:outline-offset-[3px];
+      }
+    }
     // .option__input
     // .option__label
     // .option__label--checked
+    // .option__swatch
+    // .option__swatch--checked
+    &__input:checked + &__swatch,
     &__input:checked + &__label,
-    &__label--checked {
+    &__label--checked,
+    &__swatch--checked {
       @apply border-transparent
       bg-primary-600
       text-primary-text
       outline
       outline-offset-[3px]
-      outline-primary-600;
+      outline-black;
       &:hover,
       &:focus-visible {
         @apply bg-primary-300 outline-none;
       }
     }
+    // .option__input
     &__input {
-      &:focus-visible {
+      &:checked,
+      &:disabled {
+        + .option__swatch,
         + .option__label {
-          @apply outline-none ring-2 ring-primary-300 ring-offset-4;
+          @apply pointer-events-none;
+        }
+      }
+      &:focus-visible {
+        + .option__swatch,
+        + .option__label {
+          @apply outline-none
+            ring-2
+            ring-primary-300
+            ring-offset-4;
         }
       }
     }

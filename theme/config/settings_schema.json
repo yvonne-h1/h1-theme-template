@@ -284,10 +284,21 @@
     "settings": [
       {
         "type": "header",
+        "content": "Filter availability"
+      },
+      {
+        "type": "text",
+        "id": "availability_filter_name",
+        "label": "Availability filter name",
+        "default": "Availability",
+        "info": "Set the name as it's used for product availability. This will render the filter as a toggle/switch."
+      },
+      {
+        "type": "header",
         "content": "Filter colors"
       },
       {
-        "type": "textarea",
+        "type": "text",
         "id": "color_filter_name",
         "label": "Color filter name",
         "default": "Color",
@@ -337,9 +348,9 @@
         "type": "textarea",
         "id": "render_as_swatch",
         "label": "Filters to be rendered as swatches",
-        "info": "Add the filter names you wish to render as swatches. By default, filters are rendered as checkboxes. Be sure to add all possible translations for the languages your site uses. One per line.",
-        "default": "Color\nKleur\nSize\nMaat",
-        "placeholder": "Color\nKleur\nSize\nMaat"
+        "info": "Add the filter names you wish to render as swatches. By default, filters are rendered as checkboxes. One per line.",
+        "default": "Color\nSize",
+        "placeholder": "Color\nSize"
       },
       {
         "type": "range",

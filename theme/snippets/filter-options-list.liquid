@@ -10,21 +10,15 @@
   # Check if this filter is a color filter
   assign is_color = false
   assign filter_label_handleized = filter.label | handleize
-  assign color_variant_labels = settings.color_filter_name | newline_to_br | strip_newlines | split: '<br />'
+  assign color_variant_label_handleized = settings.color_filter_name | handleize
 
-  for color_label in color_variant_labels
-    assign color_variant_label_handleized = color_label | handleize
-    if color_variant_label_handleized == filter_label_handleized
-      assign is_color = true
-      break
-    endif
-  endfor
+  if color_variant_label_handleized == filter_label_handleized
+    assign is_color = true
+  endif
 
   # determine if a filter should be rendered as a swatch or as a regular list
   assign render_as_swatch = false
-  if settings.render_as_swatch != blank
-    assign render_as_swatch_options = settings.render_as_swatch | newline_to_br | strip_newlines | split: '<br />'
-  endif
+  assign render_as_swatch_options = settings.render_as_swatch | newline_to_br | strip_newlines | split: '<br />'
 
   for option in render_as_swatch_options
     assign option_handleized = option | handleize
@@ -47,77 +41,110 @@
       assign label_classes = label_classes | append: ' option__label--disabled'
     endif
   endif
+
+  # Availability switch
+  assign availability_label_handleized = settings.availability_filter_name | handleize
+  assign availability_checked = false
+  assign has_availability_filter = false
+
+  if availability_label_handleized == filter_label_handleized
+    assign has_availability_filter = true
+    for value in filter.active_values
+      if value.value == '1'
+        assign availability_checked = true
+      endif
+      break
+    endfor
+  endif
 -%}
 
 {%- capture summary_content -%}
-  <ul class="filter-options__list filter-options__list--{{ filter_label_handleized }} {{ list_classes }}" data-filter-option-list>
-    {%- for value in filter.values -%}
-      {%- comment -%} Only render if there are items {%- endcomment -%}
-      {%- if value.count > 0 -%}
+  {%- comment -%} Render the Availability filter {%- endcomment -%}
+  {%- if has_availability_filter -%}
+    <div class="field field--switch">
+      <label class="field__switch-label flex items-center gap-4" for="Filter-availability-1">
+        <input type="checkbox" class="peer sr-only"
+          id="Filter-availability-1"
+          name="filter.v.availability"
+          value="1"
+          tabindex="0"
+          {% if availability_checked -%}checked{%- endif -%}
+        >
+        <span class="field__switch"></span>
+        {%- render 'render-translation', namespace: 'sections.collection_template', key: 'only_in_stock', fallback: 'Only show in stock' -%}
+      </label>
+    </div>
+  {%- else -%}
+    {% comment %} Render the filter in a list {% endcomment %}
+    <ul class="filter-options__list filter-options__list--{{ filter_label_handleized }} {{ list_classes }}" data-filter-option-list>
+      {%- for value in filter.values -%}
+        {%- comment -%} Only render if there are items {%- endcomment -%}
+        {%- if value.count > 0 -%}
 
-        {%- liquid
-          assign index = forloop.index
-          assign option_label = value.label
-          # for labels with only 3 letters, make them uppercase
-          if option_label.size < 4
-            assign option_label = option_label | upcase
-          endif
-        -%}
+          {%- liquid
+            assign index = forloop.index
+            assign option_label = value.label
+            # for labels with only 3 letters, make them uppercase
+            if option_label.size < 4 and is_color == false
+              assign option_label = option_label | upcase
+            endif
+          -%}
 
-        {%- capture label -%}
-          <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}">
-            {{ option_label | escape }}
-          </label>
-        {%- endcapture -%}
+          {%- capture label -%}
+            <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}">
+              {{ option_label | escape }}
+            </label>
+          {%- endcapture -%}
 
-        <li class=" list-menu__item {{ wrapper_classes }} {% unless render_as_swatch%}p-[1px]{%- endunless -%}">
-          <input class="{{ input_classes }} sr-only"
-            type="checkbox"
-            name="{{ value.param_name }}"
-            value="{{ value.value }}"
-            id="filter-{{ filter.label | handleize | escape }}-{{ index }}"
-            {% if value.active %}checked{% endif %}
-            {% if value.count == 0 and value.active == false %}disabled{% endif %}
-          >
+          <li class=" list-menu__item {{ wrapper_classes }} {% unless render_as_swatch%}p-[1px]{%- endunless -%}">
+            <input class="{{ input_classes }} sr-only"
+              type="checkbox"
+              name="{{ value.param_name }}"
+              value="{{ value.value }}"
+              id="filter-{{ filter.label | handleize | escape }}-{{ index }}"
+              {% if value.active %}checked{% endif %}
+              {% if value.count == 0 and value.active == false %}disabled{% endif %}
+            >
 
-          {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
-          {%- if is_color -%}
-            {%- liquid
-              assign variant_color = option_label | handleize
-              assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
-              assign color_is_mapped = false
-            -%}
-
-            {%- comment -%} Loop through color mapping {%- endcomment -%}
-            {%- for color in color_mappings -%}
+            {%- comment -%} If this is a color filter, add the color as a background color. {%- endcomment -%}
+            {%- if is_color -%}
               {%- liquid
                 assign variant_color = option_label | handleize
-                assign color_name = color | split: '|' | first | handleize
-                assign color_hex = color | split: '|' | last
+                assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
+                assign color_is_mapped = false
               -%}
-              {%- if color_name == variant_color -%}
 
-                {%- comment -%} Render with background-color {%- endcomment -%}
-                {%- assign color_is_mapped = true -%}
-                <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}" style="background-color: {{ color_hex }};">
-                  <span class="sr-only">{{ option_label | escape }}</span>
-                </label>
-              {%- endif -%}
-            {%- endfor -%}
+              {%- comment -%} Loop through color mapping {%- endcomment -%}
+              {%- for color in color_mappings -%}
+                {%- liquid
+                  assign variant_color = option_label | handleize
+                  assign color_name = color | split: '|' | first | handleize
+                  assign color_hex = color | split: '|' | last
+                -%}
+                {%- if color_name == variant_color -%}
 
-            {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
-            {%- unless color_is_mapped -%}
+                  {%- comment -%} Render with background-color {%- endcomment -%}
+                  {%- assign color_is_mapped = true -%}
+                  <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}" style="background-color: {{ color_hex }};">
+                    <span class="sr-only">{{ option_label | escape }}</span>
+                  </label>
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
+              {%- unless color_is_mapped -%}
+                {{ label }}
+              {%- endunless -%}
+
+            {%- comment -%} Else render default filter option {%- endcomment -%}
+            {%- else -%}
               {{ label }}
-            {%- endunless -%}
-
-          {%- comment -%} Else render default filter option {%- endcomment -%}
-          {%- else -%}
-            {{ label }}
-          {%- endif -%}
-        </li>
-      {%- endif -%}
-    {%- endfor -%}
-  </ul>
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
 {%- endcapture -%}
 
 {%- render 'render-filter-group', summary_content: summary_content, label: filter.label, filter_index: filter_index, is_color: is_color -%}
