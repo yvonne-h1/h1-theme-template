@@ -1,10 +1,20 @@
+{% style %}
+  .mobile-menu__submenu {
+    min-height: calc(100vh - 72px);
+    min-height: calc(100dvh - 72px);
+  }
+{% endstyle %}
+
 {%- liquid
   comment
     - Header section loads 2 different menu elements. One for mobile and one for desktop, as well as
-      a logo and icons. All items are positioned  in the header bases on grid template areas.
+      a logo and icons. All items are positioned in the header bases on grid template areas.
+
     - Theme settings allow for logo to be positioned left or center
     - Theme settings allow for header to be transparent on homepage.
+
     - For top level menu items, images can be added using blocks.
+
     - Icon navigation has icons for search, account and cart.
     - Search and account can be hidden on mobile and then they will be shown in the mobile menu drawer.
   endcomment

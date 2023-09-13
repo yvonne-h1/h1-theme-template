@@ -1,11 +1,12 @@
 {% comment %}
-  Card item
+  Cart item, used in both the cart drawer and on the cart page.
 
   # Standard parameters
-    item          | Object  | Required | line_item
+    - item: Object | Required | line_item
+    - view: 'cart-page' or 'cart-drawer'
 
   Usage:
-    {%- render 'cart-item', item: line_item -%}
+    {%- render 'cart-item', item: line_item, view: 'cart-page' -%}
 {% endcomment %}
 
 {%- liquid
@@ -54,7 +55,7 @@
       </p>
     </div>
 
-    <div class="mt-auto flex flex-wrap justify-between gap-2 md:flex-nowrap md:gap-4">
+    <div class="mt-auto flex justify-between gap-2 {% if view == 'cart-page' -%}md:gap-4{%- endif -%}">
       {%- comment -%} Variants and properties {%- endcomment -%}
       <div class="cart-item__meta self-end text-xs">
         {%- if settings.show_cart_vendor -%}
@@ -109,9 +110,11 @@
 
       {%- comment -%} Quantity. When only one item is in the cart, add trash icon for minus {%- endcomment -%}
       <div class="cart-item__quantity flex max-w-[7.5rem] items-end justify-self-end">
-        {%- comment %} Quantity input {%- endcomment %}
-        {%- assign qty_id = item.index | plus: 1 -%}
-        {%- render 'quantity-input', id: qty_id, value: item.quantity, qty_product: item.product, type: 'cart' -%}
+        {%- liquid
+          # Quantity input
+          assign qty_id = item.index | plus: 1
+          render 'quantity-input', id: qty_id, value: item.quantity, qty_product: item.product, type: 'cart'
+        -%}
 
         {%- comment -%} Cart remove {%- endcomment -%}
         {%- if settings.show_cart_remove -%}
@@ -122,7 +125,7 @@
             type="button">
             <a
               href="{{ item.url_to_remove }}"
-              class="button button--outline button--sm absolute -top-2 end-0 h-9 w-9 rounded-full border-0"
+              class="button button--outline button--sm absolute -top-2 end-0 rounded-full border-0 touch:h-12 touch:w-12 no-touch:h-9 no-touch:w-9"
               aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">
               {% render 'icons', icon: 'trash', icon_class: 'w-4' %}
             </a>

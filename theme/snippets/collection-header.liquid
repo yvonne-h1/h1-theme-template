@@ -123,8 +123,8 @@
               <label class="field__label sr-only" for="sort-options">
                 {%- render 'render-translation', namespace: "sections.collection_template", key: "sort_by_label", fallback: "Sort by" -%}
               </label>
-              <div class="select group">
-                <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer" name="sort_by" id="sort-options">
+              <div class="select group flex-auto">
+                <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer text-ellipsis whitespace-nowrap overflow-hidden" name="sort_by" id="sort-options">
                   {%- for option in collection.sort_options -%}
                     <option value="{{ option.value | escape }}" {% if option.value == sort_by %}selected{% endif %}>{{- option.name | escape -}}</option>
                   {%- endfor -%}
@@ -139,7 +139,7 @@
       {%- endif -%}
 
       {% comment %} Collection filter button {% endcomment %}
-      <class-toggle-component class="{% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
+      <class-toggle-component class="collection-header__filter-trigger min-w-max {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
         data-options='{
           "classToToggle": "filter-is-open"
         }'

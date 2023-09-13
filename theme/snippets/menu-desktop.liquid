@@ -74,9 +74,8 @@
                 assign submenu_layout = 'multi'
               endif
 
-              assign images = ''
-
               # Capture the images
+              assign images = ''
               if section.blocks.size > 0 and submenu_layout == 'multi'
                 capture images
                   render 'header-images', section: section, link_1_title: link_1_title
@@ -173,7 +172,7 @@
                 {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]/menu-item:rotate-180' -%}
               </a>
               <div
-                class="header__inner-container {% if submenu_layout == 'multi' and images != '' %}inset-x-0 w-full ps-10{% endif %} absolute top-full hidden group-[.collapsible-is-open]/menu-item:block {{ section.settings.color_scheme }}"
+                class="header__inner-container {% if submenu_layout == 'multi' and images != blank %}inset-x-0 w-full ps-10{% endif %} absolute top-full hidden group-[.collapsible-is-open]/menu-item:block {{ section.settings.color_scheme }}"
                 data-collapsible-target
                 tabindex="-1">
                 <div class="header__navigation-container content-wrapper grid grid-cols-12 gap-x-4 gap-y-0 p-4">
@@ -181,7 +180,7 @@
                     {{- submenu -}}
                   </ul>
 
-                  {%- if images != '' -%}
+                  {%- if images != blank -%}
                     <div class="header__image col-span-4 col-start-9 grid gap-4">
                       {{- images -}}
                     </div>

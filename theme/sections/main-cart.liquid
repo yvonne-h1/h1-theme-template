@@ -26,7 +26,7 @@
               {%- if cart != empty -%}
                 <div class="cart-items">
                   {%- for item in cart.items -%}
-                    {%- render 'cart-item', item: item -%}
+                    {%- render 'cart-item', item: item, view: 'cart-page' -%}
                   {%- endfor -%}
                 </div>
               {%- endif -%}

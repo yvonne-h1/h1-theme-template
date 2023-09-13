@@ -1,5 +1,11 @@
 {% comment %}
   For now, the translation app doesn't translate the navigation labels in the code, even though they are translated in the frontend. So be sure to not translate the link_1_title in the translation app.
+
+
+   {%- render 'header-images',
+      section: section,
+      link_1_title: level_1_title
+    -%}
 {% endcomment %}
 
 {%- liquid
@@ -10,7 +16,6 @@
       assign image_alt = link_1_title | escape
       assign menu_link_title = link_1_title | handleize
       assign link_block_title = block.settings.text | handleize
-
       # Check if there is a match, if so output.
       if menu_link_title == link_block_title
         if block.settings.url != blank

@@ -1,6 +1,6 @@
 @layer base {
   *:focus-visible {
-    @apply outline-dashed outline-offset-0 outline-primary-300;
+    @apply outline-dashed outline-1 outline-offset-0 outline-primary-300;
   }
   .button:focus-visible {
     @apply outline-offset-2;
@@ -9,7 +9,7 @@
   /* Fallback - for browsers that don't support :focus-visible, a fallback is set for :focus */
   @supports not selector(:focus-visible) {
     *:focus {
-      @apply outline-dashed outline-offset-0 outline-primary-300;
+      @apply outline-dashed outline-1 outline-offset-0 outline-primary-300;
     }
     .button:focus-visible {
       @apply outline-offset-2;

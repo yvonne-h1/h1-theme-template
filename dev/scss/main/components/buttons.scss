@@ -59,7 +59,7 @@
     &--loading {
       @apply pointer-events-none text-transparent;
       &:after {
-        @apply absolute block aspect-square h-[1.5em] animate-spin rounded-full border-[.2em] border-[--button-text] border-l-transparent content-empty;
+        @apply absolute block aspect-square h-6 w-6 animate-spin rounded-full border-2 border-[--button-text] border-l-transparent content-empty;
       }
     }
 

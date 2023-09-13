@@ -3,7 +3,7 @@
 <div class="grid grid-cols-2 gap-base">
   {% comment %} Color schemes {% endcomment %}
   {%- for type in scheme_types -%}
-    <div class="color-scheme color-scheme--{{ type }} p-10">
+    <div class="color-scheme color-scheme--{{ type }} col-span-2 p-10 md:col-span-1">
       <h3 class="h5">
         <em>{{ type | capitalize }}</em>
         color scheme

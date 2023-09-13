@@ -41,9 +41,8 @@
         assign sizes = '(min-width: 768px) ' | append: image_size | append: ', 100vw'
 
         # Align buttons with flex as parent based on text align block.
-        assign button_align = ''
+        assign button_align = 'justify-start'
         case block.settings.text_align
-          when 'text-start'
           when 'text-center'
             assign button_align = 'justify-center'
           when 'text-end'

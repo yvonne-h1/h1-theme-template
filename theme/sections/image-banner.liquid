@@ -52,7 +52,7 @@
 
     {% comment %} Banner content {% endcomment %}
     <div class="image-banner__content-wrapper content-wrapper flex h-full {{ content_position }}">
-      <div class="image-banner__content relative mx-element-spacing my-12 inline-flex max-w-[80%] flex-col gap-y-4 p-8 md:my-20 md:max-w-screen-md md:px-12 {{ section.settings.content_color_scheme -}}">
+      <div class="image-banner__content relative mx-element-spacing mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-md md:p-8 md:px-12 {{ section.settings.content_color_scheme -}}">
         {% comment %} Heading {% endcomment %}
         {%- if section.settings.heading != blank -%}
           <{{ section.settings.heading_element }} class="{{- section.settings.heading_size }} {{ section.settings.heading_color -}}">
@@ -62,9 +62,9 @@
 
         {% comment %} Text {% endcomment %}
         {%- if section.settings.text != blank -%}
-          <p class="{{- section.settings.text_color -}}">
-            {{- section.settings.text | escape -}}
-          </p>
+          <div class="{{- section.settings.text_color -}}">
+            {{- section.settings.text -}}
+          </div>
         {%- endif -%}
 
         {% comment %} Buttons {% endcomment %}
@@ -173,32 +173,38 @@
             "label": "Default"
           },
           {
+            "value": "aspect-[1/1]",
+            "label": "Square"
+          },
+          {
             "value": "aspect-[5/2]",
-            "label": "5x2"
+            "label": "5x2",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[2/1]",
-            "label": "2x1"
+            "label": "2x1",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[16/9]",
-            "label": "16x9"
+            "label": "16x9",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[4/3]",
-            "label": "4x3"
-          },
-          {
-            "value": "aspect-[1/1]",
-            "label": "1x1"
+            "label": "4x3",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[3/4]",
-            "label": "3x4"
+            "label": "3x4",
+            "group": "Landscape"
           },
           {
             "value": "aspect-[9/16]",
-            "label": "9x16"
+            "label": "9x16",
+            "group": "Landscape"
           }
         ]
       },
@@ -214,32 +220,38 @@
             "label": "Default (same as mobile)"
           },
           {
+            "value": "md:aspect-[1/1]",
+            "label": "Square"
+          },
+          {
             "value": "md:aspect-[5/2]",
-            "label": "5x2"
+            "label": "5x2",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[2/1]",
-            "label": "2x1"
+            "label": "2x1",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[16/9]",
-            "label": "16x9"
+            "label": "16x9",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[4/3]",
-            "label": "4x3"
-          },
-          {
-            "value": "md:aspect-[1/1]",
-            "label": "1x1"
+            "label": "4x3",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[3/4]",
-            "label": "3x4"
+            "label": "3x4",
+            "group": "Landscape"
           },
           {
             "value": "md:aspect-[9/16]",
-            "label": "9x16"
+            "label": "9x16",
+            "group": "Landscape"
           }
         ]
       },
@@ -484,10 +496,10 @@
         "content": "Text settings"
       },
       {
-        "type": "textarea",
+        "type": "richtext",
         "id": "text",
         "label": "Text",
-        "default": "I explain what the banner is for."
+        "default": "<p>Explain what the banner is for.</p>"
       },
       {
         "type": "select",

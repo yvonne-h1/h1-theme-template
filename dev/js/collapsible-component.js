@@ -272,6 +272,14 @@ if (!customElements.get('collapsible-component')) {
         // trapFocus(group);
         if (this.options.isMobileMenu) {
           trapFocus(group, group.querySelectorAll('.mobile-menu__submenu')[0].querySelectorAll('.mobile-menu__link')[0]);
+
+          // to prevent different heights for each panel, we have to disable to overflow for hidden panels
+          const parentSubmenu = group.closest('.mobile-menu__submenu') || group.closest('.mobile-menu__content') ;
+          if (parentSubmenu) {
+            parentSubmenu.scrollTop = 0;
+            parentSubmenu.classList.remove('overflow-y-auto');
+            parentSubmenu.classList.add('overflow-hidden');
+          }
         }
         else {
           trapFocus(group);
@@ -322,6 +330,14 @@ if (!customElements.get('collapsible-component')) {
 
         // Focus the previous menu
         if (this.options.isMobileMenu) {
+          // to prevent different heights for each panel, we have to disable to overflow for hidden panels. We have to re-enable them when we close a panel
+          const parentSubmenu = group.closest('.mobile-menu__submenu') || group.closest('.mobile-menu__content');
+          if (parentSubmenu) {
+            parentSubmenu.scrollTop = 0;
+            parentSubmenu.classList.add('overflow-y-auto');
+            parentSubmenu.classList.remove('overflow-hidden');
+          }
+
           // remove the last item of the states
           this.state.splice(-1);
           const lastItem = this.state[this.state.length - 1];

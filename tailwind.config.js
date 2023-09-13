@@ -48,7 +48,7 @@ module.exports = {
       '5xl': '2000px',
     },
     /**
-     * Font family's
+     * Font families
      * Usage: font-body, font-heading
      */
     fontFamily: {
@@ -57,11 +57,11 @@ module.exports = {
     },
     /**
      * Default font sizes
-     * Usage text-base
+     * Usage text-base, text-sm, etc.
      * Default line height is set on the body
-     * Exceptions in line-height text-base leading-tight
+     * Exceptions can be made with leading-tight, leading-wider, etc.
      *
-     * It's recommended to not change these
+     * It's recommended to not change these values
      */
     fontSize: {
       '2xs': '0.625rem',
@@ -137,7 +137,7 @@ module.exports = {
     /**
      * Colors
      * Extend the tailwind colors with our own colors for primary, secondary and accent.
-     * Usage: text-primary, bg-secondary
+     * Usage: text-primary, bg-secondary, etc.
      * Resources: Use https://www.tailwindshades.com/ to create shades based on your colors. Note that 500 should be your base color.
      */
     colors: {
@@ -240,7 +240,7 @@ module.exports = {
      * Extend tailwind with javascript
      * More info: https://tailwindcss.com/docs/plugins
      */
-    plugin(function ({ addBase, addComponents, addUtilities, addVariant, theme }) {
+    plugin(function ({ addBase, addUtilities, addVariant, theme }) {
       /*
        Style base classes
       */
@@ -302,20 +302,20 @@ module.exports = {
       /**
        * Variants
        */
-      // Create a combined variant for active, focus and hover
+      // Create a combined variant for active, focus and hover, use as states:class-when-hovered-focused-and-active
       addVariant('states', ['&:hover', '&:focus', '&:active']);
       addVariant('group-states', [
         ':merge(.group):hover &',
         ':merge(.group):focus &',
         ':merge(.group):active &',
       ]);
-      //  Create a combined variant for js and no-js, class will be applied in html-head-js
+      //  Create a  variant for js and no-js, class will be applied in html-head-js and can be used with js:class-for-js or no-js:class-for-no-script
       addVariant('js', ['.js &']);
       addVariant('no-js', ['.no-js &']);
-      // Create a combined variant for touch and no-touch, class will be applied in html-head-jsVariant('touch', ['.touch &']);
+      // Create a combined variant for touch and no-touch, class will be applied in html-head-js and can be used as touch:class-for-touch-devices
       addVariant('touch', ['.touch &']);
       addVariant('no-touch', ['.no-touch &']);
-      // Create a combined variant for disabled, class will be applied in html-head-jsVariant('touch', ['.touch &']);
+      // Create a combined variant for disabled. Use as disabled:disabled-class
       addVariant('disabled', ['&:disabled', '&.disabled', '&[aria-disabled="true"]']);
     }),
   ],

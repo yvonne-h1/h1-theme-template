@@ -111,9 +111,9 @@
 
                 {% comment %} Text {% endcomment %}
                 {%- if block.settings.text != blank -%}
-                  <p class="{{- block.settings.text_color -}}">
-                    {{- block.settings.text | escape -}}
-                  </p>
+                  <div class="{{- block.settings.text_color -}}">
+                    {{- block.settings.text -}}
+                  </div>
                 {%- endif -%}
 
                 {% comment %} Buttons {% endcomment %}
@@ -253,32 +253,38 @@
             "label": "Default"
           },
           {
+            "value": "aspect-[1/1]",
+            "label": "Square"
+          },
+          {
             "value": "aspect-[5/2]",
-            "label": "5x2"
+            "label": "5x2",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[2/1]",
-            "label": "2x1"
+            "label": "2x1",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[16/9]",
-            "label": "16x9"
+            "label": "16x9",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[4/3]",
-            "label": "4x3"
-          },
-          {
-            "value": "aspect-[1/1]",
-            "label": "1x1"
+            "label": "4x3",
+            "group": "Portrait"
           },
           {
             "value": "aspect-[3/4]",
-            "label": "3x4"
+            "label": "3x4",
+            "group": "Landscape"
           },
           {
             "value": "aspect-[9/16]",
-            "label": "9x16"
+            "label": "9x16",
+            "group": "Landscape"
           }
         ]
       },
@@ -294,32 +300,38 @@
             "label": "Default (same as mobile)"
           },
           {
+            "value": "md:aspect-[1/1]",
+            "label": "Square"
+          },
+          {
             "value": "md:aspect-[5/2]",
-            "label": "5x2"
+            "label": "5x2",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[2/1]",
-            "label": "2x1"
+            "label": "2x1",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[16/9]",
-            "label": "16x9"
+            "label": "16x9",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[4/3]",
-            "label": "4x3"
-          },
-          {
-            "value": "md:aspect-[1/1]",
-            "label": "1x1"
+            "label": "4x3",
+            "group": "Portrait"
           },
           {
             "value": "md:aspect-[3/4]",
-            "label": "3x4"
+            "label": "3x4",
+            "group": "Landscape"
           },
           {
             "value": "md:aspect-[9/16]",
-            "label": "9x16"
+            "label": "9x16",
+            "group": "Landscape"
           }
         ]
       },
@@ -599,10 +611,10 @@
             "content": "Text settings"
           },
           {
-            "type": "textarea",
+            "type": "richtext",
             "id": "text",
             "label": "Text",
-            "default": "I explain what the slide is for."
+            "default": "<p>Explain what the slide is for.</p>"
           },
           {
             "type": "select",
