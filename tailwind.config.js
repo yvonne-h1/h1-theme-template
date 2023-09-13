@@ -288,6 +288,11 @@ module.exports = {
           backgroundImage: theme('colors.primary-gradient.DEFAULT'),
           color: theme('colors.black'),
         },
+        '.ellipsis': {
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        },
         '.gap-base': {
           gap: 'var(--grid-row-gap) var(--grid-col-gap)',
         },

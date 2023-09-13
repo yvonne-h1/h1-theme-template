@@ -10,7 +10,7 @@
 {%- capture swiper_slides -%}
   {%- for block in section.blocks -%}
     {%- if block.settings.text != blank -%}
-      <div class="swiper-slide announcement-bar__slide basis-full text-center text-sm {{ section.settings.color_scheme }}"
+      <div class="swiper-slide announcement-bar__slide text-center text-sm"
         data-swiper-slide-index="{{ forloop.index }}"
         {{ block.shopify_attributes }}>
         {%- if block.settings.url != blank -%}
@@ -20,13 +20,12 @@
               target="_blank"
               rel="noopener"
             {% endif %}
-            class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-1 text-inherit no-underline states:text-inherit states:no-underline states:opacity-60"
-          >
-            {{- block.settings.text | escape -}}
+            class="announcement-bar__message relative m-0 block overflow-hidden px-4 py-1 text-inherit no-underline ellipsis states:text-inherit states:no-underline states:opacity-60">
+            {{- block.settings.text -}}
           </a>
         {%- else -%}
-          <p class="announcement-bar__message relative m-0 block overflow-hidden text-ellipsis whitespace-nowrap px-4 py-1">
-            {{- block.settings.text | escape -}}
+          <p class="announcement-bar__message relative m-0 block overflow-hidden whitespace-nowrap px-4 py-1 ellipsis">
+            {{- block.settings.text -}}
           </p>
         {%- endif -%}
       </div>
@@ -46,11 +45,20 @@
         },
       {%- endif %}
       "loop": {{ section.settings.swiper_loop }},
-      "slidesPerView": 1
+      "slidesPerView": 1,
+      "centerInsufficientSlides": true,
+      "breakpoints": {
+        "600": {
+          "slidesPerView": {{ section.settings.slides_per_view | times: 1 }}
+        },
+        "1024": {
+          "slidesPerView": {{ section.settings.slides_per_view_lg | times: 1 }}
+        }
+      }
     }'
   {%- endcapture -%}
 
-  <div class="announcement-bar relative overflow-hidden lg:z-offcanvas-backdrop">
+  <div class="announcement-bar relative overflow-hidden lg:z-offcanvas-backdrop {{ section.settings.color_scheme }}">
     <{{ wrapper_element | default: 'div' }}
       {{ swiper_options }}>
       <div class="swiper" data-swiper>
@@ -122,6 +130,62 @@
         "content": "Swiper options"
       },
       {
+        "type": "select",
+        "id": "slides_per_view",
+        "label": "Slides per view (tablet)",
+        "default": "1",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "slides_per_view_lg",
+        "label": "Slides per view (desktop)",
+        "default": "1",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          }
+        ]
+      },
+      {
         "type": "checkbox",
         "id": "swiper_loop",
         "label": "Loop",
@@ -156,7 +220,7 @@
         "name": "Item",
         "settings": [
           {
-            "type": "text",
+            "type": "inline_richtext",
             "id": "text",
             "label": "Text",
             "default": "Welcome to our store"

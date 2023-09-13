@@ -124,7 +124,7 @@
                 {%- render 'render-translation', namespace: "sections.collection_template", key: "sort_by_label", fallback: "Sort by" -%}
               </label>
               <div class="select group flex-auto">
-                <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer text-ellipsis whitespace-nowrap overflow-hidden" name="sort_by" id="sort-options">
+                <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer ellipsis" name="sort_by" id="sort-options">
                   {%- for option in collection.sort_options -%}
                     <option value="{{ option.value | escape }}" {% if option.value == sort_by %}selected{% endif %}>{{- option.name | escape -}}</option>
                   {%- endfor -%}

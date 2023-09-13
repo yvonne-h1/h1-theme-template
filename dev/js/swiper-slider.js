@@ -86,6 +86,8 @@ class SwiperSlider extends HTMLElement {
       }
     }
 
+    console.log(this.swiperOptions);
+
     // render the options and init the swiper
     this.initOptions();
 
