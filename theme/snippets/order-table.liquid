@@ -57,9 +57,17 @@
           scope="row"
           data-label="{%- render "render-translation", namespace: "customer.order", key: "product", fallback: "Product" -%}">
           {%- if line_item.product.url != blank -%}
-            {%- assign alt = line_item.product.title | escape -%}
             <a href="{{ line_item.product.url }}" class="block">
-              {%- render 'responsive-image', image_object: line_item.product.featured_image, lazy: true, aspect_ratio: '1/1', crop: 'center', max_width: 80, sizes: '80px', alt: alt, title: alt -%}
+              {%- render 'responsive-image',
+                image_object: line_item.product.featured_image,
+                lazy: true,
+                aspect_ratio: '1/1',
+                crop: 'center',
+                max_width: 80,
+                sizes: '80px',
+                alt: line_item.product.title,
+                title: line_item.product.title
+              -%}
             </a>
           {%- endif -%}
         </div>
@@ -373,7 +381,7 @@
             namespace: "customer.order",
             key: "shipping",
             fallback: "Shipping"
-          -%} ({{ shipping_method.title | escape }})
+          -%} ({{ shipping_method.title }})
         ">
         <div
           class="col-span-6 lg:col-span-8 lg:col-start-3 lg:text-right"

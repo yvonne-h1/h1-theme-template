@@ -1,10 +1,3 @@
-{% style %}
-  .mobile-menu__submenu {
-    min-height: calc(100vh - 72px);
-    min-height: calc(100dvh - 72px);
-  }
-{% endstyle %}
-
 {%- liquid
   comment
     - Header section loads 2 different menu elements. One for mobile and one for desktop, as well as
@@ -50,9 +43,16 @@
   </{{ logo_el }}>
 {%- endcapture -%}
 
-{%- comment -%} The backdrop for when the header is open state. {%- endcomment -%}
-<div
-  class="header-backdrop backdrop group-[.desktop-submenu-is-open]/body:lg:backdrop--active z-10"></div>
+{% comment %} Backdrop {% endcomment %}
+<class-toggle-component
+  class=" header-backdrop backdrop group-[.desktop-submenu-is-open]/body:lg:backdrop--active z-10"
+  tabindex="-1"
+  aria-hidden="true"
+  data-options='
+    {
+      "classToToggle": "mobile-menu-is-open"
+    }
+  '></class-toggle-component>
 
 {%- comment -%}
   The header always relative of absolute based on the is transparent and on index page setting. The whole section is sticky for better native and sticky scroll performance.

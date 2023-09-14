@@ -4,8 +4,6 @@
   - section:         {Object} main-collection.liquid section object (required)
 {%- endcomment -%}
 
-{%- assign container_title = section.settings.title | escape -%}
-
 {% comment %} Loader animation {% endcomment %}
 {%- capture loading_overlay -%}
   <div class="loading-overlay absolute inset-0 z-50 flex hidden w-full items-center justify-center bg-bg-default opacity-70" data-loader>
@@ -44,7 +42,7 @@
   </div>
 {%- endcapture -%}
 
-{%- render 'render-container-content', class: 'collection-wrapper mt-0', title: container_title, content: container_content -%}
+{%- render 'render-container-content', class: 'collection-wrapper mt-0', title: section.settings.title, content: container_content -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if section.settings.pagination_view == 'load-more' -%}

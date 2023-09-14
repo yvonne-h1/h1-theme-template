@@ -40,7 +40,7 @@
           {%- render "render-translation", namespace: "sections.collection_template", key: "title", fallback: "Collection:" -%}
           :
         </span>
-        {{- collection.title | escape -}}
+        {{- collection.title -}}
       </h1>
 
       {%- comment -%} Collection description {%- endcomment -%}
@@ -76,7 +76,7 @@
     -%}
 
     <p class="sm:order-3 m-0 sm:basis-full text-center md:order-none md:basis-auto" data-collection-totals-text>
-      {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html  }}
+      {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html }}
     </p>
 
     {%- comment -%} Toggle collection layout - mobile only {%- endcomment -%}
@@ -126,7 +126,7 @@
               <div class="select group flex-auto">
                 <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer ellipsis" name="sort_by" id="sort-options">
                   {%- for option in collection.sort_options -%}
-                    <option value="{{ option.value | escape }}" {% if option.value == sort_by %}selected{% endif %}>{{- option.name | escape -}}</option>
+                    <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{- option.name -}}</option>
                   {%- endfor -%}
                 </select>
                 <span class="select__select-icon group-states:text-secondary-text">

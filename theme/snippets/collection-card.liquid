@@ -22,14 +22,14 @@
   unless image_alt
     assign image_alt = featured_image.alt
     if image_alt == blank
-      assign image_alt = collection.title | escape
+      assign image_alt = collection.title
     endif
   endunless
 
   unless image_title
     assign image_title = collection.featured_image.alt
     if image_title == blank
-      assign image_title = collection.title | escape
+      assign image_title = collection.title
     endif
   endunless
 
@@ -54,7 +54,7 @@
   </div>
   <div class="collection-card__content pt-3">
     <p class="collection-card__title h4 text-center transition-colors group-hover/collection-card:text-primary  group-focus-visible/collection-card:text-primary">
-      {{- collection.title | escape -}}
+      {{- collection.title -}}
     </p>
   </div>
 </a>

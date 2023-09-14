@@ -96,7 +96,7 @@
               assign sublevel_title_class = 'h3 m-0 px-8 py-4 no-underline'
               assign mobile_menu_link_class = 'mobile-menu__link block no-underline py-3 px-8'
               assign mobile_return_link_class = 'mobile-menu__return flex w-full items-center gap-2 px-4 py-5 text-sm no-underline'
-              assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 start-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 flex flex-col'
+              assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 start-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 flex flex-col min-h-mobile-menu'
             -%}
             {%- if level_1.links == blank -%}
               <li class="mobile-menu__item level-1">
@@ -106,7 +106,7 @@
                   {% if level_1.current %}
                     aria-current="page"
                   {% endif %}>
-                  {{ level_1_title | escape }}
+                  {{ level_1_title }}
                 </a>
               </li>
               {%- comment -%} Level 1 with submenu {%- endcomment -%}
@@ -116,7 +116,7 @@
                   class="{{ mobile_menu_link_class }} level-1 flex w-full items-center justify-between gap-2 {{ link_classes }} {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
                   data-collapsible-trigger>
                   <span>
-                    {{- level_1_title | escape -}}
+                    {{- level_1_title -}}
                   </span>
                   {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
                 </button>
@@ -146,7 +146,7 @@
 
                   {% comment %} Level 1 title {% endcomment %}
                   <{{ level_1_title_start_el }} class="{{ sublevel_title_class }}">
-                    {{- level_1_title | escape -}}
+                    {{- level_1_title -}}
                   </{{ level_1_title_end_el }}>
 
                   {%- comment -%} Level 2 {%- endcomment -%}
@@ -169,7 +169,7 @@
                         if level_2_url == '#'
                           assign level_2_has_link = false
                         endif
-                        assign level_2_title = level_2.title | escape
+                        assign level_2_title = level_2.title
                       -%}
                       {%- if level_2.links == blank -%}
                         {%- comment -%} Level 2 without submenu {%- endcomment -%}
@@ -185,12 +185,8 @@
                         </li>
                       {%- else -%}
                         {%- comment -%} Level 2 with submenu {%- endcomment -%}
-                        <li
-                          class="mobile-menu__item level-2 group/submenu-2"
-                          data-collapsible-group>
-                          <button
-                            class="{{ mobile_menu_link_class }} level-2 flex w-full items-center justify-between gap-2 {% if level_2_is_active -%}{{ link_active_class }}{%- endif -%}"
-                            data-collapsible-trigger>
+                        <li class="mobile-menu__item level-2 group/submenu-2" data-collapsible-group>
+                          <button class="{{ mobile_menu_link_class }} level-2 flex w-full items-center justify-between gap-2 {% if level_2_is_active -%}{{ link_active_class }}{%- endif -%}" data-collapsible-trigger>
                             <span>
                               {{- level_2_title -}}
                             </span>
@@ -200,6 +196,7 @@
                             id="childlink-{{ level_2.title | handleize }}" tabindex="0"
                             class="{{ mobile_submenu_class }} level-2 group-[.collapsible-is-open]/submenu-2:visible group-[.collapsible-is-open]/submenu-2:translate-x-0 {{ section.settings.color_scheme }}"
                             data-collapsible-target>
+
                             {%- comment -%} Link back to level 2 {%- endcomment -%}
                             <button
                               class="{{ mobile_return_link_class }} level-3"
@@ -208,6 +205,7 @@
                               {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ms-3' -%}
                               {{ section.settings.back_link | replace: '[[ title ]]', level_1_title }}
                             </button>
+
                             {%- liquid
                               # Level 2 title
                               assign level_2_title_start_el = 'div'
@@ -220,6 +218,7 @@
                             <{{ level_2_title_start_el }} class="{{ sublevel_title_class }}">
                               {{- level_2_title -}}
                             </{{ level_2_title_end_el }}>
+
                             {%- comment -%} Level 3 {%- endcomment -%}
                             <ul class="mobile-menu__list level-3 pb-8">
                               {%- for level_3 in level_2.links -%}
@@ -243,7 +242,7 @@
                                     {% if level_3.current %}
                                       aria-current="page"
                                     {% endif %}>
-                                    {{- level_3.title | escape -}}
+                                    {{- level_3.title -}}
                                   </a>
                                 </li>
                               {%- endfor -%}
@@ -251,12 +250,13 @@
                           </div>
                         </li>
                       {%- endif -%}
+
                       {%- liquid
                         assign images = ''
                         # Check for blocks that are linked to level 1.
                         if section.blocks.size > 0
                           capture images
-                            render 'header-images', section: section, link_1_title: level_1_title
+                            render 'header-images', section: section, level_1_title: level_1_title
                           endcapture
                         endif
                       -%}
@@ -328,10 +328,9 @@
 
   {% comment %} Backdrop {% endcomment %}
   <class-toggle-component
-    role="button"
     class=" mobile-menu__backdrop backdrop group-[.mobile-menu-is-open]/body:backdrop--active z-offcanvas-backdrop lg:hidden"
     tabindex="-1"
-    aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
+    aria-hidden="true"
     data-options='
       {
         "classToToggle": "mobile-menu-is-open"

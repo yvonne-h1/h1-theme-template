@@ -12,12 +12,8 @@
       assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
     endif
 
-    # Container title
-    assign container_title = section.settings.title | escape
-
     # Render format container
-    render 'render-container-content', class: container_class, title_class: 'h4 text-center', title: container_title, content: content
-
+    render 'render-container-content', class: container_class, title_class: 'h4 text-center', title: section.settings.title, content: content
   else
     # Render without format container
     echo content

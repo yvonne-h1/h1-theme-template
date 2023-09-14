@@ -179,11 +179,8 @@
     assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
   endif
 
-  # Container title
-  assign container_title = section.settings.heading | escape
-
   # Title Class
-  assign title_class = section.settings.heading_size | append: ' text-center'
+  assign title_class = section.settings.heading_size | append: ' ' | append: section.settings.heading_align
 -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
@@ -192,9 +189,9 @@
   class: container_class,
   title_tag: section.settings.heading_element,
   title_class: title_class,
-  title: container_title,
+  title: section.settings.heading,
   content: container_content,
-  footer_class: 'text-center',
+  footer_class: section.settings.button_align,
   footer_content: container_footer,
 -%}
 
@@ -301,6 +298,26 @@
         "id": "heading",
         "default": "Featured blog slider",
         "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_align",
+        "label": "Header align",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
       },
       {
         "type": "select",
@@ -437,6 +454,26 @@
           {
             "value": "button--xl",
             "label": "Extra large"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "button_align",
+        "label": "Button alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
           }
         ]
       },

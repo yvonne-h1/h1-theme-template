@@ -51,8 +51,8 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
     class="collection__grid {{ collection_grid_classes }} m-0 grid grid-cols-12 gap-x-4 gap-y-8"
     data-products-wrapper>
     {%- liquid
-      assign image_alt = product.title | escape
-      assign image_title = product.title | escape
+      assign image_alt = product.title
+      assign image_title = product.title
 
       assign classes = 'col-span-6 md:col-span-4 xl:col-span-3'
       assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw'
@@ -99,7 +99,7 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
       </div>
 
       <p class="text-center" data-totals-text>
-        {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html  }}
+        {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html }}
       </p>
     </div>
   </load-more>

@@ -1,10 +1,10 @@
 {% comment %}
-  For now, the translation app doesn't translate the navigation labels in the code, even though they are translated in the frontend. So be sure to not translate the link_1_title in the translation app.
+  For now, the translation app doesn't translate the navigation labels in the code, even though they are translated in the frontend. So be sure to not translate the level_1_title in the translation app.
 
 
    {%- render 'header-images',
       section: section,
-      link_1_title: level_1_title
+      level_1_title: level_1_title
     -%}
 {% endcomment %}
 
@@ -13,8 +13,8 @@
   for block in section.blocks
     if block.settings.image != blank and block.settings.text != blank
       # Handleize the item to match to make sure it's case-insensitive.
-      assign image_alt = link_1_title | escape
-      assign menu_link_title = link_1_title | handleize
+      assign image_alt = level_1_title
+      assign menu_link_title = level_1_title | handleize
       assign link_block_title = block.settings.text | handleize
       # Check if there is a match, if so output.
       if menu_link_title == link_block_title

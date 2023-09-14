@@ -7,7 +7,7 @@
             class="rich-text__title {{ block.settings.heading_size }} {{ block.settings.title_width_layout }}"
             {{ block.shopify_attributes }}
           >
-            {{- block.settings.heading | escape -}}
+            {{- block.settings.heading -}}
           </{{ block.settings.heading_element }}>
         {%- when 'text' -%}
           <div class="rich-text__text rte {{ block.settings.text_width_layout }}" {{ block.shopify_attributes }}>
@@ -16,11 +16,11 @@
         {%- when 'button' -%}
           {% if block.settings.button_link != blank and block.settings.button_label != blank %}
             <a href="{{ block.settings.button_link }}" class="rich-text__button button button--lg {{ block.settings.button_color_scheme }}" {{ block.shopify_attributes }}>
-              {{ block.settings.button_label | escape }}
+              {{ block.settings.button_label }}
             </a>
           {% elsif request.design_mode %}
             <button class="button" aria-disabled="true">
-              {{ block.settings.button_label | escape }}
+              {{ block.settings.button_label }}
             </button>
           {% endif %}
       {%- endcase -%}
@@ -36,9 +36,10 @@
   if section.settings.color_scheme != blank
     assign container_class = container_class | append: ' container--background ' | append: section.settings.color_scheme
   endif
-%}
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', content: container_content, class: container_class -%}
+
+  # Render the content
+  render 'render-container-content', content: container_content, class: container_class
+-%}
 
 {% schema %}
   {

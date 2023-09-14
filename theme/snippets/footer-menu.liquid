@@ -66,7 +66,7 @@
             {%- if level_1_link.current %}
               aria-current="page"
             {% endif %}>
-            {{ level_1_link.title | escape }}
+            {{ level_1_link.title }}
           </a>
         </li>
       {%- else -%}
@@ -103,7 +103,7 @@
                 {{- data_collapsible_trigger -}}
               {%- endif -%}>
 
-              {{- level_1_link.title | escape -}}
+              {{- level_1_link.title -}}
               {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-1]:rotate-180 md:hidden' -%}
             </{{ end_el }}>
           {%- endcapture -%}
@@ -148,7 +148,7 @@
                     {% if level_2_link.current %}
                       aria-current="page"
                     {% endif %}>
-                    {{- level_2_link.title | escape -}}
+                    {{- level_2_link.title -}}
                   </a>
                 </li>
               {%- else -%}
@@ -180,7 +180,7 @@
                         {{- data_collapsible_trigger -}}
                       {%- endif -%}>
 
-                      {{- level_2_link.title | escape -}}
+                      {{- level_2_link.title -}}
                       {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-2]:rotate-180' -%}
 
                     </{{ end_el }}>
@@ -223,7 +223,7 @@
                           {% if level_3_link.current %}
                             aria-current="page"
                           {% endif %}>
-                          {{- level_3_link.title | escape -}}
+                          {{- level_3_link.title -}}
                         </a>
                       </li>
                     {%- endfor -%}

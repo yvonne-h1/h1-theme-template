@@ -1,27 +1,3 @@
-{%- comment -%} Capture header classes {%- endcomment -%}
-{%- capture header_class %}
-  grid grid-cols-1 gap-y-4 {{ section.settings.text_align }} content-wrapper content-wrapper-sm
-{%- endcapture -%}
-
-{%- comment -%} Capture title {%- endcomment -%}
-{% capture title %}
-  {%- render 'render-translation', namespace: 'gift_cards.issued', key: 'subtext', fallback: 'Your gift card' -%}
-{% endcapture %}
-
-{%- comment -%} Capture Container classes {%- endcomment -%}
-{%- capture container_classes -%}
-  min-h-screen flex flex-col justify-center container--background
-  {% if section.settings.section_color_scheme != "" -%}
-    my-0
-  {%- endif -%}
-  {{- section.settings.section_color_scheme | prepend: ' ' -}}
-{%- endcapture -%}
-
-{%- comment -%} Capture content classes {%- endcomment -%}
-{%- capture content_classes -%}
- {{- section.settings.text_align }} content-wrapper content-wrapper-sm grid gap-y-6 flex-col items-center justify-items-center
-{%- endcapture -%}
-
 {%- comment -%} Capture Container header {%- endcomment -%}
 {%- capture container_header -%}
   {%- if section.settings.shop_logo -%}
@@ -57,29 +33,27 @@
 
 {%- comment -%} Capture Container content {%- endcomment -%}
 {%- capture container_content -%}
+  {%- if section.settings.image != blank -%}
+    {%- render 'responsive-image',
+      image_object: section.settings.image,
+      max_width: 540,
+      sizes: '(min-width: 768px) 540px, 96vw',
+      alt: title,
+      title: title
+    -%}
+  {%- else -%}
+    <img
+      src="{{ 'gift-card/card.svg' | shopify_asset_url }}"
+      alt="Gift card"
+      height="{{ 540 | divided_by: 1.5 }}"
+      width="540"
+      fetchpriority="high"
+      loading="lazy"
+    >
+  {%- endif -%}
 
-    {%- if section.settings.image != blank -%}
-      {%- render 'responsive-image',
-        image_object: section.settings.image,
-        max_width: 540,
-        sizes: '(min-width: 768px) 540px, 96vw',
-        alt: title,
-        title: title
-      -%}
-    {%- else -%}
-      <img
-        src="{{ 'gift-card/card.svg' | shopify_asset_url }}"
-        alt="Gift card"
-        height="{{ 540 | divided_by: 1.5 }}"
-        width="540"
-        fetchpriority="high"
-        loading="lazy"
-      >
-    {%- endif -%}
-
-  <div class="gift-card__qr-code empty:hidden" data-gift-card-qr-code data-identifier="{{ gift_card.qr_identifier }}">
-    {%- comment -%} QR Code {%- endcomment -%}
-  </div>
+  {%- comment -%} QR Code {%- endcomment -%}
+  <div class="gift-card__qr-code empty:hidden" data-gift-card-qr-code data-identifier="{{ gift_card.qr_identifier }}"></div>
 
   <div class="w-full">
     <div class="flex w-full flex-row items-center justify-center gap-4">
@@ -105,8 +79,8 @@
         {%- render 'render-translation', namespace: 'gift_cards.issued', key: 'copy_code_success', fallback: 'Successfully copied code' -%}
       </p>
     </template>
-
   </div>
+
   {%- if gift_card.pass_url -%}
     <div>
       <a href="{{ gift_card.pass_url }}" class="gift_card__apple-wallet">
@@ -120,6 +94,7 @@
       </a>
     </div>
   {%- endif -%}
+
   <div class="flex flex-wrap gap-4">
     <a
       href="{{ shop.url }}"
@@ -143,6 +118,28 @@
     </span>
   </div>
 {%- endcapture -%}
+
+{%- liquid
+  # Capture title
+  capture title
+    render 'render-translation', namespace: 'gift_cards.issued', key: 'subtext', fallback: 'Your gift card'
+  endcapture
+
+  # Capture Container classes
+  capture container_classes
+    echo 'min-h-screen flex flex-col justify-center container--background '
+    if section.settings.section_color_scheme != ''
+      echo 'my-0 '
+    endif
+    echo section.settings.section_color_scheme
+  endcapture
+
+  # Capture header classes
+  assign header_class = 'grid grid-cols-1 gap-y-4 echo content-wrapper content-wrapper-sm ' | append: section.settings.text_align
+
+  # Capture content classes
+  assign content_classes = 'content-wrapper content-wrapper-sm grid gap-y-6 flex-col items-center justify-items-center ' | append: section.settings.text_align
+-%}
 
 {%- comment -%} Render the content {%- endcomment -%}
 {%- render 'render-container-content',
@@ -186,9 +183,15 @@
         ]
       },
       {
+        "type": "checkbox",
+        "id": "shop_logo",
+        "label": "Show shop logo",
+        "default": true
+      },
+      {
         "type": "select",
         "id": "text_align",
-        "label": "Header text align",
+        "label": "Logo alignment",
         "default": "text-center justify-center",
         "options": [
           {
@@ -204,12 +207,6 @@
             "label": "Right"
           }
         ]
-      },
-      {
-        "type": "checkbox",
-        "id": "shop_logo",
-        "label": "Show shop logo",
-        "default": true
       },
       {
         "type": "image_picker",

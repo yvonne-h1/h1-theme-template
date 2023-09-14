@@ -9,27 +9,32 @@
 <div
   id="main-collection-filters"
   data-id="{{ section.id }}">
-  <collection-filters-form>
+  <collection-filters-form class="relative">
     {%- comment -%} Skiplink so users can go straight to the products {%- endcomment -%}
     {%- if settings.filter_display == 'grid' -%}
-      <a class="button button--primary sr-only !p-2 focus:outline-dashed focus:outline-1 states:no-underline lg:focus:not-sr-only" href="#CollectionProductGrid">
+      <a
+        class="button button--primary sr-only invisible !absolute left-0 top-0 z-20 !p-2 focus:outline-dashed focus:outline-1 states:no-underline lg:visible lg:focus:not-sr-only"
+        href="#CollectionProductGrid">
         {% render 'render-translation', namespace: 'accessibility', key: 'skip_filters', fallback: 'Skip to products' -%}
       </a>
     {%- endif -%}
+
+    {%- comment -%} Backdrop when the collection filter is open {%- endcomment -%}
+    <class-toggle-component
+      class="filter__backdrop backdrop group-[.filter-is-open]/body:backdrop--active z-modal-backdrop"
+      tabindex="-1"
+      aria-hidden="true"
+      data-options='
+        {
+          "classToToggle": "filter-is-open"
+        }
+      '></class-toggle-component>
+
+    {% comment %} The filters {% endcomment %}
     <form
       id="CollectionFiltersForm"
       class="group/filter filter {% if settings.filter_display == 'grid' -%}group/grid{%- endif -%}"
       data-collection-filters-form>
-      {%- comment -%} backdrop collection filter overlay {%- endcomment -%}
-      <class-toggle-component
-        class="filter__backdrop backdrop group-[.filter-is-open]/body:backdrop--active z-modal-backdrop"
-        tabindex="-1"
-        data-options='
-          {
-            "classToToggle": "filter-is-open"
-          }
-        '></class-toggle-component>
-
       {%- comment -%} The collection filter drawer. {%- endcomment -%}
       <div
         class="
@@ -81,7 +86,7 @@
             </class-toggle-component>
           </div>
           {%- comment -%} Main content {%- endcomment -%}
-          <div class="filter__main relative z-0 px-6 {% if settings.filter_display == 'grid' -%}lg:px-0{%- else -%}py-6{%- endif -%}">
+          <div class="filter__main relative z-0 {% if settings.filter_display != 'grid' -%}py-6{%- endif -%}">
             {%- liquid
               render 'filter-options-active', section: section
               # Loop through the filter options

@@ -84,15 +84,11 @@
           {%- liquid
             assign index = forloop.index
             assign option_label = value.label
-            # for labels with only 3 letters, make them uppercase
-            if option_label.size < 4 and is_color == false
-              assign option_label = option_label | upcase
-            endif
           -%}
 
           {%- capture label -%}
-            <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}">
-              {{ option_label | escape }}
+            <label for="filter-{{ filter.label | handleize }}-{{ index }}" class="{{ label_classes }}">
+              {{ option_label }}
             </label>
           {%- endcapture -%}
 
@@ -101,7 +97,7 @@
               type="checkbox"
               name="{{ value.param_name }}"
               value="{{ value.value }}"
-              id="filter-{{ filter.label | handleize | escape }}-{{ index }}"
+              id="filter-{{ filter.label | handleize }}-{{ index }}"
               {% if value.active %}checked{% endif %}
               {% if value.count == 0 and value.active == false %}disabled{% endif %}
             >
@@ -125,8 +121,8 @@
 
                   {%- comment -%} Render with background-color {%- endcomment -%}
                   {%- assign color_is_mapped = true -%}
-                  <label for="filter-{{ filter.label | handleize | escape }}-{{ index }}" class="{{ label_classes }}" style="background-color: {{ color_hex }};">
-                    <span class="sr-only">{{ option_label | escape }}</span>
+                  <label for="filter-{{ filter.label | handleize }}-{{ index }}" class="{{ label_classes }}" style="background-color: {{ color_hex }};">
+                    <span class="sr-only">{{ option_label }}</span>
                   </label>
                 {%- endif -%}
               {%- endfor -%}

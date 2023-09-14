@@ -1,18 +1,11 @@
 {%- comment -%} Output cart drawer {%- endcomment -%}
 {%- if request.page_type != 'cart' -%}
-  {% style %}
-    .cart-is-empty .cart-drawer__warnings {
-      min-height: 100dvh;
-      min-height: 100vh;
-    }
-  {% endstyle %}
-
   <cart-drawer class="cart-drawer" data-cart-drawer>
     {%- comment -%} Backdrop {%- endcomment -%}
     <class-toggle-component
       class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop"
       tabindex="-1"
-      aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}"
+      aria-hidden="true"
       data-options='
         {
           "classToToggle": "cart-drawer-is-open"

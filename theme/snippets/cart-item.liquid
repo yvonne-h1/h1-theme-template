@@ -37,7 +37,7 @@
       <a
         href="{{ item.product.url }}"
         class="mb-2 block break-words text-sm font-bold text-inherit">
-        {{- item.product.title | escape -}}
+        {{- item.product.title -}}
       </a>
 
       <div class="flex items-center gap-4">
@@ -80,9 +80,10 @@
                 capture preorder_label
                   render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'
                 endcapture
+
+                assign property_first_char = property.first | slice: 0
               -%}
 
-              {%- assign property_first_char = property.first | slice: 0 -%}
               {%- if property.last != blank and property_first_char != '_' and preorder_label != property.first -%}
                 <div class="product-option mt-0.5 flex gap-1 text-xs">
                   <dt>{{ property.first }}:</dt>

@@ -33,12 +33,8 @@
   </ul>
 {%- endcapture -%}
 
-{%- capture container_title -%}
-  {{- section.settings.title | escape -}}
-{%- endcapture -%}
-
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', title: container_title, title_tag: 'h1', title_class: 'h3', content: container_content -%}
+{% comment %} Render the content {% endcomment %}
+{%- render 'render-container-content', title: section.settings.title, title_tag: 'h1', title_class: 'h3', content: container_content -%}
 
 {% schema %}
   {

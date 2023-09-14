@@ -1,16 +1,16 @@
-{%- comment -%}
-  Set the correct container classes based on section settings.
-{%- endcomment -%}
-{%- capture container_classes -%}
-  {%- if section.settings.color_scheme != "" -%}
-    my-0 container--background
-  {%- endif -%}
-  {{ section.settings.color_scheme | prepend: ' ' -}}
-  {{ section.settings.width_layout | prepend: ' ' -}}
-  {%- if section.settings.height_layout == 'full-height' %}
-    min-h-screen -mt-[90px] pt-[144px] grid content-center
-  {%- endif -%}
-{%- endcapture -%}
+{%- liquid
+  # Set the correct container classes based on section settings
+  capture container_classes
+    if section.settings.color_scheme != ''
+      echo 'my-0 container--background '
+    endif
+    echo section.settings.color_scheme
+    echo section.settings.width_layout | prepend: ' '
+    if section.settings.height_layout == 'full-height'
+      echo ' min-h-screen -mt-[90px] pt-[144px] grid content-center'
+    endif
+  endcapture
+-%}
 
 {%- capture blocks -%}
   {%- for block in section.blocks -%}
@@ -18,7 +18,7 @@
       {%- when 'heading' -%}
         {%- if block.settings.heading != blank -%}
           <{{ block.settings.heading_element }} class="newsletter__heading {{ block.settings.heading_size }} mb-0" {{ block.shopify_attributes }}>
-            {{- block.settings.heading | escape -}}
+            {{- block.settings.heading -}}
           </{{ block.settings.heading_element }}>
         {%- endif -%}
       {%- when 'text' -%}
@@ -102,9 +102,7 @@
   if blocks != blank
     # Capture content  echo
     capture container_content
-      echo '<div class="newsletter grid grid-cols-1 content-center gap-4 text-center ">'
-      echo blocks
-      echo '</div>'
+      echo blocks | prepend: '<div class="newsletter grid grid-cols-1 content-center gap-4 text-center ">' | append: '</div>'
     endcapture
 
     # Render the content  echo

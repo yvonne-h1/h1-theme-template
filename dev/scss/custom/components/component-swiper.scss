@@ -96,13 +96,6 @@
     // swiper-scrollbar
     &-scrollbar {
       @apply mt-4 h-1 bg-gray-100;
-      // swiper-scrollbar-active
-      &-active {
-        @apply pb-12;
-        &:has(.swiper-scrollbar-lock) {
-          @apply pb-0;
-        }
-      }
       // swiper-scrollbar-drag
       &-drag {
         @apply h-1 cursor-grab bg-[var(--swiper-theme-color)];

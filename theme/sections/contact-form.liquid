@@ -211,9 +211,9 @@
   endif
 
   # Container title
-  assign container_title = page.title | escape
+  assign container_title = page.title
   if section.settings.heading != blank
-    assign container_title = section.settings.heading | escape
+    assign container_title = section.settings.heading
   endif
 -%}
 

@@ -72,11 +72,7 @@
                 endfor
               endif
 
-              # for labels with only 3 letters, make them uppercase
               assign value_text = value | capitalize
-              if value.size < 4 and is_color == false
-                assign value_text = value | upcase
-              endif
             -%}
 
             <div class="option option--{{ option_name }}" data-option>
@@ -85,7 +81,7 @@
                 type="radio"
                 id="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
                 name="{{ option.name }}"
-                value="{{ value | escape }}"
+                value="{{ value }}"
                 data-variant-option-id="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
                 {% if option.selected_value == value -%}checked{%- endif %}
                 {% if has_single_option -%}disabled{%- endif %}
@@ -146,7 +142,7 @@
                           <a href="{{ product_variant.url }}"
                             class="option__{{ option_type }} option__{{ option_type }}--{{ option_name }} {% if color_is_mapped -%}states:scale-110{%- endif -%}"
                             style="background-color: {{ color_hex }};"
-                            title="{{ product_variant_color | escape }}"
+                            title="{{ product_variant_color }}"
                             data-option-label
                           >
                             <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ product_variant_color | capitalize }}</span>
@@ -171,7 +167,7 @@
                       class="option__swatch option__swatch--{{ option_name }} transition-all"
                       for="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
                       style="background-color: {{ color_hex }};"
-                      title="{{ value | escape }}"
+                      title="{{ value }}"
                       data-option-label
                     >
                       <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ value_text }}</span>

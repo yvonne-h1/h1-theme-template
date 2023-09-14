@@ -58,14 +58,14 @@
 
   assign product_link_image = product_object.featured_image
   unless image_alt
-    assign image_alt = product_object.featured_image.alt | escape
+    assign image_alt = product_object.featured_image.alt
     if image_alt == blank
-      assign image_alt = product_object.title | escape
+      assign image_alt = product_object.title
     endif
   endunless
 
   unless image_title
-    assign image_title = product_object.title | escape
+    assign image_title = product_object.title
   endunless
 
   # Quick shop logic
@@ -110,8 +110,8 @@
   <a
     href="{{ product_link }}"
     class="product-card__sr-link button button--primary sr-only !absolute inset-[3px] bottom-auto z-20 !px-2 focus:not-sr-only focus:p-2 focus:outline-dashed focus:outline-1 states:no-underline"
-    title="{{ product_object.title | escape }}">
-    {{- product_object.title | escape -}}
+    title="{{ product_object.title }}">
+    {{- product_object.title -}}
   </a>
 
   {%- comment -%} Product images {%- endcomment -%}
@@ -127,7 +127,7 @@
     <a
       class="product-card__image relative block {% unless product_object.available -%}opacity-50 saturate-50{%- endunless %} {% unless show_secondary_image %}transition-all states:scale-105{%- endunless -%}"
       href="{{ product_link }}"
-      title="{{ product_object.title | escape }}"
+      title="{{ product_object.title }}"
       tabindex="-1">
       {%- render 'responsive-image',
         image_object: product_link_image,
@@ -170,7 +170,7 @@
   -%}
   <a
     href="{{ product_link }}"
-    title="{{ product_object.title | escape }}"
+    title="{{ product_object.title }}"
     class="product-card__information block grow px-4 text-sm text-text-default no-underline states:text-text-default states:no-underline {{ product_card_information_classes }}"
     tabindex="-1">
     {%- comment -%} Vendor {%- endcomment -%}

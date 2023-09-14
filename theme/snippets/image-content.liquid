@@ -73,18 +73,20 @@
   -%}
 
   <div class="{{- class -}}__image absolute inset-0">
-    {% comment %} Desktop image {% endcomment %}
-    {%- render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, lazy: lazy -%}
+    {%- liquid
+      # Desktop image
+      render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, lazy: lazy
 
-    {% comment %} Mobile image {% endcomment %}
-    {%- if image_mobile != blank -%}
-      {%- render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy -%}
-    {%- endif -%}
+      # Mobile image
+      if image_mobile != blank
+        render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy
+      endif
+    -%}
   </div>
 
   {% comment %} Banner content {% endcomment %}
   <div
-    class="{{- class -}}__content-wrapper content-wrapper flex h-full {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align  }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
+    class="{{- class -}}__content-wrapper content-wrapper flex h-full {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
     {% if is_swiper and index != null %}
       data-swiper-slide-index="{{ index }}" {{ block.shopify_attributes }}
     {%- endif -%}>
@@ -92,7 +94,7 @@
       {% comment %} Heading {% endcomment %}
       {%- if object.settings.heading != blank -%}
         <{{ object.settings.heading_element }} class="{{- object.settings.heading_size }} {{ object.settings.heading_color -}}">
-          {{- object.settings.heading | escape -}}
+          {{- object.settings.heading -}}
         </{{ object.settings.heading_element }}>
       {%- endif -%}
 
@@ -135,7 +137,7 @@
             <a
               href="{{ object.settings.button_url_1 | default: '#' }}"
               class="button {{ object.settings.button_type_1 }}{% if object.settings.button_url_1 == blank %} disabled{% endif %}">
-              {{- object.settings.button_label_1 | escape -}}
+              {{- object.settings.button_label_1 -}}
             </a>
           {%- endif -%}
 
@@ -144,7 +146,7 @@
             <a
               href="{{ object.settings.button_url_2 | default: '#' }}"
               class="button {{ object.settings.button_type_2 }}{% if object.settings.button_url_2 == blank %} disabled{% endif %}">
-              {{- object.settings.button_label_2 | escape -}}
+              {{- object.settings.button_label_2 -}}
             </a>
           {%- endif -%}
         </div>

@@ -142,15 +142,17 @@
           {%- endif -%}
           {%- if article.title -%}
             <p class="article-card__title label-xl mb-0">
-              {{- article.title | escape -}}
+              {{- article.title -}}
             </p>
           {%- endif -%}
         </header>
         <p
           class="article-card__link flex items-center gap-2 text-sm font-bold"
-          aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title | escape }}">
-          {%- render 'render-translation', namespace: 'blog.articles.read_more', fallback: 'Read more' -%}
-          {%- render 'icons', icon: 'arrow' -%}
+          aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title }}">
+          {%- liquid
+            render 'render-translation', namespace: 'blog.articles.read_more', fallback: 'Read more'
+            render 'icons', icon: 'arrow'
+          -%}
         </p>
       </div>
     </a>
@@ -179,7 +181,7 @@
           <div class="grid grid-cols-1 gap-1">
             {%- if article.title != blank -%}
               <p class="article-card__title label-lg mb-0 transition-colors group-hover/article-card:text-primary">
-                {{- article.title | escape -}}
+                {{- article.title -}}
               </p>
             {%- endif -%}
             {%- if show_date or show_author -%}

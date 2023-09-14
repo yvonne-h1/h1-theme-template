@@ -27,7 +27,7 @@
 {%- comment -%} Container header {%- endcomment -%}
 {%- capture container_header -%}
   <h1 class="h2 mb-0">
-    {{- blog.title | escape -}}
+    {{- blog.title -}}
   </h1>
 
   {%- if section.settings.enable_navigation and tag_nav != '' -%}

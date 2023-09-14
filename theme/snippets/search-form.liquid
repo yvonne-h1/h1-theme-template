@@ -104,7 +104,7 @@
           type="search"
           name="q"
           autofocus
-          value="{{ search.terms | escape }}"
+          value="{{ search.terms }}"
           {% if predictive_search_enabled %}
             data-predicative-search="input"
             autocomplete="off"

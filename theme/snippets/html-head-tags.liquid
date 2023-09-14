@@ -17,9 +17,9 @@
 
 <meta property="og:site_name" content="{{ shop.name }}">
 <meta property="og:url" content="{{ og_url }}">
-<meta property="og:title" content="{{ og_title | escape }}">
+<meta property="og:title" content="{{ og_title }}">
 <meta property="og:type" content="{{ og_type }}">
-<meta property="og:description" content="{{ og_description | escape }}">
+<meta property="og:description" content="{{ og_description }}">
 
 {%- if page_image -%}
   <meta property="og:image" content="http:{{ page_image | image_url }}">
@@ -41,5 +41,5 @@
     content="{{ settings.social_x_link | split: 'x.com/' | last | prepend: '@' }}">
 {%- endif -%}
 <meta name="x:card" content="summary_large_image">
-<meta name="x:title" content="{{ og_title | escape }}">
-<meta name="x:description" content="{{ og_description | escape }}">
+<meta name="x:title" content="{{ og_title }}">
+<meta name="x:description" content="{{ og_description }}">

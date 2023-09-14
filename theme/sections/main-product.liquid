@@ -14,12 +14,12 @@
   assign product_form_id = 'product-form-' | append: product.id
 -%}
 
-{%- capture container_content -%}
+{%- capture product_content -%}
   <div class="product grid grid-cols-12 gap-x-0 gap-y-base">
 
     {%- comment -%} Product title {%- endcomment -%}
     <h1 class="product__title h5 content-wrapper-padding col-span-12 md:hidden">
-      {{ product.title | escape }}
+      {{ product.title }}
     </h1>
 
     {% comment %} Left column: Product media {% endcomment %}
@@ -41,7 +41,7 @@
       >
         {%- comment -%} Product title {%- endcomment -%}
         <h1 class="product__title h5 hidden md:block">
-          {{ product.title | escape }}
+          {{ product.title }}
         </h1>
 
         {%- for block in section.blocks -%}
@@ -309,12 +309,14 @@
   {%- endif -%}
 {%- endcapture -%}
 
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'mt-4 z-50 relative', content: container_content, content_class: 'px-0 md:px-8' -%}
+{%- liquid
+  # Render the product content and the product description
+  render 'render-container-content', class: 'mt-4 z-50 relative', content: product_content, content_class: 'px-0 md:px-8'
 
-{%- if product_description != '' -%}
-  {%- render 'render-container-content', content: product_description -%}
-{%- endif -%}
+  if product_description != ''
+    render 'render-container-content', content: product_description
+  endif
+-%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'main-product.js' | asset_url }}" defer></script>

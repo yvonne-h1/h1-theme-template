@@ -1,5 +1,5 @@
 {%- liquid
-  assign title = section.settings.heading | escape
+  assign title = section.settings.heading
   assign container_class = 'multi-column__container'
   assign content_class = 'multi-column__content grid gap-8'
 
@@ -51,10 +51,7 @@
       -%}
 
       {%- comment -%} Render column {%- endcomment -%}
-      <div
-        class="multi-columns__column flex flex-col {{ block.settings.position_vertical }} {{ block.settings.position_horizontal }} {{ block.settings.mobile_order }} md:order-none"
-        {{ block.shopify_attributes }}
-      >
+      <div class="multi-columns__column flex flex-col {{ block.settings.position_vertical }} {{ block.settings.position_horizontal }} {{ block.settings.mobile_order }} md:order-none" {{ block.shopify_attributes }}>
         {%- comment -%} Column inner width and text align {%- endcomment -%}
         <div class="space-y-5 {{ block.settings.text_align }}">
 
@@ -102,13 +99,13 @@
               {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
                 <a href="{{ block.settings.button_url_1 | default: '#' }}"
                   class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
-                  {{- block.settings.button_label_1 | escape -}}
+                  {{- block.settings.button_label_1 -}}
                 </a>
               {%- endif -%}
               {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
                 <a href="{{ block.settings.button_url_2 | default: '#' }}"
                   class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
-                  {{- block.settings.button_label_2 | escape -}}
+                  {{- block.settings.button_label_2 -}}
                 </a>
               {%- endif -%}
             </div>

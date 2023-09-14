@@ -183,12 +183,14 @@
 
 {%- comment -%} Check if there is content for the comments {%- endcomment -%}
 {%- if container_content != blank -%}
-  {% comment %} Capture container class {% endcomment %}
-  {%- capture container_class -%}
-    {{- class }} comments
-  {%- endcapture -%}
+  {%- liquid
+    # Capture container class  echo
+    capture container_class
+      echo class | append: ' comments'
+    endcapture
 
-  {%- assign container_title = 'blogs.article.comments' | t: count: article.comments_count -%}
+    assign container_title = 'blogs.article.comments' | t: count: article.comments_count
+  -%}
 
   {%- comment -%} Render the content {%- endcomment -%}
   {%- render 'render-container-content',

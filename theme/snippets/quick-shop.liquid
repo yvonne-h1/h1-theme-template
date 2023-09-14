@@ -119,17 +119,12 @@
           for="quick-shop__item-{{ variant.id }}"
           {% if color_hex and is_color == true %}
             style="background-color: {{ color_hex }}"
-            title="{{ option_label | escape }}"
-            aria-label="{{ option_label | escape }}"
+            title="{{ option_label }}"
+            aria-label="{{ option_label }}"
           {% endif %}>
           {%- liquid
-            # for labels with only 3 letters, make them uppercase
-            if option_label.size < 4 and is_color == false
-              assign option_label = option_label | upcase
-            endif
-
             unless color_is_mapped
-              echo option_label | escape
+              echo option_label
             endunless
           -%}
         </label>

@@ -144,16 +144,13 @@
   if section.settings.color_scheme != blank
     assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.color_scheme
   endif
-
-  # Container title
-  assign container_title = section.settings.heading | escape
 -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
 {%- render 'render-container-content',
   class: container_class,
   tag: 'product-recommendations',
-  title: container_title,
+  title: section.settings.heading,
   title_class: 'h4 product-recommendations__heading',
   content: container_content,
   content_class: 'p-0',

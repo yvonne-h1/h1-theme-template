@@ -91,10 +91,16 @@ module.exports = {
       height: {
         '80vh': '80vh',
         '90vh': '90vh',
+        screen: ['100vh', '100dvh'],
       },
       maxHeight: {
         '80vh': '80vh',
         '90vh': '90vh',
+        screen: ['100vh', '100dvh'],
+      },
+      minHeight: {
+        screen: ['100vh', '100dvh'],
+        'mobile-menu': ['calc(100vh - 72px)', 'calc(100dvh - 72px)'],
       },
       spacing: {
         'element-spacing': 'var(--element-spacing)',
@@ -113,7 +119,7 @@ module.exports = {
         popover: '1070',
         tooltip: '1080',
       },
-      typography: (theme) => ({
+      typography: theme => ({
         DEFAULT: {
           css: {
             '--tw-prose-links': theme('colors.primary.600'),

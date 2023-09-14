@@ -32,7 +32,7 @@
 
           {% comment %} Title {% endcomment %}
           <h1 class="article-header__title">
-            {{ article.title | escape }}
+            {{ article.title }}
           </h1>
 
           <div class="article-header__author-and-date flex items-center justify-between gap-4 md:justify-center">
@@ -58,12 +58,8 @@
 
         {% comment %} Featured image {% endcomment %}
       {%- when 'featured_image' -%}
-        {%- assign article_title = article.title | escape -%}
         {%- if article.image -%}
-          <div
-            class="article-header__featured-image"
-            {{ block.shopify_attributes }}
-          >
+          <div class="article-header__featured-image" {{ block.shopify_attributes }}>
             {%- render 'responsive-image',
               image_object: article.image,
               alt: article.title,
@@ -71,8 +67,8 @@
               lazy: false,
               sizes: '(min-width: 1440px) 1360px, 100vw',
               class: 'max-w-full h-auto block mx-auto',
-              alt: article_title,
-              title: article_title
+              alt: article.title,
+              title: article.title
             -%}
           </div>
         {%- endif -%}
@@ -80,10 +76,12 @@
   {%- endfor -%}
 {%- endcapture -%}
 
-{% comment %} Capture container class {% endcomment %}
-{%- capture container_class -%}
-  {{- class }} article-header space-y-8
-{%- endcapture -%}
+{%- liquid
+  # Capture container class
+  capture container_class
+    class article-header space-y-8
+  endcapture
 
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', tag: 'header', class: container_class, content_class: 'space-y-8', content: container_content -%}
+  # Render the content
+  render 'render-container-content', tag: 'header', class: container_class, content_class: 'space-y-8', content: container_content
+-%}

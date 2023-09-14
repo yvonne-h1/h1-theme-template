@@ -180,7 +180,7 @@
     },
     "author": {
       "@type": "Person",
-      "name": "{{ article.user.first_name | escape }} {{ article.user.last_name | escape }}",
+      "name": "{{ article.user.first_name }} {{ article.user.last_name }}",
       "givenName": {{ article.user.first_name | json }},
       "familyName": {{ article.user.last_name | json }}
     },

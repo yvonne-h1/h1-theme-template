@@ -29,11 +29,11 @@
           <select
             id="{{ product.id }}-{{ option.name | handleize }}-{{ forloop.index0 }}-select"
             class="select__select"
-            name="options[{{ option.name | escape }}]"
+            name="options[{{ option.name }}]"
             data-option-name="{{ option.name | handleize }}">
             {%- for value in option.values -%}
               <option
-                value="{{ value | escape }}"
+                value="{{ value }}"
                 data-variant-option-id="{{ product.id }}-{{ option.name }}-{{ forloop.index }}"
                 {% if option.selected_value == value %}
                   selected="selected"

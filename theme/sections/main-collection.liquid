@@ -48,7 +48,11 @@
     {%- endif -%}
   {%- endcapture -%}
 
-  {%- render 'render-container-content', content: container_content -%}
+  {%- capture content_class -%}
+    {% if settings.filter_display == 'grid' -%}lg:pl-0{%- endif -%}
+  {%- endcapture -%}
+
+  {%- render 'render-container-content', content: container_content, content_class: content_class -%}
 </div>
 
 <script src="{{ 'collection-filters-form.js' | asset_url }}" defer></script>

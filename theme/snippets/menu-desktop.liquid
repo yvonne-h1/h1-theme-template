@@ -26,17 +26,17 @@
         {%- for level_1 in menu_list.links -%}
           {%- liquid
             # Get link and fix deep link to native filters
-            assign link_1_url = level_1.url
-            if link_1_url contains 'collections' and link_1_url contains 'filter'
-              assign link_1_url = link_1_url | replace: '%3F', '?'
+            assign level_1_url = level_1.url
+            if level_1_url contains 'collections' and level_1_url contains 'filter'
+              assign level_1_url = level_1_url | replace: '%3F', '?'
             endif
 
             # check if item should be highlighted
             assign link_classes = 'px-4 py-6 text-inherit'
-            assign link_1_title = level_1.title
+            assign level_1_title = level_1.title
             assign is_highlight = false
-            if link_1_title contains '[HIGHLIGHT]'
-              assign link_1_title = level_1.title | remove: '[HIGHLIGHT]' | strip
+            if level_1_title contains '[HIGHLIGHT]'
+              assign level_1_title = level_1_title | remove: '[HIGHLIGHT]' | strip
               if level_1.links == blank
                 assign is_highlight = true
                 assign link_classes = 'button button--sm border-transparent inline leading-none mx-3'
@@ -58,12 +58,12 @@
             {%- comment -%} Output level 1 without submenu. {%- endcomment -%}
             <li class="header__menu-item level-1">
               <a
-                href="{{ link_1_url }}"
+                href="{{ level_1_url }}"
                 class="{{- header_menu_link_classes }} level-1 {{ link_classes }} {% if level_1_active and is_highlight == false -%}{{ header_link_active_class }}{%- endif %}"
                 {% if level_1.current %}
                   aria-current="page"
                 {% endif %}>
-                {{- link_1_title | escape -}}
+                {{- level_1_title -}}
               </a>
             </li>
           {%- else -%}
@@ -78,14 +78,13 @@
               assign images = ''
               if section.blocks.size > 0 and submenu_layout == 'multi'
                 capture images
-                  render 'header-images', section: section, link_1_title: link_1_title
+                  render 'header-images', section: section, level_1_title: level_1_title
                 endcapture
               endif
             -%}
 
             {%- comment -%} Capture the submenu {%- endcomment -%}
             {%- capture submenu -%}
-
               {%- for level_2 in level_1.links -%}
                 {%- liquid
                   # Get link and fix deep link to native filters
@@ -100,7 +99,7 @@
                   {%- if level_2.links != blank -%}
                     <div data-collapsible-group>
                       <button class="{{- header_menu_link_classes }} level-2 w-full py-1.5" data-collapsible-trigger>
-                        {{- level_2.title | escape -}}
+                        {{- level_2.title -}}
                         {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
                       </button>
                       {%- comment -%} Level 3 {%- endcomment -%}
@@ -128,7 +127,7 @@
                                 aria-current="page"
                               {% endif -%}
                             >
-                              {{ level_3.title | escape }}
+                              {{ level_3.title }}
                             </a>
                           </li>
                         {%- endfor -%}
@@ -150,7 +149,7 @@
                         aria-current="page"
                       {% endif %}
                     >
-                      {{- level_2.title | escape -}}
+                      {{- level_2.title -}}
                     </a>
                   {%- endif -%}
                 </li>
@@ -162,13 +161,13 @@
               class="header__menu-item header__menu-item--multi level-1 group/menu-item"
               data-collapsible-group>
               <a
-                href="{{ link_1_url }}"
+                href="{{ level_1_url }}"
                 class="{{- header_menu_link_classes }} level-1 {{ link_classes }} {% if level_1_active -%}{{ header_link_active_class }}{%- endif %}"
                 {%- if level_1.current %}
                   aria-current="page"
                 {% endif %}
                 data-collapsible-trigger>
-                {{- link_1_title | escape -}}
+                {{- level_1_title -}}
                 {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]/menu-item:rotate-180' -%}
               </a>
               <div

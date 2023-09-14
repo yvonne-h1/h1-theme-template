@@ -149,10 +149,10 @@
 
   # Image alt
   if alt == blank
-    assign alt = image_object.alt | escape
+    assign alt = image_object.alt
 
     if alt == blank
-      assign alt = 'Image ' | append: image_object.id | escape
+      assign alt = ''
     endif
   endif
 
@@ -203,7 +203,7 @@
       widths: widths,
       fetchpriority: fetchpriority,
       data-custom-aspect-ratio: custom_aspect_ratio
-  }}
+ }}
   {% comment %}theme-check-enable AssetUrlFilters{% endcomment %}
 {%- endcapture -%}
 
