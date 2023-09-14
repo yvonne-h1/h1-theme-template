@@ -75,7 +75,7 @@ if (!customElements.get('predictive-search')) {
         .then((text) => {
           const resultsMarkup = new DOMParser()
             .parseFromString(text, 'text/html')
-            .querySelector('#shopify-section-predictive-search').innerHTML;
+            .querySelector('#shopify-section-theme-predictive-search').innerHTML;
           this.predictiveSearchResults.innerHTML = resultsMarkup;
           this.open();
         })

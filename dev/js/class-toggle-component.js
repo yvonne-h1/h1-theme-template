@@ -69,9 +69,9 @@ if (!customElements.get('class-toggle-component')) {
 
       // Reduce actions (So the event can also be removed)
       this.reducer = {
-        click: e => this.debounceClickEvent(event),
-        mouseEnter: e => this.debouncedOnMouse(e, 'add'),
-        mouseLeave: e => this.debouncedOnMouse(e, 'remove'),
+        click: event => this.debounceClickEvent(event),
+        mouseEnter: event => this.debouncedOnMouse(event, 'add'),
+        mouseLeave: event => this.debouncedOnMouse(event, 'remove'),
       };
 
       // Construct web component
@@ -103,10 +103,10 @@ if (!customElements.get('class-toggle-component')) {
       Called by add event listener -> reducer.
     */
     debounceClickEvent(event) {
-      if (!e) return false;
+      if (!event) return false;
 
-      e.preventDefault(event);
-      e.stopPropagation(event);
+      event.preventDefault(event);
+      event.stopPropagation(event);
       this.toggle();
     }
 
@@ -116,8 +116,8 @@ if (!customElements.get('class-toggle-component')) {
       @param type {string}: open/close/closeAll
       Called by add event listener -> reducer.
     */
-    debouncedOnMouse(e, type) {
-      if (!e) return false;
+    debouncedOnMouse(event, type) {
+      if (!event) return false;
       const debouncer = debounce((type) => {
         switch (type) {
         case 'add':

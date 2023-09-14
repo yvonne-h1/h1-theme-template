@@ -13,7 +13,7 @@ class ProductMediaSlider extends HTMLElement {
 
     // Reduce actions (So the event can also be removed)
     this.reducer = {
-      slideToVariant: e => this.slideToVariant(event),
+      slideToVariant: event => this.slideToVariant(event),
     };
 
     // Listen for variant change and go to slide
@@ -171,7 +171,7 @@ class ProductMediaSlider extends HTMLElement {
     */
   slideToVariant(event) {
     if (e?.detail?.variant?.id) {
-      const slideIndex = this.matchVariantIdWithSlide(e.detail.variant.id);
+      const slideIndex = this.matchVariantIdWithSlide(event.detail.variant.id);
       if (typeof slideIndex == 'number') {
         this.goToSlide(slideIndex);
       }

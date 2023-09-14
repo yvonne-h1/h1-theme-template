@@ -233,7 +233,7 @@ function fetchConfig(type = 'json') {
  */
 document.querySelectorAll('.prevent-hashjump').forEach((link) => {
   link.addEventListener('click', (event) => {
-    const hashtag = e.target.href.split('#');
+    const hashtag = event.target.href.split('#');
     if (hashtag[1]) {
       const targetElem = document.querySelector('#' + hashtag[1]);
       if (targetElem) {

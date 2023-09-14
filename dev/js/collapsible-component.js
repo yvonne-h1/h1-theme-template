@@ -198,15 +198,15 @@ if (!customElements.get('collapsible-component')) {
       Called by add event listener -> reducer.
     */
     debounceClickEvent(event) {
-      if (!e) return false;
+      if (!event) return false;
 
-      const buttonType = e.target.nodeName.toLowerCase();
-      const group = e.target.closest('[data-collapsible-group]');
+      const buttonType = event.target.nodeName.toLowerCase();
+      const group = event.target.closest('[data-collapsible-group]');
 
       // only toggle if is closed or target is not an <a> tag
       if (!group.classList.contains(this.options.classToToggle) || buttonType != 'a') {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+        event.preventDefault();
+        event.stopImmediatePropagation();
 
         this.toggle(group);
       }
@@ -218,8 +218,8 @@ if (!customElements.get('collapsible-component')) {
       @param type {string}: open/close/closeAll
       Called by add event listener -> reducer.
     */
-    debouncedOnMouse(type, e) {
-      if (!e) return false;
+    debouncedOnMouse(type, event) {
+      if (!event) return false;
 
       // clear old trigger
       clearTimeout(this.timeout);
