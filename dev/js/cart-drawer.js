@@ -27,7 +27,6 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
-    console.log(parsedState);
     this.getSectionsToRender().forEach((section) => {
       if (section?.selector) {
         const selector = document.querySelector(section.selector);
