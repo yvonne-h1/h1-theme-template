@@ -37,7 +37,7 @@ if (!customElements.get('cart-items')) {
         },
         {
           id: 'cart-icon-bubble',
-          section: 'cart-icon-bubble',
+          section: 'theme-cart-icon-bubble',
           selector: '[data-cart-icon-bubble]',
         },
       ];

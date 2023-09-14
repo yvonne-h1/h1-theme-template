@@ -22,8 +22,8 @@ if (!customElements.get('product-form-component')) {
       delete config.headers['Content-Type'];
 
       const sectionsToFetch = [
-        ...this.cartDrawer.getSectionsToRender().map((section) => section.id),
-        ...this.cartNotification.getSectionsToRender().map((section) => section.id),
+        ...this.cartDrawer.getSectionsToRender().map(section => section.section),
+        ...this.cartNotification.getSectionsToRender().map(section => section.section),
       ];
 
       const formData = new FormData(this.form);

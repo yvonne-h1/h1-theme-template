@@ -7,7 +7,7 @@ if (!customElements.get('load-more')) {
       // Get the template - Collection, Search or Blog
       this.currentTemplate = 'collection';
       this.windowTemplate = window.collection;
-      this.ajaxSectionToLoad = 'collection-filters-content';
+      this.ajaxSectionToLoad = 'theme-collection-filters-content';
       this.updateContent = true;
 
       this.currentPageValue = +this.querySelector('[data-current-page]').value;

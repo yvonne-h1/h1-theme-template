@@ -27,6 +27,7 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
+    console.log(parsedState);
     this.getSectionsToRender().forEach((section) => {
       if (section?.selector) {
         const selector = document.querySelector(section.selector);
@@ -44,7 +45,7 @@ class CartDrawer extends HTMLElement {
    */
   async renderCartDrawer() {
     const cartDrawerContent = `${window.location.pathname}?section_id=cart-drawer`;
-    const cartIconBubbleContent = `${window.location.pathname}?section_id=cart-icon-bubble`;
+    const cartIconBubbleContent = `${window.location.pathname}?section_id=theme-cart-icon-bubble`;
 
     fetch(cartDrawerContent)
       .then(response => response.text())
@@ -78,7 +79,7 @@ class CartDrawer extends HTMLElement {
       },
       {
         id: 'cart-icon-bubble',
-        section: 'cart-icon-bubble',
+        section: 'theme-cart-icon-bubble',
         selector: '[data-cart-icon-bubble]',
       },
     ];

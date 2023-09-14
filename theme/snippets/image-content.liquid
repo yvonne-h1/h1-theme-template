@@ -1,0 +1,154 @@
+{% comment %}
+  Renders a background image with text overlayed. Text can be positioned anywhere over the image. Used in the image-banner and slider sections.
+
+  render 'image-content',
+    object: section,
+    lazy: true
+
+  - object: Required. Section or Block.
+  - class: String. Defaults to 'image-banner'
+  - lazy: Boolean. Image lazy loading
+  - min_ratio_mobile: String (optional)
+  - min_ratio_tablet: String (optional)
+
+  Object should contain:
+  - position_horizontal
+  - position_vertical
+  - min_ratio_mobile
+  - min_ratio_tablet
+  - image_desktop
+  - image_mobile
+  - image_lazy
+  - content_color_scheme
+  - heading
+  - heading_element
+  - heading_size
+  - heading_color
+  - text
+  - text_color
+  - text_align
+  - button_label_1
+  - button_url_1
+  - button_label_2
+  - button_url_2
+  - button_type_1
+  - button_type_2
+{% endcomment %}
+
+{%- liquid
+  if lazy == blank
+    assign lazy = true
+  endif
+
+  unless is_swiper
+    assign is_swiper = false
+  endunless
+
+  if class == blank
+    assign class = 'image-banner'
+  endif
+
+  unless min_ratio_mobile
+    assign min_ratio_mobile = object.settings.min_ratio_mobile
+  endunless
+
+  unless min_ratio_tablet
+    assign min_ratio_tablet = object.settings.min_ratio_tablet
+  endunless
+-%}
+
+{% comment %} Banner wrapper {% endcomment %}
+<div class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- else %}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}">
+  {% comment %} Banner image {% endcomment %}
+  {%- liquid
+    assign image_class = 'h-full w-full object-cover'
+    assign image_class_desktop = image_class | append: ' hidden md:block'
+    assign image_class_mobile = image_class | append: ' md:hidden'
+
+    # Assign mobile image
+    assign image_mobile = object.settings.image_desktop
+    if object.settings.image_mobile != blank
+      assign image_mobile = object.settings.image_mobile
+    endif
+  -%}
+
+  <div class="{{- class -}}__image absolute inset-0">
+    {% comment %} Desktop image {% endcomment %}
+    {%- render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, lazy: lazy -%}
+
+    {% comment %} Mobile image {% endcomment %}
+    {%- if image_mobile != blank -%}
+      {%- render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy -%}
+    {%- endif -%}
+  </div>
+
+  {% comment %} Banner content {% endcomment %}
+  <div
+    class="{{- class -}}__content-wrapper content-wrapper flex h-full {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align  }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
+    {% if is_swiper and index != null %}
+      data-swiper-slide-index="{{ index }}" {{ block.shopify_attributes }}
+    {%- endif -%}>
+    <div class="{{- class -}}__content relative mx-element-spacing mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-md md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
+      {% comment %} Heading {% endcomment %}
+      {%- if object.settings.heading != blank -%}
+        <{{ object.settings.heading_element }} class="{{- object.settings.heading_size }} {{ object.settings.heading_color -}}">
+          {{- object.settings.heading | escape -}}
+        </{{ object.settings.heading_element }}>
+      {%- endif -%}
+
+      {% comment %} Text {% endcomment %}
+      {%- if object.settings.text != blank -%}
+        <div class="{{- object.settings.text_color -}}">
+          {{- object.settings.text -}}
+        </div>
+      {%- endif -%}
+
+      {% comment %} Buttons {% endcomment %}
+      {%- liquid
+        # First button
+        assign button_1 = true
+        if object.settings.button_label_1 == blank or object.settings.button_url_1 == blank
+          assign button_1 = false
+        endif
+
+        # Second button
+        assign button_2 = true
+        if object.settings.button_label_2 == blank or object.settings.button_url_2 == blank
+          assign button_2 = false
+        endif
+
+        # Button alligment
+        case object.settings.text_align
+          when 'text-start'
+            assign buttons_alignment = 'justify-start'
+          when 'text-center'
+            assign buttons_alignment = 'justify-center'
+          when 'text-end'
+            assign buttons_alignment = 'justify-end'
+        endcase
+      -%}
+
+      {%- if button_1 or button_2 -%}
+        <div class="{{- class -}}__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
+          {% comment %} Button 1 {% endcomment %}
+          {%- if object.settings.button_label_1 != blank and object.settings.button_url_1 != blank or request.design_mode and object.settings.button_label_1 != blank -%}
+            <a
+              href="{{ object.settings.button_url_1 | default: '#' }}"
+              class="button {{ object.settings.button_type_1 }}{% if object.settings.button_url_1 == blank %} disabled{% endif %}">
+              {{- object.settings.button_label_1 | escape -}}
+            </a>
+          {%- endif -%}
+
+          {% comment %} Button 2 {% endcomment %}
+          {%- if object.settings.button_label_2 != blank and object.settings.button_url_2 != blank or request.design_mode and object.settings.button_label_2 != blank -%}
+            <a
+              href="{{ object.settings.button_url_2 | default: '#' }}"
+              class="button {{ object.settings.button_type_2 }}{% if object.settings.button_url_2 == blank %} disabled{% endif %}">
+              {{- object.settings.button_label_2 | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

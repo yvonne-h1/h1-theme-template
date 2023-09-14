@@ -63,7 +63,7 @@ if (!customElements.get('predictive-search')) {
      */
     getSearchResults(searchTerm) {
       fetch(
-        `${routes.predictive_search_url}?q=${searchTerm}&resources[type]=${this.predictiveSearchResources}&resources[limit]=${this.predictiveSearchMaxSize}&section_id=predictive-search`,
+        `${routes.predictive_search_url}?q=${searchTerm}&resources[type]=${this.predictiveSearchResources}&resources[limit]=${this.predictiveSearchMaxSize}&section_id=theme-predictive-search`,
       )
         .then((response) => {
           if (!response.ok) {

@@ -249,34 +249,31 @@ class VariantRadios extends VariantSelects {
     }
 
     // Loop over option groups
-    this.querySelectorAll('[data-option-group]').forEach((option) => {
+    this.querySelectorAll('[data-option-group]').forEach(option => {
       // Get index from option group (1, 2 or 3)
       const optionIndex = parseInt(option.dataset.optionGroup);
 
       // Create compare options from group, remove selected option based on index
+      // eslint-disable-next-line
       const compareOptions = [...this.variantOptions].filter((option, index) => index != optionIndex);
 
       // Loop over possible values for option group
-      option.querySelectorAll('[data-option]').forEach((optionEl) => {
+      option.querySelectorAll('[data-option]').forEach(optionEl => {
         let label = optionEl.querySelector('[data-option-label]'),
           input = optionEl.querySelector('[data-variant-option-id]'),
           value = input.value;
 
         // Match option availability and check if the two current options are available for value
-        let match = this.getVariantData().filter((variant) => {
+        let match = this.getVariantData().filter(variant => {
           // Get available variants where the current option index is the option value
           if (variant.options[optionIndex] == value && variant.available) {
             // Create variant options, remove option based on option value
-            const variantOptions = [...variant.options].filter(
-              (option, index) => index != optionIndex,
-            );
+            // eslint-disable-next-line
+            const variantOptions = [...variant.options].filter((option, index) => index != optionIndex);
 
             // Check if compare options is the same as variant options
-            return variantOptions.every(
-              (item, index) => item.toLowerCase() === compareOptions[index].toLowerCase(),
-            );
+            return variantOptions.every((item, index) => item.toLowerCase() === compareOptions[index].toLowerCase());
           }
-
           return false;
         });
 

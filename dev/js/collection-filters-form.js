@@ -211,7 +211,7 @@ if (!customElements.get('collection-filters-form')) {
    */
     renderPage(searchParams, event, updateURLHash = true) {
 
-      let sectionName = 'collection-filters-content';
+      let sectionName = 'theme-collection-filters-content';
 
       // do fetch
       const url = `${window.location.pathname}?section_id=${sectionName}&${searchParams}`;

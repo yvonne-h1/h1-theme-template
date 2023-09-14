@@ -5,17 +5,15 @@
     assign is_slider = true
   endif
 
+  # Import styles and set indicator class
+  if is_slider
+    render 'import-styles', file_name: 'component-swiper.css'
+  endif
+
   # Image assigns
   assign max_width = null
   if section.settings.container_width == ''
     assign max_width = 1360
-  endif
--%}
-
-{%- liquid
-  # Import styles and set indicator class
-  if is_slider
-    render 'import-styles', file_name: 'component-swiper.css'
   endif
 -%}
 
@@ -50,120 +48,18 @@
   <swiper-slider {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
     <div class="swiper" data-swiper>
       <div class="swiper-wrapper flex">
-        {%- for block in section.blocks -%}
+        {%- liquid
+          for block in section.blocks
 
-          {% comment %} Create content position class {% endcomment %}
-          {%- capture content_position -%}
-            {{ block.settings.position_horizontal }} {{ block.settings.position_vertical }} {{ block.settings.text_align }}
-          {%- endcapture -%}
+            # Lazy loading. Always lazy load additional slides. The ratio has to be added in the snippet options because those are section settings not block settings.
+            assign lazy = block.settings.image_lazy
+            if forloop.index >= 2
+              assign lazy = true
+            endif
 
-          {% comment %} Swiper slide {% endcomment %}
-          <div class="swiper-slide relative basis-full">
-
-            {% comment %} Slider image {% endcomment %}
-            {%- liquid
-              assign image_class = 'h-full w-full object-cover'
-              assign image_class_desktop = image_class | append: ' hidden md:block'
-              assign image_class_mobile = image_class | append: ' md:hidden'
-
-              # Assign mobile image
-              assign image_mobile = block.settings.image_desktop
-              if block.settings.image_mobile != blank
-                assign image_mobile = block.settings.image_mobile
-              endif
-
-              # Lazy loading
-              assign lazy = block.settings.image_lazy
-              if forloop.index >= 2
-                assign lazy = true
-              endif
-            -%}
-
-            <div class="slider__image absolute inset-0">
-              {% comment %} Desktop image {% endcomment %}
-              {%- render 'responsive-image',
-                image_object: block.settings.image_desktop,
-                class: image_class_desktop,
-                max_width: max_width,
-                lazy: lazy
-              -%}
-
-              {% comment %} Mobile image {% endcomment %}
-              {%- if image_mobile != blank -%}
-                {%- render 'responsive-image',
-                  image_object: image_mobile,
-                  class: image_class_mobile,
-                  max_width: 768,
-                  lazy: lazy
-                -%}
-              {%- endif -%}
-            </div>
-
-            {% comment %} Slider content {% endcomment %}
-            <div class="content-wrapper flex h-full {{ content_position -}} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }}" data-swiper-slide-index="{{ forloop.index }}" {{ block.shopify_attributes }}>
-              <div class="slider__content relative mx-element-spacing my-12 inline-flex max-w-[80%] flex-col gap-y-4 p-8 md:my-20 md:max-w-screen-md md:p-12 {{ block.settings.content_color_scheme -}}">
-                {% comment %} Heading {% endcomment %}
-                {%- if block.settings.heading != blank -%}
-                  <{{ block.settings.heading_element }} class="{{- block.settings.heading_size }} {{ block.settings.heading_color -}}">
-                    {{- block.settings.heading | escape -}}
-                  </{{ block.settings.heading_element }}>
-                {%- endif -%}
-
-                {% comment %} Text {% endcomment %}
-                {%- if block.settings.text != blank -%}
-                  <div class="{{- block.settings.text_color -}}">
-                    {{- block.settings.text -}}
-                  </div>
-                {%- endif -%}
-
-                {% comment %} Buttons {% endcomment %}
-                {%- liquid
-                  # First button
-                  assign button_1 = false
-                  if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
-                    assign button_1 = true
-                  endif
-
-                  # Second button
-                  assign button_2 = false
-                  if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
-                    assign button_2 = true
-                  endif
-
-                  # Button alligment
-                  case block.settings.text_align
-                    when 'text-start'
-                      assign buttons_alignment = 'justify-start'
-                    when 'text-center'
-                      assign buttons_alignment = 'justify-center'
-                    when 'text-end'
-                      assign buttons_alignment = 'justify-end'
-                  endcase
-                -%}
-
-                {%- if button_1 or button_2 -%}
-                  <div class="slider__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
-                    {% comment %} Button 1 {% endcomment %}
-                    {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
-                      <a href="{{ block.settings.button_url_1 | default: '#' }}"
-                        class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
-                        {{- block.settings.button_label_1 | escape -}}
-                      </a>
-                    {%- endif -%}
-
-                    {% comment %} Button 2 {% endcomment %}
-                    {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
-                      <a href="{{ block.settings.button_url_2 | default: '#' }}"
-                        class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
-                        {{- block.settings.button_label_2 | escape -}}
-                      </a>
-                    {%- endif -%}
-                  </div>
-                {%- endif -%}
-              </div>
-            </div>
-          </div>
-        {%- endfor -%}
+            render 'image-content', object: block, lazy: lazy, class: 'slider', index: forloop.index, is_swiper: is_slider, min_ratio_mobile: section.settings.min_ratio_mobile, min_ratio_tablet: section.settings.min_ratio_tablet
+          endfor
+        -%}
       </div>
 
       {%- if is_slider -%}
@@ -198,10 +94,8 @@
 {%- endif -%}
 
 {%- liquid
-  assign container_class = 'slider'
-
   # Container width
-  assign container_class = container_class | append: ' ' | append: section.settings.container_width
+  assign container_class = 'slider ' | append: section.settings.container_width
 
   # Remove y margin if section is full width
   if section.settings.container_width == 'container--full'
@@ -382,13 +276,13 @@
             "type": "image_picker",
             "id": "image_desktop",
             "label": "Desktop image",
-            "info": "Visible 768px >. Max. size: 4472 x 4472 px (20MB)."
+            "info": "Screens larger than 768px. Max. size: 4472 x 4472 px (20MB)."
           },
           {
             "type": "image_picker",
             "id": "image_mobile",
             "label": "Mobile image",
-            "info": "Visible < 768px. Max. size: 4472 x 4472 px (20MB)."
+            "info": "Screens smaller than 768px. Max. size: 4472 x 4472 px (20MB)."
           },
           {
             "type": "checkbox",
@@ -404,7 +298,7 @@
           {
             "type": "select",
             "id": "content_color_scheme",
-            "label": "Color scheme",
+            "label": "Text background",
             "default": "",
             "options": [
               {
@@ -577,11 +471,12 @@
           {
             "type": "select",
             "id": "heading_color",
-            "label": "Color",
+            "label": "Heading color",
+            "default": "",
             "options": [
               {
                 "value": "",
-                "label": "Default"
+                "label": "Default color scheme"
               },
               {
                 "value": "text-black",
@@ -623,11 +518,12 @@
           {
             "type": "select",
             "id": "text_color",
-            "label": "Color",
+            "label": "Text color",
+            "default": "",
             "options": [
               {
                 "value": "",
-                "label": "Default"
+                "label": "Default color scheme"
               },
               {
                 "value": "text-black",
@@ -759,6 +655,9 @@
       {
         "name": "Slider",
         "blocks": [
+          {
+            "type": "slide"
+          },
           {
             "type": "slide"
           }

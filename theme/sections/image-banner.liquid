@@ -4,124 +4,14 @@
   if section.settings.container_width == ''
     assign max_width = 1360
   endif
--%}
 
-{%- comment -%} Capture container content {%- endcomment -%}
-{%- capture container_content -%}
-
-  {% comment %} Create content position class {% endcomment %}
-  {%- capture content_position -%}
-    {{ section.settings.position_horizontal }} {{ section.settings.position_vertical }} {{ section.settings.text_align }}
-  {%- endcapture -%}
-
-  {% comment %} Banner wrapper {% endcomment %}
-  <div class="image-banner__wrapper relative {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }}">
-
-    {% comment %} Banner image {% endcomment %}
-    {%- liquid
-      assign image_class = 'h-full w-full object-cover'
-      assign image_class_desktop = image_class | append: ' hidden md:block'
-      assign image_class_mobile = image_class | append: ' md:hidden'
-
-      # Assign mobile image
-      assign image_mobile = section.settings.image_desktop
-      if section.settings.image_mobile != blank
-        assign image_mobile = section.settings.image_mobile
-      endif
-    -%}
-
-    <div class="image-banner__image absolute inset-0">
-      {% comment %} Desktop image {% endcomment %}
-      {%- render 'responsive-image',
-        image_object: section.settings.image_desktop,
-        class: image_class_desktop,
-        max_width: max_width,
-        lazy: section.settings.image_lazy
-      -%}
-
-      {% comment %} Mobile image {% endcomment %}
-      {%- if image_mobile != blank -%}
-        {%- render 'responsive-image',
-          image_object: image_mobile,
-          class: image_class_mobile,
-          max_width: 768,
-          lazy: section.settings.image_lazy
-        -%}
-      {%- endif -%}
-    </div>
-
-    {% comment %} Banner content {% endcomment %}
-    <div class="image-banner__content-wrapper content-wrapper flex h-full {{ content_position }}">
-      <div class="image-banner__content relative mx-element-spacing mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-md md:p-8 md:px-12 {{ section.settings.content_color_scheme -}}">
-        {% comment %} Heading {% endcomment %}
-        {%- if section.settings.heading != blank -%}
-          <{{ section.settings.heading_element }} class="{{- section.settings.heading_size }} {{ section.settings.heading_color -}}">
-            {{- section.settings.heading | escape -}}
-          </{{ section.settings.heading_element }}>
-        {%- endif -%}
-
-        {% comment %} Text {% endcomment %}
-        {%- if section.settings.text != blank -%}
-          <div class="{{- section.settings.text_color -}}">
-            {{- section.settings.text -}}
-          </div>
-        {%- endif -%}
-
-        {% comment %} Buttons {% endcomment %}
-        {%- liquid
-          # First button
-          assign button_1 = true
-          if section.settings.button_label_1 == blank or section.settings.button_url_1 == blank
-            assign button_1 = false
-          endif
-
-          # Second button
-          assign button_2 = true
-          if section.settings.button_label_2 == blank or section.settings.button_url_2 == blank
-            assign button_2 = false
-          endif
-
-          # Button alligment
-          case section.settings.text_align
-            when 'text-start'
-              assign buttons_alignment = 'justify-start'
-            when 'text-center'
-              assign buttons_alignment = 'justify-center'
-            when 'text-end'
-              assign buttons_alignment = 'justify-end'
-          endcase
-        -%}
-
-        {%- if button_1 or button_2 -%}
-          <div class="image-banner__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
-            {% comment %} Button 1 {% endcomment %}
-            {%- if section.settings.button_label_1 != blank and section.settings.button_url_1 != blank or request.design_mode and section.settings.button_label_1 != blank -%}
-              <a href="{{ section.settings.button_url_1 | default: '#' }}"
-                class="button {{ section.settings.button_type_1 }}{% if section.settings.button_url_1 == blank %} disabled{% endif %}">
-                {{- section.settings.button_label_1 | escape -}}
-              </a>
-            {%- endif -%}
-
-            {% comment %} Button 2 {% endcomment %}
-            {%- if section.settings.button_label_2 != blank and section.settings.button_url_2 != blank or request.design_mode and section.settings.button_label_2 != blank -%}
-              <a href="{{ section.settings.button_url_2 | default: '#' }}"
-                class="button {{ section.settings.button_type_2 }}{% if section.settings.button_url_2 == blank %} disabled{% endif %}">
-                {{- section.settings.button_label_2 | escape -}}
-              </a>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-      </div>
-    </div>
-  </div>
-{%- endcapture -%}
-
-{% comment %} Container class {% endcomment %}
-{%- liquid
-  assign container_class = 'image-banner'
+  # Capture container content  echo
+  capture container_content
+    render 'image-content', object: section, lazy: section.settings.image_lazy
+  endcapture
 
   # Container width
-  assign container_class = container_class | append: ' ' | append: section.settings.container_width
+  assign container_class = 'image-banner ' | append: section.settings.container_width
 
   # Remove y margin if section is full width
   if section.settings.container_width == 'container--full'
@@ -267,13 +157,13 @@
         "type": "image_picker",
         "id": "image_desktop",
         "label": "Desktop image",
-        "info": "Visible 768px >. Max. size: 4472 x 4472 px (20MB)."
+        "info": "Screens larger than 768px. Max. size: 4472 x 4472 px (20MB)."
       },
       {
         "type": "image_picker",
         "id": "image_mobile",
         "label": "Mobile image",
-        "info": "Visible < 768px. Max. size: 4472 x 4472 px (20MB)."
+        "info": "Screens smaller than 768px. Max. size: 4472 x 4472 px (20MB)."
       },
       {
         "type": "checkbox",
@@ -289,7 +179,7 @@
       {
         "type": "select",
         "id": "content_color_scheme",
-        "label": "Color scheme",
+        "label": "Text background",
         "default": "",
         "options": [
           {
@@ -462,11 +352,12 @@
       {
         "type": "select",
         "id": "heading_color",
-        "label": "Color",
+        "label": "Heading color",
+        "default": "",
         "options": [
           {
             "value": "",
-            "label": "Default"
+            "label": "Default color scheme"
           },
           {
             "value": "text-black",
@@ -508,11 +399,12 @@
       {
         "type": "select",
         "id": "text_color",
-        "label": "Color",
+        "label": "Text color",
+        "default": "",
         "options": [
           {
             "value": "",
-            "label": "Default"
+            "label": "Default color scheme"
           },
           {
             "value": "text-black",

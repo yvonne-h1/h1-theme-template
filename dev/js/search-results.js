@@ -151,7 +151,7 @@ class SearchResults extends HTMLElement {
     }
 
     // do fetch
-    const url = `${window.location.pathname}?${searchParams}&section_id=search-types`;
+    const url = `${window.location.pathname}?${searchParams}&section_id=theme-search-types`;
 
     fetch(url)
       .then(response => response.text())
@@ -170,7 +170,7 @@ class SearchResults extends HTMLElement {
    * @param {Boolean} updateURLHash
    */
   renderPage(searchParams, updateURLHash = true, type = null) {
-    const url = `${window.location.pathname}?${searchParams}&section_id=search-results`;
+    const url = `${window.location.pathname}?${searchParams}&section_id=theme-search-results`;
 
     const filterDataUrl = element => element.url === url;
 

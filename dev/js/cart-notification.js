@@ -62,6 +62,7 @@ class CartNotification extends HTMLElement {
   /**
    * renderContents
    * @param {Object} parsedState
+   * Re-assign the trigger so we can return the focus when the notification is closed.
    */
   renderContents(parsedState, trigger) {
     this.trigger = trigger || null;
@@ -104,16 +105,16 @@ class CartNotification extends HTMLElement {
     return [
       {
         id: 'cart-notification-product',
-        section: 'cart-notification-product',
+        section: 'theme-cart-notification-product',
         selector: `#cart-notification-product-${this.productId}`,
       },
       {
         id: 'cart-notification-button',
-        section: 'cart-notification-button',
+        section: 'theme-cart-notification-button',
       },
       {
         id: 'cart-icon-bubble',
-        section: 'cart-icon-bubble',
+        section: 'theme-cart-icon-bubble',
         selector: '[data-cart-icon-bubble]',
       },
     ];
