@@ -11,9 +11,7 @@ class ProductCard extends HTMLElement {
   init() {
     this.createSwiper();
     this.handleSwiperButtons();
-    window.addEventListener('resize', () => {
-      this.handleSwiperButtons();
-    });
+    window.addEventListener('resize', () => this.handleSwiperButtons());
   }
 
   createSwiper() {
@@ -53,10 +51,10 @@ class ProductCard extends HTMLElement {
 
   handleSwiperButtons() {
     if (windowWidth() < 768) {
-      this.querySelectorAll('button').forEach((button) => button.classList.remove('hidden'));
+      this.querySelectorAll('button').forEach(button => button.classList.remove('hidden'));
     }
     else if (this.swiperInstance) {
-      this.querySelectorAll('button').forEach((button) => button.classList.add('hidden'));
+      this.querySelectorAll('button').forEach(button => button.classList.add('hidden'));
     }
   }
 }

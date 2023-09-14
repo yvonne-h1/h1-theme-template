@@ -10,9 +10,7 @@ class ProductInfo extends HTMLElement {
     this.productFormQuantity = this.productForm?.querySelector('input[name="quantity"]');
     this.quantityInput = this.querySelector('quantity-input');
     this.quantityInputElement = this.quantityInput?.querySelector('input[name="quantity"]');
-    this.quantityInputElement?.addEventListener('change', () => {
-      this.handleQuantityInput();
-    });
+    this.quantityInputElement?.addEventListener('change', () => this.handleQuantityInput());
 
     // On scroll, observe the product form on mobile and make it fixed when necessary
     this.debouncedOnScroll = debounce((event) => {
@@ -22,9 +20,7 @@ class ProductInfo extends HTMLElement {
         return;
       }
       // check for window height for accessibility. We don't fix the element for small screens
-      if (window.innerHeight > 480) {
-        this.productInfoObserver(event);
-      }
+      if (window.innerHeight > 480) this.productInfoObserver(event);
     }, 10);
     window.addEventListener('scroll', this.debouncedOnScroll.bind(this));
   }
@@ -35,8 +31,8 @@ class ProductInfo extends HTMLElement {
    */
   productInfoObserver() {
     // Register IntersectionObserver
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         const isBottomVisible = entry.boundingClientRect.bottom + 50 < window.innerHeight;
         if (isBottomVisible) {
           this.quickAddWrapper.classList.add(this.fixedClass);

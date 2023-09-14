@@ -10,8 +10,8 @@ if (!customElements.get('product-form-component')) {
       this.cartItems = document.querySelector('cart-items');
     }
 
-    onSubmitHandler(evt) {
-      evt.preventDefault();
+    onSubmitHandler(event) {
+      event.preventDefault();
 
       const submitButton = this.querySelector('[type="submit"]');
       submitButton.setAttribute('disabled', true);
@@ -32,7 +32,7 @@ if (!customElements.get('product-form-component')) {
       config.body = formData;
 
       fetch(`${routes.cart_add_url}`, config)
-        .then((response) => response.json())
+        .then(response => response.json())
         .then((parsedState) => {
           if (parsedState.status == 422) {
             // When quantity error
@@ -58,8 +58,8 @@ if (!customElements.get('product-form-component')) {
             this.cartNotification?.renderContents(parsedState, submitButton);
           }
         } )
-        .catch((e) => {
-          debug() && console.error(e);
+        .catch((event) => {
+          debug() && console.error(event);
         } )
         .finally(() => {
           submitButton.classList.remove('button--loading');

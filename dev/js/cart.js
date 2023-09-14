@@ -49,7 +49,7 @@ if (!customElements.get('cart-items')) {
       const body = JSON.stringify( {
         line,
         quantity,
-        sections: this.getSectionsToRender().map((section) => section.section),
+        sections: this.getSectionsToRender().map(section => section.section),
         sections_url: window.location.pathname,
       } );
 
@@ -91,7 +91,7 @@ if (!customElements.get('cart-items')) {
     async updateAfterError(line, name) {
       // Do a new fetch to the cart so you get the correct values of the item that had errors
       const body = JSON.stringify( {
-        sections: this.getSectionsToRender().map((section) => section.section),
+        sections: this.getSectionsToRender().map(section => section.section),
         sections_url: window.location.pathname,
       } );
       const response = await fetch(routes.cart_update_url, {

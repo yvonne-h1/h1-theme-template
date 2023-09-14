@@ -7,9 +7,7 @@ if (!customElements.get('quick-shop')) {
       this.productCards = document.querySelectorAll('[data-product-card]');
       this.quickShopOptions = document.querySelectorAll('[data-quick-shop-option]');
 
-      this.parentCard.addEventListener('mouseleave', () => {
-        this.updateLabelState();
-      });
+      this.parentCard.addEventListener('mouseleave', () => this.updateLabelState());
 
       this.parentCard?.querySelectorAll('[data-quick-shop-toggle]').forEach((button) => {
         button.addEventListener('click', () => {
@@ -47,9 +45,7 @@ if (!customElements.get('quick-shop')) {
     onPopupToggle() {
       // Close other quick shops
       this.productCards.forEach((card) => {
-        if (!card.isSameNode(this.parentCard)) {
-          card.classList.remove('quick-shop--is-open');
-        }
+        if (!card.isSameNode(this.parentCard)) card.classList.remove('quick-shop--is-open');
       });
       this.parentCard.classList.toggle('quick-shop--is-open');
     }

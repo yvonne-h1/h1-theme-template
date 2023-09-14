@@ -40,7 +40,7 @@ if (!customElements.get('load-more')) {
         : null;
 
       this.loadTrigger = this.querySelectorAll('[data-load-trigger]');
-      this.loadTrigger.forEach((trigger) =>
+      this.loadTrigger.forEach(trigger =>
         trigger.addEventListener('click', this.loadItems.bind(this)),
       );
 
@@ -64,9 +64,7 @@ if (!customElements.get('load-more')) {
         }
 
         // update the elements on the page with the values
-        document
-          .querySelectorAll('[data-progress-current]')
-          .forEach((el) => (el.innerHTML = currentItems));
+        document.querySelectorAll('[data-progress-current]').forEach(el => (el.innerHTML = currentItems));
       }
     }
 
@@ -96,7 +94,7 @@ if (!customElements.get('load-more')) {
      */
     renderElementsFromFetch(url, page, direction, event) {
       fetch(url)
-        .then((response) => response.text())
+        .then(response => response.text())
         .then((responseText) => {
           const html = new DOMParser().parseFromString(responseText, 'text/html');
           let wrapperID = '#products';
@@ -105,9 +103,7 @@ if (!customElements.get('load-more')) {
 
           let elementsWrapper = document.querySelector('#CollectionProductGrid');
           let wrapperIDSelector = '[data-products-wrapper]';
-          if (this.currentTemplate === 'search') {
-            elementsWrapper = document.querySelector('#SearchProductGrid');
-          }
+          if (this.currentTemplate === 'search') elementsWrapper = document.querySelector('#SearchProductGrid');
 
           // update the wrapper with the new elements (products/articles)
           const newContent = html.querySelector(`${wrapperID} ${wrapperIDSelector}`).querySelectorAll('li');
@@ -148,9 +144,7 @@ if (!customElements.get('load-more')) {
           this.totalItemsOnLastPageValue = +html.querySelector('[data-items-on-last-page]').value;
 
           // update the array of loaded pages
-          if (this.loadedPages.indexOf(this.currentPageValue) === -1) {
-            this.loadedPages.push(this.currentPageValue);
-          }
+          if (this.loadedPages.indexOf(this.currentPageValue) === -1) this.loadedPages.push(this.currentPageValue);
 
           // reload the function since variables might have been changed
           this.initLoadMoreButtons(true);
@@ -162,11 +156,9 @@ if (!customElements.get('load-more')) {
           this.querySelector('[data-current-page]').value = page.split('page=')[1];
 
           // trigger a window event that we use in the set-creator.js
-          window.dispatchEvent(
-            new CustomEvent('load-more', {
-              bubbles: true,
-            }),
-          );
+          window.dispatchEvent(new CustomEvent('load-more', {
+            bubbles: true,
+          }));
         });
     }
 

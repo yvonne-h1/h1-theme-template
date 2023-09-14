@@ -19,10 +19,8 @@ if (!customElements.get('predictive-search')) {
       this.input = this.querySelector('[data-predicative-search="input"]');
       this.reset = this.querySelector('[data-predicative-search="reset"]');
       this.predictiveSearchResults = this.querySelector('[data-predicative-search="results"]');
-      this.predictiveSearchResources =
-        this.predictiveSearchResults.getAttribute('data-resources-types') || 'product';
-      this.predictiveSearchMaxSize =
-        this.predictiveSearchResults.getAttribute('data-max-results') || 4;
+      this.predictiveSearchResources = this.predictiveSearchResults.getAttribute('data-resources-types') || 'product';
+      this.predictiveSearchMaxSize = this.predictiveSearchResults.getAttribute('data-max-results') || 4;
 
       this.input.addEventListener( 'input', debounce((event) => {
         this.onChange(event);
@@ -94,7 +92,6 @@ if (!customElements.get('predictive-search')) {
     open() {
       this.predictiveSearchResults.style.display = 'block';
       trapFocus(this);
-
     }
 
     /**
@@ -133,6 +130,5 @@ if (!customElements.get('predictive-search')) {
   }
 
   window.PredictiveSearch = PredictiveSearch;
-
   customElements.define('predictive-search', PredictiveSearch);
 }

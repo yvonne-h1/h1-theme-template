@@ -13,7 +13,7 @@ class ProductMediaSlider extends HTMLElement {
 
     // Reduce actions (So the event can also be removed)
     this.reducer = {
-      slideToVariant: (e) => this.slideToVariant(e),
+      slideToVariant: e => this.slideToVariant(event),
     };
 
     // Listen for variant change and go to slide
@@ -169,7 +169,7 @@ class ProductMediaSlider extends HTMLElement {
     * Slide to variant
     * @Param e {object}: event object with variant
     */
-  slideToVariant(e) {
+  slideToVariant(event) {
     if (e?.detail?.variant?.id) {
       const slideIndex = this.matchVariantIdWithSlide(e.detail.variant.id);
       if (typeof slideIndex == 'number') {
@@ -183,9 +183,7 @@ class ProductMediaSlider extends HTMLElement {
     * @param id {int}: variant id
     */
   matchVariantIdWithSlide(id) {
-    if (!id || !this.swiperMain) {
-      return false;
-    }
+    if (!id || !this.swiperMain) return false;
 
     // Get slides
     const slides = this.swiperMain.querySelectorAll('[data-product-variant-image]');
@@ -196,15 +194,11 @@ class ProductMediaSlider extends HTMLElement {
       const slideVariants = JSON.parse(slide.dataset.productVariantImage);
 
       // Check if variant id match the slide variant id's
-      if (slideVariants.includes(id)) {
-        return slide;
-      }
-    } );
+      if (slideVariants.includes(id)) return slide;
+    });
 
     // return false if no slide found
-    if (!slide) {
-      return false;
-    }
+    if (!slide) return false;
 
     // return matched slide index
     return this.getNodeIndex(slide);
@@ -215,9 +209,7 @@ class ProductMediaSlider extends HTMLElement {
     * @param slide {node} / {int}: slide node / index
     */
   goToSlide(slide) {
-    if ((typeof slide != 'number' && typeof slide != 'object') || !this.swiperMainInstance) {
-      return false;
-    }
+    if ((typeof slide != 'number' && typeof slide != 'object') || !this.swiperMainInstance) return false;
 
     // Get index, transform node to slide index or string to int
     const index = typeof slide == 'number' ? parseInt(slide) : this.getNodeIndex(slide);

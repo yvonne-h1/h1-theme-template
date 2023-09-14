@@ -31,9 +31,7 @@ if (!customElements.get('collection-filters-form')) {
         if (windowWidth === this.ww) return;
         this.ww = windowWidth;
 
-        if (this.ww < 768) {
-          document.body.classList.remove(window.drawerToggleClasses.filters);
-        }
+        if (this.ww < 768) document.body.classList.remove(window.drawerToggleClasses.filters);
       }, 100);
       window.addEventListener('resize', this.debouncedOnResize.bind(this));
 
@@ -98,6 +96,7 @@ if (!customElements.get('collection-filters-form')) {
           if (filterOptions.charAt(0) === '&') {
             filterOptions = filterOptions.slice(1);
           }
+
           // if the filter options are not empty after we filtered out the sort option, then add it to the new sort option
           searchParams = `${searchParams}${(filterOptions) ? `&${filterOptions}` : ''}`;
         }
@@ -105,9 +104,7 @@ if (!customElements.get('collection-filters-form')) {
         else {
         // Filter the form parameters for empty values
           for (const [key, value] of new URLSearchParams(formData).entries()) {
-            if (value === '') {
-              searchParams.delete(key);
-            }
+            if (value === '') searchParams.delete(key);
           }
           // remove the price range from the params if the filter wasn't active yet and the price range wasn't changed
           if (!isPriceRange && !hasPriceRange) {
@@ -155,7 +152,7 @@ if (!customElements.get('collection-filters-form')) {
           }
           // set back all the pre-existent parameters (searched query, searched type & options)
           const preExistentSearchParams = ['q','type','options[prefix]'];
-          preExistentSearchParams.forEach(param => {
+          preExistentSearchParams.forEach((param) => {
             if (currentParams.has(param)) {
               searchParams.append(param, currentParams.get(param));
             }
@@ -177,7 +174,6 @@ if (!customElements.get('collection-filters-form')) {
    */
     onActiveFilterClick(event) {
       event.preventDefault();
-
       this.renderPage(new URL(event.currentTarget.href).searchParams.toString(), null);
     }
 
@@ -195,7 +191,6 @@ if (!customElements.get('collection-filters-form')) {
      * @param {Boolean} disable
      */
     toggleActiveFilters(disable = true) {
-
       document.querySelectorAll('[data-filter-remove]').forEach((element) => {
         element.classList.toggle('disabled', disable);
       });
@@ -210,7 +205,6 @@ if (!customElements.get('collection-filters-form')) {
    * @param {Boolean} updateURLHash
    */
     renderPage(searchParams, event, updateURLHash = true) {
-
       let sectionName = 'theme-collection-filters-content';
 
       // do fetch
@@ -301,10 +295,10 @@ if (!customElements.get('collection-filters-form')) {
       const filterOptionElements = parsedHTML.querySelectorAll(
         '[data-collection-filters-form] [data-filter-option]',
       );
-      const matchesIndex = (element) =>
+      const matchesIndex = element =>
         element.dataset.index === event?.target.closest('[data-filter-option]')?.dataset.index;
       const filterOptionsToRender = Array.from(filterOptionElements).filter(
-        (element) => !matchesIndex(element),
+        element => !matchesIndex(element),
       );
 
       filterOptionsToRender.forEach((element) => {
@@ -348,7 +342,7 @@ if (!customElements.get('collection-filters-form')) {
 
       // check all filters and hide the ones with no options
       const filterOptions = document.querySelectorAll('[data-filter-option-list]');
-      filterOptions.forEach((filterOption) =>
+      filterOptions.forEach(filterOption =>
         filterOption.children.length === 0
           ? filterOption.closest('[data-filter-option]').classList.add('hidden')
           : filterOption.closest('[data-filter-option]').classList.remove('hidden'),
@@ -399,8 +393,8 @@ if (!customElements.get('price-range')) {
       this.minLabel = this.querySelector('[data-price-range-values] [data-price-range-min]');
       this.maxLabel = this.querySelector('[data-price-range-values] [data-price-range-max]');
 
-      [this.minInput,this.maxInput].forEach(element => {
-        element.addEventListener('input', event => {
+      [this.minInput,this.maxInput].forEach((element) => {
+        element.addEventListener('input', (event) => {
 
           // update the spans
           if (element === this.minInput) {

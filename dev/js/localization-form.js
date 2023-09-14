@@ -11,7 +11,7 @@ class LocalizationForm extends HTMLElement {
 
     this.addEventListener('keyup', this.onContainerKeyUp.bind(this));
 
-    this.querySelectorAll('a').forEach((item) =>
+    this.querySelectorAll('a').forEach(item =>
       item.addEventListener('click', this.onItemClick.bind(this)),
     );
   }
@@ -40,17 +40,12 @@ class LocalizationForm extends HTMLElement {
   openSelector() {
     this.elements.button.focus();
     this.elements.panel.toggleAttribute('hidden');
-    this.elements.button.setAttribute(
-      'aria-expanded',
-      (this.elements.button.getAttribute('aria-expanded') === 'false').toString(),
-    );
+    this.elements.button.setAttribute('aria-expanded', (this.elements.button.getAttribute('aria-expanded') === 'false').toString());
   }
 
   closeSelector(event) {
     const isChild = this.elements.panel.contains(event.relatedTarget) || this.elements.button.contains(event.relatedTarget);
-    if (!event.relatedTarget || !isChild) {
-      this.hidePanel();
-    }
+    if (!event.relatedTarget || !isChild) this.hidePanel();
   }
 }
 if (!customElements.get('localization-form')) {

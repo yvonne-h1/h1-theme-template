@@ -9,7 +9,7 @@ class CartDrawer extends HTMLElement {
 
     this.onBodyClick = this.handleBodyClick.bind(this);
 
-    this.drawer.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
+    this.drawer.addEventListener('keyup', event => event.code === 'Escape' && this.close());
   }
 
   open() {
@@ -90,9 +90,7 @@ class CartDrawer extends HTMLElement {
 
   handleBodyClick(event) {
     const target = event.target;
-    if (target !== this.drawer && !target.closest('cart-drawer')) {
-      this.close();
-    }
+    if (target !== this.drawer && !target.closest('cart-drawer')) this.close();
   }
 }
 

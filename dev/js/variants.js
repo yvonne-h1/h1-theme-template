@@ -44,7 +44,7 @@ class VariantSelects extends HTMLElement {
     this.optionValue = event.target.value;
 
     // change the other possible variant inputs to the same value
-    document.querySelectorAll(`[data-option-name=${this.optionName}]`).forEach(variantOption => {
+    document.querySelectorAll(`[data-option-name=${this.optionName}]`).forEach((variantOption) => {
       if (variantOption.nodeName === 'FIELDSET') {
         variantOption.querySelector(`input[value="${this.optionValue}"]`).checked = true;
       }
@@ -55,11 +55,11 @@ class VariantSelects extends HTMLElement {
   }
 
   updateOptions() {
-    this.variantOptions = Array.from(this.querySelectorAll('select'), (select) => select.value);
+    this.variantOptions = Array.from(this.querySelectorAll('select'), select => select.value);
   }
 
   updateMasterId() {
-    this.currentVariant = this.getVariantData().find(variant => {
+    this.currentVariant = this.getVariantData().find((variant) => {
       return !variant.options
         .map((option, index) => {
           if (!this.variantOptions[index]) return true;
@@ -70,15 +70,13 @@ class VariantSelects extends HTMLElement {
   }
 
   dispatchVariantChange() {
-    document.dispatchEvent(
-      new CustomEvent('variant-change', {
-        bubbles: true,
+    document.dispatchEvent(new CustomEvent('variant-change', {
+      bubbles: true,
+      variant: this.currentVariant,
+      detail: {
         variant: this.currentVariant,
-        detail: {
-          variant: this.currentVariant,
-        },
-      }),
-    );
+      },
+    }));
   }
 
   updateMedia() {
@@ -91,9 +89,7 @@ class VariantSelects extends HTMLElement {
 
     const parent = newMedia.parentElement;
     parent.prepend(newMedia);
-    window.setTimeout(() => {
-      parent.scroll(0, 0);
-    });
+    window.setTimeout(() => parent.scroll(0, 0));
   }
 
   updateURL() {
@@ -117,7 +113,7 @@ class VariantSelects extends HTMLElement {
   renderProductInfo() {
     const url = `${this.options.url}?variant=${this.currentVariant.id}&section_id=${this.options.section}`;
     fetch(url)
-      .then((response) => response.text())
+      .then(response => response.text())
       .then((responseText) => {
 
         const html = new DOMParser().parseFromString(responseText, 'text/html');
@@ -226,7 +222,7 @@ class VariantRadios extends VariantSelects {
   updateOptions() {
     const fieldsetArray = Array.from(this.querySelectorAll('fieldset'));
     this.variantOptions = fieldsetArray.map((fieldset) => {
-      return Array.from(fieldset.querySelectorAll('input')).find((radio) => radio.checked).value;
+      return Array.from(fieldset.querySelectorAll('input')).find(radio => radio.checked).value;
     });
   }
 
@@ -235,9 +231,7 @@ class VariantRadios extends VariantSelects {
    */
   highlightOptions() {
     // If no selected element make all available
-    let selectedElement = event
-      ? event.target
-      : this.querySelector('[data-option-group] input[checked]');
+    let selectedElement = this.querySelector('[data-option-group] input[checked]');
     if (!selectedElement) {
       this.querySelectorAll('[data-option-group]').forEach((option) => {
         option.querySelectorAll('[data-option]').forEach((optionEl) => {
@@ -249,7 +243,7 @@ class VariantRadios extends VariantSelects {
     }
 
     // Loop over option groups
-    this.querySelectorAll('[data-option-group]').forEach(option => {
+    this.querySelectorAll('[data-option-group]').forEach((option) => {
       // Get index from option group (1, 2 or 3)
       const optionIndex = parseInt(option.dataset.optionGroup);
 
@@ -258,13 +252,13 @@ class VariantRadios extends VariantSelects {
       const compareOptions = [...this.variantOptions].filter((option, index) => index != optionIndex);
 
       // Loop over possible values for option group
-      option.querySelectorAll('[data-option]').forEach(optionEl => {
+      option.querySelectorAll('[data-option]').forEach((optionEl) => {
         let label = optionEl.querySelector('[data-option-label]'),
           input = optionEl.querySelector('[data-variant-option-id]'),
           value = input.value;
 
         // Match option availability and check if the two current options are available for value
-        let match = this.getVariantData().filter(variant => {
+        let match = this.getVariantData().filter((variant) => {
           // Get available variants where the current option index is the option value
           if (variant.options[optionIndex] == value && variant.available) {
             // Create variant options, remove option based on option value

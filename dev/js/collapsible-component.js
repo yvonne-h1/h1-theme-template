@@ -137,27 +137,21 @@ if (!customElements.get('collapsible-component')) {
       // Remove all event listeners
       this.triggers.forEach((trigger) => {
         trigger.removeEventListener('click', this.debounceClickEvent);
-        if (this.options.onHover) {
-          trigger.removeEventListener('mouseenter', this.debouncedOnMouse);
-        }
+
+        if (this.options.onHover) trigger.removeEventListener('mouseenter', this.debouncedOnMouse);
       });
-      this.groups.forEach(group => {
-        if (this.options.onHover) {
-          group.removeEventListener('mouseleave', this.debouncedOnMouse);
-        }
+      this.groups.forEach((group) => {
+        if (this.options.onHover) group.removeEventListener('mouseleave', this.debouncedOnMouse);
       });
-      if (this.options.closeOnMouseleave) {
-        this.removeEventListener('mouseleave', this.debouncedOnMouse);
-      }
+
+      if (this.options.closeOnMouseleave) this.removeEventListener('mouseleave', this.debouncedOnMouse);
 
       // the collapsible breakpoint has been reached, so the collapsibles should be opened
       if (!init) {
-        this.groups.forEach(group => {
-          this.open(group);
-        });
+        this.groups.forEach(group => this.open(group));
 
         // hide all trigger icons
-        this.triggers.forEach(trigger => {
+        this.triggers.forEach((trigger) => {
           if (this.options.breakpointMax !== false) trigger.querySelector('.icon').classList.add('hidden');
         });
 
@@ -165,7 +159,7 @@ if (!customElements.get('collapsible-component')) {
       }
       // close the collapsibles because the breakpoint demands them to be collapsed
       else if (init && this.options.breakpointMax !== false) {
-        this.groups.forEach(group => {
+        this.groups.forEach((group) => {
           if (group.classList.contains(this.options.classToToggle)) {
             this.close(group, false);
           }
@@ -173,7 +167,7 @@ if (!customElements.get('collapsible-component')) {
       }
 
       // Trigger events on [data-collapsible-trigger]
-      this.triggers.forEach(trigger => {
+      this.triggers.forEach((trigger) => {
 
         // show all icons
         if (this.options.breakpointMax !== false) trigger.querySelector('.icon').classList.remove('hidden');
@@ -186,7 +180,7 @@ if (!customElements.get('collapsible-component')) {
       });
 
       // Trigger events on [data-collapsible-group]
-      this.groups.forEach(group => {
+      this.groups.forEach((group) => {
         if (this.options.onHover) {
           group.addEventListener('mouseleave', this.debouncedOnMouse.bind(this, 'close'));
         }
@@ -203,7 +197,7 @@ if (!customElements.get('collapsible-component')) {
       @param e {object}: mouse event
       Called by add event listener -> reducer.
     */
-    debounceClickEvent(e) {
+    debounceClickEvent(event) {
       if (!e) return false;
 
       const buttonType = e.target.nodeName.toLowerCase();
@@ -287,7 +281,7 @@ if (!customElements.get('collapsible-component')) {
       }
 
       // Keep track of the state so we know where to add the focus when moving between the mobile menu items
-      this.options.isMobileMenu && this.state.push(group);
+      if (this.options.isMobileMenu) this.state.push(group);
     }
 
     /*
@@ -300,7 +294,7 @@ if (!customElements.get('collapsible-component')) {
       removeTrapFocus(group);
 
       // Set the focus to the trigger when closing a collapsible
-      !this.options.onHover && focus && group.querySelector('[data-collapsible-trigger]').focus();
+      if (!this.options.onHover && focus) group.querySelector('[data-collapsible-trigger]').focus();
 
       // Close active group
       group.classList.remove(this.options.classToToggle);
@@ -319,11 +313,7 @@ if (!customElements.get('collapsible-component')) {
       }
       else {
         // Close child collapsibles
-        if (this.options.closeChildren) {
-          group.querySelectorAll('[data-collapsible-group]').forEach(group => {
-            this.close(group);
-          });
-        }
+        if (this.options.closeChildren) group.querySelectorAll('[data-collapsible-group]').forEach(group => this.close(group));
 
         // Close this group
         this.close(group);
@@ -353,10 +343,8 @@ if (!customElements.get('collapsible-component')) {
       @param currentGroup {node}: current group selector
     */
     closeSiblings(currentGroup = null) {
-      this.groups.forEach(group => {
-        if (group !== currentGroup && !group.contains(currentGroup) && !currentGroup.contains(group)) {
-          this.close(group);
-        }
+      this.groups.forEach((group) => {
+        if (group !== currentGroup && !group.contains(currentGroup) && !currentGroup.contains(group)) this.close(group);
       });
     }
 
@@ -364,20 +352,14 @@ if (!customElements.get('collapsible-component')) {
       Open+ all collapsibles
     */
     openAll() {
-      this.groups.forEach(group => {
-        group.classList.add(this.options.classToToggle);
-      });
-
+      this.groups.forEach(group => group.classList.add(this.options.classToToggle));
     }
 
     /*
       Close all collapsibles
     */
     closeAll() {
-      this.groups.forEach(group => {
-        group.classList.remove(this.options.classToToggle);
-      });
-
+      this.groups.forEach(group => group.classList.remove(this.options.classToToggle));
       this.state = [this.querySelector('nav')];
     }
   }

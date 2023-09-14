@@ -92,19 +92,13 @@ class SwiperSlider extends HTMLElement {
     // Listen to extra events when in Shopify editor
     if (Shopify.designMode) {
       // Update the swiper when the section event is triggered
-      window.addEventListener('shopify:section:load', (event) => {
-        this.initOptions(event, true);
-      });
+      window.addEventListener('shopify:section:load', event => this.initOptions(event, true));
 
       // When on block select go to the slide in front-end
-      window.addEventListener('shopify:block:select', (event) => {
-        this.handleBlockSelect(event);
-      });
+      window.addEventListener('shopify:block:select', event => this.handleBlockSelect(event));
 
       // When on block deselect go to the slide in front-end
-      window.addEventListener('shopify:block:deselect', (event) => {
-        this.handleBlockSelect(event);
-      });
+      window.addEventListener('shopify:block:deselect', event => this.handleBlockSelect(event));
     }
   }
 
@@ -158,9 +152,7 @@ class SwiperSlider extends HTMLElement {
 
     // Set the slide index based on loop settings or not
     let swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) - 1;
-    if (this.swiperOptions.loop) {
-      swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) + 1;
-    }
+    if (this.swiperOptions.loop) swipeToSlideIndex = parseInt(event.target.dataset.swiperSlideIndex) + 1;
 
     // Slide to slide based on the data attribute from the target
     const sliderToUpdate = event.target.closest('[data-swiper]');
@@ -177,15 +169,13 @@ class ProductRecommendations extends SwiperSlider {
     super();
 
     // Only do it once, not on every web component render.
-    window.onload = () => {
-      this.init();
-    };
+    window.onload = () => this.init();
   }
 
   init() {
     if (this.dataset && this.dataset.url) {
       fetch(this.dataset.url)
-        .then((response) => response.text())
+        .then(response => response.text())
         .then((text) => {
           const html = new DOMParser()
             .parseFromString(text, 'text/html')
@@ -207,8 +197,8 @@ class ProductRecommendations extends SwiperSlider {
             this.swiperInstance.scrollbar.updateSize();
           }
         })
-        .catch((e) => {
-          debug() && console.error(e);
+        .catch((event) => {
+          debug() && console.error(event);
         });
     }
   }

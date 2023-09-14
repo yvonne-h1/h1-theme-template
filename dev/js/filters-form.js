@@ -30,11 +30,9 @@ class FiltersForm extends HTMLElement {
 
       // check if there's an actual change in window width, because the resize is triggered on mobile when the viewport changes with the header
       if (windowWidth === this.ww) return;
-      this.ww = windowWidth;
 
-      if (this.ww < 768) {
-        document.body.classList.remove(window.drawerToggleClasses.filters);
-      }
+      this.ww = windowWidth;
+      if (this.ww < 768) document.body.classList.remove(window.drawerToggleClasses.filters);
     }, 100);
     window.addEventListener('resize', this.debouncedOnResize.bind(this));
 
@@ -125,7 +123,7 @@ class FiltersForm extends HTMLElement {
         }
         // set back all the pre-existent parameters (searched query, searched type & options)
         const preExistentSearchParams = ['q','type','options[prefix]'];
-        preExistentSearchParams.forEach(param => {
+        preExistentSearchParams.forEach((param) => {
           if (currentParams.has(param)) {
             searchParams.append(param, currentParams.get(param));
           }
@@ -271,11 +269,8 @@ class FiltersForm extends HTMLElement {
     const filterOptionElements = parsedHTML.querySelectorAll(
       '[data-collection-filters-form] [data-filter-option]',
     );
-    const matchesIndex = (element) =>
-      element.dataset.index === event?.target.closest('[data-filter-option]')?.dataset.index;
-    const filterOptionsToRender = Array.from(filterOptionElements).filter(
-      (element) => !matchesIndex(element),
-    );
+    const matchesIndex = element => element.dataset.index === event?.target.closest('[data-filter-option]')?.dataset.index;
+    const filterOptionsToRender = Array.from(filterOptionElements).filter(element => !matchesIndex(element));
 
     filterOptionsToRender.forEach((element) => {
       document.querySelector(
@@ -298,12 +293,11 @@ class FiltersForm extends HTMLElement {
     activeFilterOptions.parentNode.classList.add('hidden');
     // Check if it here
     if (!activeFilterOptions) return;
+
     // Replace old with new active filters
-    document.querySelector('[data-filter-active-options]').innerHTML =
-        activeFilterOptions.innerHTML;
+    document.querySelector('[data-filter-active-options]').innerHTML = activeFilterOptions.innerHTML;
     // Show it again
     activeFilterOptions.parentNode.classList.remove('hidden');
-    //
     this.displayFilters();
     this.toggleActiveFilters(false);
   }
@@ -316,7 +310,7 @@ class FiltersForm extends HTMLElement {
 
     // check all filters and hide the ones with no options
     const filterOptions = document.querySelectorAll('[data-filter-option-list]');
-    filterOptions.forEach((filterOption) =>
+    filterOptions.forEach(filterOption =>
       filterOption.children.length === 0
         ? filterOption.closest('[data-filter-option]').classList.add('hidden')
         : filterOption.closest('[data-filter-option]').classList.remove('hidden'),

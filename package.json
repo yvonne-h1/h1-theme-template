@@ -26,7 +26,8 @@
     "clean_shopify_ignore": "rm -f theme/.shopifyignore",
     "rm_nm": "rm -rf node_modules/ & rm -rf package-lock.json",
     "prettier:check": "npx prettier --check .",
-    "prettier:write": "npx prettier --write ."
+    "prettier:write": "npx prettier --write .",
+    "eslint:fix": "npx eslint --fix-dry-run"
   },
   "dependencies": {
     "@fancyapps/ui": "^4.0.31",

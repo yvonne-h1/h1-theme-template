@@ -11,6 +11,5 @@ if (!customElements.get('back-to-top')) {
   }
 
   window.BackToTop = BackToTop;
-
   customElements.define('back-to-top', BackToTop);
 }

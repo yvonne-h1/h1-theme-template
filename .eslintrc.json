@@ -17,6 +17,7 @@
   "rules": {
     "json/*": ["error", { "allowComments": false }],
     "arrow-spacing": ["error", { "before": true, "after": true }],
+    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
     "object-curly-newline": [
       "warn",
       {

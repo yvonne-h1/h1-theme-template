@@ -44,7 +44,7 @@ class SearchResults extends HTMLElement {
   initSearchTypes(type = null) {
     this.searchTypeLinks = this.searchTypes.querySelectorAll('[data-search-type-link]');
 
-    this.searchTypeLinks.forEach(link => {
+    this.searchTypeLinks.forEach((link) => {
       link.addEventListener('click', (event) => {
         event.preventDefault();
 
@@ -129,7 +129,7 @@ class SearchResults extends HTMLElement {
     this.renderPage(searchParams, true, 'product');
 
     // update the other links so they use the correct sorting
-    this.searchTypeLinks.forEach(link => {
+    this.searchTypeLinks.forEach((link) => {
       const type = link.dataset.searchTypeLink;
       link.dataset.searchParams = `${searchString}&type=${type}`;
     });
@@ -145,9 +145,7 @@ class SearchResults extends HTMLElement {
     if (init) {
       searchParams = new URLSearchParams(searchParams);
       type = searchParams.get('type');
-      if (type) {
-        searchParams.delete('type');
-      }
+      if (type) searchParams.delete('type');
     }
 
     // do fetch

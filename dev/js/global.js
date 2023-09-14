@@ -123,8 +123,8 @@ function pauseAllMedia() {
   document.querySelectorAll('.js-vimeo').forEach((video) => {
     video.contentWindow.postMessage('{"method":"pause"}', '*');
   } );
-  document.querySelectorAll('video').forEach((video) => video.pause());
-  document.querySelectorAll('product-model').forEach((model) => model.modelViewerUI?.pause());
+  document.querySelectorAll('video').forEach(video => video.pause());
+  document.querySelectorAll('product-model').forEach(model => model.modelViewerUI?.pause());
 }
 
 /**
@@ -169,7 +169,7 @@ if (!customElements.get('quantity-input')) {
         bubbles: true,
       } );
 
-      this.querySelectorAll('button').forEach((button) =>
+      this.querySelectorAll('button').forEach(button =>
         button.addEventListener('click', this.onButtonClick.bind(this)),
       );
     }
@@ -232,7 +232,7 @@ function fetchConfig(type = 'json') {
  * Prevents the default action of an event
  */
 document.querySelectorAll('.prevent-hashjump').forEach((link) => {
-  link.addEventListener('click', (e) => {
+  link.addEventListener('click', (event) => {
     const hashtag = e.target.href.split('#');
     if (hashtag[1]) {
       const targetElem = document.querySelector('#' + hashtag[1]);
@@ -334,7 +334,7 @@ Shopify.CountryProvinceSelector.prototype = {
     }
   },
 
-  countryHandler: function (e) {
+  countryHandler: function (event) {
     var opt = this.countryEl.options[this.countryEl.selectedIndex];
     var raw = opt.getAttribute('data-provinces');
     var provinces = JSON.parse(raw);

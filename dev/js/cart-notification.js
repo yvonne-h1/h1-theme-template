@@ -9,7 +9,7 @@ class CartNotification extends HTMLElement {
     this.validContent = this.querySelector('[data-cart-notification-valid]');
     this.invalidContent = this.querySelector('[data-cart-notification-invalid]');
     this.onBodyClick = this.handleBodyClick.bind(this);
-    this.notification.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
+    this.notification.addEventListener('keyup', event => event.code === 'Escape' && this.close());
     this.querySelectorAll('[data-cart-notification-close]').forEach((closeButton) => {
       closeButton.addEventListener('click', () => this.close());
     });
@@ -69,10 +69,7 @@ class CartNotification extends HTMLElement {
     this.productId = parsedState.id;
 
     this.getSectionsToRender().forEach((section) => {
-      document.getElementById(section.id).innerHTML = this.getSectionInnerHTML(
-        parsedState.sections[section.section],
-        section.selector,
-      );
+      document.getElementById(section.id).innerHTML = this.getSectionInnerHTML(parsedState.sections[section.section],section.selector);
     });
 
     this.open();
@@ -137,9 +134,7 @@ class CartNotification extends HTMLElement {
    */
   handleBodyClick(event) {
     const target = event.target;
-    if (target !== this.notification && !target.closest('cart-notification')) {
-      this.close();
-    }
+    if (target !== this.notification && !target.closest('cart-notification')) this.close();
   }
 }
 

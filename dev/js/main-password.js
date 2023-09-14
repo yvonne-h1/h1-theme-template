@@ -8,12 +8,9 @@ if (!customElements.get('main-password')) {
       this.dialog = this.querySelector('[data-dialog]');
       this.dialogOpenButton = this.querySelector('[data-dialog-open]');
       this.dialogCloseButton = this.querySelector('[data-dialog-close]');
-      this.dialogOpenButton.addEventListener('click', () => {
-        this.dialog.showModal();
-      });
-      this.dialogCloseButton.addEventListener('click', () => {
-        this.dialog.close();
-      });
+
+      this.dialogOpenButton.addEventListener('click', () => this.dialog.showModal());
+      this.dialogCloseButton.addEventListener('click', () => this.dialog.close());
     }
   }
   window.MainPassword = MainPassword;

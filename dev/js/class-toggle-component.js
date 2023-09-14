@@ -69,9 +69,9 @@ if (!customElements.get('class-toggle-component')) {
 
       // Reduce actions (So the event can also be removed)
       this.reducer = {
-        click: (e) => this.debounceClickEvent(e),
-        mouseEnter: (e) => this.debouncedOnMouse(e, 'add'),
-        mouseLeave: (e) => this.debouncedOnMouse(e, 'remove'),
+        click: e => this.debounceClickEvent(event),
+        mouseEnter: e => this.debouncedOnMouse(e, 'add'),
+        mouseLeave: e => this.debouncedOnMouse(e, 'remove'),
       };
 
       // Construct web component
@@ -102,11 +102,11 @@ if (!customElements.get('class-toggle-component')) {
       @param e {object}: mouse event
       Called by add event listener -> reducer.
     */
-    debounceClickEvent(e) {
+    debounceClickEvent(event) {
       if (!e) return false;
 
-      e.preventDefault(e);
-      e.stopPropagation(e);
+      e.preventDefault(event);
+      e.stopPropagation(event);
       this.toggle();
     }
 
@@ -148,9 +148,7 @@ if (!customElements.get('class-toggle-component')) {
       const { classToToggle } = this.options;
 
       // toggle the class
-      if (this.target) {
-        this.target.classList.add(classToToggle);
-      }
+      if (this.target) this.target.classList.add(classToToggle);
 
       // focus the element and listen for key up event so we can close on ESCAPE
       if (this.targetID) {
@@ -163,14 +161,10 @@ if (!customElements.get('class-toggle-component')) {
       }
 
       // Switch aria-expanded
-      if (this.options.ariaExpanded && this.button) {
-        this.button.setAttribute('aria-expanded', true);
-      }
+      if (this.options.ariaExpanded && this.button) this.button.setAttribute('aria-expanded', true);
 
       // Add class to the document
-      if (this.preventBackgroundScroll) {
-        addPreventScroll();
-      }
+      if (this.preventBackgroundScroll) addPreventScroll();
 
       // Switch aria-expanded
       if (this.isDropdown) {
@@ -190,14 +184,10 @@ if (!customElements.get('class-toggle-component')) {
 
     remove() {
       const { classToToggle } = this.options;
-      if (this.target) {
-        this.target.classList.remove(classToToggle);
-      }
+      if (this.target) this.target.classList.remove(classToToggle);
 
       // Switch aria-expanded
-      if (this.options.ariaExpanded && this.button) {
-        this.button.setAttribute('aria-expanded', false);
-      }
+      if (this.options.ariaExpanded && this.button) this.button.setAttribute('aria-expanded', false);
 
       // remove the trap focus
       if (this.targetID) {
@@ -207,9 +197,7 @@ if (!customElements.get('class-toggle-component')) {
 
         // Close the predictive search
         const predictiveSearch = document.querySelector('predictive-search');
-        if (predictiveSearch && classToToggle === window.drawerToggleClasses.headerSearch) {
-          predictiveSearch.close();
-        }
+        if (predictiveSearch && classToToggle === window.drawerToggleClasses.headerSearch) predictiveSearch.close();
 
         document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', false));
 
@@ -218,9 +206,7 @@ if (!customElements.get('class-toggle-component')) {
       }
 
       // Remove class from the document
-      if (this.preventBackgroundScroll) {
-        removePreventScroll();
-      }
+      if (this.preventBackgroundScroll) removePreventScroll();
 
       if (this.isDropdown) {
         // get the modal this trigger controls and trap the focus on the expanded area
