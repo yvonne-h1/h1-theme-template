@@ -55,10 +55,8 @@ class SearchResults extends HTMLElement {
       });
     });
 
-    if (type) {
-      // toggle the class to highlight the product link
-      this.toggleActiveTypeClass(document.querySelector(`[data-search-type-link="${type}"]`));
-    }
+    // toggle the class to highlight the product link
+    if (type) this.toggleActiveTypeClass(document.querySelector(`[data-search-type-link="${type}"]`));
   }
 
   toggleActiveTypeClass(element) {

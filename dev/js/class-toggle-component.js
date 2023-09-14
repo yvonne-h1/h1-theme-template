@@ -99,7 +99,7 @@ if (!customElements.get('class-toggle-component')) {
 
     /*
       Debounce click event
-      @param e {object}: mouse event
+      @param event {object}: mouse event
       Called by add event listener -> reducer.
     */
     debounceClickEvent(event) {
@@ -112,7 +112,7 @@ if (!customElements.get('class-toggle-component')) {
 
     /*
       Debounced mouse event
-      @param e {object}: mouse event
+      @param event {object}: mouse event
       @param type {string}: open/close/closeAll
       Called by add event listener -> reducer.
     */

@@ -41,19 +41,13 @@ class CustomerAddresses extends HTMLElement {
 
   setupEventListeners() {
     this.elements.toggleButtons.forEach((element) => {
-      element.addEventListener('click', (event) => {
-        this.handleAddEditButtonClick(event);
-      });
+      element.addEventListener('click', event => this.handleAddEditButtonClick(event));
     });
     this.elements.cancelButtons.forEach((element) => {
-      element.addEventListener('click', (event) => {
-        this.handleCancelButtonClick(event);
-      });
+      element.addEventListener('click', event => this.handleCancelButtonClick(event));
     });
     this.elements.deleteButtons.forEach((element) => {
-      element.addEventListener('click', (event) => {
-        this.handleDeleteButtonClick(event);
-      });
+      element.addEventListener('click', event => this.handleDeleteButtonClick(event));
     });
   }
 

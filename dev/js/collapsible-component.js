@@ -194,7 +194,7 @@ if (!customElements.get('collapsible-component')) {
 
     /*
       Debounce click event
-      @param e {object}: mouse event
+      @param event {object}: mouse event
       Called by add event listener -> reducer.
     */
     debounceClickEvent(event) {
@@ -214,7 +214,7 @@ if (!customElements.get('collapsible-component')) {
 
     /*
       Debounced mouse event
-      @param e {object}: mouse event
+      @param event {object}: mouse event
       @param type {string}: open/close/closeAll
       Called by add event listener -> reducer.
     */
@@ -224,7 +224,7 @@ if (!customElements.get('collapsible-component')) {
       // clear old trigger
       clearTimeout(this.timeout);
 
-      const group = e?.target?.closest('[data-collapsible-group]');
+      const group = event?.target?.closest('[data-collapsible-group]');
 
       // add new trigger
       this.timeout = setTimeout(() => {

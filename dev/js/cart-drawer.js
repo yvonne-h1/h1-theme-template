@@ -35,7 +35,7 @@ class CartDrawer extends HTMLElement {
           selector.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.section], section.selector);
         }
       }
-    } );
+    });
   }
 
   /**

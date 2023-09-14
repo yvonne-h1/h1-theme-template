@@ -71,7 +71,7 @@ class ProductMediaSlider extends HTMLElement {
         setTimeout(() => {
           this.swiperThumbsInstance.update();
         }, 300);
-      } );
+      });
     }
   }
 
@@ -128,7 +128,7 @@ class ProductMediaSlider extends HTMLElement {
     if (Shopify.designMode && this.swiperMainInstance) {
       window.addEventListener('shopify:section:load', () => {
         this.swiperMainInstance.update();
-      } );
+      });
     }
   }
 
@@ -167,14 +167,12 @@ class ProductMediaSlider extends HTMLElement {
 
   /*
     * Slide to variant
-    * @Param e {object}: event object with variant
+    * @Param event {object}: event object with variant
     */
   slideToVariant(event) {
-    if (e?.detail?.variant?.id) {
+    if (event?.detail?.variant?.id) {
       const slideIndex = this.matchVariantIdWithSlide(event.detail.variant.id);
-      if (typeof slideIndex == 'number') {
-        this.goToSlide(slideIndex);
-      }
+      if (typeof slideIndex == 'number') this.goToSlide(slideIndex);
     }
   }
 

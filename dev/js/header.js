@@ -15,9 +15,7 @@ class HeaderCollapsibleComponent extends Collapsible {
       this.backdrop?.addEventListener('click', this.closeAll.bind(this));
 
       // on key up
-      document.addEventListener('keyup', (event) => {
-        this.onKeyUp(event);
-      } );
+      document.addEventListener('keyup', event => this.onKeyUp(event));
     }
   }
 

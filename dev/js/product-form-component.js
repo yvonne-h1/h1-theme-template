@@ -57,14 +57,14 @@ if (!customElements.get('product-form-component')) {
           default:
             this.cartNotification?.renderContents(parsedState, submitButton);
           }
-        } )
+        })
         .catch((event) => {
           debug() && console.error(event);
-        } )
+        })
         .finally(() => {
           submitButton.classList.remove('button--loading');
           submitButton.removeAttribute('disabled');
-        } );
+        });
     }
   }
 

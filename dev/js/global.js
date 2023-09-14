@@ -119,10 +119,10 @@ function pauseAllMedia() {
       '{"event":"command","func":"' + 'pauseVideo' + '","args":""}',
       '*',
     );
-  } );
+  });
   document.querySelectorAll('.js-vimeo').forEach((video) => {
     video.contentWindow.postMessage('{"method":"pause"}', '*');
-  } );
+  });
   document.querySelectorAll('video').forEach(video => video.pause());
   document.querySelectorAll('product-model').forEach(model => model.modelViewerUI?.pause());
 }
@@ -167,7 +167,7 @@ if (!customElements.get('quantity-input')) {
       this.input = this.querySelector('[data-qty-input]');
       this.changeEvent = new Event('change', {
         bubbles: true,
-      } );
+      });
 
       this.querySelectorAll('button').forEach(button =>
         button.addEventListener('click', this.onButtonClick.bind(this)),
@@ -241,16 +241,16 @@ document.querySelectorAll('.prevent-hashjump').forEach((link) => {
 
         window.scrollTo( {
           top: scrollTop,
-        } );
+        });
         setTimeout(function () {
           window.scrollTo( {
             top: scrollTop,
-          } );
+          });
         }, 1);
       }
     }
-  } );
-} );
+  });
+});
 
 // listen for resize event
 window.addEventListener( 'resize', debounce(() => {

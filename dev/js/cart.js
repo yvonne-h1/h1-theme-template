@@ -7,9 +7,7 @@ if (!customElements.get('cart-items')) {
       this.lineItemStatusElement = document.getElementById('shopping-cart-line-item-status');
 
       this.debouncedOnChange = debounce((event) => {
-        if (event.target != document.getElementById('Cart-note')) {
-          this.onChange(event);
-        }
+        if (event.target != document.getElementById('Cart-note')) this.onChange(event);
       }, 300);
 
       this.addEventListener('change', this.debouncedOnChange.bind(this));
@@ -51,13 +49,13 @@ if (!customElements.get('cart-items')) {
         quantity,
         sections: this.getSectionsToRender().map(section => section.section),
         sections_url: window.location.pathname,
-      } );
+      });
 
       try {
         const response = await fetch(routes.cart_change_url, {
           ...fetchConfig(),
           ...{ body },
-        } );
+        });
 
         if (!response.ok) {
           throw new Error(response.status);
@@ -93,11 +91,11 @@ if (!customElements.get('cart-items')) {
       const body = JSON.stringify( {
         sections: this.getSectionsToRender().map(section => section.section),
         sections_url: window.location.pathname,
-      } );
+      });
       const response = await fetch(routes.cart_update_url, {
         ...fetchConfig('javascript'),
         ...{ body },
-      } );
+      });
 
       const parsedState = await response.json();
       const lineItemWithError = parsedState.items[line -1];
@@ -121,7 +119,7 @@ if (!customElements.get('cart-items')) {
           parsedState.sections[section.section],
           section.selector,
         );
-      } );
+      });
 
       document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)?.focus();
     }
@@ -169,7 +167,7 @@ if (!customElements.get('cart-remove-button')) {
       this.addEventListener('click', (event) => {
         event.preventDefault();
         this.closest('cart-items').updateQuantity(this.dataset.index, 0);
-      } );
+      });
     }
   }
   customElements.define('cart-remove-button', CartRemoveButton);
@@ -183,13 +181,13 @@ if (!customElements.get('cart-note')) {
       this.addEventListener('change', debounce((event) => {
         const body = JSON.stringify( {
           note: event.target.value,
-        } );
+        });
         fetch(`${routes.cart_update_url}`, {
           ...fetchConfig(),
           ...{
             body,
           },
-        } );
+        });
       }, 300));
     }
   }
