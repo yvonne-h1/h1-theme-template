@@ -7,7 +7,7 @@
     image_aspect_ratio: { String }  | Optional  | The aspect ratio of the image
     highlight:     { Boolean } | Optional  | If the most recent article has a metafield set for article.image, then it's treated as a 'highlight' and displayed with the image on the blog overview page.
     show_image:         { Boolean } | Optional  |
-    show_type:          { Boolean } | Optional  |
+    show_category:          { Boolean } | Optional  |
     show_excerpt:       { Boolean } | Optional  |
     show_date:          { Boolean } | Optional  |
     show_author:        { Boolean } | Optional  |
@@ -63,152 +63,183 @@
   if highlight and article.metafields.article.image.value != blank
     assign image_object = article.metafields.article.image.value
   endif
--%}
 
-{%- comment -%} Capture tags, don't show type for highlighted items {%- endcomment -%}
-{%- capture tag_types -%}
-  {%- if show_type and highlight != nil -%}
-    {%- liquid
-      capture tags_with_type_prefix
-        for tag in article.tags
-          assign tag_downcase = tag | downcase
-          if tag_downcase contains 'type:'
-            assign type_name = tag | downcase | split: ':' | last
-            echo '<li class="product-card__list-tags__item uppercase text-primary tracking-widest">'
-            echo type_name
-            echo '</li>'
-          endif
-        endfor
-      endcapture
-    -%}
-    {%- if tags_with_type_prefix != blank -%}
-      <ul class="product-card__list-tags m-0 flex flex-wrap gap-2 text-sm font-bold uppercase leading-[1.125rem]">
-        {{- tags_with_type_prefix -}}
-      </ul>
-    {%- endif -%}
-  {%- endif -%}
-{%- endcapture -%}
-
-{%- comment -%} Add the highlight class when the article is in highlight state. {%- endcomment -%}
-{%- liquid
   if highlight
     assign class = class | append: ' article-card--highlighted'
   endif
 -%}
 
+{%- capture read_more_button -%}
+  <span>
+    {%- render 'render-translation', namespace: 'blogs.article', key: 'read_more', fallback: 'Read more' -%}
+    <span class="sr-only">: {{ article.title }}</span>
+  </span>
+  {%- render 'icons', icon: 'arrow', icon_class: 'w-4' -%}
+{%- endcapture -%}
+
+{%- capture article_excerpt -%}
+  <p class="article-card__excerpt mb-0 line-clamp-3 text-sm">
+    {{- article.excerpt | strip_html | truncatewords: 30 -}}
+  </p>
+{%- endcapture -%}
+
+{%- comment -%} Capture tags, don't show category for highlighted items {%- endcomment -%}
+{%- capture tag_categories -%}
+  {%- liquid
+    if show_category
+        for tag in article.tags
+          assign tag_downcase = tag | downcase
+          if tag_downcase contains 'category:'
+            assign category_name = tag | downcase | split: ':' | last
+
+            # Used for regular article cards
+            capture tags_as_badges
+              echo tags_as_badges
+              echo '<li class="product-card__list-tags__item">'
+              echo category_name | link_to_tag: tag | replace: '<a', '<a class="badge capitalize no-underline states:underline"'
+              echo '</li>'
+            endcapture
+
+            # Used for highlighted article
+            capture tags_as_string
+              echo tags_as_string
+              echo category_name | capitalize | upcase | link_to_tag: tag | replace: '<a', '<a class="label no-underline states:underline"' | prepend: ' | '
+            endcapture
+          endif
+        endfor
+
+      if tags_as_badges != blank
+       echo tags_as_badges | prepend: '<ul class="product-card__list badges">' | append: '</ul>'
+      endif
+    endif
+  -%}
+{%- endcapture -%}
+
 {%- comment -%} Render cart {%- endcomment -%}
-<div class="article-card {{ class -}}">
+<article class="article-card flex flex-col gap-y-4 {{ class -}}">
   {% comment %} Highlighted card {% endcomment %}
   {%- if highlight -%}
-    {%- comment -%} The highlight article card output. {%- endcomment -%}
-
-    <a
-      href="{{ article.url }}"
-      class="article-card__link group/article-card relative block overflow-hidden bg-accent text-white no-underline focus-visible:outline-dashed focus-visible:outline-1">
+    <div class="relative flex overflow-hidden rounded-md p-6 lg:p-10 {{ section.settings.highlight_position_horizontal }} {{ section.settings.highlight_position_vertical }} {{ section.settings.highlight_text_align }} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }} {{ section.settings.min_ratio_desktop }}">
       {% comment %} Image {% endcomment %}
-      {%- if show_image -%}
-        {%- render 'responsive-image',
-          image_object: image_object,
-          alt: article.title,
-          max_width: 1360,
-          lazy: image_lazy,
-          sizes: '(min-width: 1440px) 1360px, 100vw',
-          class: 'article-card__image absolute w-full h-full object-cover group-hover/article-card:scale-105 duration-300 transition-all'
+      <div class="article-card__image absolute inset-0 -z-10 flex-none bg-black">
+        {%- liquid
+          # Image
+          assign image_classes = 'article-card__image w-full h-full object-cover  group-hover/article-card:scale-105 duration-300 transition-all opacity-80'
+          if show_image
+            render 'responsive-image', image_object: image_object, alt: article.title, max_width: 1360, sizes: '(min-width: 1440px) 1360px, 100vw', class: image_classes
+          endif
         -%}
-      {%- endif -%}
-
-      {% comment %} Image overlay {% endcomment %}
-      <div class="article-card__overlay absolute inset-0 bg-black opacity-20"></div>
+      </div>
 
       {% comment %} Content {% endcomment %}
-      <div class="article-card__content relative z-20 flex min-h-[28rem] w-full flex-col justify-end gap-14 px-4 py-14 md:min-h-[25rem] lg:px-28 lg:py-20">
-        <header class="article-card__header grid grid-cols-1 gap-2">
-          {%- if show_date or show_author -%}
-            <p class="article-card__meta mb-0 flex flex-wrap gap-1 text-lg leading-6">
-              {%- if show_date -%}
-                <span class="article-card__published_at">
-                  {{- article.published_at | time_tag: format: 'day_month_year' -}}
-                </span>
-              {%- endif -%}
-              {%- if show_date and show_author -%}
-                <span class="article-card__divider">|</span>
-              {%- endif -%}
-              {%- if show_author -%}
-                <span class="article-card__author">
-                  {{- article.author -}}
-                </span>
-              {%- endif -%}
-            </p>
-          {%- endif -%}
-          {%- if article.title -%}
-            <p class="article-card__title label-xl mb-0">
+      <div class="article-card__content-wrapper">
+        <div class="article-card__content flex max-w-full flex-col gap-y-4 p-6 md:max-w-lg {{ section.settings.content_color_scheme }}">
+          <header class="article-card__header flex flex-col gap-y-2">
+            {% comment %} Category and date {% endcomment %}
+            {%- if section.settings.show_highlight_category or section.settings.show_highlight_date -%}
+              <div class="has-gap-4 flex items-center justify-between">
+                {% comment %} Category {% endcomment %}
+                {%- if section.settings.show_highlight_category -%}
+                  {%- assign categories = tags_as_string | remove_first: '|' | strip -%}
+                  {{- categories -}}
+                {%- endif -%}
+
+                {% comment %} Date {% endcomment %}
+                {%- if section.settings.show_highlight_date -%}
+                  <p class="article-card__published_at mb-0 text-sm italic">
+                    {{- article.published_at | time_tag: format: 'day_month_year' -}}
+                  </p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {% comment %} Title {% endcomment %}
+            <h2 class="article-card__title h4 mb-0">
               {{- article.title -}}
-            </p>
+            </h2>
+          </header>
+
+          {% comment %} Excerpt {% endcomment %}
+          {%- if section.settings.show_highlight_excerpt and article.excerpt.size > 0 -%}
+            {{- article_excerpt -}}
           {%- endif -%}
-        </header>
-        <p
-          class="article-card__link flex items-center gap-2 text-sm font-bold"
-          aria-label="{{ 'blogs.article.read_more_title' | t: title: article.title }}">
-          {%- liquid
-            render 'render-translation', namespace: 'blog.articles.read_more', fallback: 'Read more'
-            render 'icons', icon: 'arrow'
-          -%}
-        </p>
+
+          {% comment %} Read more {% endcomment %}
+          <footer>
+            <a href="{{ article.url }}" class="button">
+              {{- read_more_button -}}
+            </a>
+          </footer>
+        </div>
       </div>
-    </a>
+    </div>
 
     {% comment %} Default card {% endcomment %}
   {%- else -%}
-    <a
-      href="{{ article.url }}"
-      class="article-card__link group/article-card relative block overflow-hidden text-inherit no-underline focus-visible:outline-dashed focus-visible:outline-1">
-      {%- if show_image -%}
-        <div class="article-card__image-wrapper mb-4">
-          {%- render 'responsive-image',
-            image_object: image_object,
-            lazy: image_lazy,
-            alt: article.title,
-            aspect_ratio: image_aspect_ratio,
-            max_width: image_max_width,
-            sizes: image_sizes,
-            class: 'article-card__image w-full group-hover/article-card:scale-105 duration-300 transition-all object-cover'
-          -%}
+    <header class="article-card__header relative flex flex-col gap-y-4">
+      {% comment %} Article category {% endcomment %}
+      {%- if tag_categories != blank -%}
+        <div class="absolute {% if image_object %}left-4 top-4{%- endif %} z-10">
+          {{- tag_categories -}}
         </div>
       {%- endif -%}
-      <div class="article-card__content">
-        <header class="article-card__header grid grid-cols-1 gap-4">
-          {{- tag_types -}}
-          <div class="grid grid-cols-1 gap-1">
-            {%- if article.title != blank -%}
-              <p class="article-card__title label-lg mb-0 transition-colors group-hover/article-card:text-primary">
-                {{- article.title -}}
-              </p>
-            {%- endif -%}
-            {%- if show_date or show_author -%}
-              <p class="article-card__meta mb-0 flex flex-wrap gap-1 text-sm leading-6 opacity-50">
-                {%- if show_date -%}
-                  <span class="article-card__published-at">
-                    {{- article.published_at | time_tag: format: 'day_month_year' -}}
-                  </span>
-                {%- endif -%}
-                {%- if show_date and show_author -%}
-                  <span>|</span>
-                {%- endif -%}
-                {%- if show_author -%}
-                  <span class="article-card__author">
-                    {{- article.author -}}
-                  </span>
-                {%- endif -%}
-              </p>
-            {%- endif -%}
-            {%- if show_excerpt and article.excerpt.size > 0 -%}
-              <p class="article-card__excerpt line-clamp-3 text-sm">
-                {{- article.excerpt | strip_html | truncatewords: 30 -}}
-              </p>
-            {%- endif -%}
+      {% comment %} Article image and title {% endcomment %}
+      <a
+        href="{{ article.url }}"
+        class="article-card__link group/article-card relative block overflow-hidden rounded-md"
+        tabindex="-1">
+        {%- if show_image -%}
+          <div class="article-card__image-wrapper">
+            {%- render 'responsive-image',
+              image_object: image_object,
+              alt: article.title,
+              aspect_ratio: image_aspect_ratio,
+              max_width: image_max_width,
+              sizes: image_sizes,
+              class: 'article-card__image w-full group-hover/article-card:scale-105 duration-300 transition-all object-cover'
+            -%}
           </div>
-        </header>
+        {%- endif -%}
+      </a>
+      <div class="flex flex-col gap-y-1">
+        <a
+          href="{{ article.url }}"
+          class="article-card__title text-text-default no-underline transition-colors states:text-primary"
+          tabindex="-1">
+          <h2 class="h5 mb-0">
+            {{- article.title -}}
+          </h2>
+        </a>
+        {%- if show_date or show_author -%}
+          <p class="article-card__meta mb-0 flex flex-wrap gap-1 text-sm leading-6 opacity-50">
+            {%- if show_date -%}
+              <span class="article-card__published-at">
+                {{- article.published_at | time_tag: format: 'day_month_year' -}}
+              </span>
+            {%- endif -%}
+            {%- if show_date and show_author -%}
+              <span>|</span>
+            {%- endif -%}
+            {%- if show_author -%}
+              <span class="article-card__author">
+                {{- article.author -}}
+              </span>
+            {%- endif -%}
+          </p>
+        {%- endif -%}
       </div>
-    </a>
+    </header>
+
+    {% comment %} Excerpt {% endcomment %}
+    {%- if show_excerpt and article.excerpt.size > 0 -%}
+      {{- article_excerpt -}}
+    {%- endif -%}
+
+    {% comment %} Read more {% endcomment %}
+    <footer>
+      <a href="{{ article.url }}" class="button button--primary button--xs">
+        {{- read_more_button -}}
+      </a>
+    </footer>
   {%- endif -%}
-</div>
+</article>

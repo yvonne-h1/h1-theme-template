@@ -58,7 +58,6 @@
         article: article_object,
         image_max_width: image_max_width,
         image_sizes: image_sizes,
-        image_lazy: section.settings.lazy
       -%}
 
       {% comment %} Break if meet the limit {% endcomment %}
@@ -194,13 +193,6 @@
         "step": 2,
         "default": 8,
         "label": "Maximum products to show"
-      },
-      {
-        "type": "checkbox",
-        "id": "lazy",
-        "label": "Lazyload images",
-        "default": true,
-        "info": "Disable this only if the image is part of the [Largest Contentful Paint](https://web.dev/lcp/)"
       },
       {
         "type": "text",

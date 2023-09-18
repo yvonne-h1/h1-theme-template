@@ -49,10 +49,12 @@
     <div class="swiper" data-swiper>
       <div class="swiper-wrapper flex">
         {%- liquid
-          for block in section.blocks
+          assign lazy = true
+          if section.index == 1
+            assign lazy = false
+          endif
 
-            # Lazy loading. Always lazy load additional slides. The ratio has to be added in the snippet options because those are section settings not block settings.
-            assign lazy = block.settings.image_lazy
+          for block in section.blocks
             if forloop.index >= 2
               assign lazy = true
             endif

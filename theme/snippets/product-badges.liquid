@@ -1,32 +1,33 @@
 {%- liquid
   if class == blank
     assign class = 'absolute inset-x-2 top-2 md:inset-x-4 md:top-4'
+    assign badge_class = 'select-none pointer-events-none badge'
   endif
 
   # Badge - Sold out
   capture sold_out_badge
-    echo '<span class="badge badge--sold-out" aria-hidden="true">'
+    echo '<span class="' | append: badge_class | append: ' badge--sold-out">'
     render 'render-translation', namespace: 'products.product', key: 'sold_out', fallback: 'Sold out'
     echo '</span>'
   endcapture
 
   # Badge - Sale
   capture sale_badge
-    echo '<span class="badge badge--sale" aria-hidden="true">'
+    echo '<span class="' | append: badge_class | append: ' badge--sale">'
     render 'render-translation', namespace: 'products.product', key: 'on_sale', fallback: 'Sale'
     echo '</span>'
   endcapture
 
   # Badge - Pre order
   capture pre_order_badge
-    echo '<span class="badge badge--pre-order" aria-hidden="true">'
+    echo '<span class="' | append: badge_class | append: ' badge--pre-order">'
     render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'
     echo '</span>'
   endcapture
 
   # Get badge text from product-tag "badge:"
   capture flex_badge
-    echo '<span class="badge badge--new" aria-hidden="true">'
+    echo '<span class="' | append: badge_class | append: ' badge--new">'
     echo 'badge_text'
     echo '</span>'
   endcapture

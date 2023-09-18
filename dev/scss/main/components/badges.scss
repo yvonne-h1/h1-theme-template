@@ -19,12 +19,10 @@
     }
   }
   .badge {
-    background-color: var(--product-badge-background, theme('colors.black'));
-    color: var(--product-badge-text, theme('colors.text-default'));
+    background-color: var(--product-badge-background, theme('colors.primary.DEFAULT'));
+    color: var(--product-badge-text, theme('colors.primary.text'));
     @include small;
-    @apply pointer-events-none
-    inline-block
-    select-none
+    @apply inline-block
     break-words
     rounded-md;
 

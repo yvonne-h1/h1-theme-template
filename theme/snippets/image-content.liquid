@@ -1,9 +1,7 @@
 {% comment %}
   Renders a background image with text overlayed. Text can be positioned anywhere over the image. Used in the image-banner and slider sections.
 
-  render 'image-content',
-    object: section,
-    lazy: true
+  render 'image-content', object: section, lazy: true
 
   - object: Required. Section or Block.
   - class: String. Defaults to 'image-banner'
@@ -36,9 +34,9 @@
 {% endcomment %}
 
 {%- liquid
-  if lazy == blank
-    assign lazy = true
-  endif
+  unless lazy == true
+    assign lazy = false
+  endunless
 
   unless is_swiper
     assign is_swiper = false

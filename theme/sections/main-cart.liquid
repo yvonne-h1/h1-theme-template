@@ -55,7 +55,7 @@
           class="col-span-4">
           <div class="cart__footer mb-8 grid grid-cols-8 md:mt-14 lg:my-0 lg:grid-cols-1 lg:gap-base">
 
-            <div class="col-span-8 grid grid-cols-1 gap-y-6 md:col-span-3 lg:col-span-1">
+            <div class="col-span-8 flex flex-col gap-y-6 md:col-span-3 lg:col-span-1">
 
               {%- comment -%} USPs & @app blocks {%- endcomment -%}
               {%- capture sidebar_content -%}
@@ -155,7 +155,7 @@
               </div>
 
               {%- comment -%} Checkout button {%- endcomment -%}
-              <div class="cart__ctas grid grid-cols-1 gap-y-2" {{ block.shopify_attributes }}>
+              <div class="cart__ctas flex flex-col gap-y-2" {{ block.shopify_attributes }}>
                 <noscript>
                   <button type="submit" class="button button--secondary button--lg w-full">
                     {%- render 'render-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}

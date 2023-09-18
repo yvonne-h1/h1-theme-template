@@ -1,24 +1,18 @@
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
   {%- for block in section.blocks -%}
-    {%- liquid
-      assign show_type = ''
-      if block.settings.blog_show_type
-        assign show_type = 'show-type'
-      endif
-    -%}
 
     {%- case block.type -%}
         {% comment %} Title {% endcomment %}
       {%- when 'title' -%}
 
         <div
-          class="article-header__information {{ show_type }} mx-auto grid max-w-screen-lg items-center gap-y-6 gap-x-base md:text-center"
+          class="article-header__information mx-auto grid max-w-screen-lg items-center gap-y-6 gap-x-base md:text-center"
           {{ block.shopify_attributes }}
         >
           {%- liquid
             # Tag
-            if block.settings.blog_show_type
+            if block.settings.blog_show_category
               for tag in article.tags
                 if tag contains 'type:' or tag contains 'Type:'
                   assign article_type = tag | downcase | remove: 'type:'
@@ -64,7 +58,6 @@
               image_object: article.image,
               alt: article.title,
               max_width: 1360,
-              lazy: false,
               sizes: '(min-width: 1440px) 1360px, 100vw',
               class: 'max-w-full h-auto block mx-auto',
               alt: article.title,
@@ -79,7 +72,7 @@
 {%- liquid
   # Capture container class
   capture container_class
-    class article-header space-y-8
+    echo class | append: ' article-header space-y-8'
   endcapture
 
   # Render the content

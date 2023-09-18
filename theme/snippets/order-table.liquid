@@ -60,7 +60,6 @@
             <a href="{{ line_item.product.url }}" class="block">
               {%- render 'responsive-image',
                 image_object: line_item.product.featured_image,
-                lazy: true,
                 aspect_ratio: '1/1',
                 crop: 'center',
                 max_width: 80,
@@ -322,7 +321,7 @@
     {%- endfor -%}
   </div>
 
-  <div class="order__footer grid grid-cols-1 gap-y-2 pt-6">
+  <div class="order__footer flex flex-col gap-y-2 pt-6">
     {%- comment -%} Subtotal {%- endcomment -%}
     <div
       class="grid grid-cols-12"

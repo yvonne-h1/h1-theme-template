@@ -40,7 +40,7 @@
         product_object: product_object,
         image_max_width: image_max_width,
         image_sizes: image_sizes,
-        image_lazy: section.settings.lazy
+        product_card_title_el: 'h3'
       -%}
 
       {% comment %} Break if meet the limit {% endcomment %}
@@ -176,13 +176,6 @@
         "default": 8,
         "label": "Maximum products to show",
         "info": "When this higher than 4 it will be shown as a slider on desktop and mobile."
-      },
-      {
-        "type": "checkbox",
-        "id": "lazy",
-        "label": "Lazyload images",
-        "default": true,
-        "info": "Disable this only if the image is part of the [Largest Contentful Paint](https://web.dev/lcp/)"
       },
       {
         "type": "text",

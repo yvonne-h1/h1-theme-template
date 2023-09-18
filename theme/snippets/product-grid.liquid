@@ -67,12 +67,6 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
     -%}
 
     {%- for product in collection.products -%}
-      {%- liquid
-        assign lazy = true
-        if forloop.index <= 4
-          assign lazy = false
-        endif
-      -%}
       <li class="{{ classes }}">
         {%- render 'product-card',
           product_object: product,
@@ -80,7 +74,6 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
           image_sizes: sizes,
           image_alt: image_alt,
           image_title: image_title,
-          image_lazy: lazy,
           view: template.suffix
         -%}
       </li>

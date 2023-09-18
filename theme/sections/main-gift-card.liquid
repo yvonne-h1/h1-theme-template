@@ -135,7 +135,7 @@
   endcapture
 
   # Capture header classes
-  assign header_class = 'grid grid-cols-1 gap-y-4 echo content-wrapper content-wrapper-sm ' | append: section.settings.text_align
+  assign header_class = 'flex flex-col gap-y-4 echo content-wrapper content-wrapper-sm ' | append: section.settings.text_align
 
   # Capture content classes
   assign content_classes = 'content-wrapper content-wrapper-sm grid gap-y-6 flex-col items-center justify-items-center ' | append: section.settings.text_align

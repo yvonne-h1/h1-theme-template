@@ -12,7 +12,6 @@
                                                   Example meaning: 600 pixels from 1200 pixels screen width onwards, fallback for the image is always 100vw
     widths:             { String }  | Optional  | Defaults to value that can be seen below
     max_width           { Integer } | Optional  | Gives the maximum width of the image in 1dpr, for example if it never becomes wider than 300 pixels, prevent loading any bigger sources, keep DOM size small
-    lazy:               { Boolean } | Optional  | Defaults to true, set to false to disable lazy loading
     alt                 { String }  | Optional  | Set the image alt
     title               { String }  | Optional  | Set the image title
     class               { String }  | Optional  | Set classname(s) for the image
@@ -25,7 +24,6 @@
     Example usage:
     {%- render 'responsive-image',
       image_object: section.settings.image,
-      lazy: section.settings.lazy,
       aspect_ratio: '16/9',
       crop: 'center',
       sizes: '(min-width: 1200px) 1200px, 100vw'
@@ -136,17 +134,6 @@
     assign crop = 'center'
   endunless
 
-  # Image loading
-  if lazy == false
-    assign lazy_value = 'eager'
-    assign preload = true
-    assign fetchpriority = 'high'
-  else
-    assign lazy_value = 'lazy'
-    assign preload = false
-    assign fetchpriority = 'low'
-  endif
-
   # Image alt
   if alt == blank
     assign alt = image_object.alt
@@ -181,30 +168,45 @@
   endfor
 
   assign widths = new_widths | remove_first: ', '
+
+  # Shopify add lazy by default, so only overwrite when you pass the lazy parameter, like in sliders
+  assign lazy = 'eager'
+  if lazy == true
+    assign lazy = 'lazy'
+  endif
 -%}
 
 {%- capture image_element -%}
-  {%- comment -%}
-    The uploaded desktop image with its intrinsic size
-    Disabled theme check because it does not recognize the lazy loading options the way we use it
-  {%- endcomment -%}
-  {% comment %}theme-check-disable AssetUrlFilters{% endcomment %}
+{% comment %} We force lazy loading {% endcomment %}
+{%- if lazy == true -%}
   {{ image_url | image_tag:
       alt: alt,
       class: class,
       crop: crop,
+      loading: lazy,
       height: height,
-      loading: lazy_value,
-      preload: preload,
       sizes: sizes,
       style: style,
       title: title,
       width: width,
       widths: widths,
-      fetchpriority: fetchpriority,
       data-custom-aspect-ratio: custom_aspect_ratio
- }}
-  {% comment %}theme-check-enable AssetUrlFilters{% endcomment %}
+  }}
+ {%- else -%}
+  {% comment %} Let Shopify determine lazy loading {% endcomment %}
+  {{ image_url | image_tag:
+      alt: alt,
+      class: class,
+      crop: crop,
+      height: height,
+      sizes: sizes,
+      style: style,
+      title: title,
+      width: width,
+      widths: widths,
+      data-custom-aspect-ratio: custom_aspect_ratio
+    }}
+  {%- endif -%}
 {%- endcapture -%}
 
 {%- if figcaption == blank -%}

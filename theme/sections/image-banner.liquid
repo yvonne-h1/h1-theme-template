@@ -5,9 +5,14 @@
     assign max_width = 1360
   endif
 
+  assign lazy = true
+  if section.index == 1
+    assign lazy = false
+  endif
+
   # Capture container content  echo
   capture container_content
-    render 'image-content', object: section, lazy: section.settings.image_lazy
+    render 'image-content', object: section, lazy: lazy
   endcapture
 
   # Container width
@@ -136,16 +141,6 @@
             "value": "md:aspect-[16/9]",
             "label": "16x9",
             "group": "Landscape"
-          },
-          {
-            "value": "md:aspect-[3/4]",
-            "label": "3x4",
-            "group": "Portrait"
-          },
-          {
-            "value": "md:aspect-[9/16]",
-            "label": "9x16",
-            "group": "Portrait"
           }
         ]
       },
@@ -209,6 +204,11 @@
           {
             "value": "color-scheme color-scheme--black",
             "label": "Black",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
             "group": "Standard"
           }
         ]

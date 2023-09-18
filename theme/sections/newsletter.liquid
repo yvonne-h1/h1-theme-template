@@ -102,7 +102,7 @@
   if blocks != blank
     # Capture content  echo
     capture container_content
-      echo blocks | prepend: '<div class="newsletter grid grid-cols-1 content-center gap-4 text-center ">' | append: '</div>'
+      echo blocks | prepend: '<div class="newsletter flex flex-col content-center gap-y-4 text-center ">' | append: '</div>'
     endcapture
 
     # Render the content  echo

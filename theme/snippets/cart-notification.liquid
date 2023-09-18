@@ -31,7 +31,7 @@
         class="cart-notification-product mb-4 flex items-start gap-4 border-b  pb-4 pt-4 text-sm">
         {% comment %} Will be filled with cart-notification-product.liquid. {% endcomment %}
       </div>
-      <div class="cart-notification__links grid grid-cols-1 gap-2 text-center">
+      <div class="cart-notification__links flex flex-col gap-y-2 text-center">
         <form action="{{ routes.cart_url }}" method="post" id="cart" class="my-0">
           <button
             type="submit"

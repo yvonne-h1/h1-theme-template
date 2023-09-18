@@ -37,24 +37,24 @@
     assign aspect_ratio = '1/1'
   endunless
 -%}
-<a
-  href="{{ collection.url }}"
-  class="collection-card group/collection-card block text-center text-current group-hover/collection-card:no-underline group-focus-visible/collection-card:no-underline">
-  <div class="collection-card__image transition-all group-hover/collection-card:scale-110 group-focus-visible/collection-card:scale-110">
-    {%- render 'responsive-image',
-      image_object: featured_image,
-      alt: image_alt,
-      title: image_title,
-      sizes: '(min-width: 1440px) 316px, (min-width: 1280px) 21.56vw, (min-width: 768px) 27vw, 43vw',
-      max_width: 379,
-      aspect_ratio: aspect_ratio,
-      lazy: image_lazy,
-      class: 'mx-auto'
-    -%}
-  </div>
-  <div class="collection-card__content pt-3">
-    <p class="collection-card__title h4 text-center transition-colors group-hover/collection-card:text-primary  group-focus-visible/collection-card:text-primary">
+
+<article>
+  <a
+    href="{{ collection.url }}"
+    class="collection-card group/collection-card flex flex-col gap-y-4 text-center text-current group-hover/collection-card:no-underline group-focus-visible/collection-card:no-underline">
+    <div class="collection-card__image transition-all group-hover/collection-card:scale-110 group-focus-visible/collection-card:scale-110">
+      {%- render 'responsive-image',
+        image_object: featured_image,
+        alt: image_alt,
+        title: image_title,
+        sizes: '(min-width: 1440px) 316px, (min-width: 1280px) 21.56vw, (min-width: 768px) 27vw, 43vw',
+        max_width: 379,
+        aspect_ratio: aspect_ratio,
+        class: 'mx-auto'
+      -%}
+    </div>
+    <h2 class="collection-card__title h4 text-center transition-colors group-hover/collection-card:text-primary  group-focus-visible/collection-card:text-primary">
       {{- collection.title -}}
-    </p>
-  </div>
-</a>
+    </h2>
+  </a>
+</article>

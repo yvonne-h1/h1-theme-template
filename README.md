@@ -165,10 +165,8 @@ We work using components. So, we need to adjust and create all components for th
 
 ### Images
 
-- Images are loaded with responsive-image.liquid. Here you can lazy load the images, preserve space for cls and optimize for all screen sizes.
-- Load images lazy by default. Images above the fold don't need to be lazy.
-- Create for sections create a lazy option in the customizer.
-- Placeholders are set inside
+- Images are loaded with responsive-image.liquid. Here you can optimize for screen sizes, preserve space for cls etc.
+- By default, Shopify adds lazy loading when sections are further down the page when using the image_tag filter.
 
 ### Buttons
 

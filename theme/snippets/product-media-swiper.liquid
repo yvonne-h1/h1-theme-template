@@ -21,12 +21,6 @@
 
   {%- comment -%} Get media for the main slider {%- endcomment -%}
   {%- capture media_content -%}
-    {%- liquid
-      assign lazy = true
-      if forloop.index <= 1
-        assign lazy = false
-      endif
-    -%}
     {% case media.media_type %}
       {%- when 'image' -%}
         <a
@@ -42,8 +36,7 @@
             sizes: '(min-width: 768px) 512px, 100vw',
             alt: media.alt,
             title: media.alt,
-            class: 'w-full md:max-w-lg mx-auto',
-            lazy: lazy
+            class: 'w-full md:max-w-lg mx-auto'
             -%}
           {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute end-4 bottom-4 md:hidden pointer-events-none' -%}
         </a>
@@ -113,9 +106,8 @@
         sizes: '(min-width: 1440px) 138px, (min-width: 768px) 80px, 64px',
         alt: media.alt,
         title: media.alt,
-        class: 'w-full max-w-none',
-        lazy: true
-        -%}
+        class: 'w-full max-w-none'
+      -%}
     </div>
   {%- endcapture -%}
 

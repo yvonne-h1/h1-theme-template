@@ -86,6 +86,7 @@
             echo '||' | append: blog.title
             echo '::' | append: blog.url
           endif
+          echo '||' | append: article.title
         when 'page'
           echo '||' | append: page.title
           echo '::' | append: page.url
