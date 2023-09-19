@@ -80,10 +80,10 @@
   }
 
   .button--primary {
-    --button-background: theme('colors.primary.500');
-    --button-border-color: theme('colors.primary.500');
-    --button-hover-border-color: theme('colors.primary.600');
-    --button-hover-background: theme('colors.primary.600');
+    --button-background: theme('colors.primary.600');
+    --button-border-color: theme('colors.primary.600');
+    --button-hover-border-color: theme('colors.primary.700');
+    --button-hover-background: theme('colors.primary.700');
   }
 
   .button--gradient {

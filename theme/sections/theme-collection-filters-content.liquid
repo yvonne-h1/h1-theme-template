@@ -59,7 +59,7 @@
       {%- render 'product-grid',
         collection: collection,
         paginate: paginate,
-        view: 'load-more',
+        pagination_type: settings.pagination_view,
         current_html: current_html,
         total_html: total_html,
         items_on_last_page: items_on_last_page,

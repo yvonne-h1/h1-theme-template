@@ -27,7 +27,7 @@
 
   assign state_classes = 'states:border-primary focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:outline-none focus-visible:ring-offset-2'
   assign button_classes = 'flex h-10 w-10 touch:h-12 touch:w-12 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-transparent p-0 text-black transition-all no-js:hidden group states:bg-primary states:text-primary-text bg-white ' | append: state_classes
-  assign icon_class = 'w-3 group-hover:scale-110 pointer-events-none transition-transform duration-75 ease-linear'
+  assign icon_class = 'w-3 group-hover:scale-110 pointer-events-none transition-transform ease-linear'
 
   capture button_minus_accessibility_text
     render 'render-translation', namespace: 'products.product.quantity', key: 'decrease', product_item: qty_product.title, fallback: 'Decrease'

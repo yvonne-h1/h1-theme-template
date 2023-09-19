@@ -108,14 +108,16 @@
   endif
 -%}
 <article
-  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4"
+  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4 {% if view == 'alt' -%}rounded-md border border-gray-100 p-4{%- endif %} md:border-none md:p-0"
   data-product-card>
   {%- comment -%} Accesibility text {%- endcomment -%}
   <a
     href="{{ product_link }}"
     class="product-card__sr-link button button--primary sr-only !absolute inset-[3px] bottom-auto z-20 !px-2 focus:not-sr-only focus:p-2 focus:outline-dashed focus:outline-1 states:no-underline"
     title="{{ product_object.title }}">
-    {{- product_object.title -}}
+    {%- render 'render-translation', namespace: 'products.product', key: 'go_to_product', fallback: 'Go to product page' -%}
+    :
+    {{ product_object.title -}}
   </a>
 
   <header>
@@ -168,13 +170,13 @@
     {%- liquid
       assign product_card_information_classes = 'text-center'
       if view == 'alt'
-        assign product_card_information_classes = 'pt-3 text-start md:text-center'
+        assign product_card_information_classes = 'pt-3 text-center'
       endif
     -%}
     <a
       href="{{ product_link }}"
       title="{{ product_object.title }}"
-      class="product-card__information block grow px-4 text-sm text-text-default no-underline states:text-text-default states:no-underline {{ product_card_information_classes }}"
+      class="product-card__information block grow px-4 text-sm text-text-default no-underline states:text-primary states:no-underline {{ product_card_information_classes }}"
       tabindex="-1">
       {%- comment -%} Vendor {%- endcomment -%}
       {%- if show_vendor -%}
@@ -195,31 +197,35 @@
     </a>
   </header>
 
-  {%- comment -%} Price and quick shop button {%- endcomment -%}
-  {%- liquid
-    assign product_card_price_classes = 'justify-center text-center'
-    if view == 'alt'
-      assign product_card_price_classes = 'product-card__price--alt mt-2 text-start md:text-center justify-between md:justify-center'
-    endif
-  -%}
-  <div class="product-card__price flex items-center justify-self-end px-4 text-sm {{ product_card_price_classes }}">
+  <footer class="flex h-full flex-col items-center justify-end gap-2 text-center">
     {% comment %} Render formatted price {% endcomment %}
     {% render 'render-price', product: product_object %}
 
-    {%- if show_quick_shop -%}
-      {% comment %} Show quick_shop button {% endcomment %}
-      {%- liquid
-        assign quick_shop_button_classes = 'hidden'
-        if view == 'alt'
-          assign quick_shop_button_classes = 'block md:hidden'
-        endif
-      -%}
-      <button
-        type="button"
-        class="button button--primary quick-shop__btn-add relative z-20 {{ quick_shop_button_classes }}"
-        data-quick-shop-toggle>
-        {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
-      </button>
-    {% endif %}
-  </div>
+    <div class="flex gap-base">
+      {% comment %} ATC button to display the options {% endcomment %}
+      {%- if show_quick_shop -%}
+        {% comment %} Show quick_shop button {% endcomment %}
+        {%- liquid
+          assign quick_shop_button_classes = 'hidden'
+          if view == 'alt'
+            assign quick_shop_button_classes = 'block no-touch:md:hidden'
+          endif
+        -%}
+        <button
+          type="button"
+          class="button button--primary quick-shop__btn-add relative z-20 mx-auto {{ quick_shop_button_classes }}"
+          data-quick-shop-toggle>
+          {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
+        </button>
+      {% endif %}
+
+      {% comment %} Link to PDP {% endcomment %}
+      <a href="{{ product_object.url }}" class="button button--outline mx-auto rounded-full p-2 touch:p-3" tabindex="-1">
+        {%- render 'icons', icon: 'arrow', icon_class: 'w-5' -%}
+        <span class="sr-only">
+          {%- render 'render-translation', namespace: 'products.product', key: 'go_to_product', fallback: 'Go to product page' -%}
+        </span>
+      </a>
+    </div>
+  </footer>
 </article>

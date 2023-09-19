@@ -124,6 +124,7 @@
     "product": {
       "add": "Add",
       "add_to_cart": "Add to cart",
+      "go_to_product": "Go to product page",
       "description": "Description",
       "on_sale": "Sale",
       "new": "New",
@@ -163,7 +164,10 @@
   },
   "sections": {
     "breadcrumbs": {
-      "home": "Home"
+      "home": "Home",
+      "collections": "Collections",
+      "cart": "Cart",
+      "404": "404"
     },
     "main_search": {
       "title": "Search",

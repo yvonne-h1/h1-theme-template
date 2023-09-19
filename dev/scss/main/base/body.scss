@@ -1,7 +1,4 @@
 @layer base {
-  * {
-    @apply states:transition-colors;
-  }
   body {
     @apply m-0
       flex

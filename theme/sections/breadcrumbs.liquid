@@ -58,7 +58,7 @@
       case template.name
         when 'list-collections'
           echo '||'
-          echo section.settings.collections_label
+          echo 'sections.breadcrumbs.collections' | t
           echo '::' | append: routes.collections_url
         when 'collection'
           if parent_collection != blank
@@ -92,11 +92,11 @@
           echo '::' | append: page.url
         when 'cart'
           echo '||'
-          echo section.settings.cart_label
+          echo 'sections.breadcrumbs.cart' | t
           echo '::' | append: routes.cart_url
         when '404'
           echo '||'
-          echo section.settings.label_404
+          echo 'sections.breadcrumbs.404' | t
         when 'search'
           echo '||'
           echo 'sections.main_search.title' | t
@@ -182,7 +182,7 @@
             else
               if path_url != blank and path_url != '#'
                 echo '<li class="breadcrumbs__item">'
-                echo '<a class="breadcrumbs__link text-primary transition-colors states:no-underline" href="'
+                echo '<a class="breadcrumbs__link transition-colors states:no-underline" href="'
                 echo path_url | strip
                 echo '">'
                 echo path_name_item
@@ -195,7 +195,7 @@
                   echo '</li>'
                 endif
               endif
-              echo '<li class="breadcrumbs__divider before:content-empty before:block border-l border-gray border- h-4 w-0 mt-0.5"></li>'
+              echo '<li class="breadcrumbs__divider before:content-empty before:block border-l border-gray-200 border- h-4 w-0 mt-0.5"></li>'
             endif
           -%}
         {%- endfor -%}
@@ -258,28 +258,6 @@
             "label": "Right"
           }
         ]
-      },
-      {
-        "type": "header",
-        "content": "Labels"
-      },
-      {
-        "type": "text",
-        "id": "collections_label",
-        "label": "'Collections' label",
-        "default": "Collections"
-      },
-      {
-        "type": "text",
-        "id": "cart_label",
-        "label": "'Cart' label",
-        "default": "Cart"
-      },
-      {
-        "type": "text",
-        "id": "label_404",
-        "label": "'404' label",
-        "default": "404"
       }
     ],
     "presets": [

@@ -16,10 +16,10 @@
               for tag in article.tags
                 if tag contains 'type:' or tag contains 'Type:'
                   assign article_type = tag | downcase | remove: 'type:'
+                  echo '<p class="article-header__type  text-sm font-semibold uppercase text-primary">'
+                    echo article_type
+                  echo '</p>'
                 endif
-                echo '<p class="article-header__type  text-sm font-semibold uppercase text-primary">'
-                echo article_type
-                echo '</p>'
               endfor
             endif
           -%}

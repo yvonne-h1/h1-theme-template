@@ -283,6 +283,22 @@
     "name": "Collection page",
     "settings": [
       {
+        "type": "select",
+        "id": "pagination_view",
+        "label": "Pagination type",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "load-more",
+            "label": "Load more"
+          }
+        ]
+      },
+      {
         "type": "header",
         "content": "Filter availability"
       },

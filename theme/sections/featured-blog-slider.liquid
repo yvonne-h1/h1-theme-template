@@ -72,7 +72,7 @@
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
   <swiper-slider {{ swiper_options }}>
-    <div class="swiper overflow-visible {{ swiper_indication_class }}" data-swiper>
+    <div class="swiper relative overflow-visible {{ swiper_indication_class }}" data-swiper>
       <div class="swiper-wrapper flex">
         {%- for article_object in articles_array -%}
 

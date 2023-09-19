@@ -1,8 +1,8 @@
 
 {%- comment -%}
-Output product grid
-Be carefull with the products per page and the ?view=alt templates. The amount of products per page must be the same.
+  Output product grid
 {%- endcomment -%}
+
 {%- liquid
   capture collection_grid_classes
     if template.suffix contains 'alt'
@@ -29,7 +29,7 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
   endpaginate
 -%}
 
-{%- if view == 'load-more' -%}
+{%- if pagination_type == 'load-more' -%}
   <load-more>
     <input type="hidden" value="{{ paginate.pages }}" data-total-pages>
     <input type="hidden" value="{{ paginate.items }}" data-total-items>
@@ -57,9 +57,7 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
       assign classes = 'col-span-6 md:col-span-4 xl:col-span-3'
       assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw'
 
-      comment
-        Overwrite sizes based on template suffix alt layout
-      endcomment
+      # Overwrite sizes based on template suffix alt layout
       if template.suffix contains 'alt'
         assign classes = 'col-span-12 md:col-span-4 xl:col-span-3'
         assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 100vw'
@@ -80,7 +78,7 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
     {%- endfor -%}
   </ol>
 
-  {%- if view == 'load-more' and paginate.pages > 1 -%}
+  {%- if pagination_type == 'load-more' and paginate.pages > 1 -%}
     <div class="load-more-wrapper text-center mt-20">
       <div class="load-more load-more--next flex items-center justify-center mb-4" data-pagination-next>
         {%- if paginate.current_page < paginate.pages -%}
@@ -97,7 +95,6 @@ Be carefull with the products per page and the ?view=alt templates. The amount o
     </div>
   </load-more>
 {%- endif -%}
-
 
 {%- if collection -%}
   <script>

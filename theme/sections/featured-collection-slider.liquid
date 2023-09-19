@@ -95,25 +95,7 @@
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
   <swiper-slider {{ swiper_options }}>
-    <div class="swiper overflow-visible">
-
-      {%- comment -%} Render swiper navigation {%- endcomment -%}
-      {%- if section.settings.swiper_navigation -%}
-        <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-8">
-          <button
-            class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
-            aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
-          >
-            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
-          </button>
-          <button
-            class="swiper-button-next swiper-button-next-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
-            aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
-          >
-            {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
-          </button>
-        </div>
-      {%- endif -%}
+    <div class="swiper relative overflow-visible">
 
       <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
         <div class="swiper-wrapper flex">
@@ -168,6 +150,24 @@
           </div>
         {%- endif -%}
       </div>
+
+      {%- comment -%} Render swiper navigation {%- endcomment -%}
+      {%- if section.settings.swiper_navigation -%}
+        <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-8">
+          <button
+            class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
+            aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
+          >
+            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
+          </button>
+          <button
+            class="swiper-button-next swiper-button-next-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
+            aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
+          >
+            {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
+          </button>
+        </div>
+      {%- endif -%}
     </div>
   </swiper-slider>
 {%- endcapture -%}

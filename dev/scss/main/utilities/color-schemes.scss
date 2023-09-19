@@ -13,14 +13,11 @@
           @apply text-[var(--color-scheme-text-color)]
           states:text-[var(--color-scheme-text-active-color)]
           states:no-underline;
-
-
-
-        //   dit verder checken met article card badges
-        //   shopify image lazy checken
-        // }
+        }
+        &.inverted,
         &.active {
-          @apply text-[var(--color-scheme-text-active-color)];
+          @apply text-[var(--color-scheme-text-active-color)]
+          states:text-[var(--color-scheme-text-color)];
         }
       }
     }

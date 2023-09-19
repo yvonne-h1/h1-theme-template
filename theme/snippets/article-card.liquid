@@ -96,14 +96,14 @@
             capture tags_as_badges
               echo tags_as_badges
               echo '<li class="product-card__list-tags__item">'
-              echo category_name | link_to_tag: tag | replace: '<a', '<a class="badge capitalize no-underline states:underline"'
+              echo category_name | link_to_tag: tag | replace: '<a', '<a tabindex="-1" class="badge capitalize no-underline states:scale-110"'
               echo '</li>'
             endcapture
 
             # Used for highlighted article
             capture tags_as_string
               echo tags_as_string
-              echo category_name | capitalize | upcase | link_to_tag: tag | replace: '<a', '<a class="label no-underline states:underline"' | prepend: ' | '
+              echo category_name | capitalize | upcase | link_to_tag: tag | replace: '<a', '<a tabindex="-1" class="label no-underline inverted"' | prepend: ' | '
             endcapture
           endif
         endfor

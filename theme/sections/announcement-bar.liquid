@@ -2,7 +2,7 @@
   # Use a slider component when more than one slides and load needed css.
   if section.blocks.size > 1 or request.design_mode
     assign wrapper_element = 'swiper-slider'
-    render 'import-styles', file_name: 'component-swiper.css'
+    render 'import-styles', file_name: 'component-swiper.css', force: true
   endif
 -%}
 

@@ -4,7 +4,7 @@
   - section:         {Object} main-collection.liquid section object (required)
 {%- endcomment -%}
 
-{% comment %} Loader animation {% endcomment %}
+{% comment %} Loader animation, keep both the flex and hidden class because we toggle it to show the loader {% endcomment %}
 {%- capture loading_overlay -%}
   <div class="loading-overlay absolute inset-0 z-50 flex hidden w-full items-center justify-center bg-bg-default opacity-70" data-loader>
     {%- render 'icons', icon: 'spinner', icon_class: 'w-6 animate-spin' -%}
@@ -27,9 +27,9 @@
     >
       {%- liquid
         paginate collection.products by settings.products_per_page
-          render 'product-grid', collection: collection, paginate: paginate, view: section.settings.pagination_view, product_card_extra_id: section.id
+          render 'product-grid', collection: collection, paginate: paginate, pagination_type: settings.pagination_view, product_card_extra_id: section.id
 
-          if paginate.pages > 1 and section.settings.pagination_view == ''
+          if paginate.pages > 1 and settings.pagination_view == ''
             render 'pagination', paginate: paginate, anchor: '', class: ''
           endif
         endpaginate
@@ -45,7 +45,7 @@
 {%- render 'render-container-content', class: 'collection-wrapper mt-0', title: section.settings.title, content: container_content -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
-{%- if section.settings.pagination_view == 'load-more' -%}
+{%- if settings.pagination_view == 'load-more' -%}
   <script src="{{ 'load-more.js' | asset_url }}" defer></script>
 {%- endif -%}
 <script src="{{ 'product-card.js' | asset_url }}" type="module"></script>

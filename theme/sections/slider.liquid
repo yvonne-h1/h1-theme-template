@@ -46,7 +46,7 @@
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
   <swiper-slider {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
-    <div class="swiper" data-swiper>
+    <div class="swiper relative" data-swiper>
       <div class="swiper-wrapper flex">
         {%- liquid
           assign lazy = true
@@ -64,6 +64,7 @@
         -%}
       </div>
 
+      {% comment %} Navigation and pagination {% endcomment %}
       {%- if is_slider -%}
         {% comment %} Navigation {% endcomment %}
         {%- if section.settings.swiper_navigation %}

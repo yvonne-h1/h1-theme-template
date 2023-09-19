@@ -169,21 +169,21 @@
 
   assign widths = new_widths | remove_first: ', '
 
-  # Shopify add lazy by default, so only overwrite when you pass the lazy parameter, like in sliders
-  assign lazy = 'eager'
-  if lazy == true
-    assign lazy = 'lazy'
+  # Shopify adds lazy by default, so only overwrite when you pass the lazy parameter, like in sliders with multiple slides
+  assign lazy_load = 'eager'
+  if lazy != blank and lazy == true
+    assign lazy_load = 'lazy'
   endif
 -%}
 
 {%- capture image_element -%}
 {% comment %} We force lazy loading {% endcomment %}
-{%- if lazy == true -%}
+{%- if lazy != blank -%}
   {{ image_url | image_tag:
       alt: alt,
       class: class,
       crop: crop,
-      loading: lazy,
+      loading: lazy_load,
       height: height,
       sizes: sizes,
       style: style,
