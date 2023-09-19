@@ -15,6 +15,10 @@
 
   .swiper {
     --swiper-theme-color: theme('colors.secondary.DEFAULT');
+    --swiper-slidesPerView: 1;
+    --swiper-spaceBetween: 0;
+    --swiper-SwiperSlide-width: calc((100% - (var(--swiper-slidesPerView) - 1) * var(--swiper-spaceBetween)) / var(--swiper-slidesPerView));
+
     @apply select-none;
 
     .swiper-wrapper {
@@ -22,7 +26,9 @@
     }
 
     .swiper-slide {
-      @apply h-auto;
+      @apply me-[var(--swiper-spaceBetween)]
+      h-auto
+      w-[var(--swiper-SwiperSlide-width)];
     }
 
     .swiper-button-prev,

@@ -43,7 +43,7 @@
       },
     {% endif %}
     "breakpoints": {
-      "480": {
+      "420": {
         "slidesPerView": 2,
         "spaceBetween": 16,
         "slidesOffsetBefore": 16,
@@ -73,7 +73,14 @@
 
 {%- capture container_content -%}
   <product-recommendations {{ swiper_options }}>
-    <div class="swiper relative overflow-visible">
+    <div class="swiper relative overflow-visible
+      [--swiper-spaceBetween:16px]
+      [--swiper-slidesPerView:1.2]
+      xs:[--swiper-slidesPerView:2]
+      md:[--swiper-spaceBetween:32px]
+      md:[--swiper-slidesPerView:3]
+      lg:[--swiper-slidesPerView:4]
+      ">
 
       {%- comment -%} Render swiper navigation {%- endcomment -%}
       {%- if section.settings.swiper_navigation -%}

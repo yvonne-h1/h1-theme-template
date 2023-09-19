@@ -62,7 +62,7 @@
       },
     {% endif %}
     "breakpoints": {
-      "480": { "slidesPerView": 2 },
+      "420": { "slidesPerView": 2 },
       "768": { "slidesPerView": 2, "spaceBetween": 32 },
       "1024": { "slidesPerView": 4, "spaceBetween": 32 }
     }
@@ -72,7 +72,12 @@
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
   <swiper-slider {{ swiper_options }}>
-    <div class="swiper relative overflow-visible {{ swiper_indication_class }}" data-swiper>
+    <div class="swiper relative overflow-visible {{ swiper_indication_class }}
+      [--swiper-spaceBetween:16px]
+      xs:[--swiper-slidesPerView:2]
+      md:[--swiper-spaceBetween:32px]
+      lg:[--swiper-slidesPerView:4]
+      " data-swiper>
       <div class="swiper-wrapper flex">
         {%- for article_object in articles_array -%}
 
@@ -102,7 +107,7 @@
             assign count = count | plus: 1
           -%}
 
-          <div class="swiper-slide w-full sm:w-1/2 lg:w-1/4" data-swiper-slide-index="{{ forloop.index }}">
+          <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
             {%- render 'article-card'
               article: article_object,
               image_max_width: image_max_width,

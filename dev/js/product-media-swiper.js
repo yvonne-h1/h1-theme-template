@@ -44,7 +44,7 @@ class ProductMediaSlider extends HTMLElement {
           slidesOffsetBefore: 16,
           slidesOffsetAfter: 16,
         },
-        600: {
+        580: {
           slidesPerView: 4.2,
           slidesOffsetBefore: 16,
           slidesOffsetAfter: 16,

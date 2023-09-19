@@ -64,7 +64,7 @@
       },
     {% endif -%}
     "breakpoints": {
-      "480": {
+      "420": {
         "slidesPerView": 2,
         "spaceBetween": 16,
         "slidesOffsetBefore": 16,
@@ -95,7 +95,14 @@
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
   <swiper-slider {{ swiper_options }}>
-    <div class="swiper relative overflow-visible">
+    <div class="swiper relative overflow-visible
+      [--swiper-spaceBetween:16px]
+      [--swiper-slidesPerView:1.2]
+      xs:[--swiper-slidesPerView:2]
+      md:[--swiper-spaceBetween:32px]
+      md:[--swiper-slidesPerView:3]
+      lg:[--swiper-slidesPerView:4]
+      ">
 
       <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
         <div class="swiper-wrapper flex">
@@ -110,7 +117,7 @@
               assign count = count | plus: 1
             -%}
 
-            <div class="swiper-slide w-full sm:w-1/2 md:w-1/3 lg:w-1/4" data-swiper-slide-index="{{ forloop.index }}">
+            <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
               {%- render 'product-card',
                 product_object: product_object,
                 image_max_width: image_max_width,

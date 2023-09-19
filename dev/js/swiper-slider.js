@@ -2,6 +2,12 @@
  * SwiperSlider
  * @description Web component used to create sliders, configurable with data-options attribute.
  * @documentation https://swiperjs.com/swiper-api
+ *
+ * To prevent CLS update the custom variables with the values used for each breakpoint. Variables are
+ * --swiper-slidesPerView
+ * --swiper-spaceBetween
+ * Remove the variables when using 1 sliderPerView.
+ *
  * @example
 <swiper-slider data-options='{
     "threshold": 10,
@@ -28,7 +34,12 @@
       }
     }
   }'>
-  <div class="swiper" data-swiper>
+  <div class="swiper" [--swiper-spaceBetween:16px]
+      md:[--swiper-slidesPerView:2]
+      md:[--swiper-spaceBetween:24px]
+      lg:[--swiper-slidesPerView:3]
+      md:[--swiper-spaceBetween:32px]
+      data-swiper>
     <div class="swiper-wrapper flex">
       {%- for item in (1..8) -%}
         <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">

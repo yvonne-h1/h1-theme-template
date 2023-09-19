@@ -4,6 +4,8 @@
 {%- liquid
   assign media_content_slider = ''
   assign media_content_thumbnails_slider = ''
+
+  assign image_count = 0
 -%}
 
 {%- for media in product.media -%}
@@ -23,6 +25,18 @@
   {%- capture media_content -%}
     {% case media.media_type %}
       {%- when 'image' -%}
+        {%- liquid
+          assign image_count = image_count | plus: 1
+
+          assign lazy = true
+          if image_count == 1
+            assign lazy = false
+          endif
+
+          if image_count >= 2
+            assign lazy = true
+          endif
+        -%}
         <a
           class="product-media-swiper__item relative block w-full"
           href="{{ media | image_url }}"
@@ -36,6 +50,7 @@
             sizes: '(min-width: 768px) 512px, 100vw',
             alt: media.alt,
             title: media.alt,
+            lazy: lazy,
             class: 'w-full md:max-w-lg mx-auto'
             -%}
           {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute end-4 bottom-4 md:hidden pointer-events-none' -%}
@@ -81,7 +96,7 @@
 
   {%- capture media_content_slider -%}
     {{ media_content_slider }}
-    <div class="swiper-slide"
+    <div class="swiper-slide aspect-square w-full"
       {% if media.media_type == 'image' -%}
         data-product-variant-image="[{{ variant_images }}]"
       {%- endif -%}>
@@ -113,8 +128,7 @@
 
   {%- capture media_content_thumbnails_slider -%}
     {{ media_content_thumbnails_slider }}
-    <div class="swiper-slide relative w-16 cursor-pointer rounded-md border-2 border-transparent
-      states:border-gray-200 lg:w-20">
+    <div class="swiper-slide relative aspect-square cursor-pointer overflow-hidden rounded-md border-2 border-transparent states:border-gray-200">
       {{ media_content_thumbnails }}
     </div>
   {%- endcapture -%}
@@ -124,7 +138,7 @@
 {%- if product.media != blank -%}
   <product-media-swiper class="product-media-swiper relative flex h-full flex-col justify-between">
     {%- comment -%} Main Slider {%- endcomment -%}
-    <div class="product-media-swiper__slider relative col-span-12 mb-4">
+    <div class="product-media-swiper__slider relative col-span-12 mb-4 md:mb-0">
       {%- comment -%} Main slider {%- endcomment -%}
       <div
         class="swiper"
@@ -149,7 +163,15 @@
 
     {%- comment -%} Thumbnails slider {%- endcomment -%}
     <div class="product-media-swiper__thumbnails relative col-span-12 md:pe-[var(--content-wrapper-padding)]">
-      <div class="swiper" data-product-media-thumbnails-slider>
+      <div
+        class="
+          swiper [--swiper-slidesPerView:3.2]
+          [--swiper-spaceBetween:8px]
+          sm:[--swiper-slidesPerView:4.2]
+          md:[--swiper-slidesPerView:5.2]
+          2xl:[--swiper-slidesPerView:6.2]
+        "
+        data-product-media-thumbnails-slider>
         <div class="swiper-wrapper flex items-center">
           {{- media_content_thumbnails_slider -}}
         </div>
