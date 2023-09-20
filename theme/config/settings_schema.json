@@ -473,6 +473,10 @@
     "name": "Article card",
     "settings": [
       {
+        "type": "paragraph",
+        "content": "These settings will only apply to default article cards, not highlighted article cards, as shown on the blog main page."
+      },
+      {
         "type": "checkbox",
         "id": "show_article_image",
         "label": "Show image",
@@ -499,7 +503,8 @@
       {
         "type": "checkbox",
         "id": "show_article_excerpt",
-        "label": "Show excerpt or content",
+        "label": "Show excerpt",
+        "info": "Will only display when an excerpt is available.",
         "default": false
       }
     ]
@@ -547,7 +552,7 @@
     ]
   },
   {
-    "name": "(Predictive) Search",
+    "name": "(Predictive) search",
     "settings": [
       {
         "type": "header",

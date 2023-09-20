@@ -137,7 +137,7 @@
                 {%- comment -%} Cart errors {%- endcomment -%}
                 <div id="cart-errors" class="cart__cart-error my-2 text-sm text-danger empty:hidden"></div>
 
-                <p class="cart__tax-note rte mb-6 mt-2 hidden text-sm text-gray-500 md:block">
+                <p class="cart__tax-note rte mb-6 mt-2 hidden text-sm opacity-50 contrast-more:opacity-100 md:block">
                   {%- liquid
                     if cart.taxes_included and shop.shipping_policy.body != blank
                       echo 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url

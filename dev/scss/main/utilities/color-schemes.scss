@@ -9,7 +9,7 @@
     button,
     a {
       &:not([disabled]) {
-        &:not(.button) {
+        &:not(.button):not(.badge) {
           @apply text-[var(--color-scheme-text-color)]
           states:text-[var(--color-scheme-text-active-color)]
           states:no-underline;

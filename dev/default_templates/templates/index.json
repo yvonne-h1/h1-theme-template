@@ -3,9 +3,9 @@
     "image-banner": {
       "type": "image-banner"
     },
-    "featured-collection-slider": {
-      "type": "featured-collection-slider"
+    "featured-content-slider": {
+      "type": "featured-content-slider"
     }
   },
-  "order": ["image-banner", "featured-collection-slider"]
+  "order": ["image-banner", "featured-content-slider"]
 }

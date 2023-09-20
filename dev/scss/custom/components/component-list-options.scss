@@ -73,7 +73,6 @@
       &--disabled {
         @apply pointer-events-none
           cursor-default
-          text-gray-700
           line-through
           opacity-50;
         &:after {

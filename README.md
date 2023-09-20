@@ -41,6 +41,18 @@ Each template is represented by a JSON file, and each of these JSON files stores
 
 By adhering to these principles, the codebase will be more organized, comprehensible, and adaptable, benefiting both developers and clients in the long run.
 
+### Accessibility
+
+Always make sure you keep accessibility in mind when writing code or styling elements. Don't use text-gray-500 but instead add 'opacity-50 contrast-more:opacity-100'. This will make sure users that prefer to have more contrast will still be able to read the content.
+  - Any button with only an icon should have an aria-label attribute or an additional <code><span class="sr-only">Label describing the button</span></code>
+  - Nav elements should have an aria-label describing what it's for
+  - Headings should have a logical order
+  - Use trapFocus when opening a modal and return the focus to the trigger when closing a modal.
+  - Always test using your keyboard
+  - Use colors with enough contrast
+  - Divs and spans have no semantic meaning. Always use p tags for text content.
+  - NEVER remove focus outlines!
+
 ## Javascript
 
 - JS is written in vanilla javascript. Don NOT use jQuery in your project.
@@ -54,6 +66,7 @@ By adhering to these principles, the codebase will be more organized, comprehens
 ## Styles
 
 We use [tailwind](https://tailwindcss.com/docs/) for the theme styling.
+
 ### Tailwind and Layers
 
 - We prefer to use Tailwind classes and work **utility first**.
@@ -95,9 +108,8 @@ The dev/scss folder is divided in three folders to give you to possibility to op
 
 - The `custom` folder adds CSS that will be added dynamically to your page.
 - The `main` folder loads all critical CSS.
-- The `mixins` folder is used for SCSS mixins that can be used inside the other CSS files. Right now, these are not used.
 
-Inside the designated folders, various subfolders correspond to different Tailwind layers. Each file in these subfolders should be wrapped within the appropriate @layer ... { } directive. The layers will be rendered in the browser in the following order: base, h1-styles-modules, h1-styles-components, h1-styles-utilities, and finally, h1-styles-sections.
+Inside the designated folders, various sub-folders correspond to different Tailwind layers. Each file in these sub-folders should be wrapped within the appropriate @layer ... { } directive. The layers will be rendered in the browser in the following order: base, h1-styles-modules, h1-styles-components, h1-styles-utilities, and finally, h1-styles-sections.
 
 - The `base` layer is responsible for injecting base styling and resets introduced by the Tailwind algorithm and the scss/main/base folder. It sets the foundation for the theme.
 - The `h1-styles-modules` layer is utilized for adding third-party CSS from the custom/modules folder, such as SwiperJs or Fancybox. Here, the intention is to only import files without applying any custom styling. This approach maintains the hierarchy and separation of concerns. To apply custom styling to a third-party library, you can use the component layer.
@@ -158,7 +170,6 @@ We work using components. So, we need to adjust and create all components for th
 - Favicons / touch icons and the webmanifest can be generated with [real favicon generator](https://realfavicongenerator.net/) and are placed inside the dev/assets folder. Make sure you use the liquid asset filter and customizer settings inside the webmanifest and browser config file.
 
 ### Icons
-
 - We have divided the SVG icons in three sections: UI, Payment and Socials. The icons can be changed inside the icons-[type].liquid file.
 - The icons sizes are defined inside icons.scss
 - The size can be given to each icon with icon_class property. For example `icon_class: 'w-3 md:w-3'`
@@ -187,6 +198,5 @@ Because we work from the smallest component to the biggest element it's good to 
 - Collapsibles
 - Variants/product options
 - Pagination
-- Project-related components
 
 ---

@@ -79,8 +79,16 @@
 
 {%- capture article_excerpt -%}
   <p class="article-card__excerpt mb-0 line-clamp-3 text-sm">
-    {{- article.excerpt | strip_html | truncatewords: 30 -}}
+    {{- article.excerpt | strip_html -}}
   </p>
+{%- endcapture -%}
+
+{%- capture article_date -%}
+  {{- article.published_at | time_tag: format: 'day_month_year' -}}
+{%- endcapture -%}
+
+{%- capture article_author -%}
+  {%- render 'render-translation',  namespace: 'blogs.article', key: 'written_by', author: article.author, fallback: article.author -%}
 {%- endcapture -%}
 
 {%- comment -%} Capture tags, don't show category for highlighted items {%- endcomment -%}
@@ -119,21 +127,23 @@
 <article class="article-card flex flex-col gap-y-4 {{ class -}}">
   {% comment %} Highlighted card {% endcomment %}
   {%- if highlight -%}
-    <div class="relative flex overflow-hidden rounded-md p-6 lg:p-10 {{ section.settings.highlight_position_horizontal }} {{ section.settings.highlight_position_vertical }} {{ section.settings.highlight_text_align }} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }} {{ section.settings.min_ratio_desktop }}">
-      {% comment %} Image {% endcomment %}
-      <div class="article-card__image absolute inset-0 -z-10 flex-none bg-black">
-        {%- liquid
-          # Image
-          assign image_classes = 'article-card__image w-full h-full object-cover  group-hover/article-card:scale-105 duration-300 transition-all opacity-80'
-          if show_image
-            render 'responsive-image', image_object: image_object, alt: article.title, max_width: 1360, sizes: '(min-width: 1440px) 1360px, 100vw', class: image_classes
-          endif
-        -%}
-      </div>
+    <div class="relative {% if section.settings.show_highlight_image -%}flex overflow-hidden rounded-md p-6 lg:p-10 {{ section.settings.highlight_position_horizontal }} {{ section.settings.highlight_position_vertical }} {{ section.settings.highlight_text_align }} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }} {{ section.settings.min_ratio_desktop }}{%- endif -%}">
+      {%- if section.settings.show_highlight_image -%}
+        {% comment %} Image {% endcomment %}
+        <div class="article-card__image absolute inset-0 -z-10 flex-none bg-black">
+          {%- liquid
+            # Image
+            assign image_classes = 'article-card__image w-full h-full object-cover  group-hover/article-card:scale-105 duration-300 transition-all opacity-80'
+            if section.settings.show_highlight_image
+              render 'responsive-image', image_object: image_object, alt: article.title, max_width: 1360, sizes: '(min-width: 1440px) 1360px, 100vw', class: image_classes
+            endif
+          -%}
+        </div>
+      {%- endif -%}
 
       {% comment %} Content {% endcomment %}
       <div class="article-card__content-wrapper">
-        <div class="article-card__content flex max-w-full flex-col gap-y-4 p-6 md:max-w-lg {{ section.settings.content_color_scheme }}">
+        <div class="article-card__content flex flex-col gap-y-4 {% if section.settings.show_highlight_image -%}max-w-full p-6 md:max-w-lg{%- endif %} {{ section.settings.content_color_scheme }}">
           <header class="article-card__header flex flex-col gap-y-2">
             {% comment %} Category and date {% endcomment %}
             {%- if section.settings.show_highlight_category or section.settings.show_highlight_date -%}
@@ -147,7 +157,7 @@
                 {% comment %} Date {% endcomment %}
                 {%- if section.settings.show_highlight_date -%}
                   <p class="article-card__published_at mb-0 text-sm italic">
-                    {{- article.published_at | time_tag: format: 'day_month_year' -}}
+                    {{- article_date -}}
                   </p>
                 {%- endif -%}
               </div>
@@ -157,10 +167,13 @@
             <h2 class="article-card__title h4 mb-0">
               {{- article.title -}}
             </h2>
+            <span class="article-card__author opacity-50 contrast-more:opacity-100">
+              {{- article_author -}}
+            </span>
           </header>
 
           {% comment %} Excerpt {% endcomment %}
-          {%- if section.settings.show_highlight_excerpt and article.excerpt.size > 0 -%}
+          {%- if section.settings.show_highlight_excerpt and article.excerpt != blank -%}
             {{- article_excerpt -}}
           {%- endif -%}
 
@@ -211,10 +224,10 @@
           </h2>
         </a>
         {%- if show_date or show_author -%}
-          <p class="article-card__meta mb-0 flex flex-wrap gap-1 text-sm leading-6 opacity-50">
+          <p class="article-card__meta mb-0 flex flex-wrap gap-1 text-sm leading-6 opacity-50 contrast-more:opacity-100">
             {%- if show_date -%}
               <span class="article-card__published-at">
-                {{- article.published_at | time_tag: format: 'day_month_year' -}}
+                {{- article_date -}}
               </span>
             {%- endif -%}
             {%- if show_date and show_author -%}
@@ -222,7 +235,7 @@
             {%- endif -%}
             {%- if show_author -%}
               <span class="article-card__author">
-                {{- article.author -}}
+                {{- article_author -}}
               </span>
             {%- endif -%}
           </p>

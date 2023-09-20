@@ -1,13 +1,25 @@
 {%- comment -%} Set variables {%- endcomment -%}
 {%- liquid
+  assign render_blog_articles = false
+  assign render_products = false
+
   # Global assigns
-  assign collection_object = section.settings.collection
-  assign all_products_count = collection_object.all_products_count
-  assign products_arr = collection_object.products
+  if section.settings.collection != blank
+    assign render_products = true
+    assign object = section.settings.collection
+    assign max_count = object.all_products_count
+    assign object_array = object.products
+  elsif section.settings.blog != blank
+    assign render_blog_articles = true
+    assign object = blogs[section.settings.blog]
+    assign max_count = object.articles_count
+    assign object_array = object.articles
+    assign tag_to_show = section.settings.tag | split: ':' | last | downcase
+  endif
 
   # If the number of items is higher than the given setting, use the setting
-  if all_products_count > section.settings.all_products_count
-    assign all_products_count = section.settings.all_products_count
+  if max_count > section.settings.max_count
+    assign max_count = section.settings.max_count
   endif
 
   # Assign based on container width
@@ -65,19 +77,19 @@
     {% endif -%}
     "breakpoints": {
       "420": {
-        "slidesPerView": 2,
+        "slidesPerView": {% if render_products %}2.2{%- elsif render_blog_articles%}1.8{%- endif %},
         "spaceBetween": 16,
         "slidesOffsetBefore": 16,
         "slidesOffsetAfter": 16
       },
       "768": {
-        "slidesPerView": 3,
+        "slidesPerView": {% if render_products %}3.2{%- elsif render_blog_articles%}2.4{%- endif %},
         "spaceBetween": 32,
         "slidesOffsetBefore": 32,
         "slidesOffsetAfter": 32
       },
       "1024": {
-        "slidesPerView": 4,
+        "slidesPerView": {% if render_products %}4{%- elsif render_blog_articles%}3.2{%- endif %},
         "spaceBetween": 32,
         "slidesOffsetBefore": 32,
         "slidesOffsetAfter": 32
@@ -98,35 +110,79 @@
     <div class="swiper relative overflow-visible
       [--swiper-spaceBetween:16px]
       [--swiper-slidesPerView:1.2]
-      xs:[--swiper-slidesPerView:2]
       md:[--swiper-spaceBetween:32px]
-      md:[--swiper-slidesPerView:3]
-      lg:[--swiper-slidesPerView:4]
+      {% if render_products %}
+        xs:[--swiper-slidesPerView:2.2]
+        md:[--swiper-slidesPerView:3.2]
+        lg:[--swiper-slidesPerView:4]
+        {% elsif render_blog_articles %}
+        xs:[--swiper-slidesPerView:1.8]
+        md:[--swiper-slidesPerView:2.4]
+        lg:[--swiper-slidesPerView:3.2]
+        2xl:[--swiper-slidesPerView:4]
+      {% endif -%}
       ">
 
       <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
         <div class="swiper-wrapper flex">
-          {%- for product_object in products_arr -%}
+          {%- for item in object_array -%}
             {%- liquid
-              # Skip current product
-              if product_object.id == product.id
-                continue
-              endif
+              # render products
+              if render_products
+                # Skip current product
+                if item.id == product.id
+                  continue
+                endif
 
-              # Add 1 to the count if product is skipped
-              assign count = count | plus: 1
+                # Add 1 to the count if product is skipped
+                assign count = count | plus: 1
+
+              # render articles
+              elsif render_blog_articles
+                # Skip current article
+                if item.id == article.id
+                  continue
+                endif
+
+                # Check if the article has the tag that is defined in the settings
+                assign skip_article_with_wrong_tag = false
+
+                for article_tag in item.tags
+                  assign article_tag_last = article_tag | split: ':' | last | downcase
+
+                  unless article_tag_last contains tag_to_show
+                    assign skip_article_with_wrong_tag = true
+                  endunless
+                endfor
+
+                # Skipt the articles that doesn't have the same tag as defined in the settings
+                if skip_article_with_wrong_tag
+                  continue
+                endif
+
+                # Add 1 to the count for every article that passes the statements
+                assign count = count | plus: 1
+              endif
             -%}
 
             <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
-              {%- render 'product-card',
-                product_object: product_object,
-                image_max_width: image_max_width,
-                image_sizes: image_sizes,
-                product_card_title_el: 'h3'
-              -%}
+              {%- if render_products -%}
+                {%- render 'product-card',
+                  product_object: item,
+                  image_max_width: image_max_width,
+                  image_sizes: image_sizes,
+                  product_card_title_el: 'h3'
+                -%}
+              {%- elsif render_blog_articles -%}
+                {%- render 'article-card'
+                  article: item,
+                  image_max_width: image_max_width,
+                  image_sizes: image_sizes,
+                -%}
+              {%- endif -%}
             </div>
 
-            {%- if count >= all_products_count -%}
+            {%- if count >= max_count -%}
               {% break %}
             {%- endif -%}
 
@@ -182,8 +238,8 @@
 {%- capture container_footer -%}
   {%- if section.settings.button_text != blank -%}
     <a
-      {% if section.settings.button_url != blank or section.settings.collection.url != blank %}
-        href="{{ section.settings.button_url | default: section.settings.collection.url }}"
+      {% if section.settings.button_url != blank or object.url != blank %}
+        href="{{ section.settings.button_url | default: object.url }}"
       {% else %}
         disabled
       {% endif %}
@@ -196,7 +252,7 @@
 
 {%- liquid
   # Container class
-  assign container_class = 'featured-collection-slider overflow-hidden ' | append: section.settings.container_width
+  assign container_class = 'featured-content-slider overflow-hidden ' | append: section.settings.container_width
   if section.settings.color_scheme != blank
     assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.color_scheme
   endif
@@ -210,7 +266,7 @@
   class: container_class,
   title_tag: section.settings.heading_element,
   title_class: title_class,
-  title: section.settings.heading,
+  title: section.settings.title,
   content: container_content,
   content_class: 'p-0',
   footer_class: section.settings.button_align,
@@ -222,7 +278,7 @@
 
 {% schema %}
   {
-    "name": "Feat. collection slider",
+    "name": "Featured content slider",
     "tag": "section",
     "settings": [
       {
@@ -263,7 +319,8 @@
       },
       {
         "type": "header",
-        "content": "Content settings"
+        "content": "Collection settings",
+        "info": "Select a collection or a blog to highlight."
       },
       {
         "type": "collection",
@@ -271,19 +328,37 @@
         "label": "Collection"
       },
       {
-        "type": "range",
-        "id": "all_products_count",
-        "min": 4,
-        "max": 12,
-        "step": 2,
-        "default": 8,
-        "label": "Maximum products to show",
-        "info": "When this higher than 4 it will be shown as a slider on desktop and mobile."
+        "type": "header",
+        "content": "Blog settings"
+      },
+      {
+        "type": "blog",
+        "id": "blog",
+        "label": "Blog"
       },
       {
         "type": "text",
-        "id": "heading",
-        "default": "Featured collection slider",
+        "id": "tag",
+        "label": "Tag",
+        "info": "Enter the tag to display including the prefix.",
+        "placeholder": "type:campaign"
+      },
+      {
+        "type": "header",
+        "content": "Content settings"
+      },
+      {
+        "type": "range",
+        "id": "max_count",
+        "min": 4,
+        "max": 12,
+        "step": 1,
+        "default": 8,
+        "label": "Maximum items to show"
+      },
+      {
+        "type": "text",
+        "id": "title",
         "label": "Heading"
       },
       {
@@ -380,7 +455,8 @@
         "type": "text",
         "id": "button_text",
         "label": "Text",
-        "default": "View all"
+        "default": "View all",
+        "info": "Leave empty to hide."
       },
       {
         "type": "url",

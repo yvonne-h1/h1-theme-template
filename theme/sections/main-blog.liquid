@@ -1,6 +1,6 @@
 {%- liquid
   assign nav_item_class = 'blog-header__nav-item'
-  assign nav_link_class = 'blog-header__nav-link whitespace-nowrap font-bold uppercase text-black no-underline aria-[current=true]:text-primary states:text-primary'
+  assign nav_link_class = 'blog-header__nav-link whitespace-nowrap font-bold uppercase text-black no-underline aria-[current=true]:text-primary states:text-primary aria-[current=true]:states:border-none aria-[current=true]:after:content-empty aria-[current=true]:after:absolute aria-[current=true]:after:h-[1px] aria-[current=true]:after:inset-0 aria-[current=true]:after:top-auto aria-[current=true]:after:-bottom-[1px] aria-[current=true]:after:bg-primary relative py-2 block'
   assign nav_link_replace = '<a class="' | append: nav_link_class | append: '" aria-current="false"'
   assign nav_link_replace_active = '<a class="' | append: nav_link_class | append: '" aria-current="true"'
 
@@ -26,13 +26,13 @@
 
 {%- comment -%} Container header {%- endcomment -%}
 {%- capture container_header -%}
-  <h1 class="h2 mb-0">
+  <h1 class="h2 mb-0 {{ section.settings.heading_alignment }}">
     {{- blog.title -}}
   </h1>
 
   {%- if section.settings.enable_navigation and tag_nav != '' -%}
     <nav class="blog-header__nav blog-nav" aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'blog_tag_menu', fallback: 'Blog categories' -%}">
-      <ul class="blog-header__nav-list article-tags list-menu flex flex-wrap justify-center gap-x-10 text-sm">
+      <ul class="blog-header__nav-list article-tags list-menu flex flex-wrap gap-x-6 border-b border-gray-100 text-sm">
         {%- liquid
           assign nav_link_active = false
           unless current_tags.size
@@ -47,6 +47,7 @@
           </a>
         </li>
 
+        {% comment %} Render the other links {% endcomment %}
         {{- tag_nav -}}
       </ul>
     </nav>
@@ -63,7 +64,7 @@
         {%- liquid
           assign highlight = false
           assign col_classes = 'col-span-12 sm:col-span-6 lg:col-span-4'
-          if article.metafields.article.image.value != blank and forloop.first and section.settings.show_highlight_article
+          if forloop.first and section.settings.show_highlight_article
             assign highlight = true
             assign col_classes = 'col-span-12 mb-8 md:mb-0'
           endif
@@ -75,12 +76,7 @@
             article: article,
             class: col_classes,
             highlight: highlight,
-            section: section,
-            show_image: true,
-            show_category: true,
-            show_excerpt: true,
-            show_date: true,
-            show_author: true
+            section: section
         -%}
       {%- endfor -%}
     </div>
@@ -107,7 +103,7 @@
 {%- comment -%} Render the blog articles {%- endcomment -%}
 {%- render 'render-container-content',
   class: 'main-blog',
-  header_class: 'main-blog__header blog-header mb-8 flex items-center justify-between gap-y-8 flex-col',
+  header_class: 'main-blog__header blog-header mb-8 flex gap-y-8 flex-col',
   header_content: container_header,
   content: container_content,
   footer_content: container_footer
@@ -122,6 +118,26 @@
     "name": "Blog",
     "tag": "section",
     "settings": [
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
+      },
       {
         "type": "number",
         "id": "blog_pagination",
@@ -153,7 +169,20 @@
         "type": "checkbox",
         "id": "show_highlight_article",
         "default": true,
-        "label": "Show highlight article"
+        "label": "Highlight the first article",
+        "info": "Optionally, you can upload an additional image that will be used when the article is highlighted (metafield 'Highlighted article image')."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_image",
+        "default": true,
+        "label": "Show image"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_author",
+        "default": false,
+        "label": "Show author"
       },
       {
         "type": "checkbox",

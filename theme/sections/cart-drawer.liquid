@@ -134,7 +134,7 @@
               <div id="cart-errors" class="cart-drawer__cart-error mx-0 my-2 text-sm text-danger empty:hidden"></div>
 
               {%- if section.settings.show_tax_note -%}
-                <p class="cart-drawer__tax-note rte mx-0 mt-2 text-sm text-gray-500">
+                <p class="cart-drawer__tax-note rte mx-0 mt-2 text-sm opacity-50 contrast-more:opacity-100">
                   {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
                     {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
                   {%- elsif cart.taxes_included -%}

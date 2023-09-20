@@ -31,6 +31,9 @@
   elsif count != blank
     assign translated_str = translation_str | t: count: count
     assign fallback_html = count
+  elsif author != blank
+    assign translated_str = translation_str | t: author: author
+    assign fallback_html = author
   elsif option != blank
     assign translated_str = translation_str | t: option: option
     assign fallback_html = option
