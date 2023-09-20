@@ -128,26 +128,30 @@ class SwiperSlider extends HTMLElement {
     }
 
     if (updateSwiper) {
-      this.swiperInstance.update();
-
-      if (this.swiperOptions.navigation.nextEl) {
-        this.swiperInstance.navigation.init();
-        this.swiperInstance.navigation.update();
-      }
-      if (this.swiperOptions.pagination.el) {
-        this.swiperInstance.pagination.init();
-        this.swiperInstance.pagination.render();
-      }
-      // SCROLLBAR doesn't update in the theme editor. This seems to be a bug in swiper.
-      if (this.swiperOptions.scrollbar.el) {
-        this.swiperInstance.scrollbar.init();
-        this.swiperInstance.scrollbar.updateSize();
-        this.swiperInstance.scrollbar.setTranslate();
-      }
+      this.updateSwiper();
     }
     else {
       // Call swiper with selected swiper element and options
       this.swiperInstance = new Swiper(this.swiper, this.swiperOptions);
+    }
+  }
+
+  updateSwiper() {
+    this.swiperInstance.update();
+
+    if (this.swiperOptions.navigation?.nextEl) {
+      this.swiperInstance.navigation.init();
+      this.swiperInstance.navigation.update();
+    }
+    if (this.swiperOptions.pagination?.el) {
+      this.swiperInstance.pagination.init();
+      this.swiperInstance.pagination.render();
+    }
+    // SCROLLBAR doesn't update in the theme editor. This seems to be a bug in swiper.
+    if (this.swiperOptions.scrollbar?.el) {
+      this.swiperInstance.scrollbar.init();
+      this.swiperInstance.scrollbar.updateSize();
+      this.swiperInstance.scrollbar.setTranslate();
     }
   }
 
@@ -179,6 +183,18 @@ class ProductRecommendations extends SwiperSlider {
   constructor() {
     super();
 
+    const dataOptions = this.querySelector('swiper-slider').dataset.options;
+    // Check if we have extra options on the HTML
+    if (dataOptions) {
+      const options = JSON.parse(dataOptions);
+      if (options) {
+        this.swiperOptions = {
+          ...this.swiperOptions,
+          ...options,
+        };
+      }
+    }
+
     // Only do it once, not on every web component render.
     window.onload = () => this.init();
   }
@@ -188,25 +204,13 @@ class ProductRecommendations extends SwiperSlider {
       fetch(this.dataset.url)
         .then(response => response.text())
         .then((text) => {
+          this.swiperInstance.destroy();
           const html = new DOMParser()
             .parseFromString(text, 'text/html')
             .querySelector('[data-recommended-products]').innerHTML;
-
           this.querySelector('[data-recommended-products]').innerHTML = html;
 
-          this.swiperInstance.update();
-          if (this.swiperOptions.navigation) {
-            this.swiperInstance.navigation.init();
-            this.swiperInstance.navigation.update();
-          }
-          if (this.swiperOptions.pagination) {
-            this.swiperInstance.pagination.init();
-            this.swiperInstance.pagination.update();
-          }
-          if (this.swiperOptions.scrollbar) {
-            this.swiperInstance.scrollbar.init();
-            this.swiperInstance.scrollbar.updateSize();
-          }
+          this.swiperInstance = new Swiper(this.swiper, this.swiperOptions);
         })
         .catch((event) => {
           debug() && console.error(event);

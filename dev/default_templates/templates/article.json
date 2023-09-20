@@ -1,7 +1,15 @@
 {
   "sections": {
     "breadcrumbs": {
-      "type": "breadcrumbs"
+      "type": "breadcrumbs",
+      "settings": {
+        "menu": "",
+        "show_home_link": true,
+        "show_tagged_link": true,
+        "show_non_link": true,
+        "hide_on_mobile": false,
+        "alignment": "justify-start"
+      }
     },
     "main": {
       "type": "main-article",
@@ -16,10 +24,17 @@
         },
         "featured_image": {
           "type": "featured_image",
-          "settings": {}
+          "settings": {
+            "min_ratio_mobile": "",
+            "min_ratio_tablet": "md:aspect-[2/1]"
+          }
+        },
+        "featured_products": {
+          "type": "featured_products"
         }
       },
-      "block_order": ["title", "featured_image"]
+      "block_order": ["title", "featured_image", "featured_products"],
+      "settings": {}
     }
   },
   "order": ["breadcrumbs", "main"]

@@ -2,10 +2,10 @@
 <article class="main-article">
   {%- liquid
     # Article header
-    render 'article-header', class: 'main-article__header'
+    render 'article-header', class: 'main-article__header', section: section
 
     # Article content
-    render 'article-content', class: 'main-article__content'
+    render 'article-content', class: 'main-article__content', section: section
 
     # Article comments
     if section.settings.show_comments
@@ -23,7 +23,92 @@
       {
         "type": "featured_image",
         "name": "Featured image",
-        "limit": 1
+        "limit": 1,
+        "settings": [
+          {
+            "type": "header",
+            "content": "Image aspect ratios"
+          },
+          {
+            "type": "select",
+            "id": "min_ratio_mobile",
+            "label": "Mobile screens",
+            "default": "aspect-[2/1]",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "aspect-[1/1]",
+                "label": "Square"
+              },
+              {
+                "value": "aspect-[2/1]",
+                "label": "2x1",
+                "group": "Landscape"
+              },
+              {
+                "value": "aspect-[4/3]",
+                "label": "4x3",
+                "group": "Landscape"
+              },
+              {
+                "value": "aspect-[5/2]",
+                "label": "5x2",
+                "group": "Landscape"
+              },
+              {
+                "value": "aspect-[16/9]",
+                "label": "16x9",
+                "group": "Landscape"
+              },
+              {
+                "value": "aspect-[3/4]",
+                "label": "3x4",
+                "group": "Portrait"
+              },
+              {
+                "value": "aspect-[9/16]",
+                "label": "9x16",
+                "group": "Portrait"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "min_ratio_tablet",
+            "label": "Tablet and up",
+            "info": "Only applies to devices larger than 768 pixels.",
+            "default": "md:aspect-[2/1]",
+            "options": [
+              {
+                "value": "",
+                "label": "Default (same as mobile)"
+              },
+              {
+                "value": "md:aspect-[2/1]",
+                "label": "2x1",
+                "group": "Landscape"
+              },
+              {
+                "value": "md:aspect-[4/3]",
+                "label": "4x3",
+                "group": "Landscape"
+              },
+              {
+                "value": "md:aspect-[5/2]",
+                "label": "5x2",
+                "group": "Landscape"
+              },
+              {
+                "value": "md:aspect-[16/9]",
+                "label": "16x9",
+                "group": "Landscape"
+              }
+            ]
+          }
+        ]
       },
       {
         "type": "title",
@@ -48,6 +133,83 @@
             "default": true,
             "label": "Show category",
             "info": "Article should have a tag with the prefix 'category:'."
+          }
+        ]
+      },
+      {
+        "type": "featured_products",
+        "name": "Featured products",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "Add products to the article metafield 'Blog article - highlighted products' and they will be rendered in a slider."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "info": "Will be shown on all article pages.",
+            "default": "Recommended products"
+          },
+          {
+            "type": "select",
+            "id": "color_scheme",
+            "default": "",
+            "label": "Color scheme",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "color-scheme color-scheme--gray",
+                "label": "Gray"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Swiper settings"
+          },
+          {
+            "type": "select",
+            "id": "swiper_indication",
+            "label": "Slider indication",
+            "default": "pagination",
+            "options": [
+              {
+                "value": "",
+                "label": "None"
+              },
+              {
+                "value": "pagination",
+                "label": "Pagination"
+              },
+              {
+                "value": "scrollbar",
+                "label": "Scrollbar"
+              }
+            ]
+          },
+          {
+            "type": "checkbox",
+            "id": "swiper_navigation",
+            "label": "Navigation",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "swiper_autoplay",
+            "label": "Enable autoplay",
+            "default": false
+          },
+          {
+            "type": "number",
+            "id": "swiper_autoplay_delay",
+            "label": "Autoplay delay",
+            "default": 7500,
+            "info": "Delay between transitions (in ms)"
           }
         ]
       }

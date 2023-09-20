@@ -1,0 +1,283 @@
+{% comment %}
+  Renders a swiper for products or articles. Used in featured-content-slider.liquid and article-content.liquid.
+
+  Options:
+  - container_width: String | optional
+  - swiper_indication: String | 'pagination' or 'scrollbar' | optional
+  - swiper_navigation: Boolean
+  - swiper_autoplay: Boolean
+  - swiper_autoplay_delay: Integer | Speed in ms
+  - render_products: Boolean
+  - render_blog_articles: Boolean
+  - object_array: Required. Array of items
+  - max_count: Integer | optional
+  - tag_to_show: String | optional
+  - index_on_page: Integer | optional | When 1, the css will be forced to prevent CLS
+
+  Render:
+  {%- render 'swiper-content',
+    object_array: object_array,
+    container_width: section.settings.container_width,
+    swiper_indication: section.settings.swiper_indication,
+    swiper_navigation: true,
+    swiper_autoplay: true,
+    swiper_autoplay_delay: 7500,
+    render_products: false,
+    render_blog_articles: false,
+    max_count: 8,
+    tag_to_show: '',
+    index_on_page: section.index
+  -%}
+{% endcomment %}
+
+{%- liquid
+  unless is_recommendations == true
+    assign is_recommendations = false
+  endunless
+
+  if max_count == blank
+    assign max_count = null
+  endif
+
+  if tag_to_show == blank
+    assign tag_to_show = ''
+  endif
+
+  if container_width == blank
+    assign container_width = ''
+  endif
+
+  if swiper_indication == blank
+    assign swiper_indication = ''
+  endif
+  if swiper_navigation == blank
+    assign swiper_navigation = false
+  endif
+  if swiper_autoplay == blank
+    assign swiper_autoplay = false
+  endif
+
+  assign force_css = false
+  if index_on_page == 1
+    assign force_css = true
+  endif
+
+  # Assign based on container width
+  case container_width
+    when 'container--wide'
+      assign image_max_width = 432
+      assign image_sizes = '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+    else
+      assign image_max_width = 360
+      assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+  endcase
+
+  # Import styles
+  render 'import-styles', file_name: 'component-swiper.css', force: force_css
+
+  # Styles based on swiper_indication setting
+  case swiper_indication
+    when 'pagination'
+      assign swiper_indication_class = ' swiper-pagination-active'
+    when 'scrollbar'
+      assign swiper_indication_class = ' swiper-scrollbar-active'
+    else
+      assign swiper_indication_class = ''
+  endcase
+-%}
+
+{%- comment -%} Capture container data for slider {%- endcomment -%}
+{%- capture swiper_options -%}
+  data-options='
+  {
+    "sectionID": "{{ id }}",
+    "slidesPerView": 1.2,
+    "spaceBetween": 16,
+    "slidesOffsetBefore": 16,
+    "slidesOffsetAfter": 16,
+    {%- if swiper_autoplay %}
+      "autoplay": {
+        "delay": {{ swiper_autoplay_delay | default: 7500 }}
+      },
+    {%- endif %}
+    {%- if swiper_indication == 'pagination' %}
+      "pagination": {
+        "el": ".swiper-pagination-{{ id }}",
+        "type": "bullets",
+        "clickable": true
+      },
+    {%- elsif swiper_indication == 'scrollbar' %}
+      "scrollbar": {
+        "el": ".swiper-scrollbar-{{ id }}",
+        "snapOnRelease": true,
+        "snapOnRelease": true,
+        "draggable": true
+      },
+    {% endif -%}
+    {% if swiper_navigation %}
+      "navigation": {
+        "nextEl": ".swiper-button-next-{{ id }}",
+        "prevEl": ".swiper-button-prev-{{ id }}"
+      },
+    {% endif -%}
+    "breakpoints": {
+      "420": {
+        "slidesPerView": {% if render_products %}2.2{%- elsif render_blog_articles %}1.8{%- endif %},
+        "spaceBetween": 16,
+        "slidesOffsetBefore": 16,
+        "slidesOffsetAfter": 16
+      },
+      "768": {
+        "slidesPerView": {% if render_products %}3.2{%- elsif render_blog_articles %}2.4{%- endif %},
+        "spaceBetween": 32,
+        "slidesOffsetBefore": 32,
+        "slidesOffsetAfter": 32
+      },
+      "1024": {
+        "slidesPerView": {% if render_products %}4{%- elsif render_blog_articles %}3.2{%- endif %},
+        "spaceBetween": 32,
+        "slidesOffsetBefore": 32,
+        "slidesOffsetAfter": 32
+      },
+      "1440": {
+        "slidesPerView": 4,
+        "spaceBetween": 32,
+        "slidesOffsetBefore": 0,
+        "slidesOffsetAfter": 0
+      }
+    }
+  }'
+{%- endcapture -%}
+
+<swiper-slider {{ swiper_options }}>
+  <div
+    class="
+      swiper relative overflow-visible
+      [--swiper-spaceBetween:16px]
+      [--swiper-slidesPerView:1.2]
+      md:[--swiper-spaceBetween:32px]
+      {% if render_products %}
+        xs:[--swiper-slidesPerView:2.2]
+        md:[--swiper-slidesPerView:3.2]
+        lg:[--swiper-slidesPerView:4]
+      {% elsif render_blog_articles %}
+        xs:[--swiper-slidesPerView:1.8]
+        md:[--swiper-slidesPerView:2.4]
+        lg:[--swiper-slidesPerView:3.2]
+        2xl:[--swiper-slidesPerView:4]
+      {% endif -%}
+    ">
+    <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
+      <div
+        class="swiper-wrapper flex"
+        {% if is_recommendations -%}
+          data-recommended-products
+        {%- endif -%}>
+        {%- for item in object_array -%}
+          {%- liquid
+            # render products
+            if render_products
+              # Skip current product
+              if item.id == product.id
+                continue
+              endif
+
+              # Add 1 to the count if product is skipped
+              assign count = count | plus: 1
+
+              # render articles
+            elsif render_blog_articles
+              # Skip current article
+              if item.id == article.id
+                continue
+              endif
+
+              # Render items for a tag
+              unless tag_to_show == ''
+                # Check if the article has the tag that is defined in the settings
+                assign skip_article_with_wrong_tag = false
+
+                for article_tag in item.tags
+                  assign article_tag_last = article_tag | split: ':' | last | downcase
+
+                  unless article_tag_last contains tag_to_show
+                    assign skip_article_with_wrong_tag = true
+                  endunless
+                endfor
+
+                # Skips the articles that doesn't have the same tag as defined in the settings
+                if skip_article_with_wrong_tag
+                  continue
+                endif
+              endunless
+
+              # Add 1 to the count for every article that passes the statements
+              assign count = count | plus: 1
+            endif
+          -%}
+
+          <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
+            {%- if render_products -%}
+              {%- render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3' -%}
+            {%- elsif render_blog_articles -%}
+              {%-
+                render 'article-card'
+                article: item,
+                image_max_width: image_max_width,
+                image_sizes: image_sizes,
+              -%}
+            {%- endif -%}
+          </div>
+
+          {%- if count >= max_count -%}
+            {% break %}
+          {%- endif -%}
+
+          {% comment %} Demo slides {% endcomment %}
+        {%- else -%}
+          {%- for i in (1..8) -%}
+            <div class="swiper-slide">
+              {%- render 'product-card-placeholder' -%}
+            </div>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} Render swiper indication wrapper {%- endcomment -%}
+      {%- if swiper_indication != '' -%}
+        <div class="content-wrapper content-wrapper-padding 2xl:px-0">
+      {%- endif -%}
+
+      {% comment %} Check the indication options {% endcomment %}
+      {%- case swiper_indication -%}
+        {%- when 'pagination' -%}
+          <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
+        {%- when 'scrollbar' -%}
+          <div class="swiper-scrollbar swiper-scrollbar-{{ section.id }}"></div>
+      {%- endcase -%}
+
+      {%- if swiper_indication != '' -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Render swiper navigation {%- endcomment -%}
+    {%- if swiper_navigation -%}
+      <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-8">
+        <button
+          class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
+          aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}">
+          {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
+        </button>
+        <button
+          class="swiper-button-next swiper-button-next-{{ section.id }} {% if swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
+          aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}">
+          {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+</swiper-slider>
+
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>

@@ -9,6 +9,10 @@
     assign object = section.settings.collection
     assign max_count = object.all_products_count
     assign object_array = object.products
+  elsif section.settings.product_list != blank
+    assign render_products = true
+    assign max_count = section.settings.product_list.size
+    assign object_array = section.settings.product_list
   elsif section.settings.blog != blank
     assign render_blog_articles = true
     assign object = blogs[section.settings.blog]
@@ -21,218 +25,24 @@
   if max_count > section.settings.max_count
     assign max_count = section.settings.max_count
   endif
-
-  # Assign based on container width
-  case section.settings.container_width
-    when 'container--wide'
-      assign image_max_width = 432
-      assign image_sizes = '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
-    else
-      assign image_max_width = 360
-      assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
-  endcase
-
-  # Import styles
-  render 'import-styles', file_name: 'component-swiper.css'
-
-  # Styles based on swiper_indication setting
-  case section.settings.swiper_indication
-    when 'pagination'
-      assign swiper_indication_class = ' swiper-pagination-active'
-    when 'scrollbar'
-      assign swiper_indication_class = ' swiper-scrollbar-active'
-    else
-      assign swiper_indication_class = ''
-  endcase
 -%}
-
-{%- comment -%} Capture container data for slider {%- endcomment -%}
-{%- capture swiper_options -%}
-  data-options='
-  {
-    "sectionID": "{{ section.id }}",
-    "slidesPerView": 1.2,
-    "spaceBetween": 16,
-    "slidesOffsetBefore": 16,
-    "slidesOffsetAfter": 16,
-    {%- if section.settings.swiper_indication == 'pagination' %}
-      "pagination": {
-        "el": ".swiper-pagination-{{ section.id }}",
-        "type": "bullets",
-        "clickable": true
-      },
-    {%- elsif section.settings.swiper_indication == 'scrollbar' %}
-      "scrollbar": {
-        "el": ".swiper-scrollbar-{{ section.id }}",
-        "snapOnRelease": true,
-        "snapOnRelease": true,
-        "draggable": true
-      },
-    {% endif -%}
-    {% if section.settings.swiper_navigation %}
-      "navigation": {
-        "nextEl": ".swiper-button-next-{{ section.id }}",
-        "prevEl": ".swiper-button-prev-{{ section.id }}"
-      },
-    {% endif -%}
-    "breakpoints": {
-      "420": {
-        "slidesPerView": {% if render_products %}2.2{%- elsif render_blog_articles%}1.8{%- endif %},
-        "spaceBetween": 16,
-        "slidesOffsetBefore": 16,
-        "slidesOffsetAfter": 16
-      },
-      "768": {
-        "slidesPerView": {% if render_products %}3.2{%- elsif render_blog_articles%}2.4{%- endif %},
-        "spaceBetween": 32,
-        "slidesOffsetBefore": 32,
-        "slidesOffsetAfter": 32
-      },
-      "1024": {
-        "slidesPerView": {% if render_products %}4{%- elsif render_blog_articles%}3.2{%- endif %},
-        "spaceBetween": 32,
-        "slidesOffsetBefore": 32,
-        "slidesOffsetAfter": 32
-      },
-      "1440": {
-        "slidesPerView": 4,
-        "spaceBetween": 32,
-        "slidesOffsetBefore": 0,
-        "slidesOffsetAfter": 0
-      }
-    }
-  }'
-{%- endcapture -%}
 
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
-  <swiper-slider {{ swiper_options }}>
-    <div class="swiper relative overflow-visible
-      [--swiper-spaceBetween:16px]
-      [--swiper-slidesPerView:1.2]
-      md:[--swiper-spaceBetween:32px]
-      {% if render_products %}
-        xs:[--swiper-slidesPerView:2.2]
-        md:[--swiper-slidesPerView:3.2]
-        lg:[--swiper-slidesPerView:4]
-        {% elsif render_blog_articles %}
-        xs:[--swiper-slidesPerView:1.8]
-        md:[--swiper-slidesPerView:2.4]
-        lg:[--swiper-slidesPerView:3.2]
-        2xl:[--swiper-slidesPerView:4]
-      {% endif -%}
-      ">
-
-      <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
-        <div class="swiper-wrapper flex">
-          {%- for item in object_array -%}
-            {%- liquid
-              # render products
-              if render_products
-                # Skip current product
-                if item.id == product.id
-                  continue
-                endif
-
-                # Add 1 to the count if product is skipped
-                assign count = count | plus: 1
-
-              # render articles
-              elsif render_blog_articles
-                # Skip current article
-                if item.id == article.id
-                  continue
-                endif
-
-                # Check if the article has the tag that is defined in the settings
-                assign skip_article_with_wrong_tag = false
-
-                for article_tag in item.tags
-                  assign article_tag_last = article_tag | split: ':' | last | downcase
-
-                  unless article_tag_last contains tag_to_show
-                    assign skip_article_with_wrong_tag = true
-                  endunless
-                endfor
-
-                # Skipt the articles that doesn't have the same tag as defined in the settings
-                if skip_article_with_wrong_tag
-                  continue
-                endif
-
-                # Add 1 to the count for every article that passes the statements
-                assign count = count | plus: 1
-              endif
-            -%}
-
-            <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
-              {%- if render_products -%}
-                {%- render 'product-card',
-                  product_object: item,
-                  image_max_width: image_max_width,
-                  image_sizes: image_sizes,
-                  product_card_title_el: 'h3'
-                -%}
-              {%- elsif render_blog_articles -%}
-                {%- render 'article-card'
-                  article: item,
-                  image_max_width: image_max_width,
-                  image_sizes: image_sizes,
-                -%}
-              {%- endif -%}
-            </div>
-
-            {%- if count >= max_count -%}
-              {% break %}
-            {%- endif -%}
-
-          {% comment %} Demo slides {% endcomment %}
-          {%- else -%}
-            {%- for i in (1..8) -%}
-              <div class="swiper-slide">
-                {%- render 'product-card-placeholder' -%}
-              </div>
-            {%- endfor -%}
-          {%- endfor -%}
-        </div>
-
-        {%- comment -%} Render swiper indication wrapper {%- endcomment -%}
-        {%- if section.settings.swiper_indication != '' -%}
-          <div class="content-wrapper content-wrapper-padding 2xl:px-0">
-        {%- endif -%}
-
-        {% comment %} Check the indication options {% endcomment %}
-        {%- case section.settings.swiper_indication -%}
-          {%- when 'pagination' -%}
-            <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
-          {%- when 'scrollbar' -%}
-            <div class="swiper-scrollbar swiper-scrollbar-{{ section.id }}"></div>
-        {%- endcase -%}
-
-        {%- if section.settings.swiper_indication != '' -%}
-          </div>
-        {%- endif -%}
-      </div>
-
-      {%- comment -%} Render swiper navigation {%- endcomment -%}
-      {%- if section.settings.swiper_navigation -%}
-        <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-8">
-          <button
-            class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
-            aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
-          >
-            {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
-          </button>
-          <button
-            class="swiper-button-next swiper-button-next-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
-            aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
-          >
-            {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
-          </button>
-        </div>
-      {%- endif -%}
-    </div>
-  </swiper-slider>
+  {%- render 'swiper-content',
+    object_array: object_array,
+    render_products: render_products,
+    render_blog_articles: render_blog_articles,
+    max_count: max_count,
+    tag_to_show: tag_to_show,
+    index_on_page: section.index,
+    id: section.id,
+    container_width: section.settings.container_width,
+    swiper_indication: section.settings.swiper_indication,
+    swiper_navigation: section.settings.swiper_navigation,
+    swiper_autoplay: section.settings.swiper_autoplay,
+    swiper_autoplay_delay: section.settings.swiper_autoplay_delay
+  -%}
 {%- endcapture -%}
 
 {%- capture container_footer -%}
@@ -252,7 +62,7 @@
 
 {%- liquid
   # Container class
-  assign container_class = 'featured-content-slider overflow-hidden ' | append: section.settings.container_width
+  assign container_class = 'overflow-hidden ' | append: section.settings.container_width
   if section.settings.color_scheme != blank
     assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.color_scheme
   endif
@@ -272,9 +82,6 @@
   footer_class: section.settings.button_align,
   footer_content: container_footer
 -%}
-
-{%- comment -%} Import javascript {%- endcomment -%}
-<script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
 
 {% schema %}
   {
@@ -319,8 +126,8 @@
       },
       {
         "type": "header",
-        "content": "Collection settings",
-        "info": "Select a collection or a blog to highlight."
+        "content": "Collection/product settings",
+        "info": "Select a collection to display recent items or select individual products."
       },
       {
         "type": "collection",
@@ -328,8 +135,15 @@
         "label": "Collection"
       },
       {
+        "type": "product_list",
+        "id": "product_list",
+        "label": "Products",
+        "limit": 12
+      },
+      {
         "type": "header",
-        "content": "Blog settings"
+        "content": "Blog settings",
+        "info": "Select a blog to display recent items or choose a tag to highlight."
       },
       {
         "type": "blog",
@@ -569,6 +383,19 @@
         "id": "swiper_navigation",
         "label": "Show Navigation",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_autoplay",
+        "label": "Enable autoplay",
+        "default": false
+      },
+      {
+        "type": "number",
+        "id": "swiper_autoplay_delay",
+        "label": "Autoplay delay",
+        "default": 7500,
+        "info": "Delay between transitions (in ms)"
       }
     ],
     "presets": [

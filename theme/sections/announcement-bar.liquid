@@ -4,13 +4,15 @@
     assign wrapper_element = 'swiper-slider'
     render 'import-styles', file_name: 'component-swiper.css', force: true
   endif
+
+  assign classes = 'announcement-bar__message relative m-0 block overflow-hidden px-4 py-1 ellipsis'
 -%}
 
 {% comment %} Capture the slides first so we know  {% endcomment %}
 {%- capture swiper_slides -%}
   {%- for block in section.blocks -%}
     {%- if block.settings.text != blank -%}
-      <div class="swiper-slide announcement-bar__slide text-center text-sm"
+      <div class="swiper-slide announcement-bar__slide w-full text-center text-sm"
         data-swiper-slide-index="{{ forloop.index }}"
         {{ block.shopify_attributes }}>
         {%- if block.settings.url != blank -%}
@@ -20,11 +22,11 @@
               target="_blank"
               rel="noopener"
             {% endif %}
-            class="announcement-bar__message relative m-0 block overflow-hidden px-4 py-1 text-inherit no-underline ellipsis states:text-inherit states:no-underline states:opacity-60">
+            class="{{ classes }} text-inherit no-underline states:text-inherit states:no-underline states:opacity-60">
             {{- block.settings.text -}}
           </a>
         {%- else -%}
-          <p class="announcement-bar__message relative m-0 block overflow-hidden whitespace-nowrap px-4 py-1 ellipsis">
+          <p class="{{ classes }} whitespace-nowrap">
             {{- block.settings.text -}}
           </p>
         {%- endif -%}

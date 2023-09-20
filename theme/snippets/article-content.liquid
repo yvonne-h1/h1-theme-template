@@ -1,14 +1,76 @@
+{% comment %} Capture related products {% endcomment %}
+{%- liquid
+  for block in section.blocks
+    case block.type
+      when 'featured_products'
+        capture product_slider
+          # Slider
+          if article.metafields.article.article_products != blank
+            assign products_arr = article.metafields.article.article_products.value
+
+            # Product swiper
+            render 'swiper-content', render_products: true, object_array: products_arr, swiper_indication: block.settings.swiper_indication, swiper_navigation: block.settings.swiper_navigation, swiper_autoplay: block.settings.swiper_autoplay, swiper_autoplay_delay: block.settings.swiper_autoplay_delay, id: section.id
+          endif
+        endcapture
+
+        # Container class
+        assign container_class_products = 'overflow-hidden'
+        if block.settings.color_scheme != blank
+          assign container_class_products = container_class_products | append: ' container--background my-0 group/color-scheme ' | append: block.settings.color_scheme
+        endif
+
+        assign container_title = block.settings.title
+    endcase
+  endfor
+-%}
+
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
-  <div class="article-content rte mx-auto mt-4 max-w-screen-lg">
-    {{ article.content }}
-  </div>
+
+  {% comment %} If the article content contains a placeholder for products, render the carousel there instead {% endcomment %}
+  {%- liquid
+    assign has_products_placeholder = false
+    assign article_content = article.content
+
+    # Logic to render the article content
+    if product_slider != blank and article.content contains '<p>[[ PRODUCTS ]]</p>' or article.content contains '[[ PRODUCTS ]]'
+      if article.content contains '<p>[[ PRODUCTS ]]</p>'
+      assign has_products_placeholder = '<p>[[ PRODUCTS ]]</p>'
+        assign article_parts = article_content | split: '<p>[[ PRODUCTS ]]</p>'
+      elsif article.content contains '[[ PRODUCTS ]]'
+      assign has_products_placeholder = '[[ PRODUCTS ]]'
+        assign article_parts = article_content | split: '[[ PRODUCTS ]]'
+      endif
+
+      # render the article content with the slider
+      capture article_content
+        echo article_parts[0] | prepend: '<div class="rte mx-auto mt-4 mb-10 max-w-screen-md">' | append: '</div>'
+        echo product_slider
+        echo article_parts[1] | prepend: '<div class="rte mx-auto mt-10 max-w-screen-md">' | append: '</div>'
+      endcapture
+    else
+      capture article_content
+        echo article_content | prepend: '<div class="rte mx-auto mt-4 mb-10 max-w-screen-md">' | append: '</div>'
+      endcapture
+    endif
+  -%}
+
+  {{ article_content }}
 {%- endcapture -%}
 
-{% comment %} Capture container class {% endcomment %}
-{%- capture container_class -%}
-  {{- class }} article-content
-{%- endcapture -%}
-
+{%- liquid
+  # Capture container class
+  capture container_class
+    echo class | append: ' article-content'
+  endcapture
+-%}
 {%- comment -%} Render the content {%- endcomment -%}
 {%- render 'render-container-content', tag: 'section', content: container_content, class: container_class -%}
+
+{% comment %} If there is no placeholder in the content, render the products below the content {% endcomment %}
+{%- liquid
+  unless has_products_placeholder != false and article.content contains has_products_placeholder
+    # Render the content
+    render 'render-container-content', class: container_class_products, content: product_slider, content_class: 'p-0', title: container_title
+  endunless
+-%}
