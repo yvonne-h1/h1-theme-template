@@ -3,13 +3,6 @@
   https://shopify.dev/themes/navigation-search/search/predictive-search
 {%- endcomment -%}
 
-{%- liquid
-  assign header_classes = 'mb-4 flex items-center justify-between'
-  assign title_classes = 'text-sm font-semibold'
-  assign link_classes = 'flex items-center gap-4 text-inherit hover:opacity-70 active:opacity-100 states:no-underline'
-  assign result_type_title = 'mb-0 text-sm font-bold uppercase text-primary'
--%}
-
 {%- if predictive_search.performed -%}
   {%- capture results -%}
     <div class="flex flex-col gap-base md:flex-row">
@@ -17,135 +10,38 @@
       <div class="col basis-1/3">
         {% comment %} Collections - note these are only rendered in the predictive search and cannot be rendered on the search page {% endcomment %}
         {%- if predictive_search.resources.collections.size > 0 and settings.predictive_search_collections -%}
-          <div class="predictive-search__group mb-4">
-            <div class="predictive-search__group__header {{ header_classes }}">
-              <p class="{{ result_type_title }}">
-                {%- render "render-translation", namespace: "general.predictive_search", key: "collections", fallback: "Collections" -%}
-              </p>
-            </div>
-            <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
-              {%- for collection in predictive_search.resources.collections -%}
-                <li class="predictive-search__list-item mb-4" role="option">
-                  <a href="{{ collection.url }}" class="predictive-search__link {{ link_classes }}">
-                    <div class="predictive-search__item__image w-16">
-                      {%- render 'responsive-image',
-                        image_object: collection.image,
-                        max_width: 64,
-                        aspect_ratio: "1/1"
-                      -%}
-                    </div>
-                    <div class="predictive-search__item__content flex-1">
-                      <p class="predictive-search__item__title {{ title_classes }}">
-                        {{- collection.title | highlight: predictive_search.terms -}}
-                      </p>
-                    </div>
-                  </a>
-                </li>
-              {%- endfor -%}
-            </ul>
-          </div>
+          {%- render 'predictive-search-item',
+            type: 'collection',
+            results_array: predictive_search.resources.collections
+          -%}
         {%- endif -%}
       </div>
 
       <div class="col basis-1/3">
         {% comment %} Products {% endcomment %}
         {%- if predictive_search.resources.products.size > 0 and settings.predictive_search_products -%}
-          <div class="predictive-search__group mb-4">
-            <div class="predictive-search__group__header {{ header_classes }}">
-              <p class="{{ result_type_title }}">
-                {%- render "render-translation", namespace: "general.predictive_search", key: "products", fallback: "Products" -%}
-              </p>
-              <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=product&options[prefix]=last" class="button button--link button--sm px-0">
-                {%- render "render-translation", namespace: "general.predictive_search", key: "see_all", fallback: "See all" -%}
-                {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
-              </a>
-            </div>
-
-            <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
-              {%- for product in predictive_search.resources.products -%}
-                <li class="predictive-search__list-item mb-4" role="option">
-                  <a href="{{ product.url }}" class="predictive-search__link no-underline {{ link_classes }}">
-                    <div class="predictive-search__item__image w-16">
-                      {%- render 'responsive-image', image_object: product.featured_media, max_width: 64, aspect_ratio: "1/1" -%}
-                    </div>
-                    <div class="predictive-search__item__content flex-1">
-                      <p class="predictive-search__item__title mb-2 {{ title_classes }}">
-                        {{- product.title | highlight: predictive_search.terms -}}
-                      </p>
-                      <div class="predictive-search__item__price text-sm">
-                        {% render 'render-price', product: product %}
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              {%- endfor -%}
-            </ul>
-          </div>
+          {%- render 'predictive-search-item',
+            type: 'product',
+            results_array: predictive_search.resources.products
+          -%}
         {%- endif -%}
       </div>
 
       <div class="col basis-1/3">
         {% comment %} Articles {% endcomment %}
         {%- if predictive_search.resources.articles.size > 0 and settings.predictive_search_articles -%}
-          <div class="predictive-search__group mb-4">
-            <div class="predictive-search__group__header {{ header_classes }}">
-              <p class="{{ result_type_title }}">
-                {%- render "render-translation", namespace: "general.predictive_search", key: "blog", fallback: "Blog" -%}
-              </p>
-              <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=article&options[prefix]=last" class="button button--link button--sm px-0 py-1">
-                {%- render "render-translation", namespace: "general.predictive_search", key: "see_all", fallback: "See all" -%}
-                {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
-              </a>
-            </div>
-            <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
-              {%- for article in predictive_search.resources.articles -%}
-                <li class="predictive-search__list-item mb-4" role="option">
-                  <a href="{{ article.url }}" class="predictive-search__link {{ link_classes }}">
-                    <div class="predictive-search__item__image w-16">
-                      {%- render 'responsive-image',
-                        image_object: article.image,
-                        max_width: 64,
-                        aspect_ratio: "1/1"
-                      -%}
-                    </div>
-                    <div class="predictive-search__item__content flex-1">
-                      <p class="predictive-search__item__title {{ title_classes }}">
-                        {{- article.title | highlight: predictive_search.terms -}}
-                      </p>
-                    </div>
-                  </a>
-                </li>
-              {%- endfor -%}
-            </ul>
-          </div>
+          {%- render 'predictive-search-item',
+            type: 'article',
+            results_array: predictive_search.resources.articles
+          -%}
         {%- endif -%}
 
         {% comment %} Pages {% endcomment %}
         {%- if predictive_search.resources.pages.size > 0 and settings.predictive_search_pages -%}
-          <div class="predictive-search__group mb-4">
-            <div class="predictive-search__group__header {{ header_classes }}">
-              <p class="{{ result_type_title }}">
-                {%- render "render-translation", namespace: "general.predictive_search", key: "pages", fallback: "Pages" -%}
-              </p>
-              <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type=page&options[prefix]=last" class="button button--link button--sm px-0 py-1">
-                {%- render "render-translation", namespace: "general.predictive_search", key: "see_all", fallback: "See all" -%}
-                {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
-              </a>
-            </div>
-            <ul class="predictive-search__list" role="listbox" aria-labelledby="predictive-search-products">
-              {%- for page in predictive_search.resources.pages -%}
-                <li class="predictive-search__list-item mb-4" role="option">
-                  <a href="{{ page.url }}" class="predictive-search__link {{ link_classes }}">
-                    <div class="predictive-search__item__content flex-1">
-                      <p class="predictive-search__item__title {{ title_classes }}">
-                        {{- page.title | highlight: predictive_search.terms -}}
-                      </p>
-                    </div>
-                  </a>
-                </li>
-              {%- endfor -%}
-            </ul>
-          </div>
+          {%- render 'predictive-search-item',
+            type: 'page',
+            results_array: predictive_search.resources.pages
+          -%}
         {%- endif -%}
       </div>
     </div>

@@ -103,9 +103,7 @@
             # Used for regular article cards
             capture tags_as_badges
               echo tags_as_badges
-              echo '<li class="product-card__list-tags__item">'
               echo category_name | link_to_tag: tag | replace: '<a', '<a tabindex="-1" class="badge capitalize no-underline states:scale-110"'
-              echo '</li>'
             endcapture
 
             # Used for highlighted article
@@ -115,12 +113,15 @@
             endcapture
           endif
         endfor
-
-      if tags_as_badges != blank
-       echo tags_as_badges | prepend: '<ul class="product-card__list badges">' | append: '</ul>'
-      endif
     endif
   -%}
+
+  {% comment %} Add a wrapper {% endcomment %}
+  {%- if tags_as_badges != blank -%}
+    <div class="product-card__badges flex-gap-1 badges absolute z-10 flex {% if image_object -%}left-4 top-4{%- endif -%}">
+      {{ tags_as_badges }}
+    </div>
+  {%- endif -%}
 {%- endcapture -%}
 
 {%- comment -%} Render cart {%- endcomment -%}
@@ -149,7 +150,7 @@
             {%- if section.settings.show_highlight_category or section.settings.show_highlight_date -%}
               <div class="has-gap-4 flex items-center justify-between">
                 {% comment %} Category {% endcomment %}
-                {%- if section.settings.show_highlight_category -%}
+                {%- if section.settings.show_highlight_category and tags_as_string != blank -%}
                   {%- assign categories = tags_as_string | remove_first: '|' | strip -%}
                   {{- categories -}}
                 {%- endif -%}
@@ -192,10 +193,9 @@
     <header class="article-card__header relative flex flex-col gap-y-4">
       {% comment %} Article category {% endcomment %}
       {%- if tag_categories != blank -%}
-        <div class="absolute {% if image_object %}left-4 top-4{%- endif %} z-10">
-          {{- tag_categories -}}
-        </div>
+        {{- tag_categories -}}
       {%- endif -%}
+
       {% comment %} Article image and title {% endcomment %}
       <a
         href="{{ article.url }}"

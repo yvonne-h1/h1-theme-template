@@ -568,10 +568,10 @@
         "type": "range",
         "id": "predictive_search_max_results_per_type",
         "min": 1,
-        "max": 10,
+        "max": 12,
         "step": 1,
         "label": "Max search results",
-        "default": 4,
+        "default": 10,
         "info": "Results per type"
       },
       {

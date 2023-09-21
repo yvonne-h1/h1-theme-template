@@ -7,17 +7,17 @@
       {%- when 'title' -%}
 
         <div
-          class="article-header__information mx-auto grid max-w-screen-lg items-center gap-y-6 gap-x-base md:text-center"
+          class="article-header__information mx-auto grid max-w-screen-lg items-center gap-y-2 gap-x-base md:text-center"
           {{ block.shopify_attributes }}
         >
           {%- liquid
             # Tag
             if block.settings.blog_show_category
               for tag in article.tags
-                if tag contains 'type:' or tag contains 'Type:'
-                  assign article_type = tag | downcase | remove: 'type:'
-                  echo '<p class="article-header__type  text-sm font-semibold uppercase text-primary">'
-                    echo article_type
+                if tag contains 'category:' or tag contains 'Category:'
+                  assign article_category = tag | downcase | remove: 'category:'
+                  echo '<p class="article-header__category text-sm font-semibold uppercase text-primary mb-0">'
+                    echo article_category
                   echo '</p>'
                 endif
               endfor
@@ -29,21 +29,21 @@
             {{ article.title }}
           </h1>
 
-          <div class="article-header__author-and-date flex items-center justify-between gap-4 md:justify-center">
+          <div class="article-header__author-and-date flex items-center justify-between gap-4 text-sm md:justify-center">
             {% comment %} Author {% endcomment %}
             {%- if block.settings.blog_show_author -%}
-              <address class="article-header__author  text-sm font-semibold not-italic">
+              <address class="article-header__author font-semibold not-italic">
                 {{ 'blogs.article.written_by' | t: author: article.author }}
               </address>
             {%- endif -%}
 
             {%- if block.settings.blog_show_author and block.settings.blog_show_date -%}
-              <p class="hidden text-secondary-200 md:block">|</p>
+              <span class="hidden md:block">|</span>
             {%- endif -%}
 
             {% comment %} Date {% endcomment %}
             {%- if block.settings.blog_show_date -%}
-              <p class="article-header__date text-secondary-200">
+              <p class="article-header__date opacity-50 contrast-more:opacity-100">
                 {{ article.published_at | time_tag: format: 'day_month_year' }}
               </p>
             {%- endif -%}

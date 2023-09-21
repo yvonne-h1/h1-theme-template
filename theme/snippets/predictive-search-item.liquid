@@ -1,0 +1,56 @@
+{%- liquid
+  assign title_key = type | append: 's'
+  case type
+    when 'collection'
+      assign image_object = 'image'
+    when 'product'
+      assign image_object = 'featured_media'
+    when 'article'
+      assign image_object = 'image'
+      assign title_key = 'blog'
+  endcase
+-%}
+
+{% comment %} Render item {% endcomment %}
+<div class="predictive-search__group mb-4">
+  <div class="predictive-search__group-header mb-4 flex items-center justify-between">
+    <p class="mb-0 text-sm font-bold uppercase text-primary">
+      {%- render 'render-translation', namespace: 'general.predictive_search', key: title_key, fallback: type -%}
+    </p>
+
+    {% comment %} 'See all' link {% endcomment %}
+    {%- unless type == 'collections' -%}
+      <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type={{ type }}&options[prefix]=last" class="button button--link button--sm px-0">
+        {%- render 'render-translation', namespace: 'general.predictive_search', key: 'see_all', fallback: 'See all' -%}
+        {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
+      </a>
+    {%- endunless -%}
+  </div>
+  <ul class="predictive-search__list" role="listbox">
+    {%- for item in results_array -%}
+      <li class="predictive-search__list-item mb-4" role="option">
+        <a href="{{ item.url }}" class="predictive-search__link flex items-center gap-4 text-inherit no-underline hover:opacity-70 active:opacity-100 states:no-underline">
+          {% comment %} Image {% endcomment %}
+          {%- unless type == 'page' -%}
+            <div class="predictive-search__item-image w-16">
+              {%- render 'responsive-image', image_object: item[image_object], max_width: 64, aspect_ratio: '1/1' -%}
+            </div>
+          {%- endunless -%}
+
+          {% comment %} Title (and price) {% endcomment %}
+          <div class="predictive-search__item-content flex-1">
+            <p class="predictive-search__item-title text-sm font-semibold{%- if type == 'product' %} mb-2{%- endif -%}">
+              {{- item.title | highlight: predictive_search.terms -}}
+            </p>
+
+            {%- if type == 'product' -%}
+              <div class="predictive-search__item-price text-sm">
+                {% render 'render-price', product: item %}
+              </div>
+            {%- endif -%}
+          </div>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>

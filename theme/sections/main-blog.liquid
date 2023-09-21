@@ -8,15 +8,15 @@
 
   # Blog tags and current (if it's the case). Tags should have prefix of 'category:'. Won't render if capture is empty.
   for tag in blog.all_tags
-    if tag contains 'category:'
-      assign article_type = tag | downcase | remove: 'category:'
+    if tag contains 'category:' or tag contains 'Category:'
+      assign article_category = tag | downcase | remove: 'category:'
       capture tag_nav
         echo tag_nav
         echo '<li class="' | append: nav_item_class | append: '">'
         if current_tags contains tag
-          echo article_type | link_to_remove_tag: tag | replace: '<a ', nav_link_replace_active
+          echo article_category | link_to_remove_tag: tag | replace: '<a ', nav_link_replace_active
         else
-          echo article_type | link_to_tag: tag | replace: '<a ', nav_link_replace
+          echo article_category | link_to_tag: tag | replace: '<a ', nav_link_replace
         endif
         echo '</li>'
       endcapture
