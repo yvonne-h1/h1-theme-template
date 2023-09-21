@@ -1,7 +1,8 @@
 {% comment %}
-  Renders a swiper for products or articles. Used in featured-content-slider.liquid and article-content.liquid.
+  Renders a swiper for products or articles. So far, used in featured-content-slider, article-content and product-recommendations.
 
   Options:
+  - object_array: Required. Array of items
   - container_width: String | optional
   - swiper_indication: String | 'pagination' or 'scrollbar' | optional
   - swiper_navigation: Boolean
@@ -9,9 +10,10 @@
   - swiper_autoplay_delay: Integer | Speed in ms
   - render_products: Boolean
   - render_blog_articles: Boolean
-  - object_array: Required. Array of items
+  - is_recommendations: Boolean
   - max_count: Integer | optional
   - tag_to_show: String | optional
+  - id: String | should be the section id or another unique ID
   - index_on_page: Integer | optional | When 1, the css will be forced to prevent CLS
 
   Render:
@@ -26,17 +28,22 @@
     render_blog_articles: false,
     max_count: 8,
     tag_to_show: '',
+    id: section.id,
     index_on_page: section.index
   -%}
 {% endcomment %}
-
 {%- liquid
-  unless is_recommendations == true
+  if is_recommendations == blank
     assign is_recommendations = false
-  endunless
+  endif
 
+  # never allow more than 12 slides
   if max_count == blank
-    assign max_count = null
+    if object_array.size > 12
+      assign max_count = 12
+    else
+      assign max_count = null
+    endif
   endif
 
   if tag_to_show == blank
@@ -47,6 +54,7 @@
     assign container_width = ''
   endif
 
+  # Swiper options
   if swiper_indication == blank
     assign swiper_indication = ''
   endif
@@ -57,10 +65,14 @@
     assign swiper_autoplay = false
   endif
 
+  # When true, this will force the css to be loaded inline so it will prevent CLS when the section is loaded as part of the FCP.
   assign force_css = false
   if index_on_page == 1
     assign force_css = true
   endif
+
+  # Import styles
+  render 'import-styles', file_name: 'component-swiper.css', force: force_css
 
   # Assign based on container width
   case container_width
@@ -71,9 +83,6 @@
       assign image_max_width = 360
       assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
   endcase
-
-  # Import styles
-  render 'import-styles', file_name: 'component-swiper.css', force: force_css
 
   # Styles based on swiper_indication setting
   case swiper_indication
@@ -86,11 +95,12 @@
   endcase
 -%}
 
-{%- comment -%} Capture container data for slider {%- endcomment -%}
+{%- comment -%} Capture the options for the swiper {%- endcomment -%}
 {%- capture swiper_options -%}
   data-options='
   {
     "sectionID": "{{ id }}",
+    "isRecommendations": {{ is_recommendations }},
     "slidesPerView": 1.2,
     "spaceBetween": 16,
     "slidesOffsetBefore": 16,
@@ -129,7 +139,7 @@
       },
       "768": {
         "slidesPerView": {% if render_products %}3.2{%- elsif render_blog_articles %}2.4{%- endif %},
-        "spaceBetween": 32,
+        "spaceBetween": 16,
         "slidesOffsetBefore": 32,
         "slidesOffsetAfter": 32
       },
@@ -153,9 +163,9 @@
   <div
     class="
       swiper relative overflow-visible
-      [--swiper-spaceBetween:16px]
       [--swiper-slidesPerView:1.2]
-      md:[--swiper-spaceBetween:32px]
+      [--swiper-spaceBetween:16px]
+      lg:[--swiper-spaceBetween:32px]
       {% if render_products %}
         xs:[--swiper-slidesPerView:2.2]
         md:[--swiper-slidesPerView:3.2]
@@ -211,27 +221,39 @@
                 endif
               endunless
 
-              # Add 1 to the count for every article that passes the statements
+              # Increase the count for every item that passes the statements so we can make sure the slides don't exceed the max count
               assign count = count | plus: 1
             endif
           -%}
 
-          <div class="swiper-slide" data-swiper-slide-index="{{ forloop.index }}">
+          <div
+            class="
+              swiper-slide
+              min-w-[calc((100%-16px)/1.2)]
+              {% if render_products %}
+                xs:min-w-[calc((100%-2*16px)/2.2)]
+                md:min-w-[calc((100%-2*16px)/3.2)]
+                lg:min-w-[calc((100%-3*32px)/4)]
+              {% elsif render_blog_articles %}
+                xs:min-w-[calc((100%-16px)/1.8)]
+                md:min-w-[calc((100%-2*16px)/2.4)]
+                lg:min-w-[calc((100%-3*32px)/3.2)]
+                2xl:min-w-[calc((100%-3*32px)/4)]
+              {% endif -%}
+            "
+            data-swiper-slide-index="{{ forloop.index }}">
             {%- if render_products -%}
               {%- render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3' -%}
             {%- elsif render_blog_articles -%}
-              {%-
-                render 'article-card'
-                article: item,
-                image_max_width: image_max_width,
-                image_sizes: image_sizes,
-              -%}
+              {%- render 'article-card', article: item, image_max_width: image_max_width, image_sizes: image_sizes -%}
             {%- endif -%}
           </div>
 
-          {%- if count >= max_count -%}
-            {% break %}
-          {%- endif -%}
+          {%- liquid
+            if count >= max_count
+              break
+            endif
+          -%}
 
           {% comment %} Demo slides {% endcomment %}
         {%- else -%}
@@ -243,12 +265,12 @@
         {%- endfor -%}
       </div>
 
-      {%- comment -%} Render swiper indication wrapper {%- endcomment -%}
+      {%- comment -%} Render swiper indication wrapper to show pagination or scrollbar {%- endcomment -%}
       {%- if swiper_indication != '' -%}
         <div class="content-wrapper content-wrapper-padding 2xl:px-0">
       {%- endif -%}
 
-      {% comment %} Check the indication options {% endcomment %}
+      {% comment %} Add the placeholders {% endcomment %}
       {%- case swiper_indication -%}
         {%- when 'pagination' -%}
           <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>

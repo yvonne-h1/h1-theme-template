@@ -83,6 +83,7 @@ class SwiperSlider extends HTMLElement {
     // Default to improve user experience
     this.swiperOptions = {
       observer: true,
+      isRecommendations: false,
       modules: [A11y, Navigation, Pagination, Scrollbar, Autoplay],
     };
 
@@ -98,12 +99,12 @@ class SwiperSlider extends HTMLElement {
     }
 
     // render the options and init the swiper
-    this.initOptions();
+    this.init();
 
     // Listen to extra events when in Shopify editor
     if (Shopify.designMode) {
       // Update the swiper when the section event is triggered
-      window.addEventListener('shopify:section:load', event => this.initOptions(event, true));
+      window.addEventListener('shopify:section:load', event => this.init(event, true));
 
       // When on block select go to the slide in front-end
       window.addEventListener('shopify:block:select', event => this.handleBlockSelect(event));
@@ -113,7 +114,7 @@ class SwiperSlider extends HTMLElement {
     }
   }
 
-  initOptions(event = null, updateSwiper = false) {
+  init(event = null, updateSwiper = false) {
     if (updateSwiper && event.detail.sectionId !== this.swiperOptions.sectionID) return;
 
     // Check if we have extra options on the HTML
@@ -195,8 +196,7 @@ class ProductRecommendations extends SwiperSlider {
       }
     }
 
-    // Only do it once, not on every web component render.
-    window.onload = () => this.init();
+    this.init();
   }
 
   init() {
@@ -204,7 +204,7 @@ class ProductRecommendations extends SwiperSlider {
       fetch(this.dataset.url)
         .then(response => response.text())
         .then((text) => {
-          this.swiperInstance.destroy();
+
           const html = new DOMParser()
             .parseFromString(text, 'text/html')
             .querySelector('[data-recommended-products]').innerHTML;

@@ -34,69 +34,6 @@
       swiper_autoplay: section.settings.swiper_autoplay,
       swiper_autoplay_delay: section.settings.swiper_autoplay_delay
     -%}
-  {% comment %} <product-recommendations {{ swiper_options }}>
-      <div class="swiper relative overflow-visible
-        [--swiper-spaceBetween:16px]
-        [--swiper-slidesPerView:1.2]
-        xs:[--swiper-slidesPerView:2]
-        md:[--swiper-spaceBetween:32px]
-        md:[--swiper-slidesPerView:3]
-        lg:[--swiper-slidesPerView:4]
-        ">
-
-        {%- comment -%} Render swiper navigation {%- endcomment -%}
-        {%- if section.settings.swiper_navigation -%}
-          <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-8">
-            <button
-              class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
-              aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
-            >
-              {%- render 'icons', icon: 'chevron-left', icon_class: 'w-5' -%}
-            </button>
-            <button
-              class="swiper-button-next swiper-button-next-{{ section.id }} {% if section.settings.swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
-              aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}"
-            >
-              {%- render 'icons', icon: 'chevron-right', icon_class: 'w-5' -%}
-            </button>
-          </div>
-        {%- endif -%}
-
-        <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
-          <div class="swiper-wrapper flex" data-recommended-products>
-            {%- if recommendations.performed? and recommendations.products_count > 0 -%}
-              {%- for recommendation in recommendations.products -%}
-                <div class="swiper-slide">
-                  {%- render 'product-card', product_object: recommendation -%}
-                </div>
-              {%- endfor -%}
-            {%- else -%}
-              {%- comment -%} Prefill collection slider to prevent CLS scores {%- endcomment -%}
-              {%- assign coll = product.collections.first -%}
-              {%- for col_product in coll.products limit: 6 -%}
-                <div class="swiper-slide">
-                  {%- render 'product-card', product_object: col_product -%}
-                </div>
-              {%- endfor -%}
-            {%- endif -%}
-          </div>        {%- comment -%} Render swiper indication {%- endcomment -%}
-
-
-          {%- if section.settings.swiper_indication != '' -%}
-            <div class="content-wrapper content-wrapper-padding 2xl:px-0">
-          {%- endif -%}
-          {%- case section.settings.swiper_indication -%}
-            {%- when 'pagination' -%}
-              <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
-              {%- when 'scrollbar' -%}
-                <div class="swiper-scrollbar swiper-scrollbar-{{ section.id }}"></div>
-          {%- endcase -%}
-          {%- if section.settings.swiper_indication != '' -%}
-            </div>
-          {%- endif -%}
-        </div>
-      </div>
-    </product-recommendations>  {% endcomment %}
   {%- endcapture -%}
 
   {%- comment -%} Capture container data with url from where to fetch recommendations {%- endcomment -%}
@@ -114,6 +51,7 @@
     endif
   -%}
 
+  {% comment %} Render the section {% endcomment %}
   {%- render 'render-container-content',
     tag: 'product-recommendations',
     data: container_data,
