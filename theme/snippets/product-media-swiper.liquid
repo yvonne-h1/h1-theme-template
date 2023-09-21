@@ -1,16 +1,17 @@
 {%- comment -%} Import styles for this section {%- endcomment -%}
-{%- render 'import-styles', file_name: 'component-swiper.css' -%}
+{%- render 'import-styles', file_name: 'component-swiper.css', force: true -%}
 
 {%- liquid
   assign media_content_slider = ''
   assign media_content_thumbnails_slider = ''
 
   assign image_count = 0
+  assign media_class = 'product-media-swiper__item relative mx-auto block aspect-square max-w-lg'
 -%}
 
 {%- for media in product.media -%}
-  {%- comment -%} Create an array of variants that have this image so the image will show when a variant changes. {%- endcomment -%}
   {%- liquid
+    # Create an array of variants that have this image so the image will show when a variant changes.
     capture variant_images
       for variant in product.variants
         if variant.featured_image.src == media.src and product.variants.size > 1
@@ -22,114 +23,110 @@
   -%}
 
   {%- comment -%} Get media for the main slider {%- endcomment -%}
-  {%- capture media_content -%}
-    {% case media.media_type %}
-      {%- when 'image' -%}
-        {%- liquid
-          assign image_count = image_count | plus: 1
-
-          assign lazy = true
-          if image_count == 1
-            assign lazy = false
-          endif
-
-          if image_count >= 2
-            assign lazy = true
-          endif
-        -%}
-        <a
-          class="product-media-swiper__item relative block w-full"
-          href="{{ media | image_url }}"
-          data-fancybox="product-media-swiper"
-          data-animated="false"
-        >
-          {%- render 'responsive-image',
-            image_object: media,
-            aspect_ratio: '1/1',
-            max_width: 512,
-            sizes: '(min-width: 768px) 512px, 100vw',
-            alt: media.alt,
-            title: media.alt,
-            lazy: lazy,
-            class: 'w-full md:max-w-lg mx-auto'
-            -%}
-          {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute end-4 bottom-4 md:hidden pointer-events-none' -%}
-        </a>
-
-      {%- when 'model' -%}
-        <div class="product-media-swiper__item product-media-swiper__item--model relative mx-auto block aspect-square w-full max-w-lg">
-          {{ media | media_tag: image_size: "2048x", toggleable: true, class: 'absolute inset-0 w-full h-full' }}
-        </div>
-
-      {%- when 'video' -%}
-        <div
-          class="product-media-swiper__item product-media-swiper__item--video relative mx-auto block aspect-square w-full max-w-lg"
-          data-fancybox="product-media-swiper"
-          data-src="{{ media.sources.last.url }}"
-        >
-          {{ media | media_tag: image_size: "2048x", autoplay: false, loop: section.settings.enable_video_looping, controls: true, preload: "none", loading: "lazy", class: "absolute inset-0 w-full h-full" }}
-        </div>
-
-      {%- when 'external_video' -%}
-        {%- assign video_class = 'absolute inset-0 w-full h-full js-' | append: media.host -%}
-
-        {%- comment -%} For vimeo video, make the link into vimeo.com/ID - Fancybox doesn't recognize player.vimeo.com/video/ID {%- endcomment -%}
-        {%- capture host_attributes -%}
-          {%- assign media_external_video_url = media | external_video_url: autoplay: false, loop: false -%}
-          {% if media.host == 'vimeo' and media_external_video_url contains 'player.' -%}
-              data-fancybox="product-media" data-src="{{ media_external_video_url | remove_first: 'player.' | remove_first: 'video/' }}"
-          {% elsif media.host == 'youtube' %}
-            data-fancybox="product-media" data-src="{{ media_external_video_url }}"
-          {% endif %}
-        {%- endcapture -%}
-
-        <div class="product-media-swiper__item product-media-swiper__item--external-video relative mx-auto block aspect-square w-full max-w-lg"
-          {{ host_attributes }}>
-          {%- if media.host == 'youtube' -%}
-            {{ media | external_video_url: autoplay: false, loop: false, playlist: media.external_id | external_video_tag: class: video_class, loading: "lazy" }}
-          {%- else -%}
-            {{ media | external_video_url: autoplay: false, loop: false | external_video_tag: class: video_class, loading: "lazy" }}
-          {%- endif -%}
-        </div>
-    {%- endcase -%}
-  {%- endcapture -%}
-
   {%- capture media_content_slider -%}
     {{ media_content_slider }}
-    <div class="swiper-slide aspect-square w-full"
+    <div class="swiper-slide aspect-square w-screen md:w-full"
       {% if media.media_type == 'image' -%}
         data-product-variant-image="[{{ variant_images }}]"
       {%- endif -%}>
-      {{ media_content }}
+      {% case media.media_type %}
+        {%- when 'image' -%}
+          {%- liquid
+            assign image_count = image_count | plus: 1
+
+            assign lazy = true
+            if image_count == 1
+              assign lazy = false
+            endif
+
+            if image_count >= 2
+              assign lazy = true
+            endif
+          -%}
+          <a
+            class="product-media-swiper__item relative aspect-square"
+            href="{{ media | image_url }}"
+            data-fancybox="product-media-swiper"
+            data-animated="false"
+          >
+            {%- render 'responsive-image',
+              image_object: media,
+              aspect_ratio: '1/1',
+              max_width: 512,
+              sizes: '(min-width: 768px) 512px, 100vw',
+              alt: media.alt,
+              title: media.alt,
+              lazy: lazy,
+              class: 'aspect-square'
+              -%}
+            {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute end-4 bottom-4 md:hidden pointer-events-none' -%}
+          </a>
+
+        {%- when 'model' -%}
+          <div class="{{ media_class }} product-media-swiper__item--model">
+            {{ media | media_tag: image_size: "2048x", toggleable: true, class: 'absolute inset-0 w-full h-full' }}
+          </div>
+
+        {%- when 'video' -%}
+          <div
+            class="{{ media_class }} product-media-swiper__item--video"
+            data-fancybox="product-media-swiper"
+            data-src="{{ media.sources.last.url }}"
+          >
+            {{ media | media_tag: image_size: "2048x", autoplay: false, loop: section.settings.enable_video_looping, controls: true, preload: "none", loading: "lazy", class: "absolute inset-0 w-full h-full" }}
+          </div>
+
+        {%- when 'external_video' -%}
+          {%- assign video_class = 'absolute inset-0 w-full h-full js-' | append: media.host -%}
+
+          {%- comment -%} For vimeo video, make the link into vimeo.com/ID - Fancybox doesn't recognize player.vimeo.com/video/ID {%- endcomment -%}
+          {%- capture host_attributes -%}
+            {%- assign media_external_video_url = media | external_video_url: autoplay: false, loop: false -%}
+            {% if media.host == 'vimeo' and media_external_video_url contains 'player.' -%}
+                data-fancybox="product-media" data-src="{{ media_external_video_url | remove_first: 'player.' | remove_first: 'video/' }}"
+            {% elsif media.host == 'youtube' %}
+              data-fancybox="product-media" data-src="{{ media_external_video_url }}"
+            {% endif %}
+          {%- endcapture -%}
+
+          <div class="{{ media_class }} product-media-swiper__item--external-video"
+            {{ host_attributes }}>
+            {%- if media.host == 'youtube' -%}
+              {{ media | external_video_url: autoplay: false, loop: false, playlist: media.external_id | external_video_tag: class: video_class, loading: "lazy" }}
+            {%- else -%}
+              {{ media | external_video_url: autoplay: false, loop: false | external_video_tag: class: video_class, loading: "lazy" }}
+            {%- endif -%}
+          </div>
+      {%- endcase -%}
     </div>
   {%- endcapture -%}
 
   {%- comment -%} Get media for the thumbnails slider {%- endcomment -%}
-  {%- capture media_content_thumbnails -%}
-    <div class="product-media-swiper__item">
-      {%- liquid
-        assign image_object = media
-        if media.media_type != 'image'
-          assign image_object = media.preview_image
-        endif
-      -%}
-      {%- render 'responsive-image',
-        image_object: image_object,
-        aspect_ratio: '1/1',
-        widths: '64, 80, 138',
-        max_width: 138,
-        sizes: '(min-width: 1440px) 138px, (min-width: 768px) 80px, 64px',
-        alt: media.alt,
-        title: media.alt,
-        class: 'w-full max-w-none'
-      -%}
-    </div>
-  {%- endcapture -%}
-
   {%- capture media_content_thumbnails_slider -%}
     {{ media_content_thumbnails_slider }}
-    <div class="swiper-slide relative aspect-square cursor-pointer overflow-hidden rounded-md border-2 border-transparent states:border-gray-200">
-      {{ media_content_thumbnails }}
+    <div class="swiper-slide relative aspect-square min-w-[calc((100%-3*8px)/3.2)] cursor-pointer overflow-hidden rounded-md border-2 border-transparent
+      states:border-gray-200
+      sm:min-w-[calc((100%-5*8px)/4.2)]
+      md:min-w-[calc((100%-6*8px)/5.2)]
+      2xl:min-w-[calc((100%-7*8px)/6.2)]">
+      <div class="product-media-swiper__item">
+        {%- liquid
+          assign image_object = media
+          if media.media_type != 'image'
+            assign image_object = media.preview_image
+          endif
+        -%}
+        {%- render 'responsive-image',
+          image_object: image_object,
+          aspect_ratio: '1/1',
+          widths: '64, 80, 138',
+          max_width: 138,
+          sizes: '(min-width: 1440px) 138px, (min-width: 768px) 80px, 64px',
+          alt: media.alt,
+          title: media.alt,
+          class: 'w-full max-w-none'
+        -%}
+      </div>
     </div>
   {%- endcapture -%}
 {%- endfor -%}
@@ -138,10 +135,10 @@
 {%- if product.media != blank -%}
   <product-media-swiper class="product-media-swiper relative flex h-full flex-col justify-between">
     {%- comment -%} Main Slider {%- endcomment -%}
-    <div class="product-media-swiper__slider relative col-span-12 mb-4 md:mb-0">
+    <div class="product-media-swiper__slider col-span-12 mb-4 md:mb-0">
       {%- comment -%} Main slider {%- endcomment -%}
       <div
-        class="swiper"
+        class="swiper relative aspect-square"
         data-product-media-swiper="{{ product.selected_or_first_available_variant.id }}">
         <div class="swiper-wrapper flex items-center">
           {{- media_content_slider -}}
