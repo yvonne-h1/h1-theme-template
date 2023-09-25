@@ -7,7 +7,7 @@
   {%- liquid
     # Hide on mobile
     assign hide_on_mobile_class = ''
-    if section.settings.hide_on_mobile == true
+    if section.settings.hide_on_mobile
       assign hide_on_mobile_class = ' hidden md:block'
     endif
 

@@ -94,7 +94,7 @@
 {%- liquid
   # Container footer
   capture container_footer
-    if section.settings.show_back_to_top == true
+    if section.settings.show_back_to_top
       render 'back-to-top'
     endif
   endcapture
@@ -109,7 +109,7 @@
   footer_content: container_footer
 -%}
 
-{%- if section.settings.show_back_to_top == true -%}
+{%- if section.settings.show_back_to_top -%}
   <script src="{{ 'back-to-top.js' | asset_url }}" defer></script>
 {%- endif -%}
 

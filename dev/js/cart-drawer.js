@@ -27,12 +27,18 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
+    document.querySelector('.js-cart-drawer-recommendations').classList.add('opacity-0');
     this.getSectionsToRender().forEach((section) => {
       if (section?.selector) {
         const selector = document.querySelector(section.selector);
 
         if (selector) {
           selector.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.section], section.selector);
+          if (section.selector === '.js-cart-drawer-recommendations') {
+            setTimeout(() => {
+              selector.classList.remove('opacity-0');
+            }, 500);
+          }
         }
       }
     });
@@ -40,7 +46,7 @@ class CartDrawer extends HTMLElement {
 
   /**
    * renderCartDrawer
-   * Renders the drawer and the cart icon bubble because when there is an error for the quantity that is being added, the max quantity still gets added
+   * Renders the drawer and the cart icon bubble because when there is an error for the quantity that is being added, the max quantity still gets added, so we have to update the sections.
    */
   async renderCartDrawer() {
     const cartDrawerContent = `${window.location.pathname}?section_id=cart-drawer`;
@@ -65,16 +71,30 @@ class CartDrawer extends HTMLElement {
       })
       .catch((error) => {
         throw error;
-      });;
-
+      });
   }
 
   getSectionsToRender() {
     return [
+      // {
+      //   id: 'cart-drawer',
+      //   section: 'cart-drawer',
+      //   selector: '[data-cart-drawer]',
+      // },
       {
-        id: 'cart-drawer',
-        section: 'cart-drawer',
-        selector: '[data-cart-drawer]',
+        id: 'main-cart-recommendations',
+        section: document.getElementById('main-cart-recommendations').dataset.id,
+        selector: '.js-cart-drawer-recommendations',
+      },
+      {
+        id: 'main-cart-items',
+        section: document.getElementById('main-cart-items').dataset.id,
+        selector: '.js-cart-item-contents',
+      },
+      {
+        id: 'main-cart-footer',
+        section: document.getElementById('main-cart-footer').dataset.id,
+        selector: '.js-cart-footer-contents',
       },
       {
         id: 'cart-icon-bubble',

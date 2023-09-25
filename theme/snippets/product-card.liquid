@@ -77,8 +77,11 @@
     assign show_quick_shop = false
   endunless
 
-  if settings.enable_quick_shop == true and product_object.available
+  if settings.enable_quick_shop and product_object.available
     assign show_quick_shop = true
+    assign multiple_first_option = false
+    assign multiple_last_option = false
+    assign quick_shop_render_second_option = false
 
     if product_object.options_with_values.size == 2
       if product_object.options_with_values.first.values.size > 1
@@ -89,9 +92,9 @@
         assign multiple_last_option = true
       endif
 
-      if multiple_first_option == true and multiple_last_option == true
+      if multiple_first_option and multiple_last_option
         assign show_quick_shop = false
-      elsif multiple_last_option == true
+      elsif multiple_last_option
         assign quick_shop_render_second_option = true
       endif
     elsif product_object.options_with_values.size > 2

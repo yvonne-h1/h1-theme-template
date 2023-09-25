@@ -43,7 +43,6 @@ if (!customElements.get('product-form-component')) {
             this.cartItems?.updateAfterError();
             return;
           }
-
           this.cartDrawer.renderContents(parsedState);
 
           switch (submitButton.dataset.addToCartBehavior) {

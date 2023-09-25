@@ -24,6 +24,11 @@ if (!customElements.get('cart-items')) {
     getSectionsToRender() {
       return [
         {
+          id: 'main-cart-recommendations',
+          section: document.getElementById('main-cart-recommendations').dataset.id,
+          selector: '.js-cart-drawer-recommendations',
+        },
+        {
           id: 'main-cart-items',
           section: document.getElementById('main-cart-items').dataset.id,
           selector: '.js-cart-item-contents',
@@ -111,14 +116,14 @@ if (!customElements.get('cart-items')) {
 
     updateContent(parsedState, line, name) {
       this.getSectionsToRender().forEach((section) => {
-        const elementToReplace =
-        document.getElementById(section.id).querySelector(section.selector) ||
-        document.getElementById(section.id);
+        const elementToReplace = document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
 
-        elementToReplace.innerHTML = this.getSectionInnerHTML(
-          parsedState.sections[section.section],
-          section.selector,
-        );
+        if (elementToReplace) {
+          elementToReplace.innerHTML = this.getSectionInnerHTML(
+            parsedState.sections[section.section],
+            section.selector,
+          );
+        }
       });
 
       document.getElementById(`CartItem-${line}`)?.querySelector(`[name="${name}"]`)?.focus();

@@ -9,11 +9,11 @@ if (!customElements.get('quick-shop')) {
 
       this.parentCard.addEventListener('mouseleave', () => this.updateLabelState());
 
-      this.parentCard?.querySelectorAll('[data-quick-shop-toggle]').forEach((button) => {
-        button.addEventListener('click', () => {
-          this.updateLabelState();
-          this.onPopupToggle();
-        });
+      this.parentCard?.querySelector('[data-quick-shop-toggle]').addEventListener('click', (event) => {
+        event.currentTarget.classList.add('loading');
+        event.currentTarget.setAttribute('disabled', true);
+        this.updateLabelState();
+        this.onPopupToggle(event.currentTarget);
       });
 
       // Bind option select events
@@ -42,12 +42,18 @@ if (!customElements.get('quick-shop')) {
      * onPopupOpen
      * @description Opens the options popup on touch devices.
      */
-    onPopupToggle() {
+    onPopupToggle(trigger) {
       // Close other quick shops
       this.productCards.forEach((card) => {
         if (!card.isSameNode(this.parentCard)) card.classList.remove('quick-shop--is-open');
       });
       this.parentCard.classList.toggle('quick-shop--is-open');
+      if (trigger) {
+        setTimeout(() => {
+          trigger.classList.remove('loading');
+          trigger.removeAttribute('disabled');
+        }, 250);
+      }
     }
 
     /**

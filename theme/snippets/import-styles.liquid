@@ -6,8 +6,7 @@
       rel="stylesheet"
       href="{{ file_name | asset_url }}"
       media="print"
-      onload="this.media='all'"
-    >
+      onload="this.media='all'">
     <noscript>{{ file_name | asset_url | stylesheet_tag }}</noscript>
   {% endif %}
 {% endif %}

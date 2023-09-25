@@ -15,7 +15,7 @@
 
 {%- liquid
   # Check if we use the first or second variant option
-  if quick_shop_render_second_option == true
+  if quick_shop_render_second_option
     assign option_to_render = product.options_with_values | last
   else
     assign option_to_render = product.options_with_values | first
@@ -29,6 +29,14 @@
   if color_variant_label_handleized == color_label
     assign is_color = true
   endif
+
+  unless add_to_cart_behavior
+    assign add_to_cart_behavior = settings.add_to_cart_behavior
+  endunless
+
+  unless is_cart_drawer_recommendations
+    assign is_cart_drawer_recommendations = false
+  endunless
 -%}
 
 {%- comment -%} Output quick shop {%- endcomment -%}
@@ -47,16 +55,20 @@
     bg-gray-50
     p-2
     text-center
-    transition
-    delay-500
+    transition-all
     group-[.quick-shop--is-open]/product-card:pointer-events-auto
     group-[.quick-shop--is-open]/product-card:visible
     group-[.quick-shop--is-open]/product-card:translate-y-0
     group-[.color-scheme--gray]/color-scheme:bg-gray-100
-    no-touch:group-hover/product-card:pointer-events-auto
-    no-touch:group-hover/product-card:visible
-
-    no-touch:group-hover/product-card:translate-y-0
+    {% if is_cart_drawer_recommendations -%}
+      delay-100
+      group-[.quick-shop--is-open]/product-card:shadow-md
+    {%- else -%}
+      delay-500
+      no-touch:group-hover/product-card:pointer-events-auto
+      no-touch:group-hover/product-card:visible
+      no-touch:group-hover/product-card:translate-y-0
+    {%- endif -%}
   ">
   {%- comment -%} Title {%- endcomment -%}
   <p class="quick-shop__title mb-1 text-sm font-bold text-text-default">
@@ -68,9 +80,9 @@
     {% for variant in product.variants %}
       {%- liquid
         # Get value of the option
-        if quick_shop_render_second_option == true and variant.option2
+        if quick_shop_render_second_option and variant.option2
           assign option_label = variant.option2
-        elsif product.has_only_default_variant == true
+        elsif product.has_only_default_variant
           capture option_label
             render 'render-translation', namespace: 'products.product.add_to_cart', fallback: 'Add to cart'
           endcapture
@@ -79,7 +91,7 @@
         endif
 
         # If this is a color option get hex color
-        if is_color == true
+        if is_color
           assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
           assign color_option_name = option_label | handleize
           assign color_is_mapped = false
@@ -118,7 +130,7 @@
         <label
           class="option__label option__label--{{ color_label }} {{ disabled_classes }}"
           for="quick-shop__item-{{ variant.id }}"
-          {% if color_hex and is_color == true %}
+          {% if color_hex and is_color %}
             style="background-color: {{ color_hex }}"
             title="{{ option_label }}"
             aria-label="{{ option_label }}"
@@ -152,7 +164,7 @@
           value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
       {%- endif -%}
 
-      <button type="submit" name="add" aria-label="Add" class="sr-only" data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"></button>
+      <button type="submit" name="add" aria-label="Add" class="sr-only" data-add-to-cart-behavior="{{ add_to_cart_behavior }}"></button>
     {%- endform -%}
   </product-form-component>
 </quick-shop>

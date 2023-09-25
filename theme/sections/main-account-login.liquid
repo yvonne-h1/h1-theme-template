@@ -67,7 +67,7 @@
 
     {%- comment -%} Login form {%- endcomment -%}
     <div id="login" class="peer-target/recover:hidden" tabindex="-1">
-      {%- if recover_success == true -%}
+      {%- if recover_success -%}
         <p class="font-bold" tabindex="-1" autofocus>
           {%- render "render-translation", namespace: "customer.recover_password", key: "success", fallback: "We've sent you an email with a link to update your password." -%}
         </p>

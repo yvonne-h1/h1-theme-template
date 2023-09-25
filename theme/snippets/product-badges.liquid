@@ -46,7 +46,7 @@
 
   # Collect badges
   capture badges
-    if product.available == true
+    if product.available
       if product_can_be_preordered
         echo pre_order_badge
       elsif product_has_compare_at_price
