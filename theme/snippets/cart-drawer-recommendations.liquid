@@ -1,0 +1,148 @@
+{% comment %}
+  {%- render 'cart-drawer-recommendations', section: section -%}
+{% endcomment %}
+
+{%- capture button_content -%}
+  {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
+  <span>
+    {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}
+  </span>
+{%- endcapture -%}
+
+{%- liquid
+  assign button_class = 'button button--primary rounded-full px-4 py-2 touch:py-3'
+  assign count = 0
+
+  unless is_swiper
+    assign is_swiper = false
+  endunless
+-%}
+
+{%- for item in cart.items -%}
+  {%- liquid
+    # Only render 8 items max
+    if count > 8
+      break
+    endif
+  -%}
+
+  {% comment %} Capture the related products {% endcomment %}
+  {%- assign related_product_metafield = item.product.metafields['shopify--discovery--product_recommendation'][section.settings.recommendation_type] -%}
+  {%- if related_product_metafield != blank -%}
+    {%- for product in related_product_metafield.value -%}
+      {% comment %} Skip items already in the cart or already listed as a related product {% endcomment %}
+      {%- liquid
+        if cart_json contains product.id or product.unavailable == false
+          continue
+        endif
+
+        # check if item has already been added, else add it to the string so we can check it in the next iteration
+        if product_ids contains product.id
+          continue
+        else
+          assign product_ids = product_ids | append: product.id | append: '/'
+        endif
+
+        assign show_quick_shop = false
+        if settings.enable_quick_shop
+          assign show_quick_shop = true
+          assign multiple_first_option = false
+          assign multiple_last_option = false
+          assign quick_shop_render_second_option = false
+
+          if product.options_with_values.size == 2
+            if product.options_with_values.first.values.size > 1
+              assign multiple_first_option = true
+            endif
+
+            if product.options_with_values.last.values.size > 1
+              assign multiple_last_option = true
+            endif
+            if multiple_first_option and multiple_last_option
+              assign show_quick_shop = false
+            elsif multiple_last_option
+              assign quick_shop_render_second_option = true
+            endif
+          elsif product.options_with_values.size > 2
+            assign show_quick_shop = false
+          endif
+        endif
+
+        if product.variants.size == 1
+          assign show_quick_shop = false
+        endif
+      -%}
+      {%- assign count = count | plus: 1 -%}
+
+      {% comment %} Render the product recommendation {% endcomment %}
+      {%- if is_swiper -%}
+        <div class="swiper-slide min-h-full">
+      {%- endif -%}
+      <article class="cart-drawer-recommendation product-card group/product-card relative flex h-full flex-col gap-2 overflow-hidden rounded-md bg-white p-4 shadow-md" data-product-card>
+        <header>
+          <a href="{{ product.url }}" class="text-text-default no-underline states:underline" tabindex="-1">
+            <div class="mx-auto max-w-[80px]">{{ product.featured_image | image_url: width: 160 | image_tag: width: 160, sizes: '100vw', widths: '160', alt: product.title }}</div>
+            <h3 class="mb-0 text-sm">{{ product.title }}</h3>
+          </a>
+        </header>
+        {%- render 'render-price', product: product, use_variant: false -%}
+
+        {%- comment -%} The product form, product id will be update by variant.js {%- endcomment -%}
+        <footer class="mt-2 flex flex-wrap items-center gap-y-2 gap-x-base">
+          {%- if show_quick_shop- %}
+            {% comment %} Render the quickshop wrapper and the trigger because we don't use the hover effect here {% endcomment %}
+            {%- render 'quick-shop',
+              product: product,
+              quick_shop_render_second_option: quick_shop_render_second_option,
+              add_to_cart_behavior: 'open_cart_drawer',
+              is_cart_drawer_recommendations: true
+            -%}
+            <button
+              type="button"
+              class="{{ button_class }}"
+              data-quick-shop-toggle>
+              {{- button_content -}}
+            </button>
+
+          {%- else -%}
+            {%- comment -%} Render a default ATC button without quickshop {%- endcomment -%}
+            <product-form-component class="mx-auto">
+              {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
+              {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
+
+                {%- comment -%} If preorder is enabled for this product add a line proprety when adding to the cart {%- endcomment -%}
+                {%- if settings.enable_pre_order
+                  and product.tags contains 'preorder'
+                  and product.selected_or_first_available_variant.inventory_quantity <= 0
+                  and product.selected_or_first_available_variant.inventory_policy == 'continue'
+                -%}
+                  <input
+                    type="hidden"
+                    name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
+                    value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+                {%- endif -%}
+
+                <button type="submit" name="add" aria-label="Add" class="{{ button_class }}" data-add-to-cart-behavior="open_cart_drawer">
+                  {{- button_content -}}
+                </button>
+              {%- endform -%}
+            </product-form-component>
+          {%- endif -%}
+
+          {% comment %} Link to PDP {% endcomment %}
+          <a href="{{ product.url }}" class="button button--outline mx-auto rounded-full p-2 touch:p-3" tabindex="-1">
+            {%- render 'icons', icon: 'arrow', icon_class: 'w-5' -%}
+            <span class="sr-only">
+              {%- render 'render-translation', namespace: 'products.product', key: 'go_to_product', fallback: 'Go to product page' -%}
+            </span>
+          </a>
+        </footer>
+      </article>
+      {%- if is_swiper -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}

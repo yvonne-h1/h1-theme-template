@@ -46,11 +46,15 @@
   unless font_size
     assign font_size = 'text-sm'
   endunless
+
+  unless show_badges
+    assign show_badges = false
+  endunless
 -%}
 <div
   class="
     price {{ font_size }} flex flex-wrap items-center justify-items-center gap-2
-    {%- liquid
+    {% liquid
       if price_class
         echo price_class
       endif
@@ -91,7 +95,7 @@
 
       {%- comment -%} Product or variant is on sale {%- endcomment -%}
     {%- elsif target.compare_at_price > target.price or target.price_varies and target.compare_at_price_varies %}
-      <dl class="price__sale flex gap-2">
+      <dl class="price__sale flex flex-wrap gap-x-2">
         <dt class="sr-only">
           {{ sale_price_str }}
         </dt>

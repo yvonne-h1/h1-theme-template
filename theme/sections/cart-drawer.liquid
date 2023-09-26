@@ -4,7 +4,7 @@
   <cart-drawer class="cart-drawer" data-cart-drawer>
     {%- comment -%} Backdrop {%- endcomment -%}
     <class-toggle-component
-      class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop"
+      class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop hidden xs:block"
       tabindex="-1"
       aria-hidden="true"
       data-options='
@@ -17,7 +17,8 @@
     <div
       id="cartDrawer"
       class="
-        fixed bottom-0 end-0 top-0 z-offcanvas flex h-full translate-x-full flex-col overflow-x-hidden text-text-default
+        fixed bottom-0 end-0 top-0 z-offcanvas flex h-full max-w-screen translate-x-full flex-col overflow-x-hidden
+        text-text-default
         opacity-0
         transition-all
         duration-300
@@ -31,7 +32,8 @@
       tabindex="-1"
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
       {% comment %} Drawer items {% endcomment %}
-      <cart-items class="cart-items group/cart-items peer invisible h-full min-w-min max-w-sm bg-white group-[.cart-drawer-is-open]/body:visible {% if cart == empty %}cart-is-empty{% endif %}">
+      <cart-items
+        class="cart-items group/cart-items peer invisible h-full min-w-min max-w-screen bg-white group-[.cart-drawer-is-open]/body:visible xs:max-w-sm sm:max-w-[584px] {% if cart == empty %}cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
         <div
           class="cart-drawer__warnings hidden flex-col items-center justify-center px-10 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">
@@ -80,10 +82,10 @@
 
           {%- comment -%} Cart drawer items {%- endcomment -%}
           <div
-            class="cart-drawer__content relative z-10 px-4 pt-6 group-[.cart-is-empty]/cart-items:hidden"
+            class="cart-drawer__content relative z-10 pt-6 group-[.cart-is-empty]/cart-items:hidden"
             id="main-cart-items"
             data-id="{{ section.id }}">
-            <div class="js-cart-item-contents group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
+            <div class="js-cart-item-contents px-4 group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
               {%- if cart != empty -%}
                 <div class="cart-drawer-items">
                   {%- for item in cart.items -%}
@@ -92,9 +94,9 @@
                 </div>
               {%- endif -%}
             </div>
-            <p class="sr-only" id="cart-live-region-text" aria-live="polite" role="status"></p>
+            <p class="sr-only px-4" id="cart-live-region-text" aria-live="polite" role="status"></p>
             <p
-              class="sr-only"
+              class="sr-only px-4"
               id="shopping-cart-line-item-status"
               aria-live="polite"
               aria-hidden="true"
@@ -111,6 +113,53 @@
                   </div>
               {%- endcase -%}
             {%- endfor -%}
+
+            {% comment %} Recommendations slider {% endcomment %}
+            {%- capture recommendations -%}
+              {%- render 'cart-drawer-recommendations', section: section, is_swiper: true -%}
+            {%- endcapture -%}
+
+            {% comment %} Items {% endcomment %}
+            <div class="js-cart-drawer-recommendations-swiper max-w-screen bg-gray-100 py-6 xs:max-w-sm sm:hidden {% if recommendations == blank -%}hidden{%- endif -%}">
+              {% comment %} Title {% endcomment %}
+              {%- if section.settings.rec_title != blank -%}
+                <h2 class="h6 px-4">{{ section.settings.rec_title }}</h2>
+              {%- endif -%}
+
+              <swiper-slider
+                data-options='
+                  {
+                    "navigation": {
+                      "nextEl": ".swiper-button-next-{{ section.id }}",
+                      "prevEl": ".swiper-button-prev-{{ section.id }}"
+                    },
+                    "slidesPerView": 1.4,
+                    "spaceBetween": 16,
+                    "slidesOffsetBefore": 16,
+                    "slidesOffsetAfter": 16
+                  }
+                '>
+                <div class="swiper" data-swiper>
+                  <div class="swiper-wrapper flex h-full items-stretch">
+                    {{ recommendations }}
+                  </div>
+                  <div class="swiper-navigation site-center">
+                    <button
+                      class="swiper-button-prev swiper-button-prev-{{ section.id }}"
+                      data-swiper-nav="next"
+                      aria-label="{%- render 'render-translation',  namespace: 'accessibility.previous_slide', fallback: 'Previous slide'-%}">
+                      {% render 'icons', icon: 'chevron-left', icon_class: 'w-5' %}
+                    </button>
+                    <button
+                      class="swiper-button-next swiper-button-next-{{ section.id }}"
+                      data-swiper-nav="prev"
+                      aria-label="{%- render 'render-translation',  namespace: 'accessibility.next_slide', fallback: 'Next slide'-%}">
+                      {% render 'icons', icon: 'chevron-right', icon_class: 'w-5' %}
+                    </button>
+                  </div>
+                </div>
+              </swiper-slider>
+            </div>
           </div>
 
           {%- comment -%} Cart footer {%- endcomment -%}
@@ -193,159 +242,35 @@
       {% comment %} Recommendations {% endcomment %}
       <div
         id="main-cart-recommendations"
-        data-id="{{ section.id }}"
-        class="cart-recommendations sticky top-0 -z-10 min-w-[200px] translate-x-full transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden">
-        <div class="cart-recommendations__wrapper">
-          {%- capture recommendations -%}
-            {%- assign count = 0 -%}
-            {%- for item in cart.items -%}
-              {%- liquid
-                # Only render 8 items max
-                if count > 8
-                  break
-                endif
-              -%}
+        data-id="{{ section.id }}">
+        {% comment %} Recommendations {% endcomment %}
+        {%- capture recommendations -%}
+          {%- render 'cart-drawer-recommendations', section: section -%}
+        {%- endcapture -%}
 
-              {% comment %} Capture the related products {% endcomment %}
-              {%- assign related_product_metafield = item.product.metafields['shopify--discovery--product_recommendation'][section.settings.recommendation_type] -%}
-              {%- if related_product_metafield != blank -%}
-                {%- for product in related_product_metafield.value -%}
-                  {% comment %} Skip items already in the cart or already listed as a related product {% endcomment %}
-                  {%- liquid
-                    if cart_json contains product.id or product.unavailable == false
-                      continue
-                    endif
-
-                    if product_ids contains product.id
-                      continue
-                    else
-                      assign product_ids = product_ids | append: product.id | append: '/'
-                    endif
-
-                    assign show_quick_shop = false
-                    if settings.enable_quick_shop
-                      assign show_quick_shop = true
-                      assign multiple_first_option = false
-                      assign multiple_last_option = false
-                      assign quick_shop_render_second_option = false
-
-                      if product.options_with_values.size == 2
-                        if product.options_with_values.first.values.size > 1
-                          assign multiple_first_option = true
-                        endif
-
-                        if product.options_with_values.last.values.size > 1
-                          assign multiple_last_option = true
-                        endif
-                        if multiple_first_option and multiple_last_option
-                          assign show_quick_shop = false
-                        elsif multiple_last_option
-                          assign quick_shop_render_second_option = true
-                        endif
-                      elsif product.options_with_values.size > 2
-                        assign show_quick_shop = false
-                      endif
-                    endif
-
-                    if product.variants.size == 1
-                      assign show_quick_shop = false
-                    endif
-                  -%}
-                  {%- assign count = count | plus: 1 -%}
-
-                  {% comment %} Render the product recommendation {% endcomment %}
-                  <article class="cart-drawer-recommendation product-card group/product-card relative flex flex-col gap-1 overflow-hidden rounded-md bg-white p-2 shadow-md" data-product-card>
-                    <header>
-                      <a href="{{ product.url }}" class="text-text-default no-underline states:underline" tabindex="-1">
-                        <div class="mx-auto max-w-[80px]">{{ product.featured_image | image_url: width: 160 | image_tag: width: 160, sizes: '100vw', widths: '160', alt: product.title }}</div>
-                        <h3 class="mb-0 text-sm">{{ product.title }}</h3>
-                      </a>
-                    </header>
-                    {%- render 'render-price', product: product, use_variant: false -%}
-
-                    {%- comment -%} The product form, product id will be update by variant.js {%- endcomment -%}
-                    <footer class="flex items-center gap-base">
-                      {%- if show_quick_shop-%}
-                        {% comment %} Render the quickshop wrapper and the trigger because we don't use the hover effect here {% endcomment %}
-                        {%- render 'quick-shop', product: product, quick_shop_render_second_option: quick_shop_render_second_option, add_to_cart_behavior: 'open_cart_drawer', is_cart_drawer_recommendations: true -%}
-                        <button
-                          type="button"
-                          class="button button--primary mx-auto rounded-full p-2 touch:p-3"
-                          data-quick-shop-toggle>
-                          {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
-                          <span class="sr-only">
-                            {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
-                          </span>
-                        </button>
-
-                      {%- else -%}
-                        {%- comment -%} Render a default ATC button without quickshop {%- endcomment -%}
-                        <product-form-component class="mx-auto">
-                          {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
-                          {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-                            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                            <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
-
-                            {%- comment -%} If preorder is enabled for this product add a line proprety when adding to the cart {%- endcomment -%}
-                            {%- if settings.enable_pre_order
-                              and product.tags contains 'preorder'
-                              and product.selected_or_first_available_variant.inventory_quantity <= 0
-                              and product.selected_or_first_available_variant.inventory_policy == 'continue'
-                            -%}
-                              <input
-                                type="hidden"
-                                name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
-                                value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
-                            {%- endif -%}
-
-                            <button type="submit" name="add" aria-label="Add" class="button button--primary rounded-full p-2 touch:p-3" data-add-to-cart-behavior="open_cart_drawer">
-                              {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
-                              <span class="sr-only">
-                                {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
-                              </span>
-                            </button>
-                          {%- endform -%}
-                        </product-form-component>
-                      {%- endif-%}
-
-                      {% comment %} Link to PDP {% endcomment %}
-                      <a href="{{ product.url }}" class="button button--outline mx-auto rounded-full p-2 touch:p-3" tabindex="-1">
-                        {%- render 'icons', icon: 'arrow', icon_class: 'w-5' -%}
-                        <span class="sr-only">
-                          {%- render 'render-translation', namespace: 'products.product', key: 'go_to_product', fallback: 'Go to product page' -%}
-                        </span>
-                      </a>
-                    </footer>
-                  </article>
-                {%- endfor -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endcapture -%}
-
+        <div class="cart-recommendations sticky top-0 -z-10 hidden min-w-[220px] translate-x-full transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden md:min-w-[240px] {% if recommendations == blank -%}hidden{% else %}sm:block{%- endif -%}">
           {% comment %} Output the recommendations {% endcomment %}
-          {%- if recommendations != blank -%}
-            <div class="cart-recommendations__content-wrapper h-screen min-h-full overflow-y-auto bg-gray-100 p-4 {% if section.settings.show_recommendations -%}group-[.cart-drawer-is-open]/body:w-full{% else -%}hidden{%- endif %}">
-              {% comment %} Title {% endcomment %}
-              {%- if section.settings.rec_title != blank -%}
-                <h2 class="cart-recommendations__title h6">{{ section.settings.rec_title }}</h2>
-              {%- endif -%}
+          <div class="cart-recommendations__wrapper h-screen min-h-full overflow-y-auto bg-gray-100 sm:p-4 {% if section.settings.show_recommendations -%}group-[.cart-drawer-is-open]/body:w-full{% else -%}hidden{%- endif %}">
+            {% comment %} Title {% endcomment %}
+            {%- if section.settings.rec_title != blank -%}
+              <h2 class="cart-recommendations__title h6 px-4">{{ section.settings.rec_title }}</h2>
+            {%- endif -%}
 
-              {% comment %} Items {% endcomment %}
-              <div class="cart-recommendations__items js-cart-drawer-recommendations peer flex flex-col gap-6 transition-opacity duration-100">
-                {{ recommendations }}
-              </div>
+            {% comment %} Items {% endcomment %}
+            <div class="cart-recommendations__items js-cart-drawer-recommendations peer flex flex-col gap-y-4 transition-opacity duration-100">
+              {{ recommendations }}
             </div>
-          {%- endif -%}
+          </div>
         </div>
       </div>
     </div>
   </cart-drawer>
+
   {%- comment -%} Import javascript {%- endcomment -%}
   <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
   <script src="{{ 'cart.js' | asset_url }}" defer></script>
   {%- if section.settings.show_recommendations -%}
-    <script src="{{ 'product-form-component.js' | asset_url }}" defer></script>
-    <script src="{{ 'quickshop.js' | asset_url }}" defer></script>
+    <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
   {%- endif -%}
 {%- endif -%}
 

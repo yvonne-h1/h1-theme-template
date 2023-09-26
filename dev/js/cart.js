@@ -21,31 +21,6 @@ if (!customElements.get('cart-items')) {
       );
     }
 
-    getSectionsToRender() {
-      return [
-        {
-          id: 'main-cart-recommendations',
-          section: document.getElementById('main-cart-recommendations').dataset.id,
-          selector: '.js-cart-drawer-recommendations',
-        },
-        {
-          id: 'main-cart-items',
-          section: document.getElementById('main-cart-items').dataset.id,
-          selector: '.js-cart-item-contents',
-        },
-        {
-          id: 'main-cart-footer',
-          section: document.getElementById('main-cart-footer').dataset.id,
-          selector: '.js-cart-footer-contents',
-        },
-        {
-          id: 'cart-icon-bubble',
-          section: 'theme-cart-icon-bubble',
-          selector: '[data-cart-icon-bubble]',
-        },
-      ];
-    }
-
     async updateQuantity(line, quantity, name) {
       this.enableLoading(line);
 
@@ -72,6 +47,7 @@ if (!customElements.get('cart-items')) {
         this.classList.toggle('cart-is-empty', this.parsedState.item_count === 0);
 
         // render the sections
+        console.log('updte content');
         this.updateContent(this.parsedState, line, name);
       }
       catch (error) {
@@ -115,14 +91,28 @@ if (!customElements.get('cart-items')) {
     }
 
     updateContent(parsedState, line, name) {
+      console.log(parsedState);
       this.getSectionsToRender().forEach((section) => {
-        const elementToReplace = document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
+        console.log(section);
+        if (section?.selector) {
+          const selector = document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
 
-        if (elementToReplace) {
-          elementToReplace.innerHTML = this.getSectionInnerHTML(
-            parsedState.sections[section.section],
-            section.selector,
-          );
+          if (selector) {
+            selector.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.section], section.selector);
+
+            // update the recommendations
+            if (section.selector === '.js-cart-drawer-recommendations') {
+              setTimeout(() => {
+                selector.classList.remove('opacity-0');
+              }, 500);
+            }
+            if (section.selector === '.js-cart-drawer-recommendations-swiper') {
+            // init the swiper after a change
+              setTimeout(() => {
+                selector.querySelector('swiper-slider').init();
+              }, 500);
+            }
+          }
         }
       });
 
@@ -144,9 +134,38 @@ if (!customElements.get('cart-items')) {
       }, 1000);
     }
 
+    getSectionsToRender() {
+      return [
+        {
+          id: 'main-cart-recommendations',
+          section: document.getElementById('main-cart-recommendations').dataset.id,
+          selector: '.js-cart-drawer-recommendations',
+        },
+        {
+          id: 'main-cart-items',
+          section: document.getElementById('main-cart-items').dataset.id,
+          selector: '.js-cart-drawer-recommendations-swiper',
+        },
+        {
+          id: 'main-cart-items',
+          section: document.getElementById('main-cart-items').dataset.id,
+          selector: '.js-cart-item-contents',
+        },
+        {
+          id: 'main-cart-footer',
+          section: document.getElementById('main-cart-footer').dataset.id,
+          selector: '.js-cart-footer-contents',
+        },
+        {
+          id: 'cart-icon-bubble',
+          section: 'theme-cart-icon-bubble',
+          selector: '[data-cart-icon-bubble]',
+        },
+      ];
+    }
+
     getSectionInnerHTML(html, selector = '.shopify-section') {
-      return new DOMParser().parseFromString(html, 'text/html')
-        .querySelector(selector).innerHTML;
+      return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
     }
 
     enableLoading() {

@@ -85,6 +85,7 @@ class SwiperSlider extends HTMLElement {
       observer: true,
       isRecommendations: false,
       modules: [A11y, Navigation, Pagination, Scrollbar, Autoplay],
+      destroyAfter: false,
     };
 
     // Check if we have extra options on the HTML
@@ -98,8 +99,37 @@ class SwiperSlider extends HTMLElement {
       }
     }
 
-    // render the options and init the swiper
-    this.init();
+    if (this.swiperOptions.destroyAfter) {
+      console.log('destroy');
+
+      window.addEventListener('resize', debounce(() => {
+        console.log('resize');
+        const ww = window.innerWidth;
+        if (ww >= this.swiperOptions.destroyAfter && this.swiperInstance) {
+          console.log('destroy it');
+          this.swiperInstance.destroy();
+        }
+        else {
+          console.log('init it');
+          this.init();
+        }
+      }, 50));
+
+      window.addEventListener('DOMContentLoaded',() => {
+        console.log('load');
+        const ww = window.innerWidth;
+        if (ww >= this.swiperOptions.destroyAfter && this.swiperInstance) {
+          this.swiperInstance.destroy();
+        }
+        else if (ww < this.swiperOptions.destroyAfter) {
+          this.init();
+        }
+      });
+    }
+    else {
+      // render the options and init the swiper
+      this.init();
+    }
 
     // Listen to extra events when in Shopify editor
     if (Shopify.designMode) {
@@ -115,6 +145,7 @@ class SwiperSlider extends HTMLElement {
   }
 
   init(event = null, updateSwiper = false) {
+    // only used for the Theme Editor to check if the swiper matches the section that was updated
     if (updateSwiper && event.detail.sectionId !== this.swiperOptions.sectionID) return;
 
     // Check if we have extra options on the HTML
@@ -125,6 +156,14 @@ class SwiperSlider extends HTMLElement {
           ...this.swiperOptions,
           ...options,
         };
+      }
+    }
+
+    if (this.swiperOptions.destroyAfter) {
+      const ww = window.innerWidth;
+      if (ww >= this.swiperOptions.destroyAfter && this.swiperInstance) {
+        this.swiperInstance.destroy();
+        return;
       }
     }
 

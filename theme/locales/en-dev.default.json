@@ -124,6 +124,7 @@
     "product": {
       "add": "Add",
       "add_to_cart": "Add to cart",
+      "add_to_cart_short": "Add",
       "go_to_product": "Go to product page",
       "description": "Description",
       "on_sale": "Sale",

@@ -27,18 +27,13 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
-    document.querySelector('.js-cart-drawer-recommendations').classList.add('opacity-0');
-    this.getSectionsToRender().forEach((section) => {
+    console.log(parsedState);
+    this.getSectionsToRenderForCartNotification().forEach((section) => {
       if (section?.selector) {
         const selector = document.querySelector(section.selector);
 
         if (selector) {
           selector.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.section], section.selector);
-          if (section.selector === '.js-cart-drawer-recommendations') {
-            setTimeout(() => {
-              selector.classList.remove('opacity-0');
-            }, 500);
-          }
         }
       }
     });
@@ -74,27 +69,12 @@ class CartDrawer extends HTMLElement {
       });
   }
 
-  getSectionsToRender() {
+  getSectionsToRenderForCartNotification() {
     return [
-      // {
-      //   id: 'cart-drawer',
-      //   section: 'cart-drawer',
-      //   selector: '[data-cart-drawer]',
-      // },
       {
-        id: 'main-cart-recommendations',
-        section: document.getElementById('main-cart-recommendations').dataset.id,
-        selector: '.js-cart-drawer-recommendations',
-      },
-      {
-        id: 'main-cart-items',
-        section: document.getElementById('main-cart-items').dataset.id,
-        selector: '.js-cart-item-contents',
-      },
-      {
-        id: 'main-cart-footer',
-        section: document.getElementById('main-cart-footer').dataset.id,
-        selector: '.js-cart-footer-contents',
+        id: 'cart-drawer',
+        section: 'cart-drawer',
+        selector: '[data-cart-drawer]',
       },
       {
         id: 'cart-icon-bubble',
