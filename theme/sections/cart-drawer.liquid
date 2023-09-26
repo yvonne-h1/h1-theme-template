@@ -115,50 +115,52 @@
             {%- endfor -%}
 
             {% comment %} Recommendations slider {% endcomment %}
-            {%- capture recommendations -%}
-              {%- render 'cart-drawer-recommendations', section: section, is_swiper: true -%}
-            {%- endcapture -%}
+            <div class="js-cart-drawer-recommendations-swiper">
+              {%- capture recommendations -%}
+                {%- render 'cart-drawer-recommendations', section: section, is_swiper: true -%}
+              {%- endcapture -%}
 
-            {% comment %} Items {% endcomment %}
-            <div class="js-cart-drawer-recommendations-swiper max-w-screen bg-gray-100 py-6 xs:max-w-sm sm:hidden {% if recommendations == blank -%}hidden{%- endif -%}">
-              {% comment %} Title {% endcomment %}
-              {%- if section.settings.rec_title != blank -%}
-                <h2 class="h6 px-4">{{ section.settings.rec_title }}</h2>
-              {%- endif -%}
+              {% comment %} Items {% endcomment %}
+              <div class="max-w-screen bg-gray-100 py-6 xs:max-w-sm sm:hidden {% if recommendations == blank -%}hidden{%- endif -%}">
+                {% comment %} Title {% endcomment %}
+                {%- if section.settings.rec_title != blank -%}
+                  <h2 class="h6 px-4">{{ section.settings.rec_title }}</h2>
+                {%- endif -%}
 
-              <swiper-slider
-                data-options='
-                  {
-                    "navigation": {
-                      "nextEl": ".swiper-button-next-{{ section.id }}",
-                      "prevEl": ".swiper-button-prev-{{ section.id }}"
-                    },
-                    "slidesPerView": 1.4,
-                    "spaceBetween": 16,
-                    "slidesOffsetBefore": 16,
-                    "slidesOffsetAfter": 16
-                  }
-                '>
-                <div class="swiper" data-swiper>
-                  <div class="swiper-wrapper flex h-full items-stretch">
-                    {{ recommendations }}
+                <swiper-slider
+                  data-options='
+                    {
+                      "navigation": {
+                        "nextEl": ".swiper-button-next-{{ section.id }}",
+                        "prevEl": ".swiper-button-prev-{{ section.id }}"
+                      },
+                      "slidesPerView": 1.4,
+                      "spaceBetween": 16,
+                      "slidesOffsetBefore": 16,
+                      "slidesOffsetAfter": 16
+                    }
+                  '>
+                  <div class="swiper" data-swiper>
+                    <div class="swiper-wrapper flex h-full items-stretch">
+                      {{ recommendations }}
+                    </div>
+                    <div class="swiper-navigation site-center">
+                      <button
+                        class="swiper-button-prev swiper-button-prev-{{ section.id }}"
+                        data-swiper-nav="next"
+                        aria-label="{%- render 'render-translation',  namespace: 'accessibility.previous_slide', fallback: 'Previous slide'-%}">
+                        {% render 'icons', icon: 'chevron-left', icon_class: 'w-5' %}
+                      </button>
+                      <button
+                        class="swiper-button-next swiper-button-next-{{ section.id }}"
+                        data-swiper-nav="prev"
+                        aria-label="{%- render 'render-translation',  namespace: 'accessibility.next_slide', fallback: 'Next slide'-%}">
+                        {% render 'icons', icon: 'chevron-right', icon_class: 'w-5' %}
+                      </button>
+                    </div>
                   </div>
-                  <div class="swiper-navigation site-center">
-                    <button
-                      class="swiper-button-prev swiper-button-prev-{{ section.id }}"
-                      data-swiper-nav="next"
-                      aria-label="{%- render 'render-translation',  namespace: 'accessibility.previous_slide', fallback: 'Previous slide'-%}">
-                      {% render 'icons', icon: 'chevron-left', icon_class: 'w-5' %}
-                    </button>
-                    <button
-                      class="swiper-button-next swiper-button-next-{{ section.id }}"
-                      data-swiper-nav="prev"
-                      aria-label="{%- render 'render-translation',  namespace: 'accessibility.next_slide', fallback: 'Next slide'-%}">
-                      {% render 'icons', icon: 'chevron-right', icon_class: 'w-5' %}
-                    </button>
-                  </div>
-                </div>
-              </swiper-slider>
+                </swiper-slider>
+              </div>
             </div>
           </div>
 
@@ -243,22 +245,24 @@
       <div
         id="main-cart-recommendations"
         data-id="{{ section.id }}">
-        {% comment %} Recommendations {% endcomment %}
-        {%- capture recommendations -%}
-          {%- render 'cart-drawer-recommendations', section: section -%}
-        {%- endcapture -%}
+        <div class="js-cart-drawer-recommendations">
+          {% comment %} Recommendations {% endcomment %}
+          {%- capture recommendations -%}
+            {%- render 'cart-drawer-recommendations', section: section -%}
+          {%- endcapture -%}
 
-        <div class="cart-recommendations sticky top-0 -z-10 hidden min-w-[220px] translate-x-full transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden md:min-w-[240px] {% if recommendations == blank -%}hidden{% else %}sm:block{%- endif -%}">
-          {% comment %} Output the recommendations {% endcomment %}
-          <div class="cart-recommendations__wrapper h-screen min-h-full overflow-y-auto bg-gray-100 sm:p-4 {% if section.settings.show_recommendations -%}group-[.cart-drawer-is-open]/body:w-full{% else -%}hidden{%- endif %}">
-            {% comment %} Title {% endcomment %}
-            {%- if section.settings.rec_title != blank -%}
-              <h2 class="cart-recommendations__title h6 px-4">{{ section.settings.rec_title }}</h2>
-            {%- endif -%}
+          <div class="cart-recommendations sticky top-0 -z-10 hidden min-w-[220px] translate-x-full transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden md:min-w-[240px] {% if recommendations == blank -%}hidden{% else %}sm:block{%- endif -%}">
+            {% comment %} Output the recommendations {% endcomment %}
+            <div class="cart-recommendations__wrapper h-screen min-h-full overflow-y-auto bg-gray-100 sm:p-4 {% if section.settings.show_recommendations -%}group-[.cart-drawer-is-open]/body:w-full{% else -%}hidden{%- endif %}">
+              {% comment %} Title {% endcomment %}
+              {%- if section.settings.rec_title != blank -%}
+                <h2 class="cart-recommendations__title h6 px-4">{{ section.settings.rec_title }}</h2>
+              {%- endif -%}
 
-            {% comment %} Items {% endcomment %}
-            <div class="cart-recommendations__items js-cart-drawer-recommendations peer flex flex-col gap-y-4 transition-opacity duration-100">
-              {{ recommendations }}
+              {% comment %} Items {% endcomment %}
+              <div class="cart-recommendations__items peer flex flex-col gap-y-4 transition-opacity duration-100">
+                {{ recommendations }}
+              </div>
             </div>
           </div>
         </div>
