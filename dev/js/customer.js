@@ -81,7 +81,7 @@ class CustomerAddresses extends HTMLElement {
   fancybox() {
     if (!Fancybox) return false;
 
-    Fancybox.bind('[data-fancybox]', {
+    Fancybox.bind('[data-fancybox-address]', {
       trapFocus: false,
       placeFocusBack: false,
       autoFocus: false,

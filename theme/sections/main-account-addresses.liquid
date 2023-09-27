@@ -71,7 +71,7 @@
                   aria-controls="EditAddress_{{ address.id }}"
                   aria-expanded="false"
                   data-address-id="{{ address.id }}"
-                  data-fancybox
+                  data-fancybox-address
                   data-type="inline"
                   data-src="#EditAddress_{{ address.id }}"
                 >
@@ -286,7 +286,7 @@
         type="button"
         aria-expanded="false"
         aria-controls="AddAddress"
-        data-fancybox
+        data-fancybox-address
         data-type="inline"
         data-src="#AddAddress">
         {%- render 'render-translation', namespace: 'customer.addresses', key: 'add_new', fallback: 'Add new address' -%}

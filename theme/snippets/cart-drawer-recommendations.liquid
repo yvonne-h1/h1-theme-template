@@ -91,16 +91,21 @@
         <footer class="mt-2 flex flex-wrap items-center gap-y-2 gap-x-base">
           {%- if show_quick_shop -%}
             {% comment %} Render the quickshop wrapper and the trigger because we don't use the hover effect here {% endcomment %}
-            {%- render 'quick-shop',
-              product: product,
-              quick_shop_render_second_option: quick_shop_render_second_option,
-              add_to_cart_behavior: 'open_cart_drawer',
-              is_cart_drawer_recommendations: true
-            -%}
+            <div id="QuickShop-{{ product.id }}{%- if is_swiper -%}-swiper{%- endif -%}" class="hidden">
+              {%- render 'quick-shop',
+                product: product,
+                quick_shop_render_second_option: quick_shop_render_second_option,
+                add_to_cart_behavior: 'open_cart_drawer',
+                is_cart_drawer_recommendations: true
+              -%}
+            </div>
             <button
               type="button"
               class="{{ button_class }}"
-              data-quick-shop-toggle>
+              data-quick-shop-toggle
+              data-fancybox-quickshop
+              data-type="inline"
+              data-src="#QuickShop-{{ product.id }}{%- if is_swiper -%}-swiper{%- endif -%}">
               {{- button_content -}}
             </button>
 

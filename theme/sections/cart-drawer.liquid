@@ -278,6 +278,7 @@
   <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
   <script src="{{ 'cart.js' | asset_url }}" defer></script>
   {%- if section.settings.show_recommendations -%}
+    {%- render 'import-styles', file_name: 'component-fancybox.css' -%}
     <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
   {%- endif -%}
 {%- endif -%}

@@ -40,36 +40,7 @@
 -%}
 
 {%- comment -%} Output quick shop {%- endcomment -%}
-<quick-shop
-  class="
-    quick-shop
-    pointer-events-none
-    invisible
-    absolute
-    inset-x-0
-    top-0
-    z-30
-    max-h-full
-    translate-y-[-300%]
-    overflow-auto
-    bg-gray-50
-    p-2
-    text-center
-    transition-all
-    group-[.quick-shop--is-open]/product-card:pointer-events-auto
-    group-[.quick-shop--is-open]/product-card:visible
-    group-[.quick-shop--is-open]/product-card:translate-y-0
-    group-[.color-scheme--gray]/color-scheme:bg-gray-100
-    {% if is_cart_drawer_recommendations -%}
-      delay-100
-      group-[.quick-shop--is-open]/product-card:shadow-md
-    {%- else -%}
-      delay-500
-      no-touch:group-hover/product-card:pointer-events-auto
-      no-touch:group-hover/product-card:visible
-      no-touch:group-hover/product-card:translate-y-0
-    {%- endif -%}
-  ">
+<quick-shop class="quick-shop text-center transition-all delay-100">
   {%- comment -%} Title {%- endcomment -%}
   <p class="quick-shop__title mb-1 text-sm font-bold text-text-default">
     {%- render 'render-translation', namespace: 'products.product', key: 'choose_your_option', option: color_label, fallback: 'Choose your {{ option }}' -%}
@@ -145,14 +116,14 @@
     {%- endfor -%}
   </div>
 
-  {%- comment -%} The product form, product id will be update by variant.js {%- endcomment -%}
+  {%- comment -%} The product form, product id will be updated by variant.js {%- endcomment -%}
   <product-form-component class="product-form">
     {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
     {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
       <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
       <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
 
-      {%- comment -%} If preorder is enabled for this product add a line proprety when adding to the cart {%- endcomment -%}
+      {%- comment -%} If preorder is enabled for this product add a line property when adding to the cart {%- endcomment -%}
       {%- if settings.enable_pre_order
         and product.tags contains 'preorder'
         and product.selected_or_first_available_variant.inventory_quantity <= 0

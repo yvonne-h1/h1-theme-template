@@ -126,13 +126,6 @@
   <header>
     {%- comment -%} Product images {%- endcomment -%}
     <div class="product-card__images relative px-4 group-[.color-scheme]/color-scheme:pt-4">
-      {%- liquid
-        # Render quick shop
-        if show_quick_shop
-          render 'quick-shop', product: product_object, quick_shop_render_second_option: quick_shop_render_second_option
-        endif
-      -%}
-
       {%- comment -%} Render image with hover {%- endcomment -%}
       <a
         class="product-card__image relative block {% unless product_object.available -%}opacity-50 saturate-50{%- endunless %} {% unless show_secondary_image %}transition-all states:scale-105{%- endunless -%}"
@@ -207,18 +200,19 @@
     <div class="flex gap-base">
       {% comment %} ATC button to display the options {% endcomment %}
       {%- if show_quick_shop -%}
-        {% comment %} Show quick_shop button {% endcomment %}
-        {%- liquid
-          assign quick_shop_button_classes = 'hidden'
-          if view == 'alt'
-            assign quick_shop_button_classes = 'block no-touch:md:hidden'
-          endif
-        -%}
+        {% comment %} Render quick shop {% endcomment %}
+        <div id="QuickShop-{{ product_object.handle }}" class="hidden">
+          {%- render 'quick-shop', product: product_object, quick_shop_render_second_option: quick_shop_render_second_option -%}
+        </div>
+
         <button
           type="button"
           class="button button--primary quick-shop__btn-add relative z-20 mx-auto {{ quick_shop_button_classes }}"
-          data-quick-shop-toggle>
-          {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
+          data-quick-shop-toggle
+          data-fancybox-quickshop
+          data-type="inline"
+          data-src="#QuickShop-{{ product_object.handle }}">
+          {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add to cart' -%}
         </button>
       {% endif %}
 
