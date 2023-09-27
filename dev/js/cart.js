@@ -91,9 +91,7 @@ if (!customElements.get('cart-items')) {
     }
 
     updateContent(parsedState, line, name) {
-      console.log(parsedState);
       this.getSectionsToRender().forEach((section) => {
-        console.log(section);
         if (section?.selector) {
           const selector = document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
 

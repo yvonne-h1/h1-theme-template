@@ -22,7 +22,7 @@
     background-color: var(--product-badge-background, theme('colors.primary.DEFAULT'));
     color: var(--product-badge-text, theme('colors.primary.text'));
     @apply inline-block
-    break-words
+    whitespace-nowrap
     rounded-md;
 
     @include small;

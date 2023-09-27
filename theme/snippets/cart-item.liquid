@@ -24,7 +24,8 @@
   <a
     href="{{ item.product.url }}"
     class="cart-item__media block w-24 shrink-0 cursor-pointer"
-    title="{{ item.product.title }}">
+    title="{{ item.product.title }}"
+    tabindex="-1">
     {%- if item.image -%}
       {%- render 'responsive-image', image_object: item.image, alt: item.title, max_width: image_size, aspect_ratio: aspect_ratio, class: class -%}
     {%- endif -%}

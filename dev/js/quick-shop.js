@@ -43,10 +43,8 @@ if (!customElements.get('quick-shop')) {
      * @description Opens the options popup on touch devices.
      */
     onPopupToggle(trigger) {
-      // Close other quick shops
-      this.productCards.forEach((card) => {
-        if (!card.isSameNode(this.parentCard)) card.classList.remove('quick-shop--is-open');
-      });
+      this.closePopups();
+
       this.parentCard.classList.toggle('quick-shop--is-open');
       if (trigger) {
         setTimeout(() => {
@@ -54,6 +52,13 @@ if (!customElements.get('quick-shop')) {
           trigger.removeAttribute('disabled');
         }, 250);
       }
+    }
+
+    closePopups() {
+      // Close other quick shops
+      this.productCards.forEach((card) => {
+        if (!card.isSameNode(this.parentCard)) card.classList.remove('quick-shop--is-open');
+      });
     }
 
     /**

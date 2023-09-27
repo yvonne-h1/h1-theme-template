@@ -1,5 +1,3 @@
-{%- assign cart_json = cart.items | json -%}
-
 {%- if request.page_type != 'cart' -%}
   <cart-drawer class="cart-drawer" data-cart-drawer>
     {%- comment -%} Backdrop {%- endcomment -%}
@@ -16,6 +14,7 @@
     {%- comment -%} Cart drawer {%- endcomment -%}
     <div
       id="cartDrawer"
+      data-id="{{ section.id }}"
       class="
         fixed bottom-0 end-0 top-0 z-offcanvas flex h-full max-w-screen translate-x-full flex-col overflow-x-hidden
         text-text-default
@@ -78,10 +77,10 @@
 
           {%- comment -%} Cart drawer items {%- endcomment -%}
           <div
-            class="cart-drawer__content relative z-10 pt-6 group-[.cart-is-empty]/cart-items:hidden"
+            class="cart-drawer__content relative z-10 flex h-fit flex-col pt-6 group-[.cart-is-empty]/cart-items:hidden"
             id="main-cart-items"
             data-id="{{ section.id }}">
-            <div class="js-cart-item-contents px-4 group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
+            <div class="js-cart-item-contents flex-1 px-4 group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
               {%- if cart != empty -%}
                 <div class="cart-drawer-items">
                   {%- for item in cart.items -%}
@@ -218,11 +217,6 @@
                       {%- render 'render-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}
                     </button>
                   </noscript>
-                  <a
-                    href="{{ routes.checkout }}"
-                    class="button button--secondary button--lg w-full font-normal">
-                    {%- render 'render-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart ({{ count }})' -%}
-                  </a>
                   <button
                     type="submit"
                     class="button button--primary button--lg w-full"

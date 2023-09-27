@@ -7,11 +7,23 @@ class CartDrawer extends HTMLElement {
     this.activeClass = window.drawerToggleClasses.cartDrawer;
     this.cartIconBubble = document.querySelectorAll('[aria-controls="cartDrawer"]');
 
-    this.onBodyClick = this.handleBodyClick.bind(this);
-
     this.drawer.addEventListener('keyup', event => event.code === 'Escape' && this.close());
+
+    document.addEventListener('toggle-closed', (event) => {
+      console.log(event);
+      if (event.detail.id === 'cartDrawer') {
+
+        // Close all quick shops in the cartDrawer
+        if (this.querySelector('quick-shop')) {
+          this.querySelector('quick-shop').closePopups();
+        }
+      }
+    });
   }
 
+  /**
+   * open the drawer, called after an item is added to the cart from the product-form-component.js and the settings say to open the drawer
+   */
   open() {
     this.body.classList.add(this.activeClass);
     this.cartIconBubble.forEach(button => button.setAttribute('aria-expanded', true));
@@ -23,11 +35,19 @@ class CartDrawer extends HTMLElement {
     this.body.classList.remove(this.activeClass);
     this.cartIconBubble.forEach(button => button.setAttribute('aria-expanded', false));
 
+    // Close all quick shops
+    if (this.querySelectorAll('quick-shop').length > 0) {
+      this.querySelector('quick-shop').closePopups();
+    }
+
     removeTrapFocus();
   }
 
+  /**
+   * renderContents:
+   * @param {Object} parsedState, passed after an item is added to the cart from the product-form-component.js
+   */
   renderContents(parsedState) {
-    console.log(parsedState);
     this.getSectionsToRenderForCartNotification().forEach((section) => {
       if (section?.selector) {
         const selector = document.querySelector(section.selector);
@@ -41,7 +61,8 @@ class CartDrawer extends HTMLElement {
 
   /**
    * renderCartDrawer
-   * Renders the drawer and the cart icon bubble because when there is an error for the quantity that is being added, the max quantity still gets added, so we have to update the sections.
+   * Renders the drawer and the cart icon bubble
+   * When there is an error for the quantity that is being added, the max quantity still gets added, so we have to update the sections.
    */
   async renderCartDrawer() {
     const cartDrawerContent = `${window.location.pathname}?section_id=cart-drawer`;
@@ -69,6 +90,10 @@ class CartDrawer extends HTMLElement {
       });
   }
 
+  /**
+   * getSectionsToRenderForCartNotification:
+   * @returns the sections to be rendered after an item is added to the cart from the product-form-component.js.
+   */
   getSectionsToRenderForCartNotification() {
     return [
       {
@@ -86,11 +111,6 @@ class CartDrawer extends HTMLElement {
 
   getSectionInnerHTML(html, selector = '.shopify-section') {
     return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
-  }
-
-  handleBodyClick(event) {
-    const target = event.target;
-    if (target !== this.drawer && !target.closest('cart-drawer')) this.close();
   }
 }
 

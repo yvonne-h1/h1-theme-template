@@ -152,6 +152,15 @@ if (!customElements.get('class-toggle-component')) {
 
       // focus the element and listen for key up event so we can close on ESCAPE
       if (this.targetID) {
+
+        // dispatch a custom event so we can target specific logic based on the ID
+        document.dispatchEvent(new CustomEvent('toggle-opened', {
+          bubbles: true,
+          detail: {
+            id: this.targetID,
+          },
+        }));
+
         document.querySelectorAll(`button[aria-controls="${this.targetID}"]`)?.forEach(button => button.setAttribute('aria-expanded', true));
 
         const focusTarget = document.getElementById(this.targetID);
@@ -164,6 +173,7 @@ if (!customElements.get('class-toggle-component')) {
       if (this.options.ariaExpanded && this.button) this.button.setAttribute('aria-expanded', true);
 
       // Add class to the document
+      console.log(this.preventBackgroundScroll);
       if (this.preventBackgroundScroll) addPreventScroll();
 
       // Switch aria-expanded
@@ -192,6 +202,14 @@ if (!customElements.get('class-toggle-component')) {
       // remove the trap focus
       if (this.targetID) {
         removeTrapFocus(this.button);
+
+        // dispatch a custom event so we can target specific logic based on the ID
+        document.dispatchEvent(new CustomEvent('toggle-closed', {
+          bubbles: true,
+          detail: {
+            id: this.targetID,
+          },
+        }));
 
         this.mobileMenuCollapsible?.closeAll();
 
