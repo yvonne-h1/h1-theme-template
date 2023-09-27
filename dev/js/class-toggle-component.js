@@ -173,7 +173,6 @@ if (!customElements.get('class-toggle-component')) {
       if (this.options.ariaExpanded && this.button) this.button.setAttribute('aria-expanded', true);
 
       // Add class to the document
-      console.log(this.preventBackgroundScroll);
       if (this.preventBackgroundScroll) addPreventScroll();
 
       // Switch aria-expanded

@@ -100,23 +100,17 @@ class SwiperSlider extends HTMLElement {
     }
 
     if (this.swiperOptions.destroyAfter) {
-      console.log('destroy');
-
       window.addEventListener('resize', debounce(() => {
-        console.log('resize');
         const ww = window.innerWidth;
         if (ww >= this.swiperOptions.destroyAfter && this.swiperInstance) {
-          console.log('destroy it');
           this.swiperInstance.destroy();
         }
         else {
-          console.log('init it');
           this.init();
         }
       }, 50));
 
       window.addEventListener('DOMContentLoaded',() => {
-        console.log('load');
         const ww = window.innerWidth;
         if (ww >= this.swiperOptions.destroyAfter && this.swiperInstance) {
           this.swiperInstance.destroy();

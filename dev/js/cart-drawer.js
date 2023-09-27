@@ -9,8 +9,8 @@ class CartDrawer extends HTMLElement {
 
     this.drawer.addEventListener('keyup', event => event.code === 'Escape' && this.close());
 
+    // Listen for the class-toggle-component close event, since this triggers the cart drawer to close
     document.addEventListener('toggle-closed', (event) => {
-      console.log(event);
       if (event.detail.id === 'cartDrawer') {
 
         // Close all quick shops in the cartDrawer
@@ -35,8 +35,8 @@ class CartDrawer extends HTMLElement {
     this.body.classList.remove(this.activeClass);
     this.cartIconBubble.forEach(button => button.setAttribute('aria-expanded', false));
 
-    // Close all quick shops
-    if (this.querySelectorAll('quick-shop').length > 0) {
+    // Close all quick shops in the cartDrawer
+    if (this.querySelector('quick-shop')) {
       this.querySelector('quick-shop').closePopups();
     }
 

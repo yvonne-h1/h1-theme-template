@@ -125,7 +125,6 @@ class HeaderComponent extends HTMLElement {
   }
 
   scrollAnimation() {
-    // console.trace('scrollAnimation');
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
     // only animate if header is closed.

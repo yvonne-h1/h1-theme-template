@@ -24,15 +24,18 @@
         group-[.cart-drawer-is-open]/body:translate-x-0
         group-[.cart-drawer-is-open]/body:opacity-100
         xs:max-w-sm
+        sm:w-min
+        sm:min-w-[364px]
         sm:max-w-[584px]
         sm:flex-row-reverse
+        md:min-w-[344px]
       "
       role="dialog"
       tabindex="-1"
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
       {% comment %} Drawer items {% endcomment %}
       <cart-items
-        class="cart-items group/cart-items peer invisible h-full min-w-min max-w-screen overflow-hidden bg-white group-[.cart-drawer-is-open]/body:visible xs:max-w-sm sm:max-w-[584px] {% if cart == empty %}cart-is-empty{% endif %}">
+        class="cart-items group/cart-items peer invisible h-full min-w-min max-w-screen overflow-hidden bg-white group-[.cart-drawer-is-open]/body:visible xs:max-w-sm sm:min-w-[364px] sm:max-w-[584px] md:min-w-[344px] {% if cart == empty %}cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
         <div
           class="cart-drawer__warnings hidden flex-col items-center justify-center px-10 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">

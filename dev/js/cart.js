@@ -47,7 +47,6 @@ if (!customElements.get('cart-items')) {
         this.classList.toggle('cart-is-empty', this.parsedState.item_count === 0);
 
         // render the sections
-        console.log('updte content');
         this.updateContent(this.parsedState, line, name);
       }
       catch (error) {
