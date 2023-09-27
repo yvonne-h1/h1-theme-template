@@ -33,7 +33,7 @@
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
       {% comment %} Drawer items {% endcomment %}
       <cart-items
-        class="cart-items group/cart-items peer invisible h-full min-w-min max-w-screen bg-white group-[.cart-drawer-is-open]/body:visible xs:max-w-sm sm:max-w-[584px] {% if cart == empty %}cart-is-empty{% endif %}">
+        class="cart-items group/cart-items peer invisible h-full min-w-min max-w-screen overflow-hidden bg-white group-[.cart-drawer-is-open]/body:visible xs:max-w-sm sm:max-w-[584px] {% if cart == empty %}cart-is-empty{% endif %}">
         {%- comment -%} Empty cart {%- endcomment -%}
         <div
           class="cart-drawer__warnings hidden flex-col items-center justify-center px-10 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">
@@ -57,11 +57,7 @@
         </div>
 
         {%- comment -%} Form {%- endcomment -%}
-        <form
-          action="{{ routes.cart_url }}"
-          class="cart-drawer__form flex min-h-full flex-col flex-wrap bg-white group-[.cart-is-empty]/cart-items:hidden"
-          method="post"
-          id="cart-drawer-form">
+        <div class="cart-drawer__form flex h-full flex-col overflow-y-auto bg-white group-[.cart-is-empty]/cart-items:hidden">
           {%- comment -%} Header {%- endcomment -%}
           <header class="cart-drawer__header insex-x-0 sticky top-0 z-20 border-b bg-white p-4">
             <class-toggle-component
@@ -212,20 +208,31 @@
 
               {%- comment -%} Checkout button {%- endcomment -%}
               <div class="mt-4 flex flex-col gap-y-2">
-                <noscript>
-                  <button type="submit" class="button button--primary w-full">
-                    {%- render 'render-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}
+                <form
+                  action="{{ routes.cart_url }}"
+                  id="CartDrawer-Form"
+                  class="cart__contents cart-drawer__form"
+                  method="post">
+                  <noscript>
+                    <button type="submit" class="button button--primary w-full">
+                      {%- render 'render-translation', namespace: 'sections.cart', key: 'update', fallback: 'Update' -%}
+                    </button>
+                  </noscript>
+                  <a
+                    href="{{ routes.checkout }}"
+                    class="button button--secondary button--lg w-full font-normal">
+                    {%- render 'render-translation', namespace: 'general.cart', key: 'view', count: cart.item_count, fallback: 'View cart ({{ count }})' -%}
+                  </a>
+                  <button
+                    type="submit"
+                    class="button button--primary button--lg w-full"
+                    name="checkout"
+                    {% if cart == empty %}
+                      disabled
+                    {% endif %}>
+                    {%- render 'render-translation', namespace: 'sections.cart', key: 'checkout', fallback: 'Checkout' -%}
                   </button>
-                </noscript>
-                <button
-                  type="submit"
-                  class="button button--primary button--lg w-full"
-                  name="checkout"
-                  {% if cart == empty %}
-                    disabled
-                  {% endif %}>
-                  {%- render 'render-translation', namespace: 'sections.cart', key: 'checkout', fallback: 'Checkout' -%}
-                </button>
+                </form>
 
                 {%- comment -%} Go to cart button {%- endcomment -%}
                 {%- if section.settings.show_cart_button -%}
@@ -238,7 +245,7 @@
               </div>
             </div>
           </footer>
-        </form>
+        </div>
       </cart-items>
 
       {% comment %} Recommendations {% endcomment %}
@@ -251,9 +258,9 @@
             {%- render 'cart-drawer-recommendations', section: section -%}
           {%- endcapture -%}
 
-          <div class="cart-recommendations sticky top-0 -z-10 hidden min-w-[220px] translate-x-full transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden md:min-w-[240px] {% if recommendations == blank -%}hidden{% else %}sm:block{%- endif -%}">
+          <div class="cart-recommendations sticky top-0 hidden h-screen overflow-y-auto overflow-x-hidden {% if recommendations == blank -%}hidden{% else %}sm:block{%- endif %}">
             {% comment %} Output the recommendations {% endcomment %}
-            <div class="cart-recommendations__wrapper h-screen min-h-full overflow-y-auto bg-gray-100 sm:p-4 {% if section.settings.show_recommendations -%}group-[.cart-drawer-is-open]/body:w-full{% else -%}hidden{%- endif %}">
+            <div class="cart-recommendations__wrapper min-h-full min-w-[220px] translate-x-full  bg-gray-100 transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden sm:p-4 md:min-w-[240px] {% if section.settings.show_recommendations -%}group-[.cart-drawer-is-open]/body:w-full{% else -%}hidden{%- endif %}">
               {% comment %} Title {% endcomment %}
               {%- if section.settings.rec_title != blank -%}
                 <h2 class="cart-recommendations__title h6 px-4">{{ section.settings.rec_title }}</h2>

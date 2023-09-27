@@ -142,8 +142,8 @@ if (!customElements.get('cart-items')) {
           selector: '.js-cart-drawer-recommendations',
         },
         {
-          id: 'main-cart-items',
-          section: document.getElementById('main-cart-items').dataset.id,
+          id: 'cartDrawer',
+          section: document.getElementById('cartDrawer').dataset.id,
           selector: '.js-cart-drawer-recommendations-swiper',
         },
         {
