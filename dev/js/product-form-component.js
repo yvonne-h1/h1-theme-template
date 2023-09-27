@@ -48,6 +48,7 @@ class ProductFormComponent extends HTMLElement {
 
         switch (submitButton.dataset.addToCartBehavior) {
         case 'open_cart_drawer':
+          addPreventScroll();
           // Set timeout to force animation. Because content is just updated with renderContents
           setTimeout(() => {
             this.cartDrawer.open();

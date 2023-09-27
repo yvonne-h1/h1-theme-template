@@ -167,7 +167,11 @@
               if section.settings.show_tagged_link and current_tags.size > 0
                 capture current_tags_list
                   for tag in current_tags
-                    echo tag
+                    if tag contains 'category:' or tag contains 'Category:'
+                      echo tag | downcase | remove: 'category:'
+                    else
+                      echo tag
+                    endif
                     unless forloop.last
                       echo ','
                     endunless
