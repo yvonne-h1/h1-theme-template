@@ -8,6 +8,7 @@
   - swiper_navigation: Boolean
   - swiper_autoplay: Boolean
   - swiper_autoplay_delay: Integer | Speed in ms
+  - render_product_cards: Boolean
   - render_products: Boolean
   - render_blog_articles: Boolean
   - is_recommendations: Boolean
@@ -21,13 +22,11 @@
     object_array: object_array,
     container_width: section.settings.container_width,
     swiper_indication: section.settings.swiper_indication,
-    swiper_navigation: true,
-    swiper_autoplay: true,
-    swiper_autoplay_delay: 7500,
-    render_products: false,
-    render_blog_articles: false,
+    swiper_navigation: section.settings.swiper_navigation,
+    swiper_autoplay: section.settings.swiper_autoplay,
+    swiper_autoplay_delay: section.settings.swiper_autoplay_delay,
+    render_products: true,
     max_count: 8,
-    tag_to_show: '',
     id: section.id,
     index_on_page: section.index
   -%}
@@ -36,6 +35,18 @@
   if is_recommendations == blank
     assign is_recommendations = false
   endif
+
+  unless render_products
+    assign render_products = false
+  endunless
+
+  unless render_blog_articles
+    assign render_blog_articles = false
+  endunless
+
+  unless render_product_cards
+    assign render_product_cards = false
+  endunless
 
   # never allow more than 12 slides
   if max_count == blank
@@ -93,6 +104,10 @@
     else
       assign swiper_indication_class = ''
   endcase
+
+  if render_product_cards
+    assign object_array = object_array | split: '///'
+  endif
 -%}
 
 {%- comment -%} Capture the options for the swiper {%- endcomment -%}
@@ -132,19 +147,19 @@
     {% endif -%}
     "breakpoints": {
       "420": {
-        "slidesPerView": {% if render_products %}2.2{%- elsif render_blog_articles %}1.8{%- endif %},
+        "slidesPerView": {% if render_products or render_product_cards %}2.2{%- elsif render_blog_articles %}1.8{%- endif %},
         "spaceBetween": 16,
         "slidesOffsetBefore": 16,
         "slidesOffsetAfter": 16
       },
       "768": {
-        "slidesPerView": {% if render_products %}3.2{%- elsif render_blog_articles %}2.4{%- endif %},
+        "slidesPerView": {% if render_products or render_product_cards %}3.2{%- elsif render_blog_articles %}2.4{%- endif %},
         "spaceBetween": 16,
         "slidesOffsetBefore": 32,
         "slidesOffsetAfter": 32
       },
       "1024": {
-        "slidesPerView": {% if render_products %}4{%- elsif render_blog_articles %}3.2{%- endif %},
+        "slidesPerView": {% if render_products or render_product_cards %}4{%- elsif render_blog_articles %}3.2{%- endif %},
         "spaceBetween": 32,
         "slidesOffsetBefore": 32,
         "slidesOffsetAfter": 32
@@ -166,7 +181,7 @@
       [--swiper-slidesPerView:1.2]
       [--swiper-spaceBetween:16px]
       lg:[--swiper-spaceBetween:32px]
-      {% if render_products %}
+      {% if render_products or render_product_cards %}
         xs:[--swiper-slidesPerView:2.2]
         md:[--swiper-slidesPerView:3.2]
         lg:[--swiper-slidesPerView:4]
@@ -225,12 +240,11 @@
               assign count = count | plus: 1
             endif
           -%}
-
           <div
             class="
               swiper-slide
               min-w-[calc((100%-16px)/1.2)]
-              {% if render_products %}
+              {% if render_products or render_product_cards %}
                 xs:min-w-[calc((100%-2*16px)/2.2)]
                 md:min-w-[calc((100%-2*16px)/3.2)]
                 lg:min-w-[calc((100%-3*32px)/4)]
@@ -246,6 +260,8 @@
               {%- render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3' -%}
             {%- elsif render_blog_articles -%}
               {%- render 'article-card', article: item, image_max_width: image_max_width, image_sizes: image_sizes -%}
+            {%- elsif render_product_cards -%}
+              {{ item }}
             {%- endif -%}
           </div>
 

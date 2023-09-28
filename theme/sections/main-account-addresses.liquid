@@ -492,7 +492,5 @@
 {%- comment -%} Render the content {%- endcomment -%}
 {%- render 'render-container-content', class: 'form-fields address block', content: container_content, content_class: 'addresses', data: 'data-customer-addresses', tag: 'customer-addresses' -%}
 
-{%- render 'import-styles', file_name: 'component-fancybox.css', force: true -%}
-
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'customer.js' | asset_url }}" type="module"></script>

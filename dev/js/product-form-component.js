@@ -9,6 +9,8 @@ class ProductFormComponent extends HTMLElement {
     this.cartNotification = document.querySelector('cart-notification');
     this.cartDrawer = document.querySelector('cart-drawer');
     this.cartItems = document.querySelector('cart-items');
+
+    this.isCartPage = !!document.body.classList.contains('template-cart');
   }
 
   onSubmitHandler(event, trigger = null) {
@@ -22,10 +24,26 @@ class ProductFormComponent extends HTMLElement {
     config.headers['X-Requested-With'] = 'XMLHttpRequest';
     delete config.headers['Content-Type'];
 
-    const sectionsToFetch = [
-      ...this.cartDrawer.getSectionsToRender().map(section => section.section),
-      ...this.cartNotification.getSectionsToRender().map(section => section.section),
-    ];
+    let sectionsToFetch = [];
+    if (this.cartDrawer) {
+      sectionsToFetch = [
+        ...sectionsToFetch,
+        ...this.cartDrawer.getSectionsToRender().map(section => section.section),
+      ];
+    }
+    else if(this.isCartPage) {
+      sectionsToFetch = [
+        ...sectionsToFetch,
+        ...this.cartItems.getCartSectionsToRender().map(section => section.section),
+        ...this.cartItems.getCartRelatedSection().map(section => section.section),
+      ];
+    }
+    if (this.cartNotification) {
+      sectionsToFetch = [
+        ...sectionsToFetch,
+        ...this.cartNotification.getSectionsToRender().map(section => section.section),
+      ];
+    }
 
     const formData = new FormData(this.form);
     formData.append('sections', sectionsToFetch);
@@ -40,18 +58,23 @@ class ProductFormComponent extends HTMLElement {
           this.cartNotification?.renderQuantityError(formData.get('inventory_quantity'), submitButton);
 
           // Render the cart drawer items again because even if there was a quantity error, items could still have been added
-          this.cartDrawer.renderContents();
+          this.cartDrawer?.renderContents();
           this.cartItems?.updateAfterError();
           return;
         }
-        this.cartDrawer.renderContents(parsedState);
+        if (this.cartDrawer) {
+          this.cartDrawer.renderContents(parsedState);
+        }
+        else if (this.cartItems) {
+          this.cartItems.updateContent(parsedState);
+        }
 
         switch (submitButton.dataset.addToCartBehavior) {
         case 'open_cart_drawer':
           // Set timeout to force animation. Because content is just updated with renderContents
           setTimeout(() => {
-            this.cartDrawer.open(trigger);
-          },100 );
+            this.cartDrawer?.open(trigger);
+          },100);
           break;
         case 'show_cart_notification':
         default:

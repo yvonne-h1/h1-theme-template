@@ -4,7 +4,26 @@ if (!customElements.get('cart-items')) {
     constructor() {
       super();
 
+      this.cartDrawer = document.querySelector('cart-drawer');
       this.lineItemStatusElement = document.getElementById('shopping-cart-line-item-status');
+
+      this.isCartPage = !!document.body.classList.contains('template-cart');
+
+      this.sectionsToFetch = [
+        ...this.getCartSectionsToRender().map(section => section.section),
+      ];
+      if (this.isCartPage) {
+        this.sectionsToFetch = [
+          ...this.sectionsToFetch,
+          ...this.getCartRelatedSection().map(section => section.section),
+        ];
+      }
+      else if(this.cartDrawer) {
+        this.sectionsToFetch = [
+          ...this.sectionsToFetch,
+          ...this.getDrawerSectionsToRender().map(section => section.section),
+        ];
+      }
 
       this.debouncedOnChange = debounce((event) => {
         if (event.target != document.getElementById('Cart-note')) this.onChange(event);
@@ -27,7 +46,7 @@ if (!customElements.get('cart-items')) {
       const body = JSON.stringify( {
         line,
         quantity,
-        sections: this.getSectionsToRender().map(section => section.section),
+        sections: this.sectionsToFetch,
         sections_url: window.location.pathname,
       });
 
@@ -69,7 +88,7 @@ if (!customElements.get('cart-items')) {
     async updateAfterError(line, name) {
       // Do a new fetch to the cart so you get the correct values of the item that had errors
       const body = JSON.stringify( {
-        sections: this.getSectionsToRender().map(section => section.section),
+        sections: this.sectionsToFetch,
         sections_url: window.location.pathname,
       });
       const response = await fetch(routes.cart_update_url, {
@@ -90,25 +109,41 @@ if (!customElements.get('cart-items')) {
     }
 
     updateContent(parsedState, line, name) {
-      this.getSectionsToRender().forEach((section) => {
+      let sectionsToRender = [
+        ...this.getCartSectionsToRender(),
+      ];
+      if (this.isCartPage) {
+        sectionsToRender = [
+          ...sectionsToRender,
+          ...this.getCartRelatedSection(),
+        ];
+      }
+      else if (this.cartDrawer) {
+        sectionsToRender = [
+          ...sectionsToRender,
+          ...this.getDrawerSectionsToRender(),
+        ];
+      }
+
+      sectionsToRender.forEach((section) => {
         if (section?.selector) {
           const selector = document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
 
           if (selector) {
             selector.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.section], section.selector);
+          }
 
-            // update the recommendations
-            if (section.selector === '.js-cart-drawer-recommendations') {
-              setTimeout(() => {
-                selector.classList.remove('opacity-0');
-              }, 500);
-            }
-            if (section.selector === '.js-cart-drawer-recommendations-swiper') {
+          // update the cart drawer recommendations
+          if (section.selector === '.js-cart-related-items') {
+            setTimeout(() => {
+              selector.classList.remove('opacity-0');
+            }, 500);
+          }
+          if (section.selector === '.js-cart-related-items-swiper') {
             // init the swiper after a change
-              setTimeout(() => {
-                selector.querySelector('swiper-slider').init();
-              }, 500);
-            }
+            setTimeout(() => {
+              selector.querySelector('swiper-slider').init();
+            }, 500);
           }
         }
       });
@@ -131,18 +166,8 @@ if (!customElements.get('cart-items')) {
       }, 1000);
     }
 
-    getSectionsToRender() {
+    getCartSectionsToRender() {
       return [
-        {
-          id: 'main-cart-recommendations',
-          section: document.getElementById('main-cart-recommendations').dataset.id,
-          selector: '.js-cart-drawer-recommendations',
-        },
-        {
-          id: 'cartDrawer',
-          section: document.getElementById('cartDrawer').dataset.id,
-          selector: '.js-cart-drawer-recommendations-swiper',
-        },
         {
           id: 'main-cart-items',
           section: document.getElementById('main-cart-items').dataset.id,
@@ -157,6 +182,31 @@ if (!customElements.get('cart-items')) {
           id: 'cart-icon-bubble',
           section: 'theme-cart-icon-bubble',
           selector: '[data-cart-icon-bubble]',
+        },
+      ];
+    }
+
+    getDrawerSectionsToRender() {
+      return [
+        {
+          id: 'main-cart-recommendations',
+          section: document.getElementById('main-cart-recommendations').dataset.id,
+          selector: '.js-cart-related-items',
+        },
+        {
+          id: 'cartDrawer',
+          section: document.getElementById('cartDrawer').dataset.id,
+          selector: '.js-cart-related-items-swiper',
+        },
+      ];
+    }
+
+    getCartRelatedSection() {
+      return [
+        {
+          id: 'cartRelated',
+          section: document.getElementById('cartRelated').dataset.id,
+          selector: '.cart-related-items',
         },
       ];
     }

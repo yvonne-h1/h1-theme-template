@@ -14,62 +14,69 @@
 
   assign aria_label = cart.item_count | append: ' ' | append: cart_item_count | append: '. ' | append: open_cart_drawer_string
 
+  assign is_cart_page = false
   assign classes = 'header__icon relative'
   if request.page_type == 'cart'
+    assign is_cart_page = true
     assign classes = classes | append: ' pointer-events-none active'
   endif
 -%}
 
 {% comment %} The actual cart icon {% endcomment %}
 <cart-icon-bubble class="cart-icon-bubble -me-3 flex">
-  <class-toggle-component
-    data-options='
-      {
-        "classToToggle": "cart-drawer-is-open",
-        "ariaExpanded": true
-      }
-    '>
-    {%- if settings.enable_cart_drawer_section -%}
-      <button
-        type="button"
-        id="cart-icon-bubble"
-        class="{{ icon_classes }} {{ classes }}"
-        {% unless template.name == 'cart' -%}
-          aria-controls="cartDrawer"
-          aria-label="{{- aria_label -}}"
-          aria-haspopup="dialog"
-          aria-expanded="false"
-        {%- endunless %}
-        data-cart-icon-bubble>
-    {%- else -%}
-      <a
-        id="cart-icon-bubble"
-        class="{{ classes }}"
-        href="{{- routes.cart_url -}}"
-        {% unless template.name == 'cart' -%}
-          aria-controls="cartDrawer"
-          aria-haspopup="dialog"
-        {%- endunless %}
+  {%- unless is_cart_page -%}
+    <class-toggle-component
+      data-options='
+        {
+          "classToToggle": "cart-drawer-is-open",
+          "ariaExpanded": true
+        }
+      '>
+  {%- endunless -%}
+  {%- if settings.enable_cart_drawer_section -%}
+    <button
+      type="button"
+      id="cart-icon-bubble"
+      class="{{ icon_classes }} {{ classes }}"
+      {% unless template.name == 'cart' -%}
+        aria-controls="cartDrawer"
         aria-label="{{- aria_label -}}"
-        data-cart-icon-bubble>
-    {%- endif -%}
+        aria-haspopup="dialog"
+        aria-expanded="false"
+      {%- endunless %}
+      data-cart-icon-bubble>
+  {%- else -%}
+    <a
+      id="cart-icon-bubble"
+      class="{{ classes }}"
+      href="{{- routes.cart_url -}}"
+      {% unless template.name == 'cart' -%}
+        aria-controls="cartDrawer"
+        aria-haspopup="dialog"
+      {%- endunless %}
+      aria-label="{{- aria_label -}}"
+      data-cart-icon-bubble>
+  {%- endif -%}
 
-    {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
-    <span class="cart-icon-bubble__count button active absolute end-2 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full p-0 text-2xs leading-none empty:hidden{% if cart == empty %} hidden{% endif -%}">
-      <span class="cart-count">
-        {{- cart.item_count -}}
-      </span>
-      <span class="sr-only">
-        {{- cart_item_count -}}
-      </span>
+  {%- render 'icons', icon: 'cart', icon_class: 'w-6' -%}
+  <span class="cart-icon-bubble__count button active absolute end-2 top-2 flex h-4 min-w-[16px] items-center justify-center rounded-full p-0 text-2xs leading-none empty:hidden{% if cart == empty %} hidden{% endif -%}">
+    <span class="cart-count">
+      {{- cart.item_count -}}
     </span>
+    <span class="sr-only">
+      {{- cart_item_count -}}
+    </span>
+  </span>
 
-    {%- if settings.enable_cart_drawer_section -%}
-      </button>
-    {%- else -%}
-      </a>
-    {%- endif -%}
-  </class-toggle-component>
+  {%- if settings.enable_cart_drawer_section -%}
+    </button>
+  {%- else -%}
+    </a>
+  {%- endif -%}
+
+  {%- unless is_cart_page -%}
+    </class-toggle-component>
+  {%- endunless -%}
 
   {%- comment -%} No-js cart link {%- endcomment -%}
   <a href="{{ routes.cart_url }}" class="js:hidden">

@@ -53,7 +53,7 @@
           id="main-cart-footer"
           data-id="{{ section.id }}"
           class="col-span-4">
-          <div class="cart__footer mb-8 grid grid-cols-8 md:mt-14 lg:my-0 lg:grid-cols-1 lg:gap-base">
+          <div class="cart__footer mb-8 grid grid-cols-8 group-[.header-sticky:not(.header-hidden)]/body:top-20 md:mt-14 lg:sticky lg:top-4 lg:my-0 lg:grid-cols-1 lg:gap-base">
 
             <div class="col-span-8 flex flex-col gap-y-6 md:col-span-3 lg:col-span-1">
 
@@ -187,14 +187,63 @@
 {%- endcapture -%}
 
 {%- comment -%} Output cart content {%- endcomment -%}
-{%- if container_content -%}
-  {%- liquid
-    # Render the content  echo
-    render 'render-container-content', class: 'mb-0', content_class: 'content-wrapper', content: container_content
-  -%}
+{%- render 'render-container-content', class: 'mb-0', content_class: 'content-wrapper', content: container_content -%}
 
-  {%- comment -%} Import javascript {%- endcomment -%}
-  <script src="{{ 'cart.js' | asset_url }}" defer></script>
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'cart-items.js' | asset_url }}" defer></script>
+
+{% comment %} Related items {% endcomment %}
+{%- if section.settings.show_related and cart != empty -%}
+  <div id="cartRelated" data-id="{{ section.id }}">
+    <div class="cart-related-items">
+      {%- liquid
+        # Container class
+        assign container_class = 'overflow-hidden ' | append: section.settings.related_container_width
+        if section.settings.related_color_scheme != blank
+          assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.related_color_scheme
+        endif
+
+        # Title Class
+        assign title_class = section.settings.heading_size | append: ' ' | append: section.settings.heading_align
+
+        # Get the related products
+        capture object_array
+          render 'cart-related-items', section: section, is_cart_page: true
+        endcapture
+
+        if object_array == blank
+          assign container_class = container_class | append: ' hidden'
+        endif
+      -%}
+
+      {%- capture related_container_content -%}
+        {%- render 'swiper-content',
+          object_array: object_array,
+          container_width: section.settings.container_width,
+          swiper_indication: section.settings.swiper_indication,
+          swiper_navigation: section.settings.swiper_navigation,
+          swiper_autoplay: section.settings.swiper_autoplay,
+          swiper_autoplay_delay: section.settings.swiper_autoplay_delay,
+          render_product_cards: true,
+          max_count: 8,
+          id: section.id,
+          index_on_page: section.index
+        -%}
+      {%- endcapture -%}
+
+      {%- comment -%} Render the content {%- endcomment -%}
+      {%- assign dataset = 'data-id="' | append: section.id | append: '"' -%}
+      {%-
+        render 'render-container-content',
+        class: container_class,
+        title_tag: section.settings.heading_element,
+        title_class: title_class,
+        title: section.settings.related_title,
+        content: related_container_content,
+        content_class: 'p-0',
+      -%}
+    </div>
+  </div>
 {%- endif -%}
 
 {% schema %}
@@ -227,6 +276,213 @@
             "label": "Right"
           }
         ]
+      },
+      {
+        "type": "header",
+        "content": "Related items"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_related",
+        "label": "Show related",
+        "default": true,
+        "info": "Items are added based on related items metafield."
+      },
+      {
+        "type": "select",
+        "id": "related_container_width",
+        "label": "related content width",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "related_color_scheme",
+        "default": "",
+        "label": "related section color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Content settings"
+      },
+      {
+        "type": "range",
+        "id": "max_count",
+        "min": 4,
+        "max": 12,
+        "step": 1,
+        "default": 8,
+        "label": "Maximum items to show"
+      },
+      {
+        "type": "text",
+        "id": "related_title",
+        "label": "Heading",
+        "default": "You might also like"
+      },
+      {
+        "type": "select",
+        "id": "heading_align",
+        "label": "Header align",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h2",
+        "info": "Change the element of the heading for SEO purposes. Every page should only have one H1.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h4",
+        "info": "This is applied only for visual reasons.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Related slider settings"
+      },
+      {
+        "type": "select",
+        "id": "recommendation_type",
+        "label": "Recommendation type",
+        "default": "related_products",
+        "options": [
+          {
+            "value": "related_products",
+            "label": "Related products"
+          },
+          {
+            "value": "complementary_products",
+            "label": "Complementary products"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "swiper_indication",
+        "label": "Slider indication",
+        "default": "pagination",
+        "options": [
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "pagination",
+            "label": "Pagination"
+          },
+          {
+            "value": "scrollbar",
+            "label": "Scrollbar"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_navigation",
+        "label": "Show Navigation",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "swiper_autoplay",
+        "label": "Enable autoplay",
+        "default": false
+      },
+      {
+        "type": "number",
+        "id": "swiper_autoplay_delay",
+        "label": "Autoplay delay",
+        "default": 7500,
+        "info": "Delay between transitions (in ms)"
       }
     ],
     "blocks": [
