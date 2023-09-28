@@ -12,7 +12,7 @@ class ProductFormComponent extends HTMLElement {
   }
 
   onSubmitHandler(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
 
     const submitButton = this.querySelector('[type="submit"]');
     submitButton.setAttribute('disabled', true);
@@ -23,7 +23,7 @@ class ProductFormComponent extends HTMLElement {
     delete config.headers['Content-Type'];
 
     const sectionsToFetch = [
-      ...this.cartDrawer.getSectionsToRenderForCartNotification().map(section => section.section),
+      ...this.cartDrawer.getSectionsToRender().map(section => section.section),
       ...this.cartNotification.getSectionsToRender().map(section => section.section),
     ];
 
@@ -40,7 +40,7 @@ class ProductFormComponent extends HTMLElement {
           this.cartNotification?.renderQuantityError(formData.get('inventory_quantity'), submitButton);
 
           // Render the cart drawer items again because even if there was a quantity error, items could still have been added
-          this.cartDrawer.renderCartDrawer();
+          this.cartDrawer.renderContents();
           this.cartItems?.updateAfterError();
           return;
         }
@@ -59,8 +59,8 @@ class ProductFormComponent extends HTMLElement {
           this.cartNotification?.renderContents(parsedState, submitButton);
         }
       })
-      .catch((event) => {
-        debug() && console.error(event);
+      .catch((error) => {
+        debug() && console.error(error);
       })
       .finally(() => {
         submitButton.classList.remove('button--loading');

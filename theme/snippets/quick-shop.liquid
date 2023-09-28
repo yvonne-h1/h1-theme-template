@@ -2,14 +2,16 @@
   Renders a quick shop with variant selection and add to cart functionality.
 
   Accepts:
-  - product:                        {Object}  Product Liquid object (required)
+  - product: {Object}  Product Liquid object (required)
   - quick_shop_render_second_option: {Boolean} (optional) If true, renders option2 of each variant, otherwise renders option1
+  - unique_identifier {String}
 
   Usage:
   {%-
     render 'quick-shop',
     product: product,
-    quick_shop_render_second_option: quick_shop_render_second_option
+    quick_shop_render_second_option: quick_shop_render_second_option,
+    unique_identifier: 'card'
   -%}
 {%- endcomment -%}
 
@@ -23,10 +25,10 @@
 
   # Check if option is of type color
   assign is_color = false
-  assign color_label = option_to_render.name | handleize
+  assign variant_option_label = option_to_render.name | handleize
   assign color_variant_label_handleized = settings.color_filter_name | handleize
 
-  if color_variant_label_handleized == color_label
+  if color_variant_label_handleized == variant_option_label
     assign is_color = true
   endif
 
@@ -37,105 +39,166 @@
   unless is_cart_drawer_recommendations
     assign is_cart_drawer_recommendations = false
   endunless
+
+  if product.variants.size == 1
+    assign show_quick_shop = false
+  endif
+
+  if unique_identifier == blank
+    assign unique_identifier = template.name | handleize | append: '-' | append: product.handle
+  endif
 -%}
 
-{%- comment -%} Output quick shop {%- endcomment -%}
-<quick-shop class="quick-shop text-center transition-all delay-100">
-  {%- comment -%} Title {%- endcomment -%}
-  <p class="quick-shop__title mb-1 text-sm font-bold text-text-default">
-    {%- render 'render-translation', namespace: 'products.product', key: 'choose_your_option', option: color_label, fallback: 'Choose your {{ option }}' -%}
-  </p>
+<quick-shop>
+  {%- comment -%} Show the quickshop when there is more than 1 variant, else just add the product immediately {%- endcomment -%}
+  {%- if show_quick_shop == false -%}
+    {%- comment -%} Render a default ATC button without quickshop {%- endcomment -%}
+    <product-form-component class="mx-auto">
+      {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
+      {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
 
-  {%- comment -%} Variant options {%- endcomment -%}
-  <div class="quick-shop__options options justify-center gap-0">
-    {% for variant in product.variants %}
-      {%- liquid
-        # Get value of the option
-        if quick_shop_render_second_option and variant.option2
-          assign option_label = variant.option2
-        elsif product.has_only_default_variant
-          capture option_label
-            render 'render-translation', namespace: 'products.product.add_to_cart', fallback: 'Add to cart'
-          endcapture
-        else
-          assign option_label = variant.option1
-        endif
+        {%- comment -%} If preorder is enabled for this product add a line proprety when adding to the cart {%- endcomment -%}
+        {%- if settings.enable_pre_order
+          and product.tags contains 'preorder'
+          and product.selected_or_first_available_variant.inventory_quantity <= 0
+          and product.selected_or_first_available_variant.inventory_policy == 'continue'
+        -%}
+          <input
+            type="hidden"
+            name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
+            value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+        {%- endif -%}
+        <button type="submit" name="add" aria-label="Add" class="button button--primary  h-12 rounded-full px-4 py-2 touch:py-3" data-add-to-cart-behavior="open_cart_drawer">
+          {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
+          <span>
+            {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}
+          </span>
+        </button>
+      {%- endform -%}
+    </product-form-component>
+  {%- else -%}
+    <div id="QuickShop-{{ product.id }}-{{ unique_identifier }}" class="quick-shop hidden text-center transition-all delay-100">
+      {%- comment -%} Title {%- endcomment -%}
+      <p class="quick-shop__title mb-1 text-sm font-bold text-text-default">
+        {%- render 'render-translation', namespace: 'products.product', key: 'choose_your_option', option: variant_option_label, fallback: 'Choose your {{ option }}' -%}
+      </p>
 
-        # If this is a color option get hex color
-        if is_color
-          assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
-          assign color_option_name = option_label | handleize
-          assign color_is_mapped = false
-          assign color_hex = ''
-
-          # Loop through color mappings
-          for color in color_mappings
-            assign color_name = color | split: '|' | first | handleize
-
-            if color_name == color_option_name
-              assign color_hex = color | split: '|' | last
-              assign color_is_mapped = true
-            endif
-          endfor
-        endif
-
-        # Output option
-        assign disabled_classes = ''
-        if variant.available == false
-          assign disabled_classes = 'option__label--disabled'
-        endif
-      -%}
-
-      <div class="quick-shop__option option">
-        <input
-          id="quick-shop__item-{{ variant.id }}"
-          class="quick-shop__input option__input"
-          value="{{ variant.id }}"
-          readonly
-          {% if variant.available == false %}
-            disabled
-          {% endif %}
-          data-inventory-quantity="{{- variant.inventory_quantity -}}"
-          data-quick-shop-option
-          {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}>
-        <label
-          class="option__label option__label--{{ color_label }} {{ disabled_classes }}"
-          for="quick-shop__item-{{ variant.id }}"
-          {% if color_hex and is_color %}
-            style="background-color: {{ color_hex }}"
-            title="{{ option_label }}"
-            aria-label="{{ option_label }}"
-          {% endif %}>
+      {%- comment -%} Variant options {%- endcomment -%}
+      <div class="quick-shop__options options justify-center gap-0">
+        {% for variant in product.variants %}
           {%- liquid
-            unless color_is_mapped
-              echo option_label
-            endunless
+            # Get value of the option
+            if quick_shop_render_second_option and variant.option2
+              assign option_label = variant.option2
+            elsif product.has_only_default_variant
+              capture option_label
+                render 'render-translation', namespace: 'products.product.add_to_cart', fallback: 'Add to cart'
+              endcapture
+            else
+              assign option_label = variant.option1
+            endif
+
+            # If this is a color option get hex color
+            if is_color
+              assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
+              assign color_option_name = option_label | handleize
+              assign color_is_mapped = false
+              assign color_hex = ''
+
+              # Loop through color mappings
+              for color in color_mappings
+                assign color_name = color | split: '|' | first | handleize
+
+                if color_name == color_option_name
+                  assign color_hex = color | split: '|' | last
+                  assign color_is_mapped = true
+                endif
+              endfor
+            endif
+
+            # Output option
+            assign disabled_classes = ''
+            if variant.available == false
+              assign disabled_classes = 'option__label--disabled'
+            endif
           -%}
-        </label>
+
+          <div class="quick-shop__option option">
+            <input
+              id="quick-shop__item-{{ variant.id }}"
+              class="quick-shop__input option__input"
+              value="{{ variant.id }}"
+              type="radio"
+              name="variant-{{ product.handle }}"
+              readonly
+              {% if variant.available == false %}
+                disabled
+              {% endif %}
+              data-inventory-quantity="{{- variant.inventory_quantity -}}"
+              data-quick-shop-option
+              tabindex="0"
+              {% render 'klaviyo-tracking', render_data_attributes: true, product_details: product %}>
+            <label
+              class="option__label option__label--{{ variant_option_label }} {{ disabled_classes }}"
+              for="quick-shop__item-{{ variant.id }}"
+              {% if color_hex and is_color %}
+                style="background-color: {{ color_hex }}"
+                title="{{ option_label }}"
+                aria-label="{{ option_label }}"
+              {% endif %}>
+              {%- liquid
+                unless color_is_mapped
+                  echo option_label
+                endunless
+              -%}
+            </label>
+          </div>
+        {%- endfor -%}
       </div>
-    {%- endfor -%}
-  </div>
 
-  {%- comment -%} The product form, product id will be updated by variant.js {%- endcomment -%}
-  <product-form-component class="product-form">
-    {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
-    {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-      <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
+      {%- comment -%} The product form, product id will be updated by variant.js {%- endcomment -%}
+      <product-form-component class="product-form mt-2 block">
+        {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
+        {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
 
-      {%- comment -%} If preorder is enabled for this product add a line property when adding to the cart {%- endcomment -%}
-      {%- if settings.enable_pre_order
-        and product.tags contains 'preorder'
-        and product.selected_or_first_available_variant.inventory_quantity <= 0
-        and product.selected_or_first_available_variant.inventory_policy == 'continue'
-      -%}
-        <input
-          type="hidden"
-          name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
-          value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
-      {%- endif -%}
+          {%- comment -%} If preorder is enabled for this product add a line property when adding to the cart {%- endcomment -%}
+          {%- if settings.enable_pre_order
+            and product.tags contains 'preorder'
+            and product.selected_or_first_available_variant.inventory_quantity <= 0
+            and product.selected_or_first_available_variant.inventory_policy == 'continue'
+          -%}
+            <input
+              type="hidden"
+              name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
+              value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+          {%- endif -%}
 
-      <button type="submit" name="add" aria-label="Add" class="sr-only" data-add-to-cart-behavior="{{ add_to_cart_behavior }}"></button>
-    {%- endform -%}
-  </product-form-component>
+          <p class="field__message field__message--error" data-form-error>
+            {%- render 'render-translation', namespace: 'products.product', key: 'option_error', option: variant_option_label, fallback: 'Please choose an {{ option }}.' -%}
+          </p>
+
+          <button type="submit" name="add" aria-label="Add" class="button button--primary button--sm" data-add-to-cart-behavior="{{ add_to_cart_behavior }}">
+            {%- render 'icons', icon: 'cart', icon_class: 'w-4' -%}
+            {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
+          </button>
+        {%- endform -%}
+      </product-form-component>
+    </div>
+
+    {% comment %} The trigger {% endcomment %}
+    <button
+      type="button"
+      class="button button--primary h-full rounded-full px-4 py-2 touch:py-3"
+      data-quick-shop-toggle
+      data-src="#QuickShop-{{ product.id }}-{{ unique_identifier }}">
+      {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
+      <span>
+        {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}
+      </span>
+    </button>
+  {%- endif -%}
 </quick-shop>

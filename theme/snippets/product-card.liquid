@@ -197,27 +197,15 @@
     {% comment %} Render formatted price {% endcomment %}
     {% render 'render-price', product: product_object %}
 
-    <div class="flex gap-base">
+    <div class="flex gap-4">
       {% comment %} ATC button to display the options {% endcomment %}
       {%- if show_quick_shop -%}
         {% comment %} Render quick shop {% endcomment %}
-        <div id="QuickShop-{{ product_object.handle }}" class="hidden">
-          {%- render 'quick-shop', product: product_object, quick_shop_render_second_option: quick_shop_render_second_option -%}
-        </div>
-
-        <button
-          type="button"
-          class="button button--primary quick-shop__btn-add relative z-20 mx-auto {{ quick_shop_button_classes }}"
-          data-quick-shop-toggle
-          data-fancybox-quickshop
-          data-type="inline"
-          data-src="#QuickShop-{{ product_object.handle }}">
-          {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add to cart' -%}
-        </button>
+        {%- render 'quick-shop', product: product_object, quick_shop_render_second_option: quick_shop_render_second_option, unique_identifier: product.handle -%}
       {% endif %}
 
       {% comment %} Link to PDP {% endcomment %}
-      <a href="{{ product_object.url }}" class="button button--outline mx-auto rounded-full p-2 touch:p-3" tabindex="-1">
+      <a href="{{ product_object.url }}" class="button button--outline mx-auto h-12 w-12 rounded-full p-2 touch:p-3" tabindex="-1">
         {%- render 'icons', icon: 'arrow', icon_class: 'w-5' -%}
         <span class="sr-only">
           {%- render 'render-translation', namespace: 'products.product', key: 'go_to_product', fallback: 'Go to product page' -%}

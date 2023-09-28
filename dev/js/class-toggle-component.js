@@ -136,7 +136,11 @@ if (!customElements.get('class-toggle-component')) {
 
     keyUpCloseEvent(event) {
       if (event?.code?.toUpperCase() !== 'ESCAPE') return;
-      this.remove();
+
+      // don't close when a fancybox is open
+      if (!document.documentElement.classList.contains('with-fancybox')) {
+        this.remove();
+      }
 
       removeTrapFocus(this.button);
     }
