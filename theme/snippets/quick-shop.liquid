@@ -161,7 +161,7 @@
       </div>
 
       {%- comment -%} The product form, product id will be updated by variant.js {%- endcomment -%}
-      <product-form-component class="product-form mt-2 block">
+      <product-form-component class="product-form mt-4 block">
         {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
         {%- form 'product', product, id: product_form_id, class: 'form h-full', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
@@ -183,7 +183,7 @@
             {%- render 'render-translation', namespace: 'products.product', key: 'option_error', option: variant_option_label, fallback: 'Please choose an {{ option }}.' -%}
           </p>
 
-          <button type="submit" name="add" aria-label="Add" class="button button--primary button--sm" data-add-to-cart-behavior="{{ add_to_cart_behavior }}">
+          <button type="submit" name="add" aria-label="Add" class="button button--primary button--md rounded-full" data-add-to-cart-behavior="{{ add_to_cart_behavior }}">
             {%- render 'icons', icon: 'cart', icon_class: 'w-4' -%}
             {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart', fallback: 'Add to cart' -%}
           </button>
