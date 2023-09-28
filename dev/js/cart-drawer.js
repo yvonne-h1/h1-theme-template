@@ -5,38 +5,34 @@ class CartDrawer extends HTMLElement {
     this.body = document.querySelector('body');
     this.activeClass = window.drawerToggleClasses.cartDrawer;
     this.cartIconBubble = document.querySelectorAll('[aria-controls="cartDrawer"]');
-
-    // Listen for the class-toggle-component close event, since this triggers the cart drawer to close
-    document.addEventListener('toggle-closed', (event) => {
-      if (event.detail.id === 'cartDrawer') {
-
-        // Close all quick shops in the cartDrawer
-        if (this.querySelector('quick-shop')) {
-          this.querySelector('quick-shop').closePopups();
-        }
-      }
-    });
   }
 
   /**
-   * open the drawer, called after an item is added to the cart from the product-form-component.js and the settings say to open the drawer
+   * called after an item is added to the cart from the product-form-component.js and the settings say to open the drawer
+   * @param {Object} trigger, is passed on from product-form-component, in case there was an add from quickshop
    */
-  open() {
+  open(trigger = null) {
     const drawer = this.querySelector('#cartDrawer');
     this.body.classList.add(this.activeClass);
     this.cartIconBubble.forEach(button => button.setAttribute('aria-expanded', true));
 
-    // add the eventListener
-    drawer.addEventListener('keyup', event => event.code === 'Escape' && this.close());
+    // add the eventListener to close on ESC key
+    drawer.addEventListener('keyup', event => event.code === 'Escape' && this.close(trigger));
 
+    addPreventScroll();
     trapFocus(drawer);
   }
 
-  close() {
+  /**
+   * called after an item is added to the cart from the product-form-component.js and the ESC key was used to close the drawer
+   * @param {Object} trigger, is passed on from product-form-component, in case there was an add from quickshop
+   */
+  close(trigger = null) {
     this.body.classList.remove(this.activeClass);
     this.cartIconBubble.forEach(button => button.setAttribute('aria-expanded', false));
 
-    removeTrapFocus();
+    removePreventScroll();
+    removeTrapFocus(trigger);
   }
 
   /**

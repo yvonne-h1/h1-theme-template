@@ -11,7 +11,7 @@ class ProductFormComponent extends HTMLElement {
     this.cartItems = document.querySelector('cart-items');
   }
 
-  onSubmitHandler(event) {
+  onSubmitHandler(event, trigger = null) {
     if (event) event.preventDefault();
 
     const submitButton = this.querySelector('[type="submit"]');
@@ -48,10 +48,9 @@ class ProductFormComponent extends HTMLElement {
 
         switch (submitButton.dataset.addToCartBehavior) {
         case 'open_cart_drawer':
-          addPreventScroll();
           // Set timeout to force animation. Because content is just updated with renderContents
           setTimeout(() => {
-            this.cartDrawer.open();
+            this.cartDrawer.open(trigger);
           },100 );
           break;
         case 'show_cart_notification':

@@ -47,6 +47,8 @@
   if unique_identifier == blank
     assign unique_identifier = template.name | handleize | append: '-' | append: product.handle
   endif
+
+  assign button_class = 'button button--primary h-full rounded-full px-4 py-2 touch:py-3'
 -%}
 
 <quick-shop>
@@ -55,7 +57,7 @@
     {%- comment -%} Render a default ATC button without quickshop {%- endcomment -%}
     <product-form-component class="mx-auto">
       {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
-      {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      {%- form 'product', product, id: product_form_id, class: 'form h-full', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
 
@@ -70,7 +72,7 @@
             name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
             value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
         {%- endif -%}
-        <button type="submit" name="add" aria-label="Add" class="button button--primary  h-12 rounded-full px-4 py-2 touch:py-3" data-add-to-cart-behavior="open_cart_drawer">
+        <button type="submit" name="add" aria-label="Add" class="{{ button_class }}" data-add-to-cart-behavior="open_cart_drawer">
           {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
           <span>
             {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}
@@ -161,7 +163,7 @@
       {%- comment -%} The product form, product id will be updated by variant.js {%- endcomment -%}
       <product-form-component class="product-form mt-2 block">
         {%- assign product_form_id = 'product-card-form-' | append: product.id -%}
-        {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        {%- form 'product', product, id: product_form_id, class: 'form h-full', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
           <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
 
@@ -192,7 +194,7 @@
     {% comment %} The trigger {% endcomment %}
     <button
       type="button"
-      class="button button--primary h-full rounded-full px-4 py-2 touch:py-3"
+      class="{{ button_class }}"
       data-quick-shop-toggle
       data-src="#QuickShop-{{ product.id }}-{{ unique_identifier }}">
       {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}

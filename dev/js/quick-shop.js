@@ -33,13 +33,16 @@ class QuickAdd extends HTMLElement {
 
     const activeOption = Array.from(fancybox.$container.querySelector('.quick-shop').querySelectorAll('[data-quick-shop-option]')).filter(input => input.checked === true)[0] || option;
 
-    if (!activeOption) errorMessage.classList.add('block');
+    if (!activeOption) {
+      errorMessage.classList.add('block');
+      return;
+    }
 
     hiddenId.value = activeOption.value;
     if (hiddenInventoryQty) hiddenInventoryQty.value = activeOption.dataset.inventoryQuantity;
 
     // submit the form
-    productForm.onSubmitHandler();
+    productForm.onSubmitHandler(null, this.trigger);
 
     // close the fancybox
     setTimeout(() => {

@@ -109,10 +109,10 @@ if (!customElements.get('load-more')) {
           const newContent = html.querySelector(`${wrapperID} ${wrapperIDSelector}`).querySelectorAll('li');
 
           // depending on the direction of the click, append or prepend the products/articles and update the pagination
-          if (direction == 'next') {
+          if (direction === 'next') {
             newContent.forEach((element, index) => {
               // append the new items and focus the first added item.
-              // sCheck for the event.pointerType. It's empty when keyboard was used, so then focus the element.
+              // check for the event.pointerType. It's empty when keyboard was used, so then focus the element.
               elementsWrapper.querySelector(`${wrapperIDSelector}`).append(element);
               if (index === 0 && event.pointerType === '') {
                 element.querySelector('.product-card__sr-link').focus();
