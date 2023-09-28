@@ -232,7 +232,6 @@
       {%- endcapture -%}
 
       {%- comment -%} Render the content {%- endcomment -%}
-      {%- assign dataset = 'data-id="' | append: section.id | append: '"' -%}
       {%-
         render 'render-container-content',
         class: container_class,
@@ -307,7 +306,7 @@
       {
         "type": "select",
         "id": "related_color_scheme",
-        "default": "",
+        "default": "color-scheme color-scheme--gray",
         "label": "related section color scheme",
         "options": [
           {
@@ -337,7 +336,7 @@
         "type": "text",
         "id": "related_title",
         "label": "Heading",
-        "default": "You might also like"
+        "default": "You may also like"
       },
       {
         "type": "select",
