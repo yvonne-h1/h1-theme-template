@@ -58,7 +58,7 @@ class ProductFormComponent extends HTMLElement {
           this.cartNotification?.renderQuantityError(formData.get('inventory_quantity'), submitButton);
 
           // Render the cart drawer items again because even if there was a quantity error, items could still have been added
-          this.cartDrawer?.renderContents();
+          this.cartDrawer?.renderCartDrawer();
           this.cartItems?.updateAfterError();
           return;
         }

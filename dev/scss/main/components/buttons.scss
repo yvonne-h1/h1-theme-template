@@ -59,7 +59,10 @@
     &--loading {
       @apply pointer-events-none text-transparent;
       &:after {
-        @apply absolute block aspect-square h-6 w-6 animate-spin rounded-full border-2 border-[--button-text] border-l-transparent content-empty;
+        @apply absolute block aspect-square h-6 w-6 animate-spin rounded-full border-2 border-[var(--button-text)] border-l-transparent content-empty;
+      }
+      &.button--outline:after {
+        @apply border-inherit border-l-transparent;
       }
     }
 
@@ -76,40 +79,52 @@
   .button--primary,
   .button--gradient {
     --button-text: theme('colors.primary.text');
-    --button-hover-text: theme('colors.primary.text');
+    &,
+    &.button--outline {
+      --button-hover-text: theme('colors.primary.text');
+    }
   }
 
   .button--primary {
     --button-background: theme('colors.primary.600');
     --button-border-color: theme('colors.primary.600');
-    --button-hover-border-color: theme('colors.primary.700');
-    --button-hover-background: theme('colors.primary.700');
+    &,
+    &.button--outline {
+      --button-hover-background: theme('colors.primary.700');
+      --button-hover-border-color: theme('colors.primary.700');
+    }
   }
 
   .button--gradient {
     @apply duration-500 ease-in;
-    --button-border-color: transparent;
-    --button-hover-border-color: transparent;
     --button-background: theme('colors.primary-gradient.bg');
-    --button-hover-background: theme('colors.primary-gradient.bg-hover');
+    --button-border-color: transparent;
+    &,
+    &.button--outline {
+      --button-hover-background: theme('colors.primary-gradient.bg-hover');
+      --button-hover-border-color: transparent;
+    }
   }
 
   .button--secondary {
     --button-background: theme('colors.secondary.DEFAULT');
     --button-border-color: theme('colors.secondary.DEFAULT');
     --button-text: theme('colors.secondary.text');
-    --button-hover-background: theme('colors.secondary.400');
-    --button-hover-border-color: theme('colors.secondary.400');
-    --button-hover-text: theme('colors.secondary.text');
+    &,
+    &.button--outline {
+      --button-hover-background: theme('colors.secondary.400');
+      --button-hover-border-color: theme('colors.secondary.400');
+      --button-hover-text: theme('colors.secondary.text');
+    }
   }
 
   .button--outline {
     --button-background: transparent;
-    --button-border-color: theme('colors.secondary.DEFAULT');
-    --button-text: theme('colors.secondary.DEFAULT');
+    --button-border-color: inherit;
+    --button-text: inherit;
     --button-hover-background: theme('colors.secondary.DEFAULT');
     --button-hover-border-color: theme('colors.secondary.DEFAULT');
-    --button-hover-text: theme('colors.white');
+    --button-hover-text: theme('colors.secondary.text');
   }
 
   .button--outline-white {
@@ -170,8 +185,8 @@
         rounded-none
         border
         border-none
-        border-[--button-border-color,inherit]
-        bg-[--button-background,inherit]
+        border-[var(--button-border-color,inherit)]
+        bg-[var(--button-background,inherit)]
         text-sm
         font-bold
         leading-normal
@@ -179,9 +194,9 @@
         transition-colors
         disabled:hidden #{!important};
       &:not([disabled]) {
-        @apply states:border-[--button-hover-border-color,inherit]
-          states:bg-[--button-hover-background,inherit]
-          states:text-[--button-hover-text,inherit]
+        @apply states:border-[var(--button-hover-border-color,inherit)]
+          states:bg-[var(--button-hover-background,inherit)]
+          states:text-[var(--button-hover-text,inherit)]
           states:no-underline #{!important};
       }
       + button {

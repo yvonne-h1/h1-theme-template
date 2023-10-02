@@ -33,10 +33,8 @@
     {%- sections 'header-group' %}
 
     {%- liquid
-      # render the cart notification if it's selected to be show after add to cart
-      if settings.add_to_cart_behavior == 'show_cart_notification'
-        render 'cart-notification'
-      endif
+      # always render the cart notification, because it will display the quantity error
+      render 'cart-notification'
     -%}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">

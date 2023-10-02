@@ -65,6 +65,8 @@ class CartNotification extends HTMLElement {
    * Re-assign the trigger so we can return the focus when the notification is closed.
    */
   renderContents(parsedState, trigger) {
+    if (!('sections' in parsedState)) return;
+
     this.trigger = trigger || null;
     this.productId = parsedState.id;
 

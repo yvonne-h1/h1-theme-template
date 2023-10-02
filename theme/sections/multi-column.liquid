@@ -57,15 +57,15 @@
 
           {%- liquid
             # First button
-            assign button_1 = false
+            assign button_1 = true
             if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
-              assign button_1 = true
+              assign button_1 = false
             endif
 
             # Second button
-            assign button_2 = false
+            assign button_2 = true
             if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
-              assign button_2 = true
+              assign button_2 = false
             endif
 
             # Desktop image
@@ -88,9 +88,7 @@
 
           {%- comment -%} Text {%- endcomment -%}
           {%- if block.settings.text != blank -%}
-            <div class="rte">
-              {{- block.settings.text -}}
-            </div>
+            {{- block.settings.text -}}
           {%- endif -%}
 
           {%- comment -%} Buttons {%- endcomment -%}
@@ -98,13 +96,13 @@
             <div class="flex gap-4 {{ button_align }}">
               {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
                 <a href="{{ block.settings.button_url_1 | default: '#' }}"
-                  class="button {{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
+                  class="{{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
                   {{- block.settings.button_label_1 -}}
                 </a>
               {%- endif -%}
               {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
                 <a href="{{ block.settings.button_url_2 | default: '#' }}"
-                  class="button {{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
+                  class="{{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
                   {{- block.settings.button_label_2 -}}
                 </a>
               {%- endif -%}
@@ -602,19 +600,19 @@
                 "label": "Default"
               },
               {
-                "value": "button--primary",
+                "value": "button button--primary",
                 "label": "Primary"
               },
               {
-                "value": "button--secondary",
+                "value": "button button--secondary",
                 "label": "Secondary"
               },
               {
-                "value": "button--outline",
+                "value": "button button--outline",
                 "label": "Outline"
               },
               {
-                "value": "button--link",
+                "value": "link",
                 "label": "Link"
               }
             ]
@@ -645,19 +643,19 @@
                 "label": "Default"
               },
               {
-                "value": "button--primary",
+                "value": "button button--primary",
                 "label": "Primary"
               },
               {
-                "value": "button--secondary",
+                "value": "button button--secondary",
                 "label": "Secondary"
               },
               {
-                "value": "button--outline",
+                "value": "button button--outline",
                 "label": "Outline"
               },
               {
-                "value": "button--link",
+                "value": "link",
                 "label": "Link"
               }
             ]

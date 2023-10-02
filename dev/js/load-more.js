@@ -31,11 +31,11 @@ if (!customElements.get('load-more')) {
     initLoadMoreButtons(updateProgress = false) {
       // hide the buttons based on the page displayed
       this.totalPagesValue === this.currentPageValue &&
-      this.querySelector('[data-load-trigger="next"]') != null
+      this.querySelector('[data-load-trigger="next"]')
         ? this.querySelector('[data-load-trigger="next"]').classList.add('hidden')
         : null;
 
-      this.currentPageValue === 1 && this.querySelector('[data-load-trigger="prev"]') != null
+      this.currentPageValue === 1 && this.querySelector('[data-load-trigger="prev"]')
         ? this.querySelector('[data-load-trigger="prev"]').classList.add('hidden')
         : null;
 

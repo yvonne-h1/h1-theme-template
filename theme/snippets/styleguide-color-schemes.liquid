@@ -18,12 +18,14 @@
         at facilis asperiores, expedita natus autem facere! Neque quia in praesentium.
       </p>
       <hr class="my-8">
-      <a href="#" class="link mb-4">
-        Link with arrow
-        {% render 'icons', icon: 'caret_h1', icon_class: 'w-3' -%}
-      </a>
-      <br>
-      <button class="button">Default button</button>
+      <div class="flex flex-col items-start gap-4">
+        <a href="#" class="link">
+          Link with arrow
+          {% render 'icons', icon: 'caret_h1', icon_class: 'w-3' -%}
+        </a>
+        <button class="button">Default button</button>
+        <button class="button button--outline">Outline button</button>
+      </div>
     </div>
   {%- endfor -%}
 </div>

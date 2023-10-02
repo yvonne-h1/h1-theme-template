@@ -109,6 +109,8 @@ if (!customElements.get('cart-items')) {
     }
 
     updateContent(parsedState, line, name) {
+      if (!('sections' in parsedState)) return;
+
       let sectionsToRender = [
         ...this.getCartSectionsToRender(),
       ];

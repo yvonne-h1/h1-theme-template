@@ -40,6 +40,8 @@ class CartDrawer extends HTMLElement {
    * @param {Object} parsedState, passed after an item is added to the cart from the product-form-component.js
    */
   renderContents(parsedState) {
+    if (!('sections' in parsedState)) return;
+
     this.getSectionsToRender().forEach((section) => {
       if (section?.selector) {
         const selector = document.querySelector(section.selector);
@@ -49,6 +51,25 @@ class CartDrawer extends HTMLElement {
         }
       }
     });
+  }
+
+  /**
+   * renderCartDrawer
+   * Renders the drawer and the cart icon bubble
+   * When there is an error for the quantity that is being added, the max quantity still gets added, so we have to update the sections.
+   */
+  async renderCartDrawer() {
+    const body = JSON.stringify( {
+      sections: this.getSectionsToRender().map(section => section.section),
+      sections_url: window.location.pathname,
+    });
+    const response = await fetch(routes.cart_update_url, {
+      ...fetchConfig('javascript'),
+      ...{ body },
+    });
+
+    const parsedState = await response.json();
+    this.renderContents(parsedState);
   }
 
   /**

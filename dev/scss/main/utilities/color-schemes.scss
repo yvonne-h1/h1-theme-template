@@ -24,9 +24,6 @@
     *::marker {
       @apply text-[var(--color-scheme-text-active-color)];
     }
-    .button--outline {
-      @apply states:bg-[var(--color-scheme-text-active-color)];
-    }
 
     // .color-scheme--black
     &--black {
@@ -80,19 +77,26 @@
     &--black,
     &--secondary {
       .button {
-        --button-text: theme('colors.primary.text');
         --button-hover-text: theme('colors.primary.text');
-        --button-border-color: transparent;
         --button-hover-border-color: transparent;
-        --button-background: theme('colors.primary-gradient.bg');
         --button-hover-background: theme('colors.primary-gradient.bg-hover');
-        &.mobile-menu__toggle-button,
-        &.button--outline {
-          --button-background: transparent;
-          --button-hover-background: var(--color-scheme-text-active-color);
+        &:not(.button--outline) {
+          --button-text: theme('colors.primary.text');
+          --button-border-color: transparent;
+          --button-background: theme('colors.primary-gradient.bg');
         }
       }
     }
+
+    .button.mobile-menu__toggle-button {
+      --button-text: var(--color-scheme-text-color);
+      --button-border-color: var(--color-scheme-text-color);
+      --button-background: transparent;
+      --button-hover-text: var(--color-scheme-text-active-color);
+      --button-hover-border-color: var(--color-scheme-text-active-color);
+      --button-hover-background: var(--color-scheme-text-active-color);
+    }
+
     // .header-transparent - used for the header
     &.header-transparent {
       .template-index:not(.header-sticky):not(.desktop-submenu-is-open) & {

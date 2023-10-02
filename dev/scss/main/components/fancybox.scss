@@ -77,6 +77,9 @@
           @include states() {
             @apply scale-110;
           }
+          path {
+            @apply fill-none;
+          }
         }
       }
       &.fancybox__button--close {
