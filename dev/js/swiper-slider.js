@@ -83,9 +83,11 @@ class SwiperSlider extends HTMLElement {
     // Default to improve user experience
     this.swiperOptions = {
       observer: true,
+      threshold: 10,
       isRecommendations: false,
       modules: [A11y, Navigation, Pagination, Scrollbar, Autoplay],
       destroyAfter: false,
+      hasVideo: false,
     };
 
     // Check if we have extra options on the HTML
@@ -125,6 +127,28 @@ class SwiperSlider extends HTMLElement {
       this.init();
     }
 
+    if (this.swiperOptions.hasVideo) {
+
+      this.debouncedOnLoad = debounce((event) => {
+        this.swiperObserver(event.type);
+      }, 100);
+
+      // check if the swiper is visible
+      window.addEventListener('load', this.debouncedOnLoad.bind(this));
+
+      window.addEventListener('scroll', this.debouncedOnLoad.bind(this));
+
+      this.swiperInstance.on('slideChangeTransitionEnd', (swiper) => {
+        console.log('slideChangeTransitionEnd');
+        document.dispatchEvent(new CustomEvent('slide-change', {
+          bubbles: true,
+          detail: {
+            swiper: swiper,
+          },
+        }));
+      });
+    }
+
     // Listen to extra events when in Shopify editor
     if (Shopify.designMode) {
       // Update the swiper when the section event is triggered
@@ -136,6 +160,37 @@ class SwiperSlider extends HTMLElement {
       // When on block deselect go to the slide in front-end
       window.addEventListener('shopify:block:deselect', event => this.handleBlockSelect(event));
     }
+  }
+
+  swiperObserver() {
+    if (!this.swiperInstance) return;
+
+    // Register IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const elementBounds = entry.boundingClientRect;
+        const isBottomVisible = !!(elementBounds.bottom < window.innerHeight) && elementBounds.bottom;
+        const isTopVisible = !!(elementBounds.top > 0) && elementBounds.top;
+
+        if (isBottomVisible && isTopVisible || entry.isIntersecting && entry.intersectionRatio > 0.9) {
+          document.dispatchEvent(new CustomEvent('swiper-loaded', {
+            bubbles: true,
+            detail: {
+              swiper: this.swiperInstance,
+            },
+          }));
+        }
+        else {
+          document.dispatchEvent(new CustomEvent('swiper-hidden', {
+            bubbles: true,
+            detail: {
+              swiper: this.swiperInstance,
+            },
+          }));
+        }
+      });
+    });
+    observer.observe(this);
   }
 
   init(event = null, updateSwiper = false) {

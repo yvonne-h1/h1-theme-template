@@ -61,8 +61,8 @@
       &:after {
         @apply absolute block aspect-square h-6 w-6 animate-spin rounded-full border-2 border-[var(--button-text)] border-l-transparent content-empty;
       }
-      &.button--outline:after {
-        @apply border-inherit border-l-transparent;
+      &.button--outline {
+        --button-text: theme('colors.secondary.DEFAULT');
       }
     }
 
@@ -120,7 +120,7 @@
 
   .button--outline {
     --button-background: transparent;
-    --button-border-color: inherit;
+    --button-border-color: var(--button-text);
     --button-text: inherit;
     --button-hover-background: theme('colors.secondary.DEFAULT');
     --button-hover-border-color: theme('colors.secondary.DEFAULT');

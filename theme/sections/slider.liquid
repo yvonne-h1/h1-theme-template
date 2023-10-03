@@ -15,12 +15,34 @@
   if section.settings.container_width == ''
     assign max_width = 1360
   endif
+
+  assign has_video = false
+  assign is_youtube = false
+  assign is_vimeo = false
+  assign is_custom = false
+
+  for block in section.blocks
+    if block.settings.video_url != blank
+      if block.settings.video_url.type == 'youtube'
+        assign is_youtube = true
+      else
+        assign is_vimeo = true
+      endif
+    elsif block.settings.video_mp4 != blank
+      assign is_custom = true
+    endif
+
+    if block.settings.video_mp4 != blank or block.settings.video_url != blank
+      assign has_video = true
+    endif
+  endfor
 -%}
 
 {%- capture swiper_options -%}
   data-options='{
     "sectionID": "{{ section.id }}",
-    "loop": true,
+    "hasVideo": {{ has_video }},
+    "loop": {% if has_video %}false{% else %}true{% endif %},
     "speed": 1000,
     {%- if section.settings.swiper_autoplay %}
       "autoplay": {
@@ -59,6 +81,7 @@
               assign lazy = true
             endif
 
+            # render the content
             render 'image-content', object: block, lazy: lazy, class: 'slider', index: forloop.index, is_swiper: is_slider, min_ratio_mobile: section.settings.min_ratio_mobile, min_ratio_tablet: section.settings.min_ratio_tablet
           endfor
         -%}
@@ -94,6 +117,22 @@
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if is_slider -%}
   <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
+
+  {%- if has_video -%}
+    {% comment %} Render javascript for videos {% endcomment %}
+    {%- if is_youtube -%}
+      <script src="{{ 'custom-video-youtube.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- if is_vimeo -%}
+      <script src="https://player.vimeo.com/api/player.js" defer></script>
+      <script src="{{ 'custom-video-vimeo.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- if is_custom -%}
+      <script src="{{ 'custom-video.js' | asset_url }}" defer></script>
+    {%- endif -%}
+  {%- endif -%}
 {%- endif -%}
 
 {%- liquid
@@ -271,6 +310,45 @@
         "type": "slide",
         "name": "Slide",
         "settings": [
+          {
+            "type": "header",
+            "content": "MP4 video"
+          },
+          {
+            "type": "text",
+            "id": "video_mp4",
+            "label": "MP4 video"
+          },
+          {
+            "type": "header",
+            "content": "3rd party video"
+          },
+          {
+            "type": "video_url",
+            "id": "video_url",
+            "label": "Video",
+            "info": "https://www.youtube.com/watch?v=video_id. Note that YouTube videos might not play in the Theme Editor. They will always work in the browser.",
+            "accept": ["youtube", "vimeo"]
+          },
+          {
+            "type": "checkbox",
+            "id": "video_autoplay",
+            "label": "Autoplay",
+            "info": "In the case of YouTube video, this only works when custom controls have been enabled.",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "loop_video",
+            "label": "Loop video",
+            "default": false,
+            "info": "Only applies to MP4 videos."
+          },
+          {
+            "type": "text",
+            "id": "video_description",
+            "label": "Video description"
+          },
           {
             "type": "header",
             "content": "Image settings"
@@ -561,6 +639,13 @@
             "info": "Leave empty to hide the button."
           },
           {
+            "type": "checkbox",
+            "id": "button_1_play",
+            "label": "Play button",
+            "info": "Check this to use this button as a trigger for the video.",
+            "default": false
+          },
+          {
             "type": "text",
             "id": "button_label_1",
             "label": "Label",
@@ -607,6 +692,13 @@
             "type": "header",
             "content": "Second button",
             "info": "Leave empty to hide the button."
+          },
+          {
+            "type": "checkbox",
+            "id": "button_2_play",
+            "label": "Play button",
+            "info": "Check this to use this button as a trigger for the video.",
+            "default": false
           },
           {
             "type": "text",

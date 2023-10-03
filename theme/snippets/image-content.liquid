@@ -31,6 +31,7 @@
   - button_url_2
   - button_type_1
   - button_type_2
+  - is_video
 {% endcomment %}
 
 {%- liquid
@@ -53,10 +54,45 @@
   unless min_ratio_tablet
     assign min_ratio_tablet = object.settings.min_ratio_tablet
   endunless
+
+  # video settings
+  assign is_video = false
+  if object.settings.video_url != blank or object.settings.video_mp4 != blank
+    assign is_video = true
+    assign video_id = object.settings.video_url.id
+
+    assign video_type = object.settings.video_url.type
+    if video_type == 'youtube'
+      assign element = 'youtube-video'
+    elsif video_type == 'vimeo'
+      assign element = 'vimeo-video'
+    else
+      assign element = 'custom-video'
+    endif
+
+    unless video_type
+      assign video_type = 'mp4'
+    endunless
+
+    if object.settings.video_autoplay == blank
+      assign autoplay = false
+    else
+      assign autoplay = object.settings.video_autoplay
+    endif
+
+    assign loop = ''
+    if object.settings.loop_video
+      assign loop = '&loop=1&playlist=' | append: video_id
+    endif
+  endif
 -%}
 
 {% comment %} Banner wrapper {% endcomment %}
-<div class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- else %}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}">
+<div
+  class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% if object.settings.container_width == 'container--full' %}w-screen{%- endif -%}"
+  {% if is_swiper and index != null %}
+    data-swiper-slide-index="{{ index }}" {{ block.shopify_attributes }}
+  {%- endif %}>
   {% comment %} Banner image {% endcomment %}
   {%- liquid
     assign image_class = 'h-full w-full object-cover'
@@ -70,23 +106,95 @@
     endif
   -%}
 
-  <div class="{{- class -}}__image absolute inset-0">
-    {%- liquid
-      # Desktop image
-      render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, lazy: lazy
+  {%- capture image -%}
+    {%- if object.settings.image_desktop != blank -%}
+      {%- liquid
+        # Desktop image
+        render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, lazy: lazy
 
-      # Mobile image
-      if image_mobile != blank
-        render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy
-      endif
-    -%}
+        # Mobile image
+        if image_mobile != blank
+          render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy
+        endif
+      -%}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {% comment %} Add the custom element wrapper {% endcomment %}
+  {%- if is_video -%}
+    <{{ element }}
+      class="block h-full w-full"
+      data-options='
+        {
+        {%- unless video_type == 'mp4' -%}
+          "id":"{{- video_id -}}",
+        {%- endunless %}
+          "isSwiper": {{ is_swiper }},
+          "autoplay": {{- autoplay -}}
+        }
+      '>
+  {%- endif -%}
+
+  <div class="{{- class -}}__image absolute inset-0">
+    {% comment %} Render video {% endcomment %}
+    {%- if is_video -%}
+      <div class="video-element {% unless is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endunless %}">
+        {% comment %} Capture the video placeholder. On click, this will play the video {% endcomment %}
+        <div class="video-element__placeholder absolute inset-0 flex items-center justify-center" data-video-trigger>
+          {%- if object.settings.image_desktop != blank -%}
+            <div class="absolute {% unless is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endunless %}">
+              {{- image -}}
+            </div>
+          {%- endif -%}
+
+          {%- unless object.settings.button_1_play or object.settings.button_2_play -%}
+            <button
+              class="video-element__button button button--primary h-12 w-12 rounded-full p-0"
+              aria-label="{%- render 'render-translation', namespace: 'products.product.media', key: 'play_video', fallback: 'Play video' -%}"
+              data-video-play-button>
+              {%- render 'icons', icon: 'play', icon_class: 'w-6' -%}
+            </button>
+          {%- endunless -%}
+        </div>
+
+        {%- if video_type == 'youtube' -%}
+          {% comment %} Render a custom implementation {% endcomment %}
+          <div id="ytplayer" class="{{ min_ratio_mobile }} {{ min_ratio_tablet }} h-full w-full"></div>
+        {%- elsif video_type == 'vimeo' -%}
+          <iframe
+            src="https://player.vimeo.com/video/{{ video_id }}?{{ loop }}"
+            class="js-vimeo h-full w-full"
+            allow="autoplay; encrypted-media"
+            webkitallowfullscreen
+            mozallowfullscreen
+            allowfullscreen
+            title="{{ object.settings.video_description }}"></iframe>
+        {%- else -%}
+          <video
+            preload
+            playsinline
+            {% if autoplay %}
+              muted
+            {% endif %}
+            {% if loop %}
+              loop
+            {% endif %}
+            class="block">
+            <source src="{{- video_url -}}" type="video/mp4">
+          </video>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      {% comment %} Render image {% endcomment %}
+      {{- image -}}
+    {%- endif -%}
   </div>
 
   {% comment %} Banner content {% endcomment %}
   <div
     class="{{- class -}}__content-wrapper content-wrapper flex h-full {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
-    {% if is_swiper and index != null %}
-      data-swiper-slide-index="{{ index }}" {{ block.shopify_attributes }}
+    {% if is_video %}
+      data-video-content
     {%- endif -%}>
     <div class="{{- class -}}__content relative mx-element-spacing mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-md md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
       {% comment %} Heading {% endcomment %}
@@ -106,15 +214,15 @@
       {% comment %} Buttons {% endcomment %}
       {%- liquid
         # First button
-        assign button_1 = true
-        if object.settings.button_label_1 == blank or object.settings.button_url_1 == blank
-          assign button_1 = false
+        assign button_1 = false
+        if object.settings.button_1_play and object.settings.button_label_1 != blank or object.settings.button_label_1 != blank and object.settings.button_url_1 != blank or request.design_mode
+          assign button_1 = true
         endif
 
         # Second button
-        assign button_2 = true
-        if object.settings.button_label_2 == blank or object.settings.button_url_2 == blank
-          assign button_2 = false
+        assign button_2 = false
+        if object.settings.button_2_play and object.settings.button_label_2 != blank or object.settings.button_label_2 != blank and object.settings.button_url_2 != blank or request.design_mode
+          assign button_2 = true
         endif
 
         # Button alligment
@@ -127,28 +235,37 @@
             assign buttons_alignment = 'justify-end'
         endcase
       -%}
-
       {%- if button_1 or button_2 -%}
         <div class="{{- class -}}__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
-          {% comment %} Button 1 {% endcomment %}
-          {%- if object.settings.button_label_1 != blank and object.settings.button_url_1 != blank or request.design_mode and object.settings.button_label_1 != blank -%}
-            <a
-              href="{{ object.settings.button_url_1 | default: '#' }}"
-              class="button {{ object.settings.button_type_1 }}{% if object.settings.button_url_1 == blank %} disabled{% endif %}">
-              {{- object.settings.button_label_1 -}}
-            </a>
-          {%- endif -%}
+          {%- for i in (1..2) -%}
+            {%- assign play_button = 'button_' | append: i | append: '_play' -%}
+            {%- assign button_label = 'button_label_' | append: i -%}
+            {%- assign button_type = 'button_type_' | append: i -%}
+            {%- assign button_url = 'button_url_' | append: i -%}
 
-          {% comment %} Button 2 {% endcomment %}
-          {%- if object.settings.button_label_2 != blank and object.settings.button_url_2 != blank or request.design_mode and object.settings.button_label_2 != blank -%}
-            <a
-              href="{{ object.settings.button_url_2 | default: '#' }}"
-              class="button {{ object.settings.button_type_2 }}{% if object.settings.button_url_2 == blank %} disabled{% endif %}">
-              {{- object.settings.button_label_2 -}}
-            </a>
-          {%- endif -%}
+            {% comment %} Button 1 {% endcomment %}
+            {%- if button_1 -%}
+              {%- if object.settings[play_button] -%}
+                <button class="button {{ object.settings[button_type] }}" data-video-trigger>
+                  {%- render 'icons', icon: 'play', icon_size: 'w-4' -%}
+                  {{- object.settings[button_label] -}}
+                </button>
+              {%- else -%}
+                <a
+                  href="{{ object.settings[button_url] | default: '#' }}"
+                  class="button {{ object.settings[button_type] }}{% if object.settings[button_url] == blank %} disabled{% endif %}">
+                  {{- object.settings[button_label] -}}
+                </a>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
         </div>
       {%- endif -%}
     </div>
   </div>
+
+  {% comment %} Close the custom element {% endcomment %}
+  {%- if is_video -%}
+    </{{ element }}>
+  {%- endif -%}
 </div>

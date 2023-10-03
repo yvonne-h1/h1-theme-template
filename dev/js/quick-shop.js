@@ -31,7 +31,7 @@ class QuickAdd extends HTMLElement {
     const hiddenInventoryQty = productForm.querySelector('input[name="inventory_quantity"]');
     const errorMessage = productForm.querySelector('[data-form-error]');
 
-    const activeOption = Array.from(fancybox.$container.querySelector('.quick-shop').querySelectorAll('[data-quick-shop-option]')).filter(input => input.checked === true)[0] || option;
+    const activeOption = Array.from(fancybox.$container.querySelector('[data-quick-shop-options-wrapper]').querySelectorAll('[data-quick-shop-option]')).filter(input => input.checked === true)[0] || option;
 
     if (!activeOption) {
       errorMessage.classList.add('block');
