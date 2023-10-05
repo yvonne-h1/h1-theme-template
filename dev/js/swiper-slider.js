@@ -127,8 +127,8 @@ class SwiperSlider extends HTMLElement {
       this.init();
     }
 
+    // When the swiper has video
     if (this.swiperOptions.hasVideo) {
-
       this.debouncedOnLoad = debounce((event) => {
         this.swiperObserver(event.type);
       }, 100);
@@ -138,14 +138,19 @@ class SwiperSlider extends HTMLElement {
 
       window.addEventListener('scroll', this.debouncedOnLoad.bind(this));
 
+      // when the swiper contains a video, pause it when it's swiped out and play it if it's swiped into view and has autoplay enabled
       this.swiperInstance.on('slideChangeTransitionEnd', (swiper) => {
         console.log('slideChangeTransitionEnd');
-        document.dispatchEvent(new CustomEvent('slide-change', {
-          bubbles: true,
-          detail: {
-            swiper: swiper,
-          },
-        }));
+        const previousSlide = swiper.slides[swiper.previousIndex];
+        const previousSlideType = previousSlide.dataset.swiperVideoType;
+        const previousVideo = previousSlide.querySelector(previousSlideType);
+
+        const currentSlide = swiper.slides[swiper.activeIndex];
+        const currentSlideType = currentSlide.dataset.swiperVideoType;
+        const currentVideo = currentSlide.querySelector(currentSlideType);
+
+        if (previousVideo && !this.getPausedState(previousVideo, previousSlideType)) previousVideo.pauseVideo();
+        if (currentVideo && currentVideo.options.autoplay && this.getPausedState(currentVideo, currentSlideType) && currentVideo.dataset.videoIsPaused !== 'true') currentVideo.playVideo();
       });
     }
 
@@ -162,6 +167,17 @@ class SwiperSlider extends HTMLElement {
     }
   }
 
+  getPausedState(video, type) {
+    switch (type) {
+    case 'youtube-video':
+      return video.player.getPlayerState() !== 1;
+    case 'vimeo-video':
+      return video.paused;
+    case 'custom-video':
+      return video.videoElement.paused;
+    }
+  };
+
   swiperObserver() {
     if (!this.swiperInstance) return;
 
@@ -172,22 +188,15 @@ class SwiperSlider extends HTMLElement {
         const isBottomVisible = !!(elementBounds.bottom < window.innerHeight) && elementBounds.bottom;
         const isTopVisible = !!(elementBounds.top > 0) && elementBounds.top;
 
+        const swiper = this.swiperInstance;
+        const currentSlide = swiper.slides[swiper.activeIndex];
+        const currentSlideType = currentSlide.dataset.swiperVideoType;
+        const currentVideo = currentSlide.querySelector(currentSlideType);
+
         if (isBottomVisible && isTopVisible || entry.isIntersecting && entry.intersectionRatio > 0.9) {
-          document.dispatchEvent(new CustomEvent('swiper-loaded', {
-            bubbles: true,
-            detail: {
-              swiper: this.swiperInstance,
-            },
-          }));
+          if (currentVideo && currentVideo.options.autoplay) currentVideo.playVideo();
         }
-        else {
-          document.dispatchEvent(new CustomEvent('swiper-hidden', {
-            bubbles: true,
-            detail: {
-              swiper: this.swiperInstance,
-            },
-          }));
-        }
+        else if (!this.getPausedState(currentVideo, currentSlideType)) currentVideo.pauseVideo();
       });
     });
     observer.observe(this);

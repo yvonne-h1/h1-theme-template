@@ -20,7 +20,6 @@ class CustomYTVideo extends HTMLElement {
     super();
 
     var tag = document.createElement('script');
-
     tag.src = 'https://www.youtube.com/iframe_api';
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -30,6 +29,8 @@ class CustomYTVideo extends HTMLElement {
       autoplay: false,
       video_element_id: 'ytplayer',
       isSwiper: false,
+      loop: false,
+      controls: true,
     };
 
     if (this?.dataset?.options) {
@@ -46,68 +47,24 @@ class CustomYTVideo extends HTMLElement {
       return;
     }
 
-    // overwrite true/false with integer
-    this.options.autoplay
-      ? (this.options.autoplay = 1) && (this.options.muted = 1)
-      : (this.options.autoplay = 0) && (this.options.muted = 0);
-
     this.player;
     this.videoTriggers = this.querySelectorAll('[data-video-trigger]');
     this.videoContent = this.querySelector('[data-video-content]');
-
     window.playerIsReady = false;
 
     // init video
     this.loadVideo();
 
-    this.debouncedOnLoad = debounce((event) => {
-      this.videoObserver(event.type);
+    this.debouncedOnLoad = debounce(() => {
+      this.videoObserver();
     }, 100);
 
-    if (this.options.autoplay === 1) {
+    if (this.options.autoplay) {
       // play video on scroll
       window.addEventListener('scroll', this.debouncedOnLoad.bind(this));
 
       // play video if it's visible on load
       window.addEventListener('load', this.debouncedOnLoad.bind(this));
-    }
-
-    if (this.options.isSwiper) {
-      // play the video on load
-      document.addEventListener('swiper-loaded', (event) => {
-        const swiper = event.detail.swiper;
-        if (!swiper) return;
-
-        const currentSlide = swiper.slides[swiper.activeIndex].querySelector('youtube-video');
-        if (!currentSlide) return;
-
-        if (currentSlide && this.options.autoplay === 1) this.playVideoFunc();
-      });
-      // pause the video on hide
-      document.addEventListener('swiper-hidden', (event) => {
-        const swiper = event.detail.swiper;
-        if (!swiper) return;
-
-        const currentSlide = swiper.slides[swiper.activeIndex].querySelector('youtube-video');
-        if (!currentSlide) return;
-
-        if (currentSlide) this.pauseVideoFunc();
-      });
-
-      // listen for the slide change event
-      document.addEventListener('slide-change', (event) => {
-        const swiper = event.detail.swiper;
-        if (!swiper) return;
-
-        const previousSlide = swiper.slides[swiper.previousIndex].querySelector('youtube-video');
-        const currentSlide = swiper.slides[swiper.activeIndex].querySelector('youtube-video');
-        const playerState = this.player.getPlayerState(); // 2 is paused
-        console.log(playerState, this.options.autoplay, currentSlide);
-
-        if (previousSlide && playerState !== 2) this.pauseVideoFunc();
-        if (currentSlide && this.options.autoplay === 1 && playerState !== 1 && this.dataset.videoIsPaused === 'false') this.playVideoFunc();
-      });
-
     }
   }
 
@@ -123,11 +80,9 @@ class CustomYTVideo extends HTMLElement {
 
         if (window.playerIsReady) {
           if (isBottomVisible && isTopVisible || entry.isIntersecting && entry.intersectionRatio > 0.9) {
-            this.playVideoFunc();
+            this.playVideo();
           }
-          else {
-            this.pauseVideoFunc();
-          }
+          else if (!getPausedState()) this.pauseVideo(false);
         }
         else {
           this.loadVideo();
@@ -149,9 +104,12 @@ class CustomYTVideo extends HTMLElement {
         videoId: self.options.id,
         playerVars: {
           rel: 0,
-          playsinline: self.options.autoplay,
-          autoplay: self.options.autoplay,
-          mute: self.options.muted,
+          playsinline: (self.options.autoplay) ? 1 : 0,
+          autoplay: (self.options.autoplay) ? 1 : 0,
+          mute: (self.options.autoplay) ? 1 : 0,
+          controls: (self.options.controls) ? 1 : 0,
+          loop: (self.options.loop) ? 1 : 0,
+          playlist: (self.options.loop) ? this.options.id : '',
         },
         events: {
           onReady: onPlayerReady,
@@ -162,44 +120,53 @@ class CustomYTVideo extends HTMLElement {
       function onPlayerStateChange(event) {
         // playing
         if (event.data === 1) {
-          self.dataset.videoIsPaused = 'false';
+          self.hidePlayerElements();
         }
         // paused
         if (event.data === 2) {
-          self.dataset.videoIsPaused = 'true';
           // if video is paused, show placeholder
+          self.showPlayerElements();
+        }
+        // hide the elements when the video is done
+        if (event.data === 0) {
+          // if video has ended, show placeholder
           self.showPlayerElements();
         }
       }
 
       function onPlayerReady() {
-        window.playerIsReady = true;
         player.stopVideo(); // prevent video from playing
+
+        window.playerIsReady = true;
+        self.dataset.videoIsPaused = 'false';
         self.player = player;
 
         self.videoTriggers.forEach(trigger => trigger.addEventListener('click', function (event) {
           event.preventDefault();
           event.stopPropagation();
-          self.playVideoFunc();
-        }),
-        );
+          self.playVideo();
+        }));
 
         // when autoplay is enabled, let observer determine if it should play
-        if (self.options.autoplay === 1) {
+        if (self.options.autoplay) {
           self.videoObserver();
         }
       }
     };
   }
 
-  playVideoFunc() {
+  getPausedState() {
+    return (this.player.getPlayerState() === 2) ? true : false;
+  }
+
+  playVideo() {
     if (!this.player) return;
 
     this.player.playVideo();
     this.hidePlayerElements();
   }
 
-  pauseVideoFunc() {
+  pauseVideo() {
     if (!this.player) return;
 
     this.player.pauseVideo();

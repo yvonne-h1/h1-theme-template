@@ -16,13 +16,13 @@ class CustomVimeoVideo extends HTMLElement {
   constructor() {
     super();
 
-    this.videoTriggers = this.querySelectorAll('[data-video-trigger]');
-    this.videoContent = this.querySelector('[data-video-content]');
-
     this.options = {
       id: '',
       autoplay: false,
+      loop: false,
+      controls: true,
       isSwiper: false,
+      wrapperID: '',
     };
 
     if (this?.dataset?.options) {
@@ -33,28 +33,25 @@ class CustomVimeoVideo extends HTMLElement {
       };
     }
 
-    // init video
-    this.player = new Vimeo.Player(this.querySelector('iframe'));
+    // if ID is missing, return
+    if (this.options.id === '') {
+      debug() && console.error('vimeo ID is missing');
+      return;
+    }
+
+    console.log('vimeo', this.options);
+
+    this.videoTriggers = this.querySelectorAll('[data-video-trigger]');
+    this.videoContent = this.querySelector('[data-video-content]');
     this.paused = true;
 
-    this.player.on('pause', () => {
-      this.paused = true;
-      this.showPlayerElements();
-    });
-
-    this.videoTriggers.forEach(trigger => trigger.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.playVideo();
-    }));
-
-    this.debouncedOnLoad = debounce((event) => {
-      this.videoObserver(event.type);
+    this.debouncedOnLoad = debounce(() => {
+      this.videoObserver();
     }, 100);
 
     if (this.options.autoplay) {
       // mute the video
-      this.player.setVolume(0);
+      this.dataset.videoIsPaused = 'false';
 
       // play video on scroll
       window.addEventListener('scroll', this.debouncedOnLoad.bind(this));
@@ -63,40 +60,15 @@ class CustomVimeoVideo extends HTMLElement {
       window.addEventListener('load', this.debouncedOnLoad.bind(this));
     }
 
-    if (this.options.isSwiper) {
-    // play the video on load
-      document.addEventListener('swiper-loaded', (event) => {
-        const swiper = event.detail.swiper;
-        if (!swiper) return;
+    this.videoTriggers.forEach(trigger => trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-        const currentSlide = swiper.slides[swiper.activeIndex].querySelector('vimeo-video');
-        if (!currentSlide) return;
+      this.playVideo();
+    }));
 
-        if (currentSlide && this.options.autoplay) this.playVideo();
-      });
-      // pause the video on hide
-      document.addEventListener('swiper-hidden', (event) => {
-        const swiper = event.detail.swiper;
-        if (!swiper) return;
-
-        const currentSlide = swiper.slides[swiper.activeIndex].querySelector('vimeo-video');
-        if (!currentSlide) return;
-
-        if (currentSlide) this.pauseVideo();
-      });
-
-      document.addEventListener('slide-change', (event) => {
-        const swiper = event.detail.swiper;
-        if (!swiper) return;
-
-        window.removeEventListener('scroll', this.debouncedOnLoad.bind(this));
-
-        const previousSlide = swiper.slides[swiper.previousIndex].querySelector('vimeo-video');
-        const currentSlide = swiper.slides[swiper.activeIndex].querySelector('vimeo-video');
-
-        if (previousSlide && !this.paused) this.pauseVideo();
-        if (currentSlide && this.options.autoplay && this.paused) this.playVideo();
-      });
+    if (!this.options.isSwiper) {
+      this.loadVideo();
     }
   }
 
@@ -113,35 +85,85 @@ class CustomVimeoVideo extends HTMLElement {
         if (isBottomVisible && isTopVisible || entry.isIntersecting && entry.intersectionRatio > 0.9) {
           this.playVideo();
         }
-        else {
-          this.pauseVideo();
-        }
+        else if (!this.paused) this.pauseVideo(false);
       });
     });
     observer.observe(this);
   }
 
-  playVideo() {
-    if (!this.player) return;
-    this.player.play()
-      .then(() => {
-      // The video is playing
-        this.paused = false;
-        this.hidePlayerElements();
-      })
-      .catch((error) => {
-        console.error(error.name);
+  loadVideo() {
+    // init video
+    this.player = new Vimeo.Player(this.options.wrapperID, {
+      ...this.options,
+      height: 810,
+      width: 1440,
+      playsinline: true,
+      muted: this.options.autoplay,
+      autopause: false,
+    });
+
+    this.paused = false;
+
+    this.player.ready().then(() => {
+      // The player is ready
+
+      const iframe = this.querySelector('iframe').contentWindow;
+      console.log(iframe);
+      iframe.document.body.addEventListener('click', () => {
+        // window.addEventListener('click', () => {
+        console.log('click');
       });
+    });
+
+    this.player.on('pause', () => {
+      this.paused = true;
+      this.showPlayerElements();
+    });
+
+    this.player.on('ended', () => {
+      this.showPlayerElements();
+      this.dataset.videoIsPaused = 'true';
+    });
+  }
+
+  /**
+   * You can't programmatically trigger the initial playback of a Vimeo video,
+   * so, in the case of a slider, the trigger comes when the slider is in view and autoplay is enabled.
+   *
+   */
+  playVideo() {
+    if (!this.player) {
+      console.log('if');
+      this.loadVideo();
+      if (this.options.autoplay) {
+        this.hidePlayerElements();
+      }
+    }
+    else {
+      console.log('else', this.player);
+      this.player.play()
+        .then(() => {
+          console.log('then');
+          // The video is playing
+          this.paused = false;
+          this.hidePlayerElements();
+        })
+        .catch((error) => {
+          console.error(error.name);
+        });
+    }
   }
 
   pauseVideo() {
     if (!this.player) return;
+    console.log('pause viem');
 
     this.player.pause()
       .then(() => {
         this.paused = true;
-        // The video is paused
         this.showPlayerElements();
+
+        this.dataset.videoIsPaused = 'true';
       })
       .catch((error) => {
         console.error(error.name);

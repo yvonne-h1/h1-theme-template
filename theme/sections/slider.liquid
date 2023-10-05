@@ -10,12 +10,13 @@
     render 'import-styles', file_name: 'component-swiper.css'
   endif
 
-  # Image assigns
+  # image settings
   assign max_width = null
   if section.settings.container_width == ''
     assign max_width = 1360
   endif
 
+  # video settings
   assign has_video = false
   assign is_youtube = false
   assign is_vimeo = false
@@ -82,7 +83,7 @@
             endif
 
             # render the content
-            render 'image-content', object: block, lazy: lazy, class: 'slider', index: forloop.index, is_swiper: is_slider, min_ratio_mobile: section.settings.min_ratio_mobile, min_ratio_tablet: section.settings.min_ratio_tablet
+            render 'image-content', object: block, lazy: lazy, class: 'slider', index: forloop.index, is_swiper: is_slider, min_ratio_mobile: section.settings.min_ratio_mobile, min_ratio_tablet: section.settings.min_ratio_tablet, id: section.id, max_width: max_width
           endfor
         -%}
       </div>
@@ -117,21 +118,21 @@
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if is_slider -%}
   <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
+{%- endif -%}
 
-  {%- if has_video -%}
-    {% comment %} Render javascript for videos {% endcomment %}
-    {%- if is_youtube -%}
-      <script src="{{ 'custom-video-youtube.js' | asset_url }}" defer></script>
-    {%- endif -%}
+{%- if has_video -%}
+  {% comment %} Render javascript for videos {% endcomment %}
+  {%- if is_youtube -%}
+    <script src="{{ 'custom-video-youtube.js' | asset_url }}" type="module"></script>
+  {%- endif -%}
 
-    {%- if is_vimeo -%}
-      <script src="https://player.vimeo.com/api/player.js" defer></script>
-      <script src="{{ 'custom-video-vimeo.js' | asset_url }}" defer></script>
-    {%- endif -%}
+  {%- if is_vimeo -%}
+    <script src="https://player.vimeo.com/api/player.js" defer></script>
+    <script src="{{ 'custom-video-vimeo.js' | asset_url }}" type="module"></script>
+  {%- endif -%}
 
-    {%- if is_custom -%}
-      <script src="{{ 'custom-video.js' | asset_url }}" defer></script>
-    {%- endif -%}
+  {%- if is_custom -%}
+    <script src="{{ 'custom-video.js' | asset_url }}" type="module"></script>
   {%- endif -%}
 {%- endif -%}
 
@@ -331,18 +332,27 @@
             "accept": ["youtube", "vimeo"]
           },
           {
-            "type": "checkbox",
-            "id": "video_autoplay",
-            "label": "Autoplay",
-            "info": "In the case of YouTube video, this only works when custom controls have been enabled.",
-            "default": false
+            "type": "header",
+            "content": "Video settings"
           },
           {
             "type": "checkbox",
             "id": "loop_video",
             "label": "Loop video",
-            "default": false,
-            "info": "Only applies to MP4 videos."
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "video_autoplay",
+            "label": "Autoplay",
+            "default": false
+          },
+          {
+            "type": "checkbox",
+            "id": "video_controls",
+            "label": "Show controls",
+            "info": "Note: This will prevent Vimeo videos from being paused by the user.",
+            "default": true
           },
           {
             "type": "text",
