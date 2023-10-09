@@ -470,11 +470,320 @@
     ]
   },
   {
-    "name": "Article card",
+    "name": "Blog & Article card",
     "settings": [
       {
-        "type": "paragraph",
-        "content": "These settings will only apply to default article cards, not highlighted article cards, as shown on the blog main page."
+        "type": "header",
+        "content": "Blog settings"
+      },
+      {
+        "type": "number",
+        "id": "articles_per_page",
+        "label": "Articles per page",
+        "default": 10
+      },
+      {
+        "type": "select",
+        "id": "pagination_view_blog",
+        "label": "Pagination type",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "load-more",
+            "label": "Load more"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Highlighted article"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_article",
+        "default": true,
+        "label": "Highlight the first article",
+        "info": "Optionally, you can upload an additional image that will be used when the article is highlighted (metafield 'Highlighted article image')."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_image",
+        "default": true,
+        "label": "Show image"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_author",
+        "default": false,
+        "label": "Show author"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_date",
+        "default": true,
+        "label": "Show date"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_category",
+        "default": true,
+        "label": "Show category"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_highlight_excerpt",
+        "default": true,
+        "label": "Show excerpt"
+      },
+      {
+        "type": "select",
+        "id": "ha_content_color_scheme",
+        "label": "Text background",
+        "default": "color-scheme color-scheme--white",
+        "options": [
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--white",
+            "label": "White",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Text positioning"
+      },
+      {
+        "type": "select",
+        "id": "ha_position_horizontal",
+        "label": "Horizontal position",
+        "default": "justify-start",
+        "options": [
+          {
+            "value": "justify-start",
+            "label": "Left"
+          },
+          {
+            "value": "justify-center",
+            "label": "Center"
+          },
+          {
+            "value": "justify-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "ha_position_vertical",
+        "label": "Vertical position",
+        "default": "items-end",
+        "options": [
+          {
+            "value": "items-start",
+            "label": "Top"
+          },
+          {
+            "value": "items-center",
+            "label": "Center"
+          },
+          {
+            "value": "items-end",
+            "label": "Bottom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "ha_text_align",
+        "label": "Text align",
+        "default": "text-start",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Image aspect ratios"
+      },
+      {
+        "type": "select",
+        "id": "ha_min_ratio_mobile",
+        "label": "Mobile screens",
+        "default": "aspect-[9/16]",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "aspect-[1/1]",
+            "label": "Square"
+          },
+          {
+            "value": "aspect-[2/1]",
+            "label": "2x1",
+            "group": "Landscape"
+          },
+          {
+            "value": "aspect-[4/3]",
+            "label": "4x3",
+            "group": "Landscape"
+          },
+          {
+            "value": "aspect-[5/2]",
+            "label": "5x2",
+            "group": "Landscape"
+          },
+          {
+            "value": "aspect-[16/9]",
+            "label": "16x9",
+            "group": "Landscape"
+          },
+          {
+            "value": "aspect-[3/4]",
+            "label": "3x4",
+            "group": "Portrait"
+          },
+          {
+            "value": "aspect-[9/16]",
+            "label": "9x16",
+            "group": "Portrait"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "ha_min_ratio_tablet",
+        "label": "Tablet screens",
+        "info": "Only applies to devices larger than 768 pixels and smaller than 1280 pixels.",
+        "default": "md:aspect-[2/1]",
+        "options": [
+          {
+            "value": "",
+            "label": "Default (same as mobile)"
+          },
+          {
+            "value": "md:aspect-[1/1]",
+            "label": "Square"
+          },
+          {
+            "value": "md:aspect-[2/1]",
+            "label": "2x1",
+            "group": "Landscape"
+          },
+          {
+            "value": "md:aspect-[4/3]",
+            "label": "4x3",
+            "group": "Landscape"
+          },
+          {
+            "value": "md:aspect-[5/2]",
+            "label": "5x2",
+            "group": "Landscape"
+          },
+          {
+            "value": "md:aspect-[16/9]",
+            "label": "16x9",
+            "group": "Landscape"
+          },
+          {
+            "value": "aspect-[3/4]",
+            "label": "3x4",
+            "group": "Portrait"
+          },
+          {
+            "value": "aspect-[9/16]",
+            "label": "9x16",
+            "group": "Portrait"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "ha_min_ratio_desktop",
+        "label": "Desktop and up",
+        "info": "Only applies to devices larger than 1280 pixels.",
+        "default": "xl:aspect-[3/1]",
+        "options": [
+          {
+            "value": "",
+            "label": "Default (same as tablet)"
+          },
+          {
+            "value": "xl:aspect-[1/1]",
+            "label": "Square"
+          },
+          {
+            "value": "xl:aspect-[2/1]",
+            "label": "2x1",
+            "group": "Landscape"
+          },
+          {
+            "value": "xl:aspect-[3/1]",
+            "label": "3x1",
+            "group": "Landscape"
+          },
+          {
+            "value": "xl:aspect-[4/3]",
+            "label": "4x3",
+            "group": "Landscape"
+          },
+          {
+            "value": "xl:aspect-[5/2]",
+            "label": "5x2",
+            "group": "Landscape"
+          },
+          {
+            "value": "xl:aspect-[16/9]",
+            "label": "16x9",
+            "group": "Landscape"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Default article cards",
+        "info": "These settings will only apply to default article cards."
       },
       {
         "type": "checkbox",

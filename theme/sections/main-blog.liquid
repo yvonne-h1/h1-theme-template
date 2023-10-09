@@ -56,39 +56,17 @@
 
 {%- comment -%} Container content {%- endcomment -%}
 {%- capture container_content -%}
-  {%- paginate blog.articles by section.settings.blog_pagination -%}
-    <div class="blog-articles grid grid-cols-12 gap-base">
-      {%- for article in blog.articles -%}
-
-        {%- comment -%} Check if first item has an image set in the metafields, if so, display it as a highlight. {%- endcomment -%}
-        {%- liquid
-          assign highlight = false
-          assign col_classes = 'col-span-12 sm:col-span-6 lg:col-span-4'
-          if forloop.first and section.settings.show_highlight_article
-            assign highlight = true
-            assign col_classes = 'col-span-12 mb-8 md:mb-0'
-          endif
-        -%}
-
-        {%- comment -%} Output article card {%- endcomment -%}
-        {%-
-          render 'article-card',
-            article: article,
-            class: col_classes,
-            highlight: highlight,
-            section: section
-        -%}
-      {%- endfor -%}
-    </div>
-
+  <div class="main-blog" id="BlogArticlesGrid">
     {%- liquid
-      # Pagination
-      if paginate.pages > 1
-        render 'pagination', paginate: paginate
-      endif
-    -%}
+      paginate blog.articles by settings.articles_per_page
+        render 'article-grid', blog: blog, paginate: paginate, pagination_type: settings.pagination_view_blog
 
-  {%- endpaginate -%}
+        if paginate.pages > 1 and settings.pagination_view_blog == ''
+          render 'pagination', paginate: paginate, anchor: '', class: ''
+        endif
+      endpaginate
+    -%}
+  </div>
 {%- endcapture -%}
 
 {%- liquid
@@ -108,6 +86,11 @@
   content: container_content,
   footer_content: container_footer
 -%}
+
+{%- comment -%} Import javascript {%- endcomment -%}
+{%- if settings.pagination_view_blog == 'load-more' -%}
+  <script src="{{ 'load-more.js' | asset_url }}" defer></script>
+{%- endif -%}
 
 {%- if section.settings.show_back_to_top -%}
   <script src="{{ 'back-to-top.js' | asset_url }}" defer></script>
@@ -139,12 +122,6 @@
         ]
       },
       {
-        "type": "number",
-        "id": "blog_pagination",
-        "label": "Articles per page",
-        "default": 10
-      },
-      {
         "type": "checkbox",
         "id": "show_back_to_top",
         "default": true,
@@ -160,288 +137,6 @@
         "id": "enable_navigation",
         "default": true,
         "label": "Enable blog tags navigation"
-      },
-      {
-        "type": "header",
-        "content": "Highlighted article"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_highlight_article",
-        "default": true,
-        "label": "Highlight the first article",
-        "info": "Optionally, you can upload an additional image that will be used when the article is highlighted (metafield 'Highlighted article image')."
-      },
-      {
-        "type": "checkbox",
-        "id": "show_highlight_image",
-        "default": true,
-        "label": "Show image"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_highlight_author",
-        "default": false,
-        "label": "Show author"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_highlight_date",
-        "default": true,
-        "label": "Show date"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_highlight_category",
-        "default": true,
-        "label": "Show category"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_highlight_excerpt",
-        "default": true,
-        "label": "Show excerpt"
-      },
-      {
-        "type": "select",
-        "id": "content_color_scheme",
-        "label": "Text background",
-        "default": "color-scheme color-scheme--white",
-        "options": [
-          {
-            "value": "color-scheme color-scheme--primary",
-            "label": "Primary",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--secondary",
-            "label": "Secondary",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--accent",
-            "label": "Accent",
-            "group": "Theme"
-          },
-          {
-            "value": "color-scheme color-scheme--gray",
-            "label": "Gray",
-            "group": "Standard"
-          },
-          {
-            "value": "color-scheme color-scheme--black",
-            "label": "Black",
-            "group": "Standard"
-          },
-          {
-            "value": "color-scheme color-scheme--white",
-            "label": "White",
-            "group": "Standard"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Text positioning"
-      },
-      {
-        "type": "select",
-        "id": "highlight_position_horizontal",
-        "label": "Horizontal position",
-        "default": "justify-start",
-        "options": [
-          {
-            "value": "justify-start",
-            "label": "Left"
-          },
-          {
-            "value": "justify-center",
-            "label": "Center"
-          },
-          {
-            "value": "justify-end",
-            "label": "Right"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "highlight_position_vertical",
-        "label": "Vertical position",
-        "default": "items-end",
-        "options": [
-          {
-            "value": "items-start",
-            "label": "Top"
-          },
-          {
-            "value": "items-center",
-            "label": "Center"
-          },
-          {
-            "value": "items-end",
-            "label": "Bottom"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "highlight_text_align",
-        "label": "Text align",
-        "default": "text-start",
-        "options": [
-          {
-            "value": "text-start",
-            "label": "Left"
-          },
-          {
-            "value": "text-center",
-            "label": "Center"
-          },
-          {
-            "value": "text-end",
-            "label": "Right"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Image aspect ratios"
-      },
-      {
-        "type": "select",
-        "id": "min_ratio_mobile",
-        "label": "Mobile screens",
-        "default": "aspect-[9/16]",
-        "options": [
-          {
-            "value": "",
-            "label": "Default"
-          },
-          {
-            "value": "aspect-[1/1]",
-            "label": "Square"
-          },
-          {
-            "value": "aspect-[2/1]",
-            "label": "2x1",
-            "group": "Landscape"
-          },
-          {
-            "value": "aspect-[4/3]",
-            "label": "4x3",
-            "group": "Landscape"
-          },
-          {
-            "value": "aspect-[5/2]",
-            "label": "5x2",
-            "group": "Landscape"
-          },
-          {
-            "value": "aspect-[16/9]",
-            "label": "16x9",
-            "group": "Landscape"
-          },
-          {
-            "value": "aspect-[3/4]",
-            "label": "3x4",
-            "group": "Portrait"
-          },
-          {
-            "value": "aspect-[9/16]",
-            "label": "9x16",
-            "group": "Portrait"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "min_ratio_tablet",
-        "label": "Tablet screens",
-        "info": "Only applies to devices larger than 768 pixels and smaller than 1280 pixels.",
-        "default": "md:aspect-[2/1]",
-        "options": [
-          {
-            "value": "",
-            "label": "Default (same as mobile)"
-          },
-          {
-            "value": "md:aspect-[1/1]",
-            "label": "Square"
-          },
-          {
-            "value": "md:aspect-[2/1]",
-            "label": "2x1",
-            "group": "Landscape"
-          },
-          {
-            "value": "md:aspect-[4/3]",
-            "label": "4x3",
-            "group": "Landscape"
-          },
-          {
-            "value": "md:aspect-[5/2]",
-            "label": "5x2",
-            "group": "Landscape"
-          },
-          {
-            "value": "md:aspect-[16/9]",
-            "label": "16x9",
-            "group": "Landscape"
-          },
-          {
-            "value": "aspect-[3/4]",
-            "label": "3x4",
-            "group": "Portrait"
-          },
-          {
-            "value": "aspect-[9/16]",
-            "label": "9x16",
-            "group": "Portrait"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "min_ratio_desktop",
-        "label": "Desktop and up",
-        "info": "Only applies to devices larger than 1280 pixels.",
-        "default": "xl:aspect-[3/1]",
-        "options": [
-          {
-            "value": "",
-            "label": "Default (same as tablet)"
-          },
-          {
-            "value": "xl:aspect-[1/1]",
-            "label": "Square"
-          },
-          {
-            "value": "xl:aspect-[2/1]",
-            "label": "2x1",
-            "group": "Landscape"
-          },
-          {
-            "value": "xl:aspect-[3/1]",
-            "label": "3x1",
-            "group": "Landscape"
-          },
-          {
-            "value": "xl:aspect-[4/3]",
-            "label": "4x3",
-            "group": "Landscape"
-          },
-          {
-            "value": "xl:aspect-[5/2]",
-            "label": "5x2",
-            "group": "Landscape"
-          },
-          {
-            "value": "xl:aspect-[16/9]",
-            "label": "16x9",
-            "group": "Landscape"
-          }
-        ]
       }
     ]
   }

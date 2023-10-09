@@ -1,0 +1,14 @@
+{%- comment -%}
+  This template is used to retrieve the articles. Those elements are then loaded in the blog overview page.
+  https://shopify.dev/api/section-rendering
+{%- endcomment -%}
+{%- layout none -%}
+
+{%- comment -%} Render articles {%- endcomment -%}
+<div id="articles" data-results-size="{{ blog.articles.size }}">
+  {%- liquid
+    paginate blog.articles by settings.articles_per_page
+      render 'article-grid', blog: blog, paginate: paginate, pagination_type: settings.pagination_view_blog
+    endpaginate
+  -%}
+</div>

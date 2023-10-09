@@ -33,16 +33,21 @@
             render 'pagination', paginate: paginate, anchor: '', class: ''
           endif
         endpaginate
-
-        if section.settings.show_back_to_top
-          render 'back-to-top'
-        endif
       -%}
     </div>
   </div>
 {%- endcapture -%}
 
-{%- render 'render-container-content', class: 'collection-wrapper mt-0', title: section.settings.title, content: container_content -%}
+{%- liquid
+  # Container footer
+  capture container_footer
+    if section.settings.show_back_to_top
+      render 'back-to-top'
+    endif
+  endcapture
+-%}
+
+{%- render 'render-container-content', class: 'collection-wrapper mt-0', title: section.settings.title, content: container_content, footer_content: container_footer -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if settings.pagination_view == 'load-more' -%}

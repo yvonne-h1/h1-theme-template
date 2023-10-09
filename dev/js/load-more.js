@@ -8,7 +8,12 @@ if (!customElements.get('load-more')) {
       this.currentTemplate = 'collection';
       this.windowTemplate = window.collection;
       this.ajaxSectionToLoad = 'theme-collection-filters-content';
-      this.updateContent = true;
+
+      if ((document.body.classList.contains('template-blog'))) {
+        this.currentTemplate = 'blog';
+        this.windowTemplate = window.blog;
+        this.ajaxSectionToLoad = 'theme-blog-content';
+      }
 
       this.currentPageValue = +this.querySelector('[data-current-page]').value;
       this.totalPagesValue = +this.querySelector('[data-total-pages]').value;
@@ -97,16 +102,21 @@ if (!customElements.get('load-more')) {
         .then(response => response.text())
         .then((responseText) => {
           const html = new DOMParser().parseFromString(responseText, 'text/html');
+
           let wrapperID = '#products';
+          if (this.currentTemplate == 'blog') wrapperID = '#articles';
 
           if (!html.querySelector(`${wrapperID}`)) return;
 
           let elementsWrapper = document.querySelector('#CollectionProductGrid');
           let wrapperIDSelector = '[data-products-wrapper]';
-          if (this.currentTemplate === 'search') elementsWrapper = document.querySelector('#SearchProductGrid');
+          if (this.currentTemplate === 'blog') {
+            elementsWrapper = document.querySelector('#BlogArticlesGrid');
+            wrapperIDSelector = '[data-articles-wrapper]';
+          }
 
           // update the wrapper with the new elements (products/articles)
-          const newContent = html.querySelector(`${wrapperID} ${wrapperIDSelector}`).querySelectorAll('li');
+          const newContent = Array.from(html.querySelector(`${wrapperID} ${wrapperIDSelector}`).querySelectorAll('li'));
 
           // depending on the direction of the click, append or prepend the products/articles and update the pagination
           if (direction === 'next') {
@@ -114,27 +124,47 @@ if (!customElements.get('load-more')) {
               // append the new items and focus the first added item.
               // check for the event.pointerType. It's empty when keyboard was used, so then focus the element.
               elementsWrapper.querySelector(`${wrapperIDSelector}`).append(element);
+
+              // for product cards, focus the screen reader link
               if (index === 0 && event.pointerType === '') {
-                element.querySelector('.product-card__sr-link').focus();
+                if (this.currentTemplate === 'collection') {
+                  element.querySelector('.product-card__sr-link')?.focus();
+                }
+                else if (this.currentTemplate === 'blog') {
+                  element.querySelector('footer .button')?.focus();
+                }
               }
             });
 
             // update the pagination
-            const paginationNextHtml = html.querySelector('[data-pagination-next]').innerHTML;
-            elementsWrapper.querySelector('[data-pagination-next]').innerHTML = paginationNextHtml;
+            const paginationNextHtml = html.querySelector('[data-pagination-next]');
+            if (paginationNextHtml.innerHTML === '') {
+              elementsWrapper.querySelector('[data-pagination-next]').parentElement.classList.add('hidden');
+            }
+            else {
+              elementsWrapper.querySelector('[data-pagination-next]').innerHTML = paginationNextHtml.innerHTML;
+            }
           }
           else {
+            // reverse the order of items so they are placed in order
+            newContent.reverse();
+
             newContent.forEach((element, index) => {
               // append the new items and focus the first added item.
               // Check for the event.pointerType. It's empty when keyboard was used, so then focus the element.
               elementsWrapper.querySelector(`${wrapperIDSelector}`).prepend(element);
               if (index === newContent.length - 1 && event.pointerType === '') {
-                element.querySelector('.product-card__sr-link').focus();
+                if (this.currentTemplate === 'collection') {
+                  element.querySelector('.product-card__sr-link')?.focus();
+                }
+                else if (this.currentTemplate === 'blog') {
+                  element.querySelector('footer .button')?.focus();
+                }
               }
             });
             // update the pagination
-            const paginationPrevHtml = html.querySelector('[data-pagination-prev]').innerHTML;
-            elementsWrapper.querySelector('[data-pagination-prev]').innerHTML = paginationPrevHtml;
+            const paginationPrevHtml = html.querySelector('[data-pagination-prev]');
+            if (paginationPrevHtml) elementsWrapper.querySelector('[data-pagination-prev]').innerHTML = paginationPrevHtml.innerHTML;
           }
 
           // update the variables because the returned amount of products will likely have different pagination values
@@ -147,7 +177,7 @@ if (!customElements.get('load-more')) {
           if (this.loadedPages.indexOf(this.currentPageValue) === -1) this.loadedPages.push(this.currentPageValue);
 
           // reload the function since variables might have been changed
-          this.initLoadMoreButtons(true);
+          this.initLoadMoreButtons(this.currentTemplate === 'collection');
 
           // update url
           this.updateURLHash(page);

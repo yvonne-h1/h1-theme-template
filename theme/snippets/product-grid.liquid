@@ -39,8 +39,8 @@
       <div class="load-more load-more--prev text-center my-8 flex justify-center items-center empty:my-0" data-pagination-prev>
         {%- if paginate.current_page > 1 -%}
           <a href="{{ paginate.previous.url }}" class="button button--primary" data-load-trigger="prev">
-            <span data-load-text>{% render "render-translation", namespace: "sections.collection_template.load_more", key: "previous", fallback: "Previous" %}</span>
-            <span class="hidden" data-loader>{% render "render-translation", namespace: "sections.collection_template.load_more", key: "loading", fallback: "" %}</span>
+            <span data-load-text>{% render "render-translation", namespace: "sections.load_more", key: "previous", fallback: "Previous" %}</span>
+            <span class="hidden" data-loader>{% render "render-translation", namespace: "sections.load_more", key: "loading", fallback: "" %}</span>
           </a>
         {%- endif -%}
       </div>
@@ -78,21 +78,23 @@
     {%- endfor -%}
   </ol>
 
-  {%- if pagination_type == 'load-more' and paginate.pages > 1 -%}
-    <div class="load-more-wrapper text-center mt-20">
+{%- if pagination_type == 'load-more' -%}
+  {%- if paginate.pages > 1 -%}
+    <div class="load-more-wrapper text-center mt-20 {% if paginate.current_page >= paginate.pages -%}hidden{%- endif -%}">
       <div class="load-more load-more--next flex items-center justify-center mb-4" data-pagination-next>
         {%- if paginate.current_page < paginate.pages -%}
           <a href="{{ paginate.next.url }}" class="button button--primary" data-load-trigger="next">
-            <span data-load-text>{% render "render-translation", namespace: "sections.collection_template.load_more", key: "next", fallback: "Next" %}</span>
-            <span class="hidden" data-loader>{% render "render-translation", namespace: "sections.collection_template.load_more", key: "loading", fallback: "" %}</span>
+            <span data-load-text>{% render "render-translation", namespace: "sections.load_more", key: "next", fallback: "Next" %}</span>
+            <span class="hidden" data-loader>{% render "render-translation", namespace: "sections.load_more", key: "loading", fallback: "" %}</span>
           </a>
         {%- endif -%}
       </div>
 
       <p class="text-center" data-totals-text>
-        {{ 'sections.collection_template.load_more.info_html' | t: current: current_html, total: total_html }}
+        {{ 'sections.load_more.info_html' | t: current: current_html, total: total_html }}
       </p>
     </div>
+  {%- endif -%}
   </load-more>
 {%- endif -%}
 

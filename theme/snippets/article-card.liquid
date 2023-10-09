@@ -95,24 +95,24 @@
 {%- capture tag_categories -%}
   {%- liquid
     if show_category
-        for tag in article.tags
-          assign tag_downcase = tag | downcase
-          if tag_downcase contains 'category:'
-            assign category_name = tag | downcase | split: ':' | last
+      for tag in article.tags
+        assign tag_downcase = tag | downcase
+        if tag_downcase contains 'category:'
+          assign category_name = tag | downcase | split: ':' | last
 
-            # Used for regular article cards
-            capture tags_as_badges
-              echo tags_as_badges
-              echo category_name | link_to_tag: tag | replace: '<a', '<a tabindex="-1" class="badge capitalize no-underline states:scale-110"'
-            endcapture
+          # Used for regular article cards
+          capture tags_as_badges
+            echo tags_as_badges
+            echo category_name | link_to_tag: tag | replace: '<a', '<a tabindex="-1" class="badge capitalize no-underline states:scale-110"'
+          endcapture
 
-            # Used for highlighted article
-            capture tags_as_string
-              echo tags_as_string
-              echo category_name | capitalize | upcase | link_to_tag: tag | replace: '<a', '<a tabindex="-1" class="label no-underline inverted"' | prepend: ' | '
-            endcapture
-          endif
-        endfor
+          # Used for highlighted article
+          capture tags_as_string
+            echo tags_as_string
+            echo category_name | capitalize | upcase | link_to_tag: tag | replace: '<a', '<a tabindex="-1" class="label no-underline inverted"' | prepend: ' | '
+          endcapture
+        endif
+      endfor
     endif
   -%}
 
@@ -128,14 +128,14 @@
 <article class="article-card flex flex-col gap-y-4 {{ class -}}">
   {% comment %} Highlighted card {% endcomment %}
   {%- if highlight -%}
-    <div class="relative {% if section.settings.show_highlight_image -%}flex overflow-hidden rounded-md p-6 lg:p-10 {{ section.settings.highlight_position_horizontal }} {{ section.settings.highlight_position_vertical }} {{ section.settings.highlight_text_align }} {{ section.settings.min_ratio_mobile }} {{ section.settings.min_ratio_tablet }} {{ section.settings.min_ratio_desktop }}{%- endif -%}">
-      {%- if section.settings.show_highlight_image -%}
+    <div class="relative {% if settings.show_highlight_image -%}flex overflow-hidden rounded-md p-6 lg:p-10 {{ settings.ha_position_horizontal }} {{ settings.ha_position_vertical }} {{ settings.ha_text_align }} {{ settings.ha_min_ratio_mobile }} {{ settings.ha_min_ratio_tablet }} {{ settings.ha_min_ratio_desktop }}{%- endif -%}">
+      {%- if settings.show_highlight_image -%}
         {% comment %} Image {% endcomment %}
         <div class="article-card__image absolute inset-0 -z-10 flex-none bg-black">
           {%- liquid
             # Image
             assign image_classes = 'article-card__image w-full h-full object-cover  group-hover/article-card:scale-105 duration-300 transition-all opacity-80'
-            if section.settings.show_highlight_image
+            if settings.show_highlight_image
               render 'responsive-image', image_object: image_object, alt: article.title, max_width: 1360, sizes: '(min-width: 1440px) 1360px, 100vw', class: image_classes
             endif
           -%}
@@ -144,19 +144,19 @@
 
       {% comment %} Content {% endcomment %}
       <div class="article-card__content-wrapper">
-        <div class="article-card__content flex flex-col gap-y-4 {% if section.settings.show_highlight_image -%}max-w-full p-6 md:max-w-lg{%- endif %} {{ section.settings.content_color_scheme }}">
+        <div class="article-card__content flex flex-col gap-y-4 {% if settings.show_highlight_image -%}max-w-full p-6 md:max-w-lg{%- endif %} {{ settings.ha_content_color_scheme }}">
           <header class="article-card__header flex flex-col gap-y-2">
             {% comment %} Category and date {% endcomment %}
-            {%- if section.settings.show_highlight_category or section.settings.show_highlight_date -%}
+            {%- if settings.show_highlight_category or settings.show_highlight_date -%}
               <div class="has-gap-4 flex items-center justify-between">
                 {% comment %} Category {% endcomment %}
-                {%- if section.settings.show_highlight_category and tags_as_string != blank -%}
+                {%- if settings.show_highlight_category and tags_as_string != blank -%}
                   {%- assign categories = tags_as_string | remove_first: '|' | strip -%}
                   {{- categories -}}
                 {%- endif -%}
 
                 {% comment %} Date {% endcomment %}
-                {%- if section.settings.show_highlight_date -%}
+                {%- if settings.show_highlight_date -%}
                   <p class="article-card__published_at mb-0 text-sm italic">
                     {{- article_date -}}
                   </p>
@@ -168,13 +168,16 @@
             <h2 class="article-card__title h4 mb-0">
               {{- article.title -}}
             </h2>
-            <span class="article-card__author opacity-50 contrast-more:opacity-100">
-              {{- article_author -}}
-            </span>
+            {% comment %} Author {% endcomment %}
+            {%- if settings.show_highlight_author -%}
+              <span class="article-card__author opacity-50 contrast-more:opacity-100">
+                {{- article_author -}}
+              </span>
+            {%- endif -%}
           </header>
 
           {% comment %} Excerpt {% endcomment %}
-          {%- if section.settings.show_highlight_excerpt and article.excerpt != blank -%}
+          {%- if settings.show_highlight_excerpt and article.excerpt != blank -%}
             {{- article_excerpt -}}
           {%- endif -%}
 

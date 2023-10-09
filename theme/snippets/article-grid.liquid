@@ -1,0 +1,79 @@
+{%- comment -%}
+  Render the blog articles grid
+  This snippet renders the pagination + articles.
+{%- endcomment -%}
+
+{%- liquid
+  paginate blog.articles by settings.articles_per_page
+    assign total_for_first_pages = paginate.items | divided_by: settings.articles_per_page | times: settings.articles_per_page
+    assign items_on_last_page = paginate.items | minus: total_for_first_pages
+    if items_on_last_page == 0
+      assign items_on_last_page = settings.articles_per_page
+    endif
+  endpaginate
+-%}
+
+{%- if pagination_type == 'load-more' -%}
+  <load-more>
+    <input type="hidden" value="{{ paginate.pages }}" data-total-pages>
+    <input type="hidden" value="{{ paginate.items }}" data-total-items>
+    <input type="hidden" value="{{ items_on_last_page }}" data-items-on-last-page>
+    <input type="hidden" value="{{ paginate.current_page }}" data-current-page>
+    {%- if paginate.pages > 1 -%}
+      <div class="load-more load-more--prev my-8 flex items-center justify-center text-center empty:my-0" data-pagination-prev>
+        {%- if paginate.current_page > 1 -%}
+          <a href="{{ paginate.previous.url }}" class="button button--primary" data-load-trigger="prev">
+            <span data-load-text>{% render 'render-translation', namespace: 'sections.load_more', key: 'previous', fallback: 'Previous' %}</span>
+            <span class="hidden" data-loader>{% render 'render-translation', namespace: 'sections.load_more', key: 'loading', fallback: '' %}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+{%- endif -%}
+
+  <ol class="blog-articles grid grid-cols-12 gap-x-base gap-y-8" data-articles-wrapper>
+    {%- for article in blog.articles -%}
+      {% comment %} Check if this is a highlight and add the classes for each card {% endcomment %}
+      {%- liquid
+        assign highlight = false
+        assign col_classes = 'col-span-12 sm:col-span-6 lg:col-span-4'
+        if forloop.first and settings.show_highlight_article and paginate.current_page == 1
+          assign highlight = true
+          assign col_classes = 'col-span-12'
+        endif
+      -%}
+
+      <li class="{{ col_classes }}">
+          {% comment %} Output article card {% endcomment %}
+          {%- render 'article-card', article: article, highlight: highlight, section: section -%}
+      </li>
+    {%- endfor -%}
+  </ol>
+
+{%- if pagination_type == 'load-more' -%}
+  {%- if paginate.pages > 1 -%}
+    <div class="load-more-wrapper mt-20 text-center {% if paginate.current_page >= paginate.pages -%}hidden{%- endif -%}">
+      <div class="load-more load-more--next mb-4 flex items-center justify-center" data-pagination-next>
+        {%- if paginate.current_page < paginate.pages -%}
+          <a href="{{ paginate.next.url }}" class="button button--primary" data-load-trigger="next">
+            <span data-load-text>{% render 'render-translation', namespace: 'sections.load_more', key: 'next', fallback: 'Next' %}</span>
+            <span class="hidden" data-loader>{% render 'render-translation', namespace: 'sections.load_more', key: 'loading', fallback: '' %}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+  </load-more>
+{%- endif -%}
+
+{%- comment -%} Window object is used for load-more.js and needs pagination object {%- endcomment -%}
+<script>
+  window.blog = {
+    totalItems: {{ paginate.items }},
+    totalPages: {{ paginate.pages }},
+    itemsPerPage: {{ settings.articles_per_page }},
+    {% if items_on_last_page != nil %}
+      itemsOnLastPage: {{ items_on_last_page }},
+    {% endif %}
+  }
+</script>
