@@ -30,32 +30,34 @@
   {% comment %} If the article content contains a placeholder for products, render the carousel there instead {% endcomment %}
   {%- liquid
     assign has_products_placeholder = false
-    assign article_content = article.content
 
     # Logic to render the article content
-    if product_slider != blank and article.content contains '<p>[[ PRODUCTS ]]</p>' or article.content contains '[[ PRODUCTS ]]'
+    if article.content contains '<p>[[ PRODUCTS ]]</p>' or article.content contains '[[ PRODUCTS ]]'
       if article.content contains '<p>[[ PRODUCTS ]]</p>'
-      assign has_products_placeholder = '<p>[[ PRODUCTS ]]</p>'
-        assign article_parts = article_content | split: '<p>[[ PRODUCTS ]]</p>'
+        assign has_products_placeholder = '<p>[[ PRODUCTS ]]</p>'
       elsif article.content contains '[[ PRODUCTS ]]'
-      assign has_products_placeholder = '[[ PRODUCTS ]]'
-        assign article_parts = article_content | split: '[[ PRODUCTS ]]'
+        assign has_products_placeholder = '[[ PRODUCTS ]]'
       endif
+    endif
 
-      # render the article content with the slider
+    # render the article content with the slider replacing the placeholder
+    if product_slider != blank and has_products_placeholder != false
+      assign article_parts = article.content | split: has_products_placeholder
+
       capture article_content
         echo article_parts[0] | prepend: '<div class="rte mx-auto mt-4 mb-10 max-w-screen-md">' | append: '</div>'
         echo product_slider
         echo article_parts[1] | prepend: '<div class="rte mx-auto mt-10 max-w-screen-md">' | append: '</div>'
       endcapture
     else
+      # remove the placeholder and wrap the content
       capture article_content
-        echo article_content | prepend: '<div class="rte mx-auto mt-4 mb-10 max-w-screen-md">' | append: '</div>'
+        echo article.content | replace: has_products_placeholder, '' | prepend: '<div class="rte mx-auto mt-4 mb-10 max-w-screen-md">' | append: '</div>'
       endcapture
     endif
   -%}
 
-  {{ article_content }}
+  {{- article_content -}}
 {%- endcapture -%}
 
 {%- liquid
@@ -67,10 +69,12 @@
 {%- comment -%} Render the content {%- endcomment -%}
 {%- render 'render-container-content', tag: 'section', content: container_content, class: container_class -%}
 
-{% comment %} If there is no placeholder in the content, render the products below the content {% endcomment %}
+{% comment %} If there is no placeholder in the content, render the product slider below the content {% endcomment %}
 {%- liquid
-  unless has_products_placeholder != false and article.content contains has_products_placeholder
-    # Render the content
-    render 'render-container-content', class: container_class_products, content: product_slider, content_class: 'p-0', title: container_title
-  endunless
+  if product_slider != blank
+    unless has_products_placeholder != false and article.content contains has_products_placeholder
+      # Render the content
+      render 'render-container-content', class: container_class_products, content: product_slider, content_class: 'p-0', title: container_title
+    endunless
+  endif
 -%}

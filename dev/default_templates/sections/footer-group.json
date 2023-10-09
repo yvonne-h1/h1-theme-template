@@ -6,25 +6,68 @@
       "type": "footer",
       "blocks": {
         "menu": {
-          "type": "menu"
+          "type": "menu",
+          "settings": {
+            "enable_collapsible": true,
+            "menu": "footer",
+            "alignment": "",
+            "width_mobile": "col-span-12",
+            "width_tablet": "md:col-span-8",
+            "width_desktop": "xl:col-span-9"
           }
         },
         "newsletters-and-socials": {
           "type": "newsletter",
           "settings": {
+            "klaviyo_newsletter": "",
             "title": "Newsletter",
-            "description": "<p><strong>Subscribe to our newsletter to stay updated on sales and special events.</strong></p>",
-            "newsletter": true,
-            "social_icons": true,
-            "social_icons_shape": "round",
-            "social_icons_size": "w-8"
+            "description": "<p>Subscribe to our newsletter to stay updated on sales and special events.</p>",
+            "input_placeholder": "Your email address",
+            "submit": "Join",
+            "success_message": "<p>You have successfully subscribed.</p>",
+            "alignment": "",
+            "width_mobile": "col-span-12",
+            "width_tablet": "md:col-span-4",
+            "width_desktop": "xl:col-span-3"
+          }
+        },
+        "localization": {
+          "type": "localization",
+          "settings": {
+            "enable_country_selector": true,
+            "enable_language_selector": true,
+            "alignment": "",
+            "width_mobile": "col-span-12",
+            "width_tablet": "md:col-span-8",
+            "width_desktop": "xl:col-span-9"
+          }
+        },
+        "socials": {
+          "type": "socials",
+          "settings": {
+            "social_icons_shape": "regular",
+            "social_icons_size": "w-5",
+            "alignment": "",
+            "width_mobile": "col-span-6",
+            "width_tablet": "md:col-span-4",
+            "width_desktop": "xl:col-span-3"
+          }
+        },
+        "payment-icons": {
+          "type": "payment_icons",
+          "settings": {
+            "payment_icons_size": "w-8",
+            "alignment": "md:justify-self-center",
+            "width_mobile": "col-span-12",
+            "width_tablet": "md:col-span-12",
+            "width_desktop": "xl:col-span-12"
           }
         }
       },
-      "block_order": ["menu", "newsletters-and-socials"],
+      "block_order": ["menu", "newsletters-and-socials", "localization", "socials", "payment-icons"],
       "settings": {
-        "payment_icons": true,
-        "payment_icons_size": "w-8",
+        "color_scheme": "color-scheme color-scheme--secondary",
+        "copyright_text": "© H1 Webdevelopment [[ year ]]. All rights reserved.",
         "copyright": true
       }
     }
