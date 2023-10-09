@@ -16,7 +16,7 @@
     title               { String }  | Optional  | Set the image title
     class               { String }  | Optional  | Set classname(s) for the image
     figcaption          { String }  | Optional  | Set a figure caption
-                                                  When you add a picture caption, the <img> is automatically wrapped with a picture tag
+                                                  When you add a picture caption, the <img> is automatically wrapped with a figure tag
 
   # Figure parameters
     figure_class        { String }  | Optional | Set classname(s) for the figure
@@ -43,10 +43,21 @@
   else
     assign aspect_width = aspect_ratio | split: '/' | first | times: 1.0
     assign aspect_height = aspect_ratio | split: '/' | last | times: 1.0
-    assign image_ratio = aspect_width | divided_by: aspect_height | round: 3
+    assign image_ratio = aspect_width | divided_by: aspect_height | abs
     assign style = 'aspect-ratio: ' | append: aspect_ratio | append: ';'
     assign custom_aspect_ratio = true
   endunless
+
+  assign is_square = false
+  assign is_landscape = false
+  assign is_portrait = false
+  if aspect_width == aspect_height
+    assign is_square = true
+  elsif aspect_width > aspect_height
+    assign is_landscape = true
+  elsif aspect_height > aspect_width
+    assign is_portrait = true
+  endif
 
   if class
     unless class contains 'object-cover'
@@ -55,10 +66,16 @@
   else
     assign class = 'object-contain'
   endif
+
+  # Shopify adds lazy by default, so only overwrite when you pass the lazy parameter, like in sliders with multiple slides
+  assign lazy_load = 'eager'
+  if lazy != blank and lazy == true
+    assign lazy_load = 'lazy'
+  endif
 -%}
 
 {% capture fallback_image %}
-  <div class="svg flex items-center justify-center  text-accent {{ class -}}" style="{{- style -}}">
+  <div class="svg flex items-center justify-center text-accent {{ class -}}" style="{{- style -}}">
     {{- 'image' | placeholder_svg_tag -}}
   </div>
 {% endcapture %}
@@ -95,7 +112,7 @@
     assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 2048, 2560, 3000, 4000'
   endunless
 
-  # If the max_width is less than 320, create a new array of sizes with that value and that value times 2 to support 2DRP
+  # If the max_width is less than 320, create a new array of sizes with that value and that value times 2 to support 2 DPR
   if max_width < 320
     assign max_width_times_two = max_width | times: 2
     assign widths = max_width | append: ', ' | append: max_width_times_two
@@ -163,23 +180,17 @@
       assign new_widths = new_widths | append: ', ' | append: width_int
       assign image_url = image_object | image_url: width: width_int
       assign width = width_int
-      assign height = width_int | divided_by: image_ratio | round: 0
+      assign height = width_int | divided_by: image_ratio | round
     endif
   endfor
 
   assign widths = new_widths | remove_first: ', '
-
-  # Shopify adds lazy by default, so only overwrite when you pass the lazy parameter, like in sliders with multiple slides
-  assign lazy_load = 'eager'
-  if lazy != blank and lazy == true
-    assign lazy_load = 'lazy'
-  endif
 -%}
 
 {%- capture image_element -%}
-{% comment %} We force lazy loading {% endcomment %}
-{%- if lazy != blank -%}
-  {{ image_url | image_tag:
+  {% comment %} We force lazy loading {% endcomment %}
+  {%- if lazy != blank -%}
+    {{ image_url | image_tag:
       alt: alt,
       class: class,
       crop: crop,
@@ -191,10 +202,10 @@
       width: width,
       widths: widths,
       data-custom-aspect-ratio: custom_aspect_ratio
-  }}
- {%- else -%}
-  {% comment %} Let Shopify determine lazy loading {% endcomment %}
-  {{ image_url | image_tag:
+    }}
+  {%- else -%}
+    {% comment %} Let Shopify determine lazy loading {% endcomment %}
+    {{ image_url | image_tag:
       alt: alt,
       class: class,
       crop: crop,

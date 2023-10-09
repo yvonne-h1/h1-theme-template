@@ -14,7 +14,8 @@
 <div
   id="mobileMenu"
   class="mobile-menu lg:hidden {{ section.settings.color_scheme }}"
-  role="dialog">
+  role="dialog"
+  aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'mobile_menu', fallback: 'Mobile menu' -%}">
   <collapsible-component
     class="
       mobile-menu__inner

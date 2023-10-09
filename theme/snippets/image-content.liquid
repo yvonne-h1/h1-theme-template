@@ -132,21 +132,17 @@
 
     assign mobile_aspect = min_ratio_mobile | split: '[' | last | remove: ']'
     assign tablet_aspect = min_ratio_tablet | split: '[' | last | remove: ']'
-  -%}
 
-  {%- capture image -%}
-    {%- if object.settings.image_desktop != blank -%}
-      {%- liquid
+    capture image
+      if object.settings.image_desktop != blank
         # Desktop image
         render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, lazy: lazy, aspect_ratio: tablet_aspect
 
         # Mobile image
-        if image_mobile != blank
-          render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy, aspect_ratio: mobile_aspect
-        endif
-      -%}
-    {%- endif -%}
-  {%- endcapture -%}
+        render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy, aspect_ratio: mobile_aspect
+      endif
+    endcapture
+  -%}
 
   {% comment %} Add the custom element wrapper {% endcomment %}
   {%- if is_video -%}
