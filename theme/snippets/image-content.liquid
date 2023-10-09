@@ -179,7 +179,7 @@
 
           {%- unless object.settings.button_1_play or object.settings.button_2_play -%}
             <button
-              class="video-element__button button button--primary h-12 w-12 rounded-full p-0"
+              class="video-element__button button button--primary h-20 w-20 rounded-full p-0"
               aria-label="{%- render 'render-translation', namespace: 'products.product.media', key: 'play_video', fallback: 'Play video' -%}"
               data-video-play-button>
               {%- render 'icons', icon: 'play', icon_class: 'w-6' -%}
