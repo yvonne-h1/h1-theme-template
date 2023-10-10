@@ -2,7 +2,7 @@
   {%- for item in cart.items -%}
     <div id="cart-notification-product-{{ item.id }}" class="cart-item">
       {%- if item.image != blank -%}
-        {%- render 'responsive-image', image_object: item.image, alt: item.title, max_width: 80, aspect_ratio: '1/1', class: 'w-20 border' -%}
+        {%- render 'responsive-image', image_object: item.image, alt: item.title, widths: '80, 160', aspect_ratio: '1/1', class: 'w-20 border' -%}
       {%- endif -%}
       <div class="flex grow flex-col">
         <p class="cart-notification-product__name my-0 font-bold">

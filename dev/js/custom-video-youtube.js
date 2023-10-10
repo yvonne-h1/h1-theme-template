@@ -19,11 +19,6 @@ class CustomYTVideo extends HTMLElement {
   constructor() {
     super();
 
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
     this.options = {
       id: '',
       autoplay: false,
@@ -96,6 +91,11 @@ class CustomYTVideo extends HTMLElement {
 
   loadVideo() {
     const self = this;
+
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     window.onYouTubeIframeAPIReady = () => {
       const player = new YT.Player(self.options.video_element_id, {

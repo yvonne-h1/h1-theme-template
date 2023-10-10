@@ -39,8 +39,6 @@ class CustomVimeoVideo extends HTMLElement {
       return;
     }
 
-    console.log('vimeo', this.options);
-
     this.videoTriggers = this.querySelectorAll('[data-video-trigger]');
     this.videoContent = this.querySelector('[data-video-content]');
     this.paused = true;
@@ -104,17 +102,6 @@ class CustomVimeoVideo extends HTMLElement {
 
     this.paused = false;
 
-    this.player.ready().then(() => {
-      // The player is ready
-
-      const iframe = this.querySelector('iframe').contentWindow;
-      console.log(iframe);
-      iframe.document.body.addEventListener('click', () => {
-        // window.addEventListener('click', () => {
-        console.log('click');
-      });
-    });
-
     this.player.on('pause', () => {
       this.paused = true;
       this.showPlayerElements();
@@ -133,17 +120,14 @@ class CustomVimeoVideo extends HTMLElement {
    */
   playVideo() {
     if (!this.player) {
-      console.log('if');
       this.loadVideo();
       if (this.options.autoplay) {
         this.hidePlayerElements();
       }
     }
     else {
-      console.log('else', this.player);
       this.player.play()
         .then(() => {
-          console.log('then');
           // The video is playing
           this.paused = false;
           this.hidePlayerElements();
@@ -156,7 +140,6 @@ class CustomVimeoVideo extends HTMLElement {
 
   pauseVideo() {
     if (!this.player) return;
-    console.log('pause viem');
 
     this.player.pause()
       .then(() => {

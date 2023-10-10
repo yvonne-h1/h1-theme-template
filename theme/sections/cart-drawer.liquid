@@ -87,7 +87,7 @@
               {%- if cart != empty -%}
                 <div class="cart-drawer-items">
                   {%- for item in cart.items -%}
-                    {%- render 'cart-item', item: item, image_size: 80, view: 'cart-drawer' -%}
+                    {%- render 'cart-item', item: item, view: 'cart-drawer' -%}
                   {%- endfor -%}
                 </div>
               {%- endif -%}

@@ -22,7 +22,9 @@ class ProductInfo extends HTMLElement {
       // check for window height for accessibility. We don't fix the element for small screens
       if (window.innerHeight > 480) this.productInfoObserver(event);
     }, 10);
+
     window.addEventListener('scroll', this.debouncedOnScroll.bind(this));
+    window.addEventListener('resize', this.debouncedOnScroll.bind(this));
   }
 
   /**
@@ -37,7 +39,6 @@ class ProductInfo extends HTMLElement {
         if (isBottomVisible) {
           this.quickAddWrapper.classList.add(this.fixedClass);
           // set the height of the element to the same height as the wrapper so there's no jump when the sticky (fixed) class is applied. Also wait a bit because the dynamic checkout might be loaded later
-
           setTimeout(() => {
             document.body.style.paddingBottom = `${this.quickAddContent.clientHeight}px`;
           }, 500);

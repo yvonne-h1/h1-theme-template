@@ -53,7 +53,7 @@
         {% comment %} Featured image {% endcomment %}
       {%- when 'featured_image' -%}
         {%- if article.image -%}
-            {%- assign image_classes = 'max-w-full h-auto block mx-auto object-cover ' | append: block.settings.min_ratio_mobile | append: ' ' | append: block.settings.min_ratio_tablet -%}
+            {%- assign image_classes = 'max-w-full w-full h-auto block mx-auto object-cover ' | append: block.settings.min_ratio_mobile | append: ' ' | append: block.settings.min_ratio_tablet -%}
           <div class="article-header__featured-image {{ block.settings.min_ratio_mobile }} {{ block.settings.min_ratio_tablet }}" {{ block.shopify_attributes }}>
             {%- render 'responsive-image',
               image_object: article.image,

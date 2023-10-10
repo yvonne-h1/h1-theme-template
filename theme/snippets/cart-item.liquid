@@ -10,10 +10,6 @@
 {% endcomment %}
 
 {%- liquid
-  unless image_size
-    assign image_size = 96
-  endunless
-
   unless aspect_ratio
     assign aspect_ratio = '3/4'
   endunless
@@ -27,7 +23,7 @@
     title="{{ item.product.title }}"
     tabindex="-1">
     {%- if item.image -%}
-      {%- render 'responsive-image', image_object: item.image, alt: item.title, max_width: image_size, aspect_ratio: aspect_ratio, class: class -%}
+      {%- render 'responsive-image', image_object: item.image, alt: item.title, widths: '96, 192', aspect_ratio: aspect_ratio, class: class -%}
     {%- endif -%}
   </a>
 

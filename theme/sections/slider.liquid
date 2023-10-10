@@ -68,8 +68,8 @@
 
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
-  <swiper-slider {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
-    <div class="swiper relative" data-swiper>
+  <swiper-slider class="" {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
+    <div class="swiper relative overflow-hidden" data-swiper>
       <div class="swiper-wrapper flex">
         {%- liquid
           assign lazy = true

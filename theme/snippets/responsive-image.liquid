@@ -30,10 +30,31 @@
     -%}
 {%- endcomment -%}
 
+{% capture fallback_image %}
+  <div class="svg flex items-center justify-center text-accent {{ class -}}" style="{{- style -}}">
+    {{- 'image' | placeholder_svg_tag -}}
+  </div>
+{% endcapture %}
+
 {%- liquid
-  assign shopify_max = 5120
+  if class
+    unless class contains 'object-cover'
+      assign class = class | append: ' object-contain'
+    endunless
+  else
+    assign class = 'object-contain'
+  endif
+
+  # Fallback image
+  if image_object == blank
+    echo fallback_image
+
+    # Break here so that the rest has no impact on page speed
+    break
+  endif
 
   # Global assigns
+  assign shopify_max = 5120
   assign height = image_object.height
   assign width = image_object.width
 
@@ -51,6 +72,7 @@
   assign is_square = false
   assign is_landscape = false
   assign is_portrait = false
+
   if aspect_width == aspect_height
     assign is_square = true
   elsif aspect_width > aspect_height
@@ -59,87 +81,11 @@
     assign is_portrait = true
   endif
 
-  if class
-    unless class contains 'object-cover'
-      assign class = class | append: ' object-contain'
-    endunless
-  else
-    assign class = 'object-contain'
-  endif
-
   # Shopify adds lazy by default, so only overwrite when you pass the lazy parameter, like in sliders with multiple slides
   assign lazy_load = 'eager'
   if lazy != blank and lazy == true
     assign lazy_load = 'lazy'
   endif
--%}
-
-{% capture fallback_image %}
-  <div class="svg flex items-center justify-center text-accent {{ class -}}" style="{{- style -}}">
-    {{- 'image' | placeholder_svg_tag -}}
-  </div>
-{% endcapture %}
-
-{%- liquid
-  # Fallback image
-  unless image_object
-    echo fallback_image
-
-    # Break here so that the rest has no impact on page speed
-    break
-  endunless
-
-  # If max_width is empty, then set the Shopify max
-  unless max_width
-    assign max_width = shopify_max
-
-    # If the max_width is not empty, multiply it by 2 to support 2 DPR
-  else
-    assign max_width_times_two = max_width | times: 2
-
-    # Check if the multiplied value is within the Shopify max
-    if max_width_times_two <= shopify_max
-      assign max_width = max_width | times: 2
-
-      # If not, then grab the Shopify max
-    else
-      assign max_width = shopify_max
-    endif
-  endunless
-
-  # Image widths
-  unless widths
-    assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 2048, 2560, 3000, 4000'
-  endunless
-
-  # If the max_width is less than 320, create a new array of sizes with that value and that value times 2 to support 2 DPR
-  if max_width < 320
-    assign max_width_times_two = max_width | times: 2
-    assign widths = max_width | append: ', ' | append: max_width_times_two
-  endif
-
-  # If the width is less than 320, just output that size to avoid errors. 2 times is not possible since the image isn't bigger than this size.
-  if width < 320
-    assign widths = width
-
-    # Check if there is a max width and if it's lower than the actual image
-    if max_width < width
-      # Create a times 2 width to see if it can handle 2 DPR with the actual image width
-      assign max_width_times_two = max_width | times: 2
-
-      # If so create an array with the max width and the 2 DPR support
-      if max_width_times_two <= width
-        assign widths = max_width | append: ', ' | append: max_width_times_two
-
-        # Else just assign the max width as width
-      else
-        assign widths = max_width
-      endif
-    endif
-  endif
-
-  # Create an array of the image widths
-  assign widths_arr = widths | handleize | split: '-'
 
   # Image sizes
   unless sizes
@@ -169,22 +115,64 @@
     endif
   endif
 
+  # min width to render sizes from, used for responsive images
+  if min_width != blank
+    assign min_width = min_width | times: 1
+  else
+    assign min_width = 0
+  endif
+
+  # If max_width is empty, then set the Shopify max
+  unless max_width
+    assign max_width = shopify_max
+
+    # If the max_width is not empty, multiply it by 2 to support 2 DPR
+  else
+    assign max_width_times_two = max_width | times: 2
+
+    # Check if the multiplied value is within the Shopify max
+    if max_width_times_two <= shopify_max
+      assign max_width = max_width | times: 2
+
+      # If not, then grab the Shopify max
+    else
+      assign max_width = shopify_max
+    endif
+  endunless
+
+  # Image widths
+  unless widths
+    assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 2048, 2560, 3000, 4000'
+  endunless
+
+  # Create an array of the image widths
+  assign widths_arr = widths | handleize | split: '-'
+
   for width_item in widths_arr
     assign width_int = width_item | plus: 0
+
+    if forloop.first
+      assign initial_width = width_int
+      assign initial_height = width_int | divided_by: image_ratio | round
+    endif
 
     if width_int > max_width
       break
     endif
 
+    if width_int < min_width
+      continue
+    endif
+
+    # on the last item for the widths
     if image_object.width >= width_int
-      assign new_widths = new_widths | append: ', ' | append: width_int
-      assign image_url = image_object | image_url: width: width_int
       assign width = width_int
-      assign height = width_int | divided_by: image_ratio | round
+      assign image_url = image_object | image_url: width: width
+      assign new_widths = new_widths | append: ',' | append: width_int
     endif
   endfor
 
-  assign widths = new_widths | remove_first: ', '
+  assign widths = new_widths | remove_first: ','
 -%}
 
 {%- capture image_element -%}
@@ -195,11 +183,11 @@
       class: class,
       crop: crop,
       loading: lazy_load,
-      height: height,
+      height: initial_height,
       sizes: sizes,
       style: style,
       title: title,
-      width: width,
+      width: initial_width,
       widths: widths,
       data-custom-aspect-ratio: custom_aspect_ratio
     }}
@@ -209,11 +197,11 @@
       alt: alt,
       class: class,
       crop: crop,
-      height: height,
+      height: initial_height,
       sizes: sizes,
       style: style,
       title: title,
-      width: width,
+      width: initial_width,
       widths: widths,
       data-custom-aspect-ratio: custom_aspect_ratio
     }}

@@ -25,7 +25,7 @@
   {%- comment -%} Get media for the main slider {%- endcomment -%}
   {%- capture media_content_slider -%}
     {{ media_content_slider }}
-    <div class="swiper-slide aspect-square w-screen md:w-full"
+    <div class="swiper-slide w-screen md:w-full"
       {% if media.media_type == 'image' -%}
         data-product-variant-image="[{{ variant_images }}]"
       {%- endif -%}>
@@ -52,12 +52,12 @@
             {%- render 'responsive-image',
               image_object: media,
               aspect_ratio: '1/1',
-              max_width: 512,
+              max_width: 1024,
               sizes: '(min-width: 768px) 512px, 100vw',
               alt: media.alt,
               title: media.alt,
               lazy: lazy,
-              class: 'aspect-square'
+              class: 'aspect-square w-full'
               -%}
             {%- render 'icons', icon: 'zoom', icon_class: 'w-6 absolute end-4 bottom-4 md:hidden pointer-events-none' -%}
           </a>
@@ -119,9 +119,9 @@
         {%- render 'responsive-image',
           image_object: image_object,
           aspect_ratio: '1/1',
-          widths: '64, 80, 138',
-          max_width: 138,
-          sizes: '(min-width: 1440px) 138px, (min-width: 768px) 80px, 64px',
+          widths: '80, 114, 164',
+          max_width: 164,
+          sizes: '(min-width: 1440px) 114px, (min-width: 768px) 80px, 164px',
           alt: media.alt,
           title: media.alt,
           class: 'w-full max-w-none'
@@ -138,7 +138,7 @@
     <div class="product-media-swiper__slider col-span-12 mb-4 md:mb-0">
       {%- comment -%} Main slider {%- endcomment -%}
       <div
-        class="swiper relative aspect-square"
+        class="swiper relative"
         data-product-media-swiper="{{ product.selected_or_first_available_variant.id }}">
         <div class="swiper-wrapper flex items-center">
           {{- media_content_slider -}}

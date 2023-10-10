@@ -90,7 +90,7 @@
           {%- render 'render-price', product: product, use_variant: false -%}
 
           {%- comment -%} The product form, product id will be update by variant.js {%- endcomment -%}
-          <footer class="mt-2 flex flex-wrap items-center gap-y-2 gap-x-base">
+          <footer class="mt-2 flex flex-wrap items-center gap-2">
             {%- if show_quick_shop -%}
               {% comment %} Render the quickshop wrapper and the trigger because we don't use the hover effect here {% endcomment %}
               {%- render 'quick-shop',

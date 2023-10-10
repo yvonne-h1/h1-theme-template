@@ -111,7 +111,7 @@
 
 {% comment %} Banner wrapper {% endcomment %}
 <div
-  class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% if object.settings.container_width == 'container--full' %}w-screen{%- else -%}w-full{%- endif -%}"
+  class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% if object.settings.container_width == 'container--full' %}w-screen{%- else -%}w-full min-w-full{%- endif -%}"
   {% if is_swiper and index != null %}
     data-swiper-slide-index="{{ index }}" {{ block.shopify_attributes }}
   {%- endif %}
@@ -136,7 +136,7 @@
     capture image
       if object.settings.image_desktop != blank
         # Desktop image
-        render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, lazy: lazy, aspect_ratio: tablet_aspect
+        render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, min_width: 768, lazy: lazy, aspect_ratio: tablet_aspect
 
         # Mobile image
         render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy, aspect_ratio: mobile_aspect
@@ -147,7 +147,7 @@
   {% comment %} Add the custom element wrapper {% endcomment %}
   {%- if is_video -%}
     <{{ element }}
-      class="block h-full w-full"
+      class="block h-full w-full overflow-hidden"
       data-options='
         {
         {% if video_type != 'mp4' -%}
@@ -165,7 +165,8 @@
       '>
   {%- endif -%}
 
-  <div class="{{- class -}}__image absolute inset-0">
+  {% comment %} Video or image {% endcomment %}
+  <div class="{{- class -}}__image absolute inset-0 {{ min_ratio_mobile }} {{ min_ratio_tablet }}">
     {% comment %} Render video {% endcomment %}
     {%- if is_video -%}
       <div class="video-element {% unless is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endunless %}">
