@@ -7,4 +7,11 @@
   .block-line-break + .block-line-break {
     @apply hidden;
   }
+
+  // reviews.io styling for product reviews to hide the 'no reviews' text when the form is visible
+  .ElementsWidget__inner:has(.ElementsWidget__form.isActive) {
+    .ElementsWidget__list:has(> .u-textCenter--all) {
+      @apply hidden;
+    }
+  }
 }
