@@ -165,9 +165,12 @@
             {%- endif -%}
 
             {% comment %} Title {% endcomment %}
-            <h2 class="article-card__title h4 mb-0">
-              {{- article.title -}}
-            </h2>
+            <a href="{{ article.url }}" class="no-underline">
+              <h2 class="article-card__title h4 mb-0">
+                {{- article.title -}}
+              </h2>
+            </a>
+
             {% comment %} Author {% endcomment %}
             {%- if settings.show_highlight_author -%}
               <span class="article-card__author opacity-50 contrast-more:opacity-100">

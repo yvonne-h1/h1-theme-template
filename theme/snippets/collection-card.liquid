@@ -13,14 +13,8 @@
 {% endcomment %}
 
 {%- liquid
-  assign featured_image = collection.featured_image
-
-  if image_lazy == null
-    assign image_lazy = true
-  endif
-
   unless image_alt
-    assign image_alt = featured_image.alt
+    assign image_alt = collection.featured_image.alt
     if image_alt == blank
       assign image_alt = collection.title
     endif
@@ -41,20 +35,26 @@
 <article>
   <a
     href="{{ collection.url }}"
-    class="collection-card group/collection-card flex flex-col gap-y-4 text-center text-current group-hover/collection-card:no-underline group-focus-visible/collection-card:no-underline">
-    <div class="collection-card__image transition-all group-hover/collection-card:scale-110 group-focus-visible/collection-card:scale-110">
-      {%- render 'responsive-image',
-        image_object: featured_image,
-        alt: image_alt,
-        title: image_title,
-        sizes: '(min-width: 1440px) 316px, (min-width: 1280px) 21.56vw, (min-width: 768px) 27vw, 43vw',
-        max_width: 379,
-        aspect_ratio: aspect_ratio,
-        class: 'mx-auto'
-      -%}
-    </div>
-    <h2 class="collection-card__title h4 text-center transition-colors group-hover/collection-card:text-primary  group-focus-visible/collection-card:text-primary">
-      {{- collection.title -}}
-    </h2>
+    class="collection-card group/collection-card flex flex-col gap-y-4 text-center text-current no-underline group-hover/collection-card:underline group-focus-visible/collection-card:underline">
+    {% comment %} Collection image {% endcomment %}
+    {%- if collection.featured_image -%}
+      <div class="collection-card__image p-4 transition-all group-hover/collection-card:scale-110 group-focus-visible/collection-card:scale-110 sm:p-6 md:p-10">
+        {%- render 'responsive-image',
+          image_object: collection.featured_image,
+          alt: image_alt,
+          title: image_title,
+          sizes: '(min-width: 1440px) 240px, (min-width: 1280px) 21.56vw, (min-width: 768px) 27vw, 43vw',
+          max_width: 379,
+          widths: '130,180,230,280,320',
+          aspect_ratio: aspect_ratio,
+          class: 'mx-auto h-full w-full'
+        -%}
+      </div>
+    {%- endif -%}
+    {%- if show_title -%}
+      <h2 class="collection-card__title h6 text-center transition-colors group-hover/collection-card:text-primary  group-focus-visible/collection-card:text-primary">
+        {{- collection.title -}}
+      </h2>
+    {%- endif -%}
   </a>
 </article>

@@ -1,4 +1,4 @@
-import { Fancybox } from '@fancyapps/ui';
+import Fancybox from './modules/fancybox.js';
 
 class CustomerAddresses extends HTMLElement {
   constructor() {

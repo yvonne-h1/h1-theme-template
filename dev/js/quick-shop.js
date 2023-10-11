@@ -1,4 +1,5 @@
-import { Fancybox } from '@fancyapps/ui';
+import fancybox from './modules/fancybox.js';
+
 class QuickAdd extends HTMLElement {
   constructor() {
     super();
@@ -51,9 +52,9 @@ class QuickAdd extends HTMLElement {
   }
 
   fancybox() {
-    if (!Fancybox) return false;
+    if (!fancybox) return false;
 
-    Fancybox.show([ {
+    fancybox.show([ {
       src: this.trigger.dataset.src,
       type: 'inline',
     } ],

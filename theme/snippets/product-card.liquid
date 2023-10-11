@@ -201,7 +201,7 @@
       {% comment %} ATC button to display the options {% endcomment %}
       {%- if show_quick_shop -%}
         {% comment %} Render quick shop {% endcomment %}
-        {%- render 'quick-shop', product: product_object, quick_shop_render_second_option: quick_shop_render_second_option, unique_identifier: product.handle -%}
+        {%- render 'quick-shop', product: product_object, quick_shop_render_second_option: quick_shop_render_second_option, unique_identifier: product.handle, view: view -%}
       {% endif %}
 
       {% comment %} Link to PDP {% endcomment %}

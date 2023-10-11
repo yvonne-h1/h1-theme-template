@@ -12,13 +12,14 @@
     endif
   -%}
 
-  <ul class="collection-list grid grid-cols-12 items-end gap-x-4 gap-y-12">
+  <ul class="collection-list grid grid-cols-12 items-end gap-base">
     {%- for collection in collections -%}
       {%- if collection.all_products_count > 0 -%}
         <li class="col-span-6 md:col-span-4 xl:col-span-3">
           {%- render 'collection-card',
             collection: collection,
-            aspect_ratio: section.settings.image_ratio
+            aspect_ratio: section.settings.image_ratio,
+            show_title: section.settings.show_title
            -%}
         </li>
       {%- endif -%}
@@ -27,7 +28,7 @@
 {%- endcapture -%}
 
 {% comment %} Render the content {% endcomment %}
-{%- render 'render-container-content', title: section.settings.title, title_tag: 'h1', title_class: 'h3', content: container_content -%}
+{%- render 'render-container-content', title: section.settings.title, title_tag: 'h1', title_class: section.settings.heading_alignment, content: container_content -%}
 
 {% schema %}
   {
@@ -38,6 +39,26 @@
         "id": "title",
         "label": "Heading",
         "default": "Collections"
+      },
+      {
+        "type": "select",
+        "id": "heading_alignment",
+        "label": "Heading alignment",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
       },
       {
         "type": "select",
@@ -95,6 +116,12 @@
             "label": "Square"
           }
         ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_title",
+        "label": "Show title",
+        "default": true
       }
     ]
   }

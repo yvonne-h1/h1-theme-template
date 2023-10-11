@@ -1,6 +1,6 @@
 
-import Swiper from 'swiper';
-import { A11y, Navigation } from 'swiper/modules';
+import Swiper from './modules/swiper.js';
+import { a11y, navigation } from './modules/swiper.js';
 
 class ProductCard extends HTMLElement {
   constructor() {
@@ -32,7 +32,7 @@ class ProductCard extends HTMLElement {
           allowTouchMove: false,
         },
       },
-      modules: [A11y, Navigation],
+      modules: [a11y, navigation],
     };
 
     // Check if we have extra options on the HTML

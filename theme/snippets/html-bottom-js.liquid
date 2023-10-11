@@ -1,7 +1,6 @@
 {% # prettier-ignore %}
 
 <script>
-
   window.routes = {
     cart_url: '{{ routes.cart_url }}',
     cart_add_url: '{{ routes.cart_add_url }}',
@@ -26,9 +25,20 @@
     moneyFormat: "{{ shop.money_format }}",
     moneyWithCurrencyFormat: "{{ shop.money_with_currency_format }}"
   }
-
 </script>
 
-<script src="{{ 'variants.js' | asset_url }}" defer></script>
-<script src="{{ 'product-form-component.js' | asset_url }}" defer></script>
-<script src="{{ 'quick-shop.js' | asset_url }}" type="module"></script>
+{% comment %} Only load the js when there are product cards on the page {% endcomment %}
+<script>
+  (function() {
+    const hasProductCards = document.querySelectorAll('.product-card').length > 0;
+    const isProductPage = document.body.classList.contains('template-product');
+
+    if (hasProductCards || isProductPage) {
+      document.write('<script src="{{ 'variants.js' | asset_url }}" defer><\/script>');
+      document.write('<script src="{{ 'product-form-component.js' | asset_url }}" defer><\/script>');
+    }
+    if (hasProductCards) {
+      document.write('<script src="{{ 'quick-shop.js' | asset_url }}"  type="module"><\/script>');
+    }
+  })();
+</script>

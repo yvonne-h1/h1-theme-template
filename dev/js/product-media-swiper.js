@@ -1,6 +1,6 @@
-import Swiper from 'swiper';
-import { A11y, Navigation, Thumbs } from 'swiper/modules';
-import { Fancybox } from '@fancyapps/ui';
+import Fancybox from './modules/fancybox.js';
+import Swiper from './modules/swiper.js';
+import { a11y, navigation, thumbs } from './modules/swiper.js';
 
 class ProductMediaSlider extends HTMLElement {
   constructor() {
@@ -37,7 +37,7 @@ class ProductMediaSlider extends HTMLElement {
       slidesOffsetBefore: 16,
       slidesOffsetAfter: 16,
       centerInsufficientSlides: true,
-      modules: [A11y, Thumbs],
+      modules: [a11y, thumbs],
       breakpoints: {
         375: {
           slidesPerView: 3.2,
@@ -113,7 +113,7 @@ class ProductMediaSlider extends HTMLElement {
       rewind: true,
       observer: true,
       initialSlide: initialSlideIndex,
-      modules: [Navigation, A11y, Thumbs],
+      modules: [a11y, navigation, thumbs],
       navigation: {
         nextEl: '.product-media-swiper__button-next',
         prevEl: '.product-media-swiper__button-prev',

@@ -155,7 +155,6 @@
       assign initial_width = width_int
       assign initial_height = width_int | divided_by: image_ratio | round
     endif
-
     if width_int > max_width
       break
     endif
@@ -169,6 +168,9 @@
       assign width = width_int
       assign image_url = image_object | image_url: width: width
       assign new_widths = new_widths | append: ',' | append: width_int
+    else
+      assign new_widths = new_widths | append: ',' | append: image_object.width
+      assign image_url = image_object | image_url: width: image_object.width
     endif
   endfor
 

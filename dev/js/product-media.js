@@ -1,6 +1,6 @@
-import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
-import { Fancybox } from '@fancyapps/ui';
+import Fancybox from './modules/fancybox.js';
+import Swiper from './modules/swiper.js';
+import { navigation } from './modules/swiper.js';
 
 class ProductMedia extends HTMLElement {
   constructor() {
@@ -19,7 +19,7 @@ class ProductMedia extends HTMLElement {
     // Swiper options
     this.swiperOptions = {
       observer: true,
-      modules: [Navigation],
+      modules: [navigation],
     };
 
     // Init swiper

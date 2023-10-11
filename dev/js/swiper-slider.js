@@ -85,7 +85,7 @@ class SwiperSlider extends HTMLElement {
       observer: true,
       threshold: 10,
       isRecommendations: false,
-      modules: [A11y, Navigation, Pagination, Scrollbar, Autoplay],
+      modules: [A11y],
       destroyAfter: false,
       hasVideo: false,
     };
@@ -100,6 +100,12 @@ class SwiperSlider extends HTMLElement {
         };
       }
     }
+
+    // Load the Navigation, Pagination, Scrollbar, Autoplay modules as needed
+    if (this.swiperOptions.pagination) this.swiperOptions.modules.push(Pagination);
+    if (this.swiperOptions.navigation) this.swiperOptions.modules.push(Navigation);
+    if (this.swiperOptions.scrollbar) this.swiperOptions.modules.push(Scrollbar);
+    if (this.swiperOptions.autoplay) this.swiperOptions.modules.push(Autoplay);
 
     if (this.swiperOptions.destroyAfter) {
       window.addEventListener('resize', debounce(() => {

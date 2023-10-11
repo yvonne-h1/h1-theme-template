@@ -22,7 +22,8 @@
       <div class="collection-header__image hidden h-full max-h-40 w-full max-w-[240px] grow-0 md:block">
         {%- render 'responsive-image',
           image_object: collection.image,
-          widths: '240, 480',
+          widths: '240',
+          max_width: 240,
           aspect_ratio: '3/2',
           class: 'object-cover h-auto w-auto'
         -%}

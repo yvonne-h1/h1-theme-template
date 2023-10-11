@@ -48,7 +48,7 @@
     assign unique_identifier = template.name | handleize | append: '-' | append: product.handle
   endif
 
-  assign button_class = 'button button--primary h-full rounded-full no-touch:py-2 touch:py-3'
+  assign button_class = 'button button--primary h-full rounded-full no-touch:p-2 touch:py-3'
 -%}
 
 <quick-shop class="quick-shop">
@@ -201,9 +201,10 @@
       type="button"
       class="quick-shop__trigger {{ button_class }}"
       data-quick-shop-toggle
-      data-src="#QuickShop-{{ product.id }}-{{ unique_identifier }}">
+      data-src="#QuickShop-{{ product.id }}-{{ unique_identifier }}"
+      aria-labelledby="quickAddLabel-{{ product.id }}-{{ unique_identifier }}">
       {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
-      <span>
+      <span class="{% if view != 'alt' -%}hidden sm:block{%- endif -%}" id="quickAddLabel-{{ product.id }}-{{ unique_identifier }}">
         {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}
       </span>
     </button>
