@@ -1,0 +1,397 @@
+<script src="https://widget.reviews.co.uk/polaris/build.js"></script>
+
+{%- capture container_content -%}
+  <div id="ReviewsWidget"></div>
+{%- endcapture -%}
+
+{%- liquid
+  # Render the content  echo
+  render 'render-container-content', content: container_content, class: 'hidden'
+-%}
+
+<script>
+  new ReviewsWidget('#ReviewsWidget', {
+    //Your REVIEWS.io Store ID and widget type:
+    store: '{{ shop.domain }}',
+    widget: 'polaris',
+
+    //Content settings (store_review,product_review,third_party_review,questions). Choose what to display in this widget:
+    options: {
+      lang: '{{ section.settings.language }}',
+      types: 'product_review,questions',
+      //Possible layout options: bordered, large and reverse.
+      layout: '',
+      //How many reviews & questions to show per page?
+      per_page: {{ section.settings.reviews_per_page }},
+      store_review: {
+        hide_if_no_results: false,
+      },
+      third_party_review: {
+        hide_if_no_results: false,
+      },
+      //Product specific settings. Provide product SKU for which reviews should be displayed:
+      product_review: {
+        //Display product reviews - include multiple product SKUs seperated by Semi-Colons (Main Indentifer in your product catalog )
+        sku: '{{ product.selected_or_first_available_variant.sku }}',
+        hide_if_no_results: {{ section.settings.hide_if_no_results }},
+      },
+      //Questions settings:
+      questions:{
+        hide_if_no_results: {{ section.settings.enable_ask_question }},
+        enable_ask_question: {{ section.settings.enable_ask_question }},
+        show_dates: true,
+        //Display group questions by providing a grouping variable, new questions will be assigned to this group.
+        grouping: '[Group questions by providing a grouping variable here or a specific product SKU]',
+      },
+      //Header settings:
+      header: {
+        enable_summary: true, //Show overall rating & review count
+        enable_ratings: true,
+        enable_attributes: true,
+        enable_image_gallery: true, //Show photo & video gallery
+        enable_percent_recommended: false, //Show what percentage of reviewers recommend it
+        enable_write_review: true, //Show "Write Review" button
+        enable_ask_question: {{ section.settings.enable_ask_question }}, //Show "Ask Question" button
+        enable_sub_header: true, //Show subheader
+        rating_decimal_places: 2,
+        use_write_review_button: false, //Show "be the first to leave a review" text as a button
+      },
+
+      //Filtering settings:
+      filtering: {
+        enable: true, //Show filtering options
+        enable_text_search: true, //Show search field
+        enable_sorting: true, //Show sorting options (most recent, most popular)
+        enable_product_filter: false, //Show product options filter
+        enable_media_filter: true, //Show reviews with images/video/media options
+        enable_overall_rating_filter: true, //Show overall rating breakdown filter
+        enable_language_filter: false, // Filter by review language
+        enable_language_filter_language_change: false, // Update widget language based on language selected
+        enable_ratings_filters: true, //Show product attributes filter
+        enable_attributes_filters: true, //Show author attributes filter
+      },
+
+      //Review settings:
+      reviews:{
+        enable_avatar: false, //Show author avatar
+        enable_reviewer_name: {{ section.settings.enable_reviewer_name }}, //Show author name
+        enable_reviewer_address: false, //Show author location
+        enable_verified_badge: {{ section.settings.enable_verified_badge }}, //Show "Verified Customer" badge
+        review_content_filter: 'undefined', //Filter content
+        enable_reviewer_recommends: false, //Show "I recommend it" badge
+        enable_attributes: false, //Show author attributes
+        enable_product_name: false, //Show display product name
+        enable_review_title: {{ section.settings.enable_review_title }}, //Show review title
+        enable_replies: {{ section.settings.enable_replies }}, //Show review replies
+        enable_images: {{ section.settings.enable_images }}, //Show display review photos
+        enable_ratings: false, //Show product attributes (additional ratings)
+        enable_share: {{ section.settings.enable_share }}, //Show share buttons
+        enable_helpful_vote: {{ section.settings.enable_helpful_vote }}, //Show "was this helpful?" section
+        enable_helpful_display: {{ section.settings.enable_helpful_display }}, //Show how many times times review upvoted
+        enable_report: {{ section.settings.enable_report }}, //Show report button
+        enable_date: {{ section.settings.enable_date }}, //Show when review was published
+        enable_third_party_source: false, // Show third party source
+      },
+    },
+    //Translation settings
+    translations: {
+      'Verified Customer': '{{ section.settings.verified_customer_label }}'
+    },
+    //Style settings:
+    styles: {
+      //Base font size is a reference size for all text elements. When base value gets changed, all TextHeading and TexBody elements get proportionally adjusted.
+      '--base-font-size': '16px',
+
+      //Button styles (shared between buttons):
+      '--common-button-font-family': 'inherit',
+      '--common-button-font-size': '16px',
+      '--common-button-font-weight': '500',
+      '--common-button-letter-spacing': '0',
+      '--common-button-text-transform': 'none',
+      '--common-button-vertical-padding': '10px',
+      '--common-button-horizontal-padding': '20px',
+      '--common-button-border-width': '2px',
+      '--common-button-border-radius': '0px',
+
+      //Primary button styles:
+      '--primary-button-bg-color': '#0E1311',
+      '--primary-button-border-color': '#0E1311',
+      '--primary-button-text-color': '#ffffff',
+
+      //Secondary button styles:
+      '--secondary-button-bg-color': 'transparent',
+      '--secondary-button-border-color': '#0E1311',
+      '--secondary-button-text-color': '#0E1311',
+
+      //Star styles:
+      '--common-star-color': '#0E1311',
+      '--common-star-disabled-color': 'rgba(0,0,0,0.25)',
+      '--medium-star-size': '22px',
+      '--small-star-size': '19px',
+
+      //Heading styles:
+      '--heading-text-color': '#0E1311',
+      '--heading-text-font-weight': '600',
+      '--heading-text-font-family': 'inherit',
+      '--heading-text-line-height': '1.4',
+      '--heading-text-letter-spacing': '0',
+      '--heading-text-transform': 'none',
+
+      //Body text styles:
+      '--body-text-color': '#0E1311',
+      '--body-text-font-weight': '400',
+      '--body-text-font-family': 'inherit',
+      '--body-text-line-height': '1.4',
+      '--body-text-letter-spacing': '0',
+      '--body-text-transform': 'none',
+
+      //Input field styles:
+      '--inputfield-text-font-family': 'inherit',
+      '--input-text-font-size': '14px',
+      '--inputfield-text-font-weight': '400',
+      '--inputfield-text-color': '#0E1311',
+      '--inputfield-border-color': 'rgba(0,0,0,0.2)',
+      '--inputfield-background-color': 'transparent',
+      '--inputfield-border-width': '1px',
+      '--inputfield-border-radius': '0px',
+
+      '--common-border-color': 'rgba(0,0,0,0.15)',
+      '--common-border-width': '1px',
+      '--common-sidebar-width': '190px',
+
+      //Slider indicator (for attributes) styles:
+      '--slider-indicator-bg-color': 'rgba(0,0,0,0.1)',
+      '--slider-indicator-button-color': '#0E1311',
+      '--slider-indicator-width': '190px',
+
+      //Badge styles:
+      '--badge-icon-color': '#0E1311',
+      '--badge-icon-font-size': 'inherit',
+      '--badge-text-color': '#0E1311',
+      '--badge-text-font-size': 'inherit',
+      '--badge-text-letter-spacing': 'inherit',
+      '--badge-text-transform': 'inherit',
+
+      //Author styles:
+      '--author-font-size': 'inherit',
+      '--author-text-transform': 'none',
+
+      //Author avatar styles:
+      '--avatar-thumbnail-size': '60px',
+      '--avatar-thumbnail-border-radius': '100px',
+      '--avatar-thumbnail-text-color': '#0E1311',
+      '--avatar-thumbnail-bg-color': 'rgba(0,0,0,0.1)',
+
+      //Product photo or review photo styles:
+      '--photo-video-thumbnail-size': '80px',
+      '--photo-video-thumbnail-border-radius': '0px',
+
+      //Media (photo & video) slider styles:
+      '--mediaslider-scroll-button-icon-color': '#0E1311',
+      '--mediaslider-scroll-button-bg-color': 'rgba(255, 255, 255, 0.85)',
+      '--mediaslider-overlay-text-color': '#ffffff',
+      '--mediaslider-overlay-bg-color': 'rgba(0, 0, 0, 0.8))',
+      '--mediaslider-item-size': '110px',
+
+      //Pagination & tabs styles (normal):
+      '--pagination-tab-text-color': '#0E1311',
+      '--pagination-tab-text-transform': 'none',
+      '--pagination-tab-text-letter-spacing': '0',
+      '--pagination-tab-text-font-size': '16px',
+      '--pagination-tab-text-font-weight': '600',
+
+      //Pagination & tabs styles (active):
+      '--pagination-tab-active-text-color': '#0E1311',
+      '--pagination-tab-active-text-font-weight': '600',
+      '--pagination-tab-active-border-color': '#0E1311',
+      '--pagination-tab-border-width': '3px',
+    },
+  }, document.querySelector('.product-reviews .container').classList.remove('hidden'));
+</script>
+
+{% schema %}
+  {
+    "name": "Product reviews",
+    "tag": "section",
+    "class": "product-reviews",
+    "limit": 1,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "include_in_nav",
+        "label": "Include in navigation",
+        "default": true
+      },
+      {
+        "type": "paragraph",
+        "content": "Since the content for this block is loaded dynamically, changes will only be visible upon saving or after you have navigated to another page."
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Reviews"
+      },
+      {
+        "type": "select",
+        "id": "language",
+        "label": "Widget language",
+        "default": "en",
+        "options": [
+          {
+            "value": "cs",
+            "label": "Czech"
+          },
+          {
+            "value": "da",
+            "label": "Danish"
+          },
+          {
+            "value": "nl",
+            "label": "Dutch"
+          },
+          {
+            "value": "en",
+            "label": "English"
+          },
+          {
+            "value": "fi",
+            "label": "Finnish"
+          },
+          {
+            "value": "fr",
+            "label": "French"
+          },
+          {
+            "value": "de",
+            "label": "German"
+          },
+          {
+            "value": "it",
+            "label": "Italian"
+          },
+          {
+            "value": "no",
+            "label": "Norwegian"
+          },
+          {
+            "value": "pl",
+            "label": "Polish"
+          },
+          {
+            "value": "pt",
+            "label": "Portugese"
+          },
+          {
+            "value": "ro",
+            "label": "Romanian"
+          },
+          {
+            "value": "es",
+            "label": "Spanish"
+          },
+          {
+            "value": "sv",
+            "label": "Swedish"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "reviews_per_page",
+        "min": 1,
+        "max": 15,
+        "step": 1,
+        "unit": "x",
+        "label": "Reviews per page",
+        "default": 4
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_if_no_results",
+        "label": "Hide when 0 reviews",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_reviewer_name",
+        "label": "Enable reviewer name",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_verified_badge",
+        "label": "Enable verified badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "verified_customer_label",
+        "label": "'Verified Customer' label",
+        "default": "Verified Customer"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_ask_question",
+        "label": "Enable 'ask questions'",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_review_title",
+        "label": "Enable review title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_replies",
+        "label": "Enable replies",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_images",
+        "label": "Enable images",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_share",
+        "label": "Enable share",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_helpful_vote",
+        "label": "Enable helpful vote",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_helpful_display",
+        "label": "Enable helpful display",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_report",
+        "label": "Enable report",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_date",
+        "label": "Enable date",
+        "default": true
+      }
+    ],
+    "presets": [
+      {
+        "name": "Product reviews"
+      }
+    ],
+    "enabled_on": {
+      "templates": ["product"]
+    }
+  }
+{% endschema %}
