@@ -12,7 +12,7 @@
 -%}
 
 {%- capture product_content -%}
-  <div class="product grid grid-cols-12 gap-x-0 gap-y-base">
+  <div class="product grid grid-cols-12 gap-x-4 gap-y-base">
 
     {%- comment -%} Product title {%- endcomment -%}
     <h1 class="product__title h5 content-wrapper-padding col-span-12 md:hidden">
@@ -108,6 +108,53 @@
                 </span>
               </p>
             {%- endif -%}
+
+            {% comment %} Inventory status {% endcomment %}
+            {%- when 'inventory' -%}
+              <div id="inventory-{{ product.id }}" class="product__inventory no-js-hidden">
+              <p
+                class="mb-0 flex items-center gap-2 text-sm leading-none {% if product.selected_or_first_available_variant.inventory_management != 'shopify' %}hidden{% endif %}"
+                {{ block.shopify_attributes }}
+                role="status">
+                {%- liquid
+                  if product.selected_or_first_available_variant.inventory_management == 'shopify'
+
+                    # Stock available
+                    if product.selected_or_first_available_variant.inventory_quantity > 0
+
+                      # Low stock
+                      if product.selected_or_first_available_variant.inventory_quantity <= block.settings.inventory_threshold
+                        render 'icons', icon: 'warning-orange', icon_class: 'w-4'
+                        if block.settings.show_inventory_quantity
+                          render "render-translation", namespace: "products.product", key: "inventory_low_stock_show_count", quantity: product.selected_or_first_available_variant.inventory_quantity, fallback: "Low stock {{ quantity }}"
+                        else
+                          render "render-translation", namespace: "products.product", key: "inventory_low_stock", fallback: "Low stock"
+                        endif
+
+                      # In Stock
+                      else
+                        render 'icons', icon: 'warning-green', icon_class: 'w-4'
+                        if block.settings.show_inventory_quantity
+                          render "render-translation", namespace: "products.product", key: "inventory_in_stock_show_count", quantity: product.selected_or_first_available_variant.inventory_quantity, fallback: "In stock {{ quantity }}"
+                        else
+                          render "render-translation", namespace: "products.product", key: "inventory_in_stock", fallback: "In stock"
+                        endif
+                      endif
+
+                    # No stock available
+                    else
+                      if product.selected_or_first_available_variant.inventory_policy == 'continue'
+                        render 'icons', icon: 'warning-green', icon_class: 'w-4'
+                        render "render-translation", namespace: "products.product", key: "inventory_out_of_stock_continue_selling", fallback: "In stock"
+                      else
+                        render 'icons', icon: 'warning-red', icon_class: 'w-4'
+                        render "render-translation", namespace: "products.product", key: "inventory_out_of_stock", fallback: "Out of stock"
+                      endif
+                    endif
+                  endif
+                -%}
+              </p>
+            </div>
 
           {%- comment -%} Line break {%- endcomment -%}
           {%- when 'linebreak' -%}
@@ -256,7 +303,7 @@
                       </div>
                     </noscript>
 
-                    <div class="product-form__buttons flex flex-col items-center gap-y-2">
+                    <div class="product-form__buttons flex flex-col items-center gap-y-2 group-[.is-fixed]/add-to-cart:mt-4">
                       <button
                         type="submit"
                         name="add"
@@ -491,6 +538,29 @@
           {
             "type": "paragraph",
             "content": "Define the colors displayed as buttons in the theme settings under 'General'."
+          }
+        ]
+      },
+      {
+        "type": "inventory",
+        "name": "Inventory",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "range",
+            "id": "inventory_threshold",
+            "label": "Inventory threshold",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "info": "When the inventory is below this threshold, the message will change.",
+            "default": 10
+          },
+          {
+            "type": "checkbox",
+            "id": "show_inventory_quantity",
+            "label": "Show inventory quantity",
+            "default": true
           }
         ]
       },

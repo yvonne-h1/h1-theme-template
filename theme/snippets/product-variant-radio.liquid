@@ -47,7 +47,7 @@
         endif
       -%}
 
-      <div class="{% if block.settings.picker_layout == 'inline' %}flex-1 basis-1/2 first:pe-6 last:ps-6{%- endif- %}">
+      <div class="{% if block.settings.picker_layout == 'inline' and product.options_with_values.size > 1 %}flex-1 basis-1/2 first:pe-6 last:ps-6{%- endif- %}">
         <fieldset class="options options--{{ option_name }} js product-form__input flex items-center" data-option-name="{{ option.name | handleize }}" data-option-group="{{ forloop.index | minus: 1 }}">
 
           <legend class=" mb-2 text-sm font-semibold {% if block.settings.picker_label == false %} sr-only{% endif %}">

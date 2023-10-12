@@ -40,6 +40,9 @@
   elsif price != blank
     assign translated_str = translation_str | t: price: price
     assign fallback_html = price
+  elsif quantity != blank
+    assign translated_str = translation_str | t: quantity: quantity
+    assign fallback_html = quantity
   elsif title != blank
     assign translated_str = translation_str | t: title: title
     assign fallback_html = title

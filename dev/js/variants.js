@@ -21,6 +21,7 @@ class VariantSelects extends HTMLElement {
 
     this.productFormId = `#product-form-${this.options.productId}`;
     this.priceId = `price-${this.options.productId}`;
+    this.inventoryId = `inventory-${this.options.productId}`;
   }
 
   onVariantChange(event) {
@@ -117,10 +118,16 @@ class VariantSelects extends HTMLElement {
       .then((responseText) => {
 
         const html = new DOMParser().parseFromString(responseText, 'text/html');
-        const destination = document.getElementById(this.priceId);
-        const source = html.getElementById(this.priceId);
 
-        if (source && destination) destination.innerHTML = source.innerHTML;
+        // update the price
+        const priceSource = html.getElementById(this.priceId);
+        const priceDestination = document.getElementById(this.priceId);
+        if (priceSource && priceDestination) priceDestination.innerHTML = priceSource.innerHTML;
+
+        // update the inventory
+        const inventorySource = html.getElementById(this.inventoryId);
+        const inventoryDestination = document.getElementById(this.inventoryId);
+        if (inventorySource && inventoryDestination) inventoryDestination.innerHTML = inventorySource.innerHTML;
 
         document.getElementById(this.priceId)?.classList.remove('hidden');
         if (this.currentVariant) {

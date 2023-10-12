@@ -131,7 +131,7 @@
   {%- endcapture -%}
 {%- endfor -%}
 
-{%- comment -%} Out put Media slider {%- endcomment -%}
+{%- comment -%} Output slider {%- endcomment -%}
 {%- if product.media != blank -%}
   <product-media-swiper class="product-media-swiper relative flex h-full flex-col justify-between">
     {%- comment -%} Main Slider {%- endcomment -%}
@@ -158,22 +158,25 @@
       </div>
     </div>
 
-    {%- comment -%} Thumbnails slider {%- endcomment -%}
-    <div class="product-media-swiper__thumbnails relative col-span-12 md:pe-[var(--content-wrapper-padding)]">
-      <div
-        class="
-          swiper [--swiper-slidesPerView:3.2]
-          [--swiper-spaceBetween:8px]
-          sm:[--swiper-slidesPerView:4.2]
-          md:[--swiper-slidesPerView:5.2]
-          2xl:[--swiper-slidesPerView:6.2]
-        "
-        data-product-media-thumbnails-slider>
-        <div class="swiper-wrapper flex items-center">
-          {{- media_content_thumbnails_slider -}}
+    {% comment %} Only render when there's more than 1 image {% endcomment %}
+    {%- if image_count > 1 -%}
+      {%- comment -%} Thumbnails slider {%- endcomment -%}
+      <div class="product-media-swiper__thumbnails relative col-span-12 md:pe-[var(--content-wrapper-padding)]">
+        <div
+          class="
+            swiper [--swiper-slidesPerView:3.2]
+            [--swiper-spaceBetween:8px]
+            sm:[--swiper-slidesPerView:4.2]
+            md:[--swiper-slidesPerView:5.2]
+            2xl:[--swiper-slidesPerView:6.2]
+          "
+          data-product-media-thumbnails-slider>
+          <div class="swiper-wrapper flex items-center">
+            {{- media_content_thumbnails_slider -}}
+          </div>
         </div>
       </div>
-    </div>
+    {%- endif -%}
   </product-media-swiper>
 {%- endif -%}
 

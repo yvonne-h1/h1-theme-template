@@ -17,6 +17,7 @@
       data-id="{{ section.id }}"
       class="
         fixed bottom-0 end-0 top-0 z-offcanvas flex h-full max-w-screen translate-x-full flex-col overflow-x-hidden
+        bg-white
         text-text-default
         opacity-0
         transition-all
@@ -59,7 +60,7 @@
         </div>
 
         {%- comment -%} Form {%- endcomment -%}
-        <div class="cart-drawer__form flex h-full flex-col overflow-y-auto bg-white group-[.cart-is-empty]/cart-items:hidden">
+        <div class="cart-drawer__form flex h-full flex-col overflow-y-auto group-[.cart-is-empty]/cart-items:hidden">
           {%- comment -%} Header {%- endcomment -%}
           <header class="cart-drawer__header insex-x-0 sticky top-0 z-20 border-b bg-white p-4">
             <class-toggle-component
