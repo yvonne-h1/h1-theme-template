@@ -1,4 +1,13 @@
 @layer components {
+  :root {
+    --button-background: theme('colors.secondary.DEFAULT');
+    --button-border-color: theme('colors.secondary.DEFAULT');
+    --button-text: theme('colors.secondary.text');
+
+    --button-hover-background: theme('colors.secondary.400');
+    --button-hover-border-color: theme('colors.secondary.400');
+    --button-hover-text: theme('colors.secondary.text');
+  }
   button,
   .button {
     @apply disabled:pointer-events-none
@@ -10,13 +19,6 @@
     }
   }
   .button {
-    --button-background: theme('colors.secondary.DEFAULT');
-    --button-border-color: theme('colors.secondary.DEFAULT');
-    --button-text: theme('colors.secondary.text');
-
-    --button-hover-background: theme('colors.secondary.400');
-    --button-hover-border-color: theme('colors.secondary.400');
-    --button-hover-text: theme('colors.secondary.text');
     background: var(--button-background); // hack is needed because tailwind only outputs background-image and that doesn't work with gradients
 
     @apply relative
@@ -121,7 +123,7 @@
   .button--outline {
     --button-background: transparent;
     --button-border-color: var(--button-text);
-    --button-text: inherit;
+    --button-text: var(--button-text);
     --button-hover-background: theme('colors.secondary.DEFAULT');
     --button-hover-border-color: theme('colors.secondary.DEFAULT');
     --button-hover-text: theme('colors.secondary.text');

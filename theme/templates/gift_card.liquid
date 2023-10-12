@@ -17,17 +17,17 @@
       content="{% render "render-translation", namespace: "gift_cards.issued.subtext", fallback: "Your gift card" %}">
 
     {%- liquid
-      render 'html-head-canonical'
-      render 'html-head-prefetch'
-      render 'html-head-preconnect'
-      render 'html-head-favicon'
-      render 'html-head-description'
-      render 'html-head-tags'
-      render 'html-head-fonts'
-      render 'html-head-css'
-      render 'html-head-js'
-      render 'html-head-google'
-      render 'html-head-gtm', container: 'head'
+      render 'html-header-canonical'
+      render 'html-header-prefetch'
+      render 'html-header-preconnect'
+      render 'html-header-favicon'
+      render 'html-header-description'
+      render 'html-header-tags'
+      render 'html-header-fonts'
+      render 'html-header-css'
+      render 'html-header-js'
+      render 'html-header-google'
+      render 'html-header-gtm', container: 'head'
     -%}
 
     <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
@@ -36,6 +36,8 @@
   </head>
 
   <body class="group/body {% render 'html-template-class' %}">
+    {%- render 'html-header-gtm', container: 'body' -%}
+
     <a
       class="skip-to-content button button--secondary sr-only !absolute z-10 self-start focus:not-sr-only focus:px-4 focus:py-2 focus:text-secondary-text"
       href="#MainContent">

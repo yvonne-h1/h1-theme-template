@@ -1,9 +1,10 @@
 @layer utilities {
-  .color-scheme {
+  :root {
     --color-scheme-text-color: theme('colors.text-default');
     --color-scheme-text-active-color: var(--color-scheme-text-color);
     --swiper-theme-color: var(--color-scheme-text-color);
-
+  }
+  .color-scheme {
     @apply bg-[var(--color-scheme-background-color)] text-[var(--color-scheme-text-color)];
 
     button,
