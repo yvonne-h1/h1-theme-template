@@ -4,7 +4,7 @@
 
 ## Developing
 
-When you run `npm run start` the work files will be watched for change and an [Shopify development theme](https://shopify.dev/themes/tools/cli#development-themes) will be created. The theme/assets folder is not rebuilt from scratch. We configured the development themes with editor syncing. This means that all your changes made inside the customizer from your development theme will be synced to your local data JSON files.
+When you run `npm run start` the work files will be watched for change and a [Shopify development theme](https://shopify.dev/themes/tools/cli#development-themes) will be created. The theme/assets folder is not rebuilt from scratch. We configured the development themes with editor syncing. This means that all your changes made inside the customizer from your development theme will be synced to your local data JSON files.
 
 With `npm run start:dev` or `npm run start:stage` you can shortcut the prompt and directly use the dev or stage environment.
 
@@ -111,8 +111,8 @@ The dev/scss folder is divided in three folders to give you to possibility to op
 
 Inside the designated folders, various sub-folders correspond to different Tailwind layers. Each file in these sub-folders should be wrapped within the appropriate @layer ... { } directive. The layers will be rendered in the browser in the following order: base, h1-styles-modules, h1-styles-components, h1-styles-utilities, and finally, h1-styles-sections.
 
-- The `base` layer is responsible for injecting base styling and resets introduced by the Tailwind algorithm and the scss/main/base folder. It sets the foundation for the theme.
 - The `h1-styles-modules` layer is utilized for adding third-party CSS from the custom/modules folder, such as SwiperJs or Fancybox. Here, the intention is to only import files without applying any custom styling. This approach maintains the hierarchy and separation of concerns. To apply custom styling to a third-party library, you can use the component layer.
+- The `h1-styles-base` layer is responsible for injecting base styling and resets introduced by the Tailwind algorithm and the scss/main/base folder. It sets the foundation for the theme.
 - The `h1-styles-components` layer injects classes for components added by the Tailwind algorithm, the scss/main/components folder, and the scss/custom/components folder. You can choose to load your component dynamically or critically. The critical option should be reserved for styles that are used frequently, like styles for a commonly used button.
 - The `h1-styles-utilities` layer is responsible for injecting utility classes added by the Tailwind algorithm and the scss/main/utilities folder. This layer harnesses the full power of Tailwind's utility classes, including classes like text-md, bg-primary, and states:underline.
 - The `h1-styles-sections` layer is used to add custom section styling that cannot be easily achieved with component or utility classes. For instance, you can add a specific color scheme update for a product card inside the h1-styles-sections directive. It is crucial to be selective and strict with this layer, using it judiciously for specific section styling.
