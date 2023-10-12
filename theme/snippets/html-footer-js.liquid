@@ -27,18 +27,6 @@
   }
 </script>
 
-{% comment %} Only load the js when there are product cards on the page {% endcomment %}
-<script>
-  (function() {
-    const hasProductCards = document.querySelectorAll('.product-card').length > 0;
-    const isProductPage = document.body.classList.contains('template-product');
-
-    if (hasProductCards || isProductPage) {
-      document.write('<script src="{{ 'variants.js' | asset_url }}" defer><\/script>');
-      document.write('<script src="{{ 'product-form-component.js' | asset_url }}" defer><\/script>');
-    }
-    if (hasProductCards) {
-      document.write('<script src="{{ 'quick-shop.js' | asset_url }}"  type="module"><\/script>');
-    }
-  })();
-</script>
+{%- comment -%} Import javascript {%- endcomment -%}
+<script src="{{ 'quick-shop.js' | asset_url }}" type="module"></script>
+<script src="{{ 'product-form-component.js' | asset_url }}" defer></script>

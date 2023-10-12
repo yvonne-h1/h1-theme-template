@@ -5,17 +5,16 @@
     endfor
   endcapture
 
-  if section.settings.format_container
-    # Container class
+  if section.settings.render_in_container
+    # Render in container
     assign container_class = section.settings.container_width
     if section.settings.color_scheme != blank
       assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
     endif
 
-    # Render format container
-    render 'render-container-content', class: container_class, title_class: 'h4 text-center', title: section.settings.title, content: content
+    render 'render-container-content', class: container_class, title_tag: section.settings.heading_element, title_class: section.settings.heading_size, title: section.settings.title, header_class: section.settings.heading_align, content: content
   else
-    # Render without format container
+    # Render without container
     echo content
   endif
 -%}
@@ -25,15 +24,16 @@
     "name": "Apps",
     "settings": [
       {
-        "type": "header",
-        "content": "Layout settings"
-      },
-      {
         "type": "checkbox",
-        "id": "format_container",
+        "id": "render_in_container",
         "default": true,
         "label": "Render in a container",
-        "info": "Will add a container to the content."
+        "info": "Will add a container to the content to match the layout of the store."
+      },
+      {
+        "type": "header",
+        "content": "Layout settings",
+        "info": "Below settings only apply when the content is rendered in a container."
       },
       {
         "type": "select",
@@ -89,9 +89,95 @@
         ]
       },
       {
+        "type": "header",
+        "content": "Title settings"
+      },
+      {
         "type": "text",
         "id": "title",
         "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_align",
+        "label": "Heading alignment",
+        "default": "text-start",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h2",
+        "info": "Change the element of the heading for SEO purposes. Every page should only have one H1.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h4",
+        "info": "This is applied only for visual reasons.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
       }
     ],
     "blocks": [
