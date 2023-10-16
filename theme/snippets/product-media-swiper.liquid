@@ -44,7 +44,7 @@
             endif
           -%}
           <a
-            class="{{ media_class }}"
+            class="{{ media_class }} px-[var(--content-wrapper-padding)] md:px-0"
             href="{{ media | image_url }}"
             data-fancybox="product-media-swiper"
             data-animated="false"
@@ -145,12 +145,12 @@
         {% comment %} Navigation buttons {% endcomment %}
         <button
           class="product-media-swiper__button-prev swiper-button-prev start-3 md:start-6"
-          aria-label="{{ 'accessibility.previous_slide' | t }}">
+          aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}">
           {% render 'icons', icon: 'chevron-left', icon_class: 'w-4' %}
         </button>
         <button
           class="product-media-swiper__button-next swiper-button-next end-3 md:end-6"
-          aria-label="{{ 'accessibility.next_slide' | t }}">
+          aria-label="{% render "render-translation", namespace: "accessibility", key: "next_slide", fallback: "Next slide" %}">
           {% render 'icons', icon: 'chevron-right', icon_class: 'w-4' %}
         </button>
       </div>
@@ -161,13 +161,7 @@
       {%- comment -%} Thumbnails slider {%- endcomment -%}
       <div class="product-media-swiper__thumbnails relative col-span-12 md:pe-[var(--content-wrapper-padding)]">
         <div
-          class="
-            swiper [--swiper-slidesPerView:3.2]
-            [--swiper-spaceBetween:8px]
-            sm:[--swiper-slidesPerView:4.2]
-            md:[--swiper-slidesPerView:5.2]
-            2xl:[--swiper-slidesPerView:6.2]
-          "
+          class="swiper"
           data-product-media-thumbnails-slider>
           <div class="swiper-wrapper flex items-center">
             {{- media_content_thumbnails_slider -}}
