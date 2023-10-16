@@ -45,6 +45,8 @@
   --primary-button-text-color: var(--button-text), theme('colors.secondary.text');
   --primary-button-border-color: var(--button-border-color), theme('colors.secondary.DEFAULT');
 
+  @apply m-0;
+
   .color-scheme:not(.color-scheme--white) & {
     --inputfield-background-color: theme('colors.white');
   }

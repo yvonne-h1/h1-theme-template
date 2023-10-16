@@ -1,16 +1,11 @@
 @layer base {
   :root {
-    /*
-     * Site dimensions
-     */
+    // Site dimensions
     --content-wrapper: 1440px;
     --content-wrapper-lg: 1200px;
     --content-wrapper-md: 820px;
     --content-wrapper-sm: 620px;
 
-    /*
-     * Spacings
-     */
     // Site side spacing
     --content-wrapper-padding: theme(spacing.4);
     @screen md {
@@ -26,9 +21,6 @@
     // Element
     --element-spacing: theme(spacing.6); // 1rem
 
-    /*
-     * Grid
-     */
     // Col gaps
     --grid-col-gap: theme(gap.4);
     @screen md {

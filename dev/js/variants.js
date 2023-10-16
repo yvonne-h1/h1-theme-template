@@ -142,8 +142,8 @@ class VariantSelects extends HTMLElement {
 
           if (inventoryQtyDestination) inventoryQtyDestination.value = inventoryQtySource.value;
 
-          // update the max attribute of the quantity input
-          if (qtyInputDestination) {
+          // update the max attribute of the quantity input only if there was already a max attribute (for products that track the inventory)
+          if (qtyInputDestination && 'max' in qtyInputDestination.attributes) {
             qtyInputDestination.max = inventoryQtySource.value;
             // check if the current value of the input is higher than the max. If so, set it to the max.
             if (+qtyInputDestination.value > +inventoryQtySource.value) {
