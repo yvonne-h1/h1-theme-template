@@ -14,25 +14,40 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "title": {
-          "type": "title",
-          "settings": {}
-        },
         "badges": {
           "type": "badges",
+          "disabled": true,
           "settings": {
             "badge_size": ""
           }
         },
-        "description": {
-          "type": "description",
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_badges": true
+          }
+        },
+        "linebreak-1": {
+          "type": "linebreak",
           "settings": {}
         },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
             "picker_label": true,
-            "picker_type": "button"
+            "picker_type": "radio",
+            "picker_layout": "inline"
+          }
+        },
+        "linebreak-2": {
+          "type": "linebreak",
+          "settings": {}
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {
+            "inventory_threshold": 10,
+            "show_inventory_quantity": true
           }
         },
         "quantity_selector": {
@@ -41,8 +56,8 @@
             "quantity_label": true
           }
         },
-        "price": {
-          "type": "price",
+        "linebreak-3": {
+          "type": "linebreak",
           "settings": {}
         },
         "buy_buttons": {
@@ -71,12 +86,20 @@
             "heading": "Secure payment",
             "icon": "star"
           }
+        },
+        "collapsible": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Collapsible tab",
+            "content": "<p>Collapsible content</p>",
+            "page": "contact",
+            "icon": "none"
+          }
         }
       },
-      "block_order": ["title", "badges", "description", "variant_picker", "quantity_selector", "price", "buy_buttons", "usp_1", "usp_2", "usp_3"],
+      "block_order": ["badges", "price", "linebreak-1", "variant_picker", "linebreak-2", "inventory", "quantity_selector", "linebreak-3", "buy_buttons", "usp_1", "usp_2", "usp_3", "collapsible"],
       "settings": {
         "enable_sticky_info": true,
-        "enable_media_slider": false,
         "enable_video_looping": false
       }
     },
@@ -84,12 +107,14 @@
       "type": "product-recommendations",
       "settings": {
         "container_width": "",
-        "color_scheme": "",
+        "color_scheme": "color-scheme color-scheme--gray",
         "heading": "Recommendations",
         "intent": "related",
         "limit": 8,
         "swiper_indication": "pagination",
-        "swiper_navigation": true
+        "swiper_navigation": true,
+        "swiper_autoplay": false,
+        "swiper_autoplay_delay": 7500
       }
     }
   },
