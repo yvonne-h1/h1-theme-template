@@ -104,11 +104,9 @@
   {%- comment -%} Get media for the thumbnails slider {%- endcomment -%}
   {%- capture media_content_thumbnails_slider -%}
     {{ media_content_thumbnails_slider }}
-    <div class="swiper-slide relative aspect-square min-w-[calc((100%-3*8px)/3.2)] cursor-pointer overflow-hidden rounded-md border-2 border-transparent
+    <div class="swiper-slide relative aspect-square w-[80px] cursor-pointer overflow-hidden rounded-md border-2 border-transparent
       states:border-gray-200
-      sm:min-w-[calc((100%-5*8px)/4.2)]
-      md:min-w-[calc((100%-6*8px)/5.2)]
-      2xl:min-w-[calc((100%-7*8px)/6.2)]">
+      2xl:w-[120px]">
       <div class="product-media-swiper__item">
         {%- liquid
           assign image_object = media
@@ -119,9 +117,9 @@
         {%- render 'responsive-image',
           image_object: image_object,
           aspect_ratio: '1/1',
-          widths: '80, 114, 164',
-          max_width: 164,
-          sizes: '(min-width: 1440px) 114px, (min-width: 768px) 80px, 164px',
+          widths: '76, 116, 152, 232',
+          max_width: 328,
+          sizes: '(min-width: 1440px) 116px, 76px',
           alt: media.alt,
           title: media.alt,
           class: 'w-full max-w-none'

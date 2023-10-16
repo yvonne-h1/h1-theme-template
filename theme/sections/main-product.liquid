@@ -126,18 +126,18 @@
                       if product.selected_or_first_available_variant.inventory_quantity <= block.settings.inventory_threshold
                         render 'icons', icon: 'warning-orange', icon_class: 'w-4'
                         if block.settings.show_inventory_quantity
-                          render "render-translation", namespace: "products.product", key: "inventory_low_stock_show_count", quantity: product.selected_or_first_available_variant.inventory_quantity, fallback: "Low stock {{ quantity }}"
+                          render "render-translation", namespace: "products.product.inventory", key: "low_stock_show_count", quantity: product.selected_or_first_available_variant.inventory_quantity, fallback: "Low stock: {{ quantity }} left"
                         else
-                          render "render-translation", namespace: "products.product", key: "inventory_low_stock", fallback: "Low stock"
+                          render "render-translation", namespace: "products.product.inventory", key: "low_stock", fallback: "Low stock"
                         endif
 
                       # In Stock
                       else
                         render 'icons', icon: 'warning-green', icon_class: 'w-4'
                         if block.settings.show_inventory_quantity
-                          render "render-translation", namespace: "products.product", key: "inventory_in_stock_show_count", quantity: product.selected_or_first_available_variant.inventory_quantity, fallback: "In stock {{ quantity }}"
+                          render "render-translation", namespace: "products.product.inventory", key: "in_stock_show_count", quantity: product.selected_or_first_available_variant.inventory_quantity, fallback: "{{ quantity }} in stock"
                         else
-                          render "render-translation", namespace: "products.product", key: "inventory_in_stock", fallback: "In stock"
+                          render "render-translation", namespace: "products.product.inventory", key: "in_stock", fallback: "In stock"
                         endif
                       endif
 
@@ -145,10 +145,10 @@
                     else
                       if product.selected_or_first_available_variant.inventory_policy == 'continue'
                         render 'icons', icon: 'warning-green', icon_class: 'w-4'
-                        render "render-translation", namespace: "products.product", key: "inventory_out_of_stock_continue_selling", fallback: "In stock"
+                        render "render-translation", namespace: "products.product.inventory", key: "out_of_stock_continue_selling", fallback: "In stock"
                       else
                         render 'icons', icon: 'warning-red', icon_class: 'w-4'
-                        render "render-translation", namespace: "products.product", key: "inventory_out_of_stock", fallback: "Out of stock"
+                        render "render-translation", namespace: "products.product.inventory", key: "out_of_stock", fallback: "Out of stock"
                       endif
                     endif
                   endif

@@ -33,29 +33,13 @@ class ProductMediaSlider extends HTMLElement {
       a11y: true,
       observer: true,
       spaceBetween: 8,
-      slidesPerView: 3,
+      slidesPerView: 'auto',
       slidesOffsetBefore: 16,
       slidesOffsetAfter: 16,
       centerInsufficientSlides: true,
       modules: [a11y, thumbs],
       breakpoints: {
-        375: {
-          slidesPerView: 3.2,
-          slidesOffsetBefore: 16,
-          slidesOffsetAfter: 16,
-        },
-        580: {
-          slidesPerView: 4.2,
-          slidesOffsetBefore: 16,
-          slidesOffsetAfter: 16,
-        },
         768: {
-          slidesPerView: 5.2,
-          slidesOffsetBefore: 0,
-          slidesOffsetAfter: 0,
-        },
-        1441: {
-          slidesPerView: 6.2,
           slidesOffsetBefore: 0,
           slidesOffsetAfter: 0,
         },

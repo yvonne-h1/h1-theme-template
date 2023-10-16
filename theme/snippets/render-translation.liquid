@@ -66,6 +66,9 @@
     if fallback contains "{{ count }}" and fallback_html != blank
       assign fallback = fallback | replace: '{{ count }}', fallback_html
     endif
+    if fallback contains "{{ quantity }}" and fallback_html != blank
+      assign fallback = fallback | replace: '{{ quantity }}', fallback_html
+    endif
     assign translated_str = fallback
   endif
 
