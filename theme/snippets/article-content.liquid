@@ -32,11 +32,11 @@
     assign has_products_placeholder = false
 
     # Logic to render the article content
-    if article.content contains '<p>[[ PRODUCTS ]]</p>' or article.content contains '[[ PRODUCTS ]]'
-      if article.content contains '<p>[[ PRODUCTS ]]</p>'
-        assign has_products_placeholder = '<p>[[ PRODUCTS ]]</p>'
-      elsif article.content contains '[[ PRODUCTS ]]'
-        assign has_products_placeholder = '[[ PRODUCTS ]]'
+    if article.content contains '<p>[products]</p>' or article.content contains '[products]'
+      if article.content contains '<p>[products]</p>'
+        assign has_products_placeholder = '<p>[products]</p>'
+      elsif article.content contains '[products]'
+        assign has_products_placeholder = '[products]'
       endif
     endif
 

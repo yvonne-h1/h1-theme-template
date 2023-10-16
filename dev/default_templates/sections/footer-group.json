@@ -67,7 +67,7 @@
       "block_order": ["menu", "newsletters-and-socials", "localization", "socials", "payment-icons"],
       "settings": {
         "color_scheme": "color-scheme color-scheme--secondary",
-        "copyright_text": "© H1 Webdevelopment [[ year ]]. All rights reserved.",
+        "copyright_text": "© H1 Webdevelopment [year]. All rights reserved.",
         "copyright": true
       }
     }

@@ -108,7 +108,7 @@
     {%- if section.settings.copyright and section.settings.copyright_text != blank -%}
       <div class="mt-4 text-center">
         <p class="text-sm">
-          {{- section.settings.copyright_text | replace: '[[ year ]]', year -}}
+          {{- section.settings.copyright_text | replace: '[year]', year -}}
         </p>
       </div>
     {%- endif -%}
@@ -172,8 +172,8 @@
         "type": "text",
         "id": "copyright_text",
         "label": "Copyright text",
-        "info": "Add '[[ year ]]' to your text string and it will be replaced with the current year.",
-        "default": "© H1 Webdevelopment [[ year ]]. All rights reserved."
+        "info": "Add '[year]' to your text string and it will be replaced with the current year.",
+        "default": "© H1 Webdevelopment [year]. All rights reserved."
       },
       {
         "type": "checkbox",

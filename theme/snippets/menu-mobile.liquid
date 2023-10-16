@@ -132,7 +132,7 @@
                     aria-expanded="true"
                     data-collapsible-trigger>
                     {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ms-3' -%}
-                    {{ section.settings.back_link | replace: '[[ title ]]', menu_name }}
+                    {{ section.settings.back_link | replace: '[title]', menu_name }}
                   </button>
 
                   {%- liquid
@@ -204,7 +204,7 @@
                               aria-expanded="true"
                               data-collapsible-trigger>
                               {%- render 'icons', icon: 'chevron-left', icon_class: 'w-4 ms-3' -%}
-                              {{ section.settings.back_link | replace: '[[ title ]]', level_1_title }}
+                              {{ section.settings.back_link | replace: '[title]', level_1_title }}
                             </button>
 
                             {%- liquid
