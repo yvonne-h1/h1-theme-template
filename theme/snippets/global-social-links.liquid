@@ -1,4 +1,10 @@
-{%- assign social_accounts = 'Facebook, X, Pinterest, Instagram, Snapchat, Tumblr, YouTube, Vimeo' | split: ', ' -%}
+{%- liquid
+  if settings.social_order != blank
+    assign social_accounts = settings.social_order | newline_to_br | strip_newlines | split: '<br />'
+  else
+    assign social_accounts = 'Facebook,X,Pinterest,Instagram,Snapchat,Tumblr,YouTube,Vimeo' | split: ','
+  endif
+-%}
 
 {%- capture socials -%}
   {%- for social in social_accounts -%}

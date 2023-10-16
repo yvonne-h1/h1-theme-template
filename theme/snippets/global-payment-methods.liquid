@@ -9,7 +9,13 @@
   # Example
   {%- render linklist, linklist: block.settings.menu, prefix: 'footer-menu', collapsible: false -%}
 {%- endcomment -%}
-{%- assign payment_providers = 'apple_pay,bancontact,google_pay,ideal,klarna,mastercard,maestro,paypal,sofort,visa' | split: ',' -%}
+{%- liquid
+  if settings.payments_order != blank
+    assign payment_providers = settings.payments_order | newline_to_br | strip_newlines | split: '<br />'
+  else
+    assign payment_providers = 'apple-pay,bancontact,google-pay,ideal,klarna,mastercard,maestro,paypal,sofort,visa' | split: ','
+  endif
+-%}
 
 <p class="sr-only">
   {%- render 'render-translation', namespace: 'sections.footer.payment_methods', fallback: 'Payment methods' -%}
@@ -17,10 +23,13 @@
 
 <ul class="payment-icons__list flex flex-wrap gap-2 {{ list_class }}">
   {%- for payment_provider in payment_providers -%}
-    {%- assign payment_icon = 'payment_icon_' | append: payment_provider -%}
+    {%- liquid
+      assign payment_provider_handleized = payment_provider | handleize
+      assign payment_icon = 'payment_icon_' | append: payment_provider_handleized
+    -%}
     {%- if settings[payment_icon] -%}
       <li class="payment-icons__item {{ item_class }}">
-        {%- render 'icons', icon: payment_provider, icon_class: icon_size -%}
+        {%- render 'icons', icon: payment_provider_handleized, icon_class: icon_size -%}
       </li>
     {% endif %}
   {%- endfor -%}

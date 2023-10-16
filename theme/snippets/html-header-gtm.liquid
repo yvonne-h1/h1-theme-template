@@ -1,29 +1,25 @@
 {%- if settings.gtm_id != blank -%}
   {%- if container == 'head' -%}
-    <!-- Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{- settings.gtm_id -}}"></script>
     <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', '{{- settings.gtm_id -}}');
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', '{{- settings.gtm_id -}}');
     </script>
     <!-- End Google Tag Manager -->
   {%- elsif container == 'body' -%}
     <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
+    <noscript>
+      <iframe
         src="https://www.googletagmanager.com/ns.html?id={{- settings.gtm_id -}}"
         height="0"
         width="0"
-        style="display:none;visibility:hidden"
-      ></iframe
-    ></noscript>
+        style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <!-- End Google Tag Manager (noscript) -->
   {%- endif -%}
 {%- endif -%}

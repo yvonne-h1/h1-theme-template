@@ -105,6 +105,53 @@
     ]
   },
   {
+    "name": "Klaviyo",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "klaviyo_bis",
+        "label": "Enable Back in stock",
+        "info": "With the API credentials filled in, this will enable the Klaviyo Back in Stock functionality",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "klaviyo_bis_api_key",
+        "label": "Klaviyo account API key",
+        "info": "[Where to find this?](https://help.klaviyo.com/hc/en-us/articles/115005062267-How-to-Manage-Your-Account-s-API-Keys#find-your-api-keys2)"
+      },
+      {
+        "type": "text",
+        "id": "klaviyo_bis_listid",
+        "label": "Klaviyo List ID",
+        "info": "[Where to find this?](https://help.klaviyo.com/hc/en-us/articles/115005078647-How-to-Find-a-List-ID#find-your-list-id1)"
+      },
+      {
+        "type": "header",
+        "content": "Pop-up settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "klaviyo_bis_subscribe_checked",
+        "label": "Check opt-in checkbox by default",
+        "info": "Check the checkbox for the opt-in by default. Make sure this allowed in your country/region.",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "klaviyo_bis_background_color",
+        "label": "Button background color",
+        "default": "#439fdb"
+      },
+      {
+        "type": "color",
+        "id": "klaviyo_bis_button_text_color",
+        "label": "Button text color",
+        "default": "#ffffff"
+      }
+    ]
+  },
+  {
     "name": "Social media",
     "settings": [
       {
@@ -158,53 +205,17 @@
         "id": "social_vimeo_link",
         "label": "Vimeo link",
         "placeholder": "https://vimeo.com/your_url"
-      }
-    ]
-  },
-  {
-    "name": "Klaviyo",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "klaviyo_bis",
-        "label": "Enable Back in stock",
-        "info": "With the API credentials filled in, this will enable the Klaviyo Back in Stock functionality",
-        "default": false
-      },
-      {
-        "type": "text",
-        "id": "klaviyo_bis_api_key",
-        "label": "Klaviyo account API key",
-        "info": "[Where to find this?](https://help.klaviyo.com/hc/en-us/articles/115005062267-How-to-Manage-Your-Account-s-API-Keys#find-your-api-keys2)"
-      },
-      {
-        "type": "text",
-        "id": "klaviyo_bis_listid",
-        "label": "Klaviyo List ID",
-        "info": "[Where to find this?](https://help.klaviyo.com/hc/en-us/articles/115005078647-How-to-Find-a-List-ID#find-your-list-id1)"
       },
       {
         "type": "header",
-        "content": "Pop-up settings"
+        "content": "Social links order"
       },
       {
-        "type": "checkbox",
-        "id": "klaviyo_bis_subscribe_checked",
-        "label": "Check opt-in checkbox by default",
-        "info": "Check the checkbox for the opt-in by default. Make sure this allowed in your country/region.",
-        "default": false
-      },
-      {
-        "type": "color",
-        "id": "klaviyo_bis_background_color",
-        "label": "Button background color",
-        "default": "#439fdb"
-      },
-      {
-        "type": "color",
-        "id": "klaviyo_bis_button_text_color",
-        "label": "Button text color",
-        "default": "#ffffff"
+        "type": "textarea",
+        "id": "social_order",
+        "label": "Order of items",
+        "info": "Be sure to add a link above as well. One per line.",
+        "default": "Facebook\nX\nInstagram\nYoutube"
       }
     ]
   },
@@ -219,7 +230,7 @@
       },
       {
         "type": "checkbox",
-        "id": "payment_icon_apple_pay",
+        "id": "payment_icon_apple-pay",
         "label": "Apple Pay",
         "default": true
       },
@@ -231,7 +242,7 @@
       },
       {
         "type": "checkbox",
-        "id": "payment_icon_google_pay",
+        "id": "payment_icon_google-pay",
         "label": "Google Pay",
         "default": true
       },
@@ -276,12 +287,32 @@
         "id": "payment_icon_visa",
         "label": "Visa",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "Payment icons order"
+      },
+      {
+        "type": "textarea",
+        "id": "payments_order",
+        "label": "Order of items",
+        "info": "Be sure to enable the item above as well. One per line.",
+        "default": "iDeal\nMaestro\nApple pay"
       }
     ]
   },
   {
     "name": "Collection page",
     "settings": [
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "min": 4,
+        "max": 24,
+        "step": 1,
+        "default": 16,
+        "label": "Products per page"
+      },
       {
         "type": "select",
         "id": "pagination_view",
@@ -297,36 +328,6 @@
             "label": "Load more"
           }
         ]
-      },
-      {
-        "type": "header",
-        "content": "Filter availability"
-      },
-      {
-        "type": "text",
-        "id": "availability_filter_name",
-        "label": "Availability filter name",
-        "default": "Availability",
-        "info": "Set the name as it's used for product availability. This will render the filter as a toggle/switch."
-      },
-      {
-        "type": "header",
-        "content": "Filter colors"
-      },
-      {
-        "type": "text",
-        "id": "color_filter_name",
-        "label": "Color filter name",
-        "default": "Color",
-        "info": "Set the name as it's used for product variants. This will be used to determine the color option in the filters and the product options so they can be displayed as swatches."
-      },
-      {
-        "type": "textarea",
-        "id": "color_mappings",
-        "label": "Color mappings",
-        "info": "Set up color mappings. One per line. color|#hexvalue or color name, where 'color' is lowercase and hyphened, like 'dark-blue'. For a list of accepted color names or hex codes, [got to this page](https://htmlcolorcodes.com/color-names/).",
-        "default": "blue|SteelBlue\nred|Red\norange|DarkOrange\nblack|#000\ngray|Silver\nlight_brown|Tan\nwhite|white\nyellow|Gold",
-        "placeholder": "blue|#68b7ff\nred|#ff0000\nblack|#000"
       },
       {
         "type": "header",
@@ -351,14 +352,18 @@
       },
       {
         "type": "header",
-        "content": "Filter options"
+        "content": "Filter availability"
       },
       {
-        "type": "checkbox",
-        "id": "enable_filter_collapsibles",
-        "default": true,
-        "label": "Enable collapsible panes",
-        "info": "Renders filter groups in collapsible panes."
+        "type": "text",
+        "id": "availability_filter_name",
+        "label": "Availability filter name",
+        "default": "Availability",
+        "info": "Set the name as it's used for product availability. This will render the filter as a toggle/switch."
+      },
+      {
+        "type": "header",
+        "content": "Filter options"
       },
       {
         "type": "textarea",
@@ -369,13 +374,23 @@
         "placeholder": "Color\nSize"
       },
       {
-        "type": "range",
-        "id": "products_per_page",
-        "min": 4,
-        "max": 24,
-        "step": 1,
-        "default": 16,
-        "label": "Products per page"
+        "type": "header",
+        "content": "Filter colors"
+      },
+      {
+        "type": "text",
+        "id": "color_filter_name",
+        "label": "Color filter name",
+        "default": "Color",
+        "info": "Set the name as it's used for product variants. This will be used to determine the color option in the filters and the product options so they can be displayed as swatches."
+      },
+      {
+        "type": "textarea",
+        "id": "color_mappings",
+        "label": "Color mappings",
+        "info": "Set up color mappings. One per line. color|#hexvalue or color name, where 'color' is lowercase and hyphened, like 'dark-blue'. For a list of accepted color names or hex codes, [got to this page](https://htmlcolorcodes.com/color-names/).",
+        "default": "blue|SteelBlue\nred|Red\norange|DarkOrange\nblack|#000\ngray|Silver\nlight_brown|Tan\nwhite|white\nyellow|Gold",
+        "placeholder": "blue|#68b7ff\nred|#ff0000\nblack|#000"
       }
     ]
   },
@@ -477,10 +492,13 @@
         "content": "Blog settings"
       },
       {
-        "type": "number",
+        "type": "range",
         "id": "articles_per_page",
-        "label": "Articles per page",
-        "default": 10
+        "min": 4,
+        "max": 24,
+        "step": 1,
+        "default": 12,
+        "label": "Articles per page"
       },
       {
         "type": "select",
@@ -826,7 +844,7 @@
         "id": "enable_cart_drawer_section",
         "default": true,
         "label": "Enable Cart Drawer",
-        "info": "Enable Cart Drawer on cart icon click."
+        "info": "Display the Cart Drawer on cart icon click."
       },
       {
         "type": "checkbox",
