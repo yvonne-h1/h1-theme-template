@@ -19,7 +19,7 @@
 
     {% comment %} Collection image {% endcomment %}
     {%- if collection.image != blank and section.settings.show_collection_image -%}
-      <div class="collection-header__image hidden h-full max-h-40 w-full max-w-[240px] grow-0 md:block">
+      <div class="collection-header__image hidden h-full max-h-40 w-full max-w-[240px] grow-0 md:block aspect-[3/2]">
         {%- render 'responsive-image',
           image_object: collection.image,
           widths: '240',
