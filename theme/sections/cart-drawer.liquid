@@ -1,5 +1,12 @@
 {%- if request.page_type != 'cart' -%}
-  <cart-drawer class="cart-drawer" data-cart-drawer>
+  <cart-drawer
+    class="cart-drawer"
+    data-cart-drawer
+    data-options='
+      {
+        "showUpsell": {{ settings.show_recommendations }}
+      }
+    '>
     {%- comment -%} Backdrop {%- endcomment -%}
     <class-toggle-component
       class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop"
@@ -36,7 +43,7 @@
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
       {% comment %} Drawer items {% endcomment %}
       <cart-items
-        class="cart-items group/cart-items peer min-w-min max-w-screen overflow-hidden bg-white xs:max-w-sm sm:min-w-[364px] sm:max-w-[584px] md:min-w-[344px] {% if cart == empty %}cart-is-empty{% endif %}">
+        class="cart-items group/cart-items peer h-full min-w-min max-w-screen overflow-hidden bg-white xs:max-w-sm sm:min-w-[364px] sm:max-w-[584px] md:min-w-[344px] {% if cart == empty %}cart-is-empty{% endif %}">
         {% comment %} For accessibility purposes, make this div invisble so it's not tabbale when the drawer is not visible {% endcomment %}
         <div class="invisible h-full group-[.cart-drawer-is-open]/body:visible">
           {%- comment -%} Empty cart {%- endcomment -%}
@@ -83,7 +90,7 @@
 
             {%- comment -%} Cart drawer items {%- endcomment -%}
             <div
-              class="cart-drawer__content relative z-10 flex h-fit flex-col pt-6 group-[.cart-is-empty]/cart-items:hidden"
+              class="cart-drawer__content relative z-10 flex h-full min-h-fit flex-col pt-6 group-[.cart-is-empty]/cart-items:hidden"
               id="main-cart-items"
               data-id="{{ section.id }}">
               <div class="js-cart-item-contents flex-1 px-4 group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
@@ -116,53 +123,55 @@
               {%- endfor -%}
 
               {% comment %} Recommendations slider {% endcomment %}
-              <div class="js-cart-related-items-swiper">
-                {%- capture recommendations -%}
-                {%- render 'cart-related-items', section: section, is_swiper: true -%}
-              {%- endcapture -%}
+              {%- if settings.show_recommendations -%}
+                <div class="js-cart-related-items-swiper">
+                  {%- capture recommendations -%}
+                    {%- render 'cart-related-items', is_swiper: true -%}
+                  {%- endcapture -%}
 
-                {% comment %} Items {% endcomment %}
-                <div class="max-w-screen bg-gray-100 py-6 xs:max-w-sm sm:hidden {% if recommendations == blank -%}hidden{%- endif -%}">
-                  {% comment %} Title {% endcomment %}
-                  {%- if section.settings.rec_title != blank -%}
-                    <h2 class="h6 px-4">{{ section.settings.rec_title }}</h2>
-                  {%- endif -%}
+                  {% comment %} Items {% endcomment %}
+                  <div class="max-w-screen bg-gray-100 py-6 xs:max-w-sm sm:hidden {% if recommendations == blank -%}hidden{%- endif -%}">
+                    {% comment %} Title {% endcomment %}
+                    {%- if settings.rec_title != blank -%}
+                      <h2 class="h6 px-4">{{ settings.rec_title }}</h2>
+                    {%- endif -%}
 
-                  <swiper-slider
-                    data-options='
-                      {
-                        "navigation": {
-                          "nextEl": ".swiper-button-next-{{ section.id }}",
-                          "prevEl": ".swiper-button-prev-{{ section.id }}"
-                        },
-                        "slidesPerView": 1.4,
-                        "spaceBetween": 16,
-                        "slidesOffsetBefore": 16,
-                        "slidesOffsetAfter": 16
-                      }
-                    '>
-                    <div class="swiper" data-swiper>
-                      <div class="swiper-wrapper flex h-full items-stretch">
-                        {{ recommendations }}
+                    <swiper-slider
+                      data-options='
+                        {
+                          "navigation": {
+                            "nextEl": ".swiper-button-next-{{ section.id }}",
+                            "prevEl": ".swiper-button-prev-{{ section.id }}"
+                          },
+                          "slidesPerView": 1.4,
+                          "spaceBetween": 16,
+                          "slidesOffsetBefore": 16,
+                          "slidesOffsetAfter": 16
+                        }
+                      '>
+                      <div class="swiper" data-swiper>
+                        <div class="swiper-wrapper flex h-full items-stretch">
+                          {{ recommendations }}
+                        </div>
+                        <div class="swiper-navigation site-center">
+                          <button
+                            class="swiper-button-prev swiper-button-prev-{{ section.id }}"
+                            data-swiper-nav="next"
+                            aria-label="{%- render 'render-translation',  namespace: 'accessibility.previous_slide', fallback: 'Previous slide'-%}">
+                            {% render 'icons', icon: 'chevron-left', icon_class: 'w-5' %}
+                          </button>
+                          <button
+                            class="swiper-button-next swiper-button-next-{{ section.id }}"
+                            data-swiper-nav="prev"
+                            aria-label="{%- render 'render-translation',  namespace: 'accessibility.next_slide', fallback: 'Next slide'-%}">
+                            {% render 'icons', icon: 'chevron-right', icon_class: 'w-5' %}
+                          </button>
+                        </div>
                       </div>
-                      <div class="swiper-navigation site-center">
-                        <button
-                          class="swiper-button-prev swiper-button-prev-{{ section.id }}"
-                          data-swiper-nav="next"
-                          aria-label="{%- render 'render-translation',  namespace: 'accessibility.previous_slide', fallback: 'Previous slide'-%}">
-                          {% render 'icons', icon: 'chevron-left', icon_class: 'w-5' %}
-                        </button>
-                        <button
-                          class="swiper-button-next swiper-button-next-{{ section.id }}"
-                          data-swiper-nav="prev"
-                          aria-label="{%- render 'render-translation',  namespace: 'accessibility.next_slide', fallback: 'Next slide'-%}">
-                          {% render 'icons', icon: 'chevron-right', icon_class: 'w-5' %}
-                        </button>
-                      </div>
-                    </div>
-                  </swiper-slider>
+                    </swiper-slider>
+                  </div>
                 </div>
-              </div>
+              {%- endif -%}
             </div>
 
             {%- comment -%} Cart footer {%- endcomment -%}
@@ -197,7 +206,7 @@
                 {%- comment -%} Cart errors {%- endcomment -%}
                 <div id="cart-errors" class="cart-drawer__cart-error mx-0 my-2 text-sm text-danger empty:hidden"></div>
 
-                {%- if section.settings.show_tax_note -%}
+                {%- if settings.show_tax_note -%}
                   <p class="cart-drawer__tax-note rte mx-0 mt-2 text-sm opacity-50 contrast-more:opacity-100">
                     {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
                       {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
@@ -230,7 +239,7 @@
                   </form>
 
                   {%- comment -%} Go to cart button {%- endcomment -%}
-                  {%- if section.settings.show_cart_button -%}
+                  {%- if settings.show_cart_button -%}
                     <a
                       href="{{ routes.cart_url }}"
                       class="button button--secondary button--lg w-full font-normal">
@@ -245,38 +254,40 @@
       </cart-items>
 
       {% comment %} Recommendations {% endcomment %}
-      <div
-        id="main-cart-recommendations"
-        data-id="{{ section.id }}">
-        <div class="js-cart-related-items">
-          {% comment %} Recommendations {% endcomment %}
-          {%- capture recommendations -%}
-            {%- render 'cart-related-items', section: section -%}
-          {%- endcapture -%}
+      {%- if settings.show_recommendations -%}
+        <div
+          id="main-cart-recommendations"
+          data-id="{{ section.id }}">
+          <div class="js-cart-related-items">
+            {% comment %} Recommendations {% endcomment %}
+            {%- capture recommendations -%}
+              {%- render 'cart-related-items' -%}
+            {%- endcapture -%}
 
-          <div class="cart-recommendations sticky top-0 hidden h-screen overflow-y-auto overflow-x-hidden {% if recommendations == blank -%}hidden{% else %}sm:block{%- endif %}">
-            {% comment %} Output the recommendations {% endcomment %}
-            <div class="cart-recommendations__wrapper min-h-full min-w-[220px] translate-x-full  bg-gray-100 transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden sm:p-4 md:min-w-[240px] {% if section.settings.show_recommendations -%}group-[.cart-drawer-is-open]/body:w-full{% else -%}hidden{%- endif %}">
-              {% comment %} Title {% endcomment %}
-              {%- if section.settings.rec_title != blank -%}
-                <h2 class="cart-recommendations__title h6 px-4">{{ section.settings.rec_title }}</h2>
-              {%- endif -%}
+            <div class="cart-recommendations sticky top-0 hidden h-screen overflow-y-auto overflow-x-hidden {% if recommendations == blank -%}hidden{% else %}sm:block{%- endif %}">
+              {% comment %} Output the recommendations {% endcomment %}
+              <div class="cart-recommendations__wrapper min-h-full min-w-[220px] translate-x-full  bg-gray-100 transition-all delay-[400ms] duration-500 group-[.cart-drawer-is-open]/body:w-full group-[.cart-drawer-is-open]/body:translate-x-0 peer-[.cart-is-empty]:hidden sm:p-4 md:min-w-[240px]">
+                {% comment %} Title {% endcomment %}
+                {%- if settings.rec_title != blank -%}
+                  <h2 class="cart-recommendations__title h6 px-4">{{ settings.rec_title }}</h2>
+                {%- endif -%}
 
-              {% comment %} Items {% endcomment %}
-              <div class="cart-recommendations__items peer flex flex-col gap-y-4 transition-opacity duration-100">
-                {{ recommendations }}
+                {% comment %} Items {% endcomment %}
+                <div class="cart-recommendations__items peer flex flex-col gap-y-4 transition-opacity duration-100">
+                  {{ recommendations }}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      {%- endif -%}
     </div>
   </cart-drawer>
 
   {%- comment -%} Import javascript {%- endcomment -%}
   <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
   <script src="{{ 'cart-items.js' | asset_url }}" defer></script>
-  {%- if section.settings.show_recommendations -%}
+  {%- if settings.show_recommendations -%}
     <script src="{{ 'swiper-slider.js' | asset_url }}" type="module"></script>
   {%- endif -%}
 {%- endif -%}
@@ -286,44 +297,8 @@
     "name": "Cart drawer",
     "settings": [
       {
-        "type": "checkbox",
-        "id": "show_cart_button",
-        "default": true,
-        "label": "Show go to cart button"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_tax_note",
-        "default": true,
-        "label": "Show tax/shipping message in cart drawer"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_recommendations",
-        "default": true,
-        "label": "Show recommendations in cart drawer"
-      },
-      {
-        "type": "text",
-        "id": "rec_title",
-        "label": "'Recommendations' title",
-        "default": "We recommend:"
-      },
-      {
-        "type": "select",
-        "id": "recommendation_type",
-        "label": "Recommendation type",
-        "default": "related_products",
-        "options": [
-          {
-            "value": "related_products",
-            "label": "Related products"
-          },
-          {
-            "value": "complementary_products",
-            "label": "Complementary products"
-          }
-        ]
+        "type": "paragraph",
+        "content": "The settings for this section are done in the Theme Settings."
       }
     ],
     "blocks": [

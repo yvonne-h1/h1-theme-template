@@ -1,0 +1,351 @@
+{%- capture container_content -%}
+  {%- if section.settings.text != blank -%}
+    <div class="{{ section.settings.text_align }} mb-4">
+    {{ section.settings.text }}
+    </div>
+  {%- endif -%}
+
+  <collapsible-component
+    class="collapsible {% if section.settings.button_color_scheme != '' -%}flex flex-col gap-2{%- else -%}block divide-y border-b border-t{%- endif -%}"
+    data-options='
+      {
+        "closeSiblings": {{ section.settings.close_siblings }}
+      }
+    '>
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.trigger != blank and block.settings.content != blank -%}
+          <div
+            class="collapsible__group group"
+            data-collapsible-group {{ block.shopify_attributes }}>
+            <button
+              type="button"
+              class="collapsible__trigger {{ section.settings.button_color_scheme }} flex w-full items-center justify-between {% if section.settings.button_color_scheme == '' -%}py-4 pr-4 no-underline transition group-[.collapsible-is-open]:font-bold{%- endif -%}"
+              data-collapsible-trigger>
+              {{ block.settings.trigger }}
+              <span class="collapsible__trigger-icons">
+                {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
+                {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
+              </span>
+            </button>
+            <div
+              class="collapsible__target rte group-[.collapsible-is-open]:py-2"
+              data-collapsible-target>
+              <div class="p-0 pb-4">
+                {{ block.settings.content }}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </collapsible-component>
+{%- endcapture -%}
+
+{%- liquid
+  # Container class
+  assign container_class = 'collapsibles ' | append: ' ' | append: section.settings.container_width
+  if section.settings.color_scheme != blank
+    assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+  endif
+
+  # Title Class
+  assign title_class = section.settings.heading_size | append: ' ' | append: section.settings.heading_align
+  if section.settings.text != blank
+    assign header_class = header_class | append: ' mb-0'
+  endif
+-%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'render-container-content',
+  class: container_class,
+  title_tag: section.settings.heading_element,
+  header_class: header_class,
+  title_class: title_class,
+  title: section.settings.heading,
+  content: container_content
+-%}
+
+{% schema %}
+  {
+    "name": "Collapsible panes",
+    "tag": "section",
+    "class": "collapsible-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Layout settings"
+      },
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Section content width",
+        "default": "container--md",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "container--sm",
+            "label": "Small"
+          },
+          {
+            "value": "container--md",
+            "label": "Medium"
+          },
+          {
+            "value": "container--wide",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "default": "",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "color-scheme color-scheme--primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--accent",
+            "label": "Accent",
+            "group": "Theme"
+          },
+          {
+            "value": "color-scheme color-scheme--gray",
+            "label": "Gray",
+            "group": "Standard"
+          },
+          {
+            "value": "color-scheme color-scheme--black",
+            "label": "Black",
+            "group": "Standard"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "heading_align",
+        "label": "Header align",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_element",
+        "label": "Heading element",
+        "default": "h2",
+        "info": "Change the element of the heading for SEO purposes. Every page should only have one H1.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "default": "h4",
+        "info": "This is applied only for visual reasons.",
+        "options": [
+          {
+            "value": "h1",
+            "label": "H1"
+          },
+          {
+            "value": "h2",
+            "label": "H2"
+          },
+          {
+            "value": "h3",
+            "label": "H3"
+          },
+          {
+            "value": "h4",
+            "label": "H4"
+          },
+          {
+            "value": "h5",
+            "label": "H5"
+          },
+          {
+            "value": "h6",
+            "label": "H6"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Text settings"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text"
+      },
+      {
+        "type": "select",
+        "id": "text_align",
+        "label": "Text align",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-start",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-end",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Collapsible settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "close_siblings",
+        "label": "Close siblings",
+        "info": "When this is enabled, only one collapsible will be open at a time.",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "button_color_scheme",
+        "default": "",
+        "label": "Trigger style",
+        "options": [
+          {
+            "value": "",
+            "label": "Default"
+          },
+          {
+            "value": "button button--gradient",
+            "label": "Gradient"
+          },
+          {
+            "value": "button button--primary",
+            "label": "Primary"
+          },
+          {
+            "value": "button button--secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "button button--outline",
+            "label": "Outline"
+          },
+          {
+            "value": "button button--outline-white",
+            "label": "Outline white"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Collapsible",
+        "type": "collapsible",
+        "settings": [
+          {
+            "type": "text",
+            "id": "trigger",
+            "label": "Trigger text"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collapsible panes",
+        "blocks": [
+          {
+            "type": "collapsible",
+            "settings": {
+              "trigger": "Collapsible 1",
+              "content": "<p>Collapsible 1 content</p>"
+            }
+          },
+          {
+            "type": "collapsible",
+            "settings": {
+              "trigger": "Collapsible 2",
+              "content": "<p>Collapsible 2 content</p>"
+            }
+          },
+          {
+            "type": "collapsible",
+            "settings": {
+              "trigger": "Collapsible 3",
+              "content": "<p>Collapsible 3 content</p>"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -18,7 +18,7 @@ if (!customElements.get('cart-items')) {
           ...this.getCartRelatedSection().map(section => section.section),
         ];
       }
-      else if(this.cartDrawer) {
+      else if(this.cartDrawer && this.cartDrawer.options.showUpsell) {
         this.sectionsToFetch = [
           ...this.sectionsToFetch,
           ...this.getDrawerSectionsToRender().map(section => section.section),
@@ -120,7 +120,7 @@ if (!customElements.get('cart-items')) {
           ...this.getCartRelatedSection(),
         ];
       }
-      else if (this.cartDrawer) {
+      else if (this.cartDrawer && this.cartDrawer.options.showUpsell) {
         sectionsToRender = [
           ...sectionsToRender,
           ...this.getDrawerSectionsToRender(),

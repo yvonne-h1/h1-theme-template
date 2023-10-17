@@ -5,6 +5,18 @@ class CartDrawer extends HTMLElement {
     this.body = document.querySelector('body');
     this.activeClass = window.drawerToggleClasses.cartDrawer;
     this.cartIconBubble = document.querySelectorAll('[aria-controls="cartDrawer"]');
+
+    this.options = {
+      showUpsell: false,
+    };
+
+    if (this?.dataset?.options) {
+      const dataOptions = JSON.parse(this.dataset.options);
+      this.options = {
+        ...this.options,
+        ...dataOptions,
+      };
+    }
   }
 
   /**

@@ -840,11 +840,21 @@
     "name": "Cart & Cart drawer",
     "settings": [
       {
-        "type": "checkbox",
-        "id": "enable_cart_drawer_section",
-        "default": true,
-        "label": "Enable Cart Drawer",
-        "info": "Display the Cart Drawer on cart icon click."
+        "type": "select",
+        "id": "add_to_cart_behavior",
+        "label": "Add to cart behavior",
+        "info": "Choose what happens after adding an item to the cart.",
+        "default": "show_cart_notification",
+        "options": [
+          {
+            "value": "show_cart_notification",
+            "label": "Show cart notification"
+          },
+          {
+            "value": "open_cart_drawer",
+            "label": "Open cart drawer"
+          }
+        ]
       },
       {
         "type": "checkbox",
@@ -860,19 +870,53 @@
         "label": "Show vendor"
       },
       {
+        "type": "header",
+        "content": "Cart drawer settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_drawer_section",
+        "default": true,
+        "label": "Enable Cart Drawer",
+        "info": "Display the Cart Drawer on cart icon click."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_button",
+        "default": true,
+        "label": "Show 'View cart' button"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tax_note",
+        "default": true,
+        "label": "Show tax/shipping message in cart drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_recommendations",
+        "default": true,
+        "label": "Show recommendations in cart drawer"
+      },
+      {
+        "type": "text",
+        "id": "rec_title",
+        "label": "'Recommendations' title",
+        "default": "We recommend:"
+      },
+      {
         "type": "select",
-        "id": "add_to_cart_behavior",
-        "label": "Add to cart behavior",
-        "info": "Choose what happens after adding an item to the cart.",
-        "default": "show_cart_notification",
+        "id": "recommendation_type",
+        "label": "Recommendation type",
+        "default": "related_products",
         "options": [
           {
-            "value": "show_cart_notification",
-            "label": "Show cart notification"
+            "value": "related_products",
+            "label": "Related products"
           },
           {
-            "value": "open_cart_drawer",
-            "label": "Open cart drawer"
+            "value": "complementary_products",
+            "label": "Complementary products"
           }
         ]
       }

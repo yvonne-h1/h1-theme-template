@@ -12,7 +12,8 @@
     endif
   endcapture
 
-  assign aria_label = cart.item_count | append: ' ' | append: cart_item_count | append: '. ' | append: open_cart_drawer_string
+  assign aria_label_drawer = cart.item_count | append: ' ' | append: cart_item_count | append: '. ' | append: open_cart_drawer_string
+  assign aria_label_cart = cart.item_count | append: ' ' | append: cart_item_count | append: '.'
 
   assign is_cart_page = false
   assign classes = 'header__icon relative'
@@ -24,23 +25,23 @@
 
 {% comment %} The actual cart icon {% endcomment %}
 <cart-icon-bubble class="cart-icon-bubble -me-3 flex">
-  {%- unless is_cart_page -%}
-    <class-toggle-component
-      data-options='
-        {
-          "classToToggle": "cart-drawer-is-open",
-          "ariaExpanded": true
-        }
-      '>
-  {%- endunless -%}
   {%- if settings.enable_cart_drawer_section -%}
+    {%- unless is_cart_page -%}
+      <class-toggle-component
+        data-options='
+          {
+            "classToToggle": "cart-drawer-is-open",
+            "ariaExpanded": true
+          }
+        '>
+    {%- endunless -%}
     <button
       type="button"
       id="cart-icon-bubble"
       class="{{ icon_classes }} {{ classes }}"
       {% unless template.name == 'cart' -%}
         aria-controls="cartDrawer"
-        aria-label="{{- aria_label -}}"
+        aria-label="{{- aria_label_drawer -}}"
         aria-haspopup="dialog"
         aria-expanded="false"
       {%- endunless %}
@@ -48,13 +49,9 @@
   {%- else -%}
     <a
       id="cart-icon-bubble"
-      class="{{ classes }}"
+      class="{{ icon_classes }} {{ classes }}"
       href="{{- routes.cart_url -}}"
-      {% unless template.name == 'cart' -%}
-        aria-controls="cartDrawer"
-        aria-haspopup="dialog"
-      {%- endunless %}
-      aria-label="{{- aria_label -}}"
+      aria-label="{{- aria_label_cart -}}"
       data-cart-icon-bubble>
   {%- endif -%}
 
@@ -74,9 +71,9 @@
     </a>
   {%- endif -%}
 
-  {%- unless is_cart_page -%}
+  {%- if is_cart_page == false and settings.enable_cart_drawer_section -%}
     </class-toggle-component>
-  {%- endunless -%}
+  {%- endif -%}
 
   {%- comment -%} No-js cart link {%- endcomment -%}
   <a href="{{ routes.cart_url }}" class="js:hidden">

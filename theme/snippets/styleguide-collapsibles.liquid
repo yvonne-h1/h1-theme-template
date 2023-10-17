@@ -7,63 +7,27 @@
         "closeSiblings": true
       }
     '>
-    <div
-      class="collapsible__group group block border-b border-t border-solid"
-      data-collapsible-group>
-      <button
-        type="button"
-        class="collapsible__trigger flex w-full items-center justify-between break-words border-0 bg-transparent px-0 py-3 text-start transition-colors hover:text-primary focus:text-primary"
-        data-collapsible-trigger>
-        Collapsible button 1
-        <span class="collapsible__trigger-icons">
-          {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
-          {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
-        </span>
-      </button>
+    {%- for i in (1..3) -%}
       <div
-        class="collapsible__target rte max-w-none break-words"
-        data-collapsible-target>
-        <div class="p-0 pb-4">Collapsible content 1</div>
+        class="collapsible__group group block border-b border-t border-solid"
+        data-collapsible-group>
+        <button
+          type="button"
+          class="collapsible__trigger link flex w-full items-center justify-between py-4 no-underline group-[.collapsible-is-open]:font-bold"
+          data-collapsible-trigger>
+          Collapsible button {{ forloop.index }}
+          <span class="collapsible__trigger-icons">
+            {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
+            {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
+          </span>
+        </button>
+        <div
+          class="collapsible__target rte max-w-none break-words group-[.collapsible-is-open]:py-2"
+          data-collapsible-target>
+          <div class="p-0 pb-4">Collapsible content {{ forloop.index }}</div>
+        </div>
       </div>
-    </div>
-    <div
-      class="collapsible__group group block border-b border-t-0 border-solid"
-      data-collapsible-group>
-      <button
-        type="button"
-        class="collapsible__trigger flex w-full items-center justify-between break-words border-0 bg-transparent px-0 py-3 text-start transition-colors hover:text-primary focus:text-primary"
-        data-collapsible-trigger>
-        Collapsible button 2
-        <span class="collapsible__trigger-icons">
-          {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
-          {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
-        </span>
-      </button>
-      <div
-        class="collapsible__target rte max-w-none break-words"
-        data-collapsible-target>
-        <div class="p-0 pb-4">Collapsible content 2</div>
-      </div>
-    </div>
-    <div
-      class="collapsible__group group block border-b border-t-0 border-solid"
-      data-collapsible-group>
-      <button
-        type="button"
-        class="collapsible__trigger flex w-full items-center justify-between break-words border-0 bg-transparent px-0 py-3 text-start transition-colors hover:text-primary focus:text-primary"
-        data-collapsible-trigger>
-        Collapsible button 3
-        <span class="collapsible__trigger-icons">
-          {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
-          {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
-        </span>
-      </button>
-      <div
-        class="collapsible__target rte max-w-none break-words p-0 pb-4 group-[.collapsible-is-open]:block js:hidden"
-        data-collapsible-target>
-        <div class="p-0 pb-4">Collapsible content 3</div>
-      </div>
-    </div>
+    {%- endfor -%}
   </collapsible-component>
 </div>
 
@@ -76,47 +40,21 @@
         "closeSiblings": true
       }
     '>
-    <div class="group" data-collapsible-group>
-      <button
-        type="button"
-        class="collapsible__trigger button button--gradient w-full items-center justify-between"
-        data-collapsible-trigger>
-        Collapsible button 1
-        {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
-      </button>
-      <div
-        class="collapsible__content rte max-w-none break-words"
-        data-collapsible-target>
-        <div class="p-0 pb-4 pt-1">Collapsible content 1</div>
+    {%- for i in (1..3) -%}
+      <div class="group" data-collapsible-group>
+        <button
+          type="button"
+          class="collapsible__trigger button button--gradient w-full items-center justify-between"
+          data-collapsible-trigger>
+          Collapsible button {{ forloop.index }}
+          {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
+        </button>
+        <div
+          class="collapsible__content rte max-w-none break-words group-[.collapsible-is-open]:py-2"
+          data-collapsible-target>
+          <div class="p-0 pb-4 pt-1">Collapsible content {{ forloop.index }}</div>
+        </div>
       </div>
-    </div>
-    <div class="group" data-collapsible-group>
-      <button
-        type="button"
-        class="collapsible__trigger button button--gradient w-full items-center justify-between"
-        data-collapsible-trigger>
-        Collapsible button 2
-        {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
-      </button>
-      <div
-        class="collapsible__content rte max-w-none break-words"
-        data-collapsible-target>
-        <div class="p-0 pb-4 pt-1">Collapsible content 2</div>
-      </div>
-    </div>
-    <div class="group" data-collapsible-group>
-      <button
-        type="button"
-        class="collapsible__trigger button button--gradient w-full items-center justify-between"
-        data-collapsible-trigger>
-        Collapsible button 3
-        {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
-      </button>
-      <div
-        class="collapsible__content rte max-w-none break-words"
-        data-collapsible-target>
-        <div class="p-0 pb-4 pt-1">Collapsible content 3</div>
-      </div>
-    </div>
+    {%- endfor -%}
   </collapsible-component>
 </div>

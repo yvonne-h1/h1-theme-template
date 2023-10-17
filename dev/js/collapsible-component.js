@@ -1,73 +1,33 @@
 /*
-HTML Usage with single group
-<collapsible-component data-options='{}'>
-  <div class="group" data-collapsible-group>
-    <button
-      type="button"
-      data-collapsible-trigger
-    >
-      The trigger
-      {%- render 'icons',
-        icon: 'chevron-down',
-        icon_class: 'w-3 absolute end-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
-      -%}
-    </button>
-    <div
-      class="
-        group-[.collapsible-is-open]:your-tailwind-class-state-example
-      "
-      data-collapsible-target
-    >
-      Your content goes here.
+  <collapsible-component
+    data-options='
+      {
+        "closeSiblings": true
+      }
+    '
+  >
+    <div class="group" data-collapsible-group>
+      <div class="collapsible__group group" data-collapsible-group {{ block.shopify_attributes }}>
+        <button
+          type="button"
+          class="collapsible__trigger {{ section.settings.button_color_scheme }} flex w-full items-center justify-between {% if section.settings.button_color_scheme == '' -%}py-4 pr-4 no-underline transition group-[.collapsible-is-open]:font-bold{%- endif -%}"
+          data-collapsible-trigger>
+          Trigger text
+          <span class="collapsible__trigger-icons">
+            {%- render 'icons', icon: 'plus', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
+            {%- render 'icons', icon: 'minus', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
+          </span>
+        </button>
+        <div
+          class="collapsible__target rte group-[.collapsible-is-open]:py-2"
+          data-collapsible-target>
+          <div class="p-0 pb-4">
+            Content
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</collapsible-component>
-
-HTML Usage with multiple & nested groups
-<collapsible-component
-  data-options='
-    {
-      "closeSiblings": true
-    }
-  '
->
-  <div class="group" data-collapsible-group>
-    <button
-      type="button"
-      data-collapsible-trigger
-    >
-      The trigger
-      {%- render 'icons',
-        icon: 'chevron-down',
-        icon_class: 'w-3 absolute end-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
-      -%}
-    </button>
-    <div
-      class=""
-      data-collapsible-target
-    >
-      Your content goes here.
-    </div>
-  </div>
-  <div class="group" data-collapsible-group>
-    <button
-      type="button"
-      data-collapsible-trigger
-    >
-      The trigger
-      {%- render 'icons',
-        icon: 'chevron-down',
-        icon_class: 'w-3 absolute end-0 top-1/2 -translate-y-1/2 rotate-0 group-[.collapsible-is-open]:rotate-180'
-      -%}
-    </button>
-    <div
-      class=""
-      data-collapsible-target
-    >
-      Your content goes here.
-    </div>
-  </div>
-</collapsible-component>
+  </collapsible-component>
 */
 
 if (!customElements.get('collapsible-component')) {

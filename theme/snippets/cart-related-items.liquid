@@ -24,7 +24,7 @@
   -%}
 
   {% comment %} Capture the related products {% endcomment %}
-  {%- assign related_product_metafield = item.product.metafields['shopify--discovery--product_recommendation'][section.settings.recommendation_type] -%}
+  {%- assign related_product_metafield = item.product.metafields['shopify--discovery--product_recommendation'][settings.recommendation_type] -%}
   {%- if related_product_metafield != blank -%}
     {%- for product in related_product_metafield.value -%}
       {% comment %} Skip items already in the cart or already listed as a related product {% endcomment %}
