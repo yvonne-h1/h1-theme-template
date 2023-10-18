@@ -24,6 +24,13 @@
               endif
             -%}
 
+            {%- comment -%}
+              Skiplink so users can go straight to the newsletter -- can only be used with a fixed menu, not the drag/drop we have now
+              <a class="button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline" href="#newsletter-form-{{ section.id }}">
+                {% render "render-translation", namespace: "accessibility", key: "skip_the_menu", fallback: "Skip the menu" -%}
+              </a>
+            {%- endcomment -%}
+
             <div
               class="footer-block footer-block--{{ block.type }} {{ block.settings.width_mobile }} {{ block.settings.width_tablet }} {{ block.settings.width_desktop }}"
               {{ block.shopify_attributes }}>
@@ -33,7 +40,8 @@
                 data-options='
                   {
                     "breakpointMax": 768,
-                    "closeSiblings": true
+                    "closeSiblings": true,
+                    "trapFocus": false
                   }
                 '>
                 {%- comment -%} Output menu and collapsible content {%- endcomment -%}

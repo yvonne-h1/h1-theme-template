@@ -9,15 +9,14 @@
     class="collapsible {% if section.settings.button_color_scheme != '' -%}flex flex-col gap-2{%- else -%}block divide-y border-b border-t{%- endif -%}"
     data-options='
       {
-        "closeSiblings": {{ section.settings.close_siblings }}
+        "closeSiblings": {{ section.settings.close_siblings }},
+        "trapFocus": false
       }
     '>
     {%- if section.blocks.size > 0 -%}
       {%- for block in section.blocks -%}
         {%- if block.settings.trigger != blank and block.settings.content != blank -%}
-          <div
-            class="collapsible__group group"
-            data-collapsible-group {{ block.shopify_attributes }}>
+          <div class="collapsible__group group" data-collapsible-group {{ block.shopify_attributes }}>
             <button
               type="button"
               class="collapsible__trigger {{ section.settings.button_color_scheme }} flex w-full items-center justify-between {% if section.settings.button_color_scheme == '' -%}py-4 pr-4 no-underline transition group-[.collapsible-is-open]:font-bold{%- endif -%}"

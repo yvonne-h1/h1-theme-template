@@ -33,6 +33,12 @@
     endunless
   %}
 
+  {%- capture page_content -%}
+    <div class="rte">
+      {{ page.content }}
+    </div>
+  {%- endcapture -%}
+
   {%- comment -%} Render the content {%- endcomment -%}
   {%- render 'render-container-content',
     class: container_class,
@@ -40,8 +46,8 @@
     title_class: section.settings.heading_size,
     title: container_title,
     header_class: header_class,
-    content: page.content,
-    content_class: 'page-section__content rte'
+    content: page_content,
+    content_class: 'page-section__content'
   -%}
 {%- endif -%}
 

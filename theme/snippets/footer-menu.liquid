@@ -72,7 +72,7 @@
       {%- else -%}
         {%- comment -%} Level 1 with submenu {%- endcomment -%}
         <li
-          class="footer-menu__item group level-1 {{ level_1_class }}"
+          class="footer-menu__item group level-1 {{ level_1_class }} group/level1"
           {{ data_collapsible_group }}>
 
           {%- liquid
@@ -121,7 +121,7 @@
 
           {%- comment -%} Level 2 {%- endcomment -%}
           <ul
-            class="footer-menu__list level-2 list-none"
+            class="footer-menu__list level-2 list-none invisible group-[.collapsible-is-open]/level1:visible"
             tabindex="-1"
             {{ data_collapsible_target }}>
             {%- for level_2_link in level_1_link.links -%}
@@ -141,7 +141,7 @@
 
               {%- if level_2_link.links == blank -%}
                 {%- comment -%} Level 2 without submenu {%- endcomment -%}
-                <li class="footer-menu__item level-2">
+                <li class="footer-menu__item level-2 p-[1px]">
                   <a
                     href="{{ level_2_url }}"
                     class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
@@ -170,7 +170,7 @@
                 -%}
                 {%- comment -%} Level 2 with submenu {%- endcomment -%}
                 <li
-                  class="footer-menu__item group level-2"
+                  class="footer-menu__item group level-2 group/level2 p-[1px]"
                   {{ data_collapsible_group }}>
 
                   {%- capture level_2_link_markup -%}
@@ -199,7 +199,7 @@
 
                   {%- comment -%} Level 3 {%- endcomment -%}
                   <ul
-                    class="footer-menu__list level-3 list-inside list-disc ps-3"
+                    class="footer-menu__list level-3 list-inside list-disc ps-3 invisible group-[.collapsible-is-open]/level2:visible"
                     {{ data_collapsible_target }}>
                     {%- for level_3_link in level_2_link.links -%}
                       {%- liquid
@@ -216,7 +216,7 @@
                         endif
                       -%}
 
-                      <li class="footer-menu__item level-3">
+                      <li class="footer-menu__item level-3 py-[1px]">
                         <a
                           href="{{ level_3_link_url }}"
                           class="footer-menu__link {{ link_class_with_hover }} text-sm {% if level_3_is_active -%}{{ link_active_class }}{%- endif %}"
