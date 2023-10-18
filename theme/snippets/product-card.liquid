@@ -111,7 +111,7 @@
   endif
 -%}
 <article
-  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4 {% if view == 'alt' -%}rounded-md border border-gray-100 p-4{%- endif %} md:border-none md:p-0"
+  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4 {% if view == 'alt' -%}rounded-md border border-gray-100 p-4{%- endif %} rounded-md md:border-none md:p-0"
   data-product-card>
   {%- comment -%} Accesibility text {%- endcomment -%}
   <a
@@ -176,7 +176,7 @@
       tabindex="-1">
       {%- comment -%} Vendor {%- endcomment -%}
       {%- if show_vendor -%}
-        <p class="product-card__vendor mb-0 text-sm">
+        <p class="product-card__vendor mb-0 text-sm text-text-default">
           <span class="sr-only">
             {%- render 'render-translation', namespace: 'accessibility', key: 'vendor', fallback: 'Vendor' -%}
           </span>
@@ -188,12 +188,12 @@
 
       {%- comment -%} Title {%- endcomment -%}
       {%- if product_object.title -%}
-        <{{ product_card_title_el }} class="product-card__title label-md mb-0">{{- product_object.title -}}</{{ product_card_title_el }}>
+        <{{ product_card_title_el }} class="product-card__title label-md mb-0 text-text-default">{{- product_object.title -}}</{{ product_card_title_el }}>
       {%- endif -%}
     </a>
   </header>
 
-  <footer class="product-card__footer flex h-full flex-col items-center justify-end gap-2 text-center">
+  <footer class="product-card__footer flex h-full flex-col items-center justify-end gap-2 text-center text-text-default">
     {% comment %} Render formatted price {% endcomment %}
     {% render 'render-price', product: product_object %}
 

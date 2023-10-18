@@ -78,7 +78,7 @@
   # Container class
   assign container_class = 'featured-collection-grid' | append: ' ' | append: section.settings.container_width
   if section.settings.color_scheme != blank
-    assign container_class = container_class | append: ' container--background my-0 ' | append: section.settings.color_scheme
+    assign container_class = container_class | append: ' group/color-scheme container--background my-0 ' | append: section.settings.color_scheme
   endif
 
   # Title Class
@@ -277,7 +277,8 @@
         "type": "text",
         "id": "button_text",
         "label": "Text",
-        "default": "View all"
+        "default": "View all",
+        "info": "Leave empty to hide."
       },
       {
         "type": "url",

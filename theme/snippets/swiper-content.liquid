@@ -57,10 +57,6 @@
     endif
   endif
 
-  if tag_to_show == blank
-    assign tag_to_show = ''
-  endif
-
   if container_width == blank
     assign container_width = ''
   endif
@@ -217,24 +213,12 @@
                 continue
               endif
 
-              # Render items for a tag
-              unless tag_to_show == ''
-                # Check if the article has the tag that is defined in the settings
-                assign skip_article_with_wrong_tag = false
-
-                for article_tag in item.tags
-                  assign article_tag_last = article_tag | split: ':' | last | downcase
-
-                  unless article_tag_last contains tag_to_show
-                    assign skip_article_with_wrong_tag = true
-                  endunless
-                endfor
-
-                # Skips the articles that doesn't have the same tag as defined in the settings
-                if skip_article_with_wrong_tag
+              # Check if the article has the tag that is defined in the settings
+              if tag_to_show != blank
+                unless item.tags contains tag_to_show
                   continue
-                endif
-              endunless
+                endunless
+              endif
 
               # Increase the count for every item that passes the statements so we can make sure the slides don't exceed the max count
               assign count = count | plus: 1

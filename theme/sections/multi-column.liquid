@@ -1,7 +1,7 @@
 {%- liquid
   assign title = section.settings.heading
   assign container_class = 'multi-column__container'
-  assign content_class = 'multi-column__content grid gap-8'
+  assign content_class = 'multi-column__content grid gap-8 grid-cols-1'
 
   # Container classes
   if section.settings.container_width != blank
@@ -11,13 +11,46 @@
     assign container_class = container_class | append: ' container--background ' | append: section.settings.color_scheme
   endif
 
-  # Set the grid layout.
-  if section.settings.columns_per_row == 1
-    assign content_class = content_class | append: ' grid-cols-1'
-  elsif section.settings.columns_per_row == 2
-    assign content_class = content_class | append: ' grid-cols-1 md:grid-cols-2'
-  elsif section.settings.columns_per_row == 3
-    assign content_class = content_class | append: ' grid-cols-1 md:grid-cols-3'
+  # Set the grid layout. Make sure there are enough blocks for the columns selected
+  assign columns = section.blocks.size
+  if section.blocks.size == 1
+    assign grid_class = ' md:grid-cols-1'
+    if section.settings.odd_even
+      assign grid_class = ' xl:grid-cols-1'
+    endif
+  elsif section.blocks.size == 2
+    assign grid_class = ' md:grid-cols-2'
+    if section.settings.odd_even
+      assign grid_class = ' xl:grid-cols-2'
+    endif
+  elsif section.blocks.size == 3
+    assign grid_class = ' md:grid-cols-3'
+    if section.settings.odd_even
+      assign grid_class = ' xl:grid-cols-3'
+    endif
+  endif
+
+  if section.settings.columns_per_row == 1 and section.blocks.size >= 1
+    assign grid_class = ' md:grid-cols-1'
+    if section.settings.odd_even
+      assign grid_class = ' xl:grid-cols-1'
+    endif
+  elsif section.settings.columns_per_row == 2 and section.blocks.size >= 2
+    assign grid_class = ' md:grid-cols-2'
+    if section.settings.odd_even
+      assign grid_class = ' xl:grid-cols-2'
+    endif
+  elsif section.settings.columns_per_row == 3 and section.blocks.size >= 3
+    assign grid_class = ' md:grid-cols-3'
+    if section.settings.odd_even
+      assign grid_class = ' xl:grid-cols-3'
+    endif
+  endif
+
+  assign content_class = content_class | append: grid_class
+
+  if section.settings.odd_even
+    assign content_class = content_class | append: ' md:gap-y-10'
   endif
 
   # Collect the title classnames based on settings.
@@ -37,9 +70,12 @@
         endif
 
         # Set images sizes depending on the number of columns
-        assign image_size = 100 | divided_by: section.settings.columns_per_row | append: 'vw'
-        assign image_max_width = 1376 | divided_by: section.settings.columns_per_row | round
+        assign image_size = 100 | divided_by: columns | append: 'vw'
+        assign image_max_width = 1376 | divided_by: columns | round
         assign sizes = '(min-width: 768px) ' | append: image_size | append: ', 100vw'
+        if section.settings.odd_even
+          assign sizes = '(min-width: 1024px) ' | append: image_size | append: ', (min-width: 768px) 50vw, 100vw'
+        endif
 
         # Align buttons with flex as parent based on text align block.
         assign button_align = 'justify-start'
@@ -54,61 +90,65 @@
       {%- comment -%} Render column {%- endcomment -%}
       <div class="multi-columns__column flex flex-col {{ block.settings.position_vertical }} {{ block.settings.position_horizontal }} {{ block.settings.mobile_order }} md:order-none" {{ block.shopify_attributes }}>
         {%- comment -%} Column inner width and text align {%- endcomment -%}
-        <div class="space-y-5 {{ block.settings.text_align }}">
+        <div class="flex flex-col gap-y-4 {% if section.settings.odd_even -%}{% cycle 'md:flex-row', 'md:flex-row-reverse' %} items-center gap-x-base xl:flex-col{%- endif %}">
 
-          {%- liquid
-            # First button
-            assign button_1 = true
-            if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
-              assign button_1 = false
-            endif
+          <div class="multi-columns__image {% if section.settings.odd_even -%}shrink-0 grow basis-1/2{%- endif -%}">
+            {%- liquid
+              # First button
+              assign button_1 = true
+              if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
+                assign button_1 = false
+              endif
 
-            # Second button
-            assign button_2 = true
-            if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
-              assign button_2 = false
-            endif
+              # Second button
+              assign button_2 = true
+              if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
+                assign button_2 = false
+              endif
 
-            # Desktop image
-            if block.settings.image != blank
-              render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', max_width: image_max_width, sizes: sizes
-            endif
+              # Desktop image
+              if block.settings.image != blank
+                render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', max_width: image_max_width, sizes: sizes
+              endif
 
-            # Mobile Image
-            if image_mobile != blank
-              render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768,
-            endif
-          -%}
+              # Mobile Image
+              if image_mobile != blank
+                render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768,
+              endif
+            -%}
+          </div>
 
-          {%- comment -%} Heading {%- endcomment -%}
-          {%- if block.settings.heading != blank -%}
-            <{{ block.settings.heading_element }} class="{{ block.settings.heading_size }}">
-              {{- block.settings.heading -}}
-            </{{ block.settings.heading_element }}>
-          {%- endif -%}
+          <div class="multi-columns__text {{ block.settings.text_align }}">
+            {%- comment -%} Heading {%- endcomment -%}
+            {%- if block.settings.heading != blank -%}
+              <{{ block.settings.heading_element }} class="{{ block.settings.heading_size }}">
+                {{- block.settings.heading -}}
+              </{{ block.settings.heading_element }}>
+            {%- endif -%}
 
-          {%- comment -%} Text {%- endcomment -%}
-          {%- if block.settings.text != blank -%}
-            {{- block.settings.text -}}
-          {%- endif -%}
+            {%- comment -%} Text {%- endcomment -%}
+            {%- if block.settings.text != blank -%}
+              {{- block.settings.text -}}
+            {%- endif -%}
 
-          {%- comment -%} Buttons {%- endcomment -%}
-          {%- if button_1 or button_2 -%}
-            <div class="flex gap-4 {{ button_align }}">
-              {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
-                <a href="{{ block.settings.button_url_1 | default: '#' }}"
-                  class="{{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
-                  {{- block.settings.button_label_1 -}}
-                </a>
-              {%- endif -%}
-              {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
-                <a href="{{ block.settings.button_url_2 | default: '#' }}"
-                  class="{{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
-                  {{- block.settings.button_label_2 -}}
-                </a>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
+            {%- comment -%} Buttons {%- endcomment -%}
+            {%- if button_1 or button_2 -%}
+              <div class="flex gap-4 {{ button_align }}">
+                {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
+                  <a href="{{ block.settings.button_url_1 | default: '#' }}"
+                    class="{{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
+                    {{- block.settings.button_label_1 -}}
+                  </a>
+                {%- endif -%}
+                {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
+                  <a href="{{ block.settings.button_url_2 | default: '#' }}"
+                    class="{{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
+                    {{- block.settings.button_label_2 -}}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
         </div>
       </div>
     {%- endif -%}
@@ -195,6 +235,12 @@
         "max": 3,
         "step": 1,
         "default": 2
+      },
+      {
+        "type": "checkbox",
+        "id": "odd_even",
+        "label": "Alternate image and text on tablet screens",
+        "default": true
       },
       {
         "type": "header",
@@ -420,14 +466,13 @@
           {
             "type": "image_picker",
             "id": "image",
-            "label": "Desktop image",
-            "info": "Aspect ratio 1/1"
+            "label": "Desktop image"
           },
           {
             "type": "select",
             "id": "image_ratio",
             "label": "Destkop image ratio",
-            "default": "1/1",
+            "default": "16/9",
             "options": [
               {
                 "value": "16/9",
@@ -458,14 +503,13 @@
           {
             "type": "image_picker",
             "id": "image_mobile",
-            "label": "Mobile image",
-            "info": "Aspect ratio 5/6"
+            "label": "Mobile image"
           },
           {
             "type": "select",
             "id": "image_ratio_mobile",
             "label": "Mobile image ratio",
-            "default": "5/6",
+            "default": "16/9",
             "options": [
               {
                 "value": "16/9",

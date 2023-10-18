@@ -18,7 +18,7 @@
     {% comment %} Required name input {% endcomment %}
     <div class="field col-span-2 md:col-span-1">
       <label class="field__label" for="contact-form__name">
-        {{- name_str -}}
+        {{- name_str }} *
       </label>
       <div class="relative">
         <input
@@ -40,7 +40,7 @@
     {% comment %} Required email input {% endcomment %}
     <div class="field col-span-2 md:col-span-1">
       <label class="field__label" for="contact-form__email">
-        {{- email_str -}}
+        {{- email_str }} *
       </label>
       <div class="relative">
         <input
@@ -86,7 +86,7 @@
           {%- if block.settings.title != blank and block.settings.id != blank -%}
             <div class="field col-span-2">
               <label class="field__label" for="ContactForm-{{ block.settings.title | handleize }}">
-                {{- block.settings.title -}}
+                {{- block.settings.title }} {% if block.settings.required %}*{%- endif -%}
               </label>
               <div class="select">
                 <select class="select__select" id="ContactForm-{{ block.settings.title | handleize }}"
@@ -111,7 +111,7 @@
           {%- if block.settings.title != blank and block.settings.id != blank -%}
             <div class="field col-span-2">
               <label class="field__label" for="ContactForm-{{ block.settings.title | handleize }}">
-                {{- block.settings.title -}}
+                {{- block.settings.title }} {% if block.settings.required %}*{%- endif -%}
               </label>
               <input
               {% if block.type == 'number' and block.settings.phone_number %}
@@ -136,7 +136,7 @@
           {%- if block.settings.title != blank and block.settings.id != blank -%}
             <div class="field col-span-2">
               <label class="field__label" for="ContactForm-{{ block.settings.title | handleize }}">
-                {{ block.settings.title }}
+                {{ block.settings.title }} {% if block.settings.required %}*{%- endif -%}
               </label>
               <textarea
                 rows="[{{ block.settings.rows }}]"
@@ -155,7 +155,7 @@
     {% comment %} Required message input {% endcomment %}
     <div class="field col-span-2">
       <label class="field__label" for="ContactForm-message-required">
-        {{ message_str }}
+        {{ message_str }} *
       </label>
       <textarea
         rows="4"
@@ -171,6 +171,11 @@
         {{ section.settings.message_error }}
       </div>
     </div>
+
+    {% comment %} Required text {% endcomment %}
+    {%- if section.settings.required_text != blank and form.posted_successfully? == false -%}
+      <p class="text-sm italic">{{ section.settings.required_text }}</p>
+    {%- endif -%}
 
     {% comment %} Actions {% endcomment %}
     <div class="form__actions col-span-2">
@@ -400,6 +405,13 @@
       {
         "type": "header",
         "content": "Info messages"
+      },
+      {
+        "type": "text",
+        "id": "required_text",
+        "label": "'Required' text",
+        "info": "Leave empty to hide.",
+        "default": "Fields labeled with '*' are required."
       },
       {
         "type": "textarea",

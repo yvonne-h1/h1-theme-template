@@ -51,6 +51,13 @@
     assign id = '1'
   endif
 
+  # Assign mobile image
+  assign image_mobile = object.settings.image_desktop
+  if object.settings.image_mobile != blank
+    assign image_mobile = object.settings.image_mobile
+  endif
+
+  # Define the aspec ratio
   unless min_ratio_mobile
     assign min_ratio_mobile = object.settings.min_ratio_mobile
   endunless
@@ -58,6 +65,22 @@
   unless min_ratio_tablet
     assign min_ratio_tablet = object.settings.min_ratio_tablet
   endunless
+
+  if min_ratio_mobile == ''
+    if object.settings.image_mobile
+      assign min_ratio_mobile = object.settings.image_mobile.aspect_ratio
+    else
+      assign min_ratio_mobile = 'aspect-[16/9]'
+    endif
+  endif
+
+  if min_ratio_tablet == ''
+    if object.settings.image_desktop
+      assign min_ratio_tablet = object.settings.image_desktop.aspect_ratio
+    else
+      assign min_ratio_tablet = 'aspect-[16/9]'
+    endif
+  endif
 
   # video settings
   assign is_video = false
@@ -123,12 +146,6 @@
     assign image_class = 'h-full w-full object-cover'
     assign image_class_desktop = image_class | append: ' hidden md:block'
     assign image_class_mobile = image_class | append: ' md:hidden'
-
-    # Assign mobile image
-    assign image_mobile = object.settings.image_desktop
-    if object.settings.image_mobile != blank
-      assign image_mobile = object.settings.image_mobile
-    endif
 
     assign mobile_aspect = min_ratio_mobile | split: '[' | last | remove: ']'
     assign tablet_aspect = min_ratio_tablet | split: '[' | last | remove: ']'

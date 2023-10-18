@@ -4,7 +4,7 @@
   assign blog_object = blogs[section.settings.blog]
   assign articles_count = blog_object.articles_count
   assign articles_array = blog_object.articles
-  assign tag_to_show = section.settings.tag | split: ':' | last | downcase
+  assign tag_to_show = section.settings.tag | handleize
 
   # If the number of items is higher than the given setting, use the setting
   if articles_count > section.settings.articles_count
@@ -35,19 +35,10 @@
         endif
 
         # Check if the article has the tag that is defined in the settings
-        assign skip_article_with_wrong_tag = false
-
-        for article_tag in article_object.tags
-          assign article_tag_last = article_tag | split: ':' | last | downcase
-
-          unless article_tag_last contains tag_to_show
-            assign skip_article_with_wrong_tag = true
+        if tag_to_show
+          unless article_object.tags contains tag_to_show
+            continue
           endunless
-        endfor
-
-        # Skipt the articles that doesn't have the same tag as defined in the settings
-        if skip_article_with_wrong_tag
-          continue
         endif
 
         # Add 1 to the count for every article that passes the statements
@@ -301,7 +292,8 @@
         "type": "text",
         "id": "button_text",
         "label": "Text",
-        "default": "View all"
+        "default": "View all",
+        "info": "Leave empty to hide."
       },
       {
         "type": "url",
