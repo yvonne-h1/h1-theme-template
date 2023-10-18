@@ -38,7 +38,7 @@
 
 {%- comment %} Render Container {%- endcomment %}
 <{{ tag | default: 'div' }}
-  class="container{%- if class != blank -%}{{ class | prepend: ' ' -}}{%- endif -%}"
+  class="container{%- if class != blank -%}{{ class | prepend: ' ' -}}{%- endif %} only:w-full only:flex-1"
   {%- if id != blank -%}
     {{- id | prepend: ' ' -}}
   {%- endif -%}

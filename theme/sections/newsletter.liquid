@@ -13,22 +13,35 @@
 -%}
 
 {%- capture blocks -%}
+
+{% comment %} Check for Klaviyo first {% endcomment %}
+{%- if section.settings.klaviyo_newsletter != blank -%}
+  {{- section.settings.klaviyo_newsletter -}}
+  {% comment %} Render the default newsletter {% endcomment %}
+{%- else -%}
   {%- for block in section.blocks -%}
     {%- case block.type -%}
+
+      {% comment %} Heading {% endcomment %}
       {%- when 'heading' -%}
         {%- if block.settings.heading != blank -%}
           <{{ block.settings.heading_element }} class="newsletter__heading {{ block.settings.heading_size }} mb-0" {{ block.shopify_attributes }}>
             {{- block.settings.heading -}}
           </{{ block.settings.heading_element }}>
         {%- endif -%}
+
+      {% comment %} Text {% endcomment %}
       {%- when 'text' -%}
         {%- if block.settings.text != blank -%}
           <div class="newsletter__subheading rte me-0 ms-0 max-w-none" {{ block.shopify_attributes }}>
             {{- block.settings.text -}}
           </div>
         {%- endif -%}
+
+      {% comment %} Add the customer form {% endcomment %}
       {%- when 'form' -%}
         <div class="mx-auto w-full max-w-xs" {{ block.shopify_attributes }}>
+          {% comment %} Regular form {% endcomment %}
           {% form 'customer', class: 'newsletter__form' %}
             <input type="hidden" name="contact[tags]" value="newsletter">
             <input type="hidden" name="customer[accepts_marketing]" value="true">
@@ -95,6 +108,7 @@
         </div>
     {%- endcase -%}
   {%- endfor -%}
+{%- endif -%}
 {%- endcapture -%}
 
 {%- liquid
@@ -192,6 +206,16 @@
             "group": "Standard"
           }
         ]
+      },
+      {
+        "type": "html",
+        "id": "klaviyo_newsletter",
+        "label": "Klaviyo newsletter",
+        "info": "Add the embed code from Klaviyo."
+      },
+      {
+        "type": "paragraph",
+        "content": "If Klaviyo is used, the blocks will be ignored."
       }
     ],
     "blocks": [
@@ -293,7 +317,7 @@
           {
             "type": "select",
             "id": "button_color_scheme",
-            "default": "button--primary",
+            "default": "",
             "label": "Button type",
             "options": [
               {
