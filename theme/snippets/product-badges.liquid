@@ -27,7 +27,7 @@
 
   # Get badge text from product-tag "badge:"
   capture flex_badge
-    echo '<span class="' | append: badge_class | append: ' badge--new">'
+    echo '<span class="' | append: badge_class | append: ' badge--custom">'
     echo 'badge_text'
     echo '</span>'
   endcapture
@@ -58,7 +58,7 @@
         for tag in product.tags
           assign tag_down = tag | downcase
           if tag_down contains 'badge:'
-            assign badge_text = tag | remove: 'badge:' | strip
+            assign badge_text = tag | remove: 'badge:' | strip | capitalize
             echo flex_badge | replace: 'badge_text', badge_text
           endif
         endfor

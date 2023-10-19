@@ -194,53 +194,54 @@
 
 {% comment %} Related items {% endcomment %}
 {%- if section.settings.show_related and cart != empty -%}
+  {%- liquid
+    # Container class
+    assign container_class = 'overflow-hidden ' | append: section.settings.related_container_width
+    if section.settings.related_color_scheme != blank
+      assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.related_color_scheme
+    endif
+
+    # Title Class
+    assign title_class = section.settings.heading_size | append: ' ' | append: section.settings.related_heading_alignment
+
+    # Get the related products
+    capture object_array
+      render 'cart-related-items', section: section, is_cart_page: true
+    endcapture
+
+    if object_array == blank
+      assign container_class = container_class | append: ' hidden'
+    endif
+  -%}
+
   <div id="cartRelated" data-id="{{ section.id }}">
     <div class="cart-related-items">
-      {%- liquid
-        # Container class
-        assign container_class = 'overflow-hidden ' | append: section.settings.related_container_width
-        if section.settings.related_color_scheme != blank
-          assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.related_color_scheme
-        endif
+      {%- if object_array != blank -%}
+        {%- capture related_container_content -%}
+          {%- render 'swiper-content',
+            object_array: object_array,
+            container_width: section.settings.container_width,
+            swiper_indication: section.settings.swiper_indication,
+            swiper_navigation: section.settings.swiper_navigation,
+            swiper_autoplay: section.settings.swiper_autoplay,
+            swiper_autoplay_delay: section.settings.swiper_autoplay_delay,
+            render_product_cards: true,
+            max_count: 8,
+            id: section.id,
+            index_on_page: section.index
+          -%}
+        {%- endcapture -%}
 
-        # Title Class
-        assign title_class = section.settings.heading_size | append: ' ' | append: section.settings.heading_align
-
-        # Get the related products
-        capture object_array
-          render 'cart-related-items', section: section, is_cart_page: true
-        endcapture
-
-        if object_array == blank
-          assign container_class = container_class | append: ' hidden'
-        endif
-      -%}
-
-      {%- capture related_container_content -%}
-        {%- render 'swiper-content',
-          object_array: object_array,
-          container_width: section.settings.container_width,
-          swiper_indication: section.settings.swiper_indication,
-          swiper_navigation: section.settings.swiper_navigation,
-          swiper_autoplay: section.settings.swiper_autoplay,
-          swiper_autoplay_delay: section.settings.swiper_autoplay_delay,
-          render_product_cards: true,
-          max_count: 8,
-          id: section.id,
-          index_on_page: section.index
+        {%- comment -%} Render the content {%- endcomment -%}
+        {%-
+          render 'render-container-content',
+          class: container_class,
+          title_class: title_class,
+          title: section.settings.related_title,
+          content: related_container_content,
+          content_class: 'p-0',
         -%}
-      {%- endcapture -%}
-
-      {%- comment -%} Render the content {%- endcomment -%}
-      {%-
-        render 'render-container-content',
-        class: container_class,
-        title_tag: section.settings.heading_element,
-        title_class: title_class,
-        title: section.settings.related_title,
-        content: related_container_content,
-        content_class: 'p-0',
-      -%}
+      {%- endif -%}
     </div>
   </div>
 {%- endif -%}
@@ -249,13 +250,6 @@
   {
     "name": "Cart",
     "settings": [
-      {
-        "type": "checkbox",
-        "id": "show_cart_note",
-        "default": false,
-        "label": "Enable cart note",
-        "info": "When selected, a text field will be displayed on the cart page for customers to add a note to their order."
-      },
       {
         "type": "select",
         "id": "heading_alignment",
@@ -277,6 +271,13 @@
         ]
       },
       {
+        "type": "checkbox",
+        "id": "show_cart_note",
+        "default": false,
+        "label": "Enable cart note",
+        "info": "When selected, a text field will be displayed on the cart page for customers to add a note to their order."
+      },
+      {
         "type": "header",
         "content": "Related items"
       },
@@ -285,12 +286,12 @@
         "id": "show_related",
         "label": "Show related",
         "default": true,
-        "info": "Items are added based on related items metafield."
+        "info": "Items are added based on 'related items' metafield."
       },
       {
         "type": "select",
         "id": "related_container_width",
-        "label": "related content width",
+        "label": "'Related items' content width",
         "default": "",
         "options": [
           {
@@ -307,7 +308,7 @@
         "type": "select",
         "id": "related_color_scheme",
         "default": "color-scheme color-scheme--gray",
-        "label": "related section color scheme",
+        "label": "Related section color scheme",
         "options": [
           {
             "value": "",
@@ -320,28 +321,24 @@
         ]
       },
       {
-        "type": "header",
-        "content": "Content settings"
-      },
-      {
         "type": "range",
         "id": "max_count",
         "min": 4,
         "max": 12,
         "step": 1,
         "default": 8,
-        "label": "Maximum items to show"
+        "label": "Maximum related items to show"
       },
       {
         "type": "text",
         "id": "related_title",
-        "label": "Heading",
+        "label": "'Related items' heading",
         "default": "You may also like"
       },
       {
         "type": "select",
-        "id": "heading_align",
-        "label": "Header align",
+        "id": "related_heading_alignment",
+        "label": "'Related items' heading alignment",
         "default": "text-center",
         "options": [
           {
@@ -355,39 +352,6 @@
           {
             "value": "text-end",
             "label": "Right"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "heading_element",
-        "label": "Heading element",
-        "default": "h2",
-        "info": "Change the element of the heading for SEO purposes. Every page should only have one H1.",
-        "options": [
-          {
-            "value": "h1",
-            "label": "H1"
-          },
-          {
-            "value": "h2",
-            "label": "H2"
-          },
-          {
-            "value": "h3",
-            "label": "H3"
-          },
-          {
-            "value": "h4",
-            "label": "H4"
-          },
-          {
-            "value": "h5",
-            "label": "H5"
-          },
-          {
-            "value": "h6",
-            "label": "H6"
           }
         ]
       },

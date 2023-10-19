@@ -12,7 +12,7 @@
   .content-for-layout {
     @apply flex flex-auto flex-col;
     .shopify-section:only-child {
-      @apply flex flex-auto items-stretch;
+      @apply flex flex-auto flex-col items-stretch;
     }
   }
 

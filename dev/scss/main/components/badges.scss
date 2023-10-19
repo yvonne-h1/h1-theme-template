@@ -31,7 +31,7 @@
     }
 
     // Variants
-    &--new {
+    &--custom {
       --product-badge-background: theme('colors.primary.DEFAULT');
       --product-badge-text: theme('colors.primary.text');
     }

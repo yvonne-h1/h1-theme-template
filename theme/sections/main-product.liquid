@@ -67,9 +67,9 @@
           {%- comment -%} Text block {%- endcomment -%}
           {%- when 'text' -%}
             {%- if block.settings.text != blank -%}
-              <p class="product__text {{ block.settings.text_style }}" {{ block.shopify_attributes }}>
+              <div class="product__text {{ block.settings.text_size }}" {{ block.shopify_attributes }}>
                 {{- block.settings.text -}}
-              </p>
+              </div>
             {%- endif -%}
 
           {%- comment -%} Product price {%- endcomment -%}
@@ -401,36 +401,35 @@
         "name": "Text",
         "settings": [
           {
-            "type": "text",
+            "type": "richtext",
             "id": "text",
-            "default": "Text block",
             "label": "Text"
           },
           {
             "type": "select",
-            "id": "text_style",
-            "label": "Text style",
-            "default": "text-sm",
+            "id": "text_size",
+            "label": "Text size",
+            "default": "text-base",
             "options": [
               {
                 "value": "text-xs",
-                "label": "XS"
+                "label": "xs"
               },
               {
                 "value": "text-sm",
-                "label": "SM"
+                "label": "sm"
               },
               {
                 "value": "text-base",
-                "label": "MD"
+                "label": "base"
               },
               {
                 "value": "text-lg",
-                "label": "LG"
+                "label": "lg"
               },
               {
                 "value": "text-xl",
-                "label": "XL"
+                "label": "xl"
               }
             ]
           }

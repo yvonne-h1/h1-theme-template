@@ -63,7 +63,6 @@ class ProductFormComponent extends HTMLElement {
           return;
         }
 
-        console.log(parsedState);
         if (this.cartDrawer) {
           this.cartDrawer.renderContents(parsedState);
         }
