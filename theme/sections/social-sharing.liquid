@@ -1,7 +1,7 @@
 {%- comment -%} Capture the content {%- endcomment -%}
 {%- capture container_content -%}
   {% if section.settings.heading != blank or section.blocks.size > 0 %}
-    <div class='social-sharing flex flex-col items-center justify-center'>
+    <div class="social-sharing flex flex-col items-center justify-center">
       {% if section.settings.heading != blank %}
         <{{ section.settings.heading_element }} class="social-sharing__title {{ section.settings.heading_size }}">
           {{- section.settings.heading -}}
@@ -9,9 +9,9 @@
       {% endif %}
 
       {% if section.blocks.size > 0 %}
-        <ul class='social-sharing__list mt-4 flex space-x-4'>
+        <ul class="social-sharing__list mt-4 flex space-x-4">
           {% for block in section.blocks  %}
-            <li class='social-sharing__item duration-300 hover:scale-110'>
+            <li class="social-sharing__item duration-300 hover:scale-110">
               {%- liquid
                 assign platform = block.settings.platform | downcase
 
@@ -35,9 +35,19 @@
                 endif
               -%}
 
-              <a href='{{ share_url }}' target='_blank' rel='noopener' class='flex flex-col items-center justify-center text-inherit'>
+              <a href="{{ share_url }}" target="_blank" rel="noopener" class="flex flex-col items-center justify-center {% if block.settings.icon_color == blank %}{{ section.settings.icon_color }}{% elsif section.settings.icon_color == '' %}text-inherit{%- endif %}
+                {% case section.settings.icon_size %}
+                  {% comment %} Always make sure the tap size is 48px {% endcomment %}
+                  {%- when 'w-6' -%}
+                    p-3
+                  {%- when 'w-8' -%}
+                    p-2
+                  {%- when 'w-10' -%}
+                    p-1
+                {% endcase%}
+                " {% if block.settings.icon_color != blank %}style="color:{{ block.settings.icon_color }};"{%- endif -%}>
                 {% render 'icons-social', icon: icon, class: icon_class %}
-                <p class='sr-only'>
+                <p class="sr-only">
                   {{ block.settings.platform | capitalize }}
                 </p>
               </a>
@@ -237,20 +247,57 @@
         "default": "w-12",
         "options": [
           {
-            "value": "w-4",
+            "value": "w-6",
             "label": "Small"
           },
           {
-            "value": "w-6",
+            "value": "w-8",
             "label": "Medium"
           },
           {
-            "value": "w-8",
+            "value": "w-10",
             "label": "Large"
           },
           {
             "value": "w-12",
             "label": "Extra large"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "icon_color",
+        "label": "Icon color",
+        "default": "",
+        "options": [
+          {
+            "value": "",
+            "label": "Default color scheme"
+          },
+          {
+            "value": "text-black",
+            "label": "Black",
+            "group": "Standard"
+          },
+          {
+            "value": "text-white",
+            "label": "White",
+            "group": "Standard"
+          },
+          {
+            "value": "text-primary",
+            "label": "Primary",
+            "group": "Theme"
+          },
+          {
+            "value": "text-secondary",
+            "label": "Secondary",
+            "group": "Theme"
+          },
+          {
+            "value": "text-accent",
+            "label": "Accent",
+            "group": "Theme"
           }
         ]
       }
@@ -259,6 +306,7 @@
       {
         "type": "platform",
         "name": "Platform",
+        "limit": 3,
         "settings": [
           {
             "type": "select",
@@ -279,6 +327,11 @@
                 "label": "Pinterest"
               }
             ]
+          },
+          {
+            "type": "color",
+            "id": "icon_color",
+            "label": "Custom icon color"
           }
         ]
       }

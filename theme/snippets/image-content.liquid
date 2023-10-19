@@ -52,7 +52,8 @@
   endif
 
   # Assign mobile image
-  assign image_mobile = object.settings.image_desktop
+  assign image_desktop = object.settings.image_desktop
+  assign image_mobile = image_desktop
   if object.settings.image_mobile != blank
     assign image_mobile = object.settings.image_mobile
   endif
@@ -75,8 +76,8 @@
   endif
 
   if min_ratio_tablet == ''
-    if object.settings.image_desktop
-      assign min_ratio_tablet = object.settings.image_desktop.aspect_ratio
+    if image_desktop
+      assign min_ratio_tablet = image_desktop.aspect_ratio
     else
       assign min_ratio_tablet = 'aspect-[16/9]'
     endif
@@ -151,9 +152,9 @@
     assign tablet_aspect = min_ratio_tablet | split: '[' | last | remove: ']'
 
     capture image
-      if object.settings.image_desktop != blank
+      if image_desktop != blank
         # Desktop image
-        render 'responsive-image', image_object: object.settings.image_desktop, class: image_class_desktop, max_width: max_width, min_width: 768, lazy: lazy, aspect_ratio: tablet_aspect
+        render 'responsive-image', image_object: image_desktop, class: image_class_desktop, max_width: max_width, min_width: 768, lazy: lazy, aspect_ratio: tablet_aspect
 
         # Mobile image
         render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy, aspect_ratio: mobile_aspect
@@ -188,12 +189,14 @@
     {%- if is_video -%}
       <div class="video-element {% unless is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endunless %}">
         {% comment %} Capture the video placeholder. On click, this will play the video {% endcomment %}
-        <div class="video-element__placeholder absolute inset-0 flex cursor-pointer items-center justify-center" data-video-trigger>
-          {%- if object.settings.image_desktop != blank -%}
-            <div class="absolute inset-0 {% unless is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endunless %}">
+        <div class="video-element__placeholder absolute inset-0 z-10 flex cursor-pointer items-center justify-center" data-video-trigger>
+          <div class="absolute inset-0 {% unless is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endunless %}">
+            {%- if image_desktop != blank -%}
               {{- image -}}
-            </div>
-          {%- endif -%}
+            {%- else -%}
+              {{ object.settings.video_mp4 | image_url: width: object.settings.video_mp4.preview_image.width | image_tag: class: image_class }}
+            {%- endif -%}
+          </div>
 
           {%- unless object.settings.button_1_play or object.settings.button_2_play -%}
             <button
@@ -205,27 +208,15 @@
           {%- endunless -%}
         </div>
 
+        {% comment %} Render a custom implementation {% endcomment %}
         {%- if video_type == 'youtube' -%}
-          {% comment %} Render a custom implementation {% endcomment %}
           <div id="ytplayer" class="video-element__video--youtube {{ video_class }}"></div>
         {%- elsif video_type == 'vimeo' -%}
           <div id="vimeo-player-{{ video_id }}-{{ id }}" class="video-element__video--vimeo {{ video_class }}"></div>
         {%- else -%}
-          <video
-            preload
-            playsinline
-            {% if autoplay %}
-              muted
-            {% endif %}
-            {% if loop %}
-              loop
-            {% endif %}
-            {% if controls %}
-              controls
-            {% endif %}
-            class="video-element__video--mp4 object-cover {{ video_class }}">
-            <source src="{{- object.settings.video_mp4 -}}" type="video/mp4">
-          </video>
+          {% comment %} Render MP4 video {% endcomment %}
+          {%- assign video_class = video_class | append: ' video-element__video--mp4 object-cover' -%}
+          {{ object.settings.video_mp4 | video_tag: image_size: '1x', autoplay: autoplay, muted: autoplay, loop: loop, controls: controls, class: video_class }}
         {%- endif -%}
       </div>
     {%- else -%}
@@ -251,7 +242,7 @@
 
   {%- if object.settings.heading != blank or object.settings.text != blank or button_1 or button_2 -%}
     <div
-      class="{{- class -}}__content-wrapper content-wrapper flex h-full {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
+      class="{{- class -}}__content-wrapper content-wrapper relative z-20 flex h-full {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
       {% if is_video %}
         data-video-content
       {%- endif -%}>
