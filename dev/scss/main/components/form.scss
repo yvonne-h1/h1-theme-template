@@ -202,14 +202,14 @@ endcapture
       &:after {
         @apply h-5
         w-5
-        content-[''];
+        content-empty;
       }
       &:before {
         @apply me-2
         rounded-sm
         border-none
         bg-gray-100
-        content-[''];
+        content-empty;
       }
     }
     input:focus-visible + {
@@ -225,7 +225,7 @@ endcapture
     &:hover + &__checkbox-label {
       &:after {
         @apply absolute
-        start-0 h-5 w-5 content-[''];
+        start-0 h-5 w-5 content-empty;
         background: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' role='presentation' viewBox='0 0 20 20'%3E%3Cpath fill='currentColor' d='M16.136 6.979h0l.003-.004a1.499 1.499 0 00-2.275-1.954l-5.945 6.777-1.858-1.859A1.499 1.499 0 103.94 12.06l2.999 3s0 0 0 0c.289.29.675.44 1.1.439h.019a1.5 1.5 0 001.08-.522l6.998-7.998z'/%3E%3C/svg%3E")
           no-repeat;
       }
@@ -288,7 +288,7 @@ endcapture
         cursor-pointer
         rounded-full
         border-none
-        content-[''];
+        content-empty;
       }
       &:after {
         @apply absolute
@@ -299,7 +299,7 @@ endcapture
         bg-black
         opacity-0
         transition-opacity
-        content-[''];
+        content-empty;
       }
     }
     &:hover .field__radio-label {
@@ -379,7 +379,7 @@ endcapture
         rounded-full
         bg-white
         transition-all
-        content-[''];
+        content-empty;
       }
     }
 

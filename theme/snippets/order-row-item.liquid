@@ -1,0 +1,37 @@
+{% comment %}
+  Render the options of an order line item
+
+  Options:
+  line_item: Object,
+  type: 'sku', 'quantity', 'total' or 'price',
+  content: The content of the item
+  wrapper_class: Sting (Optional)
+
+  {%- render 'order-row-item', line_item: line_item, type: 'sku', content: content, wrapper_class: '' -%}
+{% endcomment %}
+
+{%- liquid
+  assign type_capitalize = type | capitalize
+
+  capture label
+    render 'render-translation', namespace: 'customer.order', key: type, fallback: type_capitalize
+  endcapture
+-%}
+
+<div
+  class="col-span-12 lg:col-span-2 {{ wrapper_class -}}"
+  headers="Row{{ line_item.key }} {{ 'Column'  | append: type_capitalize }}"
+  role="cell"
+  data-label="{{ label }}">
+  <p class="flex gap-2 lg:block">
+    <span class="inline-block lg:hidden">
+      {{- label -}}
+      :
+    </span>
+    {%- if content != blank -%}
+      {{- content -}}
+    {%- else -%}
+      {{ line_item[type] }}
+    {%- endif -%}
+  </p>
+</div>

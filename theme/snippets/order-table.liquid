@@ -1,4 +1,4 @@
-<div class="order__table flex flex-col divide-y text-start text-sm">
+<div class="order__table flex w-full flex-col divide-y text-start text-sm">
   <div class="order__header hidden pb-2 lg:block">
     <div class="relative grid w-full grid-cols-12 gap-x-6 gap-y-0">
       {%- comment -%} Image heading {%- endcomment -%}
@@ -131,144 +131,20 @@
         </div>
 
         {%- comment -%} SKU heading {%- endcomment -%}
-        <div
-          class="col-span-12 lg:col-span-2"
-          headers="Row{{ line_item.key }} ColumnSku"
-          role="cell"
-          data-label="{%- render "render-translation", namespace: "customer.order", key: "sku", fallback: "SKU" -%}">
-          <p class="flex gap-2">
-            <span class="inline-block lg:hidden">
-              {%- render 'render-translation', namespace: 'customer.order', key: 'sku', fallback: 'SKU' -%}
-            </span>
-            {{ line_item.sku }}
-          </p>
-        </div>
+        {%- render 'order-row-item', line_item: line_item, type: 'sku' -%}
 
         {%- comment -%} Price heading {%- endcomment -%}
-        <div
-          class="col-span-12 lg:col-span-2"
-          headers="Row{{ line_item.key }} ColumnPrice"
-          role="cell"
-          data-label="{%- render "render-translation", namespace: "customer.order", key: "price", fallback: "Price" -%}">
-          <p class="flex gap-2">
-            <span class="inline-block lg:hidden">
-              {%- render 'render-translation', namespace: 'customer.order', key: 'price', fallback: 'Price' -%}
-            </span>
-            {%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
-              <dl>
-                {%- if line_item.original_price != line_item.final_price -%}
-                  <dt>
-                    <span class="sr-only">
-                      {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
-                    </span>
-                  </dt>
-                  <dd>
-                    <s>{{ line_item.original_price | money_with_currency }}</s>
-                  </dd>
-                  <dt>
-                    <span class="sr-only">
-                      {%- render 'render-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale price' -%}
-                    </span>
-                  </dt>
-                  <dd>
-                    <span>{{ line_item.final_price | money_with_currency }}</span>
-                  </dd>
-                {%- else -%}
-                  <dt>
-                    <span class="sr-only">
-                      {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
-                    </span>
-                  </dt>
-                  <dd>
-                    {{ line_item.original_price | money_with_currency }}
-                  </dd>
-                {%- endif -%}
-                {%- if line_item.unit_price_measurement -%}
-                  <dt>
-                    <span class="sr-only">
-                      {%- render 'render-translation', namespace: 'products.product.price', key: 'unit_price', fallback: 'Unit price' -%}
-                    </span>
-                  </dt>
-                  <dd>
-                    <span>
-                      {%- capture unit_price_separator -%}
-                        <span aria-hidden="true">/</span>
-                        <span class="sr-only">
-                          {%-
-                            render "render-translation",
-                            namespace: "accessibility",
-                            key: "unit_price_separator",
-                            fallback: "per"
-                          -%}
-                          &nbsp;
-                        </span>
-                      {%- endcapture -%}
-                      {%- capture unit_price_base_unit -%}
-                        {%- if line_item.unit_price_measurement.reference_value != 1 -%}
-                          {{- line_item.unit_price_measurement.reference_value -}}
-                        {%- endif -%}
-                        {{ line_item.unit_price_measurement.reference_unit }}
-                      {%- endcapture -%}
-                      <span data-unit-price>{{ line_item.unit_price | money_with_currency }}</span>
-                      {{- unit_price_separator -}}
-                      {{- unit_price_base_unit -}}
-                    </span>
-                  </dd>
-                {%- endif -%}
-              </dl>
-            {%- else -%}
-              <span>
-                {{- line_item.final_price | money_with_currency -}}
-              </span>
-            {%- endif -%}
-          </p>
-        </div>
-
-        {%- comment -%} Quantity heading {%- endcomment -%}
-        <div
-          class="col-span-12 text-center lg:col-span-2"
-          headers="Row{{ line_item.key }} ColumnQuantity"
-          role="cell"
-          data-label="
-            {%- render "render-translation",
-              namespace: "customer.order",
-              key: "quantity",
-              fallback: "Quantity"
-            -%}
-          ">
-          <p class="flex gap-2 lg:block">
-            <span class="inline-block lg:hidden">
-              {%- render 'render-translation', namespace: 'customer.order', key: 'quantity', fallback: 'Quantity' -%}
-            </span>
-            {{- line_item.quantity -}}
-          </p>
-        </div>
-
-        {%- comment -%} Total heading {%- endcomment -%}
-        <div
-          class="col-span-12 lg:col-span-2"
-          headers="Row{{ line_item.key }} ColumnTotal"
-          role="cell"
-          data-label="
-            {%- render "render-translation",
-              namespace: "customer.order",
-              key: "total",
-              fallback: "Total"
-            -%}
-          ">
-          <div class="flex gap-2 text-right lg:block">
-            <p class="mb-0 inline-block lg:hidden">
-              {%- render 'render-translation', namespace: 'customer.order', key: 'total', fallback: 'Total' -%}
-            </p>
-            {%- if line_item.original_line_price != line_item.final_line_price -%}
-              <dl>
+        {%- capture price_content -%}
+          {%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
+            <dl>
+              {%- if line_item.original_price != line_item.final_price -%}
                 <dt>
                   <span class="sr-only">
                     {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
                   </span>
                 </dt>
                 <dd>
-                  <s>{{ line_item.original_line_price | money_with_currency }}</s>
+                  <s>{{ line_item.original_price | money_with_currency }}</s>
                 </dd>
                 <dt>
                   <span class="sr-only">
@@ -276,14 +152,88 @@
                   </span>
                 </dt>
                 <dd>
-                  <span>{{ line_item.final_line_price | money_with_currency }}</span>
+                  <span>{{ line_item.final_price | money_with_currency }}</span>
                 </dd>
-              </dl>
-            {%- else -%}
-              <span>{{ line_item.original_line_price | money_with_currency }}</span>
-            {%- endif -%}
-          </div>
-        </div>
+              {%- else -%}
+                <dt>
+                  <span class="sr-only">
+                    {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
+                  </span>
+                </dt>
+                <dd>
+                  {{ line_item.original_price | money_with_currency }}
+                </dd>
+              {%- endif -%}
+              {%- if line_item.unit_price_measurement -%}
+                <dt>
+                  <span class="sr-only">
+                    {%- render 'render-translation', namespace: 'products.product.price', key: 'unit_price', fallback: 'Unit price' -%}
+                  </span>
+                </dt>
+                <dd>
+                  <span>
+                    {%- capture unit_price_separator -%}
+                      <span aria-hidden="true">/</span>
+                      <span class="sr-only">
+                        {%-
+                          render "render-translation",
+                          namespace: "accessibility",
+                          key: "unit_price_separator",
+                          fallback: "per"
+                        -%}
+                        &nbsp;
+                      </span>
+                    {%- endcapture -%}
+                    {%- capture unit_price_base_unit -%}
+                      {%- if line_item.unit_price_measurement.reference_value != 1 -%}
+                        {{- line_item.unit_price_measurement.reference_value -}}
+                      {%- endif -%}
+                      {{ line_item.unit_price_measurement.reference_unit }}
+                    {%- endcapture -%}
+                    <span data-unit-price>{{ line_item.unit_price | money_with_currency }}</span>
+                    {{- unit_price_separator -}}
+                    {{- unit_price_base_unit -}}
+                  </span>
+                </dd>
+              {%- endif -%}
+            </dl>
+          {%- else -%}
+            <span>
+              {{- line_item.final_price | money_with_currency -}}
+            </span>
+          {%- endif -%}
+        {%- endcapture -%}
+        {%- render 'order-row-item', line_item: line_item, type: 'price', content: price_content -%}
+
+        {%- comment -%} Quantity heading {%- endcomment -%}
+        {%- render 'order-row-item', line_item: line_item, type: 'quantity', wrapper_class: 'text-center' -%}
+
+        {%- comment -%} Total heading {%- endcomment -%}
+        {%- capture total_content -%}
+          {%- if line_item.original_line_price != line_item.final_line_price -%}
+            <dl>
+              <dt>
+                <span class="sr-only">
+                  {%- render 'render-translation', namespace: 'products.product.price', key: 'regular_price', fallback: 'Regular price' -%}
+                </span>
+              </dt>
+              <dd>
+                <s>{{ line_item.original_line_price | money_with_currency }}</s>
+              </dd>
+              <dt>
+                <span class="sr-only">
+                  {%- render 'render-translation', namespace: 'products.product.price', key: 'sale_price', fallback: 'Sale price' -%}
+                </span>
+              </dt>
+              <dd>
+                <span>{{ line_item.final_line_price | money_with_currency }}</span>
+              </dd>
+            </dl>
+          {%- else -%}
+            <span>{{ line_item.original_line_price | money_with_currency }}</span>
+          {%- endif -%}
+        {%- endcapture -%}
+        {%- render 'order-row-item', line_item: line_item, type: 'total', content: total_content, wrapper_class: 'lg:text-end' -%}
 
         {%- comment -%} Fulfillment {%- endcomment -%}
         {%- if line_item.fulfillment -%}
@@ -291,14 +241,7 @@
             class="col-span-12 mt-1 lg:col-span-8"
             headers="Row{{ line_item.key }} ColumnFulfillment"
             role="cell"
-            data-label="
-              {%- render "render-translation",
-                namespace: "customer.order",
-                key: "fulfillment_status",
-                fallback: "Fulfillment status"
-              -%}
-            ">
-            {% comment %} class="pt-6 pb-6 ps-0 pe-4 lg:pe-14" {% endcomment %}
+            data-label="{%- render "render-translation", namespace: "customer.order", key: "fulfillment_status", fallback: "Fulfillment status" -%}">
             {%- assign created_at = line_item.fulfillment.created_at | time_tag: format: 'date' -%}
             <p class="flex flex-wrap gap-x-2 text-xs">
               <span>{{ 'customer.order.fulfilled_at_html' | t: date: created_at }}</span>
@@ -326,7 +269,7 @@
       class="grid grid-cols-12"
       headers="RowSubtotal"
       role="cell"
-      data-label="        {%- render "render-translation", namespace: "customer.order", key: "subtotal", fallback: "Subtotal" -%}">
+      data-label="{%- render "render-translation", namespace: "customer.order", key: "subtotal", fallback: "Subtotal" -%}">
       <div class="col-span-6 lg:col-span-8 lg:col-start-3 lg:text-right">
         <p>
           {%- render 'render-translation', namespace: 'customer.order', key: 'subtotal', fallback: 'Subtotal' -%}

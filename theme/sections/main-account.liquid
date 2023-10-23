@@ -142,21 +142,21 @@
   </div>
 
   {%- comment -%} Customer info {%- endcomment -%}
-  <div class="account__customer-info customer-info col-span-12 flex flex-col gap-y-4 xl:col-span-3 xl:rounded-md xl:bg-gray-50 xl:p-4 xl:drop-shadow-lg">
+  <div class="account__customer-info customer-info col-span-12 flex flex-col gap-y-4 xl:col-span-3 xl:rounded-md xl:bg-gray-50 xl:p-4 xl:drop-shadow-lg [&>p]:mb-0">
     <h2 class="xl:sr-only">{%- render 'render-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details' -%}</h2>
     {%- if customer.name != blank -%}
-      <p class="customer-info__name h5 mb-0">
+      <p class="customer-info__name h5">
         {{- customer.name -}}
       </p>
     {%- endif -%}
     {%- if customer.email != blank -%}
-      <p class="customer-info__email mb-0">
+      <p class="customer-info__email">
         {{- customer.email -}}
       </p>
     {%- endif -%}
     {{ customer.default_address | format_address }}
     {% if customer.phone != blank -%}
-      <p class="customer-info__address mb-0">
+      <p class="customer-info__address">
         {{- customer.phone | strip -}}
       </p>
     {%- endif -%}
