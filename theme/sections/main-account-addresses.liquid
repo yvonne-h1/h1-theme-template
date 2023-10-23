@@ -486,11 +486,14 @@
   {%- endpaginate -%}
 {%- endcapture -%}
 
-{%- comment -%} Render the account header {%- endcomment -%}
-{%- render 'account-header' -%}
+{%- liquid
+  capture account_header
+    render 'account-header'
+  endcapture
 
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'form-fields address block', content: container_content, content_class: 'addresses', data: 'data-customer-addresses', tag: 'customer-addresses' -%}
+  # Render the content
+  render 'render-container-content', class: 'form-fields address block', header_content: account_header, content: container_content, content_class: 'addresses', data: 'data-customer-addresses', tag: 'customer-addresses'
+-%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'customer.js' | asset_url }}" type="module"></script>

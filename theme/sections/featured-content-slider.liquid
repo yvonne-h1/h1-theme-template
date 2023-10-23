@@ -37,7 +37,6 @@
     tag_to_show: tag_to_show,
     index_on_page: section.index,
     id: section.id,
-    container_width: section.settings.container_width,
     swiper_indication: section.settings.swiper_indication,
     swiper_navigation: section.settings.swiper_navigation,
     swiper_autoplay: section.settings.swiper_autoplay,
@@ -62,7 +61,7 @@
 
 {%- liquid
   # Container class
-  assign container_class = 'overflow-hidden ' | append: section.settings.container_width
+  assign container_class = 'overflow-hidden'
   if section.settings.color_scheme != blank
     assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.color_scheme
   endif
@@ -91,22 +90,6 @@
       {
         "type": "header",
         "content": "Layout settings"
-      },
-      {
-        "type": "select",
-        "id": "container_width",
-        "label": "Section content width",
-        "default": "",
-        "options": [
-          {
-            "value": "",
-            "label": "Default"
-          },
-          {
-            "value": "container--wide",
-            "label": "Wide"
-          }
-        ]
       },
       {
         "type": "select",

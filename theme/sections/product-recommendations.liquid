@@ -27,7 +27,6 @@
       max_count: section.settings.limit,
       index_on_page: section.index,
       id: section.id,
-      container_width: section.settings.container_width,
       swiper_indication: section.settings.swiper_indication,
       swiper_navigation: section.settings.swiper_navigation,
       swiper_autoplay: section.settings.swiper_autoplay,
@@ -44,7 +43,7 @@
 
   {%- liquid
     # Container class
-    assign container_class = 'product-recommendations block overflow-hidden ' | append: section.settings.container_width
+    assign container_class = 'product-recommendations block overflow-hidden'
     if section.settings.color_scheme != blank
       assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.color_scheme
     endif
@@ -74,20 +73,8 @@
         "content": "Dynamic recommendations use order and product information to change and improve over time. [Learn more](https://help.shopify.com/en/themes/development/recommended-products)"
       },
       {
-        "type": "select",
-        "id": "container_width",
-        "label": "Section content width",
-        "default": "",
-        "options": [
-          {
-            "value": "",
-            "label": "Default"
-          },
-          {
-            "value": "container--wide",
-            "label": "Wide"
-          }
-        ]
+        "type": "header",
+        "content": "Layout settings"
       },
       {
         "type": "select",

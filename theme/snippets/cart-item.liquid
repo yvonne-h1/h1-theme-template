@@ -28,6 +28,11 @@
   </a>
 
   <div class="cart-item__content flex grow flex-col">
+    {%- if settings.show_cart_vendor -%}
+      <p class="mb-0 text-xs uppercase opacity-70">
+        {{- item.product.vendor -}}
+      </p>
+    {%- endif -%}
     {%- comment -%} Title and Price and item errors {%- endcomment -%}
     <div class="cart-item__title {% if settings.show_cart_remove -%}pe-12{%- endif -%}">
       {%- comment -%} Title {%- endcomment -%}
@@ -55,12 +60,6 @@
     <div class="mt-auto flex justify-between gap-2 {% if view == 'cart-page' -%}md:gap-4{%- endif -%}">
       {%- comment -%} Variants and properties {%- endcomment -%}
       <div class="cart-item__meta self-end text-xs">
-        {%- if settings.show_cart_vendor -%}
-          <p class="product-option inline-block text-xs">
-            {{- item.product.vendor -}}
-          </p>
-        {%- endif -%}
-
         {%- if item.product.has_only_default_variant == false or item.properties.size != 0 or item.selling_plan_allocation != null -%}
           <dl>
             {%- if item.product.has_only_default_variant == false -%}

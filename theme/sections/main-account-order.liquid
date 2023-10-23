@@ -69,8 +69,11 @@
   endcapture
 -%}
 
-{%- comment -%} Render the account header {%- endcomment -%}
-{%- render 'account-header', title: page_title -%}
+{%- liquid
+  capture account_header
+    render 'account-header', title: page_title
+  endcapture
 
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'form-fields order', content: container_content -%}
+  # Render the content
+  render 'render-container-content', class: 'form-fields order', header_content: account_header, content: container_content
+-%}

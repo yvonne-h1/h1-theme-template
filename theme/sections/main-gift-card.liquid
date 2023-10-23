@@ -33,9 +33,10 @@
 
 {%- comment -%} Capture Container content {%- endcomment -%}
 {%- capture container_content -%}
-  {%- if section.settings.image != blank -%}
+
+  {%- if gift_card.product.featured_image != blank -%}
     {%- render 'responsive-image',
-      image_object: section.settings.image,
+      image_object: gift_card.product.featured_image,
       max_width: 540,
       sizes: '(min-width: 768px) 540px, 96vw',
       alt: title,
@@ -209,15 +210,10 @@
         ]
       },
       {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
         "type": "select",
         "id": "button_color_scheme_1",
-        "default": "button--outline-white",
-        "label": "Continue shopping button type",
+        "default": "",
+        "label": "'Continue shopping' button type",
         "options": [
           {
             "value": "",
@@ -248,8 +244,8 @@
       {
         "type": "select",
         "id": "button_color_scheme_2",
-        "default": "button--outline-white",
-        "label": "Print button type",
+        "default": "",
+        "label": "'Print' button type",
         "options": [
           {
             "value": "",

@@ -8,13 +8,13 @@
 {%- endcomment -%}
 
 <div
-  class="filter-group filter-group--{{ label | handleize }} mb-4 border-b px-6 py-4 {% if settings.filter_display == 'grid' -%}lg:pl-[var(--content-wrapper-padding)]{%- endif -%}"
+  class="filter-group filter-group--{{ label | handleize }} mb-4 px-6 py-4 {% if settings.filter_display == 'grid' -%}lg:ps-[var(--content-wrapper-padding)]{%- endif -%}"
   data-filter-option
   data-index="{{ filter_index }}">
   <p class="filter-group__title text-sm font-bold">
     {{- label -}}
   </p>
-  <div class="filter-group__target">
+  <div class="filter-group__target border-b ">
     <div class="pb-4">
       {{- summary_content -}}
     </div>

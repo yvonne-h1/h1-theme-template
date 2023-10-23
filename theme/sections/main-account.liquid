@@ -35,7 +35,7 @@
     <h2>{%- render 'render-translation', namespace: 'customer.orders', key: 'title', fallback: 'Orders' -%}</h2>
     {% paginate customer.orders by 20 %}
       {%- if customer.orders.size > 0 -%}
-        <div class="flex flex-col divide-y">
+        <div class="orders flex flex-col divide-y">
           {%- for order in customer.orders -%}
             {%- liquid
               capture order_items_total
@@ -46,9 +46,9 @@
                 endif
               endcapture
             -%}
-            <div class="grid w-full grid-cols-2 py-4 gap-base sm:grid-cols-4 md:grid-cols-12">
+            <div class="grid w-full grid-cols-2 gap-y-4 py-4 gap-x-base sm:grid-cols-4 md:grid-cols-12">
+              {% comment %} Order number {% endcomment %}
               <div class="col-span-2 sm:col-span-1 md:col-span-3">
-                {% comment %} Order number {% endcomment %}
                 {{- order_nr_str -}}:
                 <a
                   href="{{ order.customer_url }}"
@@ -63,7 +63,9 @@
                   <span class="sr-only">{{- order_date_str -}}:</span> {{ order.created_at | time_tag: '%b %d, %Y' }}
                 </p>
               </div>
-              <div class="col-span-2 sm:col-span-2 md:col-span-5">
+
+              {% comment %} Order status {% endcomment %}
+              <div class="col-span-2 md:col-span-5">
                 {%- if order.cancelled -%}
                   {%- assign cancelled_date = order.cancelled_at | time_tag: '%b %d, %Y' -%}
                   <p class="mb-0">
@@ -84,7 +86,9 @@
                   </p>
                 {%- endif -%}
               </div>
-              <div class="col-span-1 justify-end self-center sm:col-span-1 sm:text-right md:col-span-2">
+
+              {% comment %} Totals {% endcomment %}
+              <div class="col-span-1 flex gap-2 sm:block sm:justify-end sm:text-right md:col-span-2">
                 {% comment %} Total items {% endcomment %}
                 <p class="mb-0">{{- order_items_total -}}</p>
 
@@ -93,8 +97,24 @@
                   <span class="sr-only">{{- total_str -}}:</span> {{ order.total_price | money_with_currency }}
                 </p>
               </div>
-              <div class="col-span-1 justify-end self-center text-right sm:col-span-4 md:col-span-2">
-                {% comment %} 'View order' link {% endcomment %}
+
+              {% comment %} Products preview {% endcomment %}
+              <div class="col-span-2 flex gap-2 sm:col-span-4 md:col-span-10">
+                {%- for line_item in order.line_items -%}
+                  {%- if line_item.product.featured_image != blank -%}
+                    {%- render 'responsive-image',
+                      image_object: line_item.product.featured_image,
+                      crop: 'center',
+                      widths: '80, 160',
+                      alt: line_item.product.title,
+                      title: line_item.product.title
+                    -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+
+              {% comment %} 'View order' link {% endcomment %}
+              <div class="col-span-1 justify-center sm:col-span-4 md:col-span-2 md:col-start-11 md:row-start-1 md:self-center md:text-right">
                 <a
                   href="{{ order.customer_url }}"
                   aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
@@ -122,25 +142,25 @@
   </div>
 
   {%- comment -%} Customer info {%- endcomment -%}
-  <div class="account__customer-info col-span-12 flex flex-col gap-y-4 xl:col-span-3 xl:rounded-md xl:bg-gray-50 xl:p-4 xl:drop-shadow-lg">
+  <div class="account__customer-info customer-info col-span-12 flex flex-col gap-y-4 xl:col-span-3 xl:rounded-md xl:bg-gray-50 xl:p-4 xl:drop-shadow-lg">
     <h2 class="xl:sr-only">{%- render 'render-translation', namespace: 'customer.account', key: 'details', fallback: 'Account details' -%}</h2>
     {%- if customer.name != blank -%}
-      <p class="h5 mb-0">
+      <p class="customer-info__name h5 mb-0">
         {{- customer.name -}}
       </p>
     {%- endif -%}
     {%- if customer.email != blank -%}
-      <p class="mb-0">
+      <p class="customer-info__email mb-0">
         {{- customer.email -}}
       </p>
     {%- endif -%}
     {{ customer.default_address | format_address }}
     {% if customer.phone != blank -%}
-      <p class="mb-0">
+      <p class="customer-info__address mb-0">
         {{- customer.phone | strip -}}
       </p>
     {%- endif -%}
-    <div class="flex max-w-fit flex-col gap-4">
+    <div class="customer-info__buttons mx-auto flex max-w-fit flex-col gap-4">
       <a href="{{ routes.account_addresses_url }}" class="button button--primary">
         {%- render 'render-translation', namespace: 'customer.account', key: 'edit_details', fallback: 'Edit details' -%}
       </a>
@@ -152,8 +172,11 @@
   </div>
 {%- endcapture -%}
 
-{%- comment -%} Render the account header {%- endcomment -%}
-{%- render 'account-header' -%}
+{%- liquid
+  capture account_header
+    render 'account-header'
+  endcapture
 
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', class: 'account', content: container_content, content_class: 'account__grid grid grid-cols-12 gap-base' -%}
+  # Render the content  echo
+  render 'render-container-content', class: 'account', header_content: account_header, content: container_content, content_class: 'account__grid grid grid-cols-12 gap-base'
+-%}

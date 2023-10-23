@@ -49,7 +49,7 @@
   {%- endcapture -%}
 
   {%- capture content_class -%}
-    {% if settings.filter_display == 'grid' -%}lg:pl-0{%- endif -%}
+    {% if settings.filter_display == 'grid' -%}lg:ps-0{%- else -%}px-0{%- endif -%}
   {%- endcapture -%}
 
   {%- render 'render-container-content', content: container_content, content_class: content_class -%}

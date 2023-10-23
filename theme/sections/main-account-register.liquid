@@ -144,7 +144,11 @@
   </div>
 {%- endcapture -%}
 
-{%- render 'account-header' -%}
+{%- liquid
+  capture account_header
+    render 'account-header'
+  endcapture
 
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', content: container_content -%}
+  # Render the content  echo
+  render 'render-container-content', header_content: account_header, content: container_content
+-%}

@@ -187,7 +187,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Output cart content {%- endcomment -%}
-{%- render 'render-container-content', class: 'mb-0', content_class: 'content-wrapper', content: container_content -%}
+{%- render 'render-container-content', content_class: 'content-wrapper', content: container_content -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 <script src="{{ 'cart-items.js' | asset_url }}" defer></script>
@@ -196,7 +196,7 @@
 {%- if section.settings.show_related and cart != empty -%}
   {%- liquid
     # Container class
-    assign container_class = 'overflow-hidden ' | append: section.settings.related_container_width
+    assign container_class = 'overflow-hidden'
     if section.settings.related_color_scheme != blank
       assign container_class = container_class | append: ' container--background my-0 group/color-scheme ' | append: section.settings.related_color_scheme
     endif
@@ -214,13 +214,13 @@
     endif
   -%}
 
+  {% comment %} Always render the wrapper so we can adjust the content {% endcomment %}
   <div id="cartRelated" data-id="{{ section.id }}">
     <div class="cart-related-items">
       {%- if object_array != blank -%}
         {%- capture related_container_content -%}
           {%- render 'swiper-content',
             object_array: object_array,
-            container_width: section.settings.container_width,
             swiper_indication: section.settings.swiper_indication,
             swiper_navigation: section.settings.swiper_navigation,
             swiper_autoplay: section.settings.swiper_autoplay,
@@ -287,22 +287,6 @@
         "label": "Show related",
         "default": true,
         "info": "Items are added based on 'related items' metafield."
-      },
-      {
-        "type": "select",
-        "id": "related_container_width",
-        "label": "'Related items' content width",
-        "default": "",
-        "options": [
-          {
-            "value": "",
-            "label": "Default"
-          },
-          {
-            "value": "container--wide",
-            "label": "Wide"
-          }
-        ]
       },
       {
         "type": "select",

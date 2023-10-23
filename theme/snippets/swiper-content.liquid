@@ -3,7 +3,6 @@
 
   Options:
   - object_array: Required. Array of items
-  - container_width: String | optional
   - swiper_indication: String | 'pagination' or 'scrollbar' | optional
   - swiper_navigation: Boolean
   - swiper_autoplay: Boolean
@@ -20,7 +19,6 @@
   Render:
   {%- render 'swiper-content',
     object_array: object_array,
-    container_width: section.settings.container_width,
     swiper_indication: section.settings.swiper_indication,
     swiper_navigation: section.settings.swiper_navigation,
     swiper_autoplay: section.settings.swiper_autoplay,
@@ -57,8 +55,6 @@
     endif
   endif
 
-  if container_width == blank
-    assign container_width = ''
   endif
 
   # Swiper options
@@ -81,15 +77,8 @@
   # Import styles
   render 'import-styles', file_name: 'component-swiper.css', force: force_css
 
-  # Assign based on container width
-  case container_width
-    when 'container--wide'
-      assign image_max_width = 432
-      assign image_sizes = '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
-    else
-      assign image_max_width = 360
-      assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
-  endcase
+  assign image_max_width = 360
+  assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
 
   # Styles based on swiper_indication setting
   case swiper_indication

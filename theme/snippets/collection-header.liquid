@@ -6,7 +6,9 @@
 
 {%- liquid
   # Capture collection image
+  assign show_collection_image = false
   if collection.image != blank and section.settings.show_collection_image
+    assign show_collection_image = true
     capture collection_image
       render 'responsive-image', image_object: collection.image
     endcapture
@@ -14,11 +16,11 @@
 -%}
 
 {%- capture collection_header_content -%}
-  {% comment %} Header is hidden when collection is filtered {% endcomment %}
-  <div class="collection-header {{ section.settings.header_color_scheme }} overflow-hidden rounded-md md:flex md:items-center {% if is_filtered -%}!hidden{%- endif -%}">
+  {% comment %} Collection header {% endcomment %}
+  <div class="collection-header {{ section.settings.header_color_scheme }} overflow-hidden rounded-md md:flex md:items-center">
 
     {% comment %} Collection image {% endcomment %}
-    {%- if collection.image != blank and section.settings.show_collection_image -%}
+    {%- if show_collection_image -%}
       <div class="collection-header__image hidden h-full max-h-40 w-full max-w-[240px] grow-0 md:block aspect-[3/2]">
         {%- render 'responsive-image',
           image_object: collection.image,
@@ -31,7 +33,7 @@
     {%- endif -%}
 
     {% comment %} Title and Description {% endcomment %}
-    <div class="flex flex-auto flex-col gap-4 py-4 {% if collection.image != blank or section.settings.header_color_scheme != '' -%}px-8{%- endif -%}">
+    <div class="flex flex-auto flex-col gap-4 py-4 {% if show_collection_image or section.settings.header_color_scheme != '' -%}px-8{%- endif -%}">
 
       {%- comment -%} Render collection title {%- endcomment -%}
       <h1 class="collection-header__title h4 mb-0">

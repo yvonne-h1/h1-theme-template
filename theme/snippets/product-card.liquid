@@ -125,7 +125,7 @@
 
   <header class="product-card__header">
     {%- comment -%} Product images {%- endcomment -%}
-    <div class="product-card__images relative px-4 group-[.color-scheme]/color-scheme:pt-4">
+    <div class="product-card__images relative mb-4 px-4 group-[.color-scheme]/color-scheme:pt-4">
       {%- comment -%} Render image with hover {%- endcomment -%}
       <a
         class="product-card__image relative block {% unless product_object.available -%}opacity-50 saturate-50{%- endunless %} {% unless show_secondary_image %}transition-all states:scale-105{%- endunless -%}"
@@ -180,7 +180,7 @@
           <span class="sr-only">
             {%- render 'render-translation', namespace: 'accessibility', key: 'vendor', fallback: 'Vendor' -%}
           </span>
-          <span class="block opacity-70">
+          <span class="block uppercase opacity-70">
             {{- product_object.vendor -}}
           </span>
         </p>

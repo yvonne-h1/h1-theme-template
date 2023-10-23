@@ -13,7 +13,7 @@
         {%- for section in style_guide_sections -%}
           {%- assign heading = section | replace: '-', ' ' | capitalize -%}
 
-          <li class="transition-all hover:pl-1">
+          <li class="transition-all hover:ps-1">
             <a class="block" href="#styleguide-{{- section -}}">{{- heading -}}</a>
           </li>
         {%- endfor -%}
