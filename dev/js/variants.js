@@ -22,6 +22,14 @@ class VariantSelects extends HTMLElement {
     this.productFormId = `#product-form-${this.options.productId}`;
     this.priceId = `price-${this.options.productId}`;
     this.inventoryId = `inventory-${this.options.productId}`;
+
+    // On load, check if a variant is active
+    window.addEventListener('load', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('variant')) {
+        this.onVariantChange();
+      }
+    });
   }
 
   onVariantChange(event) {
@@ -35,24 +43,28 @@ class VariantSelects extends HTMLElement {
     }
     else {
       this.updateMedia();
-      this.updateURL();
-      this.updateVariantInput();
-      this.renderProductInfo();
-      this.dispatchVariantChange();
+      if (event) {
+        this.updateURL();
+        this.updateVariantInput();
+        this.renderProductInfo();
+        this.dispatchVariantChange();
+      }
     }
 
-    this.optionName = event.target.dataset.optionName || event.target.closest('fieldset').dataset.optionName;
-    this.optionValue = event.target.value;
+    if (event) {
+      this.optionName = event.target.dataset.optionName || event.target.closest('fieldset').dataset.optionName;
+      this.optionValue = event.target.value;
 
-    // change the other possible variant inputs to the same value
-    document.querySelectorAll(`[data-option-name=${this.optionName}]`).forEach((variantOption) => {
-      if (variantOption.nodeName === 'FIELDSET') {
-        variantOption.querySelector(`input[value="${this.optionValue}"]`).checked = true;
-      }
-      if (variantOption.nodeName === 'SELECT') {
-        variantOption.querySelector(`option[value="${this.optionValue}"]`).selected = true;
-      }
-    });
+      // change the other possible variant inputs to the same value
+      document.querySelectorAll(`[data-option-name=${this.optionName}]`).forEach((variantOption) => {
+        if (variantOption.nodeName === 'FIELDSET') {
+          variantOption.querySelector(`input[value="${this.optionValue}"]`).checked = true;
+        }
+        if (variantOption.nodeName === 'SELECT') {
+          variantOption.querySelector(`option[value="${this.optionValue}"]`).selected = true;
+        }
+      });
+    }
   }
 
   updateOptions() {
