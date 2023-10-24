@@ -1,19 +1,22 @@
 {
   "sections": {
-    "404-banner": {
-      "type": "main-404",
+    "rich-text": {
+      "type": "rich-text",
       "blocks": {
         "heading": {
           "type": "heading",
           "settings": {
             "heading": "Page not found",
-            "heading_style": "h2"
+            "heading_element": "h2",
+            "heading_size": "h3",
+            "title_width_layout": ""
           }
         },
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>It looks like you've reached a URL that doesn’t exist. Please use the navigation above or try again.</p>"
+            "text": "<p>It looks like you've reached a URL that doesn’t exist. Please use the navigation above or try again.</p>",
+            "text_width_layout": ""
           }
         },
         "button": {
@@ -27,7 +30,9 @@
       },
       "block_order": ["heading", "text", "button"],
       "settings": {
-        "section_color_scheme": ""
+        "container_width": "container--md",
+        "color_scheme": "",
+        "text_alignment": "text-center"
       }
     },
     "newsletter": {
@@ -38,7 +43,7 @@
           "settings": {
             "heading": "Subscribe to our newsletter",
             "heading_element": "h2",
-            "heading_style": "h4"
+            "heading_size": "h4"
           }
         },
         "text": {
@@ -57,9 +62,10 @@
       "block_order": ["heading", "text", "form"],
       "settings": {
         "width_layout": "",
-        "section_color_scheme": ""
+        "color_scheme": "color-scheme color-scheme--gray",
+        "klaviyo_newsletter": ""
       }
     }
   },
-  "order": ["404-banner", "newsletter"]
+  "order": ["rich-text", "newsletter"]
 }

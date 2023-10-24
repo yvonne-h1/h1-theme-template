@@ -485,7 +485,7 @@
     ]
   },
   {
-    "name": "Blog & Article card",
+    "name": "Blog & Blog post card",
     "settings": [
       {
         "type": "header",
@@ -498,7 +498,7 @@
         "max": 24,
         "step": 1,
         "default": 12,
-        "label": "Articles per page"
+        "label": "Blog posts per page"
       },
       {
         "type": "select",
@@ -518,14 +518,14 @@
       },
       {
         "type": "header",
-        "content": "Highlighted article"
+        "content": "Highlighted blog post"
       },
       {
         "type": "checkbox",
         "id": "show_highlight_article",
         "default": true,
-        "label": "Highlight the first article",
-        "info": "Optionally, you can upload an additional image that will be used when the article is highlighted (metafield 'Highlighted article image')."
+        "label": "Highlight the first blog post",
+        "info": "Optionally, you can upload an additional image that will be used when the blog post is highlighted (metafield 'Highlighted article image')."
       },
       {
         "type": "checkbox",

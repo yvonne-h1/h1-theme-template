@@ -127,19 +127,16 @@
   endcapture
 
   # Capture Container classes
-  capture container_classes
-    echo 'min-h-screen flex flex-col justify-center container--background '
-    if section.settings.section_color_scheme != ''
-      echo 'my-0 '
-    endif
-    echo section.settings.section_color_scheme
-  endcapture
+  assign container_class = 'min-h-screen flex flex-col justify-center container--background'
+  if section.settings.color_scheme != blank
+    assign container_class = container_class | append: ' my-0 ' | append: section.settings.color_scheme
+  endif
 
   # Capture header classes
   assign header_class = 'flex flex-col gap-y-4 echo content-wrapper content-wrapper-sm ' | append: section.settings.text_align
 
   # Capture content classes
-  assign content_classes = 'content-wrapper content-wrapper-sm grid gap-y-6 flex-col items-center justify-items-center ' | append: section.settings.text_align
+  assign content_class = 'content-wrapper content-wrapper-sm grid gap-y-6 flex-col items-center justify-items-center ' | append: section.settings.text_align
 -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
@@ -149,8 +146,8 @@
   title: container_header,
   title_class: 'flex flex-col gap-4',
   content: container_content,
-  class: container_classes,
-  content_class: content_classes
+  class: container_class,
+  content_class: content_class
 -%}
 
 {% schema %}

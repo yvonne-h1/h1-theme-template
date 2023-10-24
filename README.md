@@ -189,7 +189,7 @@ We work using components. So, we need to adjust and create all components for th
 Because we work from the smallest component to the biggest element it's good to style all your base components separately so you can reuse it for future use.
 
 - Product cards
-- Article cards
+- Blog post (article) cards
 - Banners
 - Badges
 - Prices
