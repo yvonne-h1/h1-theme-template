@@ -94,6 +94,12 @@
               assign value_text = value | capitalize
             -%}
 
+            {%- capture label -%}
+              <label class="option__label option__label--{{ option_name }} {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
+                {{ value_text }}
+              </label>
+            {%- endcapture -%}
+
             {%- capture input -%}
               <input
                 class="option__input option__input--{{ option_name }} sr-only peer"
@@ -101,7 +107,7 @@
                 id="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
                 name="{{ option.name }}"
                 value="{{ value }}"
-                data-variant-option-id="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
+                data-variant-option-id="{{ product.id }}-{{ option.name }}-{{ index }}"
                 {% if option.selected_value == value -%}checked{%- endif %}
                 {% if has_single_option -%}disabled{%- endif %}
               >
@@ -248,17 +254,13 @@
 
                   {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
                   {%- unless color_is_mapped -%}
-                    <label class="option__label option__label--{{ option_name }} {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
-                      {{ value_text }}
-                    </label>
+                    {{ label }}
                   {%- endunless -%}
                 {%- endunless -%}
 
               {%- comment -%} Else render default filter option {%- endcomment -%}
               {%- else -%}
-                <label class="option__label option__label--{{ option_name }} {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
-                  {{ value_text }}
-                </label>
+                {{ label }}
               {%- endif -%}
             </div>
 

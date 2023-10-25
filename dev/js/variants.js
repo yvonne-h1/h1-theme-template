@@ -17,6 +17,8 @@ class VariantSelects extends HTMLElement {
     this.optionName;
     this.optionValue;
 
+    this.variantInputs = document.querySelector('variant-radios');
+
     this.querySelectorAll('select').forEach(select => select.addEventListener('change', this.onVariantChange.bind(this)));
 
     this.productFormId = `#product-form-${this.options.productId}`;
@@ -43,6 +45,7 @@ class VariantSelects extends HTMLElement {
     }
     else {
       this.updateMedia();
+      this.highlightOptions();
       if (event) {
         this.updateURL();
         this.updateVariantInput();
@@ -120,6 +123,48 @@ class VariantSelects extends HTMLElement {
       input.dispatchEvent(new Event('change', {
         bubbles: true,
       }));
+    });
+  }
+
+  highlightOptions() {
+    // Loop over option groups
+    this.querySelectorAll('[data-option-group]').forEach((option) => {
+      // Get index from option group (1, 2 or 3)
+      const optionIndex = parseInt(option.dataset.optionGroup);
+
+      // Create compare options from group, remove selected option based on index
+      // eslint-disable-next-line
+      const compareOptions = [...this.variantOptions].filter((option, index) => index != optionIndex);
+
+      // Loop over possible values for option group
+      option.querySelectorAll('[data-variant-option-id]').forEach((optionEl) => {
+        const value = optionEl.value;
+
+        // Match option availability and check if the two current options are available for value
+        let match = this.getVariantData().filter((variant) => {
+          // Get available variants where the current option index is the option value
+          if (variant.options[optionIndex] == value && variant.available) {
+            // Create variant options, remove option based on option value
+            // eslint-disable-next-line
+            const variantOptions = [...variant.options].filter((option, index) => index != optionIndex);
+
+            // Check if compare options is the same as variant options
+            return variantOptions.every((item, index) => item.toLowerCase() === compareOptions[index].toLowerCase());
+          }
+          return false;
+        });
+
+        // Debug current index, current value, compare options and match
+        // console.log(optionEl, optionIndex, value, compareOptions, match);
+
+        // Enable/disable variant options
+        match.length === 0 ? optionEl.setAttribute('disabled', true) : optionEl.removeAttribute('disabled');
+
+        // update the other variant input (when available)
+        const variantId = optionEl.dataset.variantOptionId.toLowerCase();
+        const radioOption = this.variantInputs?.querySelector(`label[for="${variantId}-radio"]`);
+        radioOption?.classList.toggle('option__label--disabled', match.length == 0);
+      });
     });
   }
 
@@ -214,18 +259,7 @@ class VariantRadios extends VariantSelects {
   constructor() {
     super();
 
-    this.options = {
-      isPreorder: false,
-    };
-    // Get options from element data and combine with this.options
-    if (this?.dataset?.options) {
-      const dataOptions = JSON.parse(this.dataset.options);
-      this.options = {
-        ...this.options,
-        ...dataOptions,
-      };
-    }
-
+    this.variantSelects = document.querySelector('variant-selects');
     this.querySelectorAll('input').forEach(input => input.addEventListener('input', this.onVariantChange.bind(this)));
 
     this.updateOptions();
@@ -249,18 +283,6 @@ class VariantRadios extends VariantSelects {
    * Check for each option value if the other one/two selected variant options are available
    */
   highlightOptions() {
-    // If no selected element make all available
-    let selectedElement = this.querySelector('[data-option-group] input[checked]');
-    if (!selectedElement) {
-      this.querySelectorAll('[data-option-group]').forEach((option) => {
-        option.querySelectorAll('[data-option]').forEach((optionEl) => {
-          let label = optionEl.querySelector('[data-option-label]');
-          label.classList.remove('option__label--disabled');
-        });
-      });
-      return;
-    }
-
     // Loop over option groups
     this.querySelectorAll('[data-option-group]').forEach((option) => {
       // Get index from option group (1, 2 or 3)
@@ -293,8 +315,13 @@ class VariantRadios extends VariantSelects {
         // Debug current index, current value, compare options and match
         // console.log(optionIndex, value, compareOptions, match);
 
-        // Enable disable variant options
+        // Enable/disable variant options
         label.classList.toggle('option__label--disabled', match.length == 0);
+
+        // update the other variant input (when available)
+        const variantId = input.dataset.variantOptionId;
+        const selectOption = this.variantSelects?.querySelector(`[data-variant-option-id="${variantId}"]`);
+        selectOption && match.length === 0 ? selectOption.setAttribute('disabled', true) : selectOption.removeAttribute('disabled');
       });
     });
   }

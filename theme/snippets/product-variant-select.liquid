@@ -21,16 +21,17 @@
     group-[.is-fixed]/add-to-cart:flex
     group-[.is-fixed]/add-to-cart:gap-base">
     {%- for option in product.options_with_values -%}
+      {%- assign option_name = option.name | handleize -%}
       <div class="field {% if block.settings.picker_layout == 'inline' %}mb-0{%- endif- %} group-[.is-fixed]/add-to-cart:mb-0">
-        <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option.name | handleize }}-{{ forloop.index0 }}-select">
+        <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option_name }}-{{ forloop.index0 }}-select">
           {{ option.name }}
         </label>
         <div class="select relative">
           <select
-            id="{{ product.id }}-{{ option.name | handleize }}-{{ forloop.index0 }}-select"
+            id="{{ product.id }}-{{ option_name }}-{{ forloop.index0 }}-select"
             class="select__select"
             name="options[{{ option.name }}]"
-            data-option-name="{{ option.name | handleize }}"
+            data-option-name="{{ option_name }}"
             data-option-group="{{ forloop.index | minus: 1 }}">
             {%- for value in option.values -%}
               <option
