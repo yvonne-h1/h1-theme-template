@@ -7,7 +7,6 @@
   -%}
 {% endcomment %}
 
-
 {% comment %} Set the vars {% endcomment %}
 {%- liquid
   assign use_images = false
@@ -17,7 +16,10 @@
 
   assign options_as_swatches = settings.render_as_swatch | newline_to_br | strip_newlines | split: '<br />'
   assign color_options_metafield = product.metafields.product.color_variants.value
+
+  assign product_variant_types_total = product.options_with_values.size
 -%}
+
 <variant-radios data-options='{
   "section": "{{ section.id }}",
   "productId": "{{ product.id }}",
@@ -26,14 +28,13 @@
 }' class="product__variant-selector product__variant-selector--buttons block no-js:hidden"
   {{ block.shopify_attributes }}>
 
-
-  <div class="flex {% if block.settings.picker_layout == 'inline' %}divide-x-2 divide-gray-100{%- else - %}flex-col gap-base{%- endif- %}">
+  <div class="flex {% if block.settings.picker_layout == 'inline' %}divide-x divide-gray-100{%- else - %}flex-col gap-base{%- endif- %}">
     {%- for option in product.options_with_values -%}
       {%- liquid
         # Check if this is a color filter
         assign variants = ''
         assign is_color = false
-        assign option_size = product.options.size
+
         assign option_name = option.name | handleize
         assign color_variant_label_handleized = settings.color_filter_name | handleize
 
@@ -55,11 +56,17 @@
         assign has_single_option = false
         if option.values.size == 1
           assign has_single_option = true
-          assign value = option.values[0]
+        endif
+
+        # determine if we should show this variant
+        assign show_variant = true
+        if has_single_option and is_color == false or has_single_option and is_color and color_options_metafield == blank
+          assign show_variant = false
         endif
       -%}
 
-      <div class="{% if block.settings.picker_layout == 'inline' and product.options_with_values.size > 1 %}flex-1 basis-1/2 first:pe-6 last:ps-6{%- endif- %}">
+      {% comment %} Only render options of there's more than 1 {% endcomment %}
+      <div class="{% if block.settings.picker_layout == 'inline' and product_variant_types_total > 1 %}flex-1 basis-1/2 first:pe-6 last:ps-6{%- endif %} {% unless show_variant %}hidden{%- endunless -%}">
         <fieldset class="options options--{{ option_name }} js product-form__input flex items-center {% if use_images and is_color -%}gap-2{%- endif -%}" data-option-name="{{ option.name | handleize }}" data-option-group="{{ forloop.index | minus: 1 }}">
 
           <legend class=" mb-2 text-sm font-semibold {% if block.settings.picker_label == false %} sr-only{% endif %}">
@@ -74,7 +81,7 @@
               # Check if it is available if we only have 1 option
               assign option_available_class = 'transition-all'
 
-              if option_size == 1
+              if product_variant_types_total == 1
                 for loop_variant in product.variants
                   if loop_variant.option1 == value
                     if loop_variant.available == false
@@ -105,8 +112,9 @@
               {%- if use_images and is_color -%}
                 {% comment %} Define the image, which can also be the product variant image {% endcomment %}
                 {%- liquid
-                  assign rindex = index | minus: 1
-                  assign image_obj = product.variants[rindex].featured_image
+                  assign option_pos = option.position | prepend: 'option'
+                  assign variant_image = product.variants | where: option_pos, value | first
+                  assign image_obj = variant_image.featured_image
                   assign color_is_product_variant = true
                   assign image_class = 'rounded-md transition'
 
