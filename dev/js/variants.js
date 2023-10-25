@@ -17,7 +17,7 @@ class VariantSelects extends HTMLElement {
     this.optionName;
     this.optionValue;
 
-    this.variantInputs = document.querySelector('variant-radios');
+    this.variantSelects = Array.from(document.querySelectorAll('variant-selects')).filter(select => select !== this)[0];
 
     this.querySelectorAll('select').forEach(select => select.addEventListener('change', this.onVariantChange.bind(this)));
 
@@ -147,8 +147,10 @@ class VariantSelects extends HTMLElement {
         match.length === 0 ? optionEl.setAttribute('disabled', true) : optionEl.removeAttribute('disabled');
 
         // update the other variant input (when available)
-        const variantId = optionEl.dataset.variantOptionId.toLowerCase();
-        const radioOption = this.variantInputs?.querySelector(`label[for="${variantId}-radio"]`);
+        const variantId = optionEl.dataset.variantOptionId;
+        const selectOption = this.variantSelects?.querySelector(`[data-variant-option-id="${variantId}"]`);
+        selectOption && match.length === 0 ? selectOption.setAttribute('disabled', true) : selectOption.removeAttribute('disabled');
+
         radioOption?.classList.toggle('option__label--disabled', match.length == 0);
       });
     });
@@ -246,6 +248,7 @@ class VariantRadios extends VariantSelects {
     super();
 
     this.variantSelects = document.querySelector('variant-selects');
+
     this.querySelectorAll('input').forEach(input => input.addEventListener('input', this.onVariantChange.bind(this)));
 
     this.updateOptions();
