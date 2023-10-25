@@ -21,8 +21,10 @@
     group-[.is-fixed]/add-to-cart:flex
     group-[.is-fixed]/add-to-cart:gap-base">
     {%- for option in product.options_with_values -%}
+
       {%- assign option_name = option.name | handleize -%}
-      <div class="field {% if block.settings.picker_layout == 'inline' %}mb-0{%- endif- %} group-[.is-fixed]/add-to-cart:mb-0">
+
+      <div class="field {% if block.settings.picker_layout == 'inline' %}mb-0{%- endif- %} group-[.is-fixed]/add-to-cart:mb-0 {% if option.values.size == 1 %}hidden{%- endif -%}">
         <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option_name }}-{{ forloop.index0 }}-select">
           {{ option.name }}
         </label>

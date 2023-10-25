@@ -44,13 +44,12 @@ class VariantSelects extends HTMLElement {
       this.setUnavailable();
     }
     else {
-      this.updateMedia();
       this.highlightOptions();
+      this.dispatchVariantChange();
       if (event) {
         this.updateURL();
         this.updateVariantInput();
         this.renderProductInfo();
-        this.dispatchVariantChange();
       }
     }
 
@@ -93,19 +92,6 @@ class VariantSelects extends HTMLElement {
         variant: this.currentVariant,
       },
     }));
-  }
-
-  updateMedia() {
-    if (!this.currentVariant || !this.currentVariant?.featured_media) return;
-    const newMedia = document.querySelector(
-      `[data-media-id="${this.options.productId}-${this.currentVariant.featured_media.id}"]`,
-    );
-
-    if (!newMedia) return;
-
-    const parent = newMedia.parentElement;
-    parent.prepend(newMedia);
-    window.setTimeout(() => parent.scroll(0, 0));
   }
 
   updateURL() {

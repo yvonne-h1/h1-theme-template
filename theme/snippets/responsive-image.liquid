@@ -109,10 +109,6 @@
   # Image title
   if title == blank
     assign title = image_object.title
-
-    if title == blank
-      assign title = 'Image ' | append: image_object.id
-    endif
   endif
 
   # min width to render sizes from, used for responsive images
