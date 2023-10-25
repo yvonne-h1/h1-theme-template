@@ -107,7 +107,7 @@
                 id="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
                 name="{{ option.name }}"
                 value="{{ value }}"
-                data-variant-option-id="{{ product.id }}-{{ option.name }}-{{ index }}"
+                data-variant-option-id="{{ product.id }}-{{ option_name }}-{{ index }}"
                 {% if option.selected_value == value -%}checked{%- endif %}
                 {% if has_single_option -%}disabled{%- endif %}
               >

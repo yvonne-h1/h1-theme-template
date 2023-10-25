@@ -18,6 +18,7 @@ class VariantSelects extends HTMLElement {
     this.optionValue;
 
     this.variantSelects = Array.from(document.querySelectorAll('variant-selects')).filter(select => select !== this)[0];
+    this.variantInputs = document.querySelector('variant-radios');
 
     this.querySelectorAll('select').forEach(select => select.addEventListener('change', this.onVariantChange.bind(this)));
 
@@ -149,8 +150,11 @@ class VariantSelects extends HTMLElement {
         // update the other variant input (when available)
         const variantId = optionEl.dataset.variantOptionId;
         const selectOption = this.variantSelects?.querySelector(`[data-variant-option-id="${variantId}"]`);
-        selectOption && match.length === 0 ? selectOption.setAttribute('disabled', true) : selectOption.removeAttribute('disabled');
+        if (selectOption) {
+          match.length === 0 ? selectOption.setAttribute('disabled', true) : selectOption.removeAttribute('disabled');
+        }
 
+        const radioOption = this.variantInputs?.querySelector(`label[for="${variantId}-radio"]`);
         radioOption?.classList.toggle('option__label--disabled', match.length == 0);
       });
     });
@@ -310,7 +314,9 @@ class VariantRadios extends VariantSelects {
         // update the other variant input (when available)
         const variantId = input.dataset.variantOptionId;
         const selectOption = this.variantSelects?.querySelector(`[data-variant-option-id="${variantId}"]`);
-        selectOption && match.length === 0 ? selectOption.setAttribute('disabled', true) : selectOption.removeAttribute('disabled');
+        if (selectOption) {
+          match.length === 0 ? selectOption.setAttribute('disabled', true) : selectOption.removeAttribute('disabled');
+        }
       });
     });
   }

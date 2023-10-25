@@ -38,7 +38,7 @@
             {%- for value in option.values -%}
               <option
                 value="{{ value }}"
-                data-variant-option-id="{{ product.id }}-{{ option.name }}-{{ forloop.index }}"
+                data-variant-option-id="{{ product.id }}-{{ option_name }}-{{ forloop.index }}"
                 {% if option.selected_value == value %}
                   selected="selected"
                 {% endif %}>
