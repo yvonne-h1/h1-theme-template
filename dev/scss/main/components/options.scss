@@ -76,7 +76,8 @@
     &__input:checked + &__label,
     &__label--checked,
     &__swatch--checked {
-      @apply border-transparent
+      @apply pointer-events-none
+      border-transparent
       bg-primary-600
       text-primary-text
       outline

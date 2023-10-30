@@ -18,7 +18,9 @@
   assign color_options_metafield = product.metafields.product.color_variants.value
 
   assign product_variant_types_total = product.options_with_values.size
-  assign has_only_single_options = true
+  assign has_only_single_option = true
+
+  assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
 -%}
 
 {%- capture variant_options -%}
@@ -45,13 +47,13 @@
         endif
       endfor
 
-      if option.values.size > 1 and has_only_single_options != false
-        assign has_only_single_options = false
+      if option.values.size > 1 and has_only_single_option
+        assign has_only_single_option = false
       endif
 
       # Check if there is only one option for this variant option
       assign has_single_option = false
-      if option.values.size == 1
+      if option.values.size == 1 or has_only_default_variant
         assign has_single_option = true
       endif
 
@@ -62,7 +64,7 @@
       endif
     -%}
 
-    {% comment %} Only render options of there's more than 1 {% endcomment %}
+    {% comment %} Only render options if there's more than 1 {% endcomment %}
     <div class="{% if block.settings.picker_layout == 'inline' and product_variant_types_total > 1 %}flex-1 basis-1/2 first:pe-6 last:ps-6{%- endif %} {% unless show_variant %}hidden{%- endunless -%}">
       <fieldset class="options options--{{ option_name }} js product-form__input flex items-center {% if use_images and is_color -%}gap-2{%- endif -%}" data-option-name="{{ option.name | handleize }}" data-option-group="{{ forloop.index | minus: 1 }}">
 
@@ -86,6 +88,10 @@
                   endif
                 endif
               endfor
+            endif
+
+            if option.selected_value == value
+              assign option_available_class = option_available_class | append: ' pointer-events-none'
             endif
 
             assign value_text = value | capitalize
@@ -140,7 +146,7 @@
                   title: product.title,
                   class: image_class
                 -%}
-              <label>
+              </label>
             {%- else -%}
               {% comment %} Render as regular input/swatch {% endcomment %}
               {{ input }}
@@ -154,10 +160,34 @@
             {%- if is_color -%}
               {%- liquid
                 assign variant_color = value | handleize
-                assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
                 assign color_is_mapped = false
                 assign color_hex = ''
               -%}
+
+              {%- comment -%} Loop through the color mapping for the current option {%- endcomment -%}
+              {%- unless use_images -%}
+                {%- for color in color_mappings -%}
+                  {%- assign color_name = color | split: '|' | first | handleize -%}
+
+                  {%- if color_name == variant_color -%}
+                    {%- liquid
+                      # Render with background-color
+                      assign color_hex = color | split: '|' | last
+                      assign color_is_mapped = true
+                    -%}
+
+                    <label
+                      class="option__swatch option__swatch--{{ option_name }} transition-all"
+                      for="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
+                      style="background-color: {{ color_hex }};"
+                      title="{{ value }}"
+                      data-option-label
+                    >
+                      <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ value_text }}</span>
+                    </label>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endunless -%}
 
               {% comment %} Get all linked colors {% endcomment %}
               {%- for product_variant in color_options_metafield -%}
@@ -165,6 +195,7 @@
 
                 {%- for option in variant_options -%}
                   {%- assign option_downcase = option | downcase -%}
+
                   {%- if option_downcase == option_name -%}
                     {%- liquid
                       assign option_index = 'option' | append: forloop.index
@@ -226,33 +257,9 @@
                 {%- endfor -%}
               {%- endfor -%}
 
-              {%- unless use_images -%}
-                {%- comment -%} Loop through the color mapping for the current option {%- endcomment -%}
-                {%- for color in color_mappings -%}
-                  {%- assign color_name = color | split: '|' | first | handleize -%}
-
-                  {%- if color_name == variant_color -%}
-                    {%- liquid
-                      # Render with background-color
-                      assign color_hex = color | split: '|' | last
-                      assign color_is_mapped = true
-                    -%}
-                    <label
-                      class="option__swatch option__swatch--{{ option_name }} transition-all"
-                      for="{{ product.id }}-{{ option_name }}-{{ index }}-radio"
-                      style="background-color: {{ color_hex }};"
-                      title="{{ value }}"
-                      data-option-label
-                    >
-                      <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ value_text }}</span>
-                    </label>
-                  {%- endif -%}
-                {%- endfor -%}
-
-                {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
-                {%- unless color_is_mapped -%}
-                  {{ label }}
-                {%- endunless -%}
+              {%- comment -%} If color is not found in the mapping, render it with a text label {%- endcomment -%}
+              {%- unless color_is_mapped or use_images -%}
+                {{ label }}
               {%- endunless -%}
 
             {%- comment -%} Else render default filter option {%- endcomment -%}
@@ -269,7 +276,7 @@
   {%- endfor -%}
 {%- endcapture -%}
 
-{%- unless has_only_single_options -%}
+{%- unless has_only_single_option -%}
   <variant-radios data-options='{
     "section": "{{ section.id }}",
     "productId": "{{ product.id }}",

@@ -8,19 +8,125 @@
 
 {% comment %} Set the vars {% endcomment %}
 {%- liquid
+  assign use_images = false
+  if block.settings.color_variant_display == 'images'
+    assign use_images = true
+  endif
+
   assign color_options_metafield = product.metafields.product.color_variants.value
-  assign has_single_option = true
+  assign has_only_single_option = true
+
+  assign color_mappings = settings.color_mappings | newline_to_br | strip_newlines | split: '<br />'
 -%}
 
 {%- capture variant_options -%}
   {%- for option in product.options_with_values -%}
     {%- liquid
+      assign variants = ''
+      assign is_color = false
+
       assign option_name = option.name | handleize
-      if option.values.size > 1 and has_single_option != false
-        assign has_single_option = false
+      assign color_variant_label_handleized = settings.color_filter_name | handleize
+
+      if color_variant_label_handleized == option_name
+        assign is_color = true
+        assign variant_color = product.options_by_name[option.name].values | first
+      endif
+
+      if option.values.size > 1 and has_only_single_option
+        assign has_only_single_option = false
       endif
     -%}
-    <div class="field {% if block.settings.picker_layout == 'inline' %}mb-0{%- endif- %} group-[.is-fixed]/add-to-cart:mb-0 {% if option.values.size == 1 %}hidden{%- endif -%}">
+
+    {% comment %} Render the images {% endcomment %}
+    {%- if is_color and color_options_metafield != blank -%}
+
+      {% comment %} Get all linked colors as images {% endcomment %}
+      {%- for product_variant in color_options_metafield -%}
+        {%- assign variant_options = product_variant.options -%}
+
+        {%- for option in variant_options -%}
+          {%- assign option_downcase = option | downcase -%}
+
+          {%- if option_downcase == option_name -%}
+            {%- liquid
+              assign option_index = 'option' | append: forloop.index
+              assign product_variant_color = product_variant.variants[0][option_index] | handleize
+              assign product_variant_color_handleized = product_variant_color | handleize
+              assign is_current_variant = false
+              assign image_class = 'rounded-md transition'
+
+              # If this is the current color
+              if product_variant_color_handleized == variant_color
+                assign is_current_variant = true
+                assign image_class = image_class | append: ' border border-black object-contain'
+              else
+                assign image_class = image_class | append: ' rounded-md states:border states:border-primary transition object-contain'
+              endif
+
+              unless use_images
+                # Loop through color mapping
+                for color in color_mappings
+                  assign color_name = color | split: '|' | first | handleize
+
+                  if color_name == product_variant_color_handleized
+                    # Render with background-color
+                    assign color_hex = color | split: '|' | last
+                    assign color_is_mapped = true
+                  endif
+                endfor
+
+                assign option_type = 'label'
+                if color_is_mapped and render_as_swatch
+                  assign option_type = 'swatch'
+                endif
+              endunless
+            -%}
+
+            {% comment %} Capture the color variants {% endcomment %}
+            {%- capture variants -%}
+              {{- variants -}}
+
+              {% comment %} Color swatch {% endcomment %}
+              <div class="option option--{{ option_name }} {% if use_images -%}p-0{%- endif %} {% if is_current_variant -%}-order-1{%- endif -%}">
+                <{% if is_current_variant %}div{% else %}a href="{{ product_variant.url }}"{% endif %}
+                  class="option__{{ option_type }} option__{{ option_type }}--{{ option_name }} relative {% if is_current_variant -%}option__{{ option_type }}--checked option__{{ option_type }}--selected{%- endif %} {% if color_is_mapped and use_images == false and is_current_variant == false -%}states:scale-110{%- endif -%}"
+                  title="{{ product_variant_color }}"
+                  {% unless use_images -%}style="background-color: {{ color_hex }};"{%- endunless %}
+                  data-option-label>
+
+                    {%- if use_images -%}
+                      {% comment %} Color images {% endcomment %}
+                      {%- render 'responsive-image',
+                        image_object: product_variant.featured_image,
+                        crop: 'center',
+                        widths: '60, 120',
+                        alt: product_variant.title,
+                        title: product_variant.title,
+                        class: image_class
+                      -%}
+                    {% comment %} Get them as swatches {% endcomment %}
+                    {%- else -%}
+                    <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ product_variant_color | capitalize }}</span>
+                    {%- endif -%}
+                </{% if is_current_variant %}div{% else %}a{% endif %}>
+              </div>
+            {%- endcapture -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+
+      <div class="field sm:flex-1 md:flex-auto lg:flex-1 {% if block.settings.picker_layout == 'inline' %}mb-0{%- endif- %} group-[.is-fixed]/add-to-cart:hidden">
+        <div class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option_name }}-{{ forloop.index0 }}-select">
+          {{ option.name }}
+        </div>
+        <div class="flex items-center gap-2">
+          {{ variants }}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="field sm:flex-1 md:flex-auto lg:flex-1 {% if block.settings.picker_layout == 'inline' %}mb-0{%- endif- %} group-[.is-fixed]/add-to-cart:mb-0 {% if option.values.size == 1 %}hidden{%- endif -%}">
       <label class="field__label {% if block.settings.picker_label == false %} sr-only{% endif %}" for="{{ product.id }}-{{ option_name }}-{{ forloop.index0 }}-select">
         {{ option.name }}
       </label>
@@ -50,7 +156,7 @@
   {%- endfor -%}
 {%- endcapture -%}
 
-{%- unless has_single_option -%}
+{%- unless has_only_single_option -%}
   <variant-selects
     data-options='
       {
@@ -62,7 +168,7 @@
     '
     class="product__variant-selector product__variant-selector--select block {{ class }} group-[.is-fixed]/add-to-cart:block"
     {{ block.shopify_attributes }}>
-    <div class="{% if block.settings.picker_layout == 'inline' %}flex gap-base{%- endif %}
+    <div class="{% if block.settings.picker_layout == 'inline' %}flex flex-wrap gap-base{%- endif %}
       group-[.is-fixed]/add-to-cart:flex
       group-[.is-fixed]/add-to-cart:gap-base">
       {{ variant_options }}

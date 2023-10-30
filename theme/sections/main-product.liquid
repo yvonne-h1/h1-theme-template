@@ -511,7 +511,7 @@
             "type": "select",
             "id": "picker_type",
             "default": "radio",
-            "label": "Type",
+            "label": "Variant display",
             "options": [
               {
                 "value": "dropdown",
@@ -520,6 +520,23 @@
               {
                 "value": "radio",
                 "label": "Radio inputs"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "color_variant_display",
+            "default": "images",
+            "label": "Linked color variant display",
+            "info": "This only applies to color variants added through the metafield. Color variants of the current product will be rendered as selected above.",
+            "options": [
+              {
+                "value": "swatches",
+                "label": "Swatches"
+              },
+              {
+                "value": "images",
+                "label": "Variant images"
               }
             ]
           },
@@ -536,23 +553,6 @@
               {
                 "value": "block",
                 "label": "Block"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id": "color_variant_display",
-            "default": "swatches",
-            "label": "Color variant display",
-            "info": "Only applies when using 'Radio inputs'. When selecting 'images', the theme will check for the 'color variants' product metafield to retrieve the images.",
-            "options": [
-              {
-                "value": "swatches",
-                "label": "Swatches"
-              },
-              {
-                "value": "images",
-                "label": "Variant images"
               }
             ]
           },
