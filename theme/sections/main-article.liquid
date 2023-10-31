@@ -156,6 +156,7 @@
             "id": "color_scheme",
             "default": "",
             "label": "Color scheme",
+            "info": "Will not apply when products are rendered inline.",
             "options": [
               {
                 "value": "",
@@ -164,6 +165,22 @@
               {
                 "value": "color-scheme color-scheme--gray",
                 "label": "Gray"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "products_display",
+            "default": "slider",
+            "label": "Product display",
+            "options": [
+              {
+                "value": "slider",
+                "label": "Slider"
+              },
+              {
+                "value": "grid",
+                "label": "Grid"
               }
             ]
           },

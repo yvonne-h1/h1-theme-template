@@ -92,10 +92,10 @@
     }
     .container--full & {
       &-button-prev {
-        @apply left-[var(--content-wrapper-padding)];
+        @apply left-content-wrapper-padding;
       }
       &-button-next {
-        @apply right-[var(--content-wrapper-padding)];
+        @apply right-content-wrapper-padding;
       }
     }
 

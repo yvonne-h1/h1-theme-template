@@ -8,7 +8,7 @@
 {%- endcomment -%}
 
 <div
-  class="filter-group filter-group--{{ label | handleize }} mb-4 px-6 py-4 {% if settings.filter_display == 'grid' -%}lg:ps-[var(--content-wrapper-padding)]{%- endif -%}"
+  class="filter-group filter-group--{{ label | handleize }} mb-4 px-6 py-4 {% if settings.filter_display == 'grid' -%}lg:ps-content-wrapper-padding{%- endif -%}"
   data-filter-option
   data-index="{{ filter_index }}">
   <p class="filter-group__title text-sm font-bold">

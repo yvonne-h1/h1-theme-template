@@ -1,20 +1,65 @@
 {% comment %} Capture related products {% endcomment %}
 {%- liquid
+  assign has_products_placeholder = false
+  assign render_inline = false
+
+  # Logic to render the article content. We have to check for as many possibilities as possible because it might cause divs to not be closed after replacing content
+  if article.content contains '[products]'
+    assign render_inline = true
+    if article.content contains '<div><p>[products]</p></div>'
+      assign has_products_placeholder = '<div><p>[products]</p></div>'
+    elsif article.content contains '<p>[products]</p>'
+      assign has_products_placeholder = '<p>[products]</p>'
+    elsif article.content contains '<div><span>[products]</span></div>'
+      assign has_products_placeholder = '<div><span>[products]</span></div>'
+    elsif article.content contains '<div>[products]</div>'
+      assign has_products_placeholder = '<div>[products]</div>'
+    elsif article.content contains '<span>[products]</span>'
+      assign has_products_placeholder = '<span>[products]</span>'
+    elsif article.content contains '[products]'
+      assign has_products_placeholder = '[products]'
+    endif
+  endif
+
+  assign products_display = 'slider'
+
   for block in section.blocks
     case block.type
       when 'featured_products'
-        capture product_slider
-          # Slider
-          if article.metafields.article.article_products != blank
-            assign products_arr = article.metafields.article.article_products.value
+        if article.metafields.article.article_products != blank
+          assign products_arr = article.metafields.article.article_products.value
 
-            # Product swiper
-            render 'swiper-content', render_products: true, object_array: products_arr, swiper_indication: block.settings.swiper_indication, swiper_navigation: block.settings.swiper_navigation, swiper_autoplay: block.settings.swiper_autoplay, swiper_autoplay_delay: block.settings.swiper_autoplay_delay, id: section.id
+          if block.settings.products_display == 'grid'
+            assign products_display = 'grid'
           endif
-        endcapture
+
+          if has_products_placeholder and products_display == 'grid'
+            assign image_sizes = '(min-width: 1024px) 33vw, (min-width: 580px) 50vw, 100vw'
+          endif
+
+          assign grid_classes = 'grid grid-cols-1 sm:grid-cols-2 gap-base lg:grid-cols-3'
+          if products_display == 'grid'
+            assign grid_classes = 'grid grid-cols-1 sm:grid-cols-2 gap-base md:grid-cols-3 lg:grid-cols-4'
+          endif
+
+          capture featured_products_content
+            if products_display == 'slider'
+              # Slider
+              render 'swiper-content', render_products: true, object_array: products_arr, render_inline: render_inline, swiper_indication: block.settings.swiper_indication, swiper_navigation: block.settings.swiper_navigation, swiper_autoplay: block.settings.swiper_autoplay, swiper_autoplay_delay: block.settings.swiper_autoplay_delay, id: section.id
+            else
+              # Grid
+              echo grid_classes | prepend: '<div class="' | append: '">'
+              for product_item in products_arr
+                render 'product-card', product_object: product_item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3'
+              endfor
+              echo '</div>'
+            endif
+          endcapture
+        endif
 
         # Container class
         assign container_class_products = 'overflow-hidden'
+
         if block.settings.color_scheme != blank
           assign container_class_products = container_class_products | append: ' container--background my-0 group/color-scheme ' | append: block.settings.color_scheme
         endif
@@ -28,53 +73,34 @@
 {%- capture container_content -%}
 
   {% comment %} If the article content contains a placeholder for products, render the carousel there instead {% endcomment %}
-  {%- liquid
-    assign has_products_placeholder = false
+  {%- if featured_products_content != blank and render_inline -%}
+    {%- assign article_parts = article.content | split: has_products_placeholder -%}
 
-    # Logic to render the article content
-    if article.content contains '<p>[products]</p>' or article.content contains '[products]'
-      if article.content contains '<p>[products]</p>'
-        assign has_products_placeholder = '<p>[products]</p>'
-      elsif article.content contains '[products]'
-        assign has_products_placeholder = '[products]'
-      endif
-    endif
-
-    # render the article content with the slider replacing the placeholder
-    if product_slider != blank and has_products_placeholder != false
-      assign article_parts = article.content | split: has_products_placeholder
-
-      capture article_content
-        echo article_parts[0] | prepend: '<div class="rte mx-auto mt-4 mb-10 max-w-screen-md">' | append: '</div>'
-        echo product_slider
-        echo article_parts[1] | prepend: '<div class="rte mx-auto mt-10 max-w-screen-md">' | append: '</div>'
-      endcapture
-    else
-      # remove the placeholder and wrap the content
-      capture article_content
-        echo article.content | replace: has_products_placeholder, '' | prepend: '<div class="rte mx-auto mt-4 mb-10 max-w-screen-md">' | append: '</div>'
-      endcapture
-    endif
-  -%}
-
-  {{- article_content -}}
+    <div class="rte mx-auto mb-10 mt-4 max-w-screen-md">{{ article_parts[0] }}</div>
+    {{- featured_products_content -}}
+    <div class="rte mx-auto mt-10 max-w-screen-md">{{ article_parts[1] }}</div>
+  {%- else -%}
+    {% comment %} # remove the placeholder and wrap the content {% endcomment %}
+    <div class="rte mx-auto mb-10 mt-4 max-w-screen-md">
+      {{ article.content | replace: has_products_placeholder, '' }}
+    </div>
+  {%- endif -%}
 {%- endcapture -%}
 
-{%- liquid
-  # Capture container class
-  capture container_class
-    echo class | append: ' article-content'
-  endcapture
--%}
+{%- assign container_class = class | append: ' article-content' -%}
+
 {%- comment -%} Render the content {%- endcomment -%}
 {%- render 'render-container-content', tag: 'section', content: container_content, class: container_class -%}
 
 {% comment %} If there is no placeholder in the content, render the product slider below the content {% endcomment %}
 {%- liquid
-  if product_slider != blank
+  if featured_products_content != blank
     unless has_products_placeholder != false and article.content contains has_products_placeholder
       # Render the content
-      render 'render-container-content', class: container_class_products, content: product_slider, content_class: 'p-0', title: container_title
+      if products_display == 'slider'
+        assign content_class = 'p-0'
+      endif
+      render 'render-container-content', class: container_class_products, content_class: content_class, content: featured_products_content, title: container_title
     endunless
   endif
 -%}

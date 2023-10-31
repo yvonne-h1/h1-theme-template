@@ -95,6 +95,10 @@ module.exports = {
       },
       maxWidth: {
         screen: ['100vw', '100dvw'],
+        'content-width': '1440px',
+        'content-width-lg': '1200px',
+        'content-width-md': '820px',
+        'content-width-sm': '620px',
       },
       maxHeight: {
         '80vh': '80vh',
@@ -107,6 +111,8 @@ module.exports = {
       },
       spacing: {
         'element-spacing': 'var(--element-spacing)',
+        'content-wrapper-padding': 'var(--content-wrapper-padding)',
+        'container-spacing': 'var(--container-spacing)',
       },
       borderColor: ({ theme }) => ({
         DEFAULT: theme('colors.gray.100'),

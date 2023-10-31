@@ -1,11 +1,5 @@
 @layer base {
   :root {
-    // Site dimensions
-    --content-wrapper: 1440px;
-    --content-wrapper-lg: 1200px;
-    --content-wrapper-md: 820px;
-    --content-wrapper-sm: 620px;
-
     // Site side spacing
     --content-wrapper-padding: theme(spacing.4);
     @screen md {

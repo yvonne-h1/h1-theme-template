@@ -143,7 +143,7 @@
 
   {%- comment -%} Render breadcrumbs {%- endcomment -%}
   {% if breadcrumb_arr != blank %}
-    <div class="content-wrapper content-wrapper-padding my-4 md:my-6 {{ hide_on_mobile_class }}">
+    <div class="content-wrapper my-4 px-content-wrapper-padding md:my-6 {{ hide_on_mobile_class }}">
       <ol class="breadcrumbs flex {{ section.settings.alignment }} list-none gap-2 text-xs">
         {%- comment -%} Loop the array {%- endcomment -%}
         {%- for path in breadcrumb_arr -%}

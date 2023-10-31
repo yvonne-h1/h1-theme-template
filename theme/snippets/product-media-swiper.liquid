@@ -44,7 +44,7 @@
             endif
           -%}
           <a
-            class="{{ media_class }} px-[var(--content-wrapper-padding)] md:px-0"
+            class="{{ media_class }} px-content-wrapper-padding md:px-0"
             href="{{ media | image_url }}"
             data-fancybox="product-media-swiper"
             data-animated="false"
@@ -159,7 +159,7 @@
     {% comment %} Only render when there's more than 1 image {% endcomment %}
     {%- if image_count > 1 -%}
       {%- comment -%} Thumbnails slider {%- endcomment -%}
-      <div class="product-media-swiper__thumbnails relative col-span-12 md:pe-[var(--content-wrapper-padding)]">
+      <div class="product-media-swiper__thumbnails relative col-span-12 md:pe-content-wrapper-padding">
         <div
           class="swiper"
           data-product-media-thumbnails-slider>

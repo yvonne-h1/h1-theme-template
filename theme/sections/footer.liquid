@@ -5,7 +5,7 @@
 -%}
 
 <footer class="footer pb-4 pt-8 md:pb-6 md:pt-10 {{ section.settings.color_scheme }}">
-  <div class="content-wrapper content-wrapper-padding flex flex-col">
+  <div class="content-wrapper flex flex-col px-content-wrapper-padding">
     <div class="footer__blocks grid grid-cols-12 gap-y-10 md:gap-base">
       {%- for block in section.blocks -%}
         {%- case block.type -%}

@@ -15,7 +15,7 @@
   <div class="product grid grid-cols-12 gap-x-4 gap-y-base">
 
     {%- comment -%} Product title {%- endcomment -%}
-    <h1 class="product__title h5 content-wrapper-padding col-span-12 md:hidden">
+    <h1 class="product__title h5 col-span-12 px-content-wrapper-padding md:hidden">
       {{ product.title }}
     </h1>
 
@@ -33,7 +33,7 @@
     {%- comment -%} Right col: Product info {%- endcomment -%}
     <div id="ProductInfo" class="product__info col-span-12 md:col-span-5 lg:col-span-6 2xl:col-span-5">
       <product-info
-        class="product-info-col content-wrapper-padding flex flex-col gap-y-5 bg-gray-50 py-6 md:z-10 md:rounded-md md:drop-shadow-lg {% if section.settings.enable_sticky_info -%}product-info-col--sticky sticky top-4 transition-all duration-300 group-[.header-sticky:not(.header-hidden)]/body:top-20{%- endif -%}"
+        class="product-info-col flex flex-col gap-y-5 bg-gray-50 px-content-wrapper-padding py-6 md:z-10 md:rounded-md md:drop-shadow-lg {% if section.settings.enable_sticky_info -%}product-info-col--sticky sticky top-4 transition-all duration-300 group-[.header-sticky:not(.header-hidden)]/body:top-20{%- endif -%}"
         data-product-info
       >
         {%- comment -%} Product title {%- endcomment -%}

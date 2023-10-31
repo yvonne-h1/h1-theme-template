@@ -1,8 +1,8 @@
 @layer base {
   .container {
-    @apply mx-auto my-[var(--container-spacing)];
+    @apply mx-auto my-container-spacing;
     &--background {
-      @apply my-0 py-[var(--container-spacing)];
+      @apply my-0 py-container-spacing;
     }
 
     &__header,
@@ -12,15 +12,15 @@
       mb-element-spacing
       w-full
       max-w-screen-2xl
-      px-[var(--content-wrapper-padding)]
+      px-content-wrapper-padding
       last:mb-0;
 
       // Container sizes
       .container--sm & {
-        @apply max-w-[var(--content-wrapper-sm)];
+        @apply max-w-content-width-sm;
       }
       .container--md & {
-        @apply max-w-[var(--content-wrapper-md)];
+        @apply max-w-content-width-md;
       }
       .container--wide & {
         @apply max-w-full;

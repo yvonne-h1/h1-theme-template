@@ -46,6 +46,10 @@
     assign render_product_cards = false
   endunless
 
+  unless render_inline
+    assign render_inline = false
+  endunless
+
   # never allow more than 12 slides
   if max_count == blank
     if object_array.size > 12
@@ -76,7 +80,10 @@
   render 'import-styles', file_name: 'component-swiper.css', force: force_css
 
   assign image_max_width = 360
-  assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+
+  unless image_sizes
+    assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+  endunless
 
   # Styles based on swiper_indication setting
   case swiper_indication
@@ -175,7 +182,9 @@
         2xl:[--swiper-slidesPerView:4]
       {% endif -%}
     ">
-    <div class="overflow-hidden {{ swiper_indication_class }} 2xl:px-[var(--content-wrapper-padding)]" data-swiper>
+    <div
+      class="overflow-hidden {{ swiper_indication_class }} {% if render_inline -%}-ml-content-wrapper-padding w-screen max-w-screen-2xl 2xl:ml-0{% else -%}2xl:px-content-wrapper-padding{%- endif -%}"
+      data-swiper>
       <div
         class="swiper-wrapper flex"
         {% if is_recommendations -%}
@@ -254,7 +263,7 @@
 
       {%- comment -%} Render swiper indication wrapper to show pagination or scrollbar {%- endcomment -%}
       {%- if swiper_indication != '' -%}
-        <div class="content-wrapper content-wrapper-padding 2xl:px-0">
+        <div class="content-wrapper px-content-wrapper-padding 2xl:px-0">
       {%- endif -%}
 
       {% comment %} Add the placeholders {% endcomment %}
