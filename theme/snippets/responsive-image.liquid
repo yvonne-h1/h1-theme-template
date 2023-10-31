@@ -136,6 +136,10 @@
     endif
   endunless
 
+  if max_width > width
+    assign max_width = width
+  endif
+
   # Image widths
   unless widths
     assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 2048, 2560, 3000, 4000'
