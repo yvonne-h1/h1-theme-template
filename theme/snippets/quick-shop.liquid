@@ -185,7 +185,6 @@
           <button
             type="submit"
             name="add"
-            aria-label="Add"
             class="quick-shop__button quick-shop__button--form button button--primary button--md rounded-full"
             data-add-to-cart-behavior="{{ add_to_cart_behavior }}">
             {%- render 'icons', icon: 'cart', icon_class: 'w-4' -%}
@@ -200,10 +199,9 @@
       type="button"
       class="quick-shop__trigger {{ button_class }}"
       data-quick-shop-toggle
-      data-src="#QuickShop-{{ product.id }}-{{ unique_identifier }}"
-      aria-labelledby="quickAddLabel-{{ product.id }}-{{ unique_identifier }}">
+      data-src="#QuickShop-{{ product.id }}-{{ unique_identifier }}">
       {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
-      <span class="{% if view != 'alt' -%}hidden sm:block{%- endif -%}" id="quickAddLabel-{{ product.id }}-{{ unique_identifier }}">
+      <span class="{% if view != 'alt' -%}sr-only sm:not-sr-only{%- endif -%}">
         {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}
       </span>
     </button>

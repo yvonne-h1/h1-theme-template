@@ -337,7 +337,7 @@
         "type": "select",
         "id": "filter_display",
         "label": "Filter display",
-        "info": "Applies to larger screens. Either keep the filters always visible or hide them in a drawer.",
+        "info": "Applies to larger screens. Either keep the filters always visible or hide them in a drawer. The 'horizontal' option is best used with a max of 5 or 6 filters.",
         "default": "drawer",
         "options": [
           {
@@ -346,9 +346,20 @@
           },
           {
             "value": "grid",
-            "label": "In grid"
+            "label": "In grid - vertical"
+          },
+          {
+            "value": "flex",
+            "label": "Above products - horizontal"
           }
         ]
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_filter_collapsibles",
+        "label": "Enable filter collapsibles",
+        "info": "This will allow customers to close filters",
+        "default": false
       },
       {
         "type": "header",

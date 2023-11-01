@@ -46,6 +46,7 @@ if (!customElements.get('collapsible-component')) {
         isMobileMenu: false,
         breakpointMax: false,
         trapFocus: true,
+        openOnMobile: true,
       };
 
       // Get options from element data and combine with this.options
@@ -62,11 +63,11 @@ if (!customElements.get('collapsible-component')) {
 
       this.timeout = null;
 
+      this.init();
+
       window.addEventListener('resize', debounce(() => {
         this.init();
       }, 50));
-
-      this.init();
     }
 
     init() {
@@ -84,7 +85,6 @@ if (!customElements.get('collapsible-component')) {
         }
       }
       this.construct(init);
-
     }
 
     construct(init = true) {
@@ -118,13 +118,26 @@ if (!customElements.get('collapsible-component')) {
 
         return;
       }
-      // close the collapsibles because the breakpoint demands them to be collapsed
-      else if (init && this.options.breakpointMax !== false) {
-        this.groups.forEach((group) => {
-          if (group.classList.contains(this.options.classToToggle)) {
-            this.close(group, false);
+      else if (init) {
+        // open on mobile, close on desktop
+        if (this.options.openOnMobile) {
+          if (windowWidth() < 768) {
+            this.openAll();
+            this.options.closeSiblings = false;
           }
-        });
+          else {
+            this.closeAll();
+            this.options.closeSiblings = true;
+          }
+        }
+        // close the collapsibles because the breakpoint demands them to be collapsed
+        if (this.options.breakpointMax !== false) {
+          this.groups.forEach((group) => {
+            if (group.classList.contains(this.options.classToToggle)) {
+              this.close(group, false);
+            }
+          });
+        }
       }
 
       // Trigger events on [data-collapsible-trigger]
@@ -322,7 +335,10 @@ if (!customElements.get('collapsible-component')) {
     */
     closeAll() {
       this.groups.forEach(group => group.classList.remove(this.options.classToToggle));
-      this.state = [this.querySelector('nav')];
+
+      if (this.options.isMobileMenu) {
+        this.state = [this.querySelector('nav')];
+      }
     }
   }
 

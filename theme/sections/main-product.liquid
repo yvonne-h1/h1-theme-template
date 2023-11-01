@@ -312,7 +312,6 @@
                       <button
                         type="submit"
                         name="add"
-                        aria-label="Add"
                         class="button button--lg button--primary w-full"
                         {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
                         data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}"

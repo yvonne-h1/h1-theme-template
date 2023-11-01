@@ -30,7 +30,7 @@
         {%- endif -%}
       </div>
     {%- else -%}
-      {%- if settings.filter_display == 'drawer' -%}
+      {%- if settings.filter_display != 'grid' -%}
         {%- liquid
             render 'collection-filters', section: section
             render 'collection-product-grid', section: section

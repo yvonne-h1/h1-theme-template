@@ -112,13 +112,7 @@
 
           {%- if line_item.line_level_discount_allocations != blank -%}
             <ul
-              aria-label="
-                {%- render "render-translation",
-                  namespace: "customer.order",
-                  key: "discount",
-                  fallback: "Discount"
-                -%}
-              ">
+              aria-label="{%- render "render-translation", namespace: "customer.order", key: "discount", fallback: "Discount" -%}">
               {%- for discount_allocation in line_item.line_level_discount_allocations -%}
                 <li>
                   {{- discount_allocation.discount_application.title }} (-

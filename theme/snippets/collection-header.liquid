@@ -140,15 +140,14 @@
       {%- endif -%}
 
       {% comment %} Collection filter button {% endcomment %}
-      <class-toggle-component class="collection-header__filter-trigger min-w-max {% if settings.filter_display == 'grid' -%}lg:hidden{%- endif -%}"
+      <class-toggle-component class="collection-header__filter-trigger min-w-max {% if settings.filter_display == 'grid' -%}lg:hidden{% elsif settings.filter_display == 'flex' -%}md:hidden{%- endif -%}"
         data-options='{
           "classToToggle": "filter-is-open"
         }'
       >
         <button
           type="button"
-          class="button button--outline flex whitespace-nowrap py-2.5 px-2 sm:px-4 leading-none"
-          aria-label="{%- render 'render-translation', namespace: "sections.collection_template", key: "filter", fallback: "Filter" -%}">
+          class="button button--outline flex whitespace-nowrap py-2.5 px-2 sm:px-4 leading-none">
           {%- render 'icons', icon: 'filter', icon_class: 'w-6' -%}
 
           {%- comment -%} Text label {%- endcomment -%}

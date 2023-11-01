@@ -1,0 +1,83 @@
+{%- comment -%}
+  Renders the filter options as collapsbile elements. This is a section setting that can be toggled off.
+
+  Accepts:
+    - label: shown as the filter label in the main menu. (required)
+    - summary_content: everything that should be in the sub-menu (required)
+    - filter_index: forloop.index from the collection.filters loop. (required)
+    - collapsible: {Boolean} (optional)
+{%- endcomment -%}
+
+{% comment %}
+  - fixed small screen layout
+  - remove current filters label when empty
+{% endcomment %}
+
+{%- liquid
+  unless collapsible
+    assign collapsible = settings.enable_filter_collapsibles
+  endunless
+
+  unless is_last
+    assign is_last = false
+  endunless
+
+  case settings.filter_display
+    when 'grid'
+      assign group_class = 'group/filter-grid'
+    when 'flex'
+      assign group_class = 'group/filter-flex'
+    else
+      assign group_class = 'group/filter-group'
+  endcase
+-%}
+
+<div
+  class="
+    group {{ group_class }} filter-group filter-group--{{ label | handleize }}  bg-white px-6 py-4
+    {% if is_last %}last{%- endif %}
+    {% if settings.filter_display == 'grid' -%}lg:ps-content-wrapper-padding
+    {% elsif settings.filter_display == 'flex' -%}md:relative md:flex-1 md:px-0{%- endif -%}
+  "
+  data-filter-option
+  data-index="{{ filter_index }}"
+  {% if collapsible %}
+    data-collapsible-group
+  {% endif %}>
+  {% comment %} The trigger {% endcomment %}
+  <button
+    type="button"
+    class="filter-group__title mb-4 flex w-full items-center gap-2 text-sm font-bold {% if settings.filter_display == 'flex' -%}md:mb-0{%- else -%}{%- endif -%}"
+    {% if collapsible %}
+      data-collapsible-trigger
+    {% endif %}>
+    {{- label -}}
+    {% if collapsible %}
+      <span class="collapsible__trigger-icons">
+        {%- render 'icons', icon: 'chevron-down', icon_class: 'w-3 block group-[.collapsible-is-open]:hidden' -%}
+        {%- render 'icons', icon: 'chevron-up', icon_class: 'w-3 hidden group-[.collapsible-is-open]:block' -%}
+      </span>
+    {% endif %}
+  </button>
+  {% comment %} The content {% endcomment %}
+  <div
+    class="
+      filter-group__target border-b bg-white py-4
+      group-[.collapsible-is-open]/filter-flex:md:absolute
+      group-[.collapsible-is-open.last]/filter-flex:md:end-0
+      group-[.collapsible-is-open.last]/filter-flex:md:start-auto
+      group-[.collapsible-is-open]/filter-flex:md:start-0
+      group-[.collapsible-is-open]/filter-flex:md:mt-[1px]
+      group-[.collapsible-is-open]/filter-flex:md:px-2
+      group-[.collapsible-is-open]/filter-flex:md:py-4
+      {% if settings.filter_display == 'flex' -%}md:top-full md:z-popover md:border-0 md:py-0 md:shadow-md{%- endif %}
+    "
+    {% if collapsible %}
+      data-collapsible-target
+    {% endif %}>
+    <div
+      class="group-[.filter-group]/filter-flex:md:w-0 group-[.collapsible-is-open]/filter-flex:md:min-w-[232px]">
+      {{- summary_content -}}
+    </div>
+  </div>
+</div>

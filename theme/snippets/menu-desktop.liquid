@@ -156,9 +156,19 @@
               {%- endfor -%}
             {%- endcapture -%}
 
-            {%- comment -%} Level 1 trigger with submenu {%- endcomment -%}
+            {%- comment -%} Level 1 trigger with submenu. Hover classes on the first menu item prevent the menu from closing unexpectedly when losing the pointer event {%- endcomment -%}
             <li
-              class="header__menu-item header__menu-item--multi level-1 group/menu-item"
+              class="
+                header__menu-item header__menu-item--multi level-1 group/menu-item static
+                first:hover:before:absolute
+                first:hover:before:start-0
+                first:hover:before:z-0
+                first:hover:before:block
+                first:hover:before:h-full
+                first:hover:before:w-full
+                first:hover:before:bg-transparent
+                first:hover:before:content-empty
+              "
               data-collapsible-group>
               <a
                 href="{{ level_1_url }}"

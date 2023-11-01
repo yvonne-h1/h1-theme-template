@@ -246,7 +246,7 @@
       {% if is_video %}
         data-video-content
       {%- endif -%}>
-      <div class="{{- class -}}__content relative mx-element-spacing mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-md md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
+      <div class="{{- class -}}__content relative mx-4 mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-md md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
         {% comment %} Heading {% endcomment %}
         {%- if object.settings.heading != blank -%}
           <{{ object.settings.heading_element }} class="{{- object.settings.heading_size }} {{ object.settings.heading_color -}}">
@@ -274,7 +274,7 @@
           endcase
         -%}
         {%- if button_1 or button_2 -%}
-          <div class="{{- class -}}__buttons mt-4 flex items-center gap-element-spacing first:mt-0 {{ buttons_alignment -}}">
+          <div class="{{- class -}}__buttons mt-4 flex items-center gap-4 first:mt-0 {{ buttons_alignment -}}">
             {%- for i in (1..2) -%}
               {%- liquid
                 assign play_button = 'button_' | append: i | append: '_play'

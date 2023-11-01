@@ -18,6 +18,9 @@ if (!customElements.get('collection-filters-form')) {
 
       this.onActiveFilterClick = this.onActiveFilterClick.bind(this);
 
+      this.displayFilters();
+
+      // Event listeners
       this.debouncedOnSubmit = debounce((event) => {
         this.onSubmitHandler(event);
       }, 500);
@@ -37,7 +40,31 @@ if (!customElements.get('collection-filters-form')) {
 
       window.addEventListener('popstate', this.onHistoryChange.bind(this));
 
-      this.displayFilters();
+      // Extra events for collapsibles (when filter is displayed as flex)
+      this.collapsibleComponent = this.querySelector('collapsible-component');
+      if (this.collapsibleComponent) this.collapsibles = Array.from(this.collapsibleComponent.querySelectorAll('[data-collapsible-group]'));
+
+      this.onBodyClick = this.handleBodyClick.bind(this);
+      this.onKeyUp = this.handleOnKeyUp.bind(this);
+
+      // listen for keyup when there are collapsibles so we can close opened collapsibles
+      if (this.collapsibleComponent) document.addEventListener('keyup', this.onKeyUp);
+      if (this.collapsibleComponent) document.body.addEventListener('click', this.onBodyClick);
+    }
+
+    handleOnKeyUp(event) {
+      const openedCollapsible = this.collapsibles.filter(collapsible => collapsible.classList.contains('collapsible-is-open'))[0];
+      if (event?.code.toUpperCase() === 'ESCAPE') this.collapsibleComponent.close(openedCollapsible);
+    }
+
+    /**
+     * handleBodyClick
+     * @param {Object} event
+     */
+    handleBodyClick(event) {
+      const target = event.target;
+      const openedCollapsible = this.collapsibles.filter(collapsible => collapsible.classList.contains('collapsible-is-open'))[0];
+      if (target !== this.collapsibleComponent && !target.closest('collapsible-component')) this.collapsibleComponent.close(openedCollapsible);
     }
 
     /**
@@ -308,6 +335,9 @@ if (!customElements.get('collection-filters-form')) {
       });
 
       this.renderActiveFilters(parsedHTML);
+
+      // rebind the event listeners for the collapsibles
+      if (this.collapsibleComponent) this.collapsibleComponent.construct();
     }
 
     /**

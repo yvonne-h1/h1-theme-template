@@ -28,7 +28,7 @@
     endif
   endfor
 
-  assign wrapper_classes = 'field field--checkbox mb-2'
+  assign wrapper_classes = 'field field--checkbox mb-2 last:mb-0'
   assign input_classes = 'field__checkbox field__checkbox--' | append: filter_label_handleized
   assign label_classes = 'field__checkbox-label'
 
@@ -76,7 +76,7 @@
     </div>
   {%- else -%}
     {% comment %} Render the filter in a list {% endcomment %}
-    <ul class="filter-options__list filter-options__list--{{ filter_label_handleized }} {{ list_classes }}" data-filter-option-list>
+    <ul class="filter-options__list filter-options__list--{{ filter_label_handleized }} {{ list_classes }}" data-filter-option-list {% if collapsible -%}tabindex="-1"{%- endif -%}>
       {%- for value in filter.values -%}
         {%- comment -%} Only render if there are items {%- endcomment -%}
         {%- if value.count > 0 -%}
@@ -143,4 +143,4 @@
   {%- endif -%}
 {%- endcapture -%}
 
-{%- render 'render-filter-group', summary_content: summary_content, label: filter.label, filter_index: filter_index, is_color: is_color -%}
+{%- render 'filter-group', summary_content: summary_content, label: filter.label, filter_index: filter_index, is_color: is_color, collapsible: collapsible, is_last: is_last -%}

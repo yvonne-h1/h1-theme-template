@@ -110,7 +110,6 @@ module.exports = {
         'mobile-menu': ['calc(100vh - 72px)', 'calc(100dvh - 72px)'],
       },
       spacing: {
-        'element-spacing': 'var(--element-spacing)',
         'content-wrapper-padding': 'var(--content-wrapper-padding)',
         'container-spacing': 'var(--container-spacing)',
       },
