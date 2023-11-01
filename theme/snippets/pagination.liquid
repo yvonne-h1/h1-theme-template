@@ -40,18 +40,22 @@
             <a
               href="{{ part.url }}{{ anchor }}"
               class="pagination__item {{ pagination_item_class }} text-inherit no-underline hover:text-primary states:no-underline"
-              aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
               data-pagination-trigger>
-              {{- part.title -}}
+              <span class="sr-only">{{ 'general.pagination.page' | t: number: part.title }}</span>
+              <span aria-hidden="true">
+                {{- part.title -}}
+              </span>
             </a>
           {%- else -%}
             {%- if part.title == paginate.current_page -%}
               <span
                 class="pagination__item pagination__item--current {{ pagination_item_class }} text-primary"
                 aria-current="page"
-                aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
                 data-pagination-trigger>
-                {{- part.title -}}
+                <span class="sr-only">{{ 'general.pagination.page' | t: number: part.title }}</span>
+                <span aria-hidden="true">
+                  {{- part.title -}}
+                </span>
               </span>
             {%- else -%}
               <span class="pagination__item {{ pagination_item_class }}">

@@ -52,11 +52,13 @@
                 {{- order_nr_str -}}:
                 <a
                   href="{{ order.customer_url }}"
-                  aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
                   class="font-bold no-underline states:no-underline"
                   tabindex="-1"
                 >
-                  {{ order.name }}
+                  <span class="sr-only">{{ 'customer.orders.order_number_link' | t: number: order.name }}</span>
+                  <span aria-hidden="true">
+                    {{ order.name }}
+                  </span>
                 </a>
                 {% comment %} Order date {% endcomment %}
                 <p class="text-sm italic">
@@ -117,10 +119,12 @@
               <div class="col-span-1 justify-center sm:col-span-4 md:col-span-2 md:col-start-11 md:row-start-1 md:self-center md:text-right">
                 <a
                   href="{{ order.customer_url }}"
-                  aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
                   class="button button--primary whitespace-nowrap"
                 >
-                  {{- view_order_str -}}
+                  <span class="sr-only">{{ 'customer.orders.order_number_link' | t: number: order.name }}</span>
+                  <span aria-hidden="true">
+                    {{ order.view_order_str }}
+                  </span>
                 </a>
               </div>
             </div>

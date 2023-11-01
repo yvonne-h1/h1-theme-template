@@ -72,7 +72,12 @@
             name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
             value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
         {%- endif -%}
-        <button type="submit" name="add" aria-label="Add" class="quick-shop__button quick-shop__button--form {{ button_class }}" data-add-to-cart-behavior="open_cart_drawer">
+        <button
+          type="submit"
+          name="add"
+          aria-label="{%- render 'render-translation', namespace: 'products.product.add_to_cart', fallback: 'Add to cart' -%}"
+          class="quick-shop__button quick-shop__button--form {{ button_class }}"
+          data-add-to-cart-behavior="open_cart_drawer">
           {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
           <span>
             {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}
@@ -146,14 +151,10 @@
               for="quick-shop__item-{{ variant.id }}"
               {% if color_hex and is_color %}
                 style="background-color: {{ color_hex }}"
-                title="{{ option_label }}"
-                aria-label="{{ option_label }}"
               {% endif %}>
-              {%- liquid
-                unless color_is_mapped
-                  echo option_label
-                endunless
-              -%}
+              <span class="sr-only">
+                {{- option_label -}}
+              </span>
             </label>
           </div>
         {%- endfor -%}

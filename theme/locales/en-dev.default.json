@@ -234,7 +234,11 @@
       "only_in_stock": "Only show in stock",
       "sort_by_label": "Sort by",
       "title": "Collection",
-      "use_fewer_filters_html": "Use fewer filters or <a href=\"{{ link }}\">clear all</a>"
+      "use_fewer_filters_html": "Use fewer filters or <a href=\"{{ link }}\">clear all</a>",
+      "view": {
+        "single": "Single",
+        "dounle": "Dounle"
+      }
     },
     "load_more": {
       "next": "Load more",

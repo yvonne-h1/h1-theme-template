@@ -91,7 +91,7 @@
         -%}
         <a
           href="{{ collection.url }}"
-          aria-label="Double"
+          aria-label="{%- render 'render-translation', namespace: "sections.collection_template.view", key: "Double", fallback: "Double" -%}"
           class="collection-layout__button block p-3 text-inherit hover:opacity-100 md:p-0 {{ collection_view_default_class }}"
           data-collection-view="">
           {%- render 'icons', icon: 'grid-double', icon_class: 'w-6' -%}
@@ -104,7 +104,7 @@
         -%}
         <a
           href="{{ collection.url }}?view=alt"
-          aria-label="Single"
+          aria-label="{%- render 'render-translation', namespace: "sections.collection_template.view", key: "Single", fallback: "Single" -%}"
           class="collection-layout__button block p-3 text-inherit hover:opacity-100 md:p-0 {{ collection_view_alt_class }}"
           data-collection-view="alt">
           {%- render 'icons', icon: 'grid-single', icon_class: 'w-6' -%}

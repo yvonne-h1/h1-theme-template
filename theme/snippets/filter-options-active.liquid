@@ -26,7 +26,7 @@
               class="{{ active_label_class }}"
               aria-label="{% render "render-translation", namespace: "accessibility", key: "remove_filter", title: value.label, fallback: "Remove filter" %}"
               data-filter-remove>
-              <span>
+              <span aria-hidden="true">
                 <span class="italic">{{ filter.label }}:</span>
                 {{ value.label }}
               </span>
@@ -43,7 +43,7 @@
                 class="{{ active_label_class }}"
                 aria-label="{% render "render-translation", namespace: "accessibility", key: "remove_filter", title: value.label, fallback: "Remove filter" %}"
                 data-filter-remove>
-                <span>
+                <span aria-hidden="true">
                   <span class="italic">{{ filter.label }}:</span>
                   {% liquid
                     if filter.min_value.value
