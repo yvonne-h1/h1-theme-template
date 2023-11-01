@@ -47,7 +47,7 @@
         endif
       endfor
 
-      if option.values.size > 1 and has_only_single_option
+      if option.values.size > 1 or is_color and color_options_metafield != blank
         assign has_only_single_option = false
       endif
 
@@ -90,15 +90,11 @@
               endfor
             endif
 
-            if option.selected_value == value
-              assign option_available_class = option_available_class | append: ' pointer-events-none'
-            endif
-
             assign value_text = value | capitalize
           -%}
 
           {%- capture label -%}
-            <label class="option__label option__label--{{ option_name }} {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
+            <label class="option__label option__label--{{ option_name }} {{ option_available_class }} has:" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
               {{ value_text }}
             </label>
           {%- endcapture -%}
@@ -136,7 +132,7 @@
                 endif
               -%}
 
-              <label class="block cursor-pointer {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
+              <label class="option__label option__label--image block cursor-pointer {{ option_available_class }}" for="{{ product.id }}-{{ option_name }}-{{ index }}-radio" data-option-label>
                 {{ input }}
                 {%- render 'responsive-image',
                   image_object: image_obj,

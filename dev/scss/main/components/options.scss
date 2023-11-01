@@ -59,6 +59,12 @@
         }
       }
     }
+    &__label--image {
+      @apply rounded-md border-none p-0;
+      &:has(input:checked) {
+        @apply pointer-events-none;
+      }
+    }
     &__swatch {
       @apply aspect-square
       h-full
