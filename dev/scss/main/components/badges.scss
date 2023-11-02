@@ -40,8 +40,8 @@
       --product-badge-text: theme('colors.white');
     }
     &--pre-order {
-      --product-badge-background: theme('colors.accent.DEFAULT');
-      --product-badge-text: theme('colors.accent.text');
+      --product-badge-background: theme('colors.accent.300');
+      --product-badge-text: theme('colors.black');
     }
     &--sale {
       --product-badge-background: theme('colors.success');

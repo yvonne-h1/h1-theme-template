@@ -76,7 +76,7 @@
     </div>
   {%- else -%}
     {% comment %} Render the filter in a list {% endcomment %}
-    <ul class="filter-options__list filter-options__list--{{ filter_label_handleized }} {{ list_classes }}" data-filter-option-list {% if collapsible -%}tabindex="-1"{%- endif -%}>
+    <ul class="filter-options__list filter-options__list--{{ filter_label_handleized }} {{ list_classes }}" data-filter-option-list>
       {%- for value in filter.values -%}
         {%- comment -%} Only render if there are items {%- endcomment -%}
         {%- if value.count > 0 -%}

@@ -47,7 +47,7 @@
   {% comment %} The trigger {% endcomment %}
   <button
     type="button"
-    class="filter-group__title mb-4 flex w-full items-center gap-2 text-sm font-bold {% if settings.filter_display == 'flex' -%}md:mb-0{%- else -%}{%- endif -%}"
+    class="filter-group__title mb-4 flex w-full items-center gap-2 text-sm font-bold {% if settings.filter_display == 'flex' -%}states:text-primary md:mb-0{%- endif -%}"
     {% if collapsible %}
       data-collapsible-trigger
     {% endif %}>
@@ -63,6 +63,8 @@
   <div
     class="
       filter-group__target border-b bg-white py-4
+      group-[.filter-group.collapsible-is-open]/filter-flex:md:visible
+      group-[.filter-group]/filter-flex:md:invisible
       group-[.collapsible-is-open]/filter-flex:md:absolute
       group-[.collapsible-is-open.last]/filter-flex:md:end-0
       group-[.collapsible-is-open.last]/filter-flex:md:start-auto
@@ -73,10 +75,10 @@
       {% if settings.filter_display == 'flex' -%}md:top-full md:z-popover md:border-0 md:py-0 md:shadow-md{%- endif %}
     "
     {% if collapsible %}
-      data-collapsible-target
+      data-collapsible-target tabindex="-1"
     {% endif %}>
     <div
-      class="group-[.filter-group]/filter-flex:md:w-0 group-[.collapsible-is-open]/filter-flex:md:min-w-[232px]">
+      class="group-[.filter-group]/filter-flex:md:w-0 group-[.collapsible-is-open]/filter-flex:md:min-w-[216px]">
       {{- summary_content -}}
     </div>
   </div>
