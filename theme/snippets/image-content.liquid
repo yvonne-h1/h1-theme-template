@@ -124,15 +124,6 @@
   endif
 -%}
 
-{%- if is_video -%}
-  <style>
-    .video-element__video iframe {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-{%- endif -%}
-
 {% comment %} Banner wrapper {% endcomment %}
 <div
   class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% if object.settings.container_width == 'container--full' %}w-screen{%- else -%}w-full min-w-full{%- endif -%}"

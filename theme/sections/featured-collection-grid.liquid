@@ -18,6 +18,11 @@
       assign image_max_width = 360
       assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
   endcase
+
+  assign has_color_scheme = false
+  if section.settings.color_scheme != blank
+    assign has_color_scheme = true
+  endif
 -%}
 
 {%- comment -%} Capture content {%- endcomment -%}
@@ -77,12 +82,12 @@
 {%- liquid
   # Container class
   assign container_class = 'featured-collection-grid' | append: ' ' | append: section.settings.container_width
-  if section.settings.color_scheme != blank
-    assign container_class = container_class | append: ' group/color-scheme container--background my-0 ' | append: section.settings.color_scheme
-  endif
-
-  # Title Class
   assign title_class = section.settings.heading_size | append: ' ' | append: section.settings.heading_align
+
+  if has_color_scheme
+    assign container_class = container_class | append: ' group/color-scheme container--background my-0 flex flex-col gap-base ' | append: section.settings.color_scheme
+    assign title_class = title_class | append: ' mb-0'
+  endif
 -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
@@ -91,6 +96,7 @@
   title_tag: section.settings.heading_element,
   title_class: title_class,
   title: section.settings.heading,
+  header_class: header_class,
   content: container_content,
   footer_class: section.settings.button_align,
   footer_content: container_footer

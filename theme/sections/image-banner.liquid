@@ -43,10 +43,14 @@
   endif
 -%}
 
-{%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', content: container_content, class: container_class -%}
-
 {%- if has_video -%}
+  {%- style -%}
+    .video-element__video iframe {
+      width: 100%;
+      height: 100%;
+    }
+  {%- endstyle -%}
+
   {% comment %} Render javascript for videos {% endcomment %}
   {%- if is_youtube -%}
     <script src="{{ 'custom-video-youtube.js' | asset_url }}" type="module"></script>
@@ -61,6 +65,9 @@
     <script src="{{ 'custom-video.js' | asset_url }}" type="module"></script>
   {%- endif -%}
 {%- endif -%}
+
+{%- comment -%} Render the content {%- endcomment -%}
+{%- render 'render-container-content', content: container_content, class: container_class -%}
 
 {% schema %}
   {
