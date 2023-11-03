@@ -27,8 +27,8 @@
   data-track-add-to-cart-image-url="https:{{ product_details | image_url: width: 1000 }}"
   data-track-add-to-cart-url="{{ shop.secure_url -}}{{- product_details.url }}"
   data-track-add-to-cart-brand={{- product_details.vendor | json }}
-  data-track-add-to-cart-price={{- product_details.price  | money_with_currency | json }}
-  data-track-add-to-cart-compare-at-price={{ product_details.compare_at_price_max  | money_with_currency | json }}
+  data-track-add-to-cart-price={{- product_details.price | money_with_currency | json }}
+  data-track-add-to-cart-compare-at-price={{ product_details.compare_at_price_max | money_with_currency | json }}
 {% endif %}
 
 {%- if render_script_tags -%}
@@ -44,8 +44,8 @@
         ImageURL: "https:{{ product.featured_image.src | image_url: width: 1024 }}",
         URL: "{{ canonical_url }}",
         Locale: "{{ request.locale.iso_code | upcase }}",
-        Price: {{ product.price  | money_with_currency | json }},
-        CompareAtPrice: {{ product.compare_at_price_max  | money_with_currency | json }}
+        Price: {{ product.price | money_with_currency | json }},
+        CompareAtPrice: {{ product.compare_at_price_max | money_with_currency | json }}
       };
       _learnq.push(['track', 'Viewed product', itemDetails]);
       _learnq.push(['trackVieweditemDetails', {

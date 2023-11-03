@@ -10,7 +10,7 @@
 
       {% if section.blocks.size > 0 %}
         <ul class="social-sharing__list mt-4 flex space-x-4">
-          {% for block in section.blocks  %}
+          {% for block in section.blocks %}
             <li class="social-sharing__item duration-300 hover:scale-110">
               {%- liquid
                 assign platform = block.settings.platform | downcase
@@ -44,7 +44,7 @@
                     p-2
                   {%- when 'w-10' -%}
                     p-1
-                {% endcase%}
+                {% endcase %}
                 " {% if block.settings.icon_color != blank %}style="color:{{ block.settings.icon_color }};"{%- endif -%}>
                 {% render 'icons-social', icon: icon, class: icon_class %}
                 <p class="sr-only">

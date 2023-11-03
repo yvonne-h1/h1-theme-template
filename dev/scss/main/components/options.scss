@@ -82,17 +82,20 @@
     &__input:checked + &__label,
     &__label--checked,
     &__swatch--checked {
-      @apply pointer-events-none
-      border-transparent
+      @apply border-transparent
       bg-primary-600
       text-primary-text
       outline
       outline-1
       outline-offset-[3px]
       outline-black;
+
+      .template-product & {
+        @apply pointer-events-none;
+      }
       &:hover,
       &:focus-visible {
-        @apply bg-primary-300 outline-none;
+        @apply bg-primary-700 outline-none;
       }
     }
     // .option__input
@@ -101,7 +104,9 @@
       &:disabled {
         + .option__swatch,
         + .option__label {
-          @apply pointer-events-none;
+          .template-product & {
+            @apply pointer-events-none;
+          }
         }
       }
       &:focus-visible {

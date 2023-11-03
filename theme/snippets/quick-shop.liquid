@@ -69,7 +69,7 @@
         -%}
           <input
             type="hidden"
-            name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
+            name="properties[{%- render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order' -%}]"
             value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
         {%- endif -%}
         <button
@@ -151,7 +151,10 @@
               {% if color_hex and is_color %}
                 style="background-color: {{ color_hex }}"
               {% endif %}>
-              <span class="sr-only">
+              <span
+                {% if color_is_mapped -%}
+                  class="sr-only"
+                {%- endif -%}>
                 {{- option_label -}}
               </span>
             </label>
@@ -174,7 +177,7 @@
           -%}
             <input
               type="hidden"
-              name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]"
+              name="properties[{%- render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order' -%}]"
               value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
           {%- endif -%}
 

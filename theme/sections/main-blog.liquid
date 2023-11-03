@@ -6,7 +6,7 @@
 
   assign tag_nav = ''
 
-  # Blog tags and current (if it's the case). Tags should have prefix of 'category:'. Won't render if capture is empty.
+  # Blog tags and current (if it's the case). Tags should have prefix of 'category: '. Won't render if capture is empty.
   for tag in blog.all_tags
     if tag contains 'category:' or tag contains 'Category:'
       assign article_category = tag | downcase | remove: 'category:'

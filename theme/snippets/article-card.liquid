@@ -83,13 +83,15 @@
   </p>
 {%- endcapture -%}
 
-{%- capture article_date -%}
-  {{- article.published_at | time_tag: format: 'day_month_year' -}}
-{%- endcapture -%}
+{%- liquid
+  capture article_date
+    echo article.published_at | time_tag: format: 'day_month_year'
+  endcapture
 
-{%- capture article_author -%}
-  {%- render 'render-translation',  namespace: 'blogs.article', key: 'written_by', author: article.author, fallback: article.author -%}
-{%- endcapture -%}
+  capture article_author
+    render 'render-translation', namespace: 'blogs.article', key: 'written_by', author: article.author, fallback: article.author
+  endcapture
+-%}
 
 {%- comment -%} Capture tags, don't show category for highlighted items {%- endcomment -%}
 {%- capture tag_categories -%}

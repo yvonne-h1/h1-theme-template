@@ -99,10 +99,10 @@
       {
       "@type": "Offer",
       "name": {{ product.title | json }},
-      "availability": "{%- if product.available -%} https://schema.org/InStock {%- else -%} https://schema.org/OutOfStock {%-endif -%}",
+      "availability": "{%- if product.available -%} https://schema.org/InStock {%- else -%} https://schema.org/OutOfStock {%- endif -%}",
       "price": {{ product.price | divided_by: 100.0 | json }},
       "priceCurrency": {{ cart.currency.iso_code | json }},
-      "priceValidUntil": "{{ 'now' | date: '%s' | plus: days_product_price_valid_until | date: '%Y-%m-%d'}}",
+      "priceValidUntil": "{{ 'now' | date: '%s' | plus: days_product_price_valid_until | date: '%Y-%m-%d' }}",
       {% if product.first_available_variant.sku != blank -%}
         "sku": {{ product.first_available_variant.sku | json }},
       {%- endif %}

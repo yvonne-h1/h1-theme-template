@@ -236,13 +236,15 @@
               {% endif -%}
             "
             data-swiper-slide-index="{{ forloop.index }}">
-            {%- if render_products -%}
-              {%- render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3' -%}
-            {%- elsif render_blog_articles -%}
-              {%- render 'article-card', article: item, image_max_width: image_max_width, image_sizes: image_sizes -%}
-            {%- elsif render_product_cards -%}
-              {{ item }}
-            {%- endif -%}
+            {%- liquid
+              if render_products
+                render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3'
+              elsif render_blog_articles
+                render 'article-card', article: item, image_max_width: image_max_width, image_sizes: image_sizes
+              elsif render_product_cards
+                echo item
+              endif
+            -%}
           </div>
 
           {%- liquid

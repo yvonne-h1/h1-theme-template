@@ -19,7 +19,7 @@
     "stpublish": "shopify theme publish",
     "stpull": "env-cmd -r shops.js -e shop, shopify theme pull",
     "stdelete": "shopify theme delete",
-    "stcheck": "shopify theme check",
+    "stcheck": "shopify theme check --auto-correct",
     "stpackage": "shopify theme package --path=theme",
     "tailwind:config_viewer": "npx tailwind-config-viewer",
     "clean_git_ignore": "git rm -r --cached .",

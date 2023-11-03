@@ -35,11 +35,11 @@
       <div class="order__billing-address">
 
         <h2 class="h5 mb-6">
-          {%-render "render-translation",namespace: "customer.order",key: "billing_address",fallback: "Billing address"-%}
+          {%- render "render-translation", namespace: "customer.order", key: "billing_address", fallback: "Billing address" -%}
         </h2>
 
         <p class="text-md mb-2">
-          {%-render "render-translation",namespace: "customer.order",key: "payment_status",fallback: "Payment Status"-%}: {{ order.financial_status_label }}
+          {%- render "render-translation", namespace: "customer.order", key: "payment_status", fallback: "Payment Status" -%}: {{ order.financial_status_label }}
         </p>
         <address class="flex flex-col gap-2 font-body text-sm">
           {{- order.billing_address | format_address -}}
@@ -49,10 +49,10 @@
       {%- comment -%} Shipping {%- endcomment -%}
       <div class="order__shipping-address">
         <h2 class="h5 mb-6">
-          {%-render "render-translation",namespace: "customer.order",key: "shipping_address",fallback: "Shipping address"-%}
+          {%- render "render-translation", namespace: "customer.order", key: "shipping_address", fallback: "Shipping address" -%}
         </h2>
         <p class="text-md mb-2">
-          {%-render "render-translation",namespace: "customer.order",key: "fulfillment_status",fallback: "Fulfillment Status"-%}: {{ order.fulfillment_status_label }}
+          {%- render "render-translation", namespace: "customer.order", key: "fulfillment_status", fallback: "Fulfillment Status" -%}: {{ order.fulfillment_status_label }}
         </p>
 
         <address class="flex flex-col gap-2 font-body text-sm">

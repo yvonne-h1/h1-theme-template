@@ -26,24 +26,26 @@
 
   {%- for color_option in color_names -%}
     {% comment %} For the colors to render, we need to render the class name without using liquid {% endcomment %}
-    {%- case color_option -%}
-      {%- when 'primary' -%}
-        {%- assign bg_color = 'bg-primary' -%}
-        {%- assign text_color = 'text-primary-text' -%}
-      {%- when 'secondary' -%}
-        {%- assign bg_color = 'bg-secondary' -%}
-        {%- assign text_color = 'text-secondary-text' -%}
-      {%- when 'accent' -%}
-        {%- assign bg_color = 'bg-accent' -%}
-        {%- assign text_color = 'text-accent-text' -%}
-      {%- when 'gray' -%}
-        {%- assign bg_color = 'bg-gray' -%}
-        {%- assign text_color = 'text-gray-text' -%}
-    {%- endcase -%}
+    {%- liquid
+      case color_option
+        when 'primary'
+          assign bg_color = 'bg-primary'
+          assign text_color = 'text-primary-text'
+        when 'secondary'
+          assign bg_color = 'bg-secondary'
+          assign text_color = 'text-secondary-text'
+        when 'accent'
+          assign bg_color = 'bg-accent'
+          assign text_color = 'text-accent-text'
+        when 'gray'
+          assign bg_color = 'bg-gray'
+          assign text_color = 'text-gray-text'
+      endcase
+    -%}
     <div class="{{ color_wrapper_class }}">
       <div
         class="{{ circle_class_full }} {{ bg_color }} {{ text_color }}"
-        title="{{ color_option | capitalize}}">
+        title="{{ color_option | capitalize }}">
         <p>{{ color_option | capitalize }}</p>
       </div>
     </div>

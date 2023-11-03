@@ -92,7 +92,7 @@
             </label>
           {%- endcapture -%}
 
-          <li class=" list-menu__item {{ wrapper_classes }} {% unless render_as_swatch%}p-[1px]{%- endunless -%}">
+          <li class=" list-menu__item {{ wrapper_classes }} {% unless render_as_swatch %}p-[1px]{%- endunless -%}">
             <input class="{{ input_classes }} sr-only"
               type="checkbox"
               name="{{ value.param_name }}"

@@ -4,7 +4,7 @@
 root: theme
 
 SpaceInsideBraces:
-  enabled: false
+  enabled: true
 
 LiquidTag:
   enabled: true
@@ -12,10 +12,14 @@ LiquidTag:
 
 NestedSnippet:
   enabled: true
-  max_nesting_level: 6
+  max_nesting_level: 10
 
 TemplateLength:
   max_length: 750
 
 SchemaJsonFormat:
   enabled: false
+
+UndefinedObject:
+  enabled: true
+  exclude_snippets: true

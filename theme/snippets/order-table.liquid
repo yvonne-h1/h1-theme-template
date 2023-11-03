@@ -290,7 +290,7 @@
           role="cell"
           data-label="{%- render "render-translation", namespace: "customer.order", key: "discount", fallback: "Discount" -%}">
           <p>
-            <span>-{{ discount_application.total_allocated_amount  | money_with_currency }}</span>
+            <span>-{{ discount_application.total_allocated_amount | money_with_currency }}</span>
             <span class="cart-discount">
               {{- discount_application.title -}}
             </span>

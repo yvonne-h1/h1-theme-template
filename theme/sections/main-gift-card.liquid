@@ -14,7 +14,7 @@
   </h1>
 
   <h2 class="h4 break-words">
-    {{ gift_card.initial_value  | money_with_currency }}
+    {{ gift_card.initial_value | money_with_currency }}
   </h2>
 
   {%- if gift_card.enabled == false or gift_card.expired -%}
@@ -23,7 +23,7 @@
     </p>
   {%- endif -%}
 
-  {%- assign gift_card_balance = gift_card.balance  | money_with_currency -%}
+  {%- assign gift_card_balance = gift_card.balance | money_with_currency -%}
   {%- if gift_card.balance != gift_card.initial_value -%}
     <p class="h4 break-words">
       {{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}

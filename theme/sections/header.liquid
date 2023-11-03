@@ -66,7 +66,7 @@
 
 <header-component
   id="header"
-  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.desktop-submenu-is-open]/body:duration-0 {{ sticky_header_classes }} {{ section.settings.color_scheme }} {% if is_transparent and template.name == 'index' %}header-transparent header-transparent-text--{{ section.settings.is_transparent_text_color}}{%- endif -%}"
+  class="header z-20 block transition-all duration-300 group-[.header-hidden]/body:-translate-y-full group-[.desktop-submenu-is-open]/body:duration-0 {{ sticky_header_classes }} {{ section.settings.color_scheme }} {% if is_transparent and template.name == 'index' %}header-transparent header-transparent-text--{{ section.settings.is_transparent_text_color }}{%- endif -%}"
   data-header>
   <div class="header-nav content-wrapper grid grid-cols-12 items-center px-content-wrapper-padding gap-base">
     {%- comment -%} Toggle for mobile navigation {%- endcomment -%}

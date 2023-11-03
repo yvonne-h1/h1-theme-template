@@ -55,7 +55,6 @@
 
   # Global assigns
   assign shopify_max = 4472
-  assign height = image_object.height
   assign width = image_object.width
 
   unless aspect_ratio
@@ -74,11 +73,8 @@
   assign is_portrait = false
 
   if aspect_width == aspect_height
-    assign is_square = true
   elsif aspect_width > aspect_height
-    assign is_landscape = true
   elsif aspect_height > aspect_width
-    assign is_portrait = true
   endif
 
   # Shopify adds lazy by default, so only overwrite when you pass the lazy parameter, like in sliders with multiple slides

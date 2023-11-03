@@ -120,11 +120,9 @@
                 assign option_pos = option.position | prepend: 'option'
                 assign variant_image = product.variants | where: option_pos, value | first
                 assign image_obj = variant_image.featured_image
-                assign color_is_product_variant = true
                 assign image_class = 'rounded-md transition'
 
                 if image_obj == blank
-                  assign color_is_product_variant = false
                   assign image_class = image_class | append: ' border border-black'
                   assign image_obj = product.featured_image
                 else

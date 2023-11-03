@@ -130,7 +130,7 @@
                     {{ cart.total_price | money_with_currency }}
                     {% if cart.total_price != cart.original_total_price %}
                       <s class="price--compare">{{- cart.original_total_price | money_with_currency -}}</s>
-                    {% endif   %}
+                    {% endif %}
                   </p>
                 </div>
 
@@ -217,31 +217,16 @@
   {% comment %} Always render the wrapper so we can adjust the content {% endcomment %}
   <div id="cartRelated" data-id="{{ section.id }}">
     <div class="cart-related-items">
-      {%- if object_array != blank -%}
-        {%- capture related_container_content -%}
-          {%- render 'swiper-content',
-            object_array: object_array,
-            swiper_indication: section.settings.swiper_indication,
-            swiper_navigation: section.settings.swiper_navigation,
-            swiper_autoplay: section.settings.swiper_autoplay,
-            swiper_autoplay_delay: section.settings.swiper_autoplay_delay,
-            render_product_cards: true,
-            max_count: 8,
-            id: section.id,
-            index_on_page: section.index
-          -%}
-        {%- endcapture -%}
+      {%- liquid
+        if object_array != blank
+          capture related_container_content
+            render 'swiper-content', object_array: object_array, swiper_indication: section.settings.swiper_indication, swiper_navigation: section.settings.swiper_navigation, swiper_autoplay: section.settings.swiper_autoplay, swiper_autoplay_delay: section.settings.swiper_autoplay_delay, render_product_cards: true, max_count: 8, id: section.id, index_on_page: section.index
+          endcapture
 
-        {%- comment -%} Render the content {%- endcomment -%}
-        {%-
-          render 'render-container-content',
-          class: container_class,
-          title_class: title_class,
-          title: section.settings.related_title,
-          content: related_container_content,
-          content_class: 'p-0',
-        -%}
-      {%- endif -%}
+          # Render the content
+          render 'render-container-content', class: container_class, title_class: title_class, title: section.settings.related_title, content: related_container_content, content_class: 'p-0'
+        endif
+      -%}
     </div>
   </div>
 {%- endif -%}

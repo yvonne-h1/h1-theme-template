@@ -1,14 +1,4 @@
 {%- liquid
-  # Styles based on swiper_indication setting
-  case section.settings.swiper_indication
-    when 'pagination'
-      assign swiper_indication_class = ' swiper-pagination-active'
-    when 'scrollbar'
-      assign swiper_indication_class = ' swiper-scrollbar-active'
-    else
-      assign swiper_indication_class = ''
-  endcase
-
   if recommendations.performed? and recommendations.products_count > 0
     assign object_array = recommendations.products
   else

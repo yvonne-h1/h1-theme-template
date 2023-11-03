@@ -1,7 +1,7 @@
 {%- capture container_content -%}
 
   {% comment %} Search type navigation {% endcomment %}
-  {%-if search.performed -%}
+  {%- if search.performed -%}
     <search-types class="mb-10">
       <div id="search-types">
         {%- render 'search-types', search: search -%}
@@ -29,7 +29,7 @@
     show_shadow: false
   -%}
 
-  {%-if search.performed -%}
+  {%- if search.performed -%}
     <hr class="bg-gray-100">
   {%- endif -%}
 

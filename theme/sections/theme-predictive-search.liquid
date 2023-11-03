@@ -28,21 +28,17 @@
       </div>
 
       <div class="col basis-1/3">
-        {% comment %} Articles {% endcomment %}
-        {%- if predictive_search.resources.articles.size > 0 and settings.predictive_search_articles -%}
-          {%- render 'predictive-search-item',
-            type: 'article',
-            results_array: predictive_search.resources.articles
-          -%}
-        {%- endif -%}
+        {%- liquid
+          # Articles
+          if predictive_search.resources.articles.size > 0 and settings.predictive_search_articles
+            render 'predictive-search-item', type: 'article', results_array: predictive_search.resources.articles
+          endif
 
-        {% comment %} Pages {% endcomment %}
-        {%- if predictive_search.resources.pages.size > 0 and settings.predictive_search_pages -%}
-          {%- render 'predictive-search-item',
-            type: 'page',
-            results_array: predictive_search.resources.pages
-          -%}
-        {%- endif -%}
+          # Pages
+          if predictive_search.resources.pages.size > 0 and settings.predictive_search_pages
+            render 'predictive-search-item', type: 'page', results_array: predictive_search.resources.pages
+          endif
+        -%}
       </div>
     </div>
   {%- endcapture -%}
@@ -56,8 +52,10 @@
           {% comment %} 'All results' link {% endcomment %}
           <div class="predictive-search__group predictive-search__group--footer mb-4 mt-4 text-center">
             <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&options[prefix]=last" class="button button--primary no-touch:button--sm touch:button-lg">
-              {%- render "render-translation", namespace: "general.predictive_search", key: "button_submit_label", fallback: 'Search for "{{ html }}".', html: predictive_search.terms -%}
-              {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
+              {%- liquid
+                render 'render-translation', namespace: 'general.predictive_search', key: 'button_submit_label', fallback: 'Search for "echo html ".', html: predictive_search.terms
+                render 'icons', icon: 'arrow', icon_class: 'w-3'
+              -%}
             </a>
           </div>
         {%- endif -%}

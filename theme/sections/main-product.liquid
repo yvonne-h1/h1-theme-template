@@ -252,7 +252,7 @@
 
                     {% comment %} Pre-orders {% endcomment %}
                     {%- if is_preorder -%}
-                      <input type="hidden" name="properties[{%-render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order'-%}]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
+                      <input type="hidden" name="properties[{%- render 'render-translation', namespace: 'products.product', key: 'pre-order', fallback: 'Pre-order' -%}]" value="{% render 'render-translation', namespace: 'products.product.yes', fallback: 'Yes' %}">
                     {% endif %}
 
                     {%- comment -%} Show variants in dropdowns for the fixed 'add to cart'{%- endcomment -%}
@@ -283,7 +283,7 @@
                                 {%- if variant.available == false %} -
                                   {%- render 'render-translation', namespace: "products.product", key: "sold_out", fallback: "Sold out" -%}
                                 {% endif %}
-                                - {{ variant.price  | money_with_currency | strip_html }}
+                                - {{ variant.price | money_with_currency | strip_html }}
                               </option>
                             {%- endfor -%}
                           </select>
