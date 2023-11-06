@@ -205,9 +205,11 @@
         {%- elsif video_type == 'vimeo' -%}
           <div id="vimeo-player-{{ video_id }}-{{ id }}" class="video-element__video--vimeo {{ video_class }}"></div>
         {%- else -%}
-          {% comment %} Render MP4 video {% endcomment %}
-          {%- assign video_class = video_class | append: ' video-element__video--mp4 object-cover' -%}
-          {{ object.settings.video_mp4 | video_tag: image_size: '1x', autoplay: autoplay, muted: autoplay, loop: loop, controls: controls, class: video_class }}
+          {%- liquid
+            # Render MP4 video
+            assign video_class = video_class | append: ' video-element__video--mp4 object-cover'
+            echo object.settings.video_mp4 | video_tag: image_size: '1x', autoplay: autoplay, muted: autoplay, loop: loop, controls: controls, class: video_class
+          -%}
         {%- endif -%}
       </div>
     {%- else -%}

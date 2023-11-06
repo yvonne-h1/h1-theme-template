@@ -146,7 +146,6 @@ class SwiperSlider extends HTMLElement {
 
       // when the swiper contains a video, pause it when it's swiped out and play it if it's swiped into view and has autoplay enabled
       this.swiperInstance.on('slideChangeTransitionEnd', (swiper) => {
-        console.log('slideChangeTransitionEnd');
         const previousSlide = swiper.slides[swiper.previousIndex];
         const previousSlideType = previousSlide.dataset.swiperVideoType;
         const previousVideo = previousSlide.querySelector(previousSlideType);
@@ -156,7 +155,7 @@ class SwiperSlider extends HTMLElement {
         const currentVideo = currentSlide.querySelector(currentSlideType);
 
         if (previousVideo && !this.getPausedState(previousVideo, previousSlideType)) previousVideo.pauseVideo();
-        if (currentVideo && currentVideo.options.autoplay && this.getPausedState(currentVideo, currentSlideType) && currentVideo.dataset.videoIsPaused !== 'true') currentVideo.playVideo();
+        if (currentVideo && currentVideo.options.autoplay && !this.getPausedState(currentVideo, currentSlideType) && currentVideo.dataset.videoIsPaused !== 'true') currentVideo.playVideo();
       });
     }
 
@@ -176,7 +175,7 @@ class SwiperSlider extends HTMLElement {
   getPausedState(video, type) {
     switch (type) {
     case 'youtube-video':
-      return video.player.getPlayerState() !== 1;
+      return video.getPausedState();
     case 'vimeo-video':
       return video.paused;
     case 'custom-video':

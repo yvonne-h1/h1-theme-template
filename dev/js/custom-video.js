@@ -32,11 +32,6 @@ class CustomVideo extends HTMLElement {
     this.videoTriggers = this.querySelectorAll('[data-video-trigger]');
     this.videoContent = this.querySelector('[data-video-content]');
 
-    this.videoElement.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      this.loadVideo();
-    });
     // video and button click
     this.videoTriggers.forEach(trigger => trigger.addEventListener('click', this.loadVideo.bind(this)));
     this.videoElement.addEventListener('click', this.loadVideo.bind(this));
