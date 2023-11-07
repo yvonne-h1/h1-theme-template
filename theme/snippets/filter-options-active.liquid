@@ -14,7 +14,7 @@
       {% if settings.filter_display == 'grid' -%}lg:ps-content-wrapper-padding
       {%- elsif settings.filter_display == 'flex' -%}md:flex md:items-center md:px-0 md:py-0 md:gap-base{%- endif %}
     ">
-    <p class="active-filters__label font-bold {% if settings.filter_display == 'flex' -%}md:mb-0{%- endif -%}">
+    <p class="active-filters__label font-bold {% if settings.filter_display == 'flex' -%}whitespace-nowrap md:mb-0{%- endif -%}">
       {%- render 'render-translation', namespace: 'products.sections.collection_template', key: 'current_filters', fallback: 'Current filters' -%}
     </p>
     <div class="active-filters__active-items flex flex-wrap gap-2 border-b pb-4 {% if settings.filter_display == 'flex' -%}md:border-0 md:py-4{%- endif -%}" data-filter-active-options-list>

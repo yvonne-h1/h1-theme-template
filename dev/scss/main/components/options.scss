@@ -59,10 +59,22 @@
         }
       }
     }
+    // .option__label--image
     &__label--image {
       @apply rounded-md border-none p-0;
       &:has(input:checked) {
         @apply pointer-events-none;
+      }
+    }
+    // .option__label--color
+    &__label--color {
+      &:hover,
+      &:focus-visible {
+        @apply scale-105
+        outline
+        outline-1
+        outline-offset-[2px]
+        outline-black;
       }
     }
     &__swatch {

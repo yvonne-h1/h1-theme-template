@@ -181,7 +181,7 @@
                 {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]/menu-item:rotate-180' -%}
               </a>
               <div
-                class="header__inner-container {% if submenu_layout == 'multi' and images != blank %}inset-x-0 w-full ps-10{% endif %} absolute top-full hidden group-[.collapsible-is-open]/menu-item:block {{ section.settings.color_scheme }}"
+                class="header__inner-container {% if submenu_layout == 'multi' and images != blank %}inset-x-0 w-full ps-10{% endif %} invisible absolute top-full group-[.collapsible-is-open]/menu-item:visible {{ section.settings.color_scheme }}"
                 data-collapsible-target
                 tabindex="-1">
                 <div class="header__navigation-container content-wrapper p-4 {% if images != blank -%}grid grid-cols-12 gap-x-4 gap-y-0{%- endif -%}">

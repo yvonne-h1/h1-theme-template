@@ -23,7 +23,7 @@
       bottom-0
       start-0
       top-0
-      z-offcanvas
+      z-modal
       flex
       h-full
       w-full
@@ -60,7 +60,7 @@
           <button
             type="button"
             aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'toggle_menu_drawer', fallback: 'Toggle menu drawer' -%}"
-            class="mobile-menu__toggle-button button relative cursor-pointer rounded-full border-0 p-3 bg-transparent">
+            class="mobile-menu__toggle-button button relative cursor-pointer rounded-full border-0 p-3">
             {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
           </button>
         </class-toggle-component>
@@ -329,7 +329,7 @@
 
   {% comment %} Backdrop {% endcomment %}
   <class-toggle-component
-    class=" mobile-menu__backdrop backdrop group-[.mobile-menu-is-open]/body:backdrop--active z-offcanvas-backdrop lg:hidden"
+    class=" mobile-menu__backdrop backdrop group-[.mobile-menu-is-open]/body:backdrop--active z-modal-backdrop lg:hidden"
     tabindex="-1"
     aria-hidden="true"
     data-options='

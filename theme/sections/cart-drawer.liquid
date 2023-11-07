@@ -9,7 +9,7 @@
     '>
     {%- comment -%} Backdrop {%- endcomment -%}
     <class-toggle-component
-      class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-offcanvas-backdrop"
+      class="cart-drawer__backdrop backdrop group-[.cart-drawer-is-open]/body:backdrop--active z-modal-backdrop"
       tabindex="-1"
       aria-hidden="true"
       data-options='
@@ -23,7 +23,7 @@
       id="cartDrawer"
       data-id="{{ section.id }}"
       class="
-        fixed bottom-0 end-0 top-0 z-offcanvas flex h-full w-full max-w-screen translate-x-full flex-col
+        fixed bottom-0 end-0 top-0 z-modal flex h-full w-full max-w-screen translate-x-full flex-col
         overflow-x-hidden
         text-text-default
         opacity-0
