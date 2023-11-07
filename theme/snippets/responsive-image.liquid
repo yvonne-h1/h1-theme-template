@@ -74,7 +74,9 @@
 
   if aspect_width == aspect_height
   elsif aspect_width > aspect_height
+
   elsif aspect_height > aspect_width
+
   endif
 
   # Shopify adds lazy by default, so only overwrite when you pass the lazy parameter, like in sliders with multiple slides
@@ -150,7 +152,9 @@
     if forloop.first
       assign initial_width = width_int
       assign initial_height = width_int | divided_by: image_ratio | round
+      assign image_url = image_object | image_url: width: image_object.width
     endif
+
     if width_int > max_width
       break
     endif
@@ -165,8 +169,8 @@
       assign image_url = image_object | image_url: width: width
       assign new_widths = new_widths | append: ',' | append: width_int
     else
-      assign new_widths = new_widths | append: ',' | append: image_object.width
       assign image_url = image_object | image_url: width: image_object.width
+      assign new_widths = new_widths | append: ',' | append: image_object.width
     endif
   endfor
 
@@ -174,7 +178,7 @@
 -%}
 
 {%- capture image_element -%}
-  {% comment %} We force lazy loading {% endcomment %}
+  {% comment %} We force lazy loading parameter {% endcomment %}
   {%- if lazy != blank -%}
     {{ image_url | image_tag:
       alt: alt,

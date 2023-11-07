@@ -119,7 +119,7 @@ endcapture
       }
       &:valid[required] {
         ~ .field__icons .icon--checkmark {
-          @apply block;
+          @apply top-[calc(50%_+_14px)] block;
         }
         ~ .field__message {
           @apply hidden;

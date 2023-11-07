@@ -123,7 +123,7 @@
                 >
                   <span class="sr-only">{{ 'customer.orders.order_number_link' | t: number: order.name }}</span>
                   <span aria-hidden="true">
-                    {{ order.view_order_str }}
+                    {{ view_order_str }}
                   </span>
                 </a>
               </div>
@@ -164,7 +164,7 @@
         {{- customer.phone | strip -}}
       </p>
     {%- endif -%}
-    <div class="customer-info__buttons mx-auto flex max-w-fit flex-col gap-4">
+    <div class="customer-info__buttons mx-auto flex max-w-fit flex-col gap-4 xl:mx-0">
       <a href="{{ routes.account_addresses_url }}" class="button button--primary">
         {%- render 'render-translation', namespace: 'customer.account', key: 'edit_details', fallback: 'Edit details' -%}
       </a>

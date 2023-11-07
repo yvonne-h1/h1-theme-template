@@ -96,7 +96,7 @@
               endif
               assign sublevel_title_class = 'h3 m-0 px-8 py-4 no-underline'
               assign mobile_menu_link_class = 'mobile-menu__link block no-underline py-3 px-8'
-              assign mobile_return_link_class = 'mobile-menu__return flex w-full items-center gap-2 px-4 py-5 text-sm no-underline'
+              assign mobile_return_link_class = 'mobile-menu__return flex w-full items-center gap-2 px-4 py-5 text-sm no-underline p-[1px]'
               assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 start-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 flex flex-col min-h-mobile-menu'
             -%}
             {%- if level_1.links == blank -%}
@@ -112,7 +112,7 @@
               </li>
               {%- comment -%} Level 1 with submenu {%- endcomment -%}
             {%- else -%}
-              <li class="mobile-menu__item level-1 group/submenu-1" data-collapsible-group>
+              <li class="mobile-menu__item level-1 group/submenu-1 p-[1px]" data-collapsible-group>
                 <button
                   class="{{ mobile_menu_link_class }} level-1 flex w-full items-center justify-between gap-2 {{ link_classes }} {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
                   data-collapsible-trigger>
@@ -123,7 +123,7 @@
                 </button>
 
                 <div
-                  id="link-{{ level_1_title | handleize }}" tabindex="0"
+                  id="link-{{ level_1_title | handleize }}"
                   class="{{ mobile_submenu_class }} level-1 group/submenu-2 group-[.collapsible-is-open]/submenu-1:visible group-[.collapsible-is-open]/submenu-1:translate-x-0 {{ section.settings.color_scheme }}"
                   data-collapsible-target>
                   {%- comment -%} Link back to level 1 {%- endcomment -%}
@@ -194,7 +194,7 @@
                             {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
                           </button>
                           <div
-                            id="childlink-{{ level_2.title | handleize }}" tabindex="0"
+                            id="childlink-{{ level_2.title | handleize }}"
                             class="{{ mobile_submenu_class }} level-2 group-[.collapsible-is-open]/submenu-2:visible group-[.collapsible-is-open]/submenu-2:translate-x-0 {{ section.settings.color_scheme }}"
                             data-collapsible-target>
 
