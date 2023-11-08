@@ -25,8 +25,7 @@
   {%- render 'search-form',
     predictive_search_enabled: false,
     prefix: 'search-page',
-    max_results: settings.predictive_search_max_results_per_type,
-    show_shadow: false
+    max_results: settings.predictive_search_max_results_per_type
   -%}
 
   {%- if search.performed -%}

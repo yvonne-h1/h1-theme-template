@@ -46,8 +46,7 @@
         "isMobileMenu": true
       }
     '>
-    <div class="mobile-menu__wrapper invisible group-[.mobile-menu-is-open]/body:visible h-screen"
-      style="height: 100dvh;">
+    <div class="mobile-menu__wrapper invisible group-[.mobile-menu-is-open]/body:visible h-screen">
       {% comment %} Header with close button {% endcomment %}
       <div class="mobile-menu__header px-4 py-3 sticky top-0 z-sticky {{ section.settings.color_scheme }}">
         <class-toggle-component
@@ -60,7 +59,7 @@
           <button
             type="button"
             aria-label="{%- render 'render-translation', namespace: 'accessibility', key: 'toggle_menu_drawer', fallback: 'Toggle menu drawer' -%}"
-            class="mobile-menu__toggle-button button relative cursor-pointer rounded-full border-0 p-3">
+            class="mobile-menu__toggle-button button button--outline relative cursor-pointer rounded-full border-transparent p-3 states:bg-transparent">
             {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
           </button>
         </class-toggle-component>

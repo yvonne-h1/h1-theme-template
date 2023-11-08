@@ -3,7 +3,6 @@
   - prefix
   - predictive_search_enabled
   - max_results
-  - show_shadow
 
   Example
   {%- render 'search-form', predictive_search_enabled: settings.predictive_search_enabled, prefix: 'mobile' -%}
@@ -13,10 +12,6 @@
 {%- liquid
   unless prefix
     assign prefix = ''
-  endunless
-
-  unless show_shadow == false
-    assign show_shadow = true
   endunless
 
   unless predictive_search_enabled == false
@@ -50,24 +45,6 @@
 
 {%- comment -%} Render search form {%- endcomment -%}
 <search-form class="relative mx-auto block max-w-screen-2xl">
-  {%- if show_shadow -%}
-    {% comment %} Close trigger {% endcomment %}
-    <class-toggle-component
-      data-options='
-        {
-          "classToToggle": "search-is-open",
-          "ariaExpanded": true
-        }
-      '>
-      <button
-        type="button"
-        class="-me-6 -mt-6 ms-auto block cursor-pointer p-3 states:text-primary no-js:hidden lg:absolute lg:-top-1 lg:end-0 lg:z-10 lg:mb-0 lg:me-content-wrapper-padding lg:ms-0 lg:mt-0"
-        aria-label="{% render "render-translation", namespace: "accessibility", key: "close", fallback: "Close" %}">
-        {%- render 'icons', icon: 'close', icon_class: 'w-6' -%}
-      </button>
-    </class-toggle-component>
-  {%- endif -%}
-
   <{{ search_form_element }} class="relative block">
     <form
       action="{{ routes.search_url }}"
