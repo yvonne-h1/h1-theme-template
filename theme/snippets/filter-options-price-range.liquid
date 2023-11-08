@@ -15,21 +15,30 @@
   endif
 {% endcomment %}
 {%- liquid
-  assign range_max = filter.max_value.value | default: filter.range_max
   assign value_min = filter.min_value.value | default: 0
   assign value_max = filter.max_value.value | default: filter.range_max
+  assign range_max = filter.range_max
 -%}
+
+{% comment %} The style is updated in the collection-filters-form.js {% endcomment %}
+{%- style -%}
+  [data-price-range-track] {
+    --low: {{ value_min | times: 100 | divided_by: range_max | ceil }}%;
+    --high: {{ value_max | times: 100 | divided_by: range_max | ceil }}%;
+    --range-color: #bb1f17;
+    --track-bg: linear-gradient(to right, transparent var(--low), var(--range-color) 0, var(--range-color) var(--high), transparent 0) no-repeat;
+  }
+{%- endstyle -%}
 
 {%- capture summary_content -%}
   <price-range class="filter-options__price relative flex flex-col">
-    <div class="range-slider relative mb-4 h-4 w-full before:absolute before:top-1.5
-      before:block before:h-1.5 before:w-full before:bg-gray-100 before:content-empty
-      ">
+    <div class="range-slider relative mb-4 h-1.5 w-full rounded-sm border-none bg-gray-100">
+      <div class="range-slider__active pointer-events-none absolute left-1 top-0 h-1.5 w-[calc(100%_-_8px)]" style="background: var(--track-bg);" data-price-range-track></div>
       <label class="sr-only" for="filter-{{ filter.label | handleize }}-{{ filter_index }}-min">{{ filter.label }} min</label>
       <input id="filter-{{ filter.label | handleize }}-{{ filter_index }}-min"
         type="range"
         name="{{ filter.min_value.param_name }}"
-        class="min-price top-1.5"
+        class="min-price -top-1.5"
         value="{{ value_min | divided_by: 100 | ceil }}"
         min="0"
         max="{{ range_max | divided_by: 100 | ceil }}"
@@ -39,7 +48,7 @@
         id="filter-{{ filter.label | handleize }}-{{ filter_index }}-max"
         type="range"
         name="{{ filter.max_value.param_name }}"
-        class="max-price top-1.5"
+        class="max-price -top-1.5 left-auto"
         value="{{ value_max | divided_by: 100 | ceil }}"
         min="0"
         max="{{ range_max | divided_by: 100 | ceil }}"

@@ -42,14 +42,13 @@ class CustomVimeoVideo extends HTMLElement {
     this.videoTriggers = this.querySelectorAll('[data-video-trigger]');
     this.videoContent = this.querySelector('[data-video-content]');
     this.paused = true;
+    this.pausedOnScroll = false;
 
     this.debouncedOnLoad = debounce(() => {
       this.videoObserver();
     }, 100);
 
     if (this.options.autoplay) {
-      // mute the video
-      this.dataset.videoIsPaused = 'false';
 
       // play video on scroll
       window.addEventListener('scroll', this.debouncedOnLoad.bind(this));
@@ -83,10 +82,13 @@ class CustomVimeoVideo extends HTMLElement {
         if (isBottomVisible && isTopVisible || entry.isIntersecting && entry.intersectionRatio > 0.9) {
           this.playVideo();
         }
-        else if (!this.paused) this.pauseVideo(false);
+        else if (!this.paused) this.pauseVideo();
       });
     });
-    observer.observe(this);
+
+    if (this.dataset.videoIsPaused !== 'true') {
+      observer.observe(this);
+    }
   }
 
   loadVideo() {
@@ -104,12 +106,12 @@ class CustomVimeoVideo extends HTMLElement {
 
     this.player.on('pause', () => {
       this.paused = true;
-      this.showPlayerElements();
+      const setPaused = (this.pausedOnScroll) ? 'false' : 'true';
+      this.showPlayerElements(setPaused);
     });
 
     this.player.on('ended', () => {
       this.showPlayerElements();
-      this.dataset.videoIsPaused = 'true';
     });
   }
 
@@ -130,6 +132,7 @@ class CustomVimeoVideo extends HTMLElement {
         .then(() => {
           // The video is playing
           this.paused = false;
+          this.pausedOnScroll = false;
           this.hidePlayerElements();
         })
         .catch((error) => {
@@ -143,10 +146,7 @@ class CustomVimeoVideo extends HTMLElement {
 
     this.player.pause()
       .then(() => {
-        this.paused = true;
-        this.showPlayerElements();
-
-        this.dataset.videoIsPaused = 'true';
+        this.pausedOnScroll = true;
       })
       .catch((error) => {
         console.error(error.name);
@@ -158,9 +158,15 @@ class CustomVimeoVideo extends HTMLElement {
     this.videoContent?.classList.add('hidden');
   }
 
-  showPlayerElements() {
+  /**
+   *
+   * @param {*} pause Will add a data attribute value to the video wrapper. This way we can check if a customer has manually stopped a video. In that case, we don't restart the video.
+   */
+  showPlayerElements(pause = 'true') {
     this.videoTriggers.forEach(trigger => trigger.classList.remove('hidden'));
     this.videoContent?.classList.remove('hidden');
+
+    this.dataset.videoIsPaused = pause;
   }
 }
 

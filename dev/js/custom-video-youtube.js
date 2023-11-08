@@ -77,7 +77,7 @@ class CustomYTVideo extends HTMLElement {
           if (isBottomVisible && isTopVisible || entry.isIntersecting && entry.intersectionRatio > 0.9) {
             this.playVideo();
           }
-          else if (!getPausedState()) this.pauseVideo(false);
+          else if (this.player.getPlayerState() === 1) this.pauseVideo();
         }
         else {
           this.loadVideo();
@@ -126,6 +126,7 @@ class CustomYTVideo extends HTMLElement {
         if (event.data === 2) {
           // if video is paused, show placeholder
           self.showPlayerElements();
+          self.dataset.videoIsPaused = 'true';
         }
         // hide the elements when the video is done
         if (event.data === 0) {
@@ -138,8 +139,8 @@ class CustomYTVideo extends HTMLElement {
         player.stopVideo(); // prevent video from playing
 
         window.playerIsReady = true;
-        self.dataset.videoIsPaused = 'false';
         self.player = player;
+        self.dataset.videoIsPaused = 'false';
 
         self.videoTriggers.forEach(trigger => trigger.addEventListener('click', function (event) {
           event.preventDefault();
@@ -156,7 +157,7 @@ class CustomYTVideo extends HTMLElement {
   }
 
   getPausedState() {
-    return (this.player.getPlayerState() === 2) ? true : false;
+    return this.player.getPlayerState() === 2 ;
   }
 
   playVideo() {
@@ -171,8 +172,6 @@ class CustomYTVideo extends HTMLElement {
 
     this.player.pauseVideo();
     this.showPlayerElements();
-
-    this.dataset.videoIsPaused = 'true';
   }
 
   hidePlayerElements() {

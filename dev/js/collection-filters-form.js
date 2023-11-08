@@ -78,7 +78,7 @@ if (!customElements.get('collection-filters-form')) {
       this.loader.classList.remove('hidden');
 
       const type = event.target.id === 'sort-options' ? 'sort' : 'filter';
-      const isPriceRange = (event.target.type === 'range') ? true : false;
+      const isPriceRange = event.target.type === 'range';
       const hasPriceRange = new URLSearchParams(document.location.search).get('filter.v.price.lte');
 
       // when the price was changed, check that the inputs have correct min-max values, because you can drag the max input over the min one and vice versa
@@ -381,6 +381,8 @@ if (!customElements.get('collection-filters-form')) {
 
     updateTotalActiveFilterOptionsCount() {
       const activeFiltersElement = document.querySelector('[data-filter-active-options]');
+      if (!activeFiltersElement) return;
+
       const activeFilters = document.querySelector('[data-filter-active-options-list]').children;
       const filterTotalWrapper = document.querySelector('[data-filter-total-active-options]');
       const filterResetButton = document.querySelector('[data-filter-clear-all]');
@@ -423,35 +425,36 @@ if (!customElements.get('price-range')) {
       this.minLabel = this.querySelector('[data-price-range-values] [data-price-range-min]');
       this.maxLabel = this.querySelector('[data-price-range-values] [data-price-range-max]');
 
+      // update the style of the input
       [this.minInput,this.maxInput].forEach((element) => {
         element.addEventListener('input', (event) => {
-
-          // update the spans
-          if (element === this.minInput) {
-            this.minLabel.innerHTML = Shopify.formatMoney(event.target.value * 100);
-          }
-          else {
-            this.maxLabel.innerHTML = Shopify.formatMoney(event.target.value * 100);
-          }
           setTimeout(() => {
             this.onRangeChange.bind(this);
+
+            // update the spans
+            if (element === this.minInput) {
+              const { min, max } = this.minInput;
+
+              this.low = Math.round(100 * (+element.value - min) / (max - min));
+              document.querySelector('[data-price-range-track]').style.setProperty('--low', this.low + '%');
+
+              this.minLabel.innerHTML = Shopify.formatMoney(event.target.value * 100);
+            }
+            else {
+
+              const { min, max } = this.maxInput;
+              this.high = Math.round(100 * (+element.value - min) / (max - min));
+              document.querySelector('[data-price-range-track]').style.setProperty('--high', this.high + '%');
+              this.maxLabel.innerHTML = Shopify.formatMoney(event.target.value * 100);
+            }
+
           }, 50);
         });
       });
-
-      this.setMinAndMaxValues();
     }
 
     onRangeChange(event) {
-      this.setMinAndMaxValues();
       this.getValidRange(event.currentTarget);
-    }
-
-    setMinAndMaxValues() {
-      if (this.maxInput.value) this.minInput.setAttribute('max', this.maxInput.value);
-      if (this.minInput.value) this.maxInput.setAttribute('min', this.minInput.value);
-      if (this.minInput.value === '') this.maxInput.setAttribute('min', 0);
-      if (this.maxInput.value === '') this.minInput.setAttribute('max', this.maxInput.getAttribute('max'));
     }
 
     getValidRange(input) {

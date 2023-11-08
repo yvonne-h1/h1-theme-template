@@ -108,7 +108,7 @@ if (!customElements.get('predictive-search')) {
      * @description Checks if the input has a value and toggles the input reset button.
      */
     handleInputState() {
-      const state = this.input.value.length > 0 ? true : false;
+      const state = this.input.value.length > 0;
       if (state) {
         this.reset.classList.remove('hidden');
       }
