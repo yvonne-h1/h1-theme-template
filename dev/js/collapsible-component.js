@@ -46,7 +46,7 @@ if (!customElements.get('collapsible-component')) {
         isMobileMenu: false,
         breakpointMax: false,
         trapFocus: true,
-        openOnMobile: true,
+        openOnMobile: false,
       };
 
       // Get options from element data and combine with this.options
