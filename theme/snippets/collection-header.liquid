@@ -21,7 +21,7 @@
 
     {% comment %} Collection image {% endcomment %}
     {%- if show_collection_image -%}
-      <div class="collection-header__image hidden h-full max-h-40 w-full max-w-[240px] grow-0 md:block aspect-[3/2]">
+      <div class="collection-header__image hidden aspect-[3/2] h-full max-h-40 w-full max-w-[240px] grow-0 md:block">
         {%- render 'responsive-image',
           image_object: collection.image,
           widths: '240',
@@ -46,14 +46,14 @@
 
       {%- comment -%} Collection description {%- endcomment -%}
       {%- if section.settings.show_collection_description and collection.description != blank -%}
-        <div class="collection-header__description rte ms-0 me-auto md:w-full lg:w-3/4">
+        <div class="collection-header__description rte me-auto ms-0 md:w-full lg:w-3/4">
           {{- collection.description -}}
         </div>
       {%- endif -%}
     </div>
   </div>
 
-  <div class="mt-10 flex flex-wrap items-center justify-center sm:justify-between gap-base {% if collection.products.size == 0 and is_filtered == false -%}!hidden{%- endif -%}">
+  <div class="mt-10 flex flex-wrap items-center justify-center gap-base sm:justify-between {% if collection.products.size == 1 and is_filtered == false -%}!hidden{%- endif -%}">
 
     {% comment %} Collection display total {% endcomment %}
     {%- liquid
@@ -76,7 +76,7 @@
       endpaginate
     -%}
 
-    <p class="sm:order-3 m-0 sm:basis-full text-center md:order-none md:basis-auto" data-collection-totals-text>
+    <p class="m-0 text-center sm:order-3 sm:basis-full md:order-none md:basis-auto" data-collection-totals-text>
       {{ 'sections.load_more.info_html' | t: current: current_html, total: total_html }}
     </p>
 
@@ -113,52 +113,54 @@
     </collection-view>
 
     {% comment %} Sort sorting {% endcomment %}
-    {%- if section.settings.enable_sorting -%}
+    {%- if collection.filters.size > 0 -%}
       <div class="collection-header__sorting relative flex justify-end gap-4">
-        {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+        {%- if section.settings.enable_sorting -%}
+          {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
 
-        {% comment %} Sort options {% endcomment %}
-        <collection-filters-form class="collection-nav__sort sort-options">
-          <form>
-            <div class="field">
-              <label class="field__label sr-only" for="sort-options">
-                {%- render 'render-translation', namespace: "sections.collection_template", key: "sort_by_label", fallback: "Sort by" -%}
-              </label>
-              <div class="select group flex-auto">
-                <select class="select__select border-2 border-solid border-black rounded-md bg-transparent group-states:bg-secondary group-states:text-secondary-text peer ellipsis" name="sort_by" id="sort-options">
-                  {%- for option in collection.sort_options -%}
-                    <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{- option.name -}}</option>
-                  {%- endfor -%}
-                </select>
-                <span class="select__select-icon group-states:text-secondary-text">
-                  {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
-                </span>
+          {% comment %} Sort options {% endcomment %}
+          <collection-filters-form class="collection-nav__sort sort-options">
+            <form>
+              <div class="field">
+                <label class="field__label sr-only" for="sort-options">
+                  {%- render 'render-translation', namespace: "sections.collection_template", key: "sort_by_label", fallback: "Sort by" -%}
+                </label>
+                <div class="select group flex-auto">
+                  <select class="select__select peer rounded-md border-2 border-solid border-black bg-transparent ellipsis group-states:bg-secondary group-states:text-secondary-text" name="sort_by" id="sort-options">
+                    {%- for option in collection.sort_options -%}
+                      <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{- option.name -}}</option>
+                    {%- endfor -%}
+                  </select>
+                  <span class="select__select-icon group-states:text-secondary-text">
+                    {%- render 'icons', icon: 'chevron-down', icon_size: 'w-3' -%}
+                  </span>
+                </div>
               </div>
-            </div>
-          </form>
-        </collection-filters-form>
-      {%- endif -%}
+            </form>
+          </collection-filters-form>
+        {%- endif -%}
 
-      {% comment %} Collection filter button {% endcomment %}
-      <class-toggle-component class="collection-header__filter-trigger min-w-max {% if settings.filter_display == 'grid' -%}lg:hidden{% elsif settings.filter_display == 'flex' -%}md:hidden{%- endif -%}"
-        data-options='{
-          "classToToggle": "filter-is-open"
-        }'
-      >
-        <button
-          type="button"
-          class="button button--outline flex whitespace-nowrap py-2.5 px-2 sm:px-4 leading-none">
-          {%- render 'icons', icon: 'filter', icon_class: 'w-6' -%}
+        {% comment %} Collection filter button {% endcomment %}
+        <class-toggle-component class="collection-header__filter-trigger min-w-max {% if settings.filter_display == 'grid' -%}lg:hidden{% elsif settings.filter_display == 'flex' -%}md:hidden{%- endif -%}"
+          data-options='{
+            "classToToggle": "filter-is-open"
+          }'
+        >
+          <button
+            type="button"
+            class="button button--outline flex whitespace-nowrap px-2 py-2.5 leading-none sm:px-4">
+            {%- render 'icons', icon: 'filter', icon_class: 'w-6' -%}
 
-          {%- comment -%} Text label {%- endcomment -%}
-          <span>
-            {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
-            {%- comment -%} Show active number of filters, loaded by js {%- endcomment -%}
-            <span class="font-body font-normal text-xs" data-filter-total-active-options></span>
-          </span>
-        </button>
-      </class-toggle-component>
-    </div>
+            {%- comment -%} Text label {%- endcomment -%}
+            <span>
+              {%- render 'render-translation', namespace: 'sections.collection_template', key: 'filter', fallback: 'Filter' -%}
+              {%- comment -%} Show active number of filters, loaded by js {%- endcomment -%}
+              <span class="font-body text-xs font-normal" data-filter-total-active-options></span>
+            </span>
+          </button>
+        </class-toggle-component>
+      </div>
+    {%- endif -%}
   </div>
 {%- endcapture -%}
 
