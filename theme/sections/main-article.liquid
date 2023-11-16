@@ -1,23 +1,22 @@
 {%- comment -%} Use grid to position elements. Mobile order is set in theme editor, desktop is based on design. {%- endcomment -%}
-<article class="main-article">
-  {%- liquid
-    # Article header
-    render 'article-header', class: 'main-article__header', section: section
+{%- liquid
+  # Article header
+  render 'article-header', class: 'main-article__header', section: section
 
-    # Article content
-    render 'article-content', class: 'main-article__content', section: section
+  # Article content
+  render 'article-content', class: 'main-article__content', section: section
 
-    # Article comments
-    if section.settings.show_comments
-      render 'article-comments', class: 'main-article__comments'
-    endif
-  -%}
-</article>
+  # Article comments
+  if section.settings.show_comments
+    render 'article-comments', class: 'main-article__comments'
+  endif
+-%}
 
 {% schema %}
   {
     "name": "Blog post",
-    "tag": "section",
+    "tag": "article",
+    "class": "main-article",
     "settings": [],
     "blocks": [
       {

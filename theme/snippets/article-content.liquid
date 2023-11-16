@@ -82,7 +82,7 @@
   {%- else -%}
     {% comment %} # remove the placeholder and wrap the content {% endcomment %}
     <div class="rte mx-auto mb-10 mt-4 max-w-screen-md">
-      {{ article.content | replace: has_products_placeholder, '' }}
+      {{ article.content }}
     </div>
   {%- endif -%}
 {%- endcapture -%}
@@ -90,7 +90,7 @@
 {%- assign container_class = class | append: ' article-content' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', tag: 'section', content: container_content, class: container_class -%}
+{%- render 'render-container-content', content: container_content, class: container_class -%}
 
 {% comment %} If there is no placeholder in the content, render the product slider below the content {% endcomment %}
 {%- liquid
