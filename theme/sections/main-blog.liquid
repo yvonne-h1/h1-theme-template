@@ -42,7 +42,7 @@
 
         {%- comment -%} General All blog link {%- endcomment -%}
         <li class="{{- nav_item_class -}}">
-          <a class="{{- nav_link_class -}}" aria-current="{{- nav_link_active -}}" href="{{ blog.url }}" title="All">
+          <a class="{{- nav_link_class -}}" aria-current="{{- nav_link_active -}}" href="{{ blog.url }}">
             {%- render 'render-translation', namespace: "blogs.general", key: "all_tags", fallback: "All" -%}
           </a>
         </li>

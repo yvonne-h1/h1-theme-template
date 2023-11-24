@@ -756,12 +756,12 @@
             "group": "Landscape"
           },
           {
-            "value": "aspect-[3/4]",
+            "value": "md:aspect-[3/4]",
             "label": "3x4",
             "group": "Portrait"
           },
           {
-            "value": "aspect-[9/16]",
+            "value": "md:aspect-[9/16]",
             "label": "9x16",
             "group": "Portrait"
           }
