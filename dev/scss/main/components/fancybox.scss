@@ -10,7 +10,7 @@
   @import '~@fancyapps/ui/src/Fancybox/Fancybox.scss';
 
   .fancybox__container {
-    @apply text-inherit;
+    @apply z-popover text-inherit;
     .fancybox__content {
       @apply relative;
       & :focus:not(.carousel__button.is-close) {

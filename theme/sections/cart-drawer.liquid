@@ -1,6 +1,9 @@
 {%- if request.page_type != 'cart' -%}
   <cart-drawer
-    class="cart-drawer"
+    class="
+      cart-drawer invisible
+      group-[.cart-drawer-is-open]/body:visible
+    "
     data-cart-drawer
     data-options='
       {
@@ -26,11 +29,9 @@
         fixed bottom-0 end-0 top-0 z-modal flex h-full w-full max-w-screen translate-x-full flex-col
         overflow-x-hidden
         text-text-default
-        opacity-0
         transition-all
         duration-300
         group-[.cart-drawer-is-open]/body:translate-x-0
-        group-[.cart-drawer-is-open]/body:opacity-100
         xs:max-w-sm
         sm:w-min
         sm:min-w-[364px]
@@ -95,11 +96,13 @@
               data-id="{{ section.id }}">
               <div class="js-cart-item-contents flex-1 px-4 group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
                 {%- if cart != empty -%}
-                  <div class="cart-drawer-items">
+                  <ul class="cart-drawer-items">
                     {%- for item in cart.items -%}
-                      {%- render 'cart-item', item: item, view: 'cart-drawer' -%}
+                      <li style="--animation-delay: {{ forloop.index | plus: 3 }}">
+                        {%- render 'cart-item', item: item, view: 'cart-drawer' -%}
+                      </li>
                     {%- endfor -%}
-                  </div>
+                  </ul>
                 {%- endif -%}
               </div>
               <p class="sr-only px-4" id="cart-live-region-text" aria-live="polite" role="status"></p>

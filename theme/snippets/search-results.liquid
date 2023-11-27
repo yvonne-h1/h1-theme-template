@@ -16,7 +16,7 @@
         {%- when 'product' -%}
           {%- capture results_products -%}
             {{ results_products }}
-            <li class="{{ grid_item_classes }}">
+            <li class="{{ grid_item_classes }}" style="--animation-delay: {{ forloop.index }}">
               {%- render 'product-card', product_object: item -%}
             </li>
           {%- endcapture -%}

@@ -9,6 +9,7 @@
   - lazy: Boolean. Image lazy loading
   - min_ratio_mobile: String (optional)
   - min_ratio_tablet: String (optional)
+  - animate: Boolean
 
   Object should contain:
   - position_horizontal
@@ -35,6 +36,10 @@
 {% endcomment %}
 
 {%- liquid
+  unless animate == true
+    assign animate = false
+  endunless
+
   unless lazy == true
     assign lazy = false
   endunless
@@ -126,7 +131,8 @@
 
 {% comment %} Banner wrapper {% endcomment %}
 <div
-  class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% if object.settings.container_width == 'container--full' %}w-screen{%- else -%}w-full min-w-full{%- endif -%}"
+  class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% if object.settings.container_width == 'container--full' %}w-screen{%- else -%}w-full min-w-full{%- endif %} {% if animate -%}bg-black{%- endif -%}"
+  style="--animation-delay: 1;"
   {% if is_swiper and index != null %}
     data-swiper-slide-index="{{ index }}" {{ block.shopify_attributes }}
   {%- endif %}
@@ -136,6 +142,9 @@
   {% comment %} Banner image {% endcomment %}
   {%- liquid
     assign image_class = 'h-full w-full object-cover'
+    if animate
+      assign image_class = image_class | append: ' motion-safe:animate-zoomout motion-safe:opacity-0 motion-safe:scale-125 transition-all'
+    endif
     assign image_class_desktop = image_class | append: ' hidden md:block'
     assign image_class_mobile = image_class | append: ' md:hidden'
 
@@ -235,11 +244,11 @@
 
   {%- if object.settings.heading != blank or object.settings.text != blank or button_1 or button_2 -%}
     <div
-      class="{{- class -}}__content-wrapper content-wrapper relative z-20 flex h-full {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
+      class="{{- class -}}__content-wrapper content-wrapper relative z-20 flex h-full motion-safe:animate-fadein motion-safe:opacity-0 {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
       {% if is_video %}
         data-video-content
       {%- endif -%}>
-      <div class="{{- class -}}__content relative mx-4 mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-md md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
+      <div class="{{- class -}}__content relative mx-4 mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-sm md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
         {% comment %} Heading {% endcomment %}
         {%- if object.settings.heading != blank -%}
           <{{ object.settings.heading_element }} class="{{- object.settings.heading_size }} {{ object.settings.heading_color -}}">

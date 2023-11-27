@@ -47,7 +47,7 @@
     {%- endif -%}
 {%- endif -%}
 
-  <ol
+  <ul
     class="collection__grid {{ collection_grid_classes }} m-0 grid grid-cols-12 gap-x-4 gap-y-8 {% if settings.filter_display != 'grid' -%}2xl:grid-cols-10{%- endif -%}"
     data-products-wrapper>
     {%- liquid
@@ -55,12 +55,20 @@
       assign image_title = product.title
 
       assign classes = 'col-span-6 md:col-span-4'
-      assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw'
+      assign default_sizes = '(min-width: 1280px) 25vw, (min-width: 768px) 33vw'
 
       # Overwrite sizes based on template suffix alt layout
       if template.suffix contains 'alt'
         assign classes = 'col-span-12 md:col-span-4'
-        assign sizes = '(min-width: 1440px) 328px, (min-width: 1280px) 25vw, (min-width: 768px) 33vw, 100vw'
+        assign sizes = default_sizes | prepend: '(min-width: 1440px) 328px, ' | append: ', 100vw'
+        if settings.filter_display != 'grid'
+          assign sizes = default_sizes | prepend: '(min-width: 1440px) 230px, ' | append: ', 100vw'
+        endif
+      else
+        assign sizes = default_sizes | prepend: '(min-width: 1440px) 328px, ' | append: ', 50vw'
+        if settings.filter_display != 'grid'
+          assign sizes = default_sizes | prepend: '(min-width: 1440px) 230px, ' | append: ', 50vw'
+        endif
       endif
 
       if settings.filter_display != 'grid'
@@ -71,18 +79,19 @@
     -%}
 
     {%- for product in collection.products -%}
-      <li class="{{ classes }}">
+      <li class="{{ classes }}" style="--animation-delay: {{ forloop.index }}">
         {%- render 'product-card',
           product_object: product,
-          image_max_width: 1440,
+          image_max_width: 750,
           image_sizes: sizes,
           image_alt: image_alt,
           image_title: image_title,
-          view: template.suffix
+          view: template.suffix,
+          index: forloop.index
         -%}
       </li>
     {%- endfor -%}
-  </ol>
+  </ul>
 
 {%- if pagination_type == 'load-more' -%}
   {%- if paginate.pages > 1 -%}

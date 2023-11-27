@@ -235,7 +235,8 @@
                 2xl:min-w-[calc((100%-3*32px)/4)]
               {% endif -%}
             "
-            data-swiper-slide-index="{{ forloop.index }}">
+            data-swiper-slide-index="{{ forloop.index }}"
+            style="--animation-delay: {{ count }}">
             {%- liquid
               if render_products
                 render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3'

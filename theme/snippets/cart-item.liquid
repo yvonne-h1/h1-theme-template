@@ -15,7 +15,9 @@
   endunless
 -%}
 
-<div id="CartItem-{{ item.index | plus: 1 }}" class="cart-item relative mb-6 flex gap-x-4 gap-y-0 border-b pb-6 last:mb-0 last:border-none">
+<div
+  id="CartItem-{{ item.index | plus: 1 }}"
+  class="cart-item relative mb-6 flex gap-x-4 gap-y-0 border-b pb-6 last:mb-0 last:border-none group-[.cart-drawer-is-open]/body:motion-safe:animate-fadein group-[.cart-drawer-is-open]/body:motion-safe:opacity-0">
   {%- comment -%} Product image {%- endcomment -%}
   <a
     href="{{ item.product.url }}"

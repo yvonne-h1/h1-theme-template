@@ -4,6 +4,7 @@
   Accepts:
   - product_object:         {Object} Product liquid object. (required)
   - image_aspect_ratio:     {String} Aspect of the product image card. Values are "square" and "portrait". Default is "square". (optional)
+  - index...................{Integer} Used for animation delay
   - crop:                   {String} Defaults to 'center'. Set to 'center / top / left / right / bottom' to crop the image with the specified size. Requires both height and width in image_size. (optional)
   - image_sizes:            {String} The img sizes attribute. (optional)
   - image_max_width:        {String} The maximum @1x image size, will be * 2 in output. (optional)
@@ -111,7 +112,7 @@
   endif
 -%}
 <article
-  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4 {% if view == 'alt' -%}rounded-md border border-gray-100 p-4{%- endif %} rounded-md md:border-none md:p-0"
+  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4 {% if view == 'alt' -%}rounded-md border border-gray-100 p-4{%- endif %} rounded-md motion-safe:animate-fadein motion-safe:opacity-0 md:border-none md:p-0"
   data-product-card>
   {%- comment -%} Accesibility text {%- endcomment -%}
   <a
@@ -128,7 +129,7 @@
     <div class="product-card__images relative mb-4 px-4 group-[.color-scheme]/color-scheme:pt-4">
       {%- comment -%} Render image with hover {%- endcomment -%}
       <a
-        class="product-card__image relative block {% unless product_object.available -%}opacity-50 saturate-50{%- endunless %} {% unless show_secondary_image %}transition-all states:scale-105{%- endunless -%}"
+        class="product-card__image relative block {% unless product_object.available -%}opacity-50 saturate-50{%- endunless %} {% unless show_secondary_image %}states:scale-105{%- endunless -%} transition-all"
         href="{{ product_link }}"
         title="{{ product_object.title }}"
         tabindex="-1">

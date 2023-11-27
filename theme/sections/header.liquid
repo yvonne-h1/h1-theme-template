@@ -23,25 +23,7 @@
 
   # Load interface snippets
   render 'search-modal', max_results: settings.predictive_search_max_results_per_type
-
-  # Capture the logo with the root url, so we can reuse it in the header.
-  assign logo_el = 'div'
-  if request.page_type == 'index'
-    assign logo_el = 'h1'
-  endif
 -%}
-
-{%- capture logo_link -%}
-  <{{ logo_el }} class="header__heading z-0 col-span-4 mb-0 pb-3 pt-3 text-2xl leading-8 lg:-order-1  lg:col-span-2">
-    <a href="{{ routes.root_url }}"
-      class="header__heading-link m-0 flex items-center justify-center justify-self-center break-words text-inherit no-underline states:text-primary states:no-underline lg:block lg:justify-self-start"
-      title="{{ shop.name }}"
-    >
-      {%- render 'global-logo', classes: 'max-w-[100px]' -%}
-      <span class="sr-only">{{ shop.name }}</span>
-    </a>
-  </{{ logo_el }}>
-{%- endcapture -%}
 
 {% comment %} Backdrop {% endcomment %}
 <class-toggle-component
@@ -94,13 +76,31 @@
     </div>
 
     {%- comment -%} The menu that is used for desktop. {%- endcomment -%}
-    {%- render 'menu-desktop', section: section, menu_list: menu_list -%}
+    <div class="hidden lg:col-span-8 lg:block">
+      {%- render 'menu-desktop', section: section, menu_list: menu_list -%}
+    </div>
 
-    {%- comment -%} Shop logo. {%- endcomment -%}
-    {{- logo_link -}}
+    {%- liquid
+      assign logo_el = 'div'
+      if request.page_type == 'index'
+        assign logo_el = 'h1'
+      endif
+    -%}
+    {%- comment -%} Shop logo {%- endcomment -%}
+    <{{ logo_el }} class="header__heading z-0 col-span-4 mb-0 pb-3 pt-3 text-2xl leading-8 lg:-order-1 lg:col-span-2">
+      <a
+        href="{{ routes.root_url }}"
+        class="header__heading-link m-0 flex items-center justify-center justify-self-center break-words text-inherit no-underline states:text-primary states:no-underline lg:block lg:justify-self-start"
+        title="{{ shop.name }}">
+        {%- render 'global-logo', classes: 'max-w-[100px]' -%}
+        <span class="sr-only">{{ shop.name }}</span>
+      </a>
+    </{{ logo_el }}>
 
     {%- comment -%} Search, account and cart items. {%- endcomment -%}
-    {%- render 'header-icon-list', section: section -%}
+    <div class="col-span-4 lg:col-span-2">
+      {%- render 'header-icon-list', section: section -%}
+    </div>
   </div>
 </header-component>
 

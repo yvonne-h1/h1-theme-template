@@ -27,7 +27,7 @@
 
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
-  <div class="grid grid-cols-2 gap-base lg:grid-cols-4">
+  <ul class="grid grid-cols-2 gap-base lg:grid-cols-4">
     {%- assign count = 0 -%}
     {%- for product_object in products_arr -%}
 
@@ -41,12 +41,14 @@
         assign count = count | plus: 1
       -%}
 
-      {%- render 'product-card',
-        product_object: product_object,
-        image_max_width: image_max_width,
-        image_sizes: image_sizes,
-        product_card_title_el: 'h3'
-      -%}
+      <li style="--animation-delay: {{ count }}">
+        {%- render 'product-card',
+          product_object: product_object,
+          image_max_width: image_max_width,
+          image_sizes: image_sizes,
+          product_card_title_el: 'h3'
+        -%}
+      </li>
 
       {% comment %} Break if meet the limit {% endcomment %}
       {%- if count >= all_products_count -%}
@@ -61,7 +63,7 @@
         endfor
       -%}
     {%- endfor -%}
-  </div>
+  </ul>
 {%- endcapture -%}
 
 {%- capture container_footer -%}

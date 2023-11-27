@@ -1,15 +1,15 @@
 @layer base {
   .content-wrapper {
-    @apply max-w-content-width mx-auto;
+    @apply mx-auto max-w-content-width;
   }
   .content-wrapper-sm {
-    @apply max-w-content-width-sm mx-auto;
+    @apply mx-auto max-w-content-width-sm;
   }
   .content-wrapper-md {
-    @apply max-w-content-width-md mx-auto;
+    @apply mx-auto max-w-content-width-md;
   }
   .content-wrapper-lg {
-    @apply max-w-content-width-lg mx-auto;
+    @apply mx-auto max-w-content-width-lg;
   }
   .content-wrapper-wide {
     @apply mx-auto max-w-full;

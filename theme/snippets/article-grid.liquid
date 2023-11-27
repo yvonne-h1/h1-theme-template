@@ -31,7 +31,7 @@
     {%- endif -%}
 {%- endif -%}
 
-  <ol class="blog-articles grid grid-cols-12 gap-x-base gap-y-8" data-articles-wrapper>
+  <ul class="blog-articles grid grid-cols-12 gap-x-base gap-y-8" data-articles-wrapper>
     {%- for article in blog.articles -%}
       {% comment %} Check if this is a highlight and add the classes for each card {% endcomment %}
       {%- liquid
@@ -43,12 +43,12 @@
         endif
       -%}
 
-      <li class="{{ col_classes }}">
+      <li class="{{ col_classes }}" style="--animation-delay: {{ forloop.index }}">
           {% comment %} Output article card {% endcomment %}
           {%- render 'article-card', article: article, highlight: highlight, section: section -%}
       </li>
     {%- endfor -%}
-  </ol>
+  </ul>
 
 {%- if pagination_type == 'load-more' -%}
   {%- if paginate.pages > 1 -%}
