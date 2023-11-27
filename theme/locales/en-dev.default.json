@@ -240,7 +240,7 @@
       "use_fewer_filters_html": "Use fewer filters or <a href=\"{{ link }}\">clear all</a>",
       "view": {
         "single": "Single",
-        "dounle": "Dounle"
+        "double": "Double"
       }
     },
     "load_more": {
