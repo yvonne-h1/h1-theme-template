@@ -72,7 +72,7 @@
         {%- liquid
           capture products_array
             echo products_array | append: '///'
-            render 'product-card', product_object: product, product_card_title_el: 'h3'
+            render 'product-card', product_object: product, product_card_title_el: 'h3', animate: false
           endcapture
         -%}
       {%- else -%}

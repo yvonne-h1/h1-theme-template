@@ -10,12 +10,15 @@
     if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
       assign collections = collections | reverse
     endif
+
+    assign count = 0
   -%}
 
   <ul class="collection-list grid grid-cols-12 items-end gap-base">
     {%- for collection in collections -%}
       {%- if collection.all_products_count > 0 -%}
-        <li class="col-span-6 md:col-span-4 xl:col-span-3">
+        {%- assign count = count | plus: 1 -%}
+        <li class="col-span-6 md:col-span-4 xl:col-span-3" style="--animation-delay: {{ count }}">
           {%- render 'collection-card',
             collection: collection,
             aspect_ratio: section.settings.image_ratio,

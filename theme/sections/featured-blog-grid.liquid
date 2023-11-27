@@ -24,7 +24,7 @@
 
 {%- comment -%} Capture content {%- endcomment -%}
 {%- capture container_content -%}
-  <div class="grid grid-cols-1 gap-base sm:grid-cols-2 lg:grid-cols-4">
+  <ul class="grid grid-cols-1 gap-base sm:grid-cols-2 lg:grid-cols-4">
     {%- assign count = 0 -%}
     {%- for article_object in articles_array -%}
 
@@ -45,11 +45,13 @@
         assign count = count | plus: 1
       -%}
 
-      {%- render 'article-card'
-        article: article_object,
-        image_max_width: image_max_width,
-        image_sizes: image_sizes,
-      -%}
+      <li style="--animation-delay: {{ forloop.index }}">
+        {%- render 'article-card'
+          article: article_object,
+          image_max_width: image_max_width,
+          image_sizes: image_sizes,
+        -%}
+      </li>
 
       {% comment %} Break if meet the limit {% endcomment %}
       {%- if count >= articles_count -%}
@@ -64,7 +66,7 @@
         endfor
       -%}
     {%- endfor -%}
-  </div>
+  </ul>
 {%- endcapture -%}
 
 {%- capture container_footer -%}

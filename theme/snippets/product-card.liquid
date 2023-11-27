@@ -22,6 +22,10 @@
 {% endcomment %}
 
 {%- liquid
+  unless animate == false
+    assign animate = true
+  endunless
+
   # Image logic
   if image_lazy == null
     assign image_lazy = true
@@ -112,7 +116,7 @@
   endif
 -%}
 <article
-  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4 {% if view == 'alt' -%}rounded-md border border-gray-100 p-4{%- endif %} rounded-md motion-safe:animate-fadein motion-safe:opacity-0 md:border-none md:p-0"
+  class="product-card group/product-card relative z-0 flex h-full flex-col gap-4 overflow-hidden {{ product_card_state_classes }} group-[.color-scheme]/color-scheme:bg-white group-[.color-scheme]/color-scheme:pb-4 {% if view == 'alt' -%}rounded-md border border-gray-100 p-4{%- endif %} {% if animate -%}motion-safe:animate-fadein motion-safe:opacity-0{%- endif %} md:border-none md:p-0"
   data-product-card>
   {%- comment -%} Accesibility text {%- endcomment -%}
   <a
