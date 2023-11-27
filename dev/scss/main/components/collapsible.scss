@@ -1,12 +1,14 @@
 @layer components {
   [data-collapsible-group] {
     [data-collapsible-target] {
-      @apply opacity-0
-      transition-opacity js:max-h-0 js:overflow-hidden;
+      @apply transition-[grid-template-rows]
+      js:grid
+      js:grid-rows-[0fr]
+      js:duration-500;
     }
     &.collapsible-is-open {
       > [data-collapsible-target] {
-        @apply opacity-100 js:max-h-[9999px] js:overflow-y-auto;
+        @apply js:grid-rows-[1fr];
       }
     }
   }

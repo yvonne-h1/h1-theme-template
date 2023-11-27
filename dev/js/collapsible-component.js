@@ -19,10 +19,12 @@
           </span>
         </button>
         <div
-          class="collapsible__target rte group-[.collapsible-is-open]:py-2"
+          class="collapsible__target"
           data-collapsible-target>
-          <div class="p-0 pb-4">
-            Content
+          <div class="rte overflow-hidden">
+            <div class="pb-4 pt-2">
+              {{ block.settings.content }}
+            </div>
           </div>
         </div>
       </div>

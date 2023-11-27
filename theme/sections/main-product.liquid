@@ -175,9 +175,12 @@
                   {%- render 'icons', icon: 'minus', icon_class: 'w-4 shrink-0 hidden no-js:hidden group-[.collapsible-is-open]:block' -%}
                 </button>
                 <div class="collapsible__target w-full overflow-y-auto" data-collapsible-target>
-                  <div class="rte pb-4 text-sm">
-                    {{- block.settings.content -}}
-                    {{- block.settings.page.content -}}
+
+                  <div class="rte overflow-hidden text-sm">
+                    <div class="pb-4 pt-2">
+                      {{- block.settings.content -}}
+                      {{- block.settings.page.content -}}
+                    </div>
                   </div>
                 </div>
               </collapsible-component>
