@@ -1,9 +1,6 @@
 {%- if request.page_type != 'cart' -%}
   <cart-drawer
-    class="
-      cart-drawer invisible
-      group-[.cart-drawer-is-open]/body:visible
-    "
+    class="cart-drawer"
     data-cart-drawer
     data-options='
       {
@@ -26,12 +23,25 @@
       id="cartDrawer"
       data-id="{{ section.id }}"
       class="
-        fixed bottom-0 end-0 top-0 z-modal flex h-full w-full max-w-screen translate-x-full flex-col
+        cart-drawer__drawer fixed
+        bottom-0
+        end-0
+        top-0
+        z-modal
+        flex
+        h-full
+        w-full
+        max-w-screen
+        translate-x-full
+        flex-col
         overflow-x-hidden
+        bg-bg-default
         text-text-default
-        transition-all
-        duration-300
+        transition-transform
+        duration-[500ms]
+        ease-[cubic-bezier(.25,.2,.25,1)]
         group-[.cart-drawer-is-open]/body:translate-x-0
+        group-[.cart-drawer-is-open]/body:bg-transparent
         xs:max-w-sm
         sm:w-min
         sm:min-w-[364px]
@@ -44,9 +54,14 @@
       aria-label="{%- render 'render-translation', namespace: "general.cart", key: "drawer", fallback: "Cart drawer" -%}">
       {% comment %} Drawer items {% endcomment %}
       <cart-items
-        class="cart-items group/cart-items peer h-full min-w-min max-w-screen overflow-hidden bg-white xs:max-w-sm sm:min-w-[364px] sm:max-w-[584px] md:min-w-[344px] {% if cart == empty %}cart-is-empty{% endif %}">
+        class="
+          cart-drawer__items cart-items
+          group/cart-items peer h-full min-w-min max-w-screen overflow-hidden bg-bg-default xs:max-w-sm sm:min-w-[364px] sm:max-w-[584px] md:min-w-[344px] {% if cart == empty %}cart-is-empty{% endif %}
+          invisible
+          group-[.cart-drawer-is-open]/body:visible
+        ">
         {% comment %} For accessibility purposes, make this div invisble so it's not tabbale when the drawer is not visible {% endcomment %}
-        <div class="invisible h-full group-[.cart-drawer-is-open]/body:visible">
+        <div class="h-full">
           {%- comment -%} Empty cart {%- endcomment -%}
           <div
             class="cart-drawer__warnings hidden flex-col items-center justify-center px-10 py-24 text-center group-[.cart-is-empty]/cart-items:flex group-[.cart-is-empty]/cart-items:min-h-screen">

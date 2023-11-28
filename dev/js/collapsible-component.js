@@ -262,6 +262,8 @@ if (!customElements.get('collapsible-component')) {
         }
       }
 
+      if (this.options.isDesktopMenu) this.header.toggleHeaderClass(true);
+
       // Keep track of the state so we know where to add the focus when moving between the mobile menu items
       if (this.options.isMobileMenu) this.state.push(group);
     }
@@ -291,12 +293,9 @@ if (!customElements.get('collapsible-component')) {
     toggle(group) {
       if (!group) return false;
 
-      const { isDesktopMenu } = this.options;
-
       // Check if already open
       if (!group.classList.contains(this.options.classToToggle)) {
         this.open(group);
-        isDesktopMenu && this.header.toggleHeaderClass(true);
       }
       else {
         // Close child collapsibles
@@ -305,7 +304,7 @@ if (!customElements.get('collapsible-component')) {
         // Close this group
         this.close(group);
 
-        isDesktopMenu && this.header.toggleHeaderClass(false);
+        if (this.options.isDesktopMenu) this.header.toggleHeaderClass(false);
 
         // Focus the previous menu
         if (this.options.isMobileMenu) {
@@ -355,8 +354,7 @@ if (!customElements.get('collapsible-component')) {
       }
 
       // Close desktop
-      const { isDesktopMenu } = this.options;
-      isDesktopMenu && this.header.toggleHeaderClass(false);
+      if (this.options.isDesktopMenu) this.header.toggleHeaderClass(false);
     }
   }
 

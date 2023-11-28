@@ -38,7 +38,7 @@
       {%- comment -%} The collection filter drawer {%- endcomment -%}
       <div
         class="
-          filter__drawer fixed bottom-0 end-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto bg-bg-default text-sm opacity-0 transition-all duration-300
+          filter__drawer fixed bottom-0 end-0 top-0 z-modal w-full max-w-sm translate-x-full overflow-y-auto bg-bg-default text-sm transition-transform duration-[500ms] ease-[cubic-bezier(.25,.2,.25,1)]
 
           {% comment %} When flex layout is used, make sure the element doesn't overlap the modals {% endcomment %}
           {% if settings.filter_display == 'flex' -%}
@@ -47,7 +47,6 @@
 
           {% comment %} If the body group has class filter-is-open, add these styles {% endcomment %}
           group-[.filter-is-open]/body:translate-x-0
-          group-[.filter-is-open]/body:opacity-100
 
           {% comment %} On LG screens, if the group has group/grid, add these styles {% endcomment %}
           group-[.filter]/grid:lg:inset-unset
@@ -57,12 +56,10 @@
           group-[.filter]/flex:md:translate-x-0
           group-[.filter]/flex:md:overflow-visible
 
-          group-[.filter]/flex:md:opacity-100
           group-[.filter]/grid:lg:relative
           group-[.filter]/grid:lg:z-10
           group-[.filter]/grid:lg:max-w-none
           group-[.filter]/grid:lg:translate-x-0
-          group-[.filter]/grid:lg:opacity-100
         ">
         <div class="invisible group-[.filter-is-open]/body:visible group-[.filter]/flex:md:visible group-[.filter]/grid:lg:visible">
           {%- comment -%} The collection drawer header. {%- endcomment -%}
