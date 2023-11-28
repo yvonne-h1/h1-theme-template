@@ -46,6 +46,7 @@ if (!customElements.get('collapsible-component')) {
         hoverDelay: 0,
         closeOnMouseleave: false,
         isMobileMenu: false,
+        isDesktopMenu: false,
         breakpointMax: false,
         trapFocus: true,
         openOnMobile: false,
@@ -58,6 +59,11 @@ if (!customElements.get('collapsible-component')) {
           ...this.options,
           ...dataOptions,
         };
+      }
+
+      // toggle the header class
+      if (this.options.isDesktopMenu) {
+        this.header = document.querySelector('header-component');
       }
 
       // Used for the main menu to retain the nested levels for the mobile menu
@@ -100,8 +106,9 @@ if (!customElements.get('collapsible-component')) {
       // Remove all event listeners
       this.triggers.forEach((trigger) => {
         trigger.removeEventListener('click', this.debounceClickEvent);
-
-        if (this.options.onHover) trigger.removeEventListener('mouseenter', this.debouncedOnMouse);
+        if (this.options.onHover) {
+          trigger.removeEventListener('mouseenter', this.debouncedOnMouse);
+        }
       });
       this.groups.forEach((group) => {
         if (this.options.onHover) group.removeEventListener('mouseleave', this.debouncedOnMouse);
@@ -284,9 +291,12 @@ if (!customElements.get('collapsible-component')) {
     toggle(group) {
       if (!group) return false;
 
+      const { isDesktopMenu } = this.options;
+
       // Check if already open
       if (!group.classList.contains(this.options.classToToggle)) {
         this.open(group);
+        isDesktopMenu && this.header.toggleHeaderClass(true);
       }
       else {
         // Close child collapsibles
@@ -294,6 +304,8 @@ if (!customElements.get('collapsible-component')) {
 
         // Close this group
         this.close(group);
+
+        isDesktopMenu && this.header.toggleHeaderClass(false);
 
         // Focus the previous menu
         if (this.options.isMobileMenu) {
@@ -341,6 +353,10 @@ if (!customElements.get('collapsible-component')) {
       if (this.options.isMobileMenu) {
         this.state = [this.querySelector('nav')];
       }
+
+      // Close desktop
+      const { isDesktopMenu } = this.options;
+      isDesktopMenu && this.header.toggleHeaderClass(false);
     }
   }
 

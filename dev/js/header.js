@@ -1,80 +1,3 @@
-class HeaderCollapsibleComponent extends Collapsible {
-  constructor() {
-    super();
-    this.header = this.closest('[data-header]');
-    this.headerWrapper = this.closest('.shopify-section-group-header-group');
-
-    // add a class to this section so the header doesn't take up space
-    this.headerWrapper.classList.add('group-[.header-hidden]/body:invisible');
-
-    if (this.header) {
-      this.inverse = !!this.header.classList.contains('header--inverse');
-      this.backdrop = this.header.querySelector('.header-backdrop');
-
-      // extra events
-      this.backdrop?.addEventListener('click', this.closeAll.bind(this));
-
-      // on key up
-      document.addEventListener('keyup', event => this.onKeyUp(event));
-    }
-  }
-
-  onKeyUp(event) {
-    if (!document.body.classList.contains('desktop-submenu-is-open') || event?.code.toUpperCase() !== 'ESCAPE') return;
-
-    const { classToToggle } = this.options;
-    let group = this.querySelector(`[data-collapsible-group].${classToToggle}`);
-    if (group) this.close(group);
-  }
-
-  open(group) {
-    super.open(group);
-    this.toggleHeaderClass(true);
-  }
-
-  close(group) {
-    super.close(group);
-    this.toggleHeaderClass(false);
-  }
-
-  closeSiblings(currentGroup = null) {
-    super.closeSiblings(currentGroup);
-    this.toggleHeaderClass(false);
-  }
-
-  openAll() {
-    super.openAll();
-    this.toggleHeaderClass(true);
-  }
-
-  closeAll() {
-    super.closeAll();
-    this.toggleHeaderClass(false);
-  }
-
-  toggleHeaderClass(open = true) {
-    if (!this.header) return false;
-
-    if (open) {
-      // set header open
-      document.body.classList.add('desktop-submenu-is-open');
-      this.inverse && this.header.classList.add('header-inverse-solid');
-    }
-    else {
-      // set header closed if all menu items are closed
-      let close = true;
-      const { classToToggle } = this.options;
-      this.groups.forEach((group) => {
-        if (group.classList.contains(classToToggle)) close = false;
-      });
-      if (close) {
-        document.body.classList.remove('desktop-submenu-is-open');
-        this.inverse && document.body.classList.remove('header-inverse-solid');
-      }
-    }
-  }
-}
-
 class HeaderComponent extends HTMLElement {
   constructor() {
     super();
@@ -180,10 +103,19 @@ class HeaderComponent extends HTMLElement {
     if (!this.search || !this.searchToggle) return false;
     if (this.search.classList.contains('header__search--is-active')) this.searchToggle.remove();
   }
-}
 
-if (!customElements.get('header-collapsible-component')) {
-  customElements.define('header-collapsible-component', HeaderCollapsibleComponent);
+  toggleHeaderClass(open = true) {
+    this.inverse = !!this.header.classList.contains('header--inverse');
+    if (open) {
+      // set header open
+      document.body.classList.add('desktop-submenu-is-open');
+      this.inverse && this.header.classList.add('header-inverse-solid');
+    }
+    else {
+      document.body.classList.remove('desktop-submenu-is-open');
+      this.inverse && document.body.classList.remove('header-inverse-solid');
+    }
+  }
 }
 
 if (!customElements.get('header-component')) {

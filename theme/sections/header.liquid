@@ -27,12 +27,12 @@
 
 {% comment %} Backdrop {% endcomment %}
 <class-toggle-component
-  class=" header-backdrop backdrop group-[.desktop-submenu-is-open]/body:lg:backdrop--active z-10"
+  class=" header-backdrop backdrop group-[.desktop-submenu-is-open]/body:lg:backdrop--active hidden lg:block"
   tabindex="-1"
   aria-hidden="true"
   data-options='
     {
-      "classToToggle": "mobile-menu-is-open"
+      "classToToggle": "desktop-submenu-is-open"
     }
   '></class-toggle-component>
 
