@@ -20,7 +20,7 @@
     </h1>
 
     {% comment %} Left column: Product media {% endcomment %}
-    <div class="product-media relative col-span-12 md:col-span-7 lg:col-span-6 2xl:col-span-7">
+    <div class="product-media col-span-12 md:col-span-7 md:self-start lg:col-span-6 2xl:col-span-7 {% if section.settings.enable_sticky_info -%}product-media-col--sticky group-[.header-sticky:not(.header-hidden)]/body:top-20 md:sticky md:top-4 md:transition-[top] md:duration-300{%- endif -%}">
 
       {%- comment -%} Skiplink so users can go straight to the product info {%- endcomment -%}
       <a class="button button--primary sr-only !absolute inset-[3px] bottom-auto z-popover !p-2 focus:not-sr-only focus:outline-dashed focus:outline-1 states:no-underline" href="#ProductInfo">
@@ -32,10 +32,7 @@
 
     {%- comment -%} Right col: Product info {%- endcomment -%}
     <div id="ProductInfo" class="product__info col-span-12 md:col-span-5 lg:col-span-6 2xl:col-span-5">
-      <product-info
-        class="product-info-col flex flex-col gap-y-5 bg-gray-50 px-content-wrapper-padding py-6 md:z-10 md:rounded-md md:drop-shadow-lg {% if section.settings.enable_sticky_info -%}product-info-col--sticky sticky top-4 transition-all duration-300 group-[.header-sticky:not(.header-hidden)]/body:top-20{%- endif -%}"
-        data-product-info
-      >
+      <product-info class="product-info-col flex flex-col gap-y-5 bg-gray-50 px-content-wrapper-padding py-6 md:z-10 md:rounded-md md:drop-shadow-lg">
         {%- comment -%} Product title {%- endcomment -%}
         <h1 class="product__title h5 m-0 hidden md:block">
           {{ product.title }}

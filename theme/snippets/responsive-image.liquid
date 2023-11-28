@@ -166,10 +166,10 @@
     # on the last item for the widths
     if image_object.width >= width_int
       assign width = width_int
-      assign image_url = image_object | image_url: width: width
+      assign image_url = image_object | image_url: width: width, crop: crop
       assign new_widths = new_widths | append: ',' | append: width_int
     else
-      assign image_url = image_object | image_url: width: image_object.width
+      assign image_url = image_object | image_url: width: image_object.width, crop: crop
       assign new_widths = new_widths | append: ',' | append: image_object.width
     endif
   endfor
@@ -183,7 +183,6 @@
     {{ image_url | image_tag:
       alt: alt,
       class: class,
-      crop: crop,
       loading: lazy_load,
       height: initial_height,
       sizes: sizes,
@@ -198,7 +197,6 @@
     {{ image_url | image_tag:
       alt: alt,
       class: class,
-      crop: crop,
       height: initial_height,
       sizes: sizes,
       style: style,

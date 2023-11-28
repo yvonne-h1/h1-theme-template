@@ -89,7 +89,6 @@ class HeaderComponent extends HTMLElement {
     this.mobileNavToggle = this.querySelector('mobile-nav-toggle');
     this.search = this.querySelector('[data-header-search]');
     this.searchToggle = this.querySelector('search-toggle');
-    this.productInfo = document.querySelector('[data-product-info]');
 
     if (this.headerWrapper) {
       // scroll parameters
@@ -154,20 +153,17 @@ class HeaderComponent extends HTMLElement {
     this.closeHeaderNav();
     this.closeMobileNav();
     this.closeSearch();
-    this.productInfoPosition('up');
   }
 
   reveal() {
     document.body.classList.add('header-sticky');
     document.body.classList.remove('header-hidden');
     if (this.headerInverse) document.body.classList.add('header-inverse-solid');
-    this.productInfoPosition('down');
   }
 
   revealTop() {
     if (this.headerInverse && !document.body.classList.contains('desktop-submenu-is-open')) document.body.classList.remove('header-inverse-solid');
     document.body.classList.remove('header-hidden', 'header-sticky');
-    this.productInfoPosition('up');
   }
 
   closeHeaderNav() {
@@ -183,16 +179,6 @@ class HeaderComponent extends HTMLElement {
   closeSearch() {
     if (!this.search || !this.searchToggle) return false;
     if (this.search.classList.contains('header__search--is-active')) this.searchToggle.remove();
-  }
-
-  productInfoPosition(pos = 'up') {
-    if (!this.productInfo) return;
-    if (pos == 'down') {
-      this.productInfo.classList.replace('top-0', 'top-[4.5rem]');
-    }
-    else {
-      this.productInfo.classList.replace('top-[4.5rem]', 'top-0');
-    }
   }
 }
 

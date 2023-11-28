@@ -120,118 +120,120 @@
           {%- endunless -%}
 
           {%- comment -%} Level 2 {%- endcomment -%}
-          <ul
-            class="footer-menu__list level-2 list-none invisible group-[.collapsible-is-open]/level1:visible"
+          <div class="footer-menu__list level-2 invisible group-[.collapsible-is-open]/level1:visible"
             tabindex="-1"
             {{ data_collapsible_target }}>
-            {%- for level_2_link in level_1_link.links -%}
-              {%- liquid
-                # Get link and fix deep link to native filters
-                assign level_2_url = level_2_link.url
-                if level_2_url contains 'collections' and level_2_url contains 'filter'
-                  assign level_2_url = level_2_url | replace: '%3F', '?'
-                endif
-
-                # if link is active
-                assign level_2_is_active = false
-                if level_2_link.current
-                  assign level_2_is_active = true
-                endif
-              -%}
-
-              {%- if level_2_link.links == blank -%}
-                {%- comment -%} Level 2 without submenu {%- endcomment -%}
-                <li class="footer-menu__item level-2 p-[1px]">
-                  <a
-                    href="{{ level_2_url }}"
-                    class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
-                    {% if level_2_link.current %}
-                      aria-current="page"
-                    {% endif %}>
-                    {{- level_2_link.title -}}
-                  </a>
-                </li>
-              {%- else -%}
-
+            <ul class="overflow-hidden list-none">
+              {%- for level_2_link in level_1_link.links -%}
                 {%- liquid
-                  # Show button as active when child link is available
-                  if level_2_link.child_active or level_2_link.current
+                  # Get link and fix deep link to native filters
+                  assign level_2_url = level_2_link.url
+                  if level_2_url contains 'collections' and level_2_url contains 'filter'
+                    assign level_2_url = level_2_url | replace: '%3F', '?'
+                  endif
+
+                  # if link is active
+                  assign level_2_is_active = false
+                  if level_2_link.current
                     assign level_2_is_active = true
                   endif
-
-                  assign start_el = 'span'
-                  assign end_el = 'span'
-                  assign has_link = false
-                  if link_2_url != '#'
-                    assign start_el = 'a href="' | append: level_2_link.url | append: '"'
-                    assign end_el = 'a'
-                    assign has_link = true
-                  endif
                 -%}
-                {%- comment -%} Level 2 with submenu {%- endcomment -%}
-                <li
-                  class="footer-menu__item group level-2 group/level2 p-[1px]"
-                  {{ data_collapsible_group }}>
 
-                  {%- capture level_2_link_markup -%}
-                    <{{ start_el }} class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if has_link -%}{{ collapsible_button_class }}{%- endif %} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
-
-                      {% if has_link -%}
-                        {{- data_collapsible_trigger -}}
-                      {%- endif -%}>
-
+                {%- if level_2_link.links == blank -%}
+                  {%- comment -%} Level 2 without submenu {%- endcomment -%}
+                  <li class="footer-menu__item level-2 p-[1px]" style="--animation-delay: {{ forloop.index | plus: 2 }}">
+                    <a
+                      href="{{ level_2_url }}"
+                      class="footer-menu__link level-2 text-sm group-[.collapsible-is-open]/level1:motion-safe:animate-fadein group-[.collapsible-is-open]/level1:motion-safe:opacity-0 {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
+                      {% if level_2_link.current %}
+                        aria-current="page"
+                      {% endif %}>
                       {{- level_2_link.title -}}
-                      {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-2]:rotate-180' -%}
+                    </a>
+                  </li>
+                {%- else -%}
 
-                    </{{ end_el }}>
-                  {%- endcapture -%}
+                  {%- liquid
+                    # Show button as active when child link is available
+                    if level_2_link.child_active or level_2_link.current
+                      assign level_2_is_active = true
+                    endif
 
-                  {%- unless has_link -%}
-                    <button
-                      type="button"
-                      class="footer-menu__link {{ collapsible_button_class }} level-2 font-bold {% if level_1_is_active -%}{{ link_active_class }}{%- endif %}"
-                      {{ data_collapsible_trigger }}>
-                  {%- endunless -%}
-                    {{ level_2_link_markup }}
-                  {%- unless has_link -%}
-                    </button>
-                  {%- endunless -%}
+                    assign start_el = 'span'
+                    assign end_el = 'span'
+                    assign has_link = false
+                    if link_2_url != '#'
+                      assign start_el = 'a href="' | append: level_2_link.url | append: '"'
+                      assign end_el = 'a'
+                      assign has_link = true
+                    endif
+                  -%}
+                  {%- comment -%} Level 2 with submenu {%- endcomment -%}
+                  <li
+                    class="footer-menu__item group level-2 group/level2 p-[1px]"
+                    {{ data_collapsible_group }}>
 
-                  {%- comment -%} Level 3 {%- endcomment -%}
-                  <ul
-                    class="footer-menu__list level-3 list-inside list-disc ps-3 invisible group-[.collapsible-is-open]/level2:visible"
-                    {{ data_collapsible_target }}>
-                    {%- for level_3_link in level_2_link.links -%}
-                      {%- liquid
-                        # Get link and fix deep link to native filters
-                        assign level_3_link_url = level_3_link.url
-                        if level_3_link_url contains 'collections' and level_3_link_url contains 'filter'
-                          assign level_3_link_url = level_3_link_url | replace: '%3F', '?'
-                        endif
+                    {%- capture level_2_link_markup -%}
+                      <{{ start_el }} class="footer-menu__link level-2 text-sm {{ link_class_with_hover }} {% if has_link -%}{{ collapsible_button_class }}{%- endif %} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"
 
-                        # If link is active
-                        assign level_3_is_active = false
-                        if level_3_link.current
-                          assign level_3_is_active = true
-                        endif
-                      -%}
+                        {% if has_link -%}
+                          {{- data_collapsible_trigger -}}
+                        {%- endif -%}>
 
-                      <li class="footer-menu__item level-3 py-[1px]">
-                        <a
-                          href="{{ level_3_link_url }}"
-                          class="footer-menu__link {{ link_class_with_hover }} text-sm {% if level_3_is_active -%}{{ link_active_class }}{%- endif %}"
-                          {% if level_3_link.current %}
-                            aria-current="page"
-                          {% endif %}>
-                          {{- level_3_link.title -}}
-                        </a>
-                      </li>
-                    {%- endfor -%}
-                  </ul>
-                </li>
-              {%- endif -%}
-            {%- endfor -%}
-          </ul>
+                        {{- level_2_link.title -}}
+                        {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 group-[.collapsible-is-open.level-2]:rotate-180' -%}
+
+                      </{{ end_el }}>
+                    {%- endcapture -%}
+
+                    {%- unless has_link -%}
+                      <button
+                        type="button"
+                        class="footer-menu__link {{ collapsible_button_class }} level-2 font-bold {% if level_1_is_active -%}{{ link_active_class }}{%- endif %}"
+                        {{ data_collapsible_trigger }}>
+                    {%- endunless -%}
+                      {{ level_2_link_markup }}
+                    {%- unless has_link -%}
+                      </button>
+                    {%- endunless -%}
+
+                    {%- comment -%} Level 3 {%- endcomment -%}
+                    <div class="footer-menu__list level-3 invisible group-[.collapsible-is-open]/level2:visible"
+                      {{ data_collapsible_target }}>
+                      <ul class="overflow-hidden  ps-3 list-inside list-disc">
+                        {%- for level_3_link in level_2_link.links -%}
+                          {%- liquid
+                            # Get link and fix deep link to native filters
+                            assign level_3_link_url = level_3_link.url
+                            if level_3_link_url contains 'collections' and level_3_link_url contains 'filter'
+                              assign level_3_link_url = level_3_link_url | replace: '%3F', '?'
+                            endif
+
+                            # If link is active
+                            assign level_3_is_active = false
+                            if level_3_link.current
+                              assign level_3_is_active = true
+                            endif
+                          -%}
+
+                          <li class="footer-menu__item level-3 py-[1px]" style="--animation-delay: {{ forloop.index | plus: 2 }}">
+                            <a
+                              href="{{ level_3_link_url }}"
+                              class="footer-menu__link group-[.collapsible-is-open]/level2:motion-safe:animate-fadein group-[.collapsible-is-open]/level2:motion-safe:opacity-0 {{ link_class_with_hover }} text-sm {% if level_3_is_active -%}{{ link_active_class }}{%- endif %}"
+                              {% if level_3_link.current %}
+                                aria-current="page"
+                              {% endif %}>
+                              {{- level_3_link.title -}}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
         </li>
       {%- endif -%}
     {%- endfor -%}

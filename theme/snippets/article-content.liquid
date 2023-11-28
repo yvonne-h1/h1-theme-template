@@ -74,17 +74,17 @@
 
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
-
+  {%- assign wrapper_classes = 'rte max-w-content-width-md mx-auto' -%}
   {% comment %} If the article content contains a placeholder for products, render the carousel there instead {% endcomment %}
   {%- if featured_products_content != blank and render_inline -%}
     {%- assign article_parts = article.content | split: has_products_placeholder -%}
 
-    <div class="mb-10 mt-4">{{ article_parts[0] }}</div>
+    <div class="mb-10 mt-4 {{ wrapper_classes }}">{{ article_parts[0] }}</div>
     {{- featured_products_content -}}
-    <div class="mt-10">{{ article_parts[1] }}</div>
+    <div class="mt-10 {{ wrapper_classes }}">{{ article_parts[1] }}</div>
   {%- else -%}
     {% comment %} # remove the placeholder and wrap the content {% endcomment %}
-    <div class="mb-10 mt-4">
+    <div class="mb-10 mt-4 {{ wrapper_classes }}">
       {{ article.content }}
     </div>
   {%- endif -%}
@@ -93,7 +93,7 @@
 {%- assign container_class = class | append: ' article-content ' -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', content: container_content, class: container_class, content_class: 'rte max-w-content-width-md' -%}
+{%- render 'render-container-content', content: container_content, class: container_class -%}
 
 {% comment %} If there is no placeholder in the content, render the product slider below the content {% endcomment %}
 {%- liquid

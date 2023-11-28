@@ -27,7 +27,7 @@
         {%- when 'form' -%}
           <div class="mx-auto w-full max-w-xs" {{ block.shopify_attributes }}>
             {% comment %} Regular form {% endcomment %}
-            {% form 'customer', class: 'newsletter__form' %}
+            {% form 'customer', class: 'newsletter__form', id: 'form-newsletter-section' %}
               <input type="hidden" name="contact[tags]" value="newsletter">
               <input type="hidden" name="customer[accepts_marketing]" value="true">
 

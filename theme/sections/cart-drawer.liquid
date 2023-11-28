@@ -98,7 +98,7 @@
                 {%- if cart != empty -%}
                   <ul class="cart-drawer-items">
                     {%- for item in cart.items -%}
-                      <li style="--animation-delay: {{ forloop.index | plus: 3 }}">
+                      <li class="border-b py-6 first:pt-0 last:border-none" style="--animation-delay: {{ forloop.index | plus: 3 }}">
                         {%- render 'cart-item', item: item, view: 'cart-drawer' -%}
                       </li>
                     {%- endfor -%}
@@ -129,7 +129,7 @@
               {%- if settings.show_recommendations -%}
                 <div class="js-cart-related-items-swiper">
                   {%- capture recommendations -%}
-                    {%- render 'cart-related-items', is_swiper: true -%}
+                    {%- render 'cart-related-items', is_swiper: true, unique_identifier: 'drawer-mobile' -%}
                   {%- endcapture -%}
 
                   {% comment %} Items {% endcomment %}

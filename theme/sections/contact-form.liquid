@@ -84,6 +84,7 @@
         {%- comment -%} Dropdown with options {%- endcomment -%}
         {%- if block.type == 'select' -%}
           {%- if block.settings.title != blank and block.settings.id != blank -%}
+            {%- assign options_arr = block.settings.dropdown_options | newline_to_br | strip_newlines | split: '<br />' -%}
             <div class="field col-span-2">
               <label class="field__label" for="ContactForm-{{ block.settings.title | handleize }}">
                 {{- block.settings.title }} {% if block.settings.required %}*{%- endif -%}
@@ -93,10 +94,9 @@
                   name="contact[{{ block.settings.title }}]"
                   {% if block.settings.required %}aria-required="true" required{% endif -%}>
                   {%- comment -%} Empty first option to show the label instead {%- endcomment -%}
-                  {% unless block.settings.required %}<option value="" disabled selected hidden>-</option>{%- endunless -%}
-                  {%- assign options_arr = block.settings.dropdown_options | newline_to_br | strip_newlines | split: '<br />' -%}
+                  <option value="" disabled selected hidden>-</option>
                   {%- for option in options_arr -%}
-                    <option value="{{ option }}">{{ option }}</option>
+                    <option value="{{- option -}}">{{- option -}}</option>
                   {%- endfor -%}
                 </select>
                 <span class="select__select-icon">
@@ -139,7 +139,7 @@
                 {{ block.settings.title }} {% if block.settings.required %}*{%- endif -%}
               </label>
               <textarea
-                rows="[{{ block.settings.rows }}]"
+                rows="{{ block.settings.rows }}"
                 id="ContactForm-{{ block.settings.title | handleize }}"
                 class="field__textarea"
                 name="contact[{{ block.settings.title }}]"

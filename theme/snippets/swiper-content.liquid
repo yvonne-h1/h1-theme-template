@@ -236,7 +236,7 @@
               {% endif -%}
             "
             data-swiper-slide-index="{{ forloop.index }}"
-            style="--animation-delay: {{ count }}">
+            style="--animation-delay: {{ count | plus: index_on_page }}">
             {%- liquid
               if render_products
                 render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3'
