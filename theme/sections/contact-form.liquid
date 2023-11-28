@@ -94,9 +94,9 @@
                   name="contact[{{ block.settings.title }}]"
                   {% if block.settings.required %}aria-required="true" required{% endif -%}>
                   {%- comment -%} Empty first option to show the label instead {%- endcomment -%}
-                  <option value="" disabled selected hidden>-</option>
+                  {% unless block.settings.required %}<option value="" disabled selected hidden>-</option>{% endunless %}
                   {%- for option in options_arr -%}
-                    <option value="{{- option -}}">{{- option -}}</option>
+                    <option value="{{- option -}}" {% if block.settings.required and forloop.first -%}selected{%- endif -%}>{{- option -}}</option>
                   {%- endfor -%}
                 </select>
                 <span class="select__select-icon">

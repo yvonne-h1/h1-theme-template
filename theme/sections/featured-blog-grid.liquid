@@ -45,7 +45,7 @@
         assign count = count | plus: 1
       -%}
 
-      <li style="--animation-delay: {{ forloop.index }}">
+      <li style="--animation-delay: {{ forloop.index }};">
         {%- render 'article-card'
           article: article_object,
           image_max_width: image_max_width,

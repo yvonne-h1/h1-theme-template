@@ -98,10 +98,10 @@
               assign mobile_submenu_class = 'mobile-menu__submenu invisible absolute bottom-0 start-0 top-0 z-10 block w-full translate-x-full overflow-y-auto transition-all duration-300 flex flex-col min-h-mobile-menu'
             -%}
             {%- if level_1.links == blank -%}
-              <li class="mobile-menu__item level-1" style="--animation-delay: {{ forloop.index | plus: 3 }}">
+              <li class="mobile-menu__item level-1" style="--animation-delay: {{ forloop.index | plus: 3 }};">
                 <a
                   href="{{ level_1_url }}"
-                  class="{{ mobile_menu_link_class }} level-1 {{ link_classes }} group-[.mobile-menu-is-open]/body:motion-safe:animate-fadein group-[.mobile-menu-is-open]/body:motion-safe:opacity-0 {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
+                  class="{{ mobile_menu_link_class }} level-1 {{ link_classes }} group-[.mobile-menu-is-open]/body:motion-safe:animate-fadein motion-safe:opacity-0 {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
                   {% if level_1.current %}
                     aria-current="page"
                   {% endif %}>
@@ -110,9 +110,9 @@
               </li>
               {%- comment -%} Level 1 with submenu {%- endcomment -%}
             {%- else -%}
-              <li class="mobile-menu__item level-1 group/submenu-1 p-[1px]" style="--animation-delay: {{ forloop.index | plus: 3 }}" data-collapsible-group >
+              <li class="mobile-menu__item level-1 group/submenu-1 p-[1px]" style="--animation-delay: {{ forloop.index | plus: 3 }};" data-collapsible-group >
                 <button
-                  class="{{ mobile_menu_link_class }} level-1 group-[.mobile-menu-is-open]/body:motion-safe:animate-fadein group-[.mobile-menu-is-open]/body:motion-safe:opacity-0 flex w-full items-center justify-between gap-2 {{ link_classes }} {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
+                  class="{{ mobile_menu_link_class }} level-1 group-[.mobile-menu-is-open]/body:motion-safe:animate-fadein motion-safe:opacity-0 flex w-full items-center justify-between gap-2 {{ link_classes }} {% if level_1_is_active -%}{{ link_active_class }}{%- endif -%}"
                   data-collapsible-trigger>
                   <span>
                     {{- level_1_title -}}
@@ -172,10 +172,10 @@
                       -%}
                       {%- if level_2.links == blank -%}
                         {%- comment -%} Level 2 without submenu {%- endcomment -%}
-                        <li class="mobile-menu__item level-2" style="--animation-delay: {{ forloop.index | plus: 3 }}">
+                        <li class="mobile-menu__item level-2" style="--animation-delay: {{ forloop.index | plus: 3 }};">
                           <a
                             href="{{ level_2_url }}"
-                            class="{{ mobile_menu_link_class }} level-2 group-[.collapsible-is-open]/submenu-1:motion-safe:animate-fadein group-[.collapsible-is-open]/submenu-1:motion-safe:opacity-0 {% if level_2_is_active -%}{{ link_active_class }}{%- endif -%}"
+                            class="{{ mobile_menu_link_class }} level-2 group-[.collapsible-is-open]/submenu-1:motion-safe:animate-fadein motion-safe:opacity-0 {% if level_2_is_active -%}{{ link_active_class }}{%- endif -%}"
                             {% if level_2.current %}
                               aria-current="page"
                             {% endif %}>
@@ -184,8 +184,8 @@
                         </li>
                       {%- else -%}
                         {%- comment -%} Level 2 with submenu {%- endcomment -%}
-                        <li class="mobile-menu__item level-2 group/submenu-2" style="--animation-delay: {{ forloop.index | plus: 3 }}" data-collapsible-group>
-                          <button class="{{ mobile_menu_link_class }} level-2 group-[.collapsible-is-open]/submenu-1:motion-safe:animate-fadein group-[.collapsible-is-open]/submenu-1:motion-safe:opacity-0 flex w-full items-center justify-between gap-2 {% if level_2_is_active -%}{{ link_active_class }}{%- endif -%}" data-collapsible-trigger>
+                        <li class="mobile-menu__item level-2 group/submenu-2" style="--animation-delay: {{ forloop.index | plus: 3 }};" data-collapsible-group>
+                          <button class="{{ mobile_menu_link_class }} level-2 group-[.collapsible-is-open]/submenu-1:motion-safe:animate-fadein motion-safe:opacity-0 flex w-full items-center justify-between gap-2 {% if level_2_is_active -%}{{ link_active_class }}{%- endif -%}" data-collapsible-trigger>
                             <span>
                               {{- level_2_title -}}
                             </span>
@@ -234,10 +234,10 @@
                                   endif
                                 -%}
                                 {%- comment -%} Level 3 {%- endcomment -%}
-                                <li class="mobile-menu__item level-3" style="--animation-delay: {{ forloop.index | plus: 3 }}">
+                                <li class="mobile-menu__item level-3" style="--animation-delay: {{ forloop.index | plus: 3 }};">
                                   <a
                                     href="{{ level_3_url }}"
-                                    class="{{ mobile_menu_link_class }} level-3 group-[.collapsible-is-open]/submenu-2:motion-safe:animate-fadein group-[.collapsible-is-open]/submenu-2:motion-safe:opacity-0 {% if level_3_is_active -%}{{ link_active_class }}{%- endif -%}"
+                                    class="{{ mobile_menu_link_class }} level-3 group-[.collapsible-is-open]/submenu-2:motion-safe:animate-fadein motion-safe:opacity-0 {% if level_3_is_active -%}{{ link_active_class }}{%- endif -%}"
                                     {% if level_3.current %}
                                       aria-current="page"
                                     {% endif %}>

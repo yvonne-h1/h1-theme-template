@@ -89,7 +89,7 @@
 
       {%- comment -%} Render column {%- endcomment -%}
       <div class="multi-columns__column flex flex-col {{ block.settings.position_vertical }} {{ block.settings.position_horizontal }} {{ block.settings.mobile_order }} md:order-none" {{ block.shopify_attributes }}
-        style="--animation-delay: {{ forloop.index | plus: section.index }}">
+        style="--animation-delay: {{ forloop.index | plus: section.index }};">
         {%- comment -%} Column inner width and text align {%- endcomment -%}
         <div class="flex flex-col gap-y-4 motion-safe:animate-fadein motion-safe:opacity-0 {% if section.settings.odd_even -%}{% cycle 'md:flex-row', 'md:flex-row-reverse' %} items-center gap-x-base xl:flex-col{%- endif %}">
 

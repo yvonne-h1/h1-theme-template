@@ -141,7 +141,7 @@
 
                 {%- if level_2_link.links == blank -%}
                   {%- comment -%} Level 2 without submenu {%- endcomment -%}
-                  <li class="footer-menu__item level-2 p-[1px]" style="--animation-delay: {{ forloop.index | plus: 2 }}">
+                  <li class="footer-menu__item level-2 p-[1px]" style="--animation-delay: {{ forloop.index | plus: 2 }};">
                     <a
                       href="{{ level_2_url }}"
                       class="footer-menu__link level-2 text-sm group-[.collapsible-is-open]/level1:motion-safe:animate-fadein group-[.collapsible-is-open]/level1:motion-safe:opacity-0 {{ link_class_with_hover }} {% if level_2_is_active -%}{{ link_active_class }}{%- endif %}"

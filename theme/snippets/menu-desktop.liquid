@@ -97,41 +97,50 @@
                 <li class="{%- if images != blank -%}w-1/4{%- endif -%}">
                   {% comment %} Render the level 2 as a collapsible {% endcomment %}
                   {%- if level_2.links != blank -%}
-                    <div data-collapsible-group>
+                    <div class="group/level2 group" data-collapsible-group>
                       <button class="{{- header_menu_link_classes }} level-2 w-full py-1.5" data-collapsible-trigger>
                         {{- level_2.title -}}
                         {%- render 'icons', icon: 'chevron-right', icon_class: 'w-4' -%}
                       </button>
                       {%- comment -%} Level 3 {%- endcomment -%}
-                      <ul class="header__menu-list level-3 absolute start-1/4 top-0 h-full w-3/4" data-collapsible-target tabindex="-1">
-                        {%- for level_3 in level_2.links -%}
+                      <div class="duration-0" data-collapsible-target tabindex="-1">
+                        <ul class="header__menu-list level-3 invisible overflow-hidden
+                          group-[.collapsible-is-open]/level2:visible
+                          group-[.collapsible-is-open]/level2:absolute
+                          group-[.collapsible-is-open]/level2:start-1/4
+                          group-[.collapsible-is-open]/level2:top-0
+                          group-[.collapsible-is-open]/level2:h-full
+                          group-[.collapsible-is-open]/level2:w-3/4
+                          group-[.collapsible-is-open]/level2:py-4">
+                          {%- for level_3 in level_2.links -%}
 
-                          {%- liquid
-                            # Get link and fix deep link to native filters
-                            assign grandchildlink_url = level_3.url
-                            if grandchildlink_url contains 'collections' and grandchildlink_url contains 'filter'
-                              assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?'
-                            endif
+                            {%- liquid
+                              # Get link and fix deep link to native filters
+                              assign grandchildlink_url = level_3.url
+                              if grandchildlink_url contains 'collections' and grandchildlink_url contains 'filter'
+                                assign grandchildlink_url = grandchildlink_url | replace: '%3F', '?'
+                              endif
 
-                            # if link is active
-                            assign level_3_active = false
-                            if level_3.current
-                              assign level_3_active = true
-                            endif
-                          -%}
-                          <li>
-                            <a
-                              href="{{ grandchildlink_url }}"
-                              class="{{- header_menu_link_classes }} level-3 py-1.5 font-normal focus-visible:-outline-offset-1 {% if level_3_active -%}{{ header_link_active_class }}{%- endif %}"
-                              {% if level_3.current -%}
-                                aria-current="page"
-                              {% endif -%}
-                            >
-                              {{ level_3.title }}
-                            </a>
-                          </li>
-                        {%- endfor -%}
-                      </ul>
+                              # if link is active
+                              assign level_3_active = false
+                              if level_3.current
+                                assign level_3_active = true
+                              endif
+                            -%}
+                            <li style="--animation-delay: {{ forloop.index | plus: 1 }};">
+                              <a
+                                href="{{ grandchildlink_url }}"
+                                class="{{- header_menu_link_classes }} level-3 py-1.5 font-normal focus-visible:-outline-offset-1 motion-safe:opacity-0 group-[.collapsible-is-open]/level2:motion-safe:animate-fadein {% if level_3_active -%}{{ header_link_active_class }}{%- endif %}"
+                                {% if level_3.current -%}
+                                  aria-current="page"
+                                {% endif -%}
+                              >
+                                {{ level_3.title }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
                     </div>
 
                   {%- else -%}
@@ -181,11 +190,11 @@
                 {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]/menu-item:rotate-180' -%}
               </a>
               <div
-                class="header__inner-container {% if submenu_layout == 'multi' and images != blank %}inset-x-0 w-full ps-10{% endif %} invisible absolute top-full group-[.collapsible-is-open]/menu-item:visible {{ section.settings.color_scheme }}"
+                class="header__inner-container js:duration-200 {% if submenu_layout == 'multi' and images != blank %}inset-x-0 w-full ps-10{% endif %} invisible absolute top-full group-[.collapsible-is-open]/menu-item:visible {{ section.settings.color_scheme }}"
                 data-collapsible-target
                 tabindex="-1">
-                <div class="header__navigation-container content-wrapper p-4 {% if images != blank -%}grid grid-cols-12 gap-x-4 gap-y-0{%- endif -%}">
-                  <ul class="header__menu-list level-2 relative col-span-8 flex flex-col gap-y-2">
+                <div class="header__navigation-container content-wrapper overflow-hidden {% if images != blank -%}grid grid-cols-12 gap-x-4 gap-y-0{%- endif -%}">
+                  <ul class="header__menu-list level-2 relative col-span-8 flex flex-col gap-y-2 p-4">
                     {{- submenu -}}
                   </ul>
 

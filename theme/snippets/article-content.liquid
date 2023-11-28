@@ -51,7 +51,7 @@
               # Grid
               echo grid_classes | prepend: '<ul class="' | append: '">'
               for product_item in products_arr
-                echo '<li style="--animation-delay: ' | append: forloop.index | append: '">'
+                echo '<li style="--animation-delay: ' | append: forloop.index | append: ';">'
                 render 'product-card', product_object: product_item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3'
                 echo '</li>'
               endfor

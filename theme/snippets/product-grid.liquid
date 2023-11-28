@@ -79,7 +79,7 @@
     -%}
 
     {%- for product in collection.products -%}
-      <li class="{{ classes }}" style="--animation-delay: {{ forloop.index }}">
+      <li class="{{ classes }}" style="--animation-delay: {{ forloop.index }};">
         {%- render 'product-card',
           product_object: product,
           image_max_width: 750,

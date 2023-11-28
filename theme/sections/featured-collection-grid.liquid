@@ -41,7 +41,7 @@
         assign count = count | plus: 1
       -%}
 
-      <li style="--animation-delay: {{ count }}">
+      <li style="--animation-delay: {{ count }};">
         {%- render 'product-card',
           product_object: product_object,
           image_max_width: image_max_width,
