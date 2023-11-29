@@ -70,7 +70,7 @@
   },
   "date_formats": {
     "month_year": "%B %Y",
-    "day_month_year": "%e %B %Y"
+    "day_month_year": "%B %e %Y"
   },
   "accessibility": {
     "skip_to_text": "Skip to content",

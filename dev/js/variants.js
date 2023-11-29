@@ -162,6 +162,7 @@ class VariantSelects extends HTMLElement {
 
   renderProductInfo() {
     const url = `${this.options.url}?variant=${this.currentVariant.id}&section_id=${this.options.section}`;
+    console.log(url);
     fetch(url)
       .then(response => response.text())
       .then((responseText) => {

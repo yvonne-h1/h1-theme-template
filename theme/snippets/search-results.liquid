@@ -4,7 +4,7 @@
 
 {%- liquid
   assign grid_classes = 'search-results gap-base'
-  assign grid_item_classes = 'col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3'
+  assign grid_item_classes = 'col-span-12 sm:col-span-6 md:col-span-4'
 
   assign sort_by = search.sort_by | default: search.default_sort_by
 -%}
@@ -16,7 +16,7 @@
         {%- when 'product' -%}
           {%- capture results_products -%}
             {{ results_products }}
-            <li class="{{ grid_item_classes }}" style="--animation-delay: {{ forloop.index }};">
+            <li class="{{ grid_item_classes }} lg:col-span-3" style="--animation-delay: {{ forloop.index }};">
               {%- render 'product-card', product_object: item -%}
             </li>
           {%- endcapture -%}
@@ -40,7 +40,7 @@
     {% comment %} Product results {% endcomment %}
     {%- if results_products -%}
       <div class="mb-8 flex justify-between">
-        <h2 class="h3 mb-0 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search', key: 'products.other', fallback: 'products' -%}</h2>
+        <h2 class="h3 mb-0 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search.types', key: 'product.other', fallback: 'products' -%}</h2>
 
         {% comment %} Sort options {% endcomment %}
         <div class="field w-auto">
@@ -87,7 +87,7 @@
 
     {% comment %} Page results {% endcomment %}
     {%- if results_pages -%}
-      <h2 class="h3 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search.types', key: 'pages.other', fallback: 'Pages' -%}</h2>
+      <h2 class="h3 capitalize leading-[inherit]">{%- render 'render-translation', namespace: 'sections.main_search.types', key: 'page.other', fallback: 'Pages' -%}</h2>
       <ul class="{{ grid_classes }} flex flex-col">
         {{ results_pages }}
       </ul>
