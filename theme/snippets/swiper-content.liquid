@@ -50,6 +50,16 @@
     assign render_inline = false
   endunless
 
+  if render_products
+    assign image_max_width = 360
+    assign image_sizes = '(min-width: 1440px) 288px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+  endif
+
+  if render_blog_articles
+    assign image_max_width = 420
+    assign image_sizes = '320px'
+  endif
+
   # never allow more than 12 slides
   if max_count == blank
     if object_array.size > 12
@@ -78,12 +88,6 @@
 
   # Import styles
   render 'import-styles', file_name: 'component-swiper.css', force: force_css
-
-  assign image_max_width = 360
-
-  unless image_sizes
-    assign image_sizes = '(min-width: 1440px) 316px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
-  endunless
 
   # Styles based on swiper_indication setting
   case swiper_indication
@@ -218,6 +222,8 @@
 
               # Increase the count for every item that passes the statements so we can make sure the slides don't exceed the max count
               assign count = count | plus: 1
+            elsif render_product_cards
+              assign count = count | plus: 1
             endif
           -%}
           <div
@@ -239,9 +245,9 @@
             style="--animation-delay: {{ count | plus: index_on_page }};">
             {%- liquid
               if render_products
-                render 'product-card', product_object: item, image_max_width: image_max_width, image_sizes: image_sizes, product_card_title_el: 'h3'
+                render 'product-card', product_object: item, image_max_width: image_max_width, sizes: image_sizes, product_card_title_el: 'h3', animate: false
               elsif render_blog_articles
-                render 'article-card', article: item, image_max_width: image_max_width, image_sizes: image_sizes
+                render 'article-card', article: item, image_max_width: image_max_width, sizes: image_sizes, animate: false
               elsif render_product_cards
                 echo item
               endif

@@ -35,7 +35,7 @@
         endif
 
         # Check if the article has the tag that is defined in the settings
-        if tag_to_show
+        if tag_to_show != blank
           unless article_object.tags contains tag_to_show
             continue
           endunless
@@ -70,7 +70,7 @@
 {%- endcapture -%}
 
 {%- capture container_footer -%}
-  {%- if section.settings.button_text != blank -%}
+  {%- if section.settings.enable_button -%}
     <a
       {% if section.settings.button_url != blank or section.settings.blog.url != blank %}
         href="{{ section.settings.button_url | default: section.settings.blog.url }}"
@@ -289,6 +289,12 @@
       {
         "type": "header",
         "content": "Button"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_button",
+        "label": "Enable button",
+        "default": true
       },
       {
         "type": "text",

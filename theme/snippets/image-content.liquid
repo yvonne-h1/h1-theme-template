@@ -61,6 +61,7 @@
   assign image_mobile = image_desktop
   if object.settings.image_mobile != blank
     assign image_mobile = object.settings.image_mobile
+    assign min_width = 768
   endif
 
   # Define the aspec ratio
@@ -154,8 +155,9 @@
     capture image
       if image_desktop != blank
         # Desktop image
-        render 'responsive-image', image_object: image_desktop, class: image_class_desktop, max_width: max_width, min_width: 768, lazy: lazy, aspect_ratio: tablet_aspect
-
+        render 'responsive-image', image_object: image_desktop, class: image_class_desktop, max_width: max_width, min_width: min_width, lazy: lazy, aspect_ratio: tablet_aspect
+      endif
+      if object.settings.image_mobile != blank
         # Mobile image
         render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy, aspect_ratio: mobile_aspect
       endif
@@ -193,7 +195,7 @@
           <div class="absolute inset-0 {% unless is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endunless %}">
             {%- if image_desktop != blank -%}
               {{- image -}}
-            {%- else -%}
+            {%- elsif object.settings.video_mp4 != blank -%}
               {{ object.settings.video_mp4 | image_url: width: object.settings.video_mp4.preview_image.width | image_tag: class: image_class }}
             {%- endif -%}
           </div>
@@ -228,27 +230,13 @@
   </div>
 
   {% comment %} Banner content {% endcomment %}
-  {%- liquid
-    # First button
-    assign button_1 = false
-    if object.settings.button_label_1 != blank and object.settings.button_1_play or object.settings.button_url_1 != blank
-      assign button_1 = true
-    endif
-
-    # Second button
-    assign button_2 = false
-    if object.settings.button_label_2 != blank and object.settings.button_2_play or object.settings.button_url_2 != blank
-      assign button_2 = true
-    endif
-  -%}
-
   {%- if object.settings.heading != blank or object.settings.text != blank or button_1 or button_2 -%}
     <div
       class="{{- class -}}__content-wrapper content-wrapper relative z-20 flex h-full motion-safe:animate-fadein motion-safe:opacity-0 {{ object.settings.position_horizontal }} {{ object.settings.position_vertical }} {{ object.settings.text_align }} {% if is_swiper -%}{{ min_ratio_mobile }} {{ min_ratio_tablet }}{%- endif %}"
       {% if is_video %}
         data-video-content
       {%- endif -%}>
-      <div class="{{- class -}}__content relative mx-4 mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-sm md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
+      <div class="{{- class -}}__content relative mx-content-wrapper-padding mb-8 mt-16 inline-flex max-w-[80%] flex-col gap-y-4 p-6 md:my-20 md:max-w-screen-sm md:p-8 md:px-12 {{ object.settings.content_color_scheme -}}">
         {% comment %} Heading {% endcomment %}
         {%- if object.settings.heading != blank -%}
           <{{ object.settings.heading_element }} class="{{- object.settings.heading_size }} {{ object.settings.heading_color -}}">
@@ -275,7 +263,7 @@
               assign buttons_alignment = 'justify-end'
           endcase
         -%}
-        {%- if button_1 or button_2 -%}
+        {%- if object.settings.enable_button_1 or object.settings.enable_button_2 -%}
           <div class="{{- class -}}__buttons mt-4 flex items-center gap-4 first:mt-0 {{ buttons_alignment -}}">
             {%- for i in (1..2) -%}
               {%- liquid
@@ -285,7 +273,7 @@
                 assign button_url = 'button_url_' | append: i
                 assign render_button = false
 
-                if request.design_mode or forloop.index == 1 and button_1 or forloop.index == 2 and button_2
+                if request.design_mode or forloop.index == 1 and object.settings.enable_button_1 or forloop.index == 2 and object.settings.enable_button_2
                   assign render_button = true
                 endif
               -%}

@@ -140,7 +140,7 @@
 
   # Image widths
   unless widths
-    assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 2048, 2560, 3000, 4000'
+    assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 1920, 2048, 2560, 3000, 4000'
   endunless
 
   # Create an array of the image widths
@@ -162,6 +162,9 @@
     if width_int < min_width
       continue
     endif
+
+    assign initial_width = width_int
+    assign initial_height = width_int | divided_by: image_ratio | round
 
     # on the last item for the widths
     if image_object.width >= width_int

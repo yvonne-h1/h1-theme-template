@@ -22,6 +22,9 @@
       .container--md & {
         @apply max-w-content-width-md;
       }
+      .container--lg & {
+        @apply max-w-content-width-lg;
+      }
       .container--wide & {
         @apply max-w-full;
       }

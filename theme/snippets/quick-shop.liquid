@@ -82,7 +82,7 @@
           type="submit"
           name="add"
           class="quick-shop__button quick-shop__button--form {{ button_class }}"
-          data-add-to-cart-behavior="open_cart_drawer">
+          data-add-to-cart-behavior="{{ settings.add_to_cart_behavior }}">
           {%- render 'icons', icon: 'cart', icon_class: 'w-5' -%}
           <span>
             {%- render 'render-translation', namespace: 'products.product', key: 'add_to_cart_short', fallback: 'Add' -%}

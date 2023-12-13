@@ -1,7 +1,7 @@
 <div>
   <h3 class="h5 mb-4">Collapsible</h3>
   <collapsible-component
-    class="collapsible"
+    class="collapsible block divide-y border-b border-t"
     data-options='
       {
         "closeSiblings": true
@@ -9,7 +9,7 @@
     '>
     {%- for i in (1..3) -%}
       <div
-        class="collapsible__group group block border-b border-t border-solid"
+        class="collapsible__group group block"
         data-collapsible-group>
         <button
           type="button"
@@ -52,9 +52,11 @@
           {%- render 'icons', icon: 'collapsible', icon_class: 'w-3 collapsible__trigger-icon rotate-0 group-[.collapsible-is-open]:rotate-180' -%}
         </button>
         <div
-          class="collapsible__content rte max-w-none break-words "
+          class="collapsible__target"
           data-collapsible-target>
-          <div class="p-0 pb-4 pt-1">Collapsible content {{ forloop.index }}</div>
+          <div class="rte overflow-hidden">
+            <div class="p-0 pb-4 pt-1">Collapsible content {{ forloop.index }}</div>
+          </div>
         </div>
       </div>
     {%- endfor -%}

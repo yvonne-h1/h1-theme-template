@@ -11,46 +11,23 @@
     assign container_class = container_class | append: ' container--background ' | append: section.settings.color_scheme
   endif
 
-  # Set the grid layout. Make sure there are enough blocks for the columns selected
-  assign columns = section.blocks.size
-  if section.blocks.size == 1
+  # only one column for odd/even option
+  assign columns = 2
+  if section.settings.odd_even
     assign grid_class = ' md:grid-cols-1'
-    if section.settings.odd_even
-      assign grid_class = ' xl:grid-cols-1'
-    endif
-  elsif section.blocks.size == 2
+  else
+    # Set the grid layout. Make sure there are enough blocks for the columns selected
     assign grid_class = ' md:grid-cols-2'
-    if section.settings.odd_even
-      assign grid_class = ' xl:grid-cols-2'
-    endif
-  elsif section.blocks.size == 3
-    assign grid_class = ' md:grid-cols-3'
-    if section.settings.odd_even
-      assign grid_class = ' xl:grid-cols-3'
-    endif
-  endif
-
-  if section.settings.columns_per_row == 1 and section.blocks.size >= 1
-    assign grid_class = ' md:grid-cols-1'
-    if section.settings.odd_even
-      assign grid_class = ' xl:grid-cols-1'
-    endif
-  elsif section.settings.columns_per_row == 2 and section.blocks.size >= 2
-    assign grid_class = ' md:grid-cols-2'
-    if section.settings.odd_even
-      assign grid_class = ' xl:grid-cols-2'
-    endif
-  elsif section.settings.columns_per_row == 3 and section.blocks.size >= 3
-    assign grid_class = ' md:grid-cols-3'
-    if section.settings.odd_even
-      assign grid_class = ' xl:grid-cols-3'
+    if section.settings.columns_per_row == '3' and section.blocks.size >= 3
+      assign columns = 3
+      assign grid_class = ' md:grid-cols-3'
     endif
   endif
 
   assign content_class = content_class | append: grid_class
 
   if section.settings.odd_even
-    assign content_class = content_class | append: ' md:gap-y-10'
+    assign content_class = content_class | append: ' gap-y-10 md:gap-y-10 xl:gap-y-14'
   endif
 
   # Collect the title classnames based on settings.
@@ -67,14 +44,50 @@
         assign image_mobile = block.settings.image_mobile
         if image_mobile == blank
           assign image_mobile = block.settings.image
+          assign min_width = 768
         endif
 
+        assign image_max_width = 767
+        assign image_size = '50vw'
+
         # Set images sizes depending on the number of columns
-        assign image_size = 100 | divided_by: columns | append: 'vw'
-        assign image_max_width = 1376 | divided_by: columns | round
-        assign sizes = '(min-width: 768px) ' | append: image_size | append: ', 100vw'
         if section.settings.odd_even
-          assign sizes = '(min-width: 1024px) ' | append: image_size | append: ', (min-width: 768px) 50vw, 100vw'
+          case section.settings.container_width
+            when 'container--sm'
+              assign sizes = '(min-width: 768px) 278px, 100vw'
+            when 'container--md'
+              assign sizes = '(min-width: 768px) 378px, 100vw'
+            when 'container--lg'
+              assign sizes = '(min-width: 1200px) 568px, (min-width: 768px) 50vw, 100vw'
+            else
+              assign sizes = '(min-width: 1440px) 688px, (min-width: 768px) 50vw, 100vw'
+            endcase
+        else
+          assign image_size = 100 | divided_by: columns | append: 'vw'
+          assign image_max_width = 1376 | divided_by: columns | round
+
+          case section.settings.container_width
+            when 'container--sm'
+              assign sizes = '(min-width: 768px) 262px, 100vw'
+              if columns == 3
+                assign sizes = '(min-width: 768px) 164px, 100vw'
+              endif
+            when 'container--md'
+              assign sizes = '(min-width: 820px) 362px, (min-width: 768px) 336px, 100vw'
+              if columns == 3
+                assign sizes = '(min-width: 768px) 231px, 100vw'
+              endif
+            when 'container--lg'
+              assign sizes = '(min-width: 1200px) 552px, (min-width: 768px) 336px, 100vw'
+              if columns == 3
+                assign sizes = '(min-width: 1200px) 357px, (min-width: 768px) 33vw, 100vw'
+              endif
+            else
+              assign sizes = '(min-width: 1440px) 672px, (min-width: 768px) 336px, 100vw'
+              if columns == 3
+                assign sizes = '(min-width: 1440px) 437px, (min-width: 768px) 33vw, 100vw'
+              endif
+            endcase
         endif
 
         # Align buttons with flex as parent based on text align block.
@@ -88,36 +101,26 @@
       -%}
 
       {%- comment -%} Render column {%- endcomment -%}
-      <div class="multi-columns__column flex flex-col {{ block.settings.position_vertical }} {{ block.settings.position_horizontal }} {{ block.settings.mobile_order }} md:order-none" {{ block.shopify_attributes }}
+      <div class="multi-columns__column flex flex-col {{ block.settings.mobile_order }} md:order-none" {{ block.shopify_attributes }}
         style="--animation-delay: {{ forloop.index | plus: section.index }};">
         {%- comment -%} Column inner width and text align {%- endcomment -%}
-        <div class="flex flex-col gap-y-4 motion-safe:animate-fadein motion-safe:opacity-0 {% if section.settings.odd_even -%}{% cycle 'md:flex-row', 'md:flex-row-reverse' %} items-center gap-x-base xl:flex-col{%- endif %}">
+        <div class="flex flex-col gap-y-4 motion-safe:animate-fadein motion-safe:opacity-0 {% if section.settings.odd_even -%}{% cycle 'md:flex-row', 'md:flex-row-reverse' %} items-center gap-x-base{%- else %}md:flex-col{%- endif %}">
 
-          <div class="multi-columns__image {% if section.settings.odd_even -%}shrink-0 grow basis-1/2{%- endif -%}">
-            {%- liquid
-              # First button
-              assign button_1 = true
-              if block.settings.button_label_1 == blank or block.settings.button_url_1 == blank
-                assign button_1 = false
-              endif
+          {%- if block.settings.image != blank -%}
+            <div class="multi-columns__image {% if section.settings.odd_even -%}shrink-0 grow basis-1/2{%- endif -%}">
+              {%- liquid
+                # Desktop image
+                if block.settings.image != blank
+                  render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', min_width: min_width, max_width: image_max_width, sizes: sizes
+                endif
 
-              # Second button
-              assign button_2 = true
-              if block.settings.button_label_2 == blank or block.settings.button_url_2 == blank
-                assign button_2 = false
-              endif
-
-              # Desktop image
-              if block.settings.image != blank
-                render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', max_width: image_max_width, sizes: sizes
-              endif
-
-              # Mobile Image
-              if image_mobile != blank
-                render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768,
-              endif
-            -%}
-          </div>
+                # Mobile Image
+                if image_mobile != blank
+                  render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768, sizes: '100vw'
+                endif
+              -%}
+            </div>
+          {%- endif -%}
 
           <div class="multi-columns__text {{ block.settings.text_align }}">
             {%- comment -%} Heading {%- endcomment -%}
@@ -133,7 +136,7 @@
             {%- endif -%}
 
             {%- comment -%} Buttons {%- endcomment -%}
-            {%- if button_1 or button_2 -%}
+            {%- if block.settings.enable_button_1 or block.settings.enable_button_2 -%}
               <div class="flex gap-4 {{ button_align }}">
                 {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
                   <a href="{{ block.settings.button_url_1 | default: '#' }}"
@@ -195,8 +198,8 @@
             "label": "Medium"
           },
           {
-            "value": "container--wide",
-            "label": "Wide"
+            "value": "container--lg",
+            "label": "Large"
           }
         ]
       },
@@ -229,19 +232,27 @@
         ]
       },
       {
-        "type": "range",
-        "id": "columns_per_row",
-        "label": "Columns per row",
-        "min": 1,
-        "max": 3,
-        "step": 1,
-        "default": 2
-      },
-      {
         "type": "checkbox",
         "id": "odd_even",
-        "label": "Alternate image and text on tablet screens",
+        "label": "Alternate image and text from tablet screens and up.",
         "default": true
+      },
+      {
+        "type": "select",
+        "id": "columns_per_row",
+        "label": "Columns per row",
+        "info": "Only applies when above option is disabled",
+        "default": "2",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          }
+        ]
       },
       {
         "type": "header",
@@ -346,67 +357,7 @@
         "settings": [
           {
             "type": "header",
-            "content": "Alignment"
-          },
-          {
-            "type": "select",
-            "id": "position_vertical",
-            "label": "Vertical position",
-            "default": "justify-start",
-            "options": [
-              {
-                "value": "justify-start",
-                "label": "Top"
-              },
-              {
-                "value": "justify-center",
-                "label": "Center"
-              },
-              {
-                "value": "justify-end",
-                "label": "Bottom"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id": "position_horizontal",
-            "label": "Horizontal position",
-            "default": "items-start",
-            "options": [
-              {
-                "value": "items-start",
-                "label": "Left"
-              },
-              {
-                "value": "items-center",
-                "label": "Center"
-              },
-              {
-                "value": "items-end",
-                "label": "Right"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id": "text_align",
-            "label": "Text align",
-            "default": "text-start",
-            "options": [
-              {
-                "value": "text-start",
-                "label": "Left"
-              },
-              {
-                "value": "text-center",
-                "label": "Center"
-              },
-              {
-                "value": "text-end",
-                "label": "Right"
-              }
-            ]
+            "content": "Layout"
           },
           {
             "type": "select",
@@ -457,6 +408,204 @@
               {
                 "value": "order-5",
                 "label": "5"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Column"
+          },
+          {
+            "type": "select",
+            "id": "heading_element",
+            "default": "h3",
+            "label": "Heading element",
+            "info": "Change the element of the heading for SEO purposes. If the section heading is H2, this should be H3, etc.",
+            "options": [
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "heading_size",
+            "label": "Heading size",
+            "info": "This is applied only for visual reasons.",
+            "default": "h5",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Text"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tristique, nibh ut facilisis imperdiet, odio velit suscipit ipsum, rhoncus pretium diam urna sit amet lacus. Aliquam a volutpat quam.</p>"
+          },
+          {
+            "type": "select",
+            "id": "text_align",
+            "label": "Text align",
+            "default": "text-start",
+            "options": [
+              {
+                "value": "text-start",
+                "label": "Left"
+              },
+              {
+                "value": "text-center",
+                "label": "Center"
+              },
+              {
+                "value": "text-end",
+                "label": "Right"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "First button"
+          },
+          {
+            "type": "checkbox",
+            "id": "enable_button_1",
+            "label": "Enable button",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "button_label_1",
+            "label": "Label"
+          },
+          {
+            "type": "url",
+            "id": "button_url_1",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "button_type_1",
+            "label": "Type",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "link",
+                "label": "Link"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Second button"
+          },
+          {
+            "type": "checkbox",
+            "id": "enable_button_2",
+            "label": "Enable button",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "button_label_2",
+            "label": "Label"
+          },
+          {
+            "type": "url",
+            "id": "button_url_2",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "button_type_2",
+            "label": "Type",
+            "default": "",
+            "options": [
+              {
+                "value": "",
+                "label": "Default"
+              },
+              {
+                "value": "button button--primary",
+                "label": "Primary"
+              },
+              {
+                "value": "button button--secondary",
+                "label": "Secondary"
+              },
+              {
+                "value": "button button--outline",
+                "label": "Outline"
+              },
+              {
+                "value": "link",
+                "label": "Link"
               }
             ]
           },
@@ -535,170 +684,6 @@
               {
                 "value": "5/6",
                 "label": "5/6"
-              }
-            ]
-          },
-          {
-            "type": "header",
-            "content": "Content"
-          },
-          {
-            "type": "text",
-            "id": "heading",
-            "label": "Heading",
-            "default": "Column"
-          },
-          {
-            "type": "select",
-            "id": "heading_element",
-            "default": "h3",
-            "label": "Heading element",
-            "info": "Change the element of the heading for SEO purposes. If the section heading is H2, this should be H3, etc.",
-            "options": [
-              {
-                "value": "h2",
-                "label": "H2"
-              },
-              {
-                "value": "h3",
-                "label": "H3"
-              },
-              {
-                "value": "h4",
-                "label": "H4"
-              },
-              {
-                "value": "h5",
-                "label": "H5"
-              },
-              {
-                "value": "h6",
-                "label": "H6"
-              }
-            ]
-          },
-          {
-            "type": "select",
-            "id": "heading_size",
-            "label": "Heading size",
-            "info": "This is applied only for visual reasons.",
-            "default": "h5",
-            "options": [
-              {
-                "value": "h1",
-                "label": "H1"
-              },
-              {
-                "value": "h2",
-                "label": "H2"
-              },
-              {
-                "value": "h3",
-                "label": "H3"
-              },
-              {
-                "value": "h4",
-                "label": "H4"
-              },
-              {
-                "value": "h5",
-                "label": "H5"
-              },
-              {
-                "value": "h6",
-                "label": "H6"
-              }
-            ]
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tristique, nibh ut facilisis imperdiet, odio velit suscipit ipsum, rhoncus pretium diam urna sit amet lacus. Aliquam a volutpat quam.</p>"
-          },
-          {
-            "type": "header",
-            "content": "First button",
-            "info": "Leave empty to hide the button."
-          },
-          {
-            "type": "text",
-            "id": "button_label_1",
-            "label": "Label"
-          },
-          {
-            "type": "url",
-            "id": "button_url_1",
-            "label": "Link"
-          },
-          {
-            "type": "select",
-            "id": "button_type_1",
-            "label": "Type",
-            "default": "",
-            "options": [
-              {
-                "value": "",
-                "label": "Default"
-              },
-              {
-                "value": "button button--primary",
-                "label": "Primary"
-              },
-              {
-                "value": "button button--secondary",
-                "label": "Secondary"
-              },
-              {
-                "value": "button button--outline",
-                "label": "Outline"
-              },
-              {
-                "value": "link",
-                "label": "Link"
-              }
-            ]
-          },
-          {
-            "type": "header",
-            "content": "Second button",
-            "info": "Leave empty to hide the button."
-          },
-          {
-            "type": "text",
-            "id": "button_label_2",
-            "label": "Label"
-          },
-          {
-            "type": "url",
-            "id": "button_url_2",
-            "label": "Link"
-          },
-          {
-            "type": "select",
-            "id": "button_type_2",
-            "label": "Type",
-            "default": "",
-            "options": [
-              {
-                "value": "",
-                "label": "Default"
-              },
-              {
-                "value": "button button--primary",
-                "label": "Primary"
-              },
-              {
-                "value": "button button--secondary",
-                "label": "Secondary"
-              },
-              {
-                "value": "button button--outline",
-                "label": "Outline"
-              },
-              {
-                "value": "link",
-                "label": "Link"
               }
             ]
           }

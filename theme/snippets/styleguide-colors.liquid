@@ -12,7 +12,19 @@
   {% comment %} Communication colors {% endcomment %}
   <div class="{{ color_wrapper_class }}">
     {%- for color in communication_colors -%}
-      {%- assign color_capitalized = color | capitalize -%}
+      {%- liquid
+        case color_option
+          when 'info'
+            assign bg_color = 'bg-info'
+          when 'success'
+            assign bg_color = 'bg-success'
+          when 'warning'
+            assign bg_color = 'bg-warning'
+          when 'danger'
+            assign bg_color = 'bg-danger'
+        endcase
+        assign color_capitalized = color | capitalize
+      -%}
 
       <div class="{{ color_wrapper_class }} flex-col items-center justify-center">
         {%- assign class = 'bg-' | append: color -%}

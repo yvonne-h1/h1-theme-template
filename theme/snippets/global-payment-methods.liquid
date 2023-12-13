@@ -21,7 +21,7 @@
   {%- render 'render-translation', namespace: 'sections.footer.payment_methods', fallback: 'Payment methods' -%}
 </p>
 
-<ul class="payment-icons__list flex flex-wrap gap-2 {{ list_class }}">
+<ul class="payment-icons__list flex flex-wrap items-center gap-2 {{ list_class }}">
   {%- for payment_provider in payment_providers -%}
     {%- liquid
       assign payment_provider_handleized = payment_provider | handleize

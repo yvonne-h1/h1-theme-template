@@ -51,6 +51,13 @@
   -%}
 {%- endif -%}
 
+{% comment %} Hide the section when there are no slides {% endcomment %}
+{%- style -%}
+  .product-recommendation-section:not(:has(.swiper-slide)) {
+    display: none;
+  }
+{%- endstyle -%}
+
 {% schema %}
   {
     "name": "Product recommendations",

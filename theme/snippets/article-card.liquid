@@ -23,6 +23,10 @@
     assign highlight = false
   endunless
 
+  unless animate == false
+    assign animate = true
+  endunless
+
   unless image_aspect_ratio != blank
     assign image_aspect_ratio = '4/3'
   endunless
@@ -127,7 +131,7 @@
 {%- endcapture -%}
 
 {%- comment -%} Render cart {%- endcomment -%}
-<article class="article-card flex flex-col gap-y-4 {{ class }} {% unless highlight -%}motion-safe:animate-fadein motion-safe:opacity-0{%- endunless -%}">
+<article class="article-card flex flex-col gap-y-4 {{ class }} {% if highlight == false and animate -%}motion-safe:animate-fadein motion-safe:opacity-0{%- endif -%}">
   {% comment %} Highlighted card {% endcomment %}
   {%- if highlight -%}
     <div class="relative {% if settings.show_highlight_image -%}flex overflow-hidden rounded-md p-6 lg:p-10 {{ settings.ha_position_horizontal }} {{ settings.ha_position_vertical }} {{ settings.ha_text_align }} {{ settings.ha_min_ratio_mobile }} {{ settings.ha_min_ratio_tablet }} {{ settings.ha_min_ratio_desktop }}{%- endif -%}">

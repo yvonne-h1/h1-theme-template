@@ -192,6 +192,7 @@
         text-sm
         font-bold
         leading-normal
+        text-[var(--button-text)]
         no-underline
         transition-colors
         disabled:hidden #{!important};
