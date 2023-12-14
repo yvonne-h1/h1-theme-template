@@ -17,14 +17,14 @@
 
     {%- comment -%} Cart items {%- endcomment -%}
     <form action="{{ routes.cart_url }}" class="cart__contents group-[.cart-is-empty]/cart-items:hidden" method="post" id="cart">
-      <div class="gap-base lg:grid lg:grid-cols-12">
+      <div class="flex flex-col gap-base lg:grid lg:grid-cols-12">
 
         {% comment %} Left column {% endcomment %}
         <div class="col-span-8">
           <div class="cart__items relative lg:mb-8" id="main-cart-items" data-id="{{ section.id }}">
             <div class="js-cart-item-contents group-[.cart-items-is-loading]/cart-items:pointer-events-none group-[.cart-items-is-loading]/cart-items:opacity-40">
               {%- if cart != empty -%}
-                <div class="cart-items">
+                <div class="cart-items flex flex-col divide-y divide-gray-50 border-b border-t border-gray-50">
                   {%- for item in cart.items -%}
                     {%- render 'cart-item', item: item, view: 'cart-page' -%}
                   {%- endfor -%}

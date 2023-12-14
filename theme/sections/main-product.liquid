@@ -249,6 +249,7 @@
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                     <input type="hidden" name="quantity" value="1">
                     <input type="hidden" name="inventory_quantity" value="{%- unless is_preorder -%}{{ product.selected_or_first_available_variant.inventory_quantity }}{%- endunless -%}">
+                    <input type="hidden" name="properties[_compare_at_price]" value="{{ product.selected_or_first_available_variant.compare_at_price }}">
 
                     {% comment %} Pre-orders {% endcomment %}
                     {%- if is_preorder -%}

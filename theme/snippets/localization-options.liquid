@@ -100,7 +100,7 @@
         <div class="collapsible__group group" data-collapsible-group>
           <button
             type="button"
-            class="collapsible__trigger localization-form__button button button--outline flex items-center gap-2 whitespace-nowrap font-normal leading-5"
+            class="collapsible__trigger localization-form__button button button--outline flex items-center gap-2 whitespace-nowrap font-normal leading-5 group-[.collapsible-is-open]:border-[var(--color-scheme-text-active-color)] states:border-[var(--color-scheme-text-active-color)]"
             data-collapsible-trigger>
             {%- if type == 'country' -%}
               {{ localization.country.currency.symbol }} | {{ localization.country.name -}}
@@ -111,7 +111,10 @@
             {%- endif -%}
 
             <span class="collapsible__trigger-icons">
-              {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]:rotate-180' -%}
+              {%- render 'icons',
+                icon: 'collapsible',
+                icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]:rotate-180 group-[.collapsible-is-open]:text-[var(--color-scheme-text-active-color)] states:text-[var(--color-scheme-text-active-color)]'
+              -%}
             </span>
           </button>
 

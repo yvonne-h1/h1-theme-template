@@ -54,7 +54,7 @@
               assign product_variant_color = product_variant.variants[0][option_index] | handleize
               assign product_variant_color_handleized = product_variant_color | handleize
               assign is_current_variant = false
-              assign image_class = 'rounded-md transition'
+              assign image_class = 'rounded-md transition w-[60px]'
 
               # If this is the current color
               if product_variant_color_handleized == variant_color

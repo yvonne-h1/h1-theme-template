@@ -19,38 +19,42 @@
     </p>
 
     {% comment %} 'See all' link {% endcomment %}
-    {%- unless type == 'collections' -%}
+    {%- unless type == 'collections' and results_array.size > 0 -%}
       <a href="{{ routes.search_url }}?q={{ predictive_search.terms }}&type={{ type }}&options[prefix]=last" class="button button--link button--sm px-0">
         {%- render 'render-translation', namespace: 'general.predictive_search', key: 'see_all', fallback: 'See all' -%}
         {%- render 'icons', icon: 'arrow', icon_class: 'w-3' -%}
       </a>
     {%- endunless -%}
   </div>
-  <ul class="predictive-search__list" role="listbox">
-    {%- for item in results_array -%}
-      <li class="predictive-search__list-item mb-4" role="option">
-        <a href="{{ item.url }}" class="predictive-search__link flex items-center gap-4 text-inherit no-underline hover:opacity-70 active:opacity-100 states:no-underline">
-          {% comment %} Image {% endcomment %}
-          {%- unless type == 'page' -%}
-            <div class="predictive-search__item-image w-16">
-              {%- render 'responsive-image', image_object: item[image_object], widths: '64, 128', aspect_ratio: '1/1' -%}
-            </div>
-          {%- endunless -%}
-
-          {% comment %} Title (and price) {% endcomment %}
-          <div class="predictive-search__item-content flex-1">
-            <p class="predictive-search__item-title text-sm font-semibold{%- if type == 'product' %} mb-2{%- endif -%}">
-              {{- item.title | highlight: predictive_search.terms -}}
-            </p>
-
-            {%- if type == 'product' -%}
-              <div class="predictive-search__item-price text-sm">
-                {% render 'render-price', product: item %}
+  {%- if results_array.size > 0 -%}
+    <ul class="predictive-search__list" role="listbox">
+      {%- for item in results_array -%}
+        <li class="predictive-search__list-item mb-4" role="option">
+          <a href="{{ item.url }}" class="predictive-search__link flex items-center gap-4 text-inherit no-underline hover:opacity-70 active:opacity-100 states:no-underline">
+            {% comment %} Image {% endcomment %}
+            {%- unless type == 'page' -%}
+              <div class="predictive-search__item-image w-16">
+                {%- render 'responsive-image', image_object: item[image_object], widths: '64, 128', aspect_ratio: '1/1' -%}
               </div>
-            {%- endif -%}
-          </div>
-        </a>
-      </li>
-    {%- endfor -%}
-  </ul>
+            {%- endunless -%}
+
+            {% comment %} Title (and price) {% endcomment %}
+            <div class="predictive-search__item-content flex-1">
+              <p class="predictive-search__item-title text-sm font-semibold{%- if type == 'product' %} mb-2{%- endif -%}">
+                {{- item.title | highlight: predictive_search.terms -}}
+              </p>
+
+              {%- if type == 'product' -%}
+                <div class="predictive-search__item-price text-sm">
+                  {% render 'render-price', product: item %}
+                </div>
+              {%- endif -%}
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- else -%}
+    <p class="text-sm">{{ 'sections.main_search.no_results_with_type' | t: terms: predictive_search.terms, type: type_title }}</p>
+  {%- endif -%}
 </div>

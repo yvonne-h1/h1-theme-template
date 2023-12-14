@@ -27,11 +27,13 @@
   endif
 
   assign available = target.available | default: false
-  assign compare_at_price = target.compare_at_price | default: 1999
+  assign compare_at_price = target.compare_at_price
   assign price = target.price | default: 1999
 
   if target.original_price > target.price
     assign compare_at_price = target.original_price
+  elsif target.properties._compare_at_price
+    assign compare_at_price = target.properties._compare_at_price | times: 1
   endif
 
   assign money_price = price | money_with_currency

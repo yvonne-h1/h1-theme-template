@@ -66,6 +66,7 @@
       {%- form 'product', product, id: product_form_id, class: 'form h-full', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
+        <input type="hidden" name="properties[_compare_at_price]" value="{{ product.selected_or_first_available_variant.compare_at_price }}">
 
         {%- comment -%} If preorder is enabled for this product add a line proprety when adding to the cart {%- endcomment -%}
         {%- if settings.enable_pre_order
@@ -174,6 +175,7 @@
         {%- form 'product', product, id: product_form_id, class: 'form h-full', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
           <input type="hidden" name="inventory_quantity" value="{{ product.selected_or_first_available_variant.inventory_quantity }}">
+          <input type="hidden" name="properties[_compare_at_price]" value="{{ product.selected_or_first_available_variant.compare_at_price }}">
 
           {%- comment -%} If preorder is enabled for this product add a line property when adding to the cart {%- endcomment -%}
           {%- if settings.enable_pre_order

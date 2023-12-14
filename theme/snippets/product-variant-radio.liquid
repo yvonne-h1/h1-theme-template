@@ -120,7 +120,7 @@
                 assign option_pos = option.position | prepend: 'option'
                 assign variant_image = product.variants | where: option_pos, value | first
                 assign image_obj = variant_image.featured_image
-                assign image_class = 'rounded-md transition'
+                assign image_class = 'rounded-md transition w-[60px]'
 
                 if image_obj == blank
                   assign image_class = image_class | append: ' border border-black'
@@ -239,7 +239,7 @@
                               widths: '60, 120',
                               alt: product_variant.title,
                               title: product_variant.title,
-                              class: 'rounded-md states:border states:border-primary transition object-contain'
+                              class: 'rounded-md states:border states:border-primary transition object-contain w-[60px]'
                             -%}
                           {%- else -%}
                             <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ product_variant_color | capitalize }}</span>

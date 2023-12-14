@@ -7,25 +7,25 @@
   {%- capture results -%}
     <div class="flex flex-col gap-base md:flex-row">
 
-      <div class="col basis-1/3">
-        {% comment %} Collections - note these are only rendered in the predictive search and cannot be rendered on the search page {% endcomment %}
-        {%- if predictive_search.resources.collections.size > 0 and settings.predictive_search_collections -%}
+      {% comment %} Collections - note these are only rendered in the predictive search and cannot be rendered on the search page {% endcomment %}
+      {%- if predictive_search.resources.collections.size > 0 and settings.predictive_search_collections -%}
+        <div class="col basis-1/3">
           {%- render 'predictive-search-item',
             type: 'collection',
             results_array: predictive_search.resources.collections
           -%}
-        {%- endif -%}
-      </div>
+        </div>
+      {%- endif -%}
 
-      <div class="col basis-1/3">
-        {% comment %} Products {% endcomment %}
-        {%- if predictive_search.resources.products.size > 0 and settings.predictive_search_products -%}
+      {% comment %} Products {% endcomment %}
+      {%- if predictive_search.resources.products.size > 0 and settings.predictive_search_products -%}
+        <div class="col basis-1/3">
           {%- render 'predictive-search-item',
             type: 'product',
             results_array: predictive_search.resources.products
           -%}
-        {%- endif -%}
-      </div>
+        </div>
+      {%- endif -%}
 
       <div class="col basis-1/3">
         {%- liquid
