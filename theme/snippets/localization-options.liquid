@@ -11,6 +11,14 @@
     assign color_scheme = 'color-scheme--white'
   endunless
 
+  unless relative == true
+    assign relative = false
+  endunless
+
+  unless show_label
+    assign show_label = false
+  endunless
+
   if type == 'country'
     assign object = localization.available_countries
     capture label
@@ -56,7 +64,12 @@
                 {{ item.name }} ({{ item.currency.iso_code }}
                 {{ item.currency.symbol }})
               {%- else -%}
-                {{ item.endonym_name | capitalize }}
+                <span class="{% unless localPosition == 'MobileHeaderLanguage'%}hidden md:block{%- endunless -%}">
+                  {{ localization.language.endonym_name | capitalize }}
+                </span>
+                <span class="{% if localPosition == 'MobileHeaderLanguage'%}hidden{%-else-%}md:hidden{%- endif -%}">
+                  {{ localization.language.iso_code | upcase }}
+                </span>
               {%- endif -%}
             </option>
           {%- endfor -%}
@@ -70,63 +83,77 @@
       </button>
     </noscript>
 
-    <div class="flex flex-col gap-4 no-js:hidden">
-      <p class="m-0" id="{{ localPosition }}Label">
+    <collapsible-component
+      class="collapsible not-rte flex flex-col gap-y-2 no-js:hidden"
+      data-options='
+        {
+          "trapFocus": false,
+          "onHover": true,
+          "hoverDelay": 200,
+          "closeOnMouseleave": true
+        }
+      '>
+      <p class="{%- unless show_label %}sr-only{%- endunless %} mb-0 text-sm font-bold" id="{{ localPosition }}Label">
         {{ label }}
       </p>
       <div class="localization-form relative">
-        <button
-          type="button"
-          class="localization-form__button button button--outline flex items-center gap-4 whitespace-nowrap p-2 [&>.icon--chevron-down]:aria-[expanded=true]:rotate-180"
-          aria-expanded="false"
-          aria-controls="{{ localPosition }}List"
-          aria-describedby="{{ localPosition }}Label">
-          <span>
+        <div class="collapsible__group group" data-collapsible-group>
+          <button
+            type="button"
+            class="collapsible__trigger localization-form__button button button--outline flex items-center gap-2 whitespace-nowrap font-normal leading-5"
+            data-collapsible-trigger>
             {%- if type == 'country' -%}
-              {{- localization.country.currency.iso_code }}
               {{ localization.country.currency.symbol }} | {{ localization.country.name -}}
             {%- else -%}
-              {{ localization.language.endonym_name | capitalize }}
+              <span>
+                {{- localization.language.endonym_name | capitalize -}}
+              </span>
             {%- endif -%}
-          </span>
-          {% render 'icons', icon: 'chevron-down' %}
-        </button>
-        <div
-          class="localization-form__list-wrapper color-scheme absolute top-10 w-full min-w-fit rounded-md border-2 border-inherit p-2 {{ color_scheme }}"
-          hidden
-          data-localization-list>
-          <ul id="{{ localPosition }}List" role="list" class="localization-form__list list-unstyled">
-            {%- for item in object -%}
-              {%- liquid
-                # Skip current language/currency
-                if type == 'country' and localization.country.currency.iso_code == item.currency.iso_code
-                  continue
-                elsif type == 'language' and localization.language.endonym_name == item.endonym_name
-                  continue
-                endif
-              -%}
 
-              <li class="localization-form__item" tabindex="-1">
-                <a
-                  class="localization-form__link focus-inset block text-sm no-underline {% if item.iso_code == localization[item].iso_code %}localization-form__link--active{% endif %}"
-                  href="#"
-                  {% if item.iso_code == localization.item.iso_code %}
-                    aria-current="true"
-                  {% endif %}
-                  data-value="{{ item.iso_code }}">
-                  {%- if type == 'country' -%}
-                    <span class="localization-form__currency">
-                      {{- item.currency.iso_code }}
-                      {{ item.currency.symbol }} |
-                    </span>
-                    {{ item.name }}
-                  {%- else -%}
-                    {{ item.endonym_name | capitalize }}
-                  {%- endif -%}
-                </a>
-              </li>
-            {%- endfor -%}
-          </ul>
+            <span class="collapsible__trigger-icons">
+              {%- render 'icons', icon: 'collapsible', icon_class: 'w-4 transition-tranform group-[.collapsible-is-open]:rotate-180' -%}
+            </span>
+          </button>
+
+          <div
+            class="collapsible__target {% unless relative %}absolute{% endunless %} top-full w-full"
+            data-collapsible-target>
+            <div class="rte overflow-hidden group-[.collapsible-is-open]:overflow-visible">
+              <div data-localization-list>
+                <ul class="localization-form__list list-unstyled translate-y-2 list-none rounded-md border {{ color_scheme }}">
+                  {%- for item in object -%}
+                    {%- liquid
+                      # Skip current language/currency
+                      if type == 'country' and localization.country.currency.iso_code == item.currency.iso_code
+                        continue
+                      elsif type == 'language' and localization.language.endonym_name == item.endonym_name
+                        continue
+                      endif
+                    -%}
+
+                    <li class="localization-form__item py-2" tabindex="-1">
+                      <a
+                        class="localization-form__link focus-inset group flex items-center gap-1 whitespace-nowrap px-3 text-sm no-underline"
+                        href="#"
+                        {% if item.iso_code == localization.item.iso_code %}
+                          aria-current="true"
+                        {% endif %}
+                        data-value="{{ item.iso_code }}">
+                        {%- if type == 'country' -%}
+                          <span class="localization-form__currency">{{ item.currency.symbol }} |</span>
+                          {{ item.name -}}
+                        {%- else -%}
+                          <span>
+                            {{- item.endonym_name | capitalize -}}
+                          </span>
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -135,6 +162,6 @@
       {%- else -%}
         <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
       {%- endif -%}
-    </div>
+    </collapsible-component>
   {%- endform -%}
 </localization-form>

@@ -138,18 +138,28 @@
             {%- comment -%} Buttons {%- endcomment -%}
             {%- if block.settings.enable_button_1 or block.settings.enable_button_2 -%}
               <div class="flex gap-4 {{ button_align }}">
-                {%- if block.settings.button_label_1 != blank and block.settings.button_url_1 != blank or request.design_mode and block.settings.button_label_1 != blank -%}
-                  <a href="{{ block.settings.button_url_1 | default: '#' }}"
-                    class="{{ block.settings.button_type_1 }}{% if block.settings.button_url_1 == blank %} disabled{% endif %}">
-                    {{- block.settings.button_label_1 -}}
-                  </a>
-                {%- endif -%}
-                {%- if block.settings.button_label_2 != blank and block.settings.button_url_2 != blank or request.design_mode and block.settings.button_label_2 != blank -%}
-                  <a href="{{ block.settings.button_url_2 | default: '#' }}"
-                    class="{{ block.settings.button_type_2 }}{% if block.settings.button_url_2 == blank %} disabled{% endif %}">
-                    {{- block.settings.button_label_2 -}}
-                  </a>
-                {%- endif -%}
+                {%- for i in (1..2) -%}
+                  {%- liquid
+                    assign button_label = 'button_label_' | append: i
+                    assign button_type = 'button_type_' | append: i
+                    assign button_url = 'button_url_' | append: i
+                    assign enable_button = 'enable_button_' | append: i
+                    assign render_button = false
+
+                    if forloop.index == i and block.settings[enable_button]
+                      assign render_button = true
+                    endif
+                  -%}
+
+                  {% comment %} Button 1 {% endcomment %}
+                  {%- if render_button -%}
+                    <a
+                      href="{{ block.settings[button_url] | default: '#' }}"
+                      class="button {{ block.settings[button_type] }}{% if block.settings[button_url] == blank %} disabled{% endif %}">
+                      {{- block.settings[button_label] -}}
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
               </div>
             {%- endif -%}
           </div>
@@ -363,6 +373,7 @@
             "type": "select",
             "id": "mobile_order",
             "label": "Mobile order",
+            "info": "Change the order of this block on mobile devices. Select 0 for the same ordering on all screens.",
             "default": "order-none",
             "options": [
               {
