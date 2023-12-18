@@ -163,9 +163,6 @@
       continue
     endif
 
-    assign initial_width = width_int
-    assign initial_height = width_int | divided_by: image_ratio | round
-
     # on the last item for the widths
     if image_object.width >= width_int
       assign width = width_int

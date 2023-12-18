@@ -239,7 +239,7 @@
                               widths: '60, 120',
                               alt: product_variant.title,
                               title: product_variant.title,
-                              class: 'rounded-md states:border states:border-primary transition object-contain w-[60px]'
+                              class: 'rounded-md states:border states:border-primary transition object-contain'
                             -%}
                           {%- else -%}
                             <span {% if color_is_mapped -%}class="sr-only"{%- endif -%}>{{ product_variant_color | capitalize }}</span>

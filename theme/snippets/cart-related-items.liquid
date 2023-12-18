@@ -83,7 +83,7 @@
         <article class="cart-drawer-recommendation product-card group/product-card relative flex h-full flex-col gap-2 overflow-hidden rounded-md bg-white p-4 shadow-md" data-product-card>
           <header class="flex-1">
             <a href="{{ product.url }}" class="text-text-default no-underline states:underline" tabindex="-1">
-              <div class="mx-auto mb-2 max-w-[80px]">{{ product.featured_image | image_url: width: 160 | image_tag: width: 160, sizes: '100vw', widths: '160', alt: product.title }}</div>
+              <div class="mx-auto mb-2 max-w-[80px]">{{ product.featured_image | image_url: width: 160 | image_tag: width: 160, widths: '160', alt: product.title }}</div>
               <h3 class="mb-0 text-sm">{{ product.title }}</h3>
             </a>
           </header>

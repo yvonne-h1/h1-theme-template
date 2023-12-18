@@ -24,7 +24,7 @@
           {%- capture results_articles -%}
             {{ results_articles }}
           <li class="{{ grid_item_classes }}" style="--animation-delay: {{ forloop.index }};">
-            {%- render 'article-card', article: item -%}
+            {%- render 'article-card', article: item, image_max_width: 320, image_sizes: '320px' -%}
           </li>
           {%- endcapture -%}
         {%- when 'page' -%}

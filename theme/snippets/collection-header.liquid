@@ -25,9 +25,8 @@
         {%- render 'responsive-image',
           image_object: collection.image,
           widths: '240',
-          max_width: 240,
           aspect_ratio: '3/2',
-          class: 'object-cover h-auto w-full'
+          class: 'object-contain h-auto w-full'
         -%}
       </div>
     {%- endif -%}

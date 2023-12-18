@@ -50,13 +50,8 @@
     assign render_inline = false
   endunless
 
-  if render_products
-    assign image_max_width = 360
-    assign image_sizes = '(min-width: 1440px) 288px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
-  endif
-
   if render_blog_articles
-    assign image_max_width = 420
+    assign image_max_width = 320
     assign image_sizes = '320px'
   endif
 
@@ -245,9 +240,9 @@
             style="--animation-delay: {{ count | plus: index_on_page }};">
             {%- liquid
               if render_products
-                render 'product-card', product_object: item, image_max_width: image_max_width, sizes: image_sizes, product_card_title_el: 'h3', animate: false
+                render 'product-card', product_object: item, product_card_title_el: 'h3', animate: false
               elsif render_blog_articles
-                render 'article-card', article: item, image_max_width: image_max_width, sizes: image_sizes, animate: false
+                render 'article-card', article: item, image_max_width: image_max_width, image_sizes: image_sizes, animate: false
               elsif render_product_cards
                 echo item
               endif

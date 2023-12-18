@@ -40,11 +40,11 @@
   endunless
 
   unless image_sizes
-    assign image_sizes = '100vw'
+    assign image_sizes = '(min-width: 1440px) 288px, (min-width: 1024px) 204px, (min-width: 768px) 198px, 50vw'
   endunless
 
   unless image_max_width
-    assign image_max_width = 328
+    assign image_max_width = 360
   endunless
 
   unless show_vendor
