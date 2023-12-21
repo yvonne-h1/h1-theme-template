@@ -12,42 +12,34 @@
 {%- endcapture -%}
 
 {%- comment -%} Collection content {%- endcomment -%}
-{%- capture container_content -%}
+<div
+  id="CollectionProductGrid"
+  class="group/collection relative">
+  {{ loading_overlay }}
   <div
-    id="CollectionProductGrid"
-    class="group/collection relative"
-  >
-    {{ loading_overlay }}
-    <div
-      class="collection relative"
-      id="main-collection-product-grid"
-      data-collection-product-grid
-      data-collection-handle="{{ collection.handle }}"
-      data-id="{{ section.id }}"
-    >
-      {%- liquid
-        paginate collection.products by settings.products_per_page
-          render 'product-grid', collection: collection, paginate: paginate, pagination_type: settings.pagination_view, product_card_extra_id: section.id
+    class="collection relative"
+    id="main-collection-product-grid"
+    data-collection-product-grid
+    data-collection-handle="{{ collection.handle }}"
+    data-id="{{ section.id }}">
+    {%- liquid
+      paginate collection.products by settings.products_per_page
+        render 'product-grid', collection: collection, paginate: paginate, pagination_type: settings.pagination_view, product_card_extra_id: section.id
 
-          if paginate.pages > 1 and settings.pagination_view == ''
-            render 'pagination', paginate: paginate, anchor: '', class: ''
-          endif
-        endpaginate
-      -%}
-    </div>
+        if paginate.pages > 1 and settings.pagination_view == ''
+          render 'pagination', paginate: paginate, anchor: '', class: ''
+        endif
+      endpaginate
+    -%}
   </div>
-{%- endcapture -%}
+</div>
 
 {%- liquid
   # Container footer
-  capture container_footer
-    if section.settings.show_back_to_top
-      render 'back-to-top'
-    endif
-  endcapture
+  if section.settings.show_back_to_top
+    render 'back-to-top'
+  endif
 -%}
-
-{%- render 'render-container-content', class: 'collection-wrapper mt-0', title: section.settings.title, content: container_content, footer_content: container_footer -%}
 
 {%- comment -%} Import javascript {%- endcomment -%}
 {%- if settings.pagination_view == 'load-more' -%}

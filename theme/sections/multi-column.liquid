@@ -1,7 +1,7 @@
 {%- liquid
   assign title = section.settings.heading
   assign container_class = 'multi-column__container'
-  assign content_class = 'multi-column__content grid gap-8 grid-cols-1'
+  assign content_class = 'multi-column__content grid gap-content-wrapper-padding grid-cols-1'
 
   # Container classes
   if section.settings.container_width != blank
@@ -37,18 +37,17 @@
 {%- comment -%} Capture the content {%- endcomment -%}
 {%- capture container_content -%}
   {%- for block in section.blocks -%}
-    {%- if block.settings.image != blank or block.settings.heading != blank or block.settings.text != blank or block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
+    {%- if block.settings.image != blank or block.settings.heading != blank or block.settings.text != blank or block.settings.enable_button_1 != blank or block.settings.enable_button_2 != blank -%}
 
       {%- liquid
         # Get mobile image
-        assign image_mobile = block.settings.image_mobile
-        if image_mobile == blank
-          assign image_mobile = block.settings.image
-          assign min_width = 768
+        assign image_mobile = block.settings.image
+        if block.settings.image_mobile != blank
+          assign image_mobile = block.settings.image_mobile
+          assign desktop_min_width = 768
         endif
 
-        assign image_max_width = 767
-        assign image_size = '50vw'
+        assign desktop_max_width = 767
 
         # Set images sizes depending on the number of columns
         if section.settings.odd_even
@@ -63,29 +62,39 @@
               assign sizes = '(min-width: 1440px) 688px, (min-width: 768px) 50vw, 100vw'
             endcase
         else
-        assign image_max_width = 1376 | divided_by: columns | round
-        assign image_size = 100 | divided_by: columns | append: 'vw'
+          assign desktop_max_width = 1376 | divided_by: columns | round
 
           case section.settings.container_width
             when 'container--sm'
               assign sizes = '(min-width: 768px) 262px, 100vw'
+              assign desktop_max_width = 262
+              assign prepend_widths = desktop_max_width
               if columns == 3
                 assign sizes = '(min-width: 768px) 164px, 100vw'
+                assign desktop_max_width = 164
+                assign prepend_widths = desktop_max_width
               endif
             when 'container--md'
-              assign sizes = '(min-width: 820px) 362px, (min-width: 768px) 336px, 100vw'
+              assign sizes = '(min-width: 820px) 362px, (min-width: 768px) , 50vw, 100vw'
+              assign desktop_max_width = 362
               if columns == 3
                 assign sizes = '(min-width: 768px) 231px, 100vw'
+                assign desktop_max_width = 231
+                assign prepend_widths = desktop_max_width
               endif
             when 'container--lg'
-              assign sizes = '(min-width: 1200px) 552px, (min-width: 768px) 336px, 100vw'
+              assign sizes = '(min-width: 1200px) 552px, (min-width: 768px) , 50vw, 100vw'
+              assign desktop_max_width = 552
               if columns == 3
                 assign sizes = '(min-width: 1200px) 357px, (min-width: 768px) 33vw, 100vw'
+                assign desktop_max_width = 357
               endif
             else
-              assign sizes = '(min-width: 1440px) 672px, (min-width: 768px) 336px, 100vw'
+              assign sizes = '(min-width: 1440px) 672px, (min-width: 768px) , 50vw, 100vw'
+              assign desktop_max_width = 672
               if columns == 3
-                assign sizes = '(min-width: 1440px) 437px, (min-width: 768px) 33vw, 100vw'
+                assign sizes = '(min-width: 1440px) 437px, (min-width: 1024px) 300px, 33vw, 100vw'
+                assign desktop_max_width = 437
               endif
             endcase
         endif
@@ -111,12 +120,12 @@
               {%- liquid
                 # Desktop image
                 if block.settings.image != blank
-                  render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', min_width: min_width, max_width: image_max_width, sizes: sizes
+                  render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', min_width: desktop_min_width, max_width: desktop_max_width, sizes: sizes, prepend_widths: prepend_widths
                 endif
 
                 # Mobile Image
                 if image_mobile != blank
-                  render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768
+                  render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768, sizes: 'calc(100vw - 2 * var(--content-wrapper-padding))'
                 endif
               -%}
             </div>

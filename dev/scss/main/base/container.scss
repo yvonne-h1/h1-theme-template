@@ -1,6 +1,7 @@
 @layer base {
   .container {
     @apply mx-auto my-container-spacing;
+    // .container--background
     &--background {
       @apply my-0 py-container-spacing;
     }

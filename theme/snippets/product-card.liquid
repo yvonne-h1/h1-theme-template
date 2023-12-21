@@ -43,6 +43,10 @@
     assign image_sizes = '(min-width: 1440px) 288px, (min-width: 1024px) 204px, (min-width: 768px) 198px, 50vw'
   endunless
 
+  unless prepend_widths
+    assign prepend_widths = '198,204,288'
+  endunless
+
   unless image_max_width
     assign image_max_width = 360
   endunless
@@ -143,6 +147,7 @@
           aspect_ratio: image_aspect_ratio,
           crop: image_crop,
           sizes: image_sizes,
+          prepend_widths: prepend_widths,
           alt: image_alt,
           title: image_title,
           class: 'product-card__image--primary block my-0 mx-auto'
@@ -154,6 +159,7 @@
             aspect_ratio: image_aspect_ratio,
             crop: image_crop,
             sizes: image_sizes,
+            prepend_widths: prepend_widths,
             alt: image_alt,
             title: image_title,
             class: 'product-card__image--secondary absolute object-contain inset-0 my-0 transition-opacity duration-300 block opacity-0 group-hover/product-card:opacity-100 group-focus/product-card:opacity-100 mx-auto'

@@ -63,11 +63,14 @@
         assign sizes = default_sizes | prepend: '(min-width: 1440px) 328px, ' | append: ', 100vw'
         if settings.filter_display != 'grid'
           assign sizes = default_sizes | prepend: '(min-width: 1440px) 230px, ' | append: ', 100vw'
+          assign prepend_widths = '230'
         endif
       else
         assign sizes = default_sizes | prepend: '(min-width: 1440px) 205px, ' | append: ', 50vw'
+        assign prepend_widths = '205'
         if settings.filter_display != 'grid'
           assign sizes = default_sizes | prepend: '(min-width: 1440px) 230px, ' | append: ', 50vw'
+          assign prepend_widths = '230'
         endif
       endif
 
@@ -83,6 +86,7 @@
         {%- render 'product-card',
           product_object: product,
           image_sizes: sizes,
+          prepend_widths: prepend_widths,
           image_alt: image_alt,
           image_title: image_title,
           view: template.suffix,

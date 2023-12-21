@@ -4,17 +4,20 @@
   # Optional
   - icon_size {String} Size of the icon. w-5, w-6, w-8 (optional).
   - list_class {String} Classes that will be placed on the ul (optional).
-  - item_class {String} Classes that will be placed on the li (optional).
 
   # Example
   {%- render linklist, linklist: block.settings.menu, prefix: 'footer-menu', collapsible: false -%}
 {%- endcomment -%}
+
 {%- liquid
-  if settings.payments_order != blank
-    assign payment_providers = settings.payments_order | newline_to_br | strip_newlines | split: '<br />'
-  else
-    assign payment_providers = 'apple-pay,bancontact,google-pay,ideal,klarna,mastercard,maestro,paypal,sofort,visa' | split: ','
-  endif
+  case icon_size
+    when 'w-6'
+      assign width =
+    when 'w-8'
+
+    else
+
+  endcase
 -%}
 
 <p class="sr-only">
@@ -22,15 +25,9 @@
 </p>
 
 <ul class="payment-icons__list flex flex-wrap items-center gap-2 {{ list_class }}">
-  {%- for payment_provider in payment_providers -%}
-    {%- liquid
-      assign payment_provider_handleized = payment_provider | handleize
-      assign payment_icon = 'payment_icon_' | append: payment_provider_handleized
-    -%}
-    {%- if settings[payment_icon] -%}
-      <li class="payment-icons__item {{ item_class }}">
-        {%- render 'icons', icon: payment_provider_handleized, icon_class: icon_size -%}
-      </li>
-    {% endif %}
-  {%- endfor -%}
+  {% for type in shop.enabled_payment_types -%}
+    <li class="payment-icons__item {{ icon_size }} [&>svg]:h-full [&>svg]:w-full">
+      {{ type | payment_type_svg_tag }}
+    </li>
+  {% endfor %}
 </ul>

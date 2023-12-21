@@ -142,7 +142,7 @@
   {%- endif %}>
   {% comment %} Banner image {% endcomment %}
   {%- liquid
-    assign image_class = 'h-full w-full object-cover'
+    assign image_class = 'object-cover'
     if animate
       assign image_class = image_class | append: ' motion-safe:animate-zoomout motion-safe:opacity-0 motion-safe:scale-125 transition-all'
     endif
@@ -156,8 +156,6 @@
       if image_desktop != blank
         # Desktop image
         render 'responsive-image', image_object: image_desktop, class: image_class_desktop, max_width: max_width, min_width: min_width, lazy: lazy, aspect_ratio: tablet_aspect
-      endif
-      if object.settings.image_mobile != blank
         # Mobile image
         render 'responsive-image', image_object: image_mobile, class: image_class_mobile, max_width: 768, lazy: lazy, aspect_ratio: mobile_aspect
       endif

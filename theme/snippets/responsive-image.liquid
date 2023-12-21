@@ -140,24 +140,40 @@
 
   # Image widths
   unless widths
-    assign widths = '320, 360, 375, 400, 420, 480, 520, 640, 768, 840, 960, 1080, 1200, 1280, 1440, 1600, 1920, 2048, 2560, 3000, 4000'
+    assign widths = '320, 360, 375, 420, 480, 520, 600, 680, 768, 850, 960, 1080, 1200, 1280, 1440, 1536, 1600, 1920, 2048, 2560, 2880, 4000'
   endunless
+
+  # When smaller images are needed
+  if prepend_widths
+    assign widths = widths | prepend: ', ' | prepend: prepend_widths
+  endif
+
+  # If the width is less than 320, just output that size to avoid errors. 2 times is not possible since the image isn't bigger than this size.
+  if width < 320
+    assign widths = width
+
+    # Check if there is a max width and if it's lower then the actual image
+    if max_width < width
+      # Create a times 2 width to see if it can handle 2 DPR with the actual image width
+      assign max_width_times_two = max_width | times: 2
+
+      # If so create an array with the max width and the 2 DPR support
+      if max_width_times_two <= width
+        assign widths = max_width | append: ', ' | append: max_width_times_two
+
+        # Else just assign the max width as width
+      else
+        assign widths = max_width
+      endif
+    endif
+  endif
 
   # Create an array of the image widths
   assign widths_arr = widths | handleize | split: '-'
 
   for width_item in widths_arr
     assign width_int = width_item | plus: 0
-
-    if forloop.first
-      assign initial_width = width_int
-      assign initial_height = width_int | divided_by: image_ratio | round
-      assign image_url = image_object | image_url: width: image_object.width
-    endif
-
-    if width_int > max_width
-      break
-    endif
+    assign width = width_int
 
     if width_int < min_width
       continue
@@ -165,12 +181,19 @@
 
     # on the last item for the widths
     if image_object.width >= width_int
-      assign width = width_int
-      assign image_url = image_object | image_url: width: width, crop: crop
-      assign new_widths = new_widths | append: ',' | append: width_int
+      if width_int > max_width
+        assign width = max_width
+      endif
+      assign new_widths = new_widths | append: ',' | append: width
     else
-      assign image_url = image_object | image_url: width: image_object.width, crop: crop
       assign new_widths = new_widths | append: ',' | append: image_object.width
+    endif
+
+    assign image_url = image_object | image_url: width: width, crop: crop
+    assign height = width | divided_by: image_ratio | round
+
+    if width_int > max_width
+      break
     endif
   endfor
 
@@ -184,11 +207,11 @@
       alt: alt,
       class: class,
       loading: lazy_load,
-      height: initial_height,
+      height: height,
       sizes: sizes,
       style: style,
       title: title,
-      width: initial_width,
+      width: width,
       widths: widths,
       data-custom-aspect-ratio: custom_aspect_ratio
     }}
@@ -197,11 +220,11 @@
     {{ image_url | image_tag:
       alt: alt,
       class: class,
-      height: initial_height,
+      height: height,
       sizes: sizes,
       style: style,
       title: title,
-      width: initial_width,
+      width: width,
       widths: widths,
       data-custom-aspect-ratio: custom_aspect_ratio
     }}
