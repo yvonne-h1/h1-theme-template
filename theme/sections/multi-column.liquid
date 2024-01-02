@@ -1,6 +1,6 @@
 {%- liquid
   assign title = section.settings.heading
-  assign container_class = 'multi-column__container'
+  assign container_class = 'multi-column'
   assign content_class = 'multi-column__content grid gap-content-wrapper-padding grid-cols-1'
 
   # Container classes
@@ -36,156 +36,159 @@
 
 {%- comment -%} Capture the content {%- endcomment -%}
 {%- capture container_content -%}
-  {%- for block in section.blocks -%}
-    {%- if block.settings.image != blank or block.settings.heading != blank or block.settings.text != blank or block.settings.enable_button_1 != blank or block.settings.enable_button_2 != blank -%}
+  <div class="{{ content_class }}">
+    {%- for block in section.blocks -%}
+      {%- if block.settings.image != blank or block.settings.heading != blank or block.settings.text != blank or block.settings.enable_button_1 != blank or block.settings.enable_button_2 != blank -%}
 
-      {%- liquid
-        # Get mobile image
-        assign image_mobile = block.settings.image
-        if block.settings.image_mobile != blank
-          assign image_mobile = block.settings.image_mobile
-          assign desktop_min_width = 768
-        endif
+        {%- liquid
+          # Get mobile image
+          assign image_mobile = block.settings.image
+          if block.settings.image_mobile != blank
+            assign image_mobile = block.settings.image_mobile
+            assign desktop_min_width = 768
+          endif
 
-        assign desktop_max_width = 767
+          assign desktop_max_width = 767
 
-        # Set images sizes depending on the number of columns
-        if section.settings.odd_even
-          case section.settings.container_width
-            when 'container--sm'
-              assign sizes = '(min-width: 768px) 278px, 100vw'
-            when 'container--md'
-              assign sizes = '(min-width: 768px) 378px, 100vw'
-            when 'container--lg'
-              assign sizes = '(min-width: 1200px) 568px, (min-width: 768px) 50vw, 100vw'
-            else
-              assign sizes = '(min-width: 1440px) 688px, (min-width: 768px) 50vw, 100vw'
-            endcase
-        else
-          assign desktop_max_width = 1376 | divided_by: columns | round
+          # Set images sizes depending on the number of columns
+          if section.settings.odd_even
+            case section.settings.container_width
+              when 'container--sm'
+                assign sizes = '(min-width: 768px) 278px, 100vw'
+              when 'container--md'
+                assign sizes = '(min-width: 768px) 378px, 100vw'
+              when 'container--lg'
+                assign sizes = '(min-width: 1200px) 568px, (min-width: 768px) 50vw, 100vw'
+              else
+                assign sizes = '(min-width: 1440px) 688px, (min-width: 768px) 50vw, 100vw'
+              endcase
+          else
+            assign desktop_max_width = 1376 | divided_by: columns | round
 
-          case section.settings.container_width
-            when 'container--sm'
-              assign sizes = '(min-width: 768px) 262px, 100vw'
-              assign desktop_max_width = 262
-              assign prepend_widths = desktop_max_width
-              if columns == 3
-                assign sizes = '(min-width: 768px) 164px, 100vw'
-                assign desktop_max_width = 164
+            case section.settings.container_width
+              when 'container--sm'
+                assign sizes = '(min-width: 768px) 262px, 100vw'
+                assign desktop_max_width = 262
                 assign prepend_widths = desktop_max_width
-              endif
-            when 'container--md'
-              assign sizes = '(min-width: 820px) 362px, (min-width: 768px) , 50vw, 100vw'
-              assign desktop_max_width = 362
-              if columns == 3
-                assign sizes = '(min-width: 768px) 231px, 100vw'
-                assign desktop_max_width = 231
-                assign prepend_widths = desktop_max_width
-              endif
-            when 'container--lg'
-              assign sizes = '(min-width: 1200px) 552px, (min-width: 768px) , 50vw, 100vw'
-              assign desktop_max_width = 552
-              if columns == 3
-                assign sizes = '(min-width: 1200px) 357px, (min-width: 768px) 33vw, 100vw'
-                assign desktop_max_width = 357
-              endif
-            else
-              assign sizes = '(min-width: 1440px) 672px, (min-width: 768px) , 50vw, 100vw'
-              assign desktop_max_width = 672
-              if columns == 3
-                assign sizes = '(min-width: 1440px) 437px, (min-width: 1024px) 300px, 33vw, 100vw'
-                assign desktop_max_width = 437
-              endif
-            endcase
-        endif
-
-        # Align buttons with flex as parent based on text align block.
-        assign button_align = 'justify-start'
-        case block.settings.text_align
-          when 'text-center'
-            assign button_align = 'justify-center'
-          when 'text-end'
-            assign button_align = 'justify-end'
-        endcase
-      -%}
-
-      {%- comment -%} Render column {%- endcomment -%}
-      <div class="multi-columns__column flex flex-col {{ block.settings.mobile_order }} md:order-none" {{ block.shopify_attributes }}
-        style="--animation-delay: {{ forloop.index | plus: section.index }};">
-        {%- comment -%} Column inner width and text align {%- endcomment -%}
-        <div class="flex flex-col gap-y-4 motion-safe:animate-fadein motion-safe:opacity-0 {% if section.settings.odd_even -%}{% cycle 'md:flex-row', 'md:flex-row-reverse' %} items-center gap-x-base{%- else %}md:flex-col{%- endif %}">
-
-          {%- if block.settings.image != blank -%}
-            <div class="multi-columns__image {% if section.settings.odd_even -%}shrink-0 grow basis-1/2{%- endif -%}">
-              {%- liquid
-                # Desktop image
-                if block.settings.image != blank
-                  render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', min_width: desktop_min_width, max_width: desktop_max_width, sizes: sizes, prepend_widths: prepend_widths
+                if columns == 3
+                  assign sizes = '(min-width: 768px) 164px, 100vw'
+                  assign desktop_max_width = 164
+                  assign prepend_widths = desktop_max_width
                 endif
-
-                # Mobile Image
-                if image_mobile != blank
-                  render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768, sizes: 'calc(100vw - 2 * var(--content-wrapper-padding))'
+              when 'container--md'
+                assign sizes = '(min-width: 820px) 362px, (min-width: 768px) , 50vw, 100vw'
+                assign desktop_max_width = 362
+                if columns == 3
+                  assign sizes = '(min-width: 768px) 231px, 100vw'
+                  assign desktop_max_width = 231
+                  assign prepend_widths = desktop_max_width
                 endif
-              -%}
-            </div>
-          {%- endif -%}
+              when 'container--lg'
+                assign sizes = '(min-width: 1200px) 552px, (min-width: 768px) , 50vw, 100vw'
+                assign desktop_max_width = 552
+                if columns == 3
+                  assign sizes = '(min-width: 1200px) 357px, (min-width: 768px) 33vw, 100vw'
+                  assign desktop_max_width = 357
+                endif
+              else
+                assign sizes = '(min-width: 1440px) 672px, (min-width: 768px) , 50vw, 100vw'
+                assign desktop_max_width = 672
+                if columns == 3
+                  assign sizes = '(min-width: 1440px) 437px, (min-width: 1024px) 300px, 33vw, 100vw'
+                  assign desktop_max_width = 437
+                endif
+              endcase
+          endif
 
-          <div class="multi-columns__text {{ block.settings.text_align }}">
-            {%- comment -%} Heading {%- endcomment -%}
-            {%- if block.settings.heading != blank -%}
-              <{{ block.settings.heading_element }} class="{{ block.settings.heading_size }}">
-                {{- block.settings.heading -}}
-              </{{ block.settings.heading_element }}>
-            {%- endif -%}
+          # Align buttons with flex as parent based on text align block.
+          assign button_align = 'justify-start'
+          case block.settings.text_align
+            when 'text-center'
+              assign button_align = 'justify-center'
+            when 'text-end'
+              assign button_align = 'justify-end'
+          endcase
+        -%}
 
-            {%- comment -%} Text {%- endcomment -%}
-            {%- if block.settings.text != blank -%}
-              {{- block.settings.text -}}
-            {%- endif -%}
+        {%- comment -%} Render column {%- endcomment -%}
+        <div class="multi-columns__column flex flex-col {{ block.settings.mobile_order }} md:order-none" {{ block.shopify_attributes }}
+          style="--animation-delay: {{ forloop.index | plus: section.index }};">
+          {%- comment -%} Column inner width and text align {%- endcomment -%}
+          <div class="flex flex-col gap-y-4 motion-safe:animate-fadein motion-safe:opacity-0 {% if section.settings.odd_even -%}{% cycle 'md:flex-row', 'md:flex-row-reverse' %} items-center gap-x-base{%- else %}md:flex-col{%- endif %}">
 
-            {%- comment -%} Buttons {%- endcomment -%}
-            {%- if block.settings.enable_button_1 or block.settings.enable_button_2 -%}
-              <div class="flex gap-4 {{ button_align }}">
-                {%- for i in (1..2) -%}
-                  {%- liquid
-                    assign button_label = 'button_label_' | append: i
-                    assign button_type = 'button_type_' | append: i
-                    assign button_url = 'button_url_' | append: i
-                    assign enable_button = 'enable_button_' | append: i
-                    assign render_button = false
+            {%- if block.settings.image != blank -%}
+              <div class="multi-columns__image {% if section.settings.odd_even -%}shrink-0 grow basis-1/2{%- endif -%}">
+                {%- liquid
+                  # Desktop image
+                  if block.settings.image != blank
+                    render 'responsive-image', image_object: block.settings.image, aspect_ratio: block.settings.image_ratio, class: 'multi-columns__image hidden md:block object-cover w-full', min_width: desktop_min_width, max_width: desktop_max_width, sizes: sizes, prepend_widths: prepend_widths
+                  endif
 
-                    if forloop.index == i and block.settings[enable_button]
-                      assign render_button = true
-                    endif
-                  -%}
-
-                  {% comment %} Button 1 {% endcomment %}
-                  {%- if render_button -%}
-                    <a
-                      href="{{ block.settings[button_url] | default: '#' }}"
-                      class="button {{ block.settings[button_type] }}{% if block.settings[button_url] == blank %} disabled{% endif %}">
-                      {{- block.settings[button_label] -}}
-                    </a>
-                  {%- endif -%}
-                {%- endfor -%}
+                  # Mobile Image
+                  if image_mobile != blank
+                    render 'responsive-image', image_object: image_mobile, aspect_ratio: block.settings.image_ratio_mobile, class: 'multi-columns__image md:hidden object-cover w-full', max_width: 768, sizes: 'calc(100vw - 2 * var(--content-wrapper-padding))'
+                  endif
+                -%}
               </div>
             {%- endif -%}
+
+            <div class="multi-columns__text {{ block.settings.text_align }}">
+              {%- comment -%} Heading {%- endcomment -%}
+              {%- if block.settings.heading != blank -%}
+                <{{ block.settings.heading_element }} class="{{ block.settings.heading_size }}">
+                  {{- block.settings.heading -}}
+                </{{ block.settings.heading_element }}>
+              {%- endif -%}
+
+              {%- comment -%} Text {%- endcomment -%}
+              {%- if block.settings.text != blank -%}
+                {{- block.settings.text -}}
+              {%- endif -%}
+
+              {%- comment -%} Buttons {%- endcomment -%}
+              {%- if block.settings.enable_button_1 or block.settings.enable_button_2 -%}
+                <div class="flex gap-4 {{ button_align }}">
+                  {%- for i in (1..2) -%}
+                    {%- liquid
+                      assign button_label = 'button_label_' | append: i
+                      assign button_type = 'button_type_' | append: i
+                      assign button_url = 'button_url_' | append: i
+                      assign new_window = 'new_window_' | append: i
+                      assign enable_button = 'enable_button_' | append: i
+                      assign render_button = false
+
+                      if forloop.index == i and block.settings[enable_button]
+                        assign render_button = true
+                      endif
+                    -%}
+
+                    {% comment %} Button 1 {% endcomment %}
+                    {%- if render_button -%}
+                      <a
+                        href="{{ block.settings[button_url] | default: '#' }}" {% if new_window -%}target="_blank" rel="noopener"{%- endif %}
+                        class="button {{ block.settings[button_type] }}{% if block.settings[button_url] == blank %} disabled{% endif %}">
+                        {{- block.settings[button_label] -}}
+                      </a>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
           </div>
         </div>
-      </div>
-    {%- endif -%}
-  {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
 {%- endcapture -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content',
+{%-
+  render 'render-container-content',
+  content: container_content,
   class: container_class,
   title_tag: section.settings.heading_element,
   title_class: title_class,
   title: title,
-  content_class: content_class,
-  content: container_content
 -%}
 
 {% schema %}
@@ -554,6 +557,12 @@
             "label": "Link"
           },
           {
+            "type": "checkbox",
+            "id": "new_window_1",
+            "label": "Open in new window",
+            "default": false
+          },
+          {
             "type": "select",
             "id": "button_type_1",
             "label": "Type",
@@ -600,6 +609,12 @@
             "type": "url",
             "id": "button_url_2",
             "label": "Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "new_window_2",
+            "label": "Open in new window",
+            "default": false
           },
           {
             "type": "select",

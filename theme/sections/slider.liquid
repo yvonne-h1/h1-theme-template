@@ -68,9 +68,9 @@
 
 {%- comment -%} Capture container content {%- endcomment -%}
 {%- capture container_content -%}
-  <swiper-slider class="" {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
-    <div class="swiper relative">
-      <div class="{% unless section.settings.container_width == 'container--full' %} mx-content-wrapper-padding{% endunless %} overflow-hidden" data-swiper>
+  <swiper-slider {% if is_slider -%}{{ swiper_options }}{%- endif -%}>
+    <div class="swiper relative overflow-visible">
+      <div class="overflow-hidden" data-swiper>
         <div class="swiper-wrapper flex">
           {%- liquid
             assign lazy = true
@@ -104,7 +104,7 @@
 
         {% comment %} Navigation {% endcomment %}
         {%- if section.settings.swiper_navigation %}
-          <div class="{% if section.settings.container_width == '' %}content-wrapper{% endif %} absolute inset-x-4 inset-y-0 md:inset-x-8">
+          <div class="{% if section.settings.container_width == '' %}content-wrapper{% endif %} {% if section.settings.container_width == 'container--full' %}inset-x-4 2xl:inset-x-content-wrapper-padding{%- else -%}inset-x-0 2xl:inset-x-0{% endif %} absolute inset-y-0">
             <button
               class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if section.settings.container_width == 'container--full' %}left-0{%- endif -%}"
               aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}"
@@ -154,7 +154,7 @@
 
 {%- liquid
   # Container width
-  assign container_class = 'slider overflow-hidden ' | append: section.settings.container_width
+  assign container_class = 'slider ' | append: section.settings.container_width
 
   # Remove y margin if section is full width
   if section.settings.container_width == 'container--full'
@@ -163,7 +163,7 @@
 -%}
 
 {%- comment -%} Render the content {%- endcomment -%}
-{%- render 'render-container-content', content: container_content, class: container_class, content_class: 'p-0' -%}
+{%- render 'render-container-content', content: container_content, class: container_class -%}
 
 {% schema %}
   {
@@ -688,6 +688,12 @@
             "label": "Link"
           },
           {
+            "type": "checkbox",
+            "id": "new_window_1",
+            "label": "Open in new window",
+            "default": false
+          },
+          {
             "type": "select",
             "id": "button_type_1",
             "label": "Type",
@@ -746,6 +752,12 @@
             "type": "url",
             "id": "button_url_2",
             "label": "Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "new_window_2",
+            "label": "Open in new window",
+            "default": false
           },
           {
             "type": "select",

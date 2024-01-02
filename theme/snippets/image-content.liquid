@@ -132,7 +132,7 @@
 
 {% comment %} Banner wrapper {% endcomment %}
 <div
-  class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% if object.settings.container_width == 'container--full' %}w-screen{%- else -%}w-full min-w-full{%- endif %} {% if animate -%}bg-black{%- endif -%}"
+  class="{{- class -}}__wrapper relative {% if is_swiper -%}swiper-slide{%- endif %} {{ min_ratio_mobile }} {{ min_ratio_tablet }} {% unless object.settings.container_width == 'container--full' %}w-full min-w-full{%- endunless %} {% if animate -%}bg-black{%- endif -%}"
   style="--animation-delay: 1;"
   {% if is_swiper and index != null %}
     data-swiper-slide-index="{{ index }}" {{ block.shopify_attributes }}
@@ -269,6 +269,7 @@
                 assign button_label = 'button_label_' | append: i
                 assign button_type = 'button_type_' | append: i
                 assign button_url = 'button_url_' | append: i
+                assign new_window = 'new_window_' | append: i
                 assign enable_button = 'enable_button_' | append: i
                 assign render_button = false
 
@@ -287,6 +288,9 @@
                 {%- else -%}
                   <a
                     href="{{ object.settings[button_url] | default: '#' }}"
+                    {% if new_window -%}
+                      target="_blank" rel="noopener"
+                    {%- endif %}
                     class="button {{ object.settings[button_type] }}{% if object.settings[button_url] == blank %} disabled{% endif %}">
                     {{- object.settings[button_label] -}}
                   </a>

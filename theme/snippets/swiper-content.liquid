@@ -107,8 +107,6 @@
     "isRecommendations": {{ is_recommendations }},
     "slidesPerView": 1.2,
     "spaceBetween": 16,
-    "slidesOffsetBefore": 16,
-    "slidesOffsetAfter": 16,
     {%- if swiper_autoplay %}
       "autoplay": {
         "delay": {{ swiper_autoplay_delay | default: 7500 }}
@@ -137,27 +135,19 @@
     "breakpoints": {
       "420": {
         "slidesPerView": {% if render_products or render_product_cards %}2.2{%- elsif render_blog_articles %}1.8{%- endif %},
-        "spaceBetween": 16,
-        "slidesOffsetBefore": 16,
-        "slidesOffsetAfter": 16
+        "spaceBetween": 16
       },
       "768": {
         "slidesPerView": {% if render_products or render_product_cards %}3.2{%- elsif render_blog_articles %}2.4{%- endif %},
-        "spaceBetween": 16,
-        "slidesOffsetBefore": 32,
-        "slidesOffsetAfter": 32
+        "spaceBetween": 16
       },
       "1024": {
         "slidesPerView": {% if render_products or render_product_cards %}4{%- elsif render_blog_articles %}3.2{%- endif %},
-        "spaceBetween": 32,
-        "slidesOffsetBefore": 32,
-        "slidesOffsetAfter": 32
+        "spaceBetween": 32
       },
       "1440": {
         "slidesPerView": 4,
-        "spaceBetween": 32,
-        "slidesOffsetBefore": 0,
-        "slidesOffsetAfter": 0
+        "spaceBetween": 32
       }
     }
   }'
@@ -166,9 +156,7 @@
 <swiper-slider {{ swiper_options }}>
   <div
     class="
-      swiper relative overflow-visible
-      [--swiper-slidesPerView:1.2]
-      [--swiper-spaceBetween:16px]
+      swiper relative max-w-screen-2xl overflow-visible [--swiper-slidesPerView:1.2] [--swiper-spaceBetween:16px]
       lg:[--swiper-spaceBetween:32px]
       {% if render_products or render_product_cards %}
         xs:[--swiper-slidesPerView:2.2]
@@ -182,7 +170,7 @@
       {% endif -%}
     ">
     <div
-      class="overflow-hidden {{ swiper_indication_class }} {% if render_inline -%}-ml-content-wrapper-padding w-screen max-w-screen-2xl 2xl:ml-0{% else -%}2xl:px-content-wrapper-padding{%- endif -%}"
+      class="{{ swiper_indication_class }} max-w-screen-2xl overflow-hidden px-content-wrapper-padding 2xl:mx-auto"
       data-swiper>
       <div
         class="swiper-wrapper flex"
@@ -223,8 +211,8 @@
           -%}
           <div
             class="
-              swiper-slide
-              min-w-[calc((100%-16px)/1.2)]
+              swiper-slide min-w-[calc((100%-16px)/1.2)]
+              last:!me-0
               {% if render_products or render_product_cards %}
                 xs:min-w-[calc((100%-2*16px)/2.2)]
                 md:min-w-[calc((100%-2*16px)/3.2)]
@@ -285,7 +273,7 @@
 
     {%- comment -%} Render swiper navigation {%- endcomment -%}
     {%- if swiper_navigation -%}
-      <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-8">
+      <div class="content-wrapper absolute inset-x-4 inset-y-0 md:inset-x-content-wrapper-padding">
         <button
           class="swiper-button-prev swiper-button-prev-{{ section.id }} {% if swiper_indication != '' %}translate-y-[-50%]{%- endif -%}"
           aria-label="{% render "render-translation", namespace: "accessibility", key: "previous_slide", fallback: "Previous slide" %}">

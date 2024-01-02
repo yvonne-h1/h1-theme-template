@@ -38,7 +38,7 @@
 
 {%- comment %} Render Container {%- endcomment %}
 <{{ tag | default: 'div' }}
-  class="container{%- if class != blank -%}{{ class | prepend: ' ' -}}{%- endif %} only:w-full only:flex-1"
+  class="container {% if class != blank -%}{{ class }}{%- endif %} only:w-full only:flex-1"
   {%- if id != blank -%}
     {{- id | prepend: ' ' -}}
   {%- endif -%}
@@ -47,11 +47,11 @@
   {%- endif -%}>
   {% comment %} Header {% endcomment %}
   {%- if header_content != blank or title != blank -%}
-    <header class="container__header{%- if header_class != blank -%}{{ header_class | prepend: ' ' -}}{%- endif -%}">
+    <header class="container__header {% if header_class != blank -%}{{ header_class }}{%- endif -%}">
       {%- if header_content != blank -%}
         {{- header_content -}}
       {%- elsif title != blank -%}
-        <{{ title_tag | default: 'h2' }} class="container__title{%- if title_class != blank -%}{{ title_class | prepend: ' ' -}}{%- endif -%}">
+        <{{ title_tag | default: 'h2' }} class="container__title {% if title_class != blank -%}{{ title_class }}{%- endif -%}">
           {{- title -}}
         </{{ title_tag | default: 'h2' }}>
       {%- endif -%}
@@ -60,14 +60,14 @@
 
   {% comment %} Container content {% endcomment %}
   {%- if content != blank -%}
-    <div class="container__content{%- if content_class != blank -%}{{ content_class | prepend: ' ' -}}{%- endif -%}">
+    <div class="container__content {% if content_class != blank -%}{{ content_class }}{%- endif -%}">
       {{- content -}}
     </div>
   {%- endif -%}
 
   {%- comment %} Container footer {%- endcomment %}
   {%- if footer_content != blank -%}
-    <footer class="container__footer{%- if footer_class != blank -%}{{ footer_class | prepend: ' ' -}}{%- endif -%}">
+    <footer class="container__footer {% if footer_class != blank -%}{{ footer_class }}{%- endif -%}">
       {{- footer_content -}}
     </footer>
   {%- endif -%}
