@@ -55,22 +55,24 @@
       assign image_title = product.title
 
       assign classes = 'col-span-6 md:col-span-4'
-      assign default_sizes = '(min-width: 1280px) 25vw, (min-width: 768px) 33vw'
+      assign four_col_sizes = '(min-width: 1280px) 200px, (min-width: 1024px) 216px, (min-width: 768px) 178px'
+      assign five_col_sizes = '(min-width: 1440px) 230px, (min-width: 1024px) 204px, (min-width: 768px) 178px'
 
       # Overwrite sizes based on template suffix alt layout
       if template.suffix contains 'alt'
         assign classes = 'col-span-12 md:col-span-4'
-        assign sizes = default_sizes | prepend: '(min-width: 1440px) 328px, ' | append: ', 100vw'
+        assign sizes = four_col_sizes | prepend: '(min-width: 1440px) 328px, ' | append: ', 274px'
+        assign prepend_widths = '178,216,274'
         if settings.filter_display != 'grid'
-          assign sizes = default_sizes | prepend: '(min-width: 1440px) 230px, ' | append: ', 100vw'
-          assign prepend_widths = '230'
+          assign sizes = five_col_sizes | append: ', 274px'
+          assign prepend_widths = '204,230,274'
         endif
       else
-        assign sizes = default_sizes | prepend: '(min-width: 1440px) 205px, ' | append: ', 50vw'
-        assign prepend_widths = '205'
+        assign sizes = four_col_sizes | prepend: '(min-width: 1440px) 240px, ' | append: ', 124px'
+        assign prepend_widths = '124,178,205'
         if settings.filter_display != 'grid'
-          assign sizes = default_sizes | prepend: '(min-width: 1440px) 230px, ' | append: ', 50vw'
-          assign prepend_widths = '230'
+          assign sizes = five_col_sizes | append: ', 124px'
+          assign prepend_widths = '124,204,230'
         endif
       endif
 

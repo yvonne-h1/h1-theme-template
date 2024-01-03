@@ -1,11 +1,11 @@
 {
   "sections": {
-    "image-banner": {
-      "type": "image-banner"
+    "media-banner": {
+      "type": "media-banner"
     },
     "featured-content-slider": {
       "type": "featured-content-slider"
     }
   },
-  "order": ["image-banner", "featured-content-slider"]
+  "order": ["media-banner", "featured-content-slider"]
 }

@@ -31,11 +31,11 @@
 
   # Capture container content  echo
   capture container_content
-    render 'image-content', object: section, lazy: lazy, id: section.id, max_width: max_width, animate: true
+    render 'media-content', object: section, lazy: lazy, id: section.id, max_width: max_width, animate: true
   endcapture
 
   # Container width
-  assign container_class = 'image-banner ' | append: section.settings.container_width
+  assign container_class = 'media-banner ' | append: section.settings.container_width
 
   # Remove y margin if section is full width
   if section.settings.container_width == 'container--full'
@@ -73,7 +73,7 @@
   {
     "name": "Image/Video banner",
     "tag": "section",
-    "class": "image-banner-section",
+    "class": "media-banner-section",
     "settings": [
       {
         "type": "header",

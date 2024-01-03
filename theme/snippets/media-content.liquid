@@ -1,11 +1,11 @@
 {% comment %}
-  Renders a background image with text overlayed. Text can be positioned anywhere over the image. Used in the image-banner and slider sections.
+  Renders a background image with text overlayed. Text can be positioned anywhere over the image. Used in the media-banner and slider sections.
 
-  render 'image-content', object: section, lazy: true, id: section.id
+  render 'media-content', object: section, lazy: true, id: section.id
 
   - object: Required. Section or Block.
   - id: String. Required
-  - class: String. Defaults to 'image-banner'
+  - class: String. Defaults to 'media-banner'
   - lazy: Boolean. Image lazy loading
   - min_ratio_mobile: String (optional)
   - min_ratio_tablet: String (optional)
@@ -49,7 +49,7 @@
   endunless
 
   if class == blank
-    assign class = 'image-banner'
+    assign class = 'media-banner'
   endif
 
   if id == blank
@@ -194,7 +194,11 @@
             {%- if image_desktop != blank -%}
               {{- image -}}
             {%- elsif object.settings.video_mp4 != blank -%}
-              {{ object.settings.video_mp4 | image_url: width: object.settings.video_mp4.preview_image.width | image_tag: class: image_class }}
+              {{
+                object.settings.video_mp4
+                | image_url: width: object.settings.video_mp4.preview_image.width
+                | image_tag: class: image_class, sizes: '100vw', widths: '320, 360, 375, 420, 480, 520, 600, 680, 768, 850, 960, 1080, 1200, 1280, 1440, 1536, 1600, 1920, 2048, 2560, 2880, 4000'
+              }}
             {%- endif -%}
           </div>
 

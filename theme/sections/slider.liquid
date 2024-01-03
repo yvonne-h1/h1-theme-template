@@ -86,7 +86,7 @@
               endif
 
               # render the content
-              render 'image-content', object: block, lazy: lazy, class: 'slider', index: forloop.index, is_swiper: is_slider, min_ratio_mobile: section.settings.min_ratio_mobile, min_ratio_tablet: section.settings.min_ratio_tablet, id: section.id, max_width: max_width, animate: animate
+              render 'media-content', object: block, lazy: lazy, class: 'slider', index: forloop.index, is_swiper: is_slider, min_ratio_mobile: section.settings.min_ratio_mobile, min_ratio_tablet: section.settings.min_ratio_tablet, id: section.id, max_width: max_width, animate: animate
             endfor
           -%}
         </div>

@@ -144,7 +144,7 @@
   endunless
 
   # When smaller images are needed
-  if prepend_widths
+  if prepend_widths != blank
     assign widths = widths | prepend: ', ' | prepend: prepend_widths
   endif
 
